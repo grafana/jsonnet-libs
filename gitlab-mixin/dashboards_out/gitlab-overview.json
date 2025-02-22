@@ -1,0 +1,889 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "Overview of a GitLab instance.",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [ ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of HTTP traffic over time, grouped by status.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "reqps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (status) (rate(http_requests_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{status}}"
+               }
+            ],
+            "title": "Traffic by Response Code",
+            "transformations": [ ],
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The rate of user logins.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "sessions/s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 8,
+               "x": 0,
+               "y": 10
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(user_session_logins_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "sessions"
+               }
+            ],
+            "title": "User Sessions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average latency of inbound HTTP requests.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "ms"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 8,
+               "x": 8,
+               "y": 10
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "1000 * rate(http_request_duration_seconds_sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(http_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{method}}"
+               }
+            ],
+            "title": "Average Request Latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 5 types of requests to the server.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "displayMode": "auto",
+                     "filterable": false,
+                     "inspect": false
+                  },
+                  "decimals": 3,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "reqps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Method"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 270
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 8,
+               "x": 16,
+               "y": 10
+            },
+            "id": 6,
+            "options": {
+               "footer": {
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "frameIndex": 1,
+               "showHeader": true,
+               "sortBy": [ ]
+            },
+            "pluginVersion": "9.1.7",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (feature_category) (rate(http_requests_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": ""
+               }
+            ],
+            "title": "Top 5 Request Types",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value": {
+                           "aggregations": [
+                              "lastNotNull"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "feature_category": {
+                           "aggregations": [
+                              "lastNotNull"
+                           ],
+                           "operation": "groupby"
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value (lastNotNull)": "Request rate",
+                        "feature_category": "Feature category"
+                     }
+                  }
+               },
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Request rate"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "id": "limit",
+                  "options": {
+                     "limitField": 5
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "uid": "${loki_datasource}"
+            },
+            "description": "The GitLab rails error logs.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 19
+            },
+            "id": 7,
+            "options": {
+               "dedupStrategy": "none",
+               "enableLogDetails": true,
+               "prettifyLogMessage": false,
+               "showCommonLabels": false,
+               "showLabels": false,
+               "showTime": true,
+               "sortOrder": "Descending",
+               "wrapLogMessage": false
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${loki_datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "{filename=\"/var/log/gitlab/gitlab-rails/exceptions_json.log\", job=~\"$job\", instance=~\"$instance\"} | json | line_format \"{{.severity}} {{.exception_class}} - {{.exception_message}}\"",
+                  "legendFormat": "",
+                  "queryType": "range",
+                  "refId": "A"
+               }
+            ],
+            "title": "Error Logs",
+            "transformations": [ ],
+            "type": "logs"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 27
+            },
+            "id": 8,
+            "title": "Pipeline Activity",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of jobs activated per second.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "activations/s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(gitlab_ci_active_jobs_sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{plan}}"
+               }
+            ],
+            "title": "Job Activations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of pipeline instances created.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "pipelines/s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 37
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(pipelines_created_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{source}}"
+               }
+            ],
+            "title": "Pipelines Created",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of builds created within a pipeline per second, grouped by source.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "builds/s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 37
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (source) (rate(gitlab_ci_pipeline_size_builds_sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{source}}"
+               }
+            ],
+            "title": "Pipeline Builds Created",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The rate of build trace operations performed, grouped by source.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "ops"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 45
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(gitlab_ci_trace_operations_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{operation}}"
+               }
+            ],
+            "title": "Build Trace Operations",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "gitlab-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(gitlab_rails_boot_time_seconds{}, job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(gitlab_rails_boot_time_seconds{job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(gitlab_rails_boot_time_seconds{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Loki Datasource",
+               "name": "loki_datasource",
+               "options": [ ],
+               "query": "loki",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "GitLab Overview",
+      "uid": "gitlab-overview",
+      "version": 0
+   }

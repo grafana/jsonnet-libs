@@ -1,0 +1,1005 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "apache-hadoop-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other Apache Hadoop dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The DataNodes current state.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     }
+                  },
+                  "mappings": [ ]
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 12,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "pieType": "pie",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_numlivedatanodes{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}} - live DataNodes"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_numdeaddatanodes{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}} - dead DataNodes"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_numstaledatanodes{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}} - stale DataNodes"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_numdecommissioningdatanodes{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}} - decommissioning DataNodes"
+               }
+            ],
+            "title": "DataNode state",
+            "type": "piechart"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The storage utilization of the NameNode.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 12,
+               "x": 12,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 * hadoop_namenode_capacityused{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"} / clamp_min(hadoop_namenode_capacitytotal{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}, 1)",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Capacity utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of blocks managed by the NameNode.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_blockstotal{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Total blocks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of blocks reported by DataNodes as missing.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_missingblocks{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Missing blocks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of blocks that are under-replicated.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 9
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_underreplicatedblocks{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Under-replicated blocks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of transactions processed by the NameNode since the last checkpoint.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 15
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_transactionssincelastcheckpoint{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Transactions since last checkpoint",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The recent increase in number of volume failures on all DataNodes.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 15
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(hadoop_namenode_volumefailurestotal{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}[$__interval:])",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Volume failures",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of files managed by the NameNode.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 21
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_filestotal{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Total files",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total load on the NameNode.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 21
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "hadoop_namenode_totalload{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"FSNamesystem\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Total load",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${loki_datasource}"
+            },
+            "description": "The NameNode logs.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 27
+            },
+            "id": 11,
+            "options": {
+               "dedupStrategy": "none",
+               "enableLogDetails": true,
+               "prettifyLogMessage": false,
+               "showCommonLabels": false,
+               "showLabels": false,
+               "showTime": false,
+               "sortOrder": "Descending",
+               "wrapLogMessage": false
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${loki_datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"} |= `` | (filename=~\".*/hadoop/logs/.*-namenode.*.log\" or log_type=\"namenode\")",
+                  "queryType": "range",
+                  "refId": "A"
+               }
+            ],
+            "title": "NameNode logs",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "apache-hadoop-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Loki Datasource",
+               "name": "loki_datasource",
+               "options": [ ],
+               "query": "loki",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(hadoop_namenode_blockstotal,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Hadoop cluster",
+               "multi": true,
+               "name": "hadoop_cluster",
+               "options": [ ],
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, hadoop_cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "Apache Hadoop NameNode overview",
+      "uid": "apache-hadoop-namenode-overview",
+      "version": 0
+   }

@@ -1,0 +1,1128 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", channel=\"System\", level=\"Critical\"} | json",
+               "hide": true,
+               "iconColor": "light-purple",
+               "name": "Critical system event",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Critical system event"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "hide": true,
+               "iconColor": "light-yellow",
+               "name": "Reboot",
+               "tagKeys": "job,instance",
+               "titleFormat": "Reboot",
+               "useValueForTime": "on"
+            },
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", source=\"Service Control Manager\", level=\"Error\"} |= \"terminated\" | json",
+               "hide": true,
+               "iconColor": "light-orange",
+               "name": "Service failed",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Service failed"
+            }
+         ]
+      },
+      "links": [
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "windows"
+            ],
+            "title": "All Windows dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "All Windows instances' perfomance at a glance.",
+            "fieldConfig": {
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "thresholds"
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "orange",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "text",
+                                    "value": 600
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "Product|^Hostname$"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Drill down to ${__field.name} ${__value.text}",
+                                 "url": "d/windows-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "Job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Filter by ${__field.name}",
+                                 "url": "d/windows-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Cores"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory total"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Disk C: total"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Disk C: used"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 16,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "footer": {
+                  "fields": [
+                     "Value #Cores",
+                     "Value #Load 1",
+                     "Value #Memory total",
+                     "Value #Disk C: total"
+                  ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": true
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_os_info{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "OS Info"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "time() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "Uptime"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "Cores"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100))",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "CPU usage",
+                  "refId": "CPU usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "Memory total",
+                  "refId": "Memory total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "Memory usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "Disk C: total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 - windows_logical_disk_free_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}*100",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "Disk C: used"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count by (instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"critical\"}[1m])) * group by (instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "CRITICAL"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count by (instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"warning\"}[1m])) * group by (instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "WARNING"
+               }
+            ],
+            "title": "Fleet overview",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "instance",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "job 1$|instance|product|^hostname$|Value.+"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Value #OS Info": true
+                     },
+                     "indexByName": { },
+                     "renameByName": {
+                        "hostname": "Hostname",
+                        "instance": "Instance",
+                        "job 1": "Job",
+                        "product": "Product"
+                     }
+                  }
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 25",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-purple",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 24,
+               "x": 0,
+               "y": 7
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100)))",
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg(100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100)))",
+                  "legendFormat": "Mean"
+               }
+            ],
+            "title": "CPU usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 25",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-purple",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 24,
+               "x": 0,
+               "y": 14
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg(100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
+                  "legendFormat": "Mean"
+               }
+            ],
+            "title": "Memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 25",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-purple",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 12,
+               "x": 0,
+               "y": 21
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,(1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100)",
+                  "legendFormat": "{{instance}}: {{volume}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg((1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100)",
+                  "legendFormat": "Mean"
+               }
+            ],
+            "title": "Disk IO",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 25",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-purple",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 12,
+               "x": 12,
+               "y": 21
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,100 - windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}*100)",
+                  "legendFormat": "{{instance}}: {{volume}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg(100 - windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}*100)",
+                  "legendFormat": "Mean"
+               }
+            ],
+            "title": "Disk space usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top 25.\n\n**Network errors**:\n\nNetwork errors refer to issues that occur during the transmission of data across a network. \n\nThese errors can result from various factors, including physical issues, jitter, collisions, noise and interference.\n\nMonitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.\n\n**Dropped packets**:\n\nDropped packets occur when data packets traveling through a network are intentionally discarded or lost due to congestion, resource limitations, or network configuration issues. \n\nCommon causes include network congestion, buffer overflows, QoS settings, and network errors, as corrupted or incomplete packets may be discarded by receiving devices.\n\nDropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "drawStyle": "points",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No errors",
+                  "unit": "pps"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25, irate(windows_net_packets_outbound_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
+                  "legendFormat": "{{instance}}: {{ nic }} transmitted"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25, irate(windows_net_packets_received_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
+                  "legendFormat": "{{instance}}: {{ nic }} received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25, irate(windows_net_packets_received_unknown_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
+                  "legendFormat": "{{instance}}: {{ nic }} received (unknown)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25, irate(windows_net_packets_outbound_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
+                  "legendFormat": "{{instance}}: {{ nic }} transmitted packets dropped"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25, irate(windows_net_packets_received_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
+                  "legendFormat": "{{instance}}: {{ nic }} received packets dropped"
+               }
+            ],
+            "title": "Network errors and dropped packets",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "windows"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "Prometheus|Cortex|Mimir|grafanacloud-.+-prom",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(windows_os_info{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(windows_os_info{job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "Loki|.+logs",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Windows fleet overview",
+      "uid": "windows-fleet"
+   }

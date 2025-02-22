@@ -1,0 +1,935 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 1,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "clickhouse-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other ClickHouse dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of successful queries per second",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "/ sec"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_SelectQuery{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - select query",
+                  "range": true,
+                  "refId": "B"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_InsertQuery{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - insert query",
+                  "range": true,
+                  "refId": "C"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_AsyncInsertQuery{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - async insert query",
+                  "range": true,
+                  "refId": "D"
+               }
+            ],
+            "title": "Successful queries",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of failed queries per second",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "/ sec"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 8
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_FailedSelectQuery{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - failed select query",
+                  "range": true,
+                  "refId": "B"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_FailedInsertQuery{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - failed insert query",
+                  "range": true,
+                  "refId": "C"
+               }
+            ],
+            "title": "Failed queries",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of rejected inserts per second",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "/ sec"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 8
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_RejectedInserts{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ instance }} - rejected inserts",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Rejected inserts",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Memory usage over time",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 16
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "ClickHouseMetrics_MemoryTracking{job=~\"$job\", instance=~\"$instance\"}",
+                  "legendFormat": "{{ instance }} - memory tracking",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Percentage of memory allocated by ClickHouse compared to OS total",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "percentage",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 80
+                        },
+                        {
+                           "color": "red",
+                           "value": 90
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "id": 6,
+            "options": {
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showThresholdLabels": true,
+               "showThresholdMarkers": true,
+               "text": { }
+            },
+            "pluginVersion": "9.1.6",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "(ClickHouseMetrics_MemoryTracking{job=~\"$job\", instance=~\"$instance\"} / ClickHouseAsyncMetrics_OSMemoryTotal{job=~\"$job\", instance=~\"$instance\"}) * 100",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - memory usage",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Memory usage",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Current number of connections to ClickHouse",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 24
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "ClickHouseMetrics_TCPConnection{job=~\"$job\", instance=~\"$instance\"}",
+                  "legendFormat": "{{ instance }} - TCP connection",
+                  "range": true,
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "ClickHouseMetrics_HTTPConnection{job=~\"$job\", instance=~\"$instance\"}",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - HTTP connection",
+                  "range": true,
+                  "refId": "B"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "ClickHouseMetrics_MySQLConnection{job=~\"$job\", instance=~\"$instance\"}",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - MySQL connection",
+                  "range": true,
+                  "refId": "C"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "ClickHouseMetrics_PostgreSQLConnection{job=~\"$job\", instance=~\"$instance\"}",
+                  "hide": false,
+                  "legendFormat": "{{ instance }} - PostgreSQL connection",
+                  "range": true,
+                  "refId": "D"
+               }
+            ],
+            "title": "Active connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Received network throughput",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 32
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_NetworkReceiveBytes{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ instance }} - network receive bytes",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Network received",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Transmitted network throughput",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 32
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "editorMode": "builder",
+                  "expr": "rate(ClickHouseProfileEvents_NetworkSendBytes{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ instance }} - network send bytes",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Network transmitted",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "clickhouse-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "hide": 0,
+               "label": "Data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "text": "all",
+                  "value": "$__all"
+               },
+               "datasource": "$prometheus_datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "text": "all",
+                  "value": "$__all"
+               },
+               "datasource": "$prometheus_datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "instance",
+               "multi": false,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(ClickHouseProfileEvents_Query{job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": {
+                  "text": "all",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(ClickHouseProfileEvents_Query{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "ClickHouse overview",
+      "uid": "clickhouse-overview",
+      "version": 0
+   }

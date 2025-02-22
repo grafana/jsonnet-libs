@@ -14,6 +14,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.network.timeSeries.packets.stylize()
       + signals.broker.brokerMessagesInPerSec.asPanelMixin(),
 
-
   },
 }

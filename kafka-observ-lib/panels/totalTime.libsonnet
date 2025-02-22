@@ -15,7 +15,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
            + { title+: ' ($%s)' % instanceLabel }
          else {}),
 
-
     fetchConsumerTotalTimeBreakdown:
       g.panel.timeSeries.new('Fetch-consumer')
       + g.panel.timeSeries.panelOptions.withDescription(

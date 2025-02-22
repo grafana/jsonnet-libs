@@ -15,7 +15,7 @@
         ]
     },
     "description": "Hashicorp Vault metrics",
-    "editable": true,
+    "editable": false,
     "fiscalYearStartMonth": 0,
     "gnetId": 12904,
     "graphTooltip": 1,

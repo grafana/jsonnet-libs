@@ -1,0 +1,23 @@
+groups:
+    - name: wildfly
+      rules:
+        - alert: HighPercentageOfErrorResponses
+          annotations:
+            description: |
+                The percentage of error responses is {{ printf "%.2f" $value }} on {{ $labels.instance }} - {{ $labels.server }} which is higher than {{30 }}.
+            summary: Large percentage of requests are resulting in 5XX responses.
+          expr: |
+            sum by (job, instance, server) (increase(wildfly_undertow_error_count_total{}[5m]) / increase(wildfly_undertow_request_count_total{}[5m])) * 100 > 30
+          for: 5m
+          labels:
+            severity: critical
+        - alert: HighNumberOfRejectedSessionsForDeployment
+          annotations:
+            description: |
+                Deployemnt {{ $labels.deployment }} on {{ $labels.instance }} is exceeding the threshold for rejected sessions {{ printf "%.0f" $value }} is higher than 20.
+            summary: Large number of sessions are being rejected for a deployment.
+          expr: |
+            sum by (deployment, instance, job) (increase(wildfly_undertow_rejected_sessions_total{}[5m])) > 20
+          for: 5m
+          labels:
+            severity: critical

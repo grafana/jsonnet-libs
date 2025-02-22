@@ -1,0 +1,238 @@
+groups:
+    - name: Cilium Endpoints
+      rules:
+        - alert: CiliumAgentEndpointFailures
+          annotations:
+            description: Cilium Agent {{$labels.pod}} has endpoints that are in an invalid state. This may result in problems with scheduling Pods, or network connectivity issues.
+            summary: Cilium Agent endpoints in the invalid state.
+          expr: sum(cilium_endpoint_state{endpoint_state="invalid"}) by (pod)
+          for: 5m
+          labels:
+            severity: warning
+        - alert: CiliumAgentEndpointUpdateFailure
+          annotations:
+            description: |-
+                API calls to Cilium Agent API to create or update Endpoints are failing on pod {{$labels.pod}} ({{$labels.method}} {{$labels.return_code}}).
+
+                This may cause problems for Pod scheduling
+            summary: API calls to Cilium Agent API to create or update Endpoints are failing.
+          expr: sum(rate(cilium_k8s_client_api_calls_total{method=~"(PUT|POST|PATCH)", endpoint="endpoint",return_code!~"2[0-9][0-9]"}[5m])) by (pod, method, return_code) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: CiliumAgentContainerNetworkInterfaceApiErrorEndpointCreate
+          annotations:
+            description: |-
+                Cilium Endpoint API endpoint rate limiter on Pod {{$labels.pod}} is reporting errors while doing endpoint create.
+                This may cause CNI and prevent Cilium scheduling.
+            summary: Cilium Endpoint API endpoint rate limiter is reporting errors while doing endpoint create.
+          expr: sum(rate(cilium_api_limiter_processed_requests_total{api_call=~"endpoint-create", outcome="fail"}[1m])) by (pod, api_call) > 0
+          for: 5m
+          labels:
+            severity: info
+        - alert: CiliumAgentApiEndpointErrors
+          annotations:
+            description: |-
+                API calls to Cilium Endpoints API on Agent Pod {{$labels.pod}} are failing due to server errors ({{$labels.return_code}}).
+
+                This could indicate issues with Ciliums ability to create endpoints which can result in failure to schedule Kubernetes Pods.
+            summary: API calls to Cilium Endpoints API are failing due to server errors.
+          expr: sum(rate(cilium_agent_api_process_time_seconds_count{return_code=~"5[0-9][0-9]", path="/v1/endpoint"}[5m])) by (pod, return_code) > 0
+          for: 5m
+          labels:
+            severity: warning
+    - name: Cilium IPAM
+      rules:
+        - alert: CiliumOperatorExhaustedIpamIps
+          annotations:
+            description: |-
+                Cilium Operator {{$labels.pod}} has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.
+
+                This may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.
+            summary: Cilium Operator has exhausted its IPAM IPs.
+          expr: sum(cilium_operator_ipam_ips{type="available"}) by () <= 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: CiliumOperatorLowAvailableIpamIps
+          annotations:
+            description: |-
+                Cilium Operator {{$labels.pod}} has used up over 90% of its available IPs. If available IPs become exhausted then the operator may not be able to schedule Pods.
+
+                This may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.
+            summary: Cilium Operator has used up over 90% of its available IPs.
+          expr: (sum(cilium_operator_ipam_ips{type!="available"}) by () / sum(cilium_operator_ipam_ips) by ()) > 0.9
+          for: 5m
+          labels:
+            severity: warning
+        - alert: CiliumOperatorEniIpamErrors
+          annotations:
+            description: |-
+                Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.
+
+                This may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.
+            summary: Cilium Operator has high error rate while trying to create/attach ENIs for IPAM.
+          expr: sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) by () / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) by () > 0.0
+          for: 10m
+          labels:
+            severity: critical
+    - name: Cilium Maps
+      rules:
+        - alert: CiliumAgentMapOperationFailures
+          annotations:
+            description: Cilium Agent {{$labels.pod}} is experiencing errors updating BPF maps on Agent Pod {{$labels.pod}}. Effects may vary depending on map type(s) being affected however this is likely to cause issues with Cilium.
+            summary: Cilium Agent is experiencing errors updating BPF maps on Agent Pod.
+          expr: sum(rate(cilium_bpf_map_ops_total{k8s_app="cilium", outcome="fail"}[5m])) by (map_name, pod) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: CiliumAgentBpfMapPressure
+          annotations:
+            description: Map {{$labels.map_name}} on Cilium Agent Pod is currently experiencing high map pressure. The map is currently over 90% full. Full maps will begin to experience errors on updates which may result in unexpected behaviour.
+            summary: Map on Cilium Agent Pod is currently experiencing high map pressure.
+          expr: cilium_bpf_map_pressure{} > 0.9
+          for: 5m
+          labels:
+            severity: warning
+    - name: Cilium NAT
+      rules:
+        - alert: CiliumAgentNatTableFull
+          annotations:
+            description: |-
+                Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.
+                This is a potentially critical issue that can lead to connection issues for packets leaving the cluster network.
+
+                See: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.
+            summary: Cilium Agent Pod is dropping packets due to "No mapping for NAT masquerade" errors.
+          expr: sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod) > 0
+          for: 5m
+          labels:
+            severity: critical
+    - name: Cilium API
+      rules:
+        - alert: CiliumAgentApiHighErrorRate
+          annotations:
+            description: 'Cilium Agent API on Pod {{$labels.pod}} is experiencing a high error rate for response code: {{$labels.response_code}} on endpoint {{$labels.endpoint}}.'
+            summary: Cilium Agent API on Pod is experiencing a high error rate.
+          expr: sum(rate(cilium_k8s_client_api_calls_total{endpoint!="metrics",return_code!~"2[0-9][0-9]"}[5m])) by (pod, endpoint, return_code) > 0
+          for: 5m
+          labels:
+            severity: info
+    - name: Cilium Conntrack
+      rules:
+        - alert: CiliumAgentConntrackTableFull
+          annotations:
+            description: |-
+                Ciliums conntrack map is failing on new insertions on agent Pod {{$labels.pod}}, this likely means that the conntrack BPF map is full. This is a potentially critical issue and may result in unexpected packet drops.
+
+                If this is firing, it is recommend to look at both CPU/memory resource utilization dashboards. As well as conntrack GC run dashboards for more details on what the issue is.
+            summary: Ciliums conntrack map is failing on new insertions on Agent Pod.
+          expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod) > 0'
+          for: 5m
+          labels:
+            severity: critical
+        - alert: CiliumAgentConnTrackFailedGarbageCollectorRuns
+          annotations:
+            description: |-
+                Cilium Agent Conntrack GC runs on Agent Pod {{$labels.pod}} has been reported as not completing. Runs reported "uncompleted" may indicate a problem with ConnTrack GC.
+                Cilium failing to GC its ConnTrack table may cause further ConnTrack issues later. This may result in dropped packets or other issues.
+            summary: Cilium Agent Conntrack GC runs are failing on Agent Pod.
+          expr: sum(rate(cilium_datapath_conntrack_gc_runs_total{status="uncompleted"}[5m])) by (pod) > 0
+          for: 5m
+          labels:
+            severity: warning
+    - name: Cilium Drops
+      rules:
+        - alert: CiliumAgentHighDeniedRate
+          annotations:
+            description: Cilium Agent Pod {{$labels.pod}} is experiencing a high drop rate due to policy rule denies. This could mean that a network policy is not configured correctly, or that a Pod is sending unexpected network traffic
+            summary: Cilium Agent is experiencing a high drop rate due to policy rule denies.
+          expr: sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod) > 0
+          for: 10m
+          labels:
+            severity: info
+    - name: Cilium Policy
+      rules:
+        - alert: CiliumAgentPolicyMapPressure
+          annotations:
+            description: 'Cilium Agent {{$labels.pod}} is experiencing high BPF map pressure (over 90% full) on policy map: {{$labels.map_name}}. This means that the map is running low on capacity. A full policy map may result in packet drops.'
+            summary: Cilium Agent is experiencing high BPF map pressure.
+          expr: sum(cilium_bpf_map_pressure{map_name=~"cilium_policy_.*"}) by (pod) > 0.9
+          for: 5m
+          labels:
+            severity: warning
+    - name: Cilium Identity
+      rules:
+        - alert: CiliumNodeLocalHighIdentityAllocation
+          annotations:
+            description: |-
+                Cilium agent Pod {{$labels.pod}} is using a very high percent (over 80%) of its maximum per-node identity limit (65535).
+
+                If this capacity is exhausted Cilium may be unable to allocate new identities. Very high identity allocations can also indicate other problems
+            summary: Cilium is using a very high percent (over 80%) of its maximum per-node identity limit (65535).
+          expr: (sum(cilium_identity{type="node_local"}) by (pod) / (2^16-1)) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RunningOutOfCiliumClusterIdentities
+          annotations:
+            description: Cilium is using a very high percent of its maximum cluster identity limit ({{value}}/65280) . If this capacity is exhausted Cilium may be unable to allocate new identities. Very high identity allocations can also indicate other problems
+            summary: Cilium is using a very high percent of its maximum cluster identity limit (65280).
+          expr: sum(cilium_identity{type="cluster_local"}) by () / (2^16-256) > .8
+          for: 5m
+          labels:
+            severity: warning
+    - name: Cilium Nodes
+      rules:
+        - alert: CiliumUnreachableNodes
+          annotations:
+            description: Cilium Agent {{$labels.pod}} is reporting unreachable Nodes in the cluster.
+            summary: Cilium Agent is reporting unreachable Nodes in the cluster.
+          expr: sum(cilium_unreachable_nodes{}) by (pod) > 0
+          for: 15m
+          labels:
+            severity: info
+    - name: Cilium Clustermesh
+      rules:
+        - alert: CiliumAgentRemoteClusterNotReady
+          annotations:
+            description: Agent can't mesh with {{$labels.target_cluster}}
+            summary: Agent can't mesh with remote cluster.
+          expr: count(cilium_clustermesh_remote_cluster_readiness_status < 1) by (source_cluster, target_cluster) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: CiliumAgentRemoteClusterFailing
+          annotations:
+            description: Agent fails to mesh with {{$labels.target_cluster}}
+            summary: Agent fails to mesh with remote cluster.
+          expr: sum(rate(cilium_clustermesh_remote_cluster_failures[5m])) by (source_cluster, target_cluster) > 0
+          for: 5m
+          labels:
+            severity: critical
+    - name: Cilium Kvstoremesh
+      rules:
+        - alert: CiliumKvstoremeshRemoteClusterNotReady
+          annotations:
+            description: Kvstoremesh can't mesh with {{$labels.target_cluster}}
+            summary: Kvstoremesh can't mesh with remote cluster.
+          expr: count(cilium_kvstoremesh_remote_cluster_readiness_status < 1) by (source_cluster, target_cluster) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: CiliumKvstoremeshRemoteClusterFailing
+          annotations:
+            description: Kvstoremesh fails to mesh with {{$labels.target_cluster}}
+            summary: Kvstoremesh fails to mesh with remote cluster.
+          expr: sum(rate(cilium_kvstoremesh_remote_cluster_failures[5m])) by (source_cluster, target_cluster) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: CiliumKvstoremeshErrors
+          annotations:
+            description: Kvstoremesh fails to mesh with {{$labels.target_cluster}}
+            summary: Kvstoremesh fails to mesh with remote cluster.
+          expr: sum(rate(cilium_kvstoremesh_kvstore_sync_errors_total[5m])) by (source_cluster) > 0
+          for: 5m
+          labels:
+            severity: critical

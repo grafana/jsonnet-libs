@@ -1,0 +1,2804 @@
+{
+      "links": [
+         {
+            "asDropdown": false,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "kafka-integration"
+            ],
+            "title": "All Kafka dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "Zookeeper overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Quorum size of ZooKeeper ensemble.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Quorum size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,kafka_cluster) (\n  zookeeper_status_quorumsize{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Quorum size",
+                  "refId": "Quorum size"
+               }
+            ],
+            "title": "Quorum size",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of alive connections.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Alive connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,kafka_cluster) (\n  zookeeper_numaliveconnections{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Alive connections",
+                  "refId": "Alive connections"
+               }
+            ],
+            "title": "Alive connections",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Outstanding requests to ZooKeeper cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Outstanding requests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 16,
+               "x": 8,
+               "y": 1
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  zookeeper_outstandingrequests{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Outstanding requests",
+                  "refId": "Outstanding requests"
+               }
+            ],
+            "title": "Outstanding requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of znodes.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "znodes count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 5
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,kafka_cluster) (\n  zookeeper_inmemorydatatree_nodecount{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: znodes count",
+                  "refId": "znodes count"
+               }
+            ],
+            "title": "znodes count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of watchers.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Watchers"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 5
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,kafka_cluster) (\n  zookeeper_inmemorydatatree_watchcount{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Watchers",
+                  "refId": "Watchers"
+               }
+            ],
+            "title": "Watchers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "0 - zookeeper, 1 - zookeeper(leader).\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Current zookeeper role"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "light-yellow",
+                                       "index": 0,
+                                       "text": "zookeeper"
+                                    },
+                                    "1": {
+                                       "color": "light-orange",
+                                       "index": 0,
+                                       "text": "zookeeper(leader)"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 11
+            },
+            "maxDataPoints": 100,
+            "options": {
+               "showValue": "never"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "clamp_max(zookeeper_leaderuptime{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, 1) or clamp_max(zookeeper_numaliveconnections{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Current zookeeper role"
+               }
+            ],
+            "title": "Current zookeeper role",
+            "type": "status-history"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 19
+            },
+            "panels": [ ],
+            "title": "Latency",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of time it takes for the server to respond to a client request.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Latency(min)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 20
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "zookeeper_minrequestlatency{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n  * ignoring (minrequestlatency,ticktime)\nzookeeper_ticktime{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Latency(min)",
+                  "refId": "Latency(min)"
+               }
+            ],
+            "title": "Latency(min)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of time it takes for the server to respond to a client request.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Latency(avg)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 20
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "zookeeper_avgrequestlatency{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n  * ignoring (avgrequestlatency,ticktime)\nzookeeper_ticktime{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Latency(avg)",
+                  "refId": "Latency(avg)"
+               }
+            ],
+            "title": "Latency(avg)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of time it takes for the server to respond to a client request.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Latency(max)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 20
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "zookeeper_maxrequestlatency{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n  * ignoring (maxrequestlatency,ticktime)\nzookeeper_ticktime{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Latency(max)",
+                  "refId": "Latency(max)"
+               }
+            ],
+            "title": "Latency(max)",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 0,
+                     "y": 27
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "((avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n))/(avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n))) * 100",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(heap)",
+                        "refId": "JVM memory used(heap)"
+                     }
+                  ],
+                  "title": "Memory used(heap)",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 4,
+                     "y": 27
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "((avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n))/(avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n))) * 100",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(nonheap)",
+                        "refId": "JVM memory used(nonheap)"
+                     }
+                  ],
+                  "title": "Memory used(nonheap)",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 8,
+                     "y": 27
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_current{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads",
+                        "refId": "Threads"
+                     }
+                  ],
+                  "title": "Threads",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of classes that are currently loaded in the JVM.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Classes loaded"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 12,
+                     "y": 27
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_classes_loaded{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Classes loaded",
+                        "refId": "Classes loaded"
+                     }
+                  ],
+                  "title": "Classes loaded",
+                  "type": "stat"
+               }
+            ],
+            "title": "JVM overview",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 31
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process uptime.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "thresholds"
+                        },
+                        "decimals": 1,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "orange",
+                                 "value": null
+                              },
+                              {
+                                 "color": "text",
+                                 "value": 600
+                              }
+                           ]
+                        },
+                        "unit": "dtdurations"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Uptime"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "dtdurations"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 0,
+                     "y": 32
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "time()-process_start_time_seconds{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Uptime",
+                        "refId": "Uptime"
+                     }
+                  ],
+                  "title": "Uptime",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process start time.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process start time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "dateTimeAsIso"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 8,
+                     "y": 32
+                  },
+                  "options": {
+                     "colorMode": "fixed",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  process_start_time_seconds{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} * 1000\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Process start time",
+                        "refId": "Process start time"
+                     }
+                  ],
+                  "title": "Process start time",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Load average: Signal not found.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 0,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*CPU count.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 16,
+                     "y": 32
+                  },
+                  "options": {
+                     "content": "",
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "title": "",
+                  "transparent": true,
+                  "type": "text"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process CPU usage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "scheme",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "CPU usage (process)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "percent"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 0,
+                     "y": 38
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  rate(process_cpu_seconds_total{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval]) * 100\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: CPU usage (process)",
+                        "refId": "CPU usage (process)"
+                     }
+                  ],
+                  "title": "CPU usage (process)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process resident memory size in bytes.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process memory used (rss)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*(T|t)otal.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 8,
+                     "y": 38
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  process_resident_memory_bytes{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Process memory used (rss)",
+                        "refId": "Process memory used (rss)"
+                     }
+                  ],
+                  "title": "Process memory used (rss)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process files opened.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process files open"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": ""
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process files max"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": ""
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 16,
+                     "y": 38
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  process_open_fds{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Process files open",
+                        "refId": "Process files open"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  process_max_fds{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Process files max",
+                        "refId": "Process files max"
+                     }
+                  ],
+                  "title": "Process files open",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Process overview",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The used space is the amount of memory that is currently occupied by Java objects.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory used(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory max(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory committed(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 45
+                  },
+                  "h": 6,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(heap)",
+                        "refId": "JVM memory used(heap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory max(heap)",
+                        "refId": "JVM memory max(heap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"heap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory committed(heap)",
+                        "refId": "JVM memory committed(heap)"
+                     }
+                  ],
+                  "title": "JVM memory used(heap)",
+                  "type": "timeseries",
+                  "w": 12
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The amount of memory that is currently in non-heap.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory used(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory max(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory committed(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 45
+                  },
+                  "h": 6,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(nonheap)",
+                        "refId": "JVM memory used(nonheap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory max(nonheap)",
+                        "refId": "JVM memory max(nonheap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"nonheap\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory committed(nonheap)",
+                        "refId": "JVM memory committed(nonheap)"
+                     }
+                  ],
+                  "title": "JVM memory used(nonheap)",
+                  "type": "timeseries",
+                  "w": 12
+               }
+            ],
+            "title": "JVM memory",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 53
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Memory used for G1 Eden Space Collection.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Eden Space (used)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Eden Space (max)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Eden Space (committed)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 54
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Eden Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Eden Space (used)",
+                        "refId": "Eden Space (used)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Eden Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Eden Space (max)",
+                        "refId": "Eden Space (max)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Eden Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Eden Space (committed)",
+                        "refId": "Eden Space (committed)"
+                     }
+                  ],
+                  "title": "Eden Space (used)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Memory used for Survival collection.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Survival space (used)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Survival space (max)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Survival space (committed)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 54
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Survivor Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Survival space (used)",
+                        "refId": "Survival space (used)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Survivor Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Survival space (max)",
+                        "refId": "Survival space (max)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Survivor Space\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Survival space (committed)",
+                        "refId": "Survival space (committed)"
+                     }
+                  ],
+                  "title": "Survival space (used)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Memory used for Tenured(Old Gen) collection.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Tenured space (used)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Tenured space (max)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Tenured space (committed)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 16,
+                     "y": 54
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_used{pool=\"G1 Old Gen\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Tenured space (used)",
+                        "refId": "Tenured space (used)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "\n  avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_max{pool=\"G1 Old Gen\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\n != -1",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Tenured space (max)",
+                        "refId": "Tenured space (max)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_memory_pool_bytes_committed{pool=\"G1 Old Gen\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Tenured space (committed)",
+                        "refId": "Tenured space (committed)"
+                     }
+                  ],
+                  "title": "Tenured space (used)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Major and minor garbage collections",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Garbage collections"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ops"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 62
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,gc) (\n  rate(jvm_gc_collection_seconds_count{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{gc}}",
+                        "refId": "Garbage collections"
+                     }
+                  ],
+                  "title": "Garbage collections",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Major and minor garbage collections",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 0,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "GC time (avg)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "s"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 62
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster, gc) (\n  rate(jvm_gc_collection_seconds_sum{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_collection_seconds_count{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{ job,kafka_cluster }}: {{ gc }} (avg)",
+                        "refId": "GC time (avg)"
+                     }
+                  ],
+                  "title": "GC duration",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "'Allocated' is the size increase of the young generation memory pool after one GC and before the next. It reflects minor GC.\n'Promoted' is the size increase of the old generation memory pool after GC. It reflects full GC.\n",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*(T|t)otal.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Allocated (bytes)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 16,
+                     "y": 62
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  rate(jvm_memory_pool_allocated_bytes_total{pool=~\"(G1 |PS )?Eden Space\",job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Allocated (bytes)",
+                        "refId": "Allocated (bytes)"
+                     }
+                  ],
+                  "title": "Allocated/promoted",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "JVM garbage collection",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 70
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (daemon)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (peak)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*peak.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (deadlocked)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 71
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_current{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads",
+                        "refId": "Threads"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_daemon{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (daemon)",
+                        "refId": "Threads (daemon)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_peak{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (peak)",
+                        "refId": "Threads (peak)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_deadlocked{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (deadlocked)",
+                        "refId": "Threads (deadlocked)"
+                     }
+                  ],
+                  "title": "Threads",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Threads by current state.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads states"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 71
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (state, job,kafka_cluster) (jvm_threads_state{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{ state }}",
+                        "refId": "Threads states"
+                     }
+                  ],
+                  "title": "Threads states",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "JVM threads",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 79
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Direct buffer used bytes"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Direct buffer capacity"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*capacity.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 80
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_buffer_pool_used_bytes{pool=\"direct\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Direct buffer used bytes",
+                        "refId": "Direct buffer used bytes"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_buffer_pool_capacity_bytes{pool=\"direct\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Direct buffer capacity",
+                        "refId": "Direct buffer capacity"
+                     }
+                  ],
+                  "title": "Direct buffer used bytes",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The mapped buffer pool is used for its FileChannel instances.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Mapped buffer used"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Mapped buffer capacity"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*capacity.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 80
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_buffer_pool_used_bytes{pool=\"mapped\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Mapped buffer used",
+                        "refId": "Mapped buffer used"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_buffer_pool_capacity_bytes{pool=\"mapped\", job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Mapped buffer capacity",
+                        "refId": "Mapped buffer capacity"
+                     }
+                  ],
+                  "title": "Mapped buffer used",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "JVM buffers",
+            "type": "row"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "kafka-integration"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"zookeeper_outstandingrequests\",job=~\"integrations/kafka-zookeeper|integrations/kafka\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Kafka_cluster",
+               "multi": true,
+               "name": "kafka_cluster",
+               "query": "label_values({__name__=~\"zookeeper_outstandingrequests\",job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\"}, kafka_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({__name__=~\"zookeeper_outstandingrequests\",job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "utc",
+      "title": "ZooKeeper overview",
+      "uid": "kafka-zookeeper-overview"
+   }

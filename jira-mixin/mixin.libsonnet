@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'jira-overview.json': (import 'dashboards/jira-overview.json'),
   },
 

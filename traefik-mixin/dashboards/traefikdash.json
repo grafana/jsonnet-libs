@@ -22,7 +22,7 @@
     ]
   },
   "description": "Traefik dashboard prometheus",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "gnetId": 4475,
   "graphTooltip": 0,

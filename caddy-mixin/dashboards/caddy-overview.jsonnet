@@ -24,7 +24,7 @@
       },
     ],
   },
-  editable: true,
+  editable: false,
   gnetId: 13460,
   graphTooltip: 0,
   id: 10,

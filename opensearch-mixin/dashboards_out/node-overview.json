@@ -1,0 +1,1706 @@
+{
+      "links": [
+         {
+            "asDropdown": false,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "opensearch-mixin"
+            ],
+            "title": "Other Opensearch dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "OpenSearch node roles over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "2": {
+                              "color": "light-purple",
+                              "index": 0,
+                              "text": "data"
+                           },
+                           "3": {
+                              "color": "light-green",
+                              "index": 1,
+                              "text": "master"
+                           },
+                           "4": {
+                              "color": "light-blue",
+                              "index": 2,
+                              "text": "ingest"
+                           },
+                           "5": {
+                              "color": "light-yellow",
+                              "index": 3,
+                              "text": "cluster_manager"
+                           },
+                           "6": {
+                              "color": "super-light-red",
+                              "index": 4,
+                              "text": "remote_cluster_client"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ]
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "maxDataPoints": 100,
+            "options": {
+               "legend": false,
+               "showValue": "never"
+            },
+            "pluginVersion": "v10.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", role=\"data\"}[1m]) == 1\n) * 2\n",
+                  "legendFormat": "{{node}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", role=\"master\"}[1m]) == 1\n) * 3\n",
+                  "legendFormat": "{{node}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", role=\"ingest\"}[1m]) == 1\n) * 4\n",
+                  "legendFormat": "{{node}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", role=\"cluster_manager\"}[1m]) == 1\n) * 5\n",
+                  "legendFormat": "{{node}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", role=\"remote_cluster_client\"}[1m]) == 1\n) * 6\n",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Roles timeline",
+            "type": "status-history"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "targets": [ ],
+            "title": "Node health",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "CPU usage percentage of the node's Operating System.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 5,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 0,
+               "y": 2
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "opensearch_os_cpu_percent{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Node CPU usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Memory usage percentage of the node for the Operating System and OpenSearch",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 5,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 6,
+               "y": 2
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "opensearch_os_mem_used_percent{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Node memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Node file system read and write data.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": "normal"
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/time|used|busy|util/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.axisSoftMax",
+                           "value": 100
+                        },
+                        {
+                           "id": "custom.drawStyle",
+                           "value": "points"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 12,
+               "y": 2
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job,opensearch_cluster,node) (rate(opensearch_fs_io_total_read_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__rate_interval]))",
+                  "legendFormat": "{{node}} - read"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job,opensearch_cluster,node) (rate(opensearch_fs_io_total_write_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__rate_interval]))",
+                  "legendFormat": "{{node}} - write"
+               }
+            ],
+            "title": "Node I/O",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of open connections for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": "normal"
+                  },
+                  "unit": ""
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 18,
+               "y": 2
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_transport_server_open_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Node open connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Disk usage percentage of the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 0,
+               "y": 8
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 - (100 * opensearch_fs_path_free_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"} / clamp_min(opensearch_fs_path_total_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}, 1))",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Node disk usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Percentage of swap space used by OpenSearch and the Operating System on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 5,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 6,
+               "y": 8
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 * opensearch_os_swap_used_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"} / clamp_min((opensearch_os_swap_used_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"} + opensearch_os_swap_free_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}), 1)",
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Node memory swap",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Node network traffic sent and received.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 5,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/sent/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 12,
+               "y": 8
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (rate(opensearch_transport_tx_bytes_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__rate_interval])) * 8",
+                  "legendFormat": "{{node}} - sent"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (rate(opensearch_transport_rx_bytes_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__rate_interval])) * 8",
+                  "legendFormat": "{{node}} - received"
+               }
+            ],
+            "title": "Node network traffic",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Circuit breakers tripped on the selected node by type",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "trips"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 6,
+               "x": 18,
+               "y": 8
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(name, job,opensearch_cluster,node) (increase(opensearch_circuitbreaker_tripped_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__interval:]))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - {{ name }}"
+               }
+            ],
+            "title": "Circuit breakers",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 15
+            },
+            "id": 11,
+            "targets": [ ],
+            "title": "Node JVM",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of heap memory used vs committed on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 16
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_jvm_mem_heap_used_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - used"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_jvm_mem_heap_committed_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - commited"
+               }
+            ],
+            "title": "JVM heap used vs. committed",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of non-heap memory used vs committed on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 6,
+               "y": 16
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_jvm_mem_nonheap_used_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - used"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_jvm_mem_nonheap_committed_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - commited"
+               }
+            ],
+            "title": "JVM non-heap used vs. committed",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of threads running in the JVM on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "threads"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 12,
+               "y": 16
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_jvm_threads_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "JVM threads",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of buffer pools available on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "buffer pools"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 16
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by( job,opensearch_cluster,node, bufferpool) (opensearch_jvm_bufferpool_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - {{bufferpool}}"
+               }
+            ],
+            "title": "JVM buffer pools",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The uptime of the JVM in seconds on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 22
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job,opensearch_cluster,node) (opensearch_jvm_uptime_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "JVM uptime",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of garbage collection operations on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "operations"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 6,
+               "y": 22
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (increase(opensearch_jvm_gc_collection_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__interval:]))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "JVM garbage collections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of time spent on garbage collection on the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 12,
+               "y": 22
+            },
+            "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (increase(opensearch_jvm_gc_collection_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}[$__interval:]))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "JVM garbage collection time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The percent used of JVM buffer pool memory.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 22
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "100 * (sum by (job,opensearch_cluster,node, bufferpool) (opensearch_jvm_bufferpool_used_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})) / clamp_min((sum by (job, bufferpool, cluster) (opensearch_jvm_bufferpool_total_capacity_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})),1)",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}} - {{bufferpool}}"
+               }
+            ],
+            "title": "JVM buffer pool usage",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 20,
+            "targets": [ ],
+            "title": "Thread pools",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of threads in the thread pool for the selected node",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "threads"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 29
+            },
+            "id": 21,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job,opensearch_cluster,node) ((opensearch_threadpool_threads_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"}))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Thread pool threads",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of tasks in the thread pool for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "tasks"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 29
+            },
+            "id": 22,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,opensearch_cluster,node) (opensearch_threadpool_tasks_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{node}}"
+               }
+            ],
+            "title": "Thread pool tasks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${loki_datasource}"
+            },
+            "description": "The recent error logs being reported by OpenSearch.",
+            "gridPos": {
+               "h": 7,
+               "w": 24,
+               "x": 0,
+               "y": 37
+            },
+            "id": 23,
+            "options": {
+               "dedupStrategy": "none",
+               "enableLogDetails": true,
+               "prettifyLogMessage": false,
+               "showCommonLabels": false,
+               "showLabels": false,
+               "showTime": false,
+               "sortOrder": "Descending",
+               "wrapLogMessage": false
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${loki_datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\"} |~ \"\"",
+                  "queryType": "range",
+                  "refId": "A"
+               }
+            ],
+            "title": "Error logs panel",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "opensearch-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(opensearch_os_cpu_percent{opensearch_cluster!=\"\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Opensearch_cluster",
+               "multi": true,
+               "name": "opensearch_cluster",
+               "query": "label_values(opensearch_os_cpu_percent{opensearch_cluster!=\"\",job=~\"$job\"}, opensearch_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Node",
+               "multi": true,
+               "name": "node",
+               "query": "label_values(opensearch_os_cpu_percent{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}, node)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "OpenSearch node overview",
+      "uid": "opensearch-node-overview"
+   }

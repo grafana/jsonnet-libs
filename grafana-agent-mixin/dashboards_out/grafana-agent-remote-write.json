@@ -1,0 +1,1517 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "grafana-agent"
+            ],
+            "targetBlank": false,
+            "title": "Grafana Agent Dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "refresh": "",
+      "rows": [
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Highest timestamp that has come into the remote storage via the Appender interface, in seconds since epoch.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "s"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 2,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "\n            (\n              prometheus_remote_storage_highest_timestamp_in_seconds{job=~\"$job\", instance=~\"$instance\"}\n              -\n              ignoring(url, remote_name) group_right(pod)\n              prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job=~\"$job\", instance=~\"$instance\"}\n            )\n          ",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Highest Timestamp In vs. Highest Timestamp Sent",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Rate of duration of send calls to the remote storage",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "s"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 3,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_sent_batch_duration_seconds_sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(prometheus_remote_storage_sent_batch_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "mean {{instance}}",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "histogram_quantile(0.99, rate(prometheus_remote_storage_sent_batch_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "p99 {{instance}}",
+                        "refId": "B"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Latency Over Rate Interval",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Timestamps",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Rate of total number of samples appended to the WAL.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 4,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(agent_wal_samples_appended_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Samples In Rate Over Rate Interval",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Rate of total number of samples sent to remote storage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 5,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_succeeded_samples_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) or rate(prometheus_remote_storage_samples_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Samples Out Rate Over Rate Interval",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The number of samples pending in the queues shards to be sent to the remote storage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 6,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_samples_pending{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Pending Samples",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Total number of samples which were dropped after being read from the WAL before being sent via remote write, either via relabelling or unintentionally because of an unknown reference ID.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 7,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_samples_dropped_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Dropped Samples",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Total number of samples which failed on send to remote storage, non-recoverable errors.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 8,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_samples_failed_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Failed Samples",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Total number of samples which failed on send to remote storage but were retried because the send error was recoverable.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 9,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_samples_retried_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Retried Samples",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Samples",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The number of shards used for parallel sending to the remote storage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 10,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "minSpan": 6,
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_shards{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Current Shards",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The maximum number of shards that the queue is allowed to run.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 11,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 4,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_shards_max{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Max Shards",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The minimum number of shards that the queue is allowed to run.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 12,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 4,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_shards_min{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Min Shards",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The number of shards that the queues shard calculation wants to run based on the rate of samples in vs. samples out.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 13,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 4,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_shards_desired{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Desired Shards",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Shards",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "The capacity of each shard of the queue used for parallel sending to the remote storage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 14,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_remote_storage_shard_capacity{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Shard Capacity",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Shard Details",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Current segment the WAL watcher is reading records from.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 15,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "prometheus_wal_watcher_current_segment{job=~\"$job\", instance=~\"$instance\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Remote Write Current Segment",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "none",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Segments",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$prometheus_datasource",
+                  "description": "Total number of times enqueue has failed because a shards queue was full.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 16,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(prometheus_remote_storage_enqueue_retries_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{instance}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Enqueue Retries",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Misc. Rates",
+            "titleSize": "h6",
+            "type": "row"
+         }
+      ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "grafana-agent"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": {
+                  "text": "default",
+                  "value": "default"
+               },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": null,
+               "current": { },
+               "datasource": "$prometheus_datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(agent_build_info, job)",
+               "refresh": 1,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": null,
+               "current": { },
+               "datasource": "$prometheus_datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(agent_build_info{job=~\"$job\"}, instance)",
+               "refresh": 1,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "browser",
+      "title": "Grafana Agent Remote Write",
+      "uid": "integration-agent-prom-rw",
+      "version": 0
+   }

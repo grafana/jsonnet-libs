@@ -246,7 +246,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Network interface is down on SNMP device.',
                 description: |||
                   Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.%s}} is down. 
-                  Only interfaces with ifAdminStatus = `up` and matching `%s` are being checked.'
+                  Only interfaces with ifAdminStatus = `up` and matching `%s` are being checked.
                 ||| % [instanceLabel, this.config.alertInterfaceDownSelector],
               },
               'for': '5m',

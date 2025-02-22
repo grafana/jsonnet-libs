@@ -1,0 +1,111 @@
+groups:
+    - name: jaeger_alerts
+      rules:
+        - alert: JaegerAgentUDPPacketsBeingDropped
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }} UDP packets per second.
+            summary: Jaeger agent is dropping UDP packets.
+          expr: rate(jaeger_agent_thrift_udp_server_packets_dropped_total[1m]) > 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerAgentHTTPServerErrs
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is experiencing {{ printf "%.2f" $value }}% HTTP errors.
+            summary: Jaeger agent is experiencing HTTP errors.
+          expr: 100 * sum(rate(jaeger_agent_http_server_errors_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_agent_http_server_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerClientSpansDropped
+          annotations:
+            description: |
+                service {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
+            summary: Jaeger client is dropping spans.
+          expr: 100 * sum(rate(jaeger_reporter_spans{result=~"dropped|err"}[1m])) by (instance, job, namespace) / sum(rate(jaeger_reporter_spans[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerAgentSpansDropped
+          annotations:
+            description: |
+                agent {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
+            summary: Jaeger agent is dropping spans.
+          expr: 100 * sum(rate(jaeger_agent_reporter_batches_failures_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_agent_reporter_batches_submitted_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerCollectorQueueNotDraining
+          annotations:
+            description: |
+                collector {{ $labels.job }} {{ $labels.instance }} is not able to drain the queue.
+            summary: Jaeger collector is not able to drain the queue.
+          expr: avg_over_time(jaeger_collector_queue_length[10m]) > 1000
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerCollectorDroppingSpans
+          annotations:
+            description: |
+                collector {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
+            summary: Jaeger collector is dropping spans.
+          expr: 100 * sum(rate(jaeger_collector_spans_dropped_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_collector_spans_received_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerSamplingUpdateFailing
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is failing {{ printf "%.2f" $value }}% in updating sampling policies.
+            summary: Jaeger's sampling update is failing.
+          expr: 100 * sum(rate(jaeger_sampler_queries{result="err"}[1m])) by (instance, job, namespace) / sum(rate(jaeger_sampler_queries[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerCollectorPersistenceSlow
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is slow at persisting spans.
+            summary: Jaeger collector is slow at persisting spans.
+          expr: histogram_quantile(0.99, sum by (le) (rate(jaeger_collector_save_latency_bucket[1m]))) > 0.5
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerThrottlingUpdateFailing
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is failing {{ printf "%.2f" $value }}% in updating throttling policies.
+            summary: Jaeger's throttling update is failing.
+          expr: 100 * sum(rate(jaeger_throttler_updates{result="err"}[1m])) by (instance, job, namespace) / sum(rate(jaeger_throttler_updates[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerQueryReqsFailing
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+            summary: Jaeger queries are failing.
+          expr: 100 * sum(rate(jaeger_query_requests_total{result="err"}[1m])) by (instance, job, namespace) / sum(rate(jaeger_query_requests_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerCassandraWritesFailing
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+            summary: Jaeger writes to Cassandra are failing.
+          expr: 100 * sum(rate(jaeger_cassandra_errors_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_cassandra_attempts_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: JaegerCassandraReadsFailing
+          annotations:
+            description: |
+                {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+            summary: Jaeger reads from Cassandra are failing.
+          expr: 100 * sum(rate(jaeger_cassandra_read_errors_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_cassandra_read_attempts_total[1m])) by (instance, job, namespace)> 1
+          for: 15m
+          labels:
+            severity: warning

@@ -1,0 +1,759 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of storage buckets.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Bucket count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "locale"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 8,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(sum by (bucket_name) (stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{bucket_name}}: Bucket count",
+                  "refId": "Bucket count"
+               }
+            ],
+            "title": "Bucket count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of objects stored.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Object count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "locale"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 8,
+               "x": 8,
+               "y": 1
+            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{bucket_name}}: Object count",
+                  "refId": "Object count"
+               }
+            ],
+            "title": "Object count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total bytes stored",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "id": 4,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(stackdriver_gcs_bucket_storage_googleapis_com_storage_total_bytes{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{bucket_name}}: Total bytes",
+                  "refId": "Total bytes"
+               }
+            ],
+            "title": "Total bytes",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total network throughput in bits for the selected timerange",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "minWidth": 100
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "bucket_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Bucket"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Total Throughput"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Network bits throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Total"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Network bits received"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "rx"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Network bits transmitted"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "tx"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 8,
+               "x": 0,
+               "y": 8
+            },
+            "id": 5,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5, sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range]))\n+ sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])))\n",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{bucket_name}}: Network bits throughput",
+                  "refId": "Network bits throughput"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])) and topk(5, sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range]))\n+ sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])))\n",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{bucket_name}}: Network bits received",
+                  "refId": "Network bits received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])) and topk(5, sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range]))\n+ sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])))\n",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{bucket_name}}: Network bits transmitted",
+                  "refId": "Network bits transmitted"
+               }
+            ],
+            "title": "Top 5 Buckets - Network Throughput",
+            "transformations": [
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "bucket_name.*|Value.*"
+                     }
+                  }
+               },
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "bucket_name",
+                     "mode": "outer"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of objects stored.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "locale"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "bucket_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Bucket"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Object Count"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 8,
+               "x": 8,
+               "y": 8
+            },
+            "id": 6,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  avg by (job,bucket_name) (\n  max_over_time(stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{bucket_name}}: Top 5 buckets - object count",
+                  "refId": "Top 5 buckets - object count"
+               }
+            ],
+            "title": "Top 5 Buckets - Object Count",
+            "transformations": [
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "bucket_name.*|Value.*"
+                     }
+                  }
+               },
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "bucket_name",
+                     "mode": "outer"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total bytes stored",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "bucket_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Bucket"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Total Bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 8,
+               "x": 16,
+               "y": 8
+            },
+            "id": 7,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  avg by (job,bucket_name) (\n  max_over_time(stackdriver_gcs_bucket_storage_googleapis_com_storage_total_bytes{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__range])\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{bucket_name}}: Top 5 buckets - total bytes",
+                  "refId": "Top 5 buckets - total bytes"
+               }
+            ],
+            "title": "Top 5 Buckets - Total Bytes",
+            "transformations": [
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "bucket_name.*|Value.*"
+                     }
+                  }
+               },
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "bucket_name",
+                     "mode": "outer"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 15
+            },
+            "id": 8,
+            "panels": [ ],
+            "title": "API",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Count of all API requests",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "API requests by type"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 12,
+               "x": 0,
+               "y": 16
+            },
+            "id": 9,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (method) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{method}}",
+                  "refId": "API requests by type"
+               }
+            ],
+            "title": "API requests by type",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Percentage of api request failure by type",
+            "fieldConfig": {
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "API error rate by type"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "id": 10,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (method) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{response_code!=\"OK\", job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__rate_interval])) / sum by (method) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{method}}",
+                  "refId": "API error rate by type"
+               }
+            ],
+            "title": "API error rate by type",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 28
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "Network",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "received"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "transmitted"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 24,
+               "x": 0,
+               "y": 29
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,bucket_name) (\n  rate(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{bucket_name}}: received",
+                  "refId": "received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,bucket_name) (\n  rate(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{job=\"integrations/gcp\",job=~\"$job\",bucket_name=~\"$bucket_name\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{bucket_name}}: transmitted",
+                  "refId": "transmitted"
+               }
+            ],
+            "title": "Network traffic",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "gcp-cloud-provider"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{job=\"integrations/gcp\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Bucket Name",
+               "multi": true,
+               "name": "bucket_name",
+               "query": "label_values(stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{job=\"integrations/gcp\",job=~\"$job\"}, bucket_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timepicker": {
+         "time_options": [
+            "now-1h"
+         ]
+      },
+      "timezone": "default",
+      "title": "GCP Blob storage",
+      "uid": "gcp-blobstorage"
+   }

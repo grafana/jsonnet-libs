@@ -1,0 +1,43 @@
+groups:
+    - name: Velero
+      rules:
+        - alert: VeleroBackupPartialFailure
+          annotations:
+            description: Velero backup {{ $labels.schedule }} has partialy failed backups.
+            summary: Partially Failed Velero Backup.
+          expr: delta(velero_backup_partial_failure_total[5m]) > 0
+          for: 1m
+          labels:
+            severity: warning
+        - alert: VeleroBackupFailed
+          annotations:
+            description: Velero backup {{ $labels.schedule }} has failed backups.
+            summary: Failed Velero Backup.
+          expr: delta(velero_backup_failure_total[5m]) > 0
+          for: 1m
+          labels:
+            severity: critical
+        - alert: RestoreFailed
+          annotations:
+            description: Velero backup {{ $labels.schedule }} has failed Restores.
+            summary: Failed Velero Restore.
+          expr: delta(velero_restore_failed_total[5m]) > 0
+          for: 1m
+          labels:
+            severity: critical
+        - alert: NoBackupJob
+          annotations:
+            description: No Velero backup has been taken in the last 24 hours.
+            summary: No Backup in last 48 hours.
+          expr: delta(velero_backup_attempt_total[48h]) <= 0
+          for: 1m
+          labels:
+            severity: warning
+        - alert: NoVolumeSnapshots
+          annotations:
+            description: No Volume Snapshot has been taken in the last 24 hours.
+            summary: No Volume Snapshots in last 24 hours.
+          expr: delta(velero_volume_snapshot_attempt_total[24h]) <= 0 and delta(velero_csi_snapshot_attempt_total[24h]) <= 0
+          for: 1m
+          labels:
+            severity: warning

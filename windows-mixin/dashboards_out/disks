@@ -1,0 +1,732 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", channel=\"System\", level=\"Critical\"} | json",
+               "hide": true,
+               "iconColor": "light-purple",
+               "name": "Critical system event",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Critical system event"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "hide": true,
+               "iconColor": "light-yellow",
+               "name": "Reboot",
+               "tagKeys": "job,instance",
+               "titleFormat": "Reboot",
+               "useValueForTime": "on"
+            },
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", source=\"Service Control Manager\", level=\"Error\"} |= \"terminated\" | json",
+               "hide": true,
+               "iconColor": "light-orange",
+               "name": "Service failed",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Service failed"
+            }
+         ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Back to Windows fleet",
+            "type": "link",
+            "url": "/d/windows-fleet"
+         },
+         {
+            "keepTime": true,
+            "title": "Back to Windows overview",
+            "type": "link",
+            "url": "/d/windows-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "windows"
+            ],
+            "title": "All Windows dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "title": "Disk",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Filesystem space utilisation in bytes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}",
+                  "legendFormat": "{{ volume }} available"
+               }
+            ],
+            "title": "Filesystem space availabe",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "This table provides information about total disk space, used space, available space, and usage percentages for each mounted file system on the system.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "light-blue",
+                           "value": null
+                        },
+                        {
+                           "color": "light-yellow",
+                           "value": 0.80000000000000004
+                        },
+                        {
+                           "color": "light-red",
+                           "value": 0.90000000000000002
+                        }
+                     ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mounted on"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 260
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Size"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Used"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Available"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Used, %"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "text"
+                           }
+                        },
+                        {
+                           "id": "max",
+                           "value": 1
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "refId": "TOTAL"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{ volume }} available",
+                  "refId": "FREE"
+               }
+            ],
+            "title": "Disk space usage",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value #FREE": {
+                           "aggregations": [
+                              "lastNotNull"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "Value #TOTAL": {
+                           "aggregations": [
+                              "lastNotNull"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "volume": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "calculateField",
+                  "options": {
+                     "alias": "Used",
+                     "binary": {
+                        "left": "Value #TOTAL (lastNotNull)",
+                        "operator": "-",
+                        "reducer": "sum",
+                        "right": "Value #FREE (lastNotNull)"
+                     },
+                     "mode": "binary",
+                     "reduce": {
+                        "reducer": "sum"
+                     }
+                  }
+               },
+               {
+                  "id": "calculateField",
+                  "options": {
+                     "alias": "Used, %",
+                     "binary": {
+                        "left": "Used",
+                        "operator": "/",
+                        "reducer": "sum",
+                        "right": "Value #TOTAL (lastNotNull)"
+                     },
+                     "mode": "binary",
+                     "reduce": {
+                        "reducer": "sum"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": {
+                        "Used": 3,
+                        "Used, %": 4,
+                        "Value #FREE (lastNotNull)": 2,
+                        "Value #TOTAL (lastNotNull)": 1,
+                        "volume": 0
+                     },
+                     "renameByName": {
+                        "Value #FREE (lastNotNull)": "Available",
+                        "Value #TOTAL (lastNotNull)": "Size",
+                        "volume": "Mounted on"
+                     }
+                  }
+               },
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": false,
+                           "field": "Mounted on"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Disk read/writes in bytes per second.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/time|used|busy|util/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.axisSoftMax",
+                           "value": 100
+                        },
+                        {
+                           "id": "custom.drawStyle",
+                           "value": "points"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_read_bytes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ volume }} read"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_write_bytes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ volume }} written"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100",
+                  "legendFormat": "{{ volume }} io util"
+               }
+            ],
+            "title": "Disk reads/writes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of I/O requests per second for the device/volume.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "iops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_reads_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n",
+                  "legendFormat": "{{ volume }} reads"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_writes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n",
+                  "legendFormat": "{{ volume }} writes"
+               }
+            ],
+            "title": "Disk I/O",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The average time for requests issued to the device to be served.\nThis includes the time spent by the requests in queue and the time spent servicing them.'\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_read_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n/\nirate(windows_logical_disk_reads_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n",
+                  "legendFormat": "{{ volume }} avg read time"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_write_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n/\nirate(windows_logical_disk_writes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n",
+                  "legendFormat": "{{ volume }} avg write time"
+               }
+            ],
+            "title": "Disk average wait time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Disk average IO queue.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 17
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_avg_read_requests_queued{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ volume }} read queue"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(windows_logical_disk_avg_write_requests_queued{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "legendFormat": "{{ volume }} write queue"
+               }
+            ],
+            "title": "Disk average queue",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "windows"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "Prometheus|Cortex|Mimir|grafanacloud-.+-prom",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(windows_os_info{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(windows_os_info{job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "Loki|.+logs",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Windows disks and filesystems",
+      "uid": "windows-disks"
+   }

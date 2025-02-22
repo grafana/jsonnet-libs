@@ -22,7 +22,7 @@
     ]
   },
   "description": "This Dashboard provides an overview of Inbound Endpoints deployed in Enterprise Integrator Cluster.",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "gnetId": 12890,
   "graphTooltip": 0,

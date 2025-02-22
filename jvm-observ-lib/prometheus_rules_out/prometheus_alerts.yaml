@@ -1,0 +1,38 @@
+groups:
+    - name: jvm-jvm-alerts
+      rules:
+        - alert: JvmMemoryFillingUp
+          annotations:
+            description: JVM heap memory usage is at {{ printf "%.0f" $value }}% over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 80%.
+            summary: JVM heap memory filling up.
+          expr: |-
+            ((java_lang_memory_heapmemoryusage_used{}
+            or
+            sum without (id) (jvm_memory_bytes_used{area="heap", })
+            or
+            sum without (id) (jvm_memory_used_bytes{area="heap", })
+            or
+            sum without (pool) (process_runtime_jvm_memory_usage_bytes{type="heap", })
+            or
+            sum without (pool) (process_runtime_jvm_memory_usage{type="heap", }))/(java_lang_memory_heapmemoryusage_max{} != -1
+            or
+            sum without (id) (jvm_memory_bytes_max{area="heap", } != -1)
+            or
+            sum without (id) (jvm_memory_max_bytes{area="heap", } != -1)
+            or
+            sum without (pool) (process_runtime_jvm_memory_limit_bytes{type="heap", } != -1)
+            or
+            sum without (pool) (process_runtime_jvm_memory_limit{type="heap", } != -1))) * 100 > 80
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: JvmThreadsDeadlocked
+          annotations:
+            description: 'JVM deadlock detected: Threads in the JVM application {{$labels.instance}} are in a cyclic dependency with each other. The restart is required to resolve the deadlock.'
+            summary: JVM deadlock detected.
+          expr: (jvm_threads_deadlocked{}) > 0
+          for: 2m
+          keep_firing_for: 5m
+          labels:
+            severity: critical

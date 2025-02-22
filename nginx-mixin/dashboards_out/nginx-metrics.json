@@ -1,0 +1,551 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "builtIn": 1,
+               "datasource": {
+                  "type": "grafana",
+                  "uid": "-- Grafana --"
+               },
+               "enable": true,
+               "hide": true,
+               "iconColor": "rgba(0, 211, 255, 1)",
+               "name": "Annotations & Alerts",
+               "type": "dashboard"
+            }
+         ]
+      },
+      "editable": false,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 1,
+      "links": [ ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "panels": [ ],
+            "title": "Status",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "name": "${datasource}",
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "This panel indicates the current status of the NGINX server for the selected instance, showing whether it's up or down.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Down"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Up"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 3,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 1,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "percentChangeColorMode": "standard",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showPercentChange": false,
+               "textMode": "auto",
+               "wideLayout": true
+            },
+            "pluginVersion": "11.2.2+security-01",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "nginx_up{instance=~\"$instance\"}",
+                  "instant": false,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "NGINX Status for $instance",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 4
+            },
+            "id": 3,
+            "panels": [ ],
+            "title": "Metrics",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "default": false,
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "This panel tracks the number of processed connections for the selected instance, displaying both active and handled connections to monitor server activity.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "Connections (rate)",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "barWidthFactor": 0.59999999999999998,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 5
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "irate(nginx_connections_accepted{instance=~\"$instance\"}[5m])",
+                  "instant": false,
+                  "legendFormat": "{{instance}} accepted",
+                  "range": true,
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "irate(nginx_connections_handled{instance=~\"$instance\"}[5m])",
+                  "hide": false,
+                  "instant": false,
+                  "legendFormat": "{{instance}} handled",
+                  "range": true,
+                  "refId": "B"
+               }
+            ],
+            "title": "Processed connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "name": "${datasource}",
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "This panel shows NGINX active connections for the selected instance, categorized as writing, waiting, reading, and total active.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "Connections",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "barWidthFactor": 0.59999999999999998,
+                     "drawStyle": "line",
+                     "fillOpacity": 29,
+                     "gradientMode": "hue",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineStyle": {
+                        "fill": "solid"
+                     },
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 5
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "nginx_connections_active{instance=~\"$instance\"}",
+                  "instant": false,
+                  "legendFormat": "{{instance}} active",
+                  "range": true,
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "nginx_connections_reading{instance=~\"$instance\"}",
+                  "hide": false,
+                  "instant": false,
+                  "legendFormat": "{{instance}} reading",
+                  "range": true,
+                  "refId": "B"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "nginx_connections_waiting{instance=~\"$instance\"}",
+                  "hide": false,
+                  "instant": false,
+                  "legendFormat": "{{instance}} waiting",
+                  "range": true,
+                  "refId": "C"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "nginx_connections_writing{instance=~\"$instance\"}",
+                  "hide": false,
+                  "instant": false,
+                  "legendFormat": "{{instance}} writing",
+                  "range": true,
+                  "refId": "D"
+               }
+            ],
+            "title": "Active Connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "default": false,
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "This panel displays the total number of requests processed by the NGINX server for the selected instance, providing insight into traffic volume.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "barWidthFactor": 0.59999999999999998,
+                     "drawStyle": "line",
+                     "fillOpacity": 3,
+                     "gradientMode": "hue",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "auto",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 13
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "irate(nginx_http_requests_total{instance=~\"$instance\"}[5m])",
+                  "instant": false,
+                  "legendFormat": "{{instance}} total requests",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Total requests",
+            "type": "timeseries"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "NGINX"
+      ],
+      "templating": {
+         "list": [
+            {
+               "hide": 0,
+               "includeAll": false,
+               "label": "datasource",
+               "multi": false,
+               "name": "datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "definition": "label_values(nginx_up,instance)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": {
+                  "qryType": 1,
+                  "query": "label_values(nginx_up,instance)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": { },
+      "timezone": "browser",
+      "title": "NGINX Overview",
+      "uid": "MsjffzSZz",
+      "version": 4,
+      "weekStart": ""
+   }

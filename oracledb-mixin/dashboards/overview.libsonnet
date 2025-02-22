@@ -1053,7 +1053,7 @@ local tablespaceSizePanel(matcher) = {
       dashboard.new(
         'OracleDB overview',
         time_from='%s' % $._config.dashboardPeriod,
-        editable=true,
+        editable=false,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,

@@ -1,0 +1,1963 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "apache-solr-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other Apache Solr dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of live nodes in the Solr cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "value",
+               "wideLayout": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "disableTextWrap": false,
+                  "expr": "min by (job, solr_cluster) (solr_collections_live_nodes{job=~\"$job\", solr_cluster=~\"$solr_cluster\"})",
+                  "fullMetaSearch": false,
+                  "includeNullMetadata": true,
+                  "instant": false,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "useBackend": false
+               }
+            ],
+            "title": "Live nodes",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Status of ZooKeeper, integral for cluster coordination.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "color-text"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Unavailable"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Available"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "__name__"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "status"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "solr_cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Solr cluster"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "zk_host"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Zookeeper host"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 6,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": [ ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "solr_zookeeper_status{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zk_host}}"
+               }
+            ],
+            "title": "Zookeeper status",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Size of the ZooKeeper ensemble.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 12,
+               "y": 0
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "solr_zookeeper_ensemble_size{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zk_host}}"
+               }
+            ],
+            "title": "Zookeeper ensemble size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Panel to report on the status of firing alerts.",
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 0
+            },
+            "id": 5,
+            "options": {
+               "alertInstanceLabelFilter": "{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
+               "alertName": "",
+               "dashboardAlerts": false,
+               "groupBy": [ ],
+               "groupMode": "default",
+               "maxItems": 20,
+               "sortOrder": 1,
+               "stateFilter": {
+                  "error": true,
+                  "firing": true,
+                  "noData": false,
+                  "normal": false,
+                  "pending": true
+               },
+               "viewMode": "list"
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": ""
+               }
+            ],
+            "title": "Alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Percent of running shards in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 80
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 6
+            },
+            "id": 6,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "value",
+               "wideLayout": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "disableTextWrap": false,
+                  "expr": "100 * sum(solr_collections_shard_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"})  / count(solr_collections_shard_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"})",
+                  "fullMetaSearch": false,
+                  "includeNullMetadata": true,
+                  "instant": false,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "useBackend": false
+               }
+            ],
+            "title": "Running shards",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Shows the state of various shards in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "color-text"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Unavailable"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Available"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "__name__"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "solr_cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "zk_host"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Instance"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "shard"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Shard"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "collection"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Collection"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 4,
+               "y": 6
+            },
+            "id": 7,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": [ ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "solr_collections_shard_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{auto}}"
+               }
+            ],
+            "title": "Shard status",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Shows the total percent of running shards in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 80
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 12,
+               "y": 6
+            },
+            "id": 8,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "value",
+               "wideLayout": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "disableTextWrap": false,
+                  "expr": "100 * sum(solr_collections_replica_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"})  / count(solr_collections_replica_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"})",
+                  "fullMetaSearch": false,
+                  "includeNullMetadata": true,
+                  "instant": false,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "useBackend": false
+               }
+            ],
+            "title": "Running replicas",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "State of replicas within a Solr collection.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "color-text"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Unavailable"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Available"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "__name__"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "solr_cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "collection"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "shard"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "replica"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "base_url"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "node_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "type"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "state"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "zk_host"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "core"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Core"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Instance"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "replica_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Replica name"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 6
+            },
+            "id": 9,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": [ ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "9.4.3",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "solr_collections_replica_state{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{auto}}"
+               }
+            ],
+            "title": "Replica status",
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 12
+            },
+            "id": 10,
+            "targets": [ ],
+            "title": "Top metrics",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top nodes by CPU load caused by the JVM.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue"
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 13
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, 100 * avg by (job, base_url, solr_cluster) (solr_metrics_jvm_os_cpu_load{job=~\"$job\", solr_cluster=~\"$solr_cluster\", item=\"systemCpuLoad\"}))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{base_url}}"
+               }
+            ],
+            "title": "Top nodes by CPU load",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top nodes by the JVM heap memory usage.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue"
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 13
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, 100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", item=\"used\"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", item=\"max\"}), 1)))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{base_url}}"
+               }
+            ],
+            "title": "Top nodes by heap memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top cores by the average rate of query processing in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "reqps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 19
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{job=~\"$job\", solr_cluster=~\"$solr_cluster\", category=\"QUERY\", collection=~\"$solr_collection\", core=~\"$solr_core\"}))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+               }
+            ],
+            "title": "Top cores by mean queries",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top cores by the number of total document additions in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "documents"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 19
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, avg by (job, base_url, solr_cluster, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{collection}} - {{core}}"
+               }
+            ],
+            "title": "Top cores by update handlers / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top cores by the Solr index size.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 25
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", collection=~\"$solr_collection\", core=~\"$solr_core\"}))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{collection}} - {{core}}"
+               }
+            ],
+            "title": "Top cores by index size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top cores by the cache hit ratio in Solr searchers.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 25
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "bottomk($k, 100 * avg by (job, base_url, solr_cluster, collection, core, type) (solr_metrics_core_searcher_cache_ratio{job=~\"$job\", solr_cluster=~\"$solr_cluster\", collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\"}))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{collection}} - {{core}} - {{type}}"
+               }
+            ],
+            "title": "Top cores by cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 31
+            },
+            "id": 17,
+            "targets": [ ],
+            "title": "Errors",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top cores by Solr core errors.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 32
+            },
+            "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{collection}} - {{core}}"
+               }
+            ],
+            "title": "Top cores by core errors / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Top nodes by Solr node errors.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 32
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}[$__interval:])))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{base_url}}"
+               }
+            ],
+            "title": "Top nodes by node errors / $__interval",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "apache-solr-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(solr_metrics_core_errors_total,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Solr cluster",
+               "multi": true,
+               "name": "solr_cluster",
+               "options": [ ],
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, solr_cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "text": "5",
+                  "value": "5"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Top node count",
+               "multi": false,
+               "name": "k",
+               "options": [
+                  {
+                     "text": "5",
+                     "value": "5"
+                  },
+                  {
+                     "text": "10",
+                     "value": "10"
+                  },
+                  {
+                     "text": "20",
+                     "value": "20"
+                  },
+                  {
+                     "text": "50",
+                     "value": "50"
+                  }
+               ],
+               "query": "5,10,20,50",
+               "refresh": 0,
+               "type": "custom"
+            },
+            {
+               "allValue": ".*",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Collection",
+               "multi": true,
+               "name": "solr_collection",
+               "options": [ ],
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, collection)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Core",
+               "multi": true,
+               "name": "solr_core",
+               "options": [ ],
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, core)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "Apache Solr cluster overview",
+      "uid": "apache-solr-cluster-overview",
+      "version": 0
+   }

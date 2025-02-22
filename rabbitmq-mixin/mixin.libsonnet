@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'rabbitmq-overview.json': (import 'dashboards/rabbitmq-overview.json'),
     'erlang-memory-allocators.json': (import 'dashboards/erlang-memory-allocators.json'),
   },

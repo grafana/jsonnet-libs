@@ -1,0 +1,78 @@
+groups:
+    - name: istio-alerts-istio
+      rules:
+        - alert: IstioHighRequestLatencyWarning
+          annotations:
+            description: |
+                Requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} has an average latency of {{ printf "%.0f" $value }}ms, which is above the threshold of 4000.
+            summary: High request latency between pods can indicate that there are performance issues within the k8s environment.
+          expr: |
+            sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_request_duration_milliseconds_sum{job=~"integrations/istio", reporter="source"}[5m]))
+            /
+            clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_request_duration_milliseconds_count{job=~"integrations/istio", reporter="source"}[5m])), 1) > 4000
+          for: 5m
+          labels:
+            severity: warning
+        - alert: IstioGalleyValidationFailuresWarning
+          annotations:
+            description: |
+                {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} Galley validation failures, which is above the thresold of 0.
+            summary: Istio Galley is reporting failures for a number of configurations.
+          expr: |
+            sum without(instance) (increase(galley_validation_failed{job=~"integrations/istio", pod=~"istiod.*"}[5m])) > 0
+          for: 1m
+          labels:
+            severity: warning
+        - alert: IstioListenerConfigConflictsCritical
+          annotations:
+            description: |
+                {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the threshold of 0.
+            summary: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
+          expr: |
+            sum without(instance) (increase(pilot_conflict_inbound_listener{job=~"integrations/istio", pod=~"istiod.*"}[5m])) + sum without(instance) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{job=~"integrations/istio", pod=~"istiod.*"}[5m])) > 0
+          for: 1m
+          labels:
+            severity: critical
+        - alert: IstioXDSConfigRejectionsWarning
+          annotations:
+            description: |
+                {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} xDS rejections from envoy proxies, which is above the threshold of 0.
+            summary: Istio Pilot is seeing a number of xDS rejections from envoy proxies.
+          expr: |
+            sum without(instance) (increase(pilot_total_xds_rejects{job=~"integrations/istio", pod=~"istiod.*"}[5m])) > 0
+          for: 1m
+          labels:
+            severity: warning
+        - alert: IstioHighHTTPRequestErrorsCritical
+          annotations:
+            description: |
+                HTTP requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%.0f" $value }}%, which is above the threshold of 5%.
+            summary: There are a high number of HTTP request errors in the Istio system.
+          expr: |
+            100 * sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{job=~"integrations/istio", reporter="source", request_protocol="http", response_code=~"[45].+"}[5m]))
+            /
+            clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{job=~"integrations/istio", reporter="source", request_protocol="http"}[5m])), 1) > 5
+          for: 5m
+          labels:
+            severity: critical
+        - alert: IstioHighGRPCRequestErrorsCritical
+          annotations:
+            description: |
+                GRPC requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%.0f" $value }}%, which is above the threshold of 5%.
+            summary: There are a high number of GRPC request errors in the Istio system.
+          expr: |
+            100 * sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{job=~"integrations/istio", reporter="source", grpc_response_status=~"[1-9]\\d*"}[5m]))
+            /
+            clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{job=~"integrations/istio", reporter="source", grpc_response_status=~"[0-9]\\d*"}[5m])), 1) > 5
+          for: 5m
+          labels:
+            severity: critical
+        - alert: IstioMetricsDown
+          annotations:
+            description: There are no available metrics for Istio integration from pod {{$labels.pod}} in cluster {{$labels.cluster}}.
+            summary: Istio metrics are down.
+          expr: |
+            up{job=~"integrations/istio"} == 0
+          for: 5m
+          labels:
+            severity: critical

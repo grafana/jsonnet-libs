@@ -1,0 +1,1094 @@
+{
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Catchpoint overview",
+            "type": "link",
+            "url": "/d/catchpoint-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Catchpoint web performance by tests",
+            "type": "link",
+            "url": "/d/catchpoint-testname-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "title": "Errors and content types",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Indicates various errors that are occuring.",
+            "fieldConfig": {
+               "defaults": {
+                  "max": 1,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        },
+                        {
+                           "color": "super-light-red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "orientation": "horizontal"
+            },
+            "pluginVersion": "v10.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_error_objects_loaded{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "object loaded"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_dns_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "DNS"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_load_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "load"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_timeout_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "timeout"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_connection_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "connection"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_transaction_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "transaction"
+               }
+            ],
+            "title": "Errors",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Size of content loaded in bytes",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v10.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_image_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "image"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_html_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "html"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_css_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "css"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_script_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "script"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_font_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "font"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_xml_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "xml"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_media_content_type{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "media"
+               }
+            ],
+            "title": "Content types loaded by size",
+            "type": "piechart"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Number of elements loaded.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "orientation": "horizontal"
+            },
+            "pluginVersion": "v10.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_image_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "image"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_html_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "html"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_css_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "css"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_script_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "script"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_font_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "font"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_xml_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "xml"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_media_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "media"
+               }
+            ],
+            "title": "Content loaded by type",
+            "type": "bargauge"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 7
+            },
+            "id": 5,
+            "title": "Content handling and loading",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time taken for the browser to fully render the page after all resources are downloaded.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 16,
+               "x": 0,
+               "y": 8
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - completion"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_total_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - load"
+               }
+            ],
+            "title": "Page completion time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 8
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_client_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Client processing",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time taken establish an SSL handshake, DNS resolution and connect.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 14
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_dns_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - DNS"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_ssl_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - SSL"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - connect"
+               }
+            ],
+            "title": "Connection and DNS resolution",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time taken to load and render content on the webpage.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 20
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{node_name}} - load"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (node_name) (catchpoint_render_start_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{node_name}} - render"
+               }
+            ],
+            "title": "Content handling",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 26
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - redirect"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_wait_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - wait"
+               }
+            ],
+            "title": "Additional delays",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 32
+            },
+            "id": 11,
+            "title": "Response",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Size of the HTTP response content in bytes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 33
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_response_content_size{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - content"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_response_header_size{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - header"
+               }
+            ],
+            "title": "Response content size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total size of the HTTP response content and headers in bytes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 33
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_total_content_size{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - content"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_total_header_size{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}} - header"
+               }
+            ],
+            "title": "Total content size",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 39
+            },
+            "id": 14,
+            "title": "Network activity",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of connections made.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "conn"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 40
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_connections_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Network connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of hosts contacted.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "hosts"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 40
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_hosts_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Hosts contacted",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of cached elements accessed.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 40
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_cached_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Cache access",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 46
+            },
+            "id": 18,
+            "title": "Request",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Success ratio of requests made.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  },
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 47
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(avg by (test_name) (catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"}) - avg by (test_name) (catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})) / avg by (test_name) (catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Requests success ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of HTTP redirections encountered.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": "true"
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 47
+            },
+            "id": 20,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (test_name) (catchpoint_redirections_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\",node_name=~\"$node_name\"})",
+                  "legendFormat": "{{test_name}}"
+               }
+            ],
+            "title": "Redirects",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "catchpoint"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": false,
+               "label": "Node_name",
+               "multi": false,
+               "name": "node_name",
+               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\",job=~\"$job\",instance=~\"$instance\"}, node_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Test_name",
+               "multi": true,
+               "name": "test_name",
+               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\"}, test_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Catchpoint web performance by node",
+      "uid": "catchpoint-nodename-overview"
+   }

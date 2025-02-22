@@ -1,0 +1,1336 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": false,
+            "keepTime": true,
+            "tags": [
+               "apache-hbase-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other Apache HBase Dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Displays the current active and backup masters.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "fillOpacity": 70,
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineWidth": 1
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "yellow",
+                              "index": 1,
+                              "text": "Backup"
+                           },
+                           "1": {
+                              "color": "blue",
+                              "index": 0,
+                              "text": "Active"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "maxDataPoints": 100,
+            "options": {
+               "colWidth": 0.90000000000000002,
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "rowHeight": 0.90000000000000002,
+               "showValue": "never",
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", isactivemaster=\"true\"} * 0  + 1 )",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", isactivemaster=\"false\"}) * 0)",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Master status history",
+            "transformations": [ ],
+            "type": "status-history"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of RegionServers that are currently live.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 5,
+               "x": 0,
+               "y": 6
+            },
+            "id": 3,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "value"
+            },
+            "pluginVersion": "10.3.0-62488",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "server_num_region_servers{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", isactivemaster=\"true\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               }
+            ],
+            "title": "Live RegionServers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of RegionServers that are currently dead.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 5,
+               "x": 5,
+               "y": 6
+            },
+            "id": 4,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "value"
+            },
+            "pluginVersion": "10.3.0-62488",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "server_num_dead_region_servers{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", isactivemaster=\"true\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               }
+            ],
+            "title": "Dead RegionServers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Servers for a cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "links": [ ],
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "RegionServer"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "",
+                                 "url": "/d/apache-hbase-regionserver-overview?from=${__from}&to=${__to}&var-instance=${__data.fields[\"RegionServer\"]}"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Role"
+                     },
+                     "properties": [
+                        {
+                           "id": "noValue",
+                           "value": "RegionServer"
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "false": {
+                                       "index": 1,
+                                       "text": "backup master"
+                                    },
+                                    "true": {
+                                       "color": "text",
+                                       "index": 0,
+                                       "text": "active master"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 14,
+               "x": 10,
+               "y": 6
+            },
+            "id": 5,
+            "options": {
+               "cellHeight": "md",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true,
+               "sortBy": [ ]
+            },
+            "pluginVersion": "10.3.0-62488",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_replace(server_num_region_servers{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}, \"master_instance\", \"$1\", \"instance\", \"(.+)\")",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_replace(server_num_reference_files{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}, \"region_server_instance\", \"$1\", \"instance\", \"(.+)\")",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               }
+            ],
+            "title": "Servers",
+            "transformations": [
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "Time 1": true,
+                        "Time 2": true,
+                        "Value": true,
+                        "Value #A": true,
+                        "Value #B": true,
+                        "__name__": true,
+                        "__name__ 1": true,
+                        "__name__ 2": true,
+                        "clusterid": true,
+                        "clusterid 1": true,
+                        "clusterid 2": true,
+                        "context": true,
+                        "context 1": true,
+                        "context 2": true,
+                        "hbase_cluster": false,
+                        "hbase_cluster 1": true,
+                        "hbase_cluster 2": true,
+                        "instance": true,
+                        "instance 1": false,
+                        "instance 2": true,
+                        "isactivemaster": false,
+                        "isactivemaster 1": false,
+                        "isactivemaster 2": true,
+                        "job": true,
+                        "job 1": true,
+                        "job 2": true,
+                        "liveregionservers": true,
+                        "liveregionservers 1": true,
+                        "liveregionservers 2": true,
+                        "servername": false,
+                        "servername 1": false,
+                        "servername 2": true,
+                        "zookeeperquorum": true,
+                        "zookeeperquorum 1": true,
+                        "zookeeperquorum 2": true
+                     },
+                     "indexByName": {
+                        "Time": 5,
+                        "Value #A": 12,
+                        "Value #B": 13,
+                        "__name__": 6,
+                        "clusterid": 7,
+                        "context": 8,
+                        "hbase_cluster": 4,
+                        "hostname": 1,
+                        "instance": 2,
+                        "isactivemaster": 3,
+                        "job": 9,
+                        "liveregionservers": 10,
+                        "servername": 0,
+                        "zookeeperquorum": 11
+                     },
+                     "renameByName": {
+                        "Time": "",
+                        "deadregionservers": "Dead server",
+                        "hbase_cluster": "Cluster",
+                        "hostname": "Hostname",
+                        "instance": "Instance",
+                        "instance 1": "",
+                        "isactivemaster": "Role",
+                        "isactivemaster 1": "Master",
+                        "master_instance": "Master",
+                        "region_server_instance": "RegionServer",
+                        "servername": "Servername",
+                        "servername 1": "Servername"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Panel to report on the status of integration alerts.",
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 14
+            },
+            "id": 6,
+            "options": {
+               "alertInstanceLabelFilter": "{job=~\"${job:regex}\", hbase_cluster=~\"${hbase_cluster:regex}\"}",
+               "alertName": "",
+               "dashboardAlerts": false,
+               "folder": "",
+               "groupBy": [ ],
+               "groupMode": "default",
+               "maxItems": 20,
+               "sortOrder": 1,
+               "stateFilter": {
+                  "error": true,
+                  "firing": true,
+                  "noData": true,
+                  "normal": true,
+                  "pending": true
+               },
+               "viewMode": "list"
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "master_num_open_connections{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               }
+            ],
+            "title": "Alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Heap memory usage for the JVM.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 14
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "jvm_metrics_mem_heap_used_m{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", processname=~\"Master\"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\", processname=~\"Master\"}, 1)",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "JVM heap memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of open connections to the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "decimals": 0,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 22
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_open_connections{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - masters"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (region_server_num_open_connections{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - RegionServers"
+               }
+            ],
+            "title": "Connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Volume of successful and unsuccessful authentications.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 22
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (rate(master_authentication_successes{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - masters success"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (rate(master_authentication_failures{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - masters failure"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (rate(region_server_authentication_successes{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - rs success"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (rate(region_server_authentication_failures{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - rs failure"
+               }
+            ],
+            "title": "Authentications",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The size of the queue of requests, operations, and tasks to be processed by the master.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 30
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "master_queue_size{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Master queue size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of calls waiting to be processed by the master.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 30
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_general_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - general"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_replication_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - replication"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_read_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - read"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_write_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - write"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_scan_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - scan"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, hbase_cluster) (master_num_calls_in_priority_queue{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - priority"
+               }
+            ],
+            "title": "Master queued calls",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of regions in transition for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "decimals": 0,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 38
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "assignment_manager_rit_count{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "assignment_manager_rit_count_over_threshold{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}} - old"
+               }
+            ],
+            "title": "Regions in transition",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The age of the longest region in transition for the master of the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 30,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "ms"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 38
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "assignment_manager_rit_oldest_age{job=~\"$job\", hbase_cluster=~\"$hbase_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{hbase_cluster}}"
+               }
+            ],
+            "title": "Oldest region in transition",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "apache-hbase-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": "",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(master_num_open_connections,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "HBase cluster",
+               "multi": true,
+               "name": "hbase_cluster",
+               "options": [ ],
+               "query": "label_values(master_num_open_connections{job=~\"$job\"},hbase_cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "Apache HBase cluster overview",
+      "uid": "apache-hbase-cluster-overview",
+      "version": 0
+   }

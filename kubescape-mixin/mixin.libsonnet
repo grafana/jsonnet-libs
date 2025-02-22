@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'kubescape-overview.json': (import 'dashboards/kubescape-overview.json'),
   },
 

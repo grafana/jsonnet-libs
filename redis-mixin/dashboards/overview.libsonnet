@@ -65,6 +65,7 @@ local newGraph(datasource, title, expr, label, unit='short', description='', h, 
       title='Redis Overview',
       tags=['redis-overview'],
       uid=uid,
+      editable=false,
     )
     .addTemplate(
       g.template.query.new(

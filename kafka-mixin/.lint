@@ -5,3 +5,29 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-job-rule:
     reason: using the new common lib stardard with a filtering static value for job
+  template-instance-rule:
+    reason: "Kafka topic overview dashboard uses multi-select instance template"
+    entries:
+      - dashboard: "Kafka topic overview"
+  target-instance-rule:
+    reason: "Using kafka_cluster label instead of instance label for Kafka metrics"
+    entries:
+      - dashboard: "Kafka topic overview"
+      - dashboard: "ZooKeeper overview" 
+      - dashboard: "Kafka overview"
+  panel-datasource-rule:
+    reason: "Some panels use --Mixed-- datasource by default"
+    entries:
+      - dashboard: "ZooKeeper overview"
+        panels:
+          - "GC duration"
+          - "Allocated/promoted"
+      - dashboard: "Kafka overview"
+        panels:
+          - "Cluster network throughput"
+          - "Cluster messages throughput" 
+          - "Broker network throughput"
+          - "Broker messages throughput"
+          - "Producer"
+          - "Fetch-follower"
+          - "Fetch-consumer"

@@ -1,6 +1,6 @@
 (import 'alerts/alerts.libsonnet') +
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'snmp-overview.json': (import 'dashboards/snmp-overview.json'),
   },
 }

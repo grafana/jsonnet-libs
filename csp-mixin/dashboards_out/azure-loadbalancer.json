@@ -1,0 +1,653 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Summary",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of SYN Packets transmitted",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 6,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "background_solid"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(sum_over_time(azure_microsoft_network_loadbalancers_syncount_total_count[$__range]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Sync Packets"
+               }
+            ],
+            "title": "Sync Packets",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of Packets transmitted",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 6,
+               "x": 6,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "colorMode": "background_solid"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(sum_over_time(azure_microsoft_network_loadbalancers_packetcount_total_count[$__range]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Packets"
+               }
+            ],
+            "title": "Packets",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of Bytes transmitted",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "unit": "decbytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 6,
+               "x": 12,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "colorMode": "background_solid"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(sum_over_time(azure_microsoft_network_loadbalancers_bytecount_total_bytes[$__range]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Bytes"
+               }
+            ],
+            "title": "Bytes",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of new SNAT connections created",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 6,
+               "x": 18,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "colorMode": "background_solid"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(sum_over_time(azure_microsoft_network_loadbalancers_snatconnectioncount_total_count[$__range]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "SNAT connetions"
+               }
+            ],
+            "title": "SNAT connetions",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 3
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Details",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of SYN Packets transmitted within time period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 4
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (resourceGroup) (azure_microsoft_network_loadbalancers_syncount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{resourceGroup}}",
+                  "refId": "Sync Packets"
+               }
+            ],
+            "title": "Sync Packets",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of Packets transmitted within time period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 4
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (resourceGroup) (azure_microsoft_network_loadbalancers_packetcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{resourceGroup}}",
+                  "refId": "Packets"
+               }
+            ],
+            "title": "Packets",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of Bytes transmitted within time period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "decbytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 12
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (resourceGroup) (azure_microsoft_network_loadbalancers_bytecount_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{resourceGroup}}",
+                  "refId": "Bytes"
+               }
+            ],
+            "title": "Bytes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of new SNAT connections created within time period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 12
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (resourceGroup) (azure_microsoft_network_loadbalancers_snatconnectioncount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{resourceGroup}}",
+                  "refId": "SNAT connections"
+               }
+            ],
+            "title": "SNAT connections",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 20
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "SNAT Ports",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total SNAT ports used and allocated within time period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 21
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(azure_microsoft_network_loadbalancers_usedsnatports_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Used",
+                  "refId": "SNAT Ports"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(azure_microsoft_network_loadbalancers_allocatedsnatports_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Allocated",
+                  "refId": "Allocated SNAT Ports"
+               }
+            ],
+            "title": "SNAT Ports",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total SNAT ports used at the current time",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 21
+            },
+            "id": 13,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(azure_microsoft_network_loadbalancers_usedsnatports_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Used",
+                  "refId": "Currently used SNAT ports"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(azure_microsoft_network_loadbalancers_allocatedsnatports_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Allocated",
+                  "refId": "Allocated SNAT Ports"
+               }
+            ],
+            "title": "Currently used SNAT ports",
+            "transformations": [
+               {
+                  "id": "configFromData",
+                  "options": {
+                     "configRefId": "Allocated SNAT Ports",
+                     "mappings": [
+                        {
+                           "fieldName": "Allocated",
+                           "handlerKey": "max"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "type": "gauge"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "azure-cloud-provider"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(azure_microsoft_network_loadbalancers_bytecount_total_bytes{job=\"integrations/azure\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "ResourceGroup",
+               "multi": true,
+               "name": "resourceGroup",
+               "query": "label_values(azure_microsoft_network_loadbalancers_bytecount_total_bytes{job=\"integrations/azure\",job=~\"$job\"}, resourceGroup)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "SubscriptionName",
+               "multi": true,
+               "name": "subscriptionName",
+               "query": "label_values(azure_microsoft_network_loadbalancers_bytecount_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\"}, subscriptionName)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "ResourceName",
+               "multi": true,
+               "name": "resourceName",
+               "query": "label_values(azure_microsoft_network_loadbalancers_bytecount_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}, resourceName)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timepicker": {
+         "time_options": [
+            "now-1h"
+         ]
+      },
+      "timezone": "default",
+      "title": "Azure Load Balancing",
+      "uid": "azure-loadbalancer"
+   }
