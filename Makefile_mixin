@@ -1,7 +1,7 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
 
 .PHONY: all
-all: build dashboards_out prometheus_alerts.yaml prometheus_rules.yaml
+all: build dashboards_out prometheus_alerts.yaml prometheus_rules.yaml test
 
 vendor: $(wildcard jsonnetfile.json)
 ifneq ("$(wildcard jsonnetfile.json)","")
@@ -35,11 +35,20 @@ prometheus_alerts.yaml: $(wildcard vendor/**/alerts.yaml) $(wildcard vendor/**/a
 	else \
 		touch prometheus_rules_out/prometheus_alerts.yaml; \
 	fi
+
 prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rules.libsonnet) mixin.libsonnet $(wildcard rules.libsonnet) $(wildcard signals/*) $(wildcard rules/*)
 	@if [ -f rules.libsonnet -o -d rules ]; then \
 		mixtool generate rules mixin.libsonnet -a prometheus_rules_out/prometheus_rules.yaml; \
 	else \
 		touch prometheus_rules_out/prometheus_rules.yaml; \
+	fi
+
+.PHONY: test
+test:
+	@if [ -f tests/prometheus_alerts_test.yaml ]; then \
+		promtool test rules tests/prometheus_alerts_test.yaml; \
+	else \
+		echo "No prometheus_alerts_test.yaml file found, skipping promtool test."; \
 	fi
 
 .PHONY: deploy deploy_rules deploy_dashboards
