@@ -45,10 +45,10 @@ prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rul
 
 .PHONY: test
 test:
-	@if [ -f tests/prometheus_alerts_test.yaml ]; then \
-		promtool test rules tests/prometheus_alerts_test.yaml; \
+	@if [ -f tests/prometheus_*.yaml ]; then \
+		promtool test rules tests/prometheus_*.yaml; \
 	else \
-		echo "No prometheus_alerts_test.yaml file found, skipping promtool test."; \
+		echo "No tests/prometheus_*.yaml files found, skipping promtool test."; \
 	fi
 
 .PHONY: deploy deploy_rules deploy_dashboards
