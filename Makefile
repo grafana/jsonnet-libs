@@ -39,6 +39,14 @@ lint-mixins:
 	done; \
 	exit $$RESULT
 
+update-mixins:
+	@for d in $$(find . -maxdepth 1 -regex '.*-mixin\|.*-lib' -a -type d -print); do \
+		if [ -e "$$d/jsonnetfile.json" ]; then \
+			echo "Updating dependencies for $$d"; \
+			pushd "$$d" >/dev/null && jb update && popd >/dev/null; \
+		fi; \
+	done
+
 tests:
 	pushd . && cd ./common-lib && make vendor && make tests
 	pushd . && cd ./mixin-utils/test && make tests
