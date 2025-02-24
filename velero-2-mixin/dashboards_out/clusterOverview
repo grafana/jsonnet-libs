@@ -541,7 +541,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(velero_backup_success_total{job=~\"integrations/velero\"}, job)",
+               "query": "label_values(velero_backup_success_total{job=\"integrations/velero\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -556,7 +556,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(velero_backup_success_total{job=~\"integrations/velero\",job=~\"$job\"}, cluster)",
+               "query": "label_values(velero_backup_success_total{job=\"integrations/velero\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
