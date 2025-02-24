@@ -48,7 +48,7 @@
             "keepTime": true,
             "title": "Back to network fleet",
             "type": "link",
-            "url": "/d/snmp-snmp-fleet"
+            "url": "/d/snmp-fleet"
          },
          {
             "asDropdown": true,
@@ -176,7 +176,7 @@
                   "calcs": [
                      "lastNotNull"
                   ],
-                  "fields": "/^(sysDescr)$/"
+                  "fields": "/^(version)$/"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -186,7 +186,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,sysDescr) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"sysDescr\", \"$1\", \"sysDescr\", \".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*\")\n)",
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor\nsum by (job,instance,version) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*\")\n)",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "{{instance}}: Version",
@@ -2253,5 +2253,5 @@
       },
       "timezone": "",
       "title": "SNMP overview",
-      "uid": "snmp-snmp-overview"
+      "uid": "snmp-overview"
    }

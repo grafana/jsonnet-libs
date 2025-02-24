@@ -132,7 +132,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "sysDescr"
+                        "options": "version"
                      },
                      "properties": [
                         {
@@ -449,7 +449,7 @@
                               {
                                  "targetBlank": false,
                                  "title": "Drill down to ${__field.name} ${__value.text}",
-                                 "url": "d/snmp-snmp-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
+                                 "url": "d/snmp-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
                               }
                            ]
                         }
@@ -471,7 +471,7 @@
                               {
                                  "targetBlank": false,
                                  "title": "Filter by ${__field.name}",
-                                 "url": "d/snmp-snmp-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}"
+                                 "url": "d/snmp-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}"
                               }
                            ]
                         }
@@ -522,7 +522,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,sysDescr) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"sysDescr\", \"$1\", \"sysDescr\", \".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*\")\n)",
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor\nsum by (job,instance,version) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}: Version",
@@ -675,7 +675,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No traffic",
@@ -770,7 +770,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No errors",
@@ -857,7 +857,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No dropped packets",
@@ -955,7 +955,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No unicast packets",
@@ -1042,7 +1042,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No broadcast packets",
@@ -1129,7 +1129,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "noValue": "No multicast packets",
@@ -1266,5 +1266,5 @@
       },
       "timezone": "",
       "title": "SNMP fleet overview",
-      "uid": "snmp-snmp-fleet"
+      "uid": "snmp-fleet"
    }

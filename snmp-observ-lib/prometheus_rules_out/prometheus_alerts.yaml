@@ -1,5 +1,5 @@
 groups:
-    - name: snmp-fc-snmp-alerts
+    - name: snmp-fc-alerts
       rules:
         - alert: SNMPInterfaceFCerrors
           annotations:
@@ -78,7 +78,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: warning
-    - name: snmp-snmp-alerts
+    - name: snmp-alerts
       rules:
         - alert: SNMPNodeHasRebooted
           annotations:
@@ -127,12 +127,12 @@ groups:
             severity: info
         - alert: SNMPInterfaceDown
           annotations:
-            description: "Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.instance}} is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN)).*\"` are being checked.\n"
+            description: "Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.instance}} is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN)|ISP).*\"` are being checked.\n"
             summary: Network interface is down on SNMP device.
           expr: |
-            (ifOperStatus{ifAlias=~".*(?i:(uplink|internet|WAN)).*"}) == 2
+            (ifOperStatus{ifAlias=~".*(?i:(uplink|internet|WAN)|ISP).*"}) == 2
             # only alert if interface is adminatratively up:
-            and (ifAdminStatus{}) != 1
+            and (ifAdminStatus{}) != 2
           for: 5m
           keep_firing_for: 5m
           labels:
@@ -182,7 +182,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: warning
-    - name: snmp-snmp-exporter-alerts
+    - name: snmp-exporter-alerts
       rules:
         - alert: SNMPExporterEmptyResponse
           annotations:

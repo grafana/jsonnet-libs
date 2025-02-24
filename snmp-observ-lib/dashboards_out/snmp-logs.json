@@ -7,7 +7,7 @@
             "keepTime": true,
             "title": "Back to network fleet",
             "type": "link",
-            "url": "/d/snmp-snmp-fleet"
+            "url": "/d/snmp-fleet"
          },
          {
             "asDropdown": true,
