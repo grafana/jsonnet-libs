@@ -114,6 +114,7 @@ local template = import 'grafonnet/template.libsonnet';
         // Repeat this row for each Envoy downstream filter.
         { repeat: 'envoy_listener_filter' },
       ) + {
+        editable: false,
         templating+: {
           list+: [jobTemplate, instanceTemplate],
         },

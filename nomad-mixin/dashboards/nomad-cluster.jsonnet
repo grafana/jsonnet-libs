@@ -24,7 +24,7 @@
             },
           ],
         },
-        editable: true,
+        editable: false,
         fiscalYearStartMonth: 0,
         graphTooltip: 1,
         id: 8,

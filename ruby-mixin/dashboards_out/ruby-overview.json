@@ -1,0 +1,531 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "builtIn": 1,
+               "datasource": {
+                  "type": "datasource",
+                  "uid": "grafana"
+               },
+               "enable": true,
+               "hide": true,
+               "iconColor": "rgba(0, 211, 255, 1)",
+               "name": "Annotations & Alerts",
+               "target": {
+                  "limit": 100,
+                  "matchAny": false,
+                  "tags": [ ],
+                  "type": "dashboard"
+               },
+               "type": "dashboard"
+            }
+         ]
+      },
+      "description": "Http metrics for Rack applications",
+      "editable": false,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 18,
+      "links": [ ],
+      "liveNow": false,
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$datasource"
+            },
+            "description": "Http requests throughput by path.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "short",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 12,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "$datasource"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by(path) (rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                  "interval": "",
+                  "legendFormat": "{{path}}",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Request rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$datasource"
+            },
+            "description": "Http requests duration percentiles and average.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "ms",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 0
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "$datasource"
+                  },
+                  "editorMode": "code",
+                  "expr": "histogram_quantile(\n  0.99, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 2,
+                  "legendFormat": "99th Percentile",
+                  "range": true,
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "uid": "$datasource"
+                  },
+                  "editorMode": "code",
+                  "expr": "histogram_quantile(\n  0.5, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 2,
+                  "legendFormat": "50th Percentile",
+                  "range": true,
+                  "refId": "B"
+               },
+               {
+                  "datasource": {
+                     "uid": "$datasource"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum(rate(http_server_request_duration_seconds_sum{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])) * 1e3 \n/\nsum(rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval]))",
+                  "interval": "",
+                  "intervalFactor": 2,
+                  "legendFormat": "Average",
+                  "range": true,
+                  "refId": "C"
+               }
+            ],
+            "title": "Request latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$datasource"
+            },
+            "description": "Http requests error rate (5xx) by path.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "short",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "$datasource"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by(path) (\n  rate(http_server_requests_total{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\", code=~\"5.+\"}[$__rate_interval])\n)\n/\nsum by(path) (\n  rate(http_server_requests_total{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n)",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{path}}",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Error rate",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "30s",
+      "revision": 1,
+      "schemaVersion": 39,
+      "tags": [
+         "ruby-rack-integration"
+      ],
+      "templating": {
+         "list": [
+            {
+               "allValue": ".+",
+               "current": {
+                  "selected": true,
+                  "text": [
+                     "All"
+                  ],
+                  "value": [
+                     "$__all"
+                  ]
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "definition": "label_values(http_server_requests_total, job)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(http_server_requests_total, job)",
+                  "refId": "StandardVariableQuery"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "selected": true,
+                  "text": [
+                     "All"
+                  ],
+                  "value": [
+                     "$__all"
+                  ]
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "definition": "label_values(http_server_requests_total, instance)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(http_server_requests_total, instance)",
+                  "refId": "StandardVariableQuery"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "default",
+                  "value": "default"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Data source",
+               "multi": false,
+               "name": "datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "queryValue": "",
+               "refresh": 1,
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "skipUrlSync": false,
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "current": {
+                  "selected": true,
+                  "text": [
+                     "All"
+                  ],
+                  "value": [
+                     "$__all"
+                  ]
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$datasource"
+               },
+               "definition": "label_values(http_server_requests_total, path)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Path",
+               "multi": true,
+               "name": "path",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(http_server_requests_total, path)",
+                  "refId": "grafanacloud-muhammadshahzeb-prom-path-Variable-Query"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": {
+                  "selected": true,
+                  "text": [
+                     "All"
+                  ],
+                  "value": [
+                     "$__all"
+                  ]
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$datasource"
+               },
+               "definition": "label_values(http_server_requests_total, method)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Method",
+               "multi": true,
+               "name": "method",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(http_server_requests_total, method)",
+                  "refId": "grafanacloud-muhammadshahzeb-prom-method-Variable-Query"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": { },
+      "timezone": "",
+      "title": "Ruby Rack application overview",
+      "uid": "k17ofEYMz",
+      "version": 2,
+      "weekStart": ""
+   }

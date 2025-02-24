@@ -1,0 +1,1183 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "apache-activemq-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other Apache ActiveMQ dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of topics connected with the broker instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 6,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count (activemq_topic_queue_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "__auto"
+               }
+            ],
+            "title": "Topics",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of producers attached to topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 6,
+               "x": 6,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum (activemq_topic_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "__auto"
+               }
+            ],
+            "title": "Producers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of consumers subscribed to topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 6,
+               "x": 12,
+               "y": 0
+            },
+            "id": 4,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum (activemq_topic_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "__auto"
+               }
+            ],
+            "title": "Consumers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average number of consumers per topic.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 6,
+               "x": 18,
+               "y": 0
+            },
+            "id": 5,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg (activemq_topic_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "__auto"
+               }
+            ],
+            "title": "Average consumers per topic",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The rate messages are sent to topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "axisShow": false,
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 25,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "mps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 4
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by enqueue rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The rate messages have been acknowledged (and removed) from topic destinations",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "axisShow": false,
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 25,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "mps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 4
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by dequeue rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average time a message was held across all topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "axisShow": false,
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 25,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ms"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 12
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by average enqueue time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The rate messages have expired on topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "axisShow": false,
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 25,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "mps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 12
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_expired_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by expired message rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of consumers subscribed to the most active/used topics.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 20
+            },
+            "id": 10,
+            "options": {
+               "displayMode": "gradient",
+               "minVizHeight": 10,
+               "minVizWidth": 0,
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showUnfilled": true,
+               "valueMode": "color"
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by consumers",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average message size on topic destinations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "axisShow": false,
+                     "axisSoftMin": 0,
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 25,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 20
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_message_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+               }
+            ],
+            "title": "Top topics by average message size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Enqueue rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Dequeue rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Average enqueue time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Average message size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "ActiveMQ cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "Cluster link",
+                                 "url": "d/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "Instance link",
+                                 "url": "d/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 12,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "10.2.0-60139",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(activemq_topic_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(activemq_topic_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "activemq_topic_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "activemq_topic_average_message_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Topic summary",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "destination",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": { },
+                     "renameByName": {
+                        "Time 3": "",
+                        "Value #A": "Enqueue rate",
+                        "Value #B": "Dequeue rate",
+                        "Value #C": "Average enqueue time",
+                        "Value #D": "Average message size",
+                        "activemq_cluster 1": "ActiveMQ cluster",
+                        "destination": "Destination",
+                        "instance 1": "Instance"
+                     }
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "ActiveMQ cluster",
+                           "Instance",
+                           "Enqueue rate",
+                           "Dequeue rate",
+                           "Average enqueue time",
+                           "Average message size",
+                           "Destination"
+                        ]
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "apache-activemq-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(activemq_topic_producer_count,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "ActiveMQ cluster",
+               "multi": true,
+               "name": "activemq_cluster",
+               "options": [ ],
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},activemq_cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(activemq_topic_producer_count{job=~\"$job\",activemq_cluster=~\"$activemq_cluster\"},instance)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "text": "4",
+                  "value": "4"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Top topic count",
+               "multi": false,
+               "name": "k_selector",
+               "options": [
+                  {
+                     "text": "2",
+                     "value": "2"
+                  },
+                  {
+                     "text": "4",
+                     "value": "4"
+                  },
+                  {
+                     "text": "6",
+                     "value": "6"
+                  },
+                  {
+                     "text": "8",
+                     "value": "8"
+                  },
+                  {
+                     "text": "10",
+                     "value": "10"
+                  }
+               ],
+               "query": "2,4,6,8,10",
+               "refresh": 0,
+               "type": "custom"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+               },
+               "label": "Topic by name",
+               "name": "name",
+               "query": "",
+               "type": "textbox"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "Apache ActiveMQ topic overview",
+      "uid": "apache-activemq-topic-overview",
+      "version": 0
+   }

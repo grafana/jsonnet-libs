@@ -46,6 +46,7 @@ More examples:
  [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
 
 Examples:
+ - [docker-mixin](docker-mixin/)
  - [kafka-observ-lib](kafka-observ-lib/)
  - [jvm-observ-lib](jvm-observ-lib/)
  - [snmp-observ-lib](snmp-observ-lib/)

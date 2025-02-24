@@ -46,7 +46,7 @@ jobs:
         run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
 
   lint-mixin:
-    name: Run Mixtool
+    name: Lint Mixin
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -75,8 +75,13 @@ jobs:
 
       - name: Install Mixin dependencies
         working-directory: ./${{ matrix.mixin }}
-        run: jb install
+        run: make build
 
-      - name: Lint Mixin
+      - name: Lint Mixin with Mixtool
         working-directory: ./${{ matrix.mixin }}
         run: mixtool lint mixin.libsonnet
+
+      - name: Check for unexpected changes in generated files
+        working-directory: ./${{ matrix.mixin }}
+        run: "make && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
+

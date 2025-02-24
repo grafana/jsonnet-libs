@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'velero-overview.json': (import 'dashboards/velero-overview.json'),
   },
 

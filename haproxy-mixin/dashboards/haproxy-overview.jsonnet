@@ -4,7 +4,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
 
 g.dashboard.new() + {
   title: 'HAProxy / Overview',
-
+  editable: false,
   panels:
     local headline = d.util.section(
       g.panel.row.new(title='Headline'),

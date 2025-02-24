@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'nodejs-overview.json': (import 'dashboards/nodejs-overview.json'),
   },
 

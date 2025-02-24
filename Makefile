@@ -5,7 +5,7 @@ install-ci-deps:
 	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.20.0
 	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.20.0
 	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.20.0
-	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@a8984473edc33da685bd5f2138eab9cf6a0ff2b7
+	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.5.1
 
 fmt:
