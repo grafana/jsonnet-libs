@@ -26,7 +26,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
 };
 
 {
-  grafanaDashboards+: {
+  grafanaDashboards+:: {
     'jaeger-write.json':
       (g.dashboard('Jaeger / Write') + { uid: '5f26222aa7a3fb734f0cd4072cab43b3' })
       .addRow(
