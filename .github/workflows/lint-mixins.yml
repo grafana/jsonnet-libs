@@ -83,4 +83,5 @@ jobs:
 
       - name: Check for unexpected changes in generated files
         working-directory: ./${{ matrix.mixin }}
-        run: make && git diff --exit-code || (echo "Error: Generated files are not up to date. Run 'make' and commit the local diff" && exit 1)
+        run: "make && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
+
