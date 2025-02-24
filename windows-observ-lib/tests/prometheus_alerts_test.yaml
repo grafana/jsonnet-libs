@@ -1,0 +1,49 @@
+rule_files:
+  - ../prometheus_rules_out/prometheus_alerts.yaml
+
+evaluation_interval: 15m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'windows_os_physical_memory_free_bytes{instance="host1"}'
+        values: '10000000x15'
+      - series: 'windows_cs_physical_memory_bytes{instance="host1"}'
+        values: '1000000000x15'
+      - series: 'windows_logical_disk_free_bytes{volume="C:", instance="host1"}'
+        values: '10000000x15'
+      - series: 'windows_logical_disk_size_bytes{volume="C:", instance="host1"}'
+        values: '1000000000x15'
+
+
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: WindowsMemoryHighUtilization
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: host1
+            exp_annotations:
+              description: |
+                Memory usage on host host1 is critically high, with 99.00% of total memory used.
+                This exceeds the threshold of 90%.
+                Current memory free: 10M.
+                Total memory: 1G.
+                Consider investigating processes consuming high memory or increasing available memory.
+              summary: 'High memory usage on Windows host.'
+
+      - eval_time: 15m
+        alertname: WindowsDiskAlmostOutOfSpace
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              instance: host1
+              volume: "C:"
+            exp_annotations:
+              description: |
+                Disk space on volume C: of host host1 is critically low, with 99.00% of total space used.
+                This exceeds the threshold of 90%.
+                Current disk free: 10M.
+                Total disk size: 1G.
+                Consider cleaning up unnecessary files or increasing disk capacity.
+              summary: 'Disk is almost full on Windows host.'
