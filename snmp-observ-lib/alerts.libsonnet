@@ -6,7 +6,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
     groups+: [
       {
-        name: this.config.uid + '-fc-snmp-alerts',
+        name: this.config.uid + '-fc-alerts',
         rules:
           [
             {
@@ -152,7 +152,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           ],
       },
       {
-        name: this.config.uid + '-snmp-alerts',
+        name: this.config.uid + '-alerts',
         rules:
           [
             {
@@ -233,14 +233,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: |||
                       (%s) == 2
                       # only alert if interface is adminatratively up:
-                      and (%s) != 1
+                      and (%s) != 2
                     |||
                     % [
                       this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
-                severity: 'warning',
+                severity: this.config.alertInterfaceDownSeverity,
               },
               annotations: {
                 summary: 'Network interface is down on SNMP device.',
@@ -321,7 +321,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           ],
       },
       {
-        name: this.config.uid + '-snmp-exporter-alerts',
+        name: this.config.uid + '-exporter-alerts',
         rules:
           [
             {
