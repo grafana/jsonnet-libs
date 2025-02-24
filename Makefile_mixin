@@ -35,7 +35,6 @@ prometheus_alerts.yaml: $(wildcard vendor/**/alerts.yaml) $(wildcard vendor/**/a
 	else \
 		touch prometheus_rules_out/prometheus_alerts.yaml; \
 	fi
-
 prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rules.libsonnet) mixin.libsonnet $(wildcard rules.libsonnet) $(wildcard signals/*) $(wildcard rules/*)
 	@if [ -f rules.libsonnet -o -d rules ]; then \
 		mixtool generate rules mixin.libsonnet -a prometheus_rules_out/prometheus_rules.yaml; \
