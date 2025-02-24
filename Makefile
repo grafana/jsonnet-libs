@@ -8,6 +8,7 @@ install-ci-deps:
 	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.5.1
 	go install github.com/grafana/grizzly/cmd/grr@latest
+	go install github.com/cloudflare/pint/cmd/pint@v0.70.0
 
 fmt:
 	@find . -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
@@ -26,17 +27,25 @@ lint-fmt:
 lint-mixins:
 	@RESULT=0; \
 	for d in $$(find . -maxdepth 1 -regex '.*-mixin\|.*-lib' -a -type d -print); do \
+		echo "=== Linting mixin: $$d ==="; \
 		if [ -e "$$d/jsonnetfile.json" ]; then \
-			echo "Installing dependencies for $$d"; \
+			echo "Installing dependencies..."; \
 			pushd "$$d" >/dev/null && jb install && popd >/dev/null; \
 		fi; \
-	done; \
-	for m in $$(find . -maxdepth 2 -name 'mixin.libsonnet' -print); do \
-			echo "Linting mixin $$m"; \
-			mixtool lint -J $$(dirname "$$m")/vendor "$$m"; \
+		if [ -e "$$d/mixin.libsonnet" ]; then \
+			echo "Running mixtool lint..."; \
+			mixtool lint -J "$$d/vendor" "$$d/mixin.libsonnet"; \
 			if [ $$? -ne 0 ]; then \
 				RESULT=1; \
 			fi; \
+		fi; \
+		if [ -d "$$d/prometheus_rules_out" ]; then \
+			echo "Running pint..."; \
+			pint lint "$$d/prometheus_rules_out/"; \
+			if [ $$? -ne 0 ]; then \
+				RESULT=1; \
+			fi; \
+		fi; \
 	done; \
 	exit $$RESULT
 
