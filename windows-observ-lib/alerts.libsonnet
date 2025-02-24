@@ -111,8 +111,8 @@
               description: |||
                 Memory usage on host {{ $labels.instance }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
                 This exceeds the threshold of %(alertMemoryUsageThresholdCritical)s%%.
-                Current memory free: {{ with printf "windows_os_physical_memory_free_bytes{%(filteringSelector)s}" | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total memory: {{ with printf "windows_cs_physical_memory_bytes{%(filteringSelector)s}" | query | first | value | humanize }}{{ . }}{{ end }}.
+                Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{%(filteringSelector)s}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total memory: {{ with printf `windows_cs_physical_memory_bytes{%(filteringSelector)s}` | query | first | value | humanize }}{{ . }}{{ end }}.
                 Consider investigating processes consuming high memory or increasing available memory.
               ||| % this.config,
             },
@@ -132,8 +132,8 @@
               description: |||
                 Disk space on volume {{ $labels.volume }} of host {{ $labels.instance }} is critically low, with {{ printf "%%.2f" $value }}%% of total space used.
                 This exceeds the threshold of %(alertDiskUsageThresholdCritical)s%%.
-                Current disk free: {{ with printf "windows_logical_disk_free_bytes{volume=\"%%s\", %(filteringSelector)s}" $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total disk size: {{ with printf "windows_logical_disk_size_bytes{volume=\"%%s\", %(filteringSelector)s}" $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%%s", %(filteringSelector)s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %(filteringSelector)s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
                 Consider cleaning up unnecessary files or increasing disk capacity.
               ||| % this.config,
             },
