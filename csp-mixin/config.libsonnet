@@ -20,7 +20,8 @@
         gcpceOverview: (import './signals/gcpceOverview.libsonnet')(this),
         gcpvpc: (import './signals/gcpvpc.libsonnet')(this),
         azurefrontdoorOverview: (import './signals/azurefrontdoorOverview.libsonnet')(this),
-        azurefrontdoor: (import './signals/azurefrontdoor.libsonnet')(this),
+        azurefrontdoorAlloy: (import './signals/azurefrontdoorAlloy.libsonnet')(this),
+        azurefrontdoorAgentless: (import './signals/azurefrontdoorAgentless.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,

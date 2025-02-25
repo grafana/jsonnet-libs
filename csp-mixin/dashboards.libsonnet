@@ -221,7 +221,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    ),
 
                  [csplib.config.uid + '-frontdoor.json']:
-                   local variables = csplib.signals.azurefrontdoor.getVariablesMultiChoice();
+                   local variables = csplib.signals.azurefrontdoorAlloy.getVariablesMultiChoice();
                    g.dashboard.new(csplib.config.dashboardNamePrefix + 'Front Door')
                    + g.dashboard.withUid(csplib.config.uid + '-frontdoor')
                    + g.dashboard.withTags(csplib.config.dashboardTags)
