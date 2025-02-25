@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint-fmt:
-    name: Lint and Format
+    name: Lint and format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,7 +25,7 @@ jobs:
         run: make lint-fmt
 
   tests:
-    name: Run Tests
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
