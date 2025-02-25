@@ -45,6 +45,7 @@ prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rul
 .PHONY: test
 test:
 	@if [ -f tests/prometheus_*.yaml ]; then \
+		echo "Execute promtool tests:"; \
 		promtool test rules tests/prometheus_*.yaml; \
 	else \
 		echo "No tests/prometheus_*.yaml files found, skipping promtool test."; \

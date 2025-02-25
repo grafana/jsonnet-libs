@@ -23,6 +23,7 @@ install-ci-deps: install-promtool
 	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.20.0
 	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.5.1
+	go install github.com/grafana/grizzly/cmd/grr@latest
 
 .PHONY: install-promtool
 install-promtool:
@@ -65,6 +66,14 @@ lint-mixins:
 			fi; \
 	done; \
 	exit $$RESULT
+
+update-mixins:
+	@for d in $$(find . -maxdepth 1 -regex '.*-mixin\|.*-lib' -a -type d -print); do \
+		if [ -e "$$d/jsonnetfile.json" ]; then \
+			echo "Updating dependencies for $$d"; \
+			pushd "$$d" >/dev/null && jb update && popd >/dev/null; \
+		fi; \
+	done
 
 tests:
 	pushd . && cd ./common-lib && make vendor && make tests
