@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint-fmt:
-    name: Lint and format
+    name: Lint and Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,11 +21,11 @@ jobs:
           go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
-      - name: Lint and format
+      - name: Lint and Format
         run: make lint-fmt
 
   tests:
-    name: Run tests
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,5 +36,5 @@ jobs:
           go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
-      - name: Run tests
+      - name: Run Tests
         run: make tests
