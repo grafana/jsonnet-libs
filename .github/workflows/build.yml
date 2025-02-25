@@ -21,7 +21,7 @@ jobs:
           go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
-      - name: Lint and Format
+      - name: Lint and format
         run: make lint-fmt
 
   tests:
@@ -36,5 +36,5 @@ jobs:
           go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
-      - name: Run Tests
+      - name: Run tests
         run: make tests
