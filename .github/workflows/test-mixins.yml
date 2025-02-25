@@ -105,3 +105,7 @@ jobs:
           # Try to deploy dashboards
           make deploy_dashboards
 
+      - name: Run promtool test for rules
+        working-directory: ./${{ matrix.mixin }}
+        run: make test
+
