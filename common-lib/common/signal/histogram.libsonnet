@@ -30,6 +30,18 @@ base {
     )
 
     {
+      local this = self,
+      withQuantile(quantile=0.95):
+        self
+        {
+          sourceMaps:
+            [
+              source
+              {
+                quantile: quantile,
+              }
+              for source in super.sourceMaps
+            ],
+        },
     },
-
 }
