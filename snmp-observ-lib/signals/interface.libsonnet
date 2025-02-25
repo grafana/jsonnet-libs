@@ -14,7 +14,7 @@ function(this, level='interface')
     local bitsWrapper = ['(', ')*8'],
     local nonZeroWrapper = ['(', ')>0'],
     //set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.
-    local clampQuery = ['', '\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9'],
+    local clampQuery = ['', '\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<' + this.clampSpeed],
     discoveryMetric: {
       generic: 'ifOperStatus',
       arista_sw: self.generic,
@@ -52,7 +52,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCInOctets{%(queriesSelector)s}',
-                exprWrappers: [bitsWrapper, clampQuery],
+                exprWrappers: [bitsWrapper] + if this.clampQueryEnabled then [clampQuery] else [],
               },
             arista_sw: self.generic,
             brocade_fc: self.generic,
@@ -86,7 +86,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCOutOctets{%(queriesSelector)s} ',
-                exprWrappers: [bitsWrapper, clampQuery],
+                exprWrappers: [bitsWrapper] + if this.clampQueryEnabled then [clampQuery] else [],
               },
             arista_sw: self.generic,
             brocade_fc: self.generic,
@@ -530,7 +530,7 @@ function(this, level='interface')
         },
         interfacesCount: self.ifOperStatus {
           name: 'Interfaces total',
-          nameShort: 'Interfaces count',
+          nameShort: 'Interfaces',
           description: |||
             Device interface count
           |||,
