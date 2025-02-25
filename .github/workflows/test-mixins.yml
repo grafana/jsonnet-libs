@@ -46,7 +46,7 @@ jobs:
         run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
 
   lint-mixin:
-    name: Test Mixin
+    name: Test mixin
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -82,13 +82,13 @@ jobs:
       - name: Install CI dependencies
         run: make install-ci-deps
 
-      - name: Install Mixin dependencies
+      - name: Install mixin dependencies
         working-directory: ./${{ matrix.mixin }}
         run: make build
 
-      - name: Lint Mixin with Mixtool
+      - name: Lint mixin
         working-directory: ./${{ matrix.mixin }}
-        run: mixtool lint mixin.libsonnet
+        run: make lint
 
       - name: Check for unexpected changes in generated files
         working-directory: ./${{ matrix.mixin }}

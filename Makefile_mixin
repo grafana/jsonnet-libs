@@ -17,12 +17,16 @@ fmt:
 		xargs -n 1 -- $(JSONNET_FMT) -i
 
 .PHONY: lint
-lint: build
-	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
+lint: build lint-pint
+	@find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		while read f; do \
 			$(JSONNET_FMT) "$$f" | diff -u "$$f" -; \
 		done
 	mixtool lint mixin.libsonnet
+
+.PHONY: lint-pint
+lint-pint: prometheus_alerts.yaml prometheus_rules.yaml
+	pint lint prometheus_rules_out/
 
 dashboards_out: mixin.libsonnet $(wildcard **/*.libsonnet) $(wildcard **/*.jsonnet) $(wildcard panels/*) $(wildcard signals/*)
 	@mkdir -p dashboards_out

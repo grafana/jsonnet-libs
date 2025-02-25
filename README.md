@@ -20,7 +20,7 @@ Based on format described [here](https://monitoring.mixins.dev/):
 * [`memcached-mixin`](memcached-mixin/): A set of reuseable and extensible dashboards
   for Memcached.
 
-* [`nodejs-mixin`](nodejs-mixin/): A set of reusable and extensible dashboards
+* [`nodejs-mixin`](nodejs-mixin/): A set of reuseable and extensible dashboards
   for Node.js.
 
 * [`caddy-mixin`](caddy-mixin/): A set of reusable and extensible dashboards
@@ -29,6 +29,13 @@ Based on format described [here](https://monitoring.mixins.dev/):
 * [`jira-mixin`](jira-mixin/): A set of reusable and extensible dashboards and alerts for JIRA.
 
 You can find more in directories with `-mixin` suffix.
+
+### Linting
+
+The monitoring mixins in this repository use two linting tools to ensure quality and consistency:
+
+* [mixtool](https://github.com/monitoring-mixins/mixtool): Validates the structure and syntax of monitoring mixins, ensuring they follow the standard mixin format.
+* [pint](https://github.com/cloudflare/pint): Lints Prometheus rules and alerts to catch common mistakes and enforce best practices.
 
 ## Observability libraries
 
