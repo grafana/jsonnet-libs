@@ -108,4 +108,3 @@ jobs:
       - name: Run promtool test for rules
         working-directory: ./${{ matrix.mixin }}
         run: make test
-
