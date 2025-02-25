@@ -15,7 +15,11 @@ groups:
         - alert: WindowsMemoryHighUtilization
           annotations:
             description: |
-                Memory usage on host {{ $labels.instance }} is above 90%. The current value is {{ $value | printf "%.2f" }}%.
+                Memory usage on host {{ $labels.instance }} is critically high, with {{ printf "%.2f" $value }}% of total memory used.
+                This exceeds the threshold of 90%.
+                Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total memory: {{ with printf `windows_cs_physical_memory_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                Consider investigating processes consuming high memory or increasing available memory.
             summary: High memory usage on Windows host.
           expr: |
             100 - ((windows_os_physical_memory_free_bytes{}
@@ -28,7 +32,11 @@ groups:
         - alert: WindowsDiskAlmostOutOfSpace
           annotations:
             description: |
-                Volume {{ $labels.volume }} is almost full on host {{ $labels.instance }}, more than 90% of space is used. The current volume utilization is {{ $value | printf "%.2f" }}%.
+                Disk space on volume {{ $labels.volume }} of host {{ $labels.instance }} is critically low, with {{ printf "%.2f" $value }}% of total space used.
+                This exceeds the threshold of 90%.
+                Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%s", }` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%s", }` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                Consider cleaning up unnecessary files or increasing disk capacity.
             summary: Disk is almost full on Windows host.
           expr: |
             100 - ((windows_logical_disk_free_bytes{} ) / (windows_logical_disk_size_bytes{})) * 100  > 90
