@@ -16,7 +16,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }
       ),
 
-
     //overview
     containersCount:
       this.signals.machine.containersCount.asStat()
@@ -68,7 +67,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + this.signals.container.networkErrorsReceive.asPanelMixin()
       + this.signals.container.networkErrorsTransmit.asPanelMixin()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
-
 
     diskUsageBytes:
       commonlib.panels.disk.timeSeries.usage.new('Disk usage', targets=[])

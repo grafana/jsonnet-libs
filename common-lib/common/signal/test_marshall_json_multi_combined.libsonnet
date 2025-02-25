@@ -51,10 +51,12 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'foo_info{%(queriesSelector)s}',
-
             infoLabel: 'version',
           },
-          prometheus: {},
+          prometheus: {
+            expr: 'foo_info2{%(queriesSelector)s}',
+            infoLabel: 'version2',
+          },
         },
       },
       status: {
@@ -135,6 +137,15 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, ['otel', 'prometheus']);
       testExpression: {
         actual: panel.expr,
         expect: 'avg by (job,abc) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor\navg by (job,xxx) (\n  abc2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+      },
+    }),
+  },
+  asTargetInfo: {
+    local raw = signals.foo_info.asTarget(),
+    testResult: test.suite({
+      testExpression: {
+        actual: raw.expr,
+        expect: 'avg by (job,xxx,version) (\n  foo_info{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor ignoring(version,version2)\navg by (job,xxx,version2) (\n  foo_info2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

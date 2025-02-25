@@ -13,7 +13,7 @@
     ]
   },
   "description": "Python runtime metrics",
-  "editable": true,
+  "editable": false,
   "folderName": "Integration - Python",
   "gnetId": null,
   "graphTooltip": 0,

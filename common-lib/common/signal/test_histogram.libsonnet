@@ -8,6 +8,7 @@ local m1 = signal.init(
   aggFunction='avg',
 ).addSignal(
   name='API server duration',
+  nameShort='duration',
   type='histogram',
   unit='seconds',
   description='API server call duration.',
@@ -17,6 +18,7 @@ local m1 = signal.init(
       rangeFunction: 'rate',
       aggKeepLabels: [],
       legendCustomTemplate: null,
+      infoLabel: null,
     },
   ],
 
@@ -28,7 +30,7 @@ local m1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: m1.asTarget().legendFormat,
-        expect: '{{job}}: API server duration',
+        expect: '{{job}}: duration',
       },
       testExpression: {
         actual: m1.asTarget().expr,

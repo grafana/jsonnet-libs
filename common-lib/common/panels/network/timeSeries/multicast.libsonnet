@@ -11,5 +11,10 @@ base {
     targets,
     description='Packets sent from one source to multiple recipients simultaneously, allowing efficient one-to-many communication in a network.',
   ):
-    super.new(title, targets, description),
+    super.new(title, targets, description)
+    + self.stylize(),
+
+  stylize(allLayers=true):
+    (if allLayers == true then super.stylize() else {})
+    + timeSeries.standardOptions.withNoValue('No multicast packets'),
 }

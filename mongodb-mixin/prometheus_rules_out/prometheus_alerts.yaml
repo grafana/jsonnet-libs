@@ -1,0 +1,109 @@
+groups:
+    - name: MongodbAlerts
+      rules:
+        - alert: MongodbDown
+          annotations:
+            description: |-
+                MongoDB instance is down
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB Instance is Down.
+          expr: mongodb_up == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: MongodbReplicaMemberUnhealthy
+          annotations:
+            description: Mongodb replica member unhealthy (instance {{ $labels.instance }})
+            summary: MongoDB replica member unhealthy.
+          expr: mongodb_mongod_replset_member_health == 0
+          labels:
+            severity: critical
+        - alert: MongodbReplicationLag
+          annotations:
+            description: |-
+                Mongodb replication lag is more than 10s
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB replication lag is exceeding the threshold.
+          expr: mongodb_mongod_replset_member_replication_lag{state="SECONDARY"} > 60
+          for: 5m
+          labels:
+            severity: critical
+        - alert: MongodbReplicationHeadroom
+          annotations:
+            description: |-
+                MongoDB replication headroom is <= 0
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB replication headroom is exceeding the threshold.
+          expr: (avg(mongodb_mongod_replset_oplog_tail_timestamp - mongodb_mongod_replset_oplog_head_timestamp) - (avg(mongodb_mongod_replset_member_optime_date{state="PRIMARY"}) - avg(mongodb_mongod_replset_member_optime_date{state="SECONDARY"}))) <= 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: MongodbNumberCursorsOpen
+          annotations:
+            description: |-
+                Too many cursors opened by MongoDB for clients (> 10k)
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB number cursors open too high.
+          expr: mongodb_mongod_metrics_cursor_open{state="total"} > 10 * 1000
+          for: 2m
+          labels:
+            severity: warning
+        - alert: MongodbCursorsTimeouts
+          annotations:
+            description: |-
+                Too many cursors are timing out
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB cursors timeouts is exceeding the threshold.
+          expr: increase(mongodb_mongod_metrics_cursor_timed_out_total[1m]) > 100
+          for: 2m
+          labels:
+            severity: warning
+        - alert: MongodbTooManyConnections
+          annotations:
+            description: |-
+                Too many connections (> 80%)
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB too many connections.
+          expr: avg by(instance) (rate(mongodb_connections{state="current"}[1m])) / avg by(instance) (sum (mongodb_connections) by (instance)) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+        - alert: MongodbVirtualMemoryUsage
+          annotations:
+            description: |-
+                High memory usage
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB virtual memory usage is too high.
+          expr: (sum(mongodb_memory{type="virtual"}) BY (instance) / sum(mongodb_memory{type="mapped"}) BY (instance)) > 3
+          for: 2m
+          labels:
+            severity: warning
+        - alert: MongodbReadRequestsQueueingUp
+          annotations:
+            description: |-
+                MongoDB requests are queuing up
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB read requests queuing up.
+          expr: delta(mongodb_mongod_global_lock_current_queue{type="reader"}[1m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: MongodbWriteRequestsQueueingUp
+          annotations:
+            description: |-
+                MongoDB write requests are queueing up
+                  VALUE = {{ $value }}
+                  LABELS = {{ $labels }}
+            summary: MongoDB write requests queuing up.
+          expr: delta(mongodb_mongod_global_lock_current_queue{type="writer"}[1m]) > 0
+          for: 5m
+          labels:
+            severity: warning

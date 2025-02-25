@@ -19,10 +19,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           for v in variables
         ])
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            csplib.grafana.rows.overview
-            + csplib.grafana.rows.api
-            + csplib.grafana.rows.network,
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                csplib.grafana.rows.overview,
+                csplib.grafana.rows.api,
+                csplib.grafana.rows.network,
+              ]
+            )
           )
         ),
     }
@@ -46,10 +50,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             for v in variables
           ])
           + g.dashboard.withPanels(
-            g.util.grid.wrapPanels(
-              csplib.grafana.rows.glb_requests
-              + csplib.grafana.rows.glb_latency
-              + csplib.grafana.rows.glb_traffic_metrics
+            g.util.panel.resolveCollapsedFlagOnRows(
+              g.util.grid.wrapPanels(
+                [
+                  csplib.grafana.rows.glb_requests,
+                  csplib.grafana.rows.glb_latency,
+                  csplib.grafana.rows.glb_traffic_metrics,
+                ]
+              )
             )
           ),
         [csplib.config.uid + '-computeengine.json']:
@@ -62,9 +70,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
           + g.dashboard.withVariables(variables)
           + g.dashboard.withPanels(
-            g.util.grid.wrapPanels(
-              csplib.grafana.rows.gce_overview +
-              csplib.grafana.rows.gce_instance
+            g.util.panel.resolveCollapsedFlagOnRows(
+              g.util.grid.wrapPanels(
+                [
+                  csplib.grafana.rows.gce_overview,
+                  csplib.grafana.rows.gce_instance,
+                ]
+              )
             )
           ),
 
@@ -83,10 +95,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             for v in variables
           ])
           + g.dashboard.withPanels(
-            g.util.grid.wrapPanels(
-              csplib.grafana.rows.gcpvpc_overview +
-              csplib.grafana.rows.gcpvpc_service +
-              csplib.grafana.rows.gcpvpc_tunnel,
+            g.util.panel.resolveCollapsedFlagOnRows(
+              g.util.grid.wrapPanels(
+                [
+                  csplib.grafana.rows.gcpvpc_overview,
+                  csplib.grafana.rows.gcpvpc_service,
+                  csplib.grafana.rows.gcpvpc_tunnel,
+                ]
+              )
             ),
           ),
       } else {}
@@ -103,9 +119,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.aep_storage +
-                       csplib.grafana.rows.aep_resources
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.aep_storage,
+                           csplib.grafana.rows.aep_resources,
+                         ]
+                       )
                      )
                    ),
 
@@ -119,9 +139,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.asql_connections +
-                       csplib.grafana.rows.asql_resources
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.asql_connections,
+                           csplib.grafana.rows.asql_resources,
+                         ]
+                       )
                      )
                    ),
 
@@ -135,10 +159,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.alb_summary +
-                       csplib.grafana.rows.alb_details +
-                       csplib.grafana.rows.alb_loadbalancers
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.alb_summary,
+                           csplib.grafana.rows.alb_details,
+                           csplib.grafana.rows.alb_loadbalancers,
+                         ]
+                       )
                      )
                    ),
 
@@ -153,9 +181,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
                      g.util.grid.wrapPanels(
-                       csplib.grafana.rows.vn_overview +
-                       csplib.grafana.rows.vn_bytes +
-                       csplib.grafana.rows.vn_packets
+                       g.util.panel.resolveCollapsedFlagOnRows(
+                         [
+                           csplib.grafana.rows.vn_overview,
+                           csplib.grafana.rows.vn_bytes,
+                           csplib.grafana.rows.vn_packets,
+                         ]
+                       )
                      )
                    ),
 
@@ -178,9 +210,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                      for v in variables
                    ])
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.avm_overview +
-                       csplib.grafana.rows.avm_instance
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.avm_overview,
+                           csplib.grafana.rows.avm_instance,
+                         ]
+                       )
                      )
                    ),
 
@@ -203,9 +239,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                      for v in variables
                    ])
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.afd_overview
-                       + csplib.grafana.rows.afd_endpoints,
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.afd_overview,
+                           csplib.grafana.rows.afd_endpoints,
+                         ]
+                       )
                      )
                    ),
 
@@ -219,10 +259,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       csplib.grafana.rows.azqueuestore_overview
-                       + csplib.grafana.rows.azqueuestore_api
-                       + csplib.grafana.rows.azqueuestore_network,
+                     g.util.panel.resolveCollapsedFlagOnRows(
+                       g.util.grid.wrapPanels(
+                         [
+                           csplib.grafana.rows.azqueuestore_overview,
+                           csplib.grafana.rows.azqueuestore_api,
+                           csplib.grafana.rows.azqueuestore_network,
+                         ]
+                       )
                      )
                    ),
                } else {},

@@ -145,6 +145,41 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       }),
   },
 
+  // This enables vault pods to be labeled as 'vault-active' (Vault K8s service registration),
+  // indicating whether the pod is active or in standby mode
+  // See https://developer.hashicorp.com/vault/docs/v1.10.x/configuration/service-registration/kubernetes#configuration
+  withServiceRegistration(namespace, serviceAccount):: {
+    local role = k.rbac.v1.role,
+    local policyRule = k.rbac.v1.policyRule,
+    local roleBinding = k.rbac.v1.roleBinding,
+    local subject = k.rbac.v1.subject,
+    _config+:: { vault+: { config+: {
+      service_registration+: {
+        kubernetes: {},
+      },
+    } } },
+    role: role.new()
+          + role.metadata.withName('vault-role')
+          + role.metadata.withNamespace(namespace)
+          + role.withRules([
+            policyRule.new()
+            + policyRule.withApiGroups([''])
+            + policyRule.withResources(['pods'])
+            + policyRule.withVerbs(['get', 'update', 'patch']),
+          ]),
+    roleBinding: roleBinding.new()
+                 + roleBinding.metadata.withName('vault-role-binding')
+                 + roleBinding.metadata.withNamespace(namespace)
+                 + roleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io')
+                 + roleBinding.roleRef.withKind('Role')
+                 + roleBinding.roleRef.withName('vault-role')
+                 + roleBinding.withSubjects([
+                   subject.withKind('ServiceAccount')
+                   + subject.withName(serviceAccount)
+                   + subject.withNamespace(namespace),
+                 ]),
+  },
+
   local container = k.core.v1.container,
   local containerPort = k.core.v1.containerPort,
   local envVar = k.core.v1.envVar,
@@ -163,6 +198,10 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     + container.withEnv([
       envVar.fromFieldPath('POD_IP', 'status.podIP'),
       envVar.fromFieldPath('POD_NAME', 'metadata.name'),
+      // These environment variables are needed to support Vault K8s service registration
+      // See https://developer.hashicorp.com/vault/docs/v1.10.x/configuration/service-registration/kubernetes#configuration
+      envVar.fromFieldPath('VAULT_K8S_POD_NAME', 'metadata.name'),
+      envVar.fromFieldPath('VAULT_K8S_NAMESPACE', 'metadata.namespace'),
       envVar.new(
         'VAULT_CLUSTER_ADDR',
         'https://$(POD_NAME).vault.vault.svc.cluster.local.:%s' % this._config.vault.clusterPort

@@ -5,6 +5,7 @@ local m1 = signal.init(
   filteringSelector=['job="abc"'],
 ).addSignal(
   name='Go version',
+  nameShort='Version',
   type='info',
   description='Go version.',
   sourceMaps=[
@@ -32,39 +33,39 @@ local m1 = signal.init(
 {
 
   asTarget: {
-    raw:: m1.asTarget(),
+    local raw = m1.asTarget(),
     testResult: test.suite({
       testExpression: {
-        actual: m1.asTarget().expr,
+        actual: raw.expr,
         expect: 'go_info{job="abc",job=~"$job",instance=~"$instance"}',
       },
     }),
   },
   asStat:
     {
-      raw:: m1.asStat(),
+      local raw = m1.asStat(),
       testResult: test.suite({
         testTStitle: {
-          actual: m1.asStat().title,
+          actual: raw.title,
           expect: 'Go version',
         },
         testType: {
-          actual: m1.asStat().type,
+          actual: raw.type,
           expect: 'stat',
         },
         testTSversion: {
-          actual: m1.asStat().pluginVersion,
+          actual: raw.pluginVersion,
           expect: 'v11.0.0',
         },
         testTSUid: {
-          actual: m1.asStat().datasource,
+          actual: raw.datasource,
           expect: {
             uid: '${datasource}',
             type: 'prometheus',
           },
         },
         testInfoLabel: {
-          actual: m1.asStat().options.reduceOptions.fields,
+          actual: raw.options.reduceOptions.fields,
           expect: '/^' + '(version|version2)' + '$/',
         },
       }),

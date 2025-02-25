@@ -8,8 +8,9 @@ local m1 = signal.init(
   aggFunction='max',
 ).addSignal(
   name='API server requests',
+  nameShort='Requests',
   type='counter',
-  unit='requests',
+  unit='rps',
   description='API server calls.',
   sourceMaps=[
     {
@@ -17,6 +18,7 @@ local m1 = signal.init(
       rangeFunction: 'rate',
       aggKeepLabels: [],
       legendCustomTemplate: null,
+      infoLabel: null,
     },
   ],
 
@@ -26,7 +28,7 @@ local m1 = signal.init(
 {
 
   asTableColumn: {
-    raw:: m1.asTableColumn(),
+    local raw = m1.asTableColumn(),
     testResult: test.suite({
       testFormat: {
         actual: m1.asTableColumn().targets[0].format,
@@ -39,6 +41,14 @@ local m1 = signal.init(
       testInstant: {
         actual: m1.asTableColumn().targets[0].instant,
         expect: true,
+      },
+      testColumnTitle: {
+        actual: m1.asTable().fieldConfig.overrides[0].properties[0].value,
+        expect: 'Requests',
+      },
+      testUnit: {
+        actual: m1.asTable().fieldConfig.overrides[0].properties[1].value,
+        expect: 'rps',
       },
     }),
   },
@@ -61,26 +71,93 @@ local m1 = signal.init(
   },
   asTable:
     {
-      raw:: m1.asTable(),
+      local raw = m1.asTable(),
       testResult: test.suite({
+        testRaw: {
+          actual: raw,
+          expect: {
+            datasource:
+              { type: 'prometheus', uid: '${datasource}' },
+            description: 'API server calls.',
+            fieldConfig: { defaults: { custom: { filterable: false } }, overrides: [{ matcher: { id: 'byName', options: 'API server requests' }, properties: [{ id: 'displayName', value: 'Requests' }, { id: 'unit', value: 'rps' }] }] },
+            pluginVersion: 'v11.0.0',
+            targets: [{ datasource: { type: 'prometheus', uid: '${datasource}' }, expr: 'max by (job,instance) (\n  rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m])\n)', format: 'table', instant: true, legendFormat: '{{instance}}: Requests', refId: 'API server requests' }],
+            title: 'API server requests',
+            transformations: [
+              { id: 'merge' },
+              { id: 'renameByRegex', options: { regex: 'Value #(.*)', renamePattern: '$1' } },
+              { id: 'filterFieldsByName', options: { include: { pattern: '^(?!Time).*$' } } },
+              {
+                id: 'organize',
+                options:
+                  {
+                    indexByName: { instance: 1, job: 0 },
+                    renameByName:
+                      {
+                        Value: 'API server requests',
+                        instance: 'Instance',
+                        job: 'Job',
+                      },
+
+                  },
+              },
+            ],
+            type: 'table',
+          },
+        },
+        testTransformations: {
+          actual: raw.transformations,
+          expect: [
+            { id: 'merge' },
+            {
+              id: 'renameByRegex',
+              options: {
+                regex: 'Value #(.*)',
+                renamePattern: '$1',
+              },
+            },
+            {
+              id: 'filterFieldsByName',
+              options: { include: { pattern: '^(?!Time).*$' } },
+            },
+            {
+              // Sort instance and job labels first
+              // Capitalize instance and job labels
+              id: 'organize',
+              options: {
+                indexByName: { instance: 1, job: 0 },
+                renameByName:
+                  {
+                    Value: 'API server requests',
+                    instance: 'Instance',
+                    job: 'Job',
+                  },
+              },
+            },
+          ],
+        },
         testTStitle: {
-          actual: m1.asTable().title,
+          actual: raw.title,
           expect: 'API server requests',
         },
+        testColumnTitle: {
+          actual: raw.fieldConfig.overrides[0].properties[0].value,
+          expect: 'Requests',
+        },
         testUnit: {
-          actual: m1.asTable().fieldConfig.overrides[0].properties[0].value,
+          actual: raw.fieldConfig.overrides[0].properties[1].value,
           expect: 'rps',
         },
         testTStype: {
-          actual: m1.asTable().type,
+          actual: raw.type,
           expect: 'table',
         },
         testTSversion: {
-          actual: m1.asTimeSeries().pluginVersion,
+          actual: raw.pluginVersion,
           expect: 'v11.0.0',
         },
         testTSUid: {
-          actual: m1.asTimeSeries().datasource,
+          actual: raw.datasource,
           expect: {
             uid: '${datasource}',
             type: 'prometheus',

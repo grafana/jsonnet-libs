@@ -9,6 +9,7 @@ groups:
         labels:
           severity: critical
           service: 'Compute Engine'
+          serviceId: 'compute'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'VM CPU utilization is too high.'
@@ -23,6 +24,7 @@ groups:
         labels:
           severity: critical
           service: 'Compute Engine'
+          serviceId: 'compute'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'VM IO latency is too high.'
@@ -37,6 +39,7 @@ groups:
         labels:
           severity: critical
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Database CPU utilization is too high.'
@@ -51,6 +54,7 @@ groups:
         labels:
           severity: critical
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Database memory utilization is too high.'
@@ -65,6 +69,7 @@ groups:
         labels:
           severity: critical
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Database disk utilization is too high.'
@@ -79,6 +84,7 @@ groups:
         labels:
           severity: critical
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Too many database active connections.'
@@ -93,6 +99,7 @@ groups:
         labels:
           severity: critical
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'More than 5 MySQL failed connections in 5 minutes.'
@@ -107,6 +114,7 @@ groups:
         labels:
           severity: warning
           service: 'Cloud SQL'
+          serviceId: 'cloudsql'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'More than 5 seconds lag between database read replica and primary.'
@@ -121,6 +129,7 @@ groups:
         labels:
           severity: warning
           service: 'Pub/Sub'
+          serviceId: 'pubsub'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'More than 1000 unacknowledged messages for a PubSub subscription.'
@@ -135,6 +144,7 @@ groups:
         labels:
           severity: warning
           service: 'Pub/Sub'
+          serviceId: 'pubsub'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Unacknowledged messages for more than 60 seconds for a PubSub subscription.'

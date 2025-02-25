@@ -1,5 +1,5 @@
 {
-  prometheusAlerts+: {
+  prometheusAlerts+:: {
     groups+: [{
       name: 'minio',
       rules: [
