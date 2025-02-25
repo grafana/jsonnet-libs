@@ -1,14 +1,21 @@
-local utils = import '../utils.libsonnet';
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
+local utils = import '../utils.libsonnet';
+
 function(
   datasourceName,
   datasourceLabel,
   datasourceRegex,
   filterSelector,
   labels,
+  customAllValue,
+  adHocEnabled,
+  adHocLabels,
 )
   {
+    // strip trailing or starting comma if present that are not accepted in LoqQL
+    // starting comma can be present in case of concatenation of empty filteringSelector with some extra selectors.
+    local _filteringSelector = std.stripChars(std.stripChars(filterSelector, ' '), ','),
     local this = self,
     local variablesFromLabels(labels, filterSelector) =
       local chainVarProto(chainVar) =
@@ -21,7 +28,7 @@ function(
         )
         + var.query.selectionOptions.withIncludeAll(
           value=true,
-          customAllValue='.+'
+          customAllValue=customAllValue,
         )
         + var.query.selectionOptions.withMulti()
         + var.query.refresh.onTime()
@@ -34,7 +41,7 @@ function(
       ;
       [
         chainVarProto(chainVar)
-        for chainVar in utils.chainLabels(labels, [filterSelector])
+        for chainVar in utils.chainLabels(labels, [_filteringSelector])
       ],
 
     datasource:
@@ -42,18 +49,35 @@ function(
       + var.datasource.withRegex(datasourceRegex)
       + var.query.generalOptions.withLabel(datasourceLabel),
 
-    regex_search:
+    regexSearch:
       var.textbox.new('regex_search', default='')
       + var.query.generalOptions.withLabel('Regex search'),
 
+    adHoc:
+      var.adhoc.new('adhoc', 'loki', '${' + self.datasource.name + '}')
+      + var.adhoc.generalOptions.withLabel('Adhoc filters')
+      + var.adhoc.generalOptions.withDescription('Add additional filters')
+      + (if std.length(adHocLabels) > 0 then {
+           defaultKeys: [
+             {
+               text: l,
+               value: l,
+             }
+             for l in adHocLabels
+           ],
+         } else {}),
     toArray:
       [self.datasource]
-      + variablesFromLabels(labels, filterSelector)
-      + [self.regex_search],
+      + variablesFromLabels(labels, _filteringSelector)
+      + [self.regexSearch]
+      + (if adHocEnabled then [self.adHoc] else []),
 
     queriesSelector:
-      '%s,%s' % [
-        filterSelector,
-        utils.labelsToPromQLSelector(labels),
-      ],
+      std.join(
+        ',',
+        std.filter(function(x) std.length(x) > 0, [
+          _filteringSelector,
+          utils.labelsToPromQLSelector(labels),
+        ])
+      ),
   }

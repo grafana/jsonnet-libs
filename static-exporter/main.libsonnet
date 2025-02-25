@@ -1,29 +1,32 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
-  new(name, image='httpd:2.4-alpine'):: {
-    name:: name,
-    data:: { metrics: '' },
+  new(name, image='httpd:2.4-alpine')::
+    {
+      name:: name,
+      data:: { metrics: '' },
 
-    local configMap = k.core.v1.configMap,
-    configmap:
-      configMap.new(name, self.data),
+      local configMap = k.core.v1.configMap,
+      configmap:
+        configMap.new(name, self.data),
 
-    local container = k.core.v1.container,
-    container::
-      container.new('static-exporter', image)
-      + container.withPorts([
-        k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
-      ])
-      + k.util.resourcesRequests('10m', '10Mi')
-    ,
+      local container = k.core.v1.container,
+      container::
+        container.new('static-exporter', image)
+        + container.withPorts([
+          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
+        ])
+        + k.util.resourcesRequests('10m', '10Mi')
+      ,
 
-    local deployment = k.apps.v1.deployment,
-    local volumeMount = k.core.v1.volumeMount,
-    deployment:
-      deployment.new(name, replicas=1, containers=[self.container])
-      + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
-  },
+      local deployment = k.apps.v1.deployment,
+      local volumeMount = k.core.v1.volumeMount,
+      deployment:
+        deployment.new(name, replicas=1, containers=[self.container])
+        + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
+    }
+    + self.withHttpConfig()
+  ,
 
   withData(data):: { data: data },
 
@@ -56,8 +59,17 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       + configMap.withData({
         'httpd.conf': config,
       }),
+
     deployment+:
-      k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf')),
+      if std.objectHas(self, 'httpdConfig')
+      then k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf'))
+      else {},
+  },
+
+  withoutHttpConfig():: {
+    assert std.trace('DEPRECATION WARNING: running static-exporter without HttpConfig will make it unable for Prometheus 3.x to scrape it.', true),
+    // by hiding this field, std.objectHas in the conditional above will not find the key
+    httpdConfig:: super.httpdConfig,
   },
 
   metric:: {
@@ -69,19 +81,23 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
     withDescription(description): { description: description },
 
-    local generateValues(labelMap, value=1) =
+    local generateValues(labelMap, value=1, valueAsFloat=false) =
       local labels = [
         key + '="' + labelMap[key] + '"'
         for key in std.objectFields(labelMap)
       ];
       [
-        '{%s} %d' % [std.join(',', labels), value],
+        (
+          if valueAsFloat
+          then '{%s} %f'
+          else '{%s} %d'
+        ) % [std.join(',', labels), value],
       ],
 
     // withValue adds a labeled metric with a value
     // labelMap = { key: value }
-    withValue(labelMap, value=1): {
-      values+: generateValues(labelMap, value),
+    withValue(labelMap, value=1, valueAsFloat=false): {
+      values+: generateValues(labelMap, value, valueAsFloat),
     },
 
     // withLabelMapList adds multiple labeled metrics with the same value

@@ -72,7 +72,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
     objectCountByBucket:
-      this.signals.blobstore.objectCountTopK.common
+      this.signals.blobstore.objectCountTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('locale')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Object Count',
@@ -89,7 +89,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
     totalBytesByBucket:
-      this.signals.blobstore.totalBytesTopK.common
+      this.signals.blobstore.totalBytesTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Total Bytes',
@@ -101,7 +101,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total bytes stored'
       ) + self._tableCommon('Total Bytes'),
     totalNetworkThroughput:
-      this.signals.blobstore.networkThroughputTopK.common
+      this.signals.blobstore.networkThroughputTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Network Throughput',

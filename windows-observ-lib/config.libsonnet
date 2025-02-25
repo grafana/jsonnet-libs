@@ -7,7 +7,7 @@
   // 'uid' - UID to prefix all dashboards original uids
   groupLabels: ['job'],
   instanceLabels: ['instance'],
-  filteringSelector: 'job=~".*windows.*"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="windows"
   dashboardTags: ['windows'],
   uid: 'windows',
   dashboardNamePrefix: '',

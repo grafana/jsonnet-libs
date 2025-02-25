@@ -59,7 +59,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     gcpvpc_service_topk_throughput:
-      this.signals.gcpvpc.gcpvpc_service_topk_throughput_bytes.common
+      this.signals.gcpvpc.gcpvpc_service_topk_throughput_bytes.common(type='table')
       + g.panel.table.standardOptions.withUnit('bps')
       + commonlib.panels.generic.table.base.new(
         'Top 5 services - Average throughput',
@@ -72,7 +72,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ) + self._serviceTableCommon('Average throughput'),
 
     gcpvpc_service_topk_error:
-      this.signals.gcpvpc.gcpvpc_service_topk_error_percent.common
+      this.signals.gcpvpc.gcpvpc_service_topk_error_percent.common(type='table')
       + g.panel.table.standardOptions.withUnit('percent')
       + commonlib.panels.generic.table.base.new(
         'Top 5 services - Average error rate',

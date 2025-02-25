@@ -2,7 +2,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
   {
-    filteringSelector: this.filteringSelector + ', quantile="%s"' % this.zookeeperClientQuantile,
+    filteringSelector: ('quantile="%s"' % this.zookeeperClientQuantile) + ',' + this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
@@ -88,7 +88,6 @@ function(this)
           },
         },
       },
-
 
     },
   }

@@ -10,7 +10,7 @@
     uid: 'integration-docker',
     // ignore k8s nodes by default
     filteringSelector: 'job!="kubelet"',
-    containerSelector: 'id=~"/system.slice/docker.+", name!=""',
+    containerSelector: 'name!=""',
     //signals related
     groupLabels: ['job'],
     // host level

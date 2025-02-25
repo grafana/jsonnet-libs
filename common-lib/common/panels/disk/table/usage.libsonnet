@@ -237,13 +237,13 @@ base {
 
     + table.standardOptions.withOverrides([
       fieldOverride.byName.new('Mounted on')
-      + fieldOverride.byName.withProperty('custom.width', '260'),
+      + fieldOverride.byName.withProperty('custom.width', 260),
       fieldOverride.byName.new('Size')
-      + fieldOverride.byName.withProperty('custom.width', '80'),
+      + fieldOverride.byName.withProperty('custom.width', 80),
       fieldOverride.byName.new('Used')
-      + fieldOverride.byName.withProperty('custom.width', '80'),
+      + fieldOverride.byName.withProperty('custom.width', 80),
       fieldOverride.byName.new('Available')
-      + fieldOverride.byName.withProperty('custom.width', '80'),
+      + fieldOverride.byName.withProperty('custom.width', 80),
       fieldOverride.byName.new('Used, %')
       + fieldOverride.byName.withProperty(
         'custom.cellOptions', {

@@ -1,0 +1,1773 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "",
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "hideControls": false,
+      "id": null,
+      "links": [
+         {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "influxdb-mixin"
+            ],
+            "targetBlank": false,
+            "title": "Other InfluxDB dashboards",
+            "type": "dashboards",
+            "url": ""
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Panel to report on the status of firing alerts.",
+            "gridPos": {
+               "h": 8,
+               "w": 7,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "alertInstanceLabelFilter": "{job=~\"${job:regex}\", influxdb_cluster=~\"${influxdb_cluster:regex}\"}",
+               "alertName": "",
+               "dashboardAlerts": false,
+               "groupBy": [ ],
+               "groupMode": "default",
+               "maxItems": 20,
+               "sortOrder": 1,
+               "stateFilter": {
+                  "error": true,
+                  "firing": true,
+                  "noData": false,
+                  "normal": false,
+                  "pending": true
+               },
+               "viewMode": "list"
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": ""
+               }
+            ],
+            "title": "Alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Statistics for each instance in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "links": [ ],
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "Instance overview",
+                                 "url": "/d/influxdb-instance-overview?from=${__from}&to=${__to}&var-instance=${__data.fields[\"Instance\"]}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 17,
+               "x": 7,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "10.3.0-63516",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_uptime_seconds{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Uptime"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_buckets_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Buckets"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_users_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Users"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_replications_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Replications"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_remotes_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Remotes"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_scrapers_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Scrapers"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "influxdb_dashboards_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "table",
+                  "intervalFactor": 2,
+                  "legendFormat": "Dashboards"
+               }
+            ],
+            "title": "Servers",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "instance",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "Time 2": true,
+                        "Time 3": true,
+                        "Time 4": true,
+                        "Time 5": true,
+                        "Time 6": true,
+                        "Time 7": true,
+                        "Value #B": false,
+                        "Value #H": true,
+                        "__name__": true,
+                        "__name__ 1": true,
+                        "__name__ 2": true,
+                        "__name__ 3": true,
+                        "__name__ 4": true,
+                        "__name__ 5": true,
+                        "__name__ 6": true,
+                        "__name__ 7": true,
+                        "cluster": false,
+                        "cluster 2": true,
+                        "cluster 3": true,
+                        "cluster 4": true,
+                        "cluster 5": true,
+                        "cluster 6": true,
+                        "cluster 7": true,
+                        "id": true,
+                        "influxdb_cluster": false,
+                        "influxdb_cluster 2": true,
+                        "influxdb_cluster 3": true,
+                        "influxdb_cluster 4": true,
+                        "influxdb_cluster 5": true,
+                        "influxdb_cluster 6": true,
+                        "influxdb_cluster 7": true,
+                        "job": true,
+                        "job 2": true,
+                        "job 3": true,
+                        "job 4": true,
+                        "job 5": true,
+                        "job 6": true,
+                        "job 7": true
+                     },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Dashboards": "",
+                        "Value #A": "Uptime",
+                        "Value #B": "Buckets",
+                        "Value #C": "Users",
+                        "Value #D": "Replications",
+                        "Value #E": "Remotes",
+                        "Value #F": "Scrapers",
+                        "Value #G": "Dashboards",
+                        "cluster": "K8s cluster",
+                        "influxdb_cluster": "InfluxDB cluster",
+                        "instance": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 17
+            },
+            "id": 4,
+            "targets": [ ],
+            "title": "Queries and operations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "HTTP API request rate for the instances with the most traffic in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "reqps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 18
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, sum by(job, influxdb_cluster, instance) (rate(http_api_requests_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Top instances by HTTP API requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time taken to respond to HTTP API requests for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "fillOpacity": 80,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineWidth": 1
+                  },
+                  "decimals": 0,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 18
+            },
+            "id": 6,
+            "options": {
+               "bucketOffset": 0,
+               "combine": false,
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "histogram_quantile(0.95, sum by(le, job, influxdb_cluster) (rate(http_api_request_duration_seconds_bucket{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}}"
+               }
+            ],
+            "title": "HTTP API request duration",
+            "type": "histogram"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of different HTTP response codes for the entire cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     }
+                  },
+                  "mappings": [ ],
+                  "unit": "reqps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 18
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "pieType": "pie",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster, response_code) (rate(http_api_requests_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])) > 0",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{response_code}}"
+               }
+            ],
+            "title": "HTTP API response codes",
+            "type": "piechart"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of database operations from HTTP for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 26
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster, status) (rate(http_query_request_count{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])) > 0",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - query - {{status}}"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster, status) (rate(http_write_request_count{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])) > 0",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - write - {{status}}"
+               }
+            ],
+            "title": "HTTP operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of database HTTP operation data for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 26
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (rate(http_query_request_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - query - request"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (rate(http_query_response_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - query - response"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (rate(http_write_request_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - write - request"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (rate(http_write_response_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - write - response"
+               }
+            ],
+            "title": "HTTP operation data",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of InfluxQL queries for the instances with the most traffic in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "queries/s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 34
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, sum by(job, influxdb_cluster, instance) (rate(influxql_service_requests_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Top instances by IQL query rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Response time for recent InfluxQL queries, organized by result.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 34
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster, result) (increase(influxql_service_executing_duration_seconds_sum{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__interval:]))",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{result}}"
+               }
+            ],
+            "title": "IQL query response time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of reads and writes to the underlying BoltDB storage engine for the entire cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 34
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(boltdb_reads_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - reads"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(boltdb_writes_total{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - writes"
+               }
+            ],
+            "title": "BoltDB operations",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 42
+            },
+            "id": 13,
+            "targets": [ ],
+            "title": "Task scheduler",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of tasks currently being executed for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 43
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (task_scheduler_current_execution{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}}"
+               }
+            ],
+            "title": "Active tasks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of workers currently running tasks on the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 43
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, influxdb_cluster) (task_executor_total_runs_active{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"})",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}}"
+               }
+            ],
+            "title": "Active workers",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of executions and execution failures for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 51
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(task_scheduler_total_execution_calls{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - total"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(task_scheduler_total_execute_failure{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - failed"
+               }
+            ],
+            "title": "Executions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of schedule operations and schedule operation failures for the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 51
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(task_scheduler_total_schedule_calls{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - total"
+               },
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(task_scheduler_total_schedule_fails{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - failed"
+               }
+            ],
+            "title": "Schedules",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 8
+            },
+            "id": 18,
+            "targets": [ ],
+            "title": "Go",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Heap memory usage for the largest instances in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk($k, go_memstats_heap_alloc_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}/clamp_min(go_memstats_heap_idle_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"} + go_memstats_heap_alloc_bytes{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}, 1))",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Top instances by heap memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Fraction of CPU time used for garbage collection for the top instances in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 20,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 20,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "go_memstats_gc_cpu_fraction{job=~\"$job\", influxdb_cluster=~\"$influxdb_cluster\"}",
+                  "format": "time_series",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{influxdb_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Top instances by GC CPU usage",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "rows": [ ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+         "influxdb-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": { },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "prometheus_datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(influxdb_uptime_seconds,job)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".*",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "options": [ ],
+               "query": "label_values(influxdb_uptime_seconds{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": { },
+               "datasource": {
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 0,
+               "includeAll": true,
+               "label": "InfluxDB cluster",
+               "multi": true,
+               "name": "influxdb_cluster",
+               "options": [ ],
+               "query": "label_values(influxdb_uptime_seconds{job=~\"$job\"}, influxdb_cluster)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "text": "5",
+                  "value": "5"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Top node count",
+               "multi": false,
+               "name": "k",
+               "options": [
+                  {
+                     "text": "5",
+                     "value": "5"
+                  },
+                  {
+                     "text": "10",
+                     "value": "10"
+                  },
+                  {
+                     "text": "20",
+                     "value": "20"
+                  },
+                  {
+                     "text": "50",
+                     "value": "50"
+                  }
+               ],
+               "query": "5,10,20,50",
+               "refresh": 0,
+               "type": "custom"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "default",
+      "title": "InfluxDB cluster overview",
+      "uid": "influxdb-cluster-overview",
+      "version": 0
+   }

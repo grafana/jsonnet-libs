@@ -1,0 +1,1015 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Load balancer requests",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of requests sent by status code for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "reqps"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "label_replace(sum by (response_code_class) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])),\"response_code_class\",\"${1}xx\",\"response_code_class\",\"([0-9])00\")",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{response_code_class}}",
+                  "refId": "Requests by status code"
+               }
+            ],
+            "title": "Requests by status code",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of requests sent by country for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (backend_target_name, client_country) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{client_country}}",
+                  "refId": "Requests by country"
+               }
+            ],
+            "title": "Requests by country",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of cache results for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (backend_target_name, cache_result) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cache_result}}",
+                  "refId": "Requests by cache results"
+               }
+            ],
+            "title": "Requests by cache results",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Amount of requests by protocol for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (backend_target_name, protocol) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{protocol}}",
+                  "refId": "Requests by protocol"
+               }
+            ],
+            "title": "Requests by protocol",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Percentage of requests failing for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "max": 1,
+                  "min": 0,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Error Rate visualization"
+                     },
+                     "properties": [
+                        {
+                           "id": "noValue",
+                           "value": "0"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 18
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * (sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\", response_code_class!=\"200\", response_code_class!=\"0\"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Error Rate visualization",
+                  "refId": "Error rate percentage"
+               }
+            ],
+            "title": "Error rate percentage",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 27
+            },
+            "id": 7,
+            "panels": [ ],
+            "title": "Latency",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Latency of all responses for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p50"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p90"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p99"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Average"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.50, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p50",
+                  "refId": "Total Response"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.90, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p90",
+                  "refId": "Latency 90"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.99, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p99",
+                  "refId": "Latency 99"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_sum{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Average",
+                  "refId": "Latency Average"
+               }
+            ],
+            "title": "Total Response",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Latency of return trip time for the frontend for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p50"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p90"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p99"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 36
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.50,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p50",
+                  "refId": "Frontend RTT"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.90,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p90",
+                  "refId": "Frontend RTT Latency 90"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.99,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p99",
+                  "refId": "Frontend RTT Latency 99"
+               }
+            ],
+            "title": "Frontend RTT",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Latency of responses for the backend for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0",
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p50"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p90"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "p99"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 36
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.50, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p50",
+                  "refId": "Backend Response"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.90, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p90",
+                  "refId": "Backend Response Latency 90"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "histogram_quantile(0.99, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval])) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "p99",
+                  "refId": "Backend Response Latency 99"
+               }
+            ],
+            "title": "Backend Response",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 45
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "Traffic",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total bytes sent/received by load balancer for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Sent"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Received"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 46
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sent",
+                  "refId": "Total requests sent/received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Received",
+                  "refId": "Total Requests received"
+               }
+            ],
+            "title": "Total requests sent/received",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total bytes sent/received by backend for the filters selected",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Sent"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Received"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 46
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sent",
+                  "refId": "Backend requests sent/received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",backend_target_name=~\"$backend_target_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Received",
+                  "refId": "Backend Total Requests received"
+               }
+            ],
+            "title": "Backend requests sent/received",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "gcp-cloud-provider"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Project_id",
+               "multi": true,
+               "name": "project_id",
+               "query": "label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\"}, project_id)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Country",
+               "multi": true,
+               "name": "client_country",
+               "query": "label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}, client_country)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Backend Target",
+               "multi": true,
+               "name": "backend_target_name",
+               "query": "label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\",client_country=~\"$client_country\"}, backend_target_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timepicker": {
+         "time_options": [
+            "now-1h"
+         ]
+      },
+      "timezone": "default",
+      "title": "GCP Load Balancing",
+      "uid": "gcp-loadbalancer"
+   }

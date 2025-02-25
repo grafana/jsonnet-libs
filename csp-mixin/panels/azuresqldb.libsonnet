@@ -98,7 +98,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     asql_dtutbl:
-      this.signals.azuresqldb.dtuUsed.common
+      this.signals.azuresqldb.dtuUsed.common(type='table')
       + commonlib.panels.generic.table.base.new(
         'DTU utilization and limits by database',
         [

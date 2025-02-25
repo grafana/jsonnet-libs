@@ -1,0 +1,110 @@
+---
+name: Mixin
+
+permissions:
+  contents: read
+
+on:
+  # To conserve resources we only run tests against main in PRs
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check-for-changed-mixins:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      changed-mixins: ${{ steps.changed-mixins.outputs.all_changed_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      
+      - name: Install CI dependencies
+        run: make install-ci-deps
+      
+      - name: Get changed mixins
+        id: changed-mixins
+        uses: tj-actions/changed-files@v44
+        with:
+          dir_names: true
+          dir_names_exclude_current_dir: true
+          dir_names_max_depth: 1
+          files: | 
+            **-mixin/
+            **-observ-lib/
+          matrix: true
+          
+      - name: List all changed mixins
+        run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
+
+  lint-mixin:
+    name: Test mixin
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    timeout-minutes: 15
+    needs: [check-for-changed-mixins]
+    strategy:
+      matrix:
+        mixin: ${{ fromJSON(needs.check-for-changed-mixins.outputs.changed-mixins) }}
+      fail-fast: false
+    services:
+      grafana:
+        image: grafana/grafana:11.4.0
+        ports:
+          - 3000:3000
+        env:
+          GF_AUTH_DISABLE_LOGIN_FORM: "true"
+          GF_AUTH_ANONYMOUS_ENABLED: "true"
+          GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      
+      - name: Install CI dependencies
+        run: make install-ci-deps
+
+      - name: Install mixin dependencies
+        working-directory: ./${{ matrix.mixin }}
+        run: make build
+
+      - name: Lint mixin
+        working-directory: ./${{ matrix.mixin }}
+        run: make lint
+
+      - name: Check for unexpected changes in generated files
+        working-directory: ./${{ matrix.mixin }}
+        run: "make && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
+
+      - name: Wait for Grafana and validate dashboards
+        working-directory: ./${{ matrix.mixin }}
+        env:
+          GRAFANA_URL: http://localhost:3000
+        run: |
+          # Wait for Grafana to be ready
+          timeout 60s bash -c 'until curl -s http://localhost:3000/api/health | grep "ok"; do sleep 1; done'
+          
+          # Try to deploy dashboards
+          make deploy_dashboards
+
+      - name: Run promtool test for rules
+        working-directory: ./${{ matrix.mixin }}
+        run: make test
