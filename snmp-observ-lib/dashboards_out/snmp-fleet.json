@@ -77,7 +77,7 @@
                      "properties": [
                         {
                            "id": "displayName",
-                           "value": "Interfaces count"
+                           "value": "Interfaces"
                         },
                         {
                            "id": "unit",
@@ -503,7 +503,7 @@
                   "expr": "count by (job,instance) (\n  ifOperStatus{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{instance}}: Interfaces count",
+                  "legendFormat": "{{instance}}: Interfaces",
                   "refId": "Interfaces total"
                },
                {
