@@ -93,7 +93,7 @@ groups:
 
       - alert: GcpCloudSQLAbortedConnections
         expr: |
-          sum by(job, instance, project_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
+          sum by(job, instance, project_id, database_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
         for: 5m
         keep_firing_for: 10m
         labels:
