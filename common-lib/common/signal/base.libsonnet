@@ -257,6 +257,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            q=std.get(source, 'quantile', default=0.95),
             aggLevel=aggLevel,
             rangeFunction=source.rangeFunction,
           ).applyFunctions()
@@ -274,6 +275,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            q=std.get(source, 'quantile', default=0.95),
             aggLevel='none',
             rangeFunction=source.rangeFunction,
           ).applyFunctions()
