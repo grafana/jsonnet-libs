@@ -39,6 +39,7 @@ groups:
         labels:
           severity: critical
           service: 'Azure SQL database'
+          serviceId: 'microsoft.sql/servers/databases'
           namespace: cloud-provider-azure
         annotations:
           summary: 'High database DTU consumption.'
