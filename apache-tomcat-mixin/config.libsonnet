@@ -12,10 +12,9 @@
     ApacheTomcatAlertsWarningProcessingTime: 300,  //ms
 
     // used in alerts:
-    filteringSelector: 'job=~"integrations/tomcat"',
+    filteringSelector: 'job="integrations/tomcat"',
     groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
     instanceLabels: ['instance'],
-
 
     enableLokiLogs: true,
     enableMultiCluster: false,

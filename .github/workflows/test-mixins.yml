@@ -92,7 +92,7 @@ jobs:
 
       - name: Check for unexpected changes in generated files
         working-directory: ./${{ matrix.mixin }}
-        run: "make && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
+        run: "make dashboards_out prometheus_alerts.yaml prometheus_rules.yaml && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
 
       - name: Wait for Grafana and validate dashboards
         working-directory: ./${{ matrix.mixin }}

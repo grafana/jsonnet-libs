@@ -1,4 +1,4 @@
-JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
+JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
 
 .PHONY: all
 all: build dashboards_out prometheus_alerts.yaml prometheus_rules.yaml test
@@ -18,15 +18,16 @@ fmt:
 
 .PHONY: lint
 lint: build lint-pint
-	@find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
+	@set -e; \
+	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		while read f; do \
-			$(JSONNET_FMT) "$$f" | diff -u "$$f" -; \
-		done
+			$(JSONNET_FMT) "$$f" | diff -u "$$f" - || exit 1; \
+		done; \
 	mixtool lint mixin.libsonnet
 
 .PHONY: lint-pint
 lint-pint: prometheus_alerts.yaml prometheus_rules.yaml
-	pint lint prometheus_rules_out/
+	pint lint --min-severity=info --fail-on=warning prometheus_rules_out/
 
 dashboards_out: mixin.libsonnet $(wildcard **/*.libsonnet) $(wildcard **/*.jsonnet) $(wildcard panels/*) $(wildcard signals/*)
 	@mkdir -p dashboards_out

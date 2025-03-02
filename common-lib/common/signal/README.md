@@ -25,6 +25,7 @@ These functions modify one of the signal's property and then  return signal back
 - withExprWrappersMixin(wrapper=[]) - wrap signal expression into additional function on top of existing wrappers.
 - withOffset(offset) - add offset modifier to the expression.
 - withFilteringSelectorMixin(mixin) - add additional selector to filteringSelector used.
+- withQuantile(quantile=0.95) - add quantile modifier to the expression for histogram signals.
 
 ### Render functions
 
@@ -103,6 +104,7 @@ Signal's level:
 |sourceMaps[].valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |sourceMaps[].legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{topic}}`|
 |sourceMaps[].rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
+|sourceMaps[].quantile| Only applicable to `histogram` metrics. Defines quantile for histogram metrics. |0.01-0.99|`0.99`|`0.95`|
 
 ## Expressions templating
 
