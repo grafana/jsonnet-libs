@@ -60,13 +60,12 @@ test-env-down:
 
 .PHONY: test-dashboards
 test-dashboards: test-env-up
-	export GRAFANA_URL=http://localhost:3000 && $(MAKE) deploy_dashboards
 	@mkdir -p cypress/e2e
 	# Build the test image
 	docker build -f ../tests/cypress/Dockerfile -t cypress-mixin-test ../tests/cypress
 	# Create screenshots directory if it doesn't exist
 	@mkdir -p screenshots
-	# Run tests
+	# Run e2e tests
 	docker run --rm --network=host \
 		-v $$(pwd)/dashboards_out:/e2e/dashboards_out:ro \
 		-v $$(pwd)/screenshots:/e2e/cypress/screenshots \
@@ -76,7 +75,6 @@ test-dashboards: test-env-up
 		-c 'node generate-fixture.js && cypress run \
 		--config-file /e2e/cypress.config.js \
 		--project /e2e'
-	$(MAKE) test-env-down
 
 .PHONY: deploy_dashboards
 deploy_dashboards:
@@ -97,14 +95,21 @@ endif
 .PHONY: deploy
 deploy: deploy_rules deploy_dashboards
 
-.PHONY: test
-test: test-dashboards
+.PHONY: test-promtool
+test-promtool:
 	@if [ -f tests/prometheus_*.yaml ]; then \
 		echo "Execute promtool tests:"; \
 		promtool test rules tests/prometheus_*.yaml; \
 	else \
 		echo "No tests/prometheus_*.yaml files found, skipping promtool test."; \
 	fi
+
+.PHONY: test
+test: test-promtool
+	$(MAKE) test-env-up
+	export GRAFANA_URL=http://localhost:3000 && $(MAKE) deploy_dashboards
+	$(MAKE) test-dashboards
+	$(MAKE) test-env-down
 
 .PHONY: clean
 clean:

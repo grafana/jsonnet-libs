@@ -87,10 +87,7 @@ jobs:
 
       - name: Run promtool test for rules
         working-directory: ./${{ matrix.mixin }}
-        run: make test
-
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
+        run: make test-promtool
 
       - name: Setup Grafana and Prometheus
         working-directory: ./${{ matrix.mixin }}
