@@ -108,7 +108,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.threads.threadStates.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
-
     // classes
     classesLoaded:
       signals.classes.classesLoaded.asStat()

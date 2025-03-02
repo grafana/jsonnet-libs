@@ -2,3 +2,5 @@
 vendor
 jsonnetfile.lock.json
 *.zip
+*/screenshots
+node_modules

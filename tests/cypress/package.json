@@ -1,0 +1,9 @@
+{
+  "name": "mixin-tests",
+  "version": "1.0.0",
+  "description": "Mixin dashboard tests",
+  "devDependencies": {
+    "@grafana/e2e": "11.0.0",
+    "@grafana/e2e-selectors": "11.0.0"
+  }
+} 
