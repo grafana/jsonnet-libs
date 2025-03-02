@@ -59,15 +59,6 @@ jobs:
       matrix:
         mixin: ${{ fromJSON(needs.check-for-changed-mixins.outputs.changed-mixins) }}
       fail-fast: false
-    services:
-      grafana:
-        image: grafana/grafana:11.4.0
-        ports:
-          - 3000:3000
-        env:
-          GF_AUTH_DISABLE_LOGIN_FORM: "true"
-          GF_AUTH_ANONYMOUS_ENABLED: "true"
-          GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,17 +85,33 @@ jobs:
         working-directory: ./${{ matrix.mixin }}
         run: "make dashboards_out prometheus_alerts.yaml prometheus_rules.yaml && git diff --exit-code || ( echo 'Error: Generated files are not up to date. Run make and commit the local diff'; exit 1; )"
 
-      - name: Wait for Grafana and validate dashboards
+      - name: Run promtool test for rules
+        working-directory: ./${{ matrix.mixin }}
+        run: make test
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Setup Grafana and Prometheus
+        working-directory: ./${{ matrix.mixin }}
+        run: make test-env-up
+
+      - name: Validate dashboards
         working-directory: ./${{ matrix.mixin }}
         env:
           GRAFANA_URL: http://localhost:3000
         run: |
-          # Wait for Grafana to be ready
-          timeout 60s bash -c 'until curl -s http://localhost:3000/api/health | grep "ok"; do sleep 1; done'
-          
           # Try to deploy dashboards
           make deploy_dashboards
 
-      - name: Run promtool test for rules
+      - name: Test dashboards with Cypress
         working-directory: ./${{ matrix.mixin }}
-        run: make test
+        run: make test-dashboards
+
+      - name: Upload test screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-screenshots
+          path: tests/cypress/screenshots/
+          retention-days: 30
