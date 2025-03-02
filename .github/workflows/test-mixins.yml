@@ -110,8 +110,9 @@ jobs:
 
       - name: Upload test screenshots
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: cypress-screenshots
-          path: tests/cypress/screenshots/
+          name: cypress-screenshots-${{ matrix.mixin }}-${{ github.sha::8 }}
+          path: ${{ matrix.mixin }}/screenshots/
           retention-days: 30
+          compression-level: 9
