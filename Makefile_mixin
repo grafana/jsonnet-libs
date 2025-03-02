@@ -76,9 +76,10 @@ test-dashboards: test-env-up
 		-c 'node generate-fixture.js && cypress run \
 		--config-file /e2e/cypress.config.js \
 		--project /e2e'
+	$(MAKE) test-env-down
 
 .PHONY: deploy_dashboards
-deploy_dashboards: test-env-up
+deploy_dashboards:
 ifdef GRAFANA_URL
 	grr apply mixin.libsonnet --target "Dashboard.*" --target "DashboardFolder.*"
 else
@@ -104,8 +105,9 @@ test: test-dashboards
 	else \
 		echo "No tests/prometheus_*.yaml files found, skipping promtool test."; \
 	fi
-	$(MAKE) test-env-down
 
 .PHONY: clean
 clean:
 	rm -rf dashboards_out prometheus_rules_out
+	rm -rf screenshots
+	$(MAKE) test-env-down
