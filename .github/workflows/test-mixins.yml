@@ -27,7 +27,21 @@ jobs:
         with:
           go-version: 1.23
       
+      - name: Tools cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/local/bin/jsonnet
+            /usr/local/bin/jsonnetfmt
+            /usr/local/bin/jb
+            /usr/local/bin/mixtool
+            /usr/local/bin/grr
+            /usr/local/bin/pint
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('.github/workflows/test-mixins.yml') }}
+
       - name: Install CI dependencies
+        if: steps.tools-cache.outputs.cache-hit != 'true'
         run: make install-ci-deps
       
       - name: Get changed mixins
