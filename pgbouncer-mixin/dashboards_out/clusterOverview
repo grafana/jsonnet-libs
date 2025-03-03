@@ -56,7 +56,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"})",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"})",
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
                }
             ],
@@ -124,7 +124,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"}[$__rate_interval]))",
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
                }
             ],
@@ -173,7 +173,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"}[$__interval:]), 1))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"}[$__interval:]), 1))",
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
                }
             ],
@@ -223,7 +223,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"}[$__rate_interval]))",
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received"
                },
                {
@@ -231,7 +231,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=~\"integrations/pgbouncer\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",job=\"integrations/pgbouncer\"}[$__rate_interval]))",
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent"
                }
             ],
@@ -263,7 +263,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(pgbouncer_databases_current_connections{job=~\"integrations/pgbouncer\"}, job)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=\"integrations/pgbouncer\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -278,7 +278,7 @@
                "label": "Pgbouncer_cluster",
                "multi": true,
                "name": "pgbouncer_cluster",
-               "query": "label_values(pgbouncer_databases_current_connections{job=~\"integrations/pgbouncer\",job=~\"$job\"}, pgbouncer_cluster)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=\"integrations/pgbouncer\",job=~\"$job\"}, pgbouncer_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

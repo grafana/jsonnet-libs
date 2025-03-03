@@ -19,6 +19,11 @@
   alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)|ISP).*"',
   alertInterfaceDownSeverity: 'warning',
 
+  // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
+  // This will clamp max interface traffic possible to 1000Gbps.
+  clampQueryEnabled: true,
+  clampSpeed: '100*10^9',  // 1000 GBps
+
   // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
   // memorySelector for metricsSources with HOST-RESOURCE-MIB:

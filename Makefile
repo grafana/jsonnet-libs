@@ -67,7 +67,7 @@ lint-mixins:
 		fi; \
 		if [ -d "$$d/prometheus_rules_out" ]; then \
 			echo "Running pint..."; \
-			pint lint "$$d/prometheus_rules_out/"; \
+			pint lint --min-severity=info --fail-on=warning "$$d/prometheus_rules_out/"; \
 			if [ $$? -ne 0 ]; then \
 				RESULT=1; \
 			fi; \

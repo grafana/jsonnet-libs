@@ -31,7 +31,7 @@ groups:
             severity: critical
         - alert: AzureDatabaseHighDtuConsumption
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Check active queries and optimize indexes or consider scaling up DTUs to handle load in {{ $labels.resourceName }} database.
             summary: High database DTU consumption.
           expr: |
@@ -41,10 +41,11 @@ groups:
           labels:
             namespace: cloud-provider-azure
             service: Azure SQL database
+            serviceId: microsoft.sql/servers/databases
             severity: critical
         - alert: AzureDatabaseHighStorageUsage
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Archive or delete old data, or scale up storage capacity in {{ $labels.resourceName }} database.
             summary: High database Storage usage.
           expr: |
@@ -58,7 +59,7 @@ groups:
             severity: critical
         - alert: AzureDatabaseHighDeadlockCount
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Check {{ $labels.resourceName }} database logs for deadlock details and optimize affected queries.
             summary: High database Deadlock count.
           expr: |
@@ -72,7 +73,7 @@ groups:
             severity: info
         - alert: AzureDatabaseHighUserCpuUsage
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Identify high CPU queries on {{ $labels.resourceName }} database and optimize them.
             summary: High database User CPU usage.
           expr: |
@@ -86,7 +87,7 @@ groups:
             severity: warning
         - alert: AzureDatabaseHighSystemFailedConnections
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Check network problems, firewall restrictions or high resource consumption affecting application access to the {{ $labels.resourceName }} database.
             summary: High number of database System Failed connections.
           expr: |
@@ -100,7 +101,7 @@ groups:
             severity: warning
         - alert: AzureDatabaseHighUserFailedConnections
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Check for authentication problems, network configuration errors, firewall issues, or resource constraints, affecting database accessibility for users on database {{ $labels.resourceName }}.
             summary: High number of database User Failed connections.
           expr: |
@@ -114,7 +115,7 @@ groups:
             severity: warning
         - alert: AzureDatabaseHighWorkerUsage
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Look for long execution queries, review the number of concurrent queries and requests being sent to the database or check if there are any blocking sessions or deadlocks into the {{ $labels.resourceName }} database.
             summary: High database worker usage.
           expr: |
@@ -128,7 +129,7 @@ groups:
             severity: critical
         - alert: AzureDatabaseHighDataIoUsage
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Review queries with high read or write activity, check if there are missing indexes or inefficient indexes that result in full table scans and assess the volume of transactions into the {{ $labels.resourceName }} database.
             summary: High database data IO usage.
           expr: |
@@ -142,7 +143,7 @@ groups:
             severity: info
         - alert: AzureDatabaseLowTempdbLogSpace
           annotations:
-            dashboard_uid: 82c5b6cf30db5b601c5cc3f5d8d4284d
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
             description: Look for active sessions that might be using TempDB intensively, identify stored procedures or queries that create temporary tables or objects, and also look for long-running or memory-intensive queries that rely heavily on TempDB into the {{ $labels.resourceName }} database.
             summary: Low database tempdb log space.
           expr: |
@@ -246,7 +247,7 @@ groups:
             description: Verify credentials and network settings; check for firewall rules blocking connections for the {{ $labels.database_id }} database.
             summary: More than 5 MySQL failed connections in 5 minutes.
           expr: |
-            sum by(job, instance, project_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
+            sum by(job, instance, project_id, database_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
           for: 5m
           keep_firing_for: 10m
           labels:
