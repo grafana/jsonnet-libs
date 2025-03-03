@@ -33,14 +33,14 @@ dashboards_out: mixin.libsonnet $(wildcard **/*.libsonnet) $(wildcard **/*.jsonn
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: $(wildcard vendor/**/alerts.yaml) $(wildcard vendor/**/alerts.libsonnet) mixin.libsonnet $(wildcard alerts.libsonnet) $(wildcard signals/*) $(wildcard alerts/*)
+prometheus_alerts.yaml: mixin.libsonnet config.libsonnet $(wildcard vendor/**/alerts.yaml) $(wildcard alerts/*) $(wildcard vendor/**/alerts.libsonnet) $(wildcard alerts.libsonnet) $(wildcard signals/*)
 	@mkdir -p prometheus_rules_out
 	@if [ -f alerts.libsonnet -o -d alerts ]; then \
 		mixtool generate alerts mixin.libsonnet -a prometheus_rules_out/prometheus_alerts.yaml; \
 	else \
 		touch prometheus_rules_out/prometheus_alerts.yaml; \
 	fi
-prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rules.libsonnet) mixin.libsonnet $(wildcard rules.libsonnet) $(wildcard signals/*) $(wildcard rules/*)
+prometheus_rules.yaml: mixin.libsonnet $(wildcard vendor/**/rules.yaml) $(wildcard rules/*) $(wildcard vendor/**/rules.libsonnet) $(wildcard rules.libsonnet) $(wildcard signals/*) 
 	@if [ -f rules.libsonnet -o -d rules ]; then \
 		mixtool generate rules mixin.libsonnet -a prometheus_rules_out/prometheus_rules.yaml; \
 	else \
