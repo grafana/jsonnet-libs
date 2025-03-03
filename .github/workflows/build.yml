@@ -19,8 +19,18 @@ jobs:
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
         with:
           go-version: 1.23
+      - name: Tools cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
+
       - name: Install CI dependencies
+        if: steps.tools-cache.outputs.cache-hit != 'true'
         run: make install-ci-deps
+
       - name: Lint and Format
         run: make lint-fmt
 
@@ -34,7 +44,17 @@ jobs:
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
         with:
           go-version: 1.23
+
+      - name: Tools cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
       - name: Install CI dependencies
+        if: steps.tools-cache.outputs.cache-hit != 'true'
         run: make install-ci-deps
+
       - name: Run Tests
         run: make tests

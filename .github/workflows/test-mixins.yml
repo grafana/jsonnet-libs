@@ -31,14 +31,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            /usr/local/bin/jsonnet
-            /usr/local/bin/jsonnetfmt
-            /usr/local/bin/jb
-            /usr/local/bin/mixtool
-            /usr/local/bin/grr
-            /usr/local/bin/pint
+            ~/go/bin
             /usr/local/bin/promtool
-          key: ${{ runner.os }}-tools-${{ hashFiles('.github/workflows/test-mixins.yml') }}
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
 
       - name: Install CI dependencies
         if: steps.tools-cache.outputs.cache-hit != 'true'
@@ -97,14 +92,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            /usr/local/bin/jsonnet
-            /usr/local/bin/jsonnetfmt
-            /usr/local/bin/jb
-            /usr/local/bin/mixtool
-            /usr/local/bin/grr
-            /usr/local/bin/pint
+            ~/go/bin
             /usr/local/bin/promtool
-          key: ${{ runner.os }}-tools-${{ hashFiles('.github/workflows/test-mixins.yml') }}
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
 
       - name: Install CI dependencies
         if: steps.tools-cache.outputs.cache-hit != 'true'
