@@ -6,7 +6,6 @@ local proc =
   proclib.new()
   + proclib.withConfigMixin(
     {
-      filteringSelector: 'job!=""',
       metricsSource: 'java_otel',
     }
   );
