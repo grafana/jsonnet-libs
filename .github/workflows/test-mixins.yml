@@ -12,7 +12,7 @@ on:
 
 jobs:
   setup:
-    name: Setup ools
+    name: Setup tools
     runs-on: ubuntu-latest
     outputs:
       cache-hit: ${{ steps.tools-cache.outputs.cache-hit }}
