@@ -17,6 +17,8 @@ else
     ARCH := $(UNAME_M)
 endif
 
+# Check if .github/workflows/*.yml need to be updated
+# when changing the install-ci-deps target.
 install-ci-deps: install-promtool
 	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.20.0
 	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.20.0
