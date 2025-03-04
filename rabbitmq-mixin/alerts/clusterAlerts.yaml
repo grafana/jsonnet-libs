@@ -35,4 +35,6 @@ groups:
       severity: critical
     annotations:
       summary: 'RabbitMQ node not distributed, link state is down.'
-      description: Distribution link state is not 'up' on {{ $labels.instance }}, current value is {{ $value }}. Note: The state is represented as a numerical value where pending=1', up_pending=2' and `up=3'.
+      description: |-
+        Distribution link state is not 'up' on {{ $labels.instance }}, current value is {{ $value }}. 
+        Note: The state is represented as a numerical value where pending=1, up_pending=2 and up=3.
