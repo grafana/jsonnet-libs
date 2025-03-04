@@ -13,7 +13,7 @@ on:
 
 jobs:
   setup:
-    name: Setup Tools
+    name: Setup tools
     runs-on: ubuntu-latest
     outputs:
       cache-hit: ${{ steps.tools-cache.outputs.cache-hit }}
@@ -39,7 +39,7 @@ jobs:
         run: make install-ci-deps
 
   lint-fmt:
-    name: Lint and Format
+    name: Lint and format
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
         run: make lint-fmt
 
   tests:
-    name: Run Tests
+    name: Run tests
     needs: setup
     runs-on: ubuntu-latest
     steps:
