@@ -27,20 +27,9 @@ groups:
             severity: warning
         - alert: RabbitMQNodeNotDistributed
           annotations:
-            description: Distribution link state is not 'up' on {{ $labels.instance }}.
+            description: "Distribution link state is not 'up' on {{ $labels.instance }}, current value is {{ $value }}. \nNote: The state is represented as a numerical value where pending=1, up_pending=2 and up=3."
             summary: RabbitMQ node not distributed, link state is down.
-          expr: erlang_vm_dist_node_state < 3
-          for: 2m
-          labels:
-            severity: critical
-        - alert: RabbitMQNodeDown
-          annotations:
-            description: |-
-                Less than 3 nodes running in RabbitMQ cluster
-                  VALUE = {{ $value }}
-                  LABELS = {{ $labels }}
-            summary: RabbitMQ node is down.
-          expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info) < 3
-          for: 0m
+          expr: erlang_vm_dist_node_state{rabbitmq_cluster!=""} < 3
+          for: 5m
           labels:
             severity: critical
