@@ -39,7 +39,7 @@ jobs:
         run: make install-ci-deps
 
   lint-fmt:
-    name: Lint and format
+    name: Lint and Format
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
         run: make lint-fmt
 
   tests:
-    name: Run tests
+    name: Run Tests
     needs: setup
     runs-on: ubuntu-latest
     steps:
