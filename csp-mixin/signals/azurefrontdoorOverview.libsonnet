@@ -20,7 +20,7 @@ function(this)
           azuremonitor: {
             expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
             legendCustomTemplate: '',
-            aggKeepLabels: ['dimensionEndpoint'],
+            aggKeepLabels: ['dimensionEndpoint', 'dimension_Endpoint'],
             exprWrappers: [['count(', ')']],
           },
         },
@@ -33,7 +33,7 @@ function(this)
         unit: 'percent',
         sources: {
           azuremonitor: {
-            expr: 'avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
+            expr: 'avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
             legendCustomTemplate: '',
             exprWrappers: [['topk(5,', ')']],
           },
@@ -49,14 +49,14 @@ function(this)
           azuremonitor: {
             expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Total Requests',
-            aggKeepLabels: ['dimensionEndpoint'],
+            aggKeepLabels: ['dimensionEndpoint', 'dimension_Endpoint'],
             exprWrappers: [['sum(', ')']],
           },
         },
       },
 
-      requestsByCountry: {
-        name: 'Requests by country',
+      requestsByCountryAlloy: {
+        name: 'Requests by country Alloy',
         description: 'The number of client requests served by the HTTP/S proxy grouped by country',
         type: 'gauge',
         aggFunction: 'sum',
@@ -70,8 +70,23 @@ function(this)
         },
       },
 
-      requestsByStatus: {
-        name: 'Requests by status',
+      requestsByCountryAgentless: {
+        name: 'Requests by country Agentless',
+        description: 'The number of client requests served by the HTTP/S proxy grouped by country',
+        type: 'gauge',
+        aggFunction: 'sum',
+        unit: 'short',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimension_clientcountry}}',
+            aggKeepLabels: ['dimension_clientcountry'],
+          },
+        },
+      },
+
+      requestsByStatusAlloy: {
+        name: 'Requests by status Alloy',
         description: 'The number of client requests served by the HTTP/S proxy grouped by status group',
         type: 'gauge',
         aggFunction: 'sum',
@@ -81,6 +96,21 @@ function(this)
             expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
             legendCustomTemplate: '{{dimensionHttpStatusGroup}}',
             aggKeepLabels: ['dimensionHttpStatusGroup'],
+          },
+        },
+      },
+
+      requestsByStatusAgentless: {
+        name: 'Requests by Status Agentless',
+        description: 'The number of client requests served by the HTTP/S proxy grouped by status group',
+        type: 'gauge',
+        aggFunction: 'sum',
+        unit: 'short',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimension_httpstatusgroup}}',
+            aggKeepLabels: ['dimension_httpstatusgroup'],
           },
         },
       },

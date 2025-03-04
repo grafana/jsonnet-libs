@@ -55,7 +55,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count(\n  sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "expr": "count(\n  sum by (job,resourceGroup,subscriptionName,dimensionEndpoint,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
@@ -144,7 +144,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk(5,\n  avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"})\n)",
+                  "expr": "topk(5,\n  avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"})\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -166,6 +166,8 @@
                         "Value": 7,
                         "dimensionClientCountry": 6,
                         "dimensionClientRegion": 5,
+                        "dimension_clientcountry": 6,
+                        "dimension_clientregion": 5,
                         "job": 1,
                         "resourceGroup": 2,
                         "resourceName": 3,
@@ -174,6 +176,8 @@
                      "renameByName": {
                         "dimensionClientCountry": "Country",
                         "dimensionClientRegion": "Region",
+                        "dimension_clientcountry": "Country",
+                        "dimension_clientregion": "Region",
                         "job": "Job",
                         "resourceGroup": "Group",
                         "resourceName": "Resource"
@@ -251,10 +255,10 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The number of client requests served by the HTTP/S proxy grouped by country",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -265,20 +269,7 @@
                      "showPoints": "never"
                   }
                },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Requests by country"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  }
-               ]
+               "overrides": [ ]
             },
             "gridPos": {
                "h": 8,
@@ -308,7 +299,18 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{dimensionClientCountry}}",
-                  "refId": "Requests by country"
+                  "refId": "Requests by country Alloy"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,dimension_clientcountry) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{dimension_clientcountry}}",
+                  "refId": "Requests by country Agentless"
                }
             ],
             "title": "Requests by country",
@@ -316,10 +318,10 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The number of client requests served by the HTTP/S proxy grouped by status group",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -330,20 +332,7 @@
                      "showPoints": "never"
                   }
                },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Requests by status"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  }
-               ]
+               "overrides": [ ]
             },
             "gridPos": {
                "h": 8,
@@ -373,10 +362,21 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{dimensionHttpStatusGroup}}",
-                  "refId": "Requests by status"
+                  "refId": "Requests by status Alloy"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,dimension_httpstatusgroup) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{dimension_httpstatusgroup}}",
+                  "refId": "Requests by Status Agentless"
                }
             ],
-            "title": "Requests by status",
+            "title": "Requests by Status",
             "type": "timeseries"
          },
          {
@@ -803,10 +803,10 @@
             "panels": [
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "Number of requests by endpoints.",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -821,7 +821,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Total requests"
+                              "options": "Total requests Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Total requests Agentless"
                            },
                            "properties": [
                               {
@@ -860,7 +872,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Total requests"
+                        "refId": "Total requests Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Total requests Agentless"
                      }
                   ],
                   "title": "Total requests",
@@ -868,10 +891,10 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "The number of bytes sent as requests from clients to AFDX.",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -886,7 +909,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Requests size"
+                              "options": "Requests size Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Requests size Agentless"
                            },
                            "properties": [
                               {
@@ -925,7 +960,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Requests size"
+                        "refId": "Requests size Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestsize_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Requests size Agentless"
                      }
                   ],
                   "title": "Requests size",
@@ -933,10 +979,10 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "The number of bytes sent as responses from HTTP/S proxy to clients.",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -951,7 +997,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Responses size"
+                              "options": "Responses size Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Responses size Agentless"
                            },
                            "properties": [
                               {
@@ -990,7 +1048,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Responses size"
+                        "refId": "Responses size Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_responsesize_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Responses size Agentless"
                      }
                   ],
                   "title": "Responses size",
@@ -998,10 +1067,10 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "The time calculated from when the client request was received by the HTTP/S proxy until the client acknowledged the last response byte from the HTTP/S proxy\tTotalLatency",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -1016,7 +1085,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Total latency"
+                              "options": "Total latency Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Total latency Agentless"
                            },
                            "properties": [
                               {
@@ -1055,7 +1136,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Total latency"
+                        "refId": "Total latency Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_totallatency_average_milliseconds{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Total latency Agentless"
                      }
                   ],
                   "title": "Total latency",
@@ -1063,8 +1155,8 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
                   "description": "",
                   "fieldConfig": {
@@ -1127,7 +1219,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Percentage of errors"
+                        "refId": "Percentage of errors Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}) + avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"})",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Percentage of errors Agentless"
                      }
                   ],
                   "title": "Percentage of errors",
@@ -1135,10 +1238,10 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "The number of requests sent from AFDX to origin.",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -1153,7 +1256,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Origin Request count"
+                              "options": "Origin Request count Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Origin Request count Agentless"
                            },
                            "properties": [
                               {
@@ -1192,7 +1307,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Origin Request count"
+                        "refId": "Origin Request count Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_originrequestcount_total_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Origin Request count Agentless"
                      }
                   ],
                   "title": "Origin Request count",
@@ -1200,10 +1326,10 @@
                },
                {
                   "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
                   },
-                  "description": "The time calculated from when the request was sent by AFDX edge to the backend until AFDX received the last response byte from the backend.",
+                  "description": "",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -1218,7 +1344,19 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Origin Latency average"
+                              "options": "Origin Latency average Alloy"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Origin Latency average Agentless"
                            },
                            "properties": [
                               {
@@ -1257,7 +1395,18 @@
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{dimensionEndpoint}}",
-                        "refId": "Origin Latency average"
+                        "refId": "Origin Latency average Alloy"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_originlatency_average_milliseconds{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",dimension_Endpoint=~\"$dimension_Endpoint\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimension_Endpoint}}",
+                        "refId": "Origin Latency average Agentless"
                      }
                   ],
                   "title": "Origin Latency average",
