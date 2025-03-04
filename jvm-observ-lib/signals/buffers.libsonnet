@@ -8,10 +8,11 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_buffer_memory_used_bytes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java
-      prometheus: 'jvm_buffer_pool_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-buffer-pool-metrics
+      java_micrometer: 'jvm_buffer_memory_used',  // can be seen when otel micrometer bridge is used
+      java_micrometer_with_suffixes: 'jvm_buffer_memory_used_bytes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java
       otel: 'process_runtime_jvm_buffer_usage',
       otel_with_suffixes: 'process_runtime_jvm_buffer_usage_bytes',
+      prometheus: 'jvm_buffer_pool_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-buffer-pool-metrics
       prometheus_old: 'jvm_buffer_pool_used_bytes',
     },
     signals: {
@@ -23,6 +24,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_memory_used{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
           },
           prometheus: {
@@ -47,6 +51,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_total_capacity{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',
           },
           prometheus: {
@@ -71,6 +78,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_memory_used{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
           },
           prometheus: {
@@ -95,6 +105,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_total_capacity{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',
           },
           prometheus: {
