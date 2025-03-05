@@ -70,6 +70,7 @@ local stub = import './stub.libsonnet';
             type: std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
             legendCustomTemplate: std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             valueMappings: std.get(signalsJson.signals[s], 'valueMappings', []),
+            quantile: std.get(signalsJson.signals[s], 'quantile', 0.95),
           },
         ],
       )
@@ -132,6 +133,7 @@ local stub = import './stub.libsonnet';
                 infoLabel: std.get(source.value, 'infoLabel', null),
                 legendCustomTemplate: std.get(source.value, 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
                 valueMappings: std.get(source.value, 'valueMappings', []),
+                quantile: std.get(source.value, 'quantile', 0.95),
               }
               for source in std.objectKeysValues(signalsJson.signals[s].sources)
               if std.member(validatedArr, source.key)
@@ -246,6 +248,7 @@ local stub = import './stub.libsonnet';
           type: type,
           legendCustomTemplate: null,
           valueMappings: [],
+          quantile: 0.95,
         },
       ],
     ):

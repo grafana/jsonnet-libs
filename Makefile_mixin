@@ -1,4 +1,4 @@
-JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
+JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
 
 .PHONY: all
 all: build dashboards_out prometheus_alerts.yaml prometheus_rules.yaml test
@@ -17,25 +17,30 @@ fmt:
 		xargs -n 1 -- $(JSONNET_FMT) -i
 
 .PHONY: lint
-lint: build
+lint: build lint-pint
+	@set -e; \
 	find . -name 'vendor' -prune -o -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
 		while read f; do \
-			$(JSONNET_FMT) "$$f" | diff -u "$$f" -; \
-		done
+			$(JSONNET_FMT) "$$f" | diff -u "$$f" - || exit 1; \
+		done; \
 	mixtool lint mixin.libsonnet
+
+.PHONY: lint-pint
+lint-pint: prometheus_alerts.yaml prometheus_rules.yaml
+	pint lint --min-severity=info --fail-on=warning prometheus_rules_out/
 
 dashboards_out: mixin.libsonnet $(wildcard **/*.libsonnet) $(wildcard **/*.jsonnet) $(wildcard panels/*) $(wildcard signals/*)
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: $(wildcard vendor/**/alerts.yaml) $(wildcard vendor/**/alerts.libsonnet) mixin.libsonnet $(wildcard alerts.libsonnet) $(wildcard signals/*) $(wildcard alerts/*)
+prometheus_alerts.yaml: mixin.libsonnet $(wildcard vendor/**/alerts.yaml) $(wildcard alerts/*) $(wildcard vendor/**/alerts.libsonnet) $(wildcard alerts.libsonnet) $(wildcard signals/*)
 	@mkdir -p prometheus_rules_out
 	@if [ -f alerts.libsonnet -o -d alerts ]; then \
 		mixtool generate alerts mixin.libsonnet -a prometheus_rules_out/prometheus_alerts.yaml; \
 	else \
 		touch prometheus_rules_out/prometheus_alerts.yaml; \
 	fi
-prometheus_rules.yaml: $(wildcard vendor/**/rules.yaml) $(wildcard vendor/**/rules.libsonnet) mixin.libsonnet $(wildcard rules.libsonnet) $(wildcard signals/*) $(wildcard rules/*)
+prometheus_rules.yaml: mixin.libsonnet $(wildcard vendor/**/rules.yaml) $(wildcard rules/*) $(wildcard vendor/**/rules.libsonnet) $(wildcard rules.libsonnet) $(wildcard signals/*) 
 	@if [ -f rules.libsonnet -o -d rules ]; then \
 		mixtool generate rules mixin.libsonnet -a prometheus_rules_out/prometheus_rules.yaml; \
 	else \
