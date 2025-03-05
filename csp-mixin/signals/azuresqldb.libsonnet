@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'none',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
 
     signals: {

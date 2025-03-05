@@ -43,7 +43,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-
     gcpvpc_services_in_use_count:
       this.signals.gcpvpc.gcpvpc_services_in_use_count.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')

@@ -105,16 +105,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withShowLegend(false),
 
     afd_requests_by_country:
-      commonlib.panels.generic.timeSeries.base.new('Requests by country', targets=[])
-      + this.signals.azurefrontdoorOverview.requestsByCountryAlloy.asPanelMixin()
-      + this.signals.azurefrontdoorOverview.requestsByCountryAgentless.asPanelMixin()
+      this.signals.azurefrontdoorOverview.requestsByCountry.asTimeSeries()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_requests_by_status:
-      commonlib.panels.generic.timeSeries.base.new('Requests by Status', targets=[])
-      + this.signals.azurefrontdoorOverview.requestsByStatusAlloy.asPanelMixin()
-      + this.signals.azurefrontdoorOverview.requestsByStatusAgentless.asPanelMixin()
+      this.signals.azurefrontdoorOverview.requestsByStatus.asTimeSeries()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
@@ -257,33 +253,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withShowLegend(false),
 
     afd_requests_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Total requests', targets=[])
-      + this.signals.azurefrontdoorAlloy.requestsByEndpoint.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.requestsByEndpoint.asPanelMixin()
+      this.signals.azurefrontdoor.requestsByEndpoint.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_requests_size_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Requests size', targets=[])
-      + this.signals.azurefrontdoorAlloy.requestsSizeByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.requestsSizeByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.requestsSizeByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_responses_size_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Responses size', targets=[])
-      + this.signals.azurefrontdoorAlloy.responsesSizeByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.responsesSizeByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.responsesSizeByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_total_latency_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Total latency', targets=[])
-      + this.signals.azurefrontdoorAlloy.totalLatencyByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.totalLatencyByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.totalLatencyByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_errors_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Percentage of errors', targets=[])
-      + this.signals.azurefrontdoorAlloy.errorsByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.errorsByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.errorsByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.table.standardOptions.withOverrides(
         [
@@ -310,15 +296,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     afd_origin_requests_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Origin Request count', targets=[])
-      + this.signals.azurefrontdoorAlloy.originRequestsByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.originRequestsByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.originRequestsByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_origin_latency_by_endpoint:
-      commonlib.panels.generic.timeSeries.base.new('Origin Latency average', targets=[])
-      + this.signals.azurefrontdoorAlloy.originLatencyByEndpoints.asPanelMixin()
-      + this.signals.azurefrontdoorAgentless.originLatencyByEndpoints.asPanelMixin()
+      this.signals.azurefrontdoor.originLatencyByEndpoints.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
   },
 }

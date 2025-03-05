@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'instance',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_network_virtualnetworks_ifunderddosattack_maximum_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
     signals: {
       bytesDropped: {
