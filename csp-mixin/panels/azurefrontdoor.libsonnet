@@ -78,7 +78,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               Time: 0,
               Value: 7,
               dimensionClientCountry: 6,
+              dimension_clientcountry: 6,
               dimensionClientRegion: 5,
+              dimension_clientregion: 5,
               job: 1,
               resourceGroup: 2,
               resourceName: 3,
@@ -86,7 +88,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             renameByName: {
               dimensionClientCountry: 'Country',
+              dimension_clientcountry: 'Country',
               dimensionClientRegion: 'Region',
+              dimension_clientregion: 'Region',
               job: 'Job',
               resourceGroup: 'Group',
               resourceName: 'Resource',
@@ -102,10 +106,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     afd_requests_by_country:
       this.signals.azurefrontdoorOverview.requestsByCountry.asTimeSeries()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_requests_by_status:
       this.signals.azurefrontdoorOverview.requestsByStatus.asTimeSeries()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
       + commonlib.panels.generic.timeSeries.base.stylize(),
 
     afd_requests_by_errors:

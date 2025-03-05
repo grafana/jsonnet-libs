@@ -328,7 +328,6 @@ local g = import './g.libsonnet';
           ]
         ),
 
-
       // Azure Virtual Machines
       avm_overview:
         g.panel.row.new('Overview')
@@ -440,7 +439,6 @@ local g = import './g.libsonnet';
             + g.panel.timeSeries.gridPos.withH(8),
           ]
         ),
-
 
       // Azure Queue Storage
       azqueuestore_overview:
@@ -594,7 +592,6 @@ local g = import './g.libsonnet';
             + g.panel.timeSeries.gridPos.withH(8),
           ]
         ),
-
 
       gcpvpc_overview:
         g.panel.row.new('Overview')

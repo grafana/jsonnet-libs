@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'none',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_network_loadbalancers_bytecount_total_bytes',
+      azuremonitor_agentless: self.azuremonitor,
     },
     signals: {
       summarySyncPackets: {

@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'instance',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
     signals: {
       cpuUtilization: {

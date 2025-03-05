@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'instance',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_sql_servers_elasticpools_sessions_count_average_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
     signals: {
       storageAllocTbl: {
