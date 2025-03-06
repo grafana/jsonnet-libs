@@ -105,7 +105,7 @@ function(this)
           },
           azuremonitor_agentless: {
             expr: 'avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{dimension_Endpoint!="",%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{dimension_Endpoint!="",%(queriesSelector)s})',
-            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            legendCustomTemplate: '{{dimensionEndpoint}}{{dimension_Endpoint}}',
             aggKeepLabels: ['dimension_Endpoint'],
           },
         },
