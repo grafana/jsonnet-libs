@@ -19,7 +19,7 @@
 
     groupLabels: ['job', 'resourceGroup', 'subscriptionName'],
     instanceLabels: ['resourceName'],
-    metricsSource: 'azuremonitor',
+    metricsSource: ['azuremonitor', 'azuremonitor_agentless'],
 
     local importRules(rules) = {
       groups+: std.parseYaml(rules).groups,
