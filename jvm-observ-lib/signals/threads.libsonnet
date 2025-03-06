@@ -8,7 +8,8 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
+      java_micrometer: 'jvm_threads_live',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
+      java_micrometer_with_suffixes: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
       prometheus: 'jvm_threads_current',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_threads_count',
       otel_with_suffixes: self.otel,
@@ -23,6 +24,9 @@ function(this)
         unit: 'short',
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_live{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_live_threads{%(queriesSelector)s}',
           },
           prometheus: {
@@ -45,6 +49,9 @@ function(this)
         unit: 'short',
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_daemon{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_daemon_threads{%(queriesSelector)s}',
           },
           prometheus: {
@@ -70,6 +77,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_peak{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_peak_threads{%(queriesSelector)s}',
           },
           prometheus: {
@@ -102,6 +112,10 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'sum by (state, %(agg)s) (jvm_threads_states{%(queriesSelector)s})',
+            legendCustomTemplate: '{{ state }}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum by (state, %(agg)s) (jvm_threads_states_threads{%(queriesSelector)s})',
             legendCustomTemplate: '{{ state }}',
           },
