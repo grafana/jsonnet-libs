@@ -1121,23 +1121,10 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
-        "description": "Source of the metrics (e.g. Prometheus source)",
-        "hide": 0,
-        "includeAll": false,
         "label": "Data source",
-        "multi": false,
         "name": "datasource",
-        "options": [],
         "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
@@ -1172,149 +1159,31 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
+        "allValue": ".+",
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(http_server_request_duration_seconds_bucket, job)",
-        "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Job",
-        "multi": false,
+        "multi": true,
         "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(http_server_request_duration_seconds_bucket, job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
+        "query": "label_values(http_server_request_duration_seconds_bucket, job)",
+        "refresh": 2,
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
+        "allValue": ".+",
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(http_server_request_duration_seconds_bucket{job=~\"$job\"}, instance)",
-        "hide": 0,
         "includeAll": false,
         "label": "Instance",
         "multi": false,
         "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(http_server_request_duration_seconds_bucket{job=~\"$job\"}, instance)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".+",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(job)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Job",
-        "multi": true,
-        "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(job)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": ".+",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(instance)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Instance",
-        "multi": true,
-        "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(instance)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": ".+",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "includeAll": true,
-        "label": "Job",
-        "multi": true,
-        "name": "job",
-        "query": "label_values(up{job!=\"kubelet\"}, job)",
-        "refresh": 2,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".+",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "includeAll": true,
-        "label": "Instance",
-        "multi": true,
-        "name": "instance",
-        "query": "label_values(up{job=~\"$job\"}, instance)",
+        "query": "label_values(http_server_request_duration_seconds_bucket{job=~\"$job\"}, instance)",
         "refresh": 2,
         "sort": 1,
         "type": "query"

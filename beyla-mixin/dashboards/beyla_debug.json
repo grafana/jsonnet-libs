@@ -791,56 +791,39 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
+        "label": "Data source",
+        "name": "datasource",
+        "query": "prometheus",
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": ".+",
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(beyla_internal_build_info, job)",
-        "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Job",
-        "multi": false,
+        "multi": true,
         "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(beyla_internal_build_info, job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
+        "query": "label_values(beyla_internal_build_info, job)",
+        "refresh": 2,
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
+        "allValue": ".+",
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(beyla_internal_build_info{job=~\"$job\"}, instance)",
-        "hide": 0,
         "includeAll": false,
         "label": "Instance",
         "multi": false,
         "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(beyla_internal_build_info{job=~\"$job\"}, instance)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
+        "query": "label_values(beyla_internal_build_info{job=~\"$job\"}, instance)",
+        "refresh": 2,
         "sort": 1,
         "type": "query"
       },
