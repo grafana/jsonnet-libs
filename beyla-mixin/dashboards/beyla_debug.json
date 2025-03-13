@@ -15,7 +15,7 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 72,
@@ -37,9 +37,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
-      "description": "",
+      "description": "Current version of Beyla running in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -117,9 +117,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
-      "description": "",
+      "description": "Number of Beyla pods currently running in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -187,8 +187,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
+      "description": "Total number of OpenTelemetry metrics exported by Beyla",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -261,8 +262,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
+      "description": "Total number of OpenTelemetry traces exported by Beyla",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -331,8 +333,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
+      "description": "List of all processes discovered and instrumented by Beyla",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -428,8 +431,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
+      "description": "Memory usage of Beyla pods over time",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -534,8 +538,9 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${datasource}"
       },
+      "description": "CPU utilization of Beyla processes over time",
       "fieldConfig": {
         "defaults": {
           "color": {
