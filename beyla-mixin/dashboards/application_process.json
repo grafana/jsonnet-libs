@@ -47,7 +47,7 @@
     ]
   },
   "description": "Information about the processes belonging to the applications instrumented by Beyla",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
@@ -58,6 +58,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "CPU utilization percentage for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -168,6 +169,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Physical memory usage for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -277,6 +279,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Virtual memory usage for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -386,6 +389,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Disk read operations rate for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -495,6 +499,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Disk write operations rate for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -604,6 +609,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Network receive throughput for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -713,6 +719,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD_PROM}"
       },
+      "description": "Network transmit throughput for each instrumented process",
       "fieldConfig": {
         "defaults": {
           "color": {
