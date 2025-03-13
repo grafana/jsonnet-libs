@@ -75,7 +75,7 @@
               description: 'Beyla in { $labels.cluster }} is experiencing {{ printf "%.2f" $value }}% errors for OTEL trace exports.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaOTELTraceExportHighErrorRate',
             },
-          },                   
+          },
           {
             alert: 'BeylaInstrumentedProcessesNoTelemetry',
             expr: |||
@@ -94,7 +94,7 @@
               description: 'Beyla in {{ $labels.cluster }} has more than 1 instrumented processes, but no metrics or traces have been exported in the last 10 minutes.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaInstrumentedProcessesNoTelemetry',
             },
-          },              
+          },
         ],
       },
     ],

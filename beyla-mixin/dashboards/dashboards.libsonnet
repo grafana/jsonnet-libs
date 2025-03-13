@@ -9,6 +9,6 @@
     },
     'application_process.json': (import './application_process.json') {
       uid: std.md5('application_process.json'),
-    },    
+    },
   },
 }
