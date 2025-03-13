@@ -131,7 +131,6 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": false,
           "expr": "sort_desc(topk by(http_route, service_name) (5,  max by (http_route, service_name) (histogram_quantile(0.95,  (sum by(http_route, service_name, le) (rate({__name__=~\"http_server_request_duration_seconds_bucket|http_server_request_duration_bucket\",instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])))))))",
           "format": "table",
           "hide": false,
@@ -285,7 +284,6 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": false,
           "expr": "sort_desc(topk by(rpc_method, service_name) (5,  max by (rpc_method, service_name) (histogram_quantile(0.95,  (sum by(rpc_method, service_name, le) (rate({__name__=~\"rpc_server_duration_seconds_bucket|rpc_server_duration_bucket\",instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])))))))",
           "format": "table",
           "hide": false,
@@ -476,7 +474,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"rpc_server_duration_seconds_sum\",service_name=\"$Service\",instance=~\"$instance\",job=~\"$job\"} [$__rate_interval])) / sum(rate({__name__=~\"rpc_server_duration_seconds_count|rpc_server_duration_count\",service_name=\"$Service\",instance=~\"$instance\",job=~\"$job\"} [$__rate_interval]))",
+          "expr": "sum(rate({__name__=~\"rpc_server_duration_seconds_sum|rpc_server_duration_sum\",service_name=\"$Service\",instance=~\"$instance\",job=~\"$job\"} [$__rate_interval])) / sum(rate({__name__=~\"rpc_server_duration_seconds_count|rpc_server_duration_count\",service_name=\"$Service\",instance=~\"$instance\",job=~\"$job\"} [$__rate_interval]))",
           "hide": false,
           "legendFormat": "RPC Avg",
           "range": true,
@@ -1235,6 +1233,36 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Job",
+        "multi": true,
+        "name": "job",
+        "query": "label_values(up{job!=\"kubelet\"}, job)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "query": "label_values(up{job=~\"$job\"}, instance)",
+        "refresh": 2,
+        "sort": 1,
         "type": "query"
       }
     ]

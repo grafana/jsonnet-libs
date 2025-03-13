@@ -56,7 +56,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "CPU utilization percentage for each instrumented process",
       "fieldConfig": {
@@ -139,10 +139,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_cpu_time.*\",process_pid=\"\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_cpu_time.*\",process_pid=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -150,10 +150,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_cpu_time.*\",process_pid!=\"\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_cpu_time.*\",process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
@@ -167,7 +167,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Physical memory usage for each instrumented process",
       "fieldConfig": {
@@ -250,10 +250,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"process_memory_usage.*\",process_pid=\"\"} + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum({__name__=~\"process_memory_usage.*\",process_pid=\"\",job=~\"$job\",instance=~\"$instance\"} + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -261,10 +261,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"process_memory_usage.*\",process_pid!=\"\"}) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum({__name__=~\"process_memory_usage.*\",process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"}) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -277,7 +277,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Virtual memory usage for each instrumented process",
       "fieldConfig": {
@@ -360,10 +360,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"process_memory_virtual.*\",process_pid=\"\"} + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum({__name__=~\"process_memory_virtual.*\",process_pid=\"\",job=~\"$job\",instance=~\"$instance\"} + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -371,10 +371,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"process_memory_virtual.*\",process_pid!=\"\"}) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum({__name__=~\"process_memory_virtual.*\",process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"}) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -387,7 +387,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Disk read operations rate for each instrumented process",
       "fieldConfig": {
@@ -470,10 +470,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid=\"\",disk_io_direction=\"read\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid=\"\",disk_io_direction=\"read\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -481,10 +481,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid!=\"\",disk_io_direction=\"read\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid!=\"\",disk_io_direction=\"read\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -497,7 +497,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Disk write operations rate for each instrumented process",
       "fieldConfig": {
@@ -580,10 +580,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid=\"\",disk_io_direction=\"write\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid=\"\",disk_io_direction=\"write\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -591,10 +591,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid!=\"\",disk_io_direction=\"write\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_disk_io.*\",process_pid!=\"\",disk_io_direction=\"write\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -607,7 +607,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Network receive throughput for each instrumented process",
       "fieldConfig": {
@@ -690,10 +690,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid=\"\",network_io_direction=\"receive\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid=\"\",network_io_direction=\"receive\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -701,10 +701,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid!=\"\",network_io_direction=\"receive\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid!=\"\",network_io_direction=\"receive\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -717,7 +717,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD_PROM}"
+        "uid": "${datasource}"
       },
       "description": "Network transmit throughput for each instrumented process",
       "fieldConfig": {
@@ -800,10 +800,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid=\"\",network_io_direction=\"transmit\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid=\"\",network_io_direction=\"transmit\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) + on(instance) group_left(k8s_pod_name,k8s_namespace_name,process_command,process_pid) (0 * target_info{process_pid!=\"\",job=~\"$job\",instance=~\"$instance\"})) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
           "refId": "A"
@@ -811,10 +811,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD_PROM}"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid!=\"\",network_io_direction=\"transmit\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
+          "expr": "sum(rate({__name__=~\"process_network_io.*\",process_pid!=\"\",network_io_direction=\"transmit\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by(k8s_pod_name,k8s_namespace_name,process_command,process_pid)",
           "hide": false,
           "legendFormat": "{{process_command}}/{{process_pid}} (Pod: {{k8s_namespace_name}}/{{k8s_pod_name}})",
           "range": true,
@@ -831,7 +831,45 @@
     "beyla"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "label": "Data source",
+        "name": "datasource",
+        "query": "prometheus",
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Job",
+        "multi": true,
+        "name": "job",
+        "query": "label_values(up{job!=\"kubelet\"}, job)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "query": "label_values(up{job=~\"$job\"}, instance)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-15m",

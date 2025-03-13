@@ -17,7 +17,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Beyla has a high error rate for OTEL metric exports',
+              summary: 'Beyla has a high error rate for OTEL metric exports.',
               description: 'Beyla in { $labels.cluster }} is experiencing {{ printf "%.2f" $value }}% errors for OTEL metric exports.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaOTELMetricExportHighErrorRate',
             },
@@ -35,7 +35,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'Beyla has a high error rate for OTEL metric exports',
+              summary: 'Beyla has a high error rate for OTEL metric exports.',
               description: 'Beyla in { $labels.cluster }} is experiencing {{ printf "%.2f" $value }}% errors for OTEL metric exports.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaOTELMetricExportHighErrorRate',
             },
@@ -53,7 +53,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Beyla has a high error rate for OTEL trace exports',
+              summary: 'Beyla has a high error rate for OTEL trace exports.',
               description: 'Beyla in { $labels.cluster }} is experiencing {{ printf "%.2f" $value }}% errors for OTEL trace exports.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaOTELTraceExportHighErrorRate',
             },
@@ -71,7 +71,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'Beyla has a high error rate for OTEL trace exports',
+              summary: 'Beyla has a high error rate for OTEL trace exports.',
               description: 'Beyla in { $labels.cluster }} is experiencing {{ printf "%.2f" $value }}% errors for OTEL trace exports.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaOTELTraceExportHighErrorRate',
             },
@@ -90,8 +90,8 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Beyla has instrumented processes without metrics or traces',
-              description: 'Beyla in { $labels.cluster }} has are more than 1 instrumented processes, but no metrics or traces have been exported in the last 10 minutes.',
+              summary: 'Beyla has instrumented processes without metrics or traces.',
+              description: 'Beyla in {{ $labels.cluster }} has more than 1 instrumented processes, but no metrics or traces have been exported in the last 10 minutes.',
               runbook_url: 'https://github.com/grafana/beyla/tree/main/ops/runbook.md#BeylaInstrumentedProcessesNoTelemetry',
             },
           },              

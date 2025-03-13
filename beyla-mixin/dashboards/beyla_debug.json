@@ -99,11 +99,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": false,
-          "expr": "beyla_internal_build_info",
+          "expr": "beyla_internal_build_info{job=~\"$job\",instance=~\"$instance\"}",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -171,10 +170,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "kube_daemonset_status_number_ready{daemonset=\"beyla\"}",
+          "expr": "kube_daemonset_status_number_ready{daemonset=\"beyla\",job=~\"$job\",instance=~\"$instance\"}",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -241,12 +240,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "sum by(cluster) (beyla_otel_metric_exports_total)",
+          "expr": "sum by(cluster) (beyla_otel_metric_exports_total{job=~\"$job\",instance=~\"$instance\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -316,11 +315,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by(cluster) (beyla_otel_trace_exports_total)",
+          "expr": "sum by(cluster) (beyla_otel_trace_exports_total{job=~\"$job\",instance=~\"$instance\"})",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -408,12 +407,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "sum by(process_name) (beyla_instrumented_processes)",
+          "expr": "sum by(process_name) (beyla_instrumented_processes{job=~\"$job\",instance=~\"$instance\"})",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -514,12 +513,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "process_memory_usage_bytes{job=\"default/beyla\"}",
+          "expr": "process_memory_usage_bytes{job=\"default/beyla\",job=~\"$job\",instance=~\"$instance\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -621,12 +620,12 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${datasource}"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "sum by(process_command) (process_cpu_utilization_ratio{job=\"default/beyla\"})",
+          "expr": "sum by(process_command) (process_cpu_utilization_ratio{job=\"default/beyla\",job=~\"$job\",instance=~\"$instance\"})",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -791,6 +790,43 @@
   ],
   "templating": {
     "list": [
+      {
+        "label": "Data source",
+        "name": "datasource",
+        "query": "prometheus",
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Job",
+        "multi": true,
+        "name": "job",
+        "query": "label_values(up{job!=\"kubelet\"}, job)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "query": "label_values(up{job=~\"$job\"}, instance)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      },
       {
         "baseFilters": [],
         "datasource": {
