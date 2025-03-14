@@ -15,23 +15,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   local secret = k.core.v1.secret,
 
-  // TODO: Remove once we are ready to migrate storage backend in ops-eu-south-0
-  // Add GCS storage settings from a secret
-  withStorageGCSFromSecret(secret_name, secret_key, bucket):: {
-    _config+:: { vault+: { config+: {
-      // See https://www.vaultproject.io/docs/configuration/storage/
-      // for other storage backends
-      storage+: {
-        gcs+: {
-          bucket: bucket,
-          credentials_file: '/var/run/secrets/gcs-auth/%s' % secret_key,
-          ha_enabled: 'true',
-        },
-      },
-    } } },
-    statefulset+: k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
-  },
-
   withStorageDynamoDB(region, table):: {
     _config+:: { vault+: { config+: {
       storage+: {
@@ -43,14 +26,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       },
     } } },
   },
-
-  // TODO: Replace with withStorageDynamoDB once we are ready to migrate ops-eu-south-0
-  // Create the secret from a service account key and add the settings
-  withStorageGCS(bucket, key):: {
-    gcs_auth_secret:
-      secret.new('gcs-auth', { key: key }),
-
-  } + self.withStorageGCSFromSecret('gcs-auth', 'key', bucket),
 
   // Add GCP KMS settings from a secret
   withGoogleCloudKMSFromSecret(secret_name, secret_key, project, location, key_ring, crypto_key):: {
