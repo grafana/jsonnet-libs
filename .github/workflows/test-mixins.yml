@@ -50,7 +50,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed mixins
         id: changed-mixins
-        uses: tj-actions/changed-files@v44
+        uses: grafana/changed-files@dcc7a0cba800f454d79fff4b993e8c3555bcc0a8 # v45.0.7
         with:
           dir_names: true
           dir_names_exclude_current_dir: true
