@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'jira-overview.json': (import 'dashboards/jira-overview.json'),
   },
 
@@ -9,5 +9,5 @@
     groups+: std.parseYaml(rules).groups,
   },
 
-  prometheusAlerts+: importRules(importstr 'alerts/general.yaml'),
+  prometheusAlerts+:: importRules(importstr 'alerts/general.yaml'),
 }

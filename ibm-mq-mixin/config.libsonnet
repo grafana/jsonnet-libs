@@ -6,8 +6,8 @@
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
-    logExpression: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"'
-    else 'job=~"$job"',
+    logExpression: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster", qmgr=~"$qmgr"'
+    else 'job=~"$job", qmgr=~"$qmgr"',
 
     //alerts thresholds
     alertsExpiredMessages: 2,  //count

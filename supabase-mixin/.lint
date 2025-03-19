@@ -1,11 +1,11 @@
 exclusions:
   template-instance-rule:
-    reason: "SupaBase instance filtering is accomplished by the project"
+    reason: "Supabase instance filtering is accomplished by the project"
   template-job-rule:
-    reason: "SupaBase instance filtering is accomplished by the project"
+    reason: "Supabase instance filtering is accomplished by the project"
   target-instance-rule:
-    reason: "SupaBase instance filtering is accomplished by the project"
+    reason: "Supabase instance filtering is accomplished by the project"
   target-job-rule:
-    reason: "SupaBase instance filtering is accomplished by the project"
+    reason: "Supabase instance filtering is accomplished by the project"
   panel-units-rule:
     reason: "Unit set as Number(none)"

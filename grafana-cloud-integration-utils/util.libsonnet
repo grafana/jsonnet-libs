@@ -2,6 +2,7 @@ local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
 local xtd = import 'xtd/main.libsonnet';
+local var = g.dashboard.variable;
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
@@ -141,6 +142,22 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       },
     },
 
+  // This function can be used to patch dashboards variables, matching by name:
+  // patch format:
+  // {
+  //   cluster: {
+  //     allValues: ".*"
+  //   },
+  // }
+  patch_variables(dashboard, patch)::
+    {
+      templating: {
+        list+: [
+          t + std.get(patch, t.name, default={})
+          for t in dashboard.templating.list
+        ],
+      },
+    },
 
   // This function can be used to patch alert rules:
   // prometheusAlerts format (as in mixin):
@@ -169,13 +186,13 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   // }
   // patch format:
   // {
-  //   Alert1+: {
+  //   Alert1: {
   //     labels+: {
   //       new_label: 'abc',
   //       asserts_severity: super.severity,
   //     }
   //   },
-  //   Alert2+: {
+  //   Alert2: {
   //     labels+: {
   //       new_label: 'zyx',
   //     }
@@ -183,16 +200,13 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   // }
   patch_alerts(prometheusAlerts, group_name, alert_rules_patch)::
     local patch_rules(rules, patch) =
-      std.objectValues(
-        {
-          [o.key]: o.value[0]
-          for o
-          in
-            std.objectKeysValues(xtd.aggregate.byKey(rules, 'alert'))
-        }
-        + patch
-      );
-
+      [
+        if std.objectHasAll(patch, rule.alert) then
+          rule + patch[rule.alert]
+        else rule
+        for rule
+        in rules
+      ];
     {
       groups+:
         [
@@ -205,6 +219,86 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
           for group in prometheusAlerts.groups
 
         ],
+    },
+
+  // Adds asserts specific variables to the dashboards
+  add_asserts_variables(dashboard, config, hidden=true)::
+    local ds_name =
+      std.prune([
+        if std.objectHas(template, 'type') && template.type == 'datasource' && template.query == 'prometheus'
+        then
+          std.get(template, 'name')
+        else null
+        for template in dashboard.templating.list
+      ])[0];
+    dashboard
+    {
+      templating: {
+        list: [
+          var.query.new('env')
+          + var.query.withDatasource('prometheus', '${%s}' % ds_name)
+          + var.query.queryTypes.withLabelValues(
+            'asserts_env',
+            'asserts:mixin_workload_job',
+          )
+          + var.query.generalOptions.withLabel('Asserts environment')
+          + (
+            if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.*'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
+          var.query.new('site')
+          + var.query.withDatasource('prometheus', '${%s}' % ds_name)
+          + var.query.queryTypes.withLabelValues(
+            'asserts_site',
+            'asserts:mixin_workload_job{asserts_env=~"$env"}',
+          )
+          + var.query.generalOptions.withLabel('Asserts site')
+          + (
+            if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.*'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
+        ] + dashboard.templating.list,
+      },
+      panels: [
+        if std.objectHas(panel, 'targets') then
+          panel {
+            targets: [
+              if std.objectHas(target, 'expr') then
+                target {
+                  expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                }
+              else target
+              for target in panel.targets
+            ],
+          } else panel
+        for panel in dashboard.panels
+      ],
     },
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {

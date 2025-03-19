@@ -4,7 +4,7 @@ local velero =
   velerolib.new()
   + velerolib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/velero"',
+      filteringSelector: 'job="integrations/velero"',
       uid: 'velero',
       enableLokiLogs: true,
     }

@@ -1,4 +1,6 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
+local configMap = k.core.v1.configMap;
+local configVolumeMount = k.util.configVolumeMount;
 local container = k.core.v1.container;
 
 {
@@ -9,11 +11,16 @@ local container = k.core.v1.container;
     user,
     host,
     port=3306,
-    image='prom/mysqld-exporter:v0.13.0',
+    image='prom/mysqld-exporter:v0.16.0',
     tlsMode='preferred',
+    configMapName='%s-cfg' % [name],
   ):: {
     local this = self,
-
+    local versionParts = std.split(std.split(image, ':')[1], '.'),
+    local majorVersion = std.parseInt(std.strReplace(versionParts[0], 'v', '')),
+    local minorVersion = std.parseInt(versionParts[1]),
+    // Ref: https://github.com/prometheus/mysqld_exporter/releases/tag/v0.15.0
+    local needsConfigFile = majorVersion > 0 || minorVersion > 14,
     envMap:: {
       MYSQL_USER: user,
       MYSQL_HOST: host,
@@ -25,9 +32,13 @@ local container = k.core.v1.container;
     container::
       container.new('mysqld-exporter', image)
       + container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104))
-      + container.withArgsMixin([
-        '--collect.info_schema.innodb_metrics',
-      ])
+      + container.withArgsMixin(
+        [
+          '--collect.info_schema.innodb_metrics',
+        ] + (if needsConfigFile then [
+               '--config.my-cnf=/conf/config.cnf',
+             ] else [])
+      )
       + container.withEnvMap(this.envMap)
     ,
 
@@ -43,10 +54,25 @@ local container = k.core.v1.container;
             DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/?tls=$(MYSQL_TLS_MODE)',
           }),
         ]
-      ),
+      ) + (if needsConfigFile then configVolumeMount(configMapName, '/conf') else {}),
 
     service:
       k.util.serviceFor(this.deployment),
+
+    configMap: (if needsConfigFile then configMap.new(configMapName)
+                                        + configMap.withData({
+                                          'config.cnf': std.manifestIni({
+                                            sections: {
+                                              client: {
+                                                host: '${MYSQL_HOST}',
+                                                port: '${MYSQL_PORT}',
+                                                user: '${MYSQL_USER}',
+                                                password: '${MYSQL_PASSWORD}',
+                                                tls: '${MYSQL_TLS_MODE}',
+                                              },
+                                            },
+                                          }),
+                                        }) else {}),
   },
 
   withPassword(password):: {

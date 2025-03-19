@@ -1,0 +1,82 @@
+---
+exclusions:
+  target-instance-rule:
+    entries:
+    - dashboard: "Azure Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "GCP Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "Azure Elastic pool"
+      reason: "Using 'resourceName' as instance label"
+    - panel: "Average Message Size"
+      reason: "Overview which is not filterable by instance"
+    - dashboard: "Azure SQL database"
+      reason: "Overview which is not filterable by instance"
+    - dashboard: "Azure Load Balancing"
+    - dashboard: "GCP Load Balancing"
+    - dashboard: "Azure Virtual network"
+      reason: "resourceName is the instance label"
+    - dashboard: "GCP Virtual private cloud"
+      reason: "project_id is the instance label"
+    - dashboard: "Azure Queue storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "GCP Compute Engine"
+      reason: "Using instance_name as instance label"
+    - dashboard: "Azure Virtual Machines"
+    - dashboard: "Azure Front Door"
+      reason: "Aggregation is at the group level, and resourceName is used for instance label"
+  target-job-rule:
+      reason: "Using filtering selector with job"
+  template-instance-rule:  
+    entries:
+    - dashboard: "Azure Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "GCP Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "Azure Elastic pool"
+      reason: "Using 'resourceName' as instance label"
+    - dashboard: "Azure SQL database"
+      reason: "Using 'resourceName' as instance label"
+    - dashboard: "Azure Load Balancing"    
+    - dashboard: "GCP Load Balancing"
+    - dashboard: "Azure Virtual network"
+      reason: "resourceName is the instance label"
+    - dashboard: "GCP Virtual private cloud"
+      reason: "project_id is the instance label"
+    - dashboard: "Azure Queue storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "GCP Compute Engine"
+      reason: "Using instance_name as instance label"
+    - dashboard: "Azure Virtual Machines"
+    - dashboard: "Azure Front Door"
+      reason: "Aggregation is at the group level, and resourceName is used for instance label"
+  panel-datasource-rule:
+    reason: "Many panels use --Mixed-- DS"
+  panel-units-rule:
+    reason: |
+      Common-lib uses overrides for units in almost all cases, and the dashboard linter creates a false positive here.
+      When dashboard linter is updated, this exception should be removed and any remaining issues resolved.
+    # entries:
+    # - panel: "API requests by type"
+    # - panel: "eDTU utilization"
+    # - panel: "Concurrent sessions"
+    # - panel: "Requests Success Rate"
+    # - dashboard: "Azure SQL database"
+    # - dashboard: "Azure Load Balancing"
+    # - dashboard: "Azure Elastic pool"
+    # - dashboard: "Azure Blob storage"
+    # - dashboard: "GCP Blob storage"
+    # - dashboard: "Azure Virtual network"
+    #   reason: "False positive.. Need to look into this"
+    # - dashboard: "GCP Virtual private cloud"
+    #   reason: "False positive as above. Linter does not look at overrides."
+  panel-title-description-rule:
+    entries:
+    - dashboard: Azure Service Bus
+    - dashboard: GCP Compute Engine
+    - dashboard: Azure Virtual Machines
+    - dashboard: Azure Front Door
+  target-rate-interval-rule:
+    entries:
+    - dashboard: GCP Compute Engine
+

@@ -1653,7 +1653,7 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster"' % cfg;
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='.+',
+            allValues='.*',
             sort=1
           ),
           template.new(

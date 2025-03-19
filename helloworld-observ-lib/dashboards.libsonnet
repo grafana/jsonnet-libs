@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      fleet:
+      'fleet.json':
         g.dashboard.new(prefix + 'Helloworld fleet')
         + g.dashboard.withPanels(
           // wrapPanels returns an array of panels organized in a grid,
@@ -27,7 +27,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-fleet', tags, links { backToFleet+:: {}, backToOverview+:: {} }, annotations, timezone, refresh, period),
 
-      overview:
+      'overview.json':
         g.dashboard.new(prefix + 'Helloworld overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -42,7 +42,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
 
-      dashboard3:
+      'dashboard3.json':
         g.dashboard.new(prefix + 'Helloworld dashboard 3')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(

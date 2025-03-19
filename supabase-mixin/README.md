@@ -1,13 +1,13 @@
-# SupaBase Mixin
+# Supabase Mixin
 
-The SupaBase mixin is a configurable Grafana dashboard.
+The Supabase mixin is a configurable Grafana dashboard.
 
-The SupaBase mixin contains the following dashboard:
+The Supabase mixin contains the following dashboard:
 
-- SupaBase
+- Supabase
 
-## SupaBase Dashboard Overview
-SupaBase dashboard provides details on the overall status of the SupaBase project including the database related metrics. The dashboard includes visualizations for requests, overall project stats. The dashboard is sourced from https://github.com/supabase/supabase-grafana
+## Supabase Dashboard Overview
+Supabase dashboard provides details on the overall status of the Supabase project including the database related metrics. The dashboard includes visualizations for requests, overall project stats. The dashboard is sourced from https://github.com/supabase/supabase-grafana
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:

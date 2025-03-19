@@ -4,11 +4,7 @@ local winlib = import 'windows-observ-lib/main.libsonnet';
 local config = (import 'config.libsonnet')._config;
 {
   local windows =
-    winlib.new(
-      dashboardNamePrefix=config.dashboardNamePrefix,
-      uid=config.uid,
-      filteringSelector=config.filteringSelector,
-    )
+    winlib.new()
     +
     {
       config+: config,

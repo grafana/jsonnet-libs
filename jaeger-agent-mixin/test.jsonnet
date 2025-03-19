@@ -6,6 +6,8 @@ local lib = (import './jaeger.libsonnet') {
     cluster: 'CLUSTER',
     namespace: 'NAMESPACE',
     jaeger_agent_host: 'JAEGER_AGENT_HOST',
+    jaeger_sampler_type: 'const',
+    jaeger_sampler_param: '1',
     with_otel_resource_attrs: true,
     with_otel_container_resource_attrs: true,
   },

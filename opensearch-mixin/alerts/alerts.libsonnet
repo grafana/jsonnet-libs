@@ -71,7 +71,7 @@
             },
           },
           {
-            alert: 'OpenSearchModerateNodeDiskUsage',
+            alert: 'OpenSearchHighNodeDiskUsage',
             expr: |||
               100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes{%(filteringSelector)s} - opensearch_fs_path_free_bytes{%(filteringSelector)s}) / opensearch_fs_path_total_bytes{%(filteringSelector)s}) > %(alertsWarningDiskUsage)s
             ||| % $._config,
@@ -103,7 +103,7 @@
             },
           },
           {
-            alert: 'OpenSearchModerateNodeCpuUsage',
+            alert: 'OpenSearchHighNodeCpuUsage',
             expr: |||
               sum without(nodeid) (opensearch_os_cpu_percent{%(filteringSelector)s}) > %(alertsWarningCPUUsage)s
             ||| % $._config,
@@ -135,7 +135,7 @@
             },
           },
           {
-            alert: 'OpenSearchModerateNodeMemoryUsage',
+            alert: 'OpenSearchHighNodeMemoryUsage',
             expr: |||
               sum without(nodeid) (opensearch_os_mem_used_percent{%(filteringSelector)s}) > %(alertsWarningMemoryUsage)s
             ||| % $._config,

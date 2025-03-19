@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'ceph-cluster.json': (import 'dashboards/ceph-cluster.json'),
   },
 
@@ -9,6 +9,6 @@
     groups+: std.parseYaml(rules).groups,
   },
 
-  prometheusAlerts+:
+  prometheusAlerts+::
     importRules(importstr 'alerts/CephClusterAlerts.yml'),
 }

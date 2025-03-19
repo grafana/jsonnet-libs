@@ -8,36 +8,40 @@ base {
     name,
     type,
     unit,
+    nameShort,
     description,
-    expr,
-    exprWrappers,
     aggLevel,
     aggFunction,
-    aggKeepLabels,
     vars,
     datasource,
-    valueMapping,
-    legendCustomTemplate,
-    rangeFunction,
+    sourceMaps,
   ):
     base.new(
       name,
       type,
       unit,
+      nameShort,
       description,
-      expr,
-      exprWrappers,
       aggLevel,
       aggFunction,
-      aggKeepLabels,
       vars,
       datasource,
-      valueMapping,
-      legendCustomTemplate,
-      rangeFunction,
+      sourceMaps=sourceMaps,
     )
 
     {
+      local this = self,
+      withQuantile(quantile=0.95):
+        self
+        {
+          sourceMaps:
+            [
+              source
+              {
+                quantile: quantile,
+              }
+              for source in super.sourceMaps
+            ],
+        },
     },
-
 }

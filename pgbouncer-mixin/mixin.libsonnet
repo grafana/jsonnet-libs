@@ -4,7 +4,7 @@ local pgbouncer =
   pgbouncerlib.new()
   + pgbouncerlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/pgbouncer"',
+      filteringSelector: 'job="integrations/pgbouncer"',
       uid: 'pgbouncer',
       enableLokiLogs: true,
     }

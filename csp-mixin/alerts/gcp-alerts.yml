@@ -1,0 +1,152 @@
+groups:
+  - name: gcp
+    rules:
+      - alert: GcpCEHighCpuUtilization
+        expr: |
+          100 * avg by (job,project_id,instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Compute Engine'
+          serviceId: 'compute'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'VM CPU utilization is too high.'
+          description: 'The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/compute-engine'
+
+      - alert: GcpCEHighIOLatency
+        expr: |
+          avg by (job,project_id,instance_id)(stackdriver_gce_instance_compute_googleapis_com_instance_disk_average_io_latency{job=~".+",project_id=~".+",instance_id=~".+"}) > 5000
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Compute Engine'
+          serviceId: 'compute'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'VM IO latency is too high.'
+          description: 'Check {{ $labels.instance_id }} VM for I/O bottlenecks and upgrade to SSD if necessary.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/compute-engine'
+
+      - alert: GcpCloudSQLHighCpu
+        expr: |
+          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'Database CPU utilization is too high.'
+          description: 'Check {{ $labels.database_id }} database for high CPU queries and optimize them, or scale up the instance if sustained high usage.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpCloudSQLMemoryUsage
+        expr: |
+          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'Database memory utilization is too high.'
+          description: 'Review high-memory queries or add more memory to the {{ $labels.database_id }} instance.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpCloudSQLDiskUsage
+        expr: |
+          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'Database disk utilization is too high.'
+          description: 'Delete or archive unused data, or increase disk size to the {{ $labels.database_id }} database.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpCloudSQLActiveConnections
+        expr: |
+          avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_threads{thread_kind="THREADS_CONNECTED", job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 0.9 * avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_max_connections{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"})
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'Too many database active connections.'
+          description: 'Investigate connection pooling settings and connection management in your {{ $labels.database_id }} application database.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpCloudSQLAbortedConnections
+        expr: |
+          sum by(job, instance, project_id, database_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'More than 5 MySQL failed connections in 5 minutes.'
+          description: 'Verify credentials and network settings; check for firewall rules blocking connections for the {{ $labels.database_id }} database.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpCloudSQLLagSecondsBehindMaster
+        expr: |
+          avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_replication_seconds_behind_master) > 5
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: warning
+          service: 'Cloud SQL'
+          serviceId: 'cloudsql'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'More than 5 seconds lag between database read replica and primary.'
+          description: 'Check {{ $labels.database_id }} database for network latency between primary and replica; adjust configurations to optimize replication.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
+
+      - alert: GcpPubSubNumUndeliveredMessages
+        expr: |
+          avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: warning
+          service: 'Pub/Sub'
+          serviceId: 'pubsub'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'More than 1000 unacknowledged messages for a PubSub subscription.'
+          description: 'Scale up subscribers or adjust message processing capacity for the {{ $labels.instance }} instance.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/pub-sub'
+
+      - alert: GcpPubSubUnackedMessageAge
+        expr: |
+          avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{job=~".+",project_id=~".+",instance=~".+"}) > 60
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: warning
+          service: 'Pub/Sub'
+          serviceId: 'pubsub'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'Unacknowledged messages for more than 60 seconds for a PubSub subscription.'
+          description: 'Investigate {{ $labels.instance }} instance and speed up message processing; ensure consumers can handle the load.'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/pub-sub'
