@@ -1,0 +1,13 @@
+exclusions:
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
+  template-job-rule:
+    reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
+  target-instance-rule:
+    reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
+  target-job-rule:
+    reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
+  alert-description-templating:
+    reason: ArgoAppMissing will not have any labels to template into the description, as it is checking for the absense of data

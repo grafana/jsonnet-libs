@@ -1,0 +1,34 @@
+exclusions:
+  panel-title-description-rule:
+    reason: "All titles are present. Descriptions are absent only when title is sufficiently descriptive."
+  panel-units-rule:
+    reason: "Units are undefined where panel description is clear, and the entity being graphed is not available in default set of available units."
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "NGINX Overview dashboard does not use a job label"
+  target-job-rule:
+    reason: "NGINX Overview dashboard does not use a job label"
+  target-rate-interval-rule:
+    reason: "using $__rate_interval breaks the dashboard hence using [5m] instead"
+  target-logql-auto-rule:
+    reason: "LogQL queries use fixed duration instead of $__auto"
+    entries:
+      - dashboard: "NGINX Logs"
+        panels:
+          - "Total requests"
+          - "Requests per status code"
+          - "NGINX logs in bytes"
+          - "Total Bytes Sent"
+          - "% of requests by Googlebot"
+          - "Realtime visitors "
+          - "# NGINX log lines"
+          - "% of 5xx requests "
+          - "Top Countries"
+          - "95th percentile of Request Time"
+          - "HTTP status codes over time"
+          - "Bytes Sent"
+          - "Top 10 HTTP Referers"
+          - "Top 10 User Agents"
+          - "Top 10 visitor IPs"
+          - "Top 10 Requested Pages"

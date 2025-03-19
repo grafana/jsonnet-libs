@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'Siddhi_overall.json': (import 'dashboards/Siddhi_overall.json'),
     'Siddhi_server.json': (import 'dashboards/Siddhi_server.json'),
     'Siddhi_query.json': (import 'dashboards/Siddhi_query.json'),
@@ -12,8 +12,4 @@
     'StreamingIntegrator_apps.json': (import 'dashboards/StreamingIntegrator_apps.json'),
     'StreamingIntegrator_overall.json': (import 'dashboards/StreamingIntegrator_overall.json'),
   },
-  local importRules(rules) = {
-    groups+: std.native('parseYaml')(rules)[0].groups,
-  },
-
 }

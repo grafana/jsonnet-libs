@@ -2,7 +2,7 @@
 
 Apache HTTP mixin is a set of configurable Grafana dashboards and alerts based on the metrics exported by the [Apache exporter](https://github.com/Lusitaniae/apache_exporter).
 
-Based on Apache dashboard by rfrail3: https://github.com/rfrail3/grafana-dashboards.
+Based on Apache dashboard by rfmoz: https://github.com/rfmoz/grafana-dashboards.
 
 ![image](https://user-images.githubusercontent.com/14870891/170320166-91bf48a6-0e21-48fd-873b-2483ee402339.png)
 

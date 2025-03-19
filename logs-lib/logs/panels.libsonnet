@@ -1,4 +1,4 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local g = import './g.libsonnet';
 
 local timeSeries = g.panel.timeSeries;
 local logsPanel = g.panel.logs;
@@ -9,6 +9,7 @@ local fieldConfig = timeSeries.fieldConfig;
 function(
   logsVolumeTarget,
   logsTarget,
+  logsVolumeGroupBy,
 )
 
   {
@@ -16,22 +17,29 @@ function(
 
     logsVolumeInit(targets, title='Logs volume')::
       timeSeries.new(title)
-      + timeSeries.withTargets(targets)
+      + timeSeries.queryOptions.withTargets(targets)
+      + timeSeries.panelOptions.withDescription('Logs volume grouped by "%s" label.' % logsVolumeGroupBy)
+      // set type to first target's type
+      + timeSeries.queryOptions.withDatasource(
+        logsVolumeTarget.datasource.type, logsVolumeTarget.datasource.uid
+      )
+      + timeSeries.queryOptions.withMaxDataPoints(100)
       + custom.withDrawStyle('bars')
       + custom.stacking.withMode('normal')
       + custom.withFillOpacity(50)
-      + timeSeries.withInterval('30s')  // must be set , otherwise interval is around 1ms
       + options.tooltip.withMode('multi')
-      + timeSeries.withTransformationsMixin(
+      + options.tooltip.withSort('desc')
+      + timeSeries.standardOptions.withUnit('none')
+      + timeSeries.queryOptions.withTransformationsMixin(
         {
           id: 'renameByRegex',
           options: {
             regex: 'Value',
-            renamePattern: 'unknown',
+            renamePattern: 'logs',
           },
         }
       )
-      + fieldConfig.withOverridesMixin(
+      + timeSeries.standardOptions.withOverridesMixin(
         [
           {
             matcher: {
@@ -57,14 +65,14 @@ function(
               { regex: '(N|n)(otice|ote)|(I|i)(nf.*|NF.*)', color: 'green' },
               { regex: 'dbg.*|DBG.*|(D|d)(EBUG|ebug)', color: 'blue' },
               { regex: '(T|t)(race|RACE)', color: 'light-blue' },
-              { regex: 'unknown', color: 'text' },
+              { regex: 'logs', color: 'text' },
             ]
         ]
       ),
 
     logsInit(targets, title='Logs')::
       logsPanel.new(title)
-      + logsPanel.withTargets(targets)
+      + logsPanel.queryOptions.withTargets(targets)
       + logsPanel.options.withDedupStrategy('exact')  //"none", "exact", "numbers", "signature"
       + logsPanel.options.withEnableLogDetails(true)
       + logsPanel.options.withShowTime(true)

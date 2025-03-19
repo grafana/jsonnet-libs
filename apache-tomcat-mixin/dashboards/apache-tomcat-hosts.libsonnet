@@ -8,45 +8,47 @@ local dashboardUid = 'apache-tomcat-hosts';
 
 local promDatasourceName = 'prometheus_datasource';
 
+local getMatcher(cfg) = '%(tomcatSelector)s, instance=~"$instance"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local sessionsPanel = {
+local sessionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
+      'sum(increase(tomcat_session_sessioncounter_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total sessions',
       interval='1m',
     ),
     prometheus.target(
-      'sum(increase(tomcat_session_rejectedsessions_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
+      'sum(increase(tomcat_session_rejectedsessions_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - rejected',
       interval='1m',
     ),
     prometheus.target(
-      'sum(increase(tomcat_session_expiredsessions_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
+      'sum(increase(tomcat_session_expiredsessions_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - expired',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
+      'increase(tomcat_session_sessioncounter_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{host}}{{context}} - sessions',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_session_rejectedsessions_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
+      'increase(tomcat_session_rejectedsessions_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{host}}{{context}}  - rejected',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_session_expiredsessions_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
+      'increase(tomcat_session_expiredsessions_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{host}}{{context}}  - expired',
       interval='1m',
@@ -124,17 +126,17 @@ local sessionsPanel = {
   },
 };
 
-local sessionProcessingTimePanel = {
+local sessionProcessingTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_session_processingtime_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+      'sum(increase(tomcat_session_processingtime_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_session_processingtime_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)',
+      'increase(tomcat_session_processingtime_total{' + matcher + ', host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~"$job", instance=~"$instance", host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{host}}{{context}}',
       interval='1m',
@@ -218,26 +220,26 @@ local servletRow = {
   collapsed: false,
 };
 
-local servletRequestsPanel = {
+local servletRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_servlet_requestcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total requests',
     ),
     prometheus.target(
-      'sum(rate(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_servlet_errorcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total errors',
     ),
     prometheus.target(
-      'rate(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])',
+      'rate(tomcat_servlet_requestcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{module}}{{servlet}} - requests',
     ),
     prometheus.target(
-      'rate(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])',
+      'rate(tomcat_servlet_errorcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{module}}{{servlet}} - errors',
     ),
@@ -312,17 +314,17 @@ local servletRequestsPanel = {
   },
 };
 
-local servletProcessingTimePanel = {
+local servletProcessingTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+      'sum(increase(tomcat_servlet_processingtime_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)',
+      'increase(tomcat_servlet_processingtime_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{' + matcher + ', module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{module}}{{servlet}}',
       interval='1m',
@@ -440,9 +442,21 @@ local servletProcessingTimePanel = {
             sort=0
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(tomcat_bytesreceived_total{%(multiclusterSelector)s}, cluster)' % $._config,
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
-            'label_values(tomcat_bytesreceived_total, instance)',
+            'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
             label='Instance',
             refresh=1,
             includeAll=false,
@@ -453,7 +467,7 @@ local servletProcessingTimePanel = {
           template.new(
             'host',
             promDatasource,
-            'label_values(tomcat_session_sessioncounter_total{instance=~"$instance"}, host)',
+            'label_values(tomcat_session_sessioncounter_total{%(tomcatSelector)s}, host)' % $._config,
             label='Host',
             refresh=1,
             includeAll=true,
@@ -464,7 +478,7 @@ local servletProcessingTimePanel = {
           template.new(
             'context',
             promDatasource,
-            'label_values(tomcat_session_sessioncounter_total{host=~"$host"}, context)',
+            'label_values(tomcat_session_sessioncounter_total{%(tomcatSelector)s, host=~"$host"}, context)' % $._config,
             label='Context',
             refresh=1,
             includeAll=true,
@@ -475,7 +489,7 @@ local servletProcessingTimePanel = {
           template.new(
             'servlet',
             promDatasource,
-            'label_values(tomcat_servlet_requestcount_total{module=~"$host$context"}, servlet)',
+            'label_values(tomcat_servlet_requestcount_total{%(tomcatSelector)s, module=~"$host$context"}, servlet)' % $._config,
             label='Servlet',
             refresh=1,
             includeAll=true,
@@ -487,13 +501,12 @@ local servletProcessingTimePanel = {
       )
       .addPanels(
         [
-          sessionsPanel { gridPos: { h: 10, w: 12, x: 0, y: 0 } },
-          sessionProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 0 } },
+          sessionsPanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 0, y: 0 } },
+          sessionProcessingTimePanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 12, y: 0 } },
           servletRow { gridPos: { h: 1, w: 24, x: 0, y: 10 } },
-          servletRequestsPanel { gridPos: { h: 10, w: 12, x: 0, y: 11 } },
-          servletProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 11 } },
+          servletRequestsPanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 0, y: 11 } },
+          servletProcessingTimePanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 12, y: 11 } },
         ]
       ),
-
   },
 }

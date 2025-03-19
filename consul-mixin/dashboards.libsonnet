@@ -92,6 +92,8 @@ local panel_settings = {
           g.queryPanel('sum(rate(consul_http_request{job=~"$job"}[$__rate_interval])) by (instance) / sum(rate(consul_http_request{job=~"$job"}[$__rate_interval])) by (instance)', 'Average') +
           { yaxes: g.yaxes('ms') }
         )
-      ),
+      ) { editable: false },
+
   },
+
 }

@@ -8,6 +8,7 @@ local dashboardUid = 'mssql-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
+local getMatcher(cfg) = '%(mssqlSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -17,11 +18,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local connectionsPanel = {
+local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_connections{instance=~"$instance", job=~"$job"}',
+      'mssql_connections{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
     ),
@@ -97,13 +98,14 @@ local connectionsPanel = {
   },
 };
 
-local batchRequestsPanel = {
+local batchRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mssql_batch_requests_total{instance=~"$instance", job=~"$job"}[$__rate_interval])',
+      'rate(mssql_batch_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -162,7 +164,6 @@ local batchRequestsPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -177,13 +178,14 @@ local batchRequestsPanel = {
   },
 };
 
-local severeErrorsPanel = {
+local severeErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_kill_connection_errors_total{instance=~"$instance", job=~"$job"}[$__rate_interval])',
+      'increase(mssql_kill_connection_errors_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -242,7 +244,6 @@ local severeErrorsPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -257,13 +258,14 @@ local severeErrorsPanel = {
   },
 };
 
-local deadlocksPanel = {
+local deadlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mssql_deadlocks_total{instance=~"$instance", job=~"$job"}[$__rate_interval])',
+      'rate(mssql_deadlocks_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -322,7 +324,6 @@ local deadlocksPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -337,11 +338,11 @@ local deadlocksPanel = {
   },
 };
 
-local osMemoryUsagePanel = {
+local osMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_os_memory{instance=~"$instance", job=~"$job"}',
+      'mssql_os_memory{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{state}}',
     ),
@@ -416,18 +417,102 @@ local osMemoryUsagePanel = {
   },
 };
 
-local memoryUtilizationPanel = {
+local memoryManagerPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_memory_utilization_percentage{instance=~"$instance", job=~"$job"}',
+      'mssql_server_total_memory_bytes{' + matcher + '}',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - total',
+    ),
+    prometheus.target(
+      'mssql_server_target_memory_bytes{' + matcher + '}',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - target',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Memory manager',
+  description: 'The committed memory and target committed memory for the SQL Server memory manager. See https://learn.microsoft.com/en-us/sql/relational-databases/performance-monitor/monitor-memory-usage?view=sql-server-ver16#isolating-memory-used-by-',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 51,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineStyle: {
+          fill: 'solid',
+        },
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'bytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
+  },
+};
+
+local committedMemoryUtilizationPanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      '100 * mssql_server_total_memory_bytes{' + matcher + '} / clamp_min(mssql_available_commit_memory_bytes{' + matcher + '},1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
   ],
   type: 'gauge',
-  title: 'Memory utilization',
-  description: 'Utilization of memory being used from the working set.',
+  title: 'Committed memory utilization',
+  description: 'The committed memory utilization',
   fieldConfig: {
     defaults: {
       color: {
@@ -464,13 +549,13 @@ local memoryUtilizationPanel = {
   pluginVersion: '9.1.7',
 };
 
-local errorLogsPanel = {
+local errorLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{instance=~"$instance", job=~"$job", log_type="mssql_error"}',
+      expr: '{' + matcher + ', log_type="mssql_error"}',
       queryType: 'range',
       refId: 'A',
     },
@@ -498,13 +583,14 @@ local databaseRow = {
   collapsed: false,
 };
 
-local databaseWriteStallDurationPanel = {
+local databaseWriteStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{instance=~"$instance", job=~"$job", db=~"$database", operation="write"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="write"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -559,7 +645,6 @@ local databaseWriteStallDurationPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -574,13 +659,14 @@ local databaseWriteStallDurationPanel = {
   },
 };
 
-local databaseReadStallDurationPanel = {
+local databaseReadStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{instance=~"$instance", job=~"$job", db=~"$database", operation="read"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="read"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -635,7 +721,6 @@ local databaseReadStallDurationPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -650,13 +735,14 @@ local databaseReadStallDurationPanel = {
   },
 };
 
-local transactionLogExpansionsPanel = {
+local transactionLogExpansionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_log_growths_total{instance=~"$instance", job=~"$job", db=~"$database"}[$__rate_interval])',
+      'increase(mssql_log_growths_total{' + matcher + ', db=~"$database"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -715,7 +801,6 @@ local transactionLogExpansionsPanel = {
     },
     overrides: [],
   },
-  interval: '1m',
   options: {
     legend: {
       calcs: [],
@@ -782,9 +867,21 @@ local transactionLogExpansionsPanel = {
               sort=2
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(mssql_build_info{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(mssql_build_info{job=~"$job"}, instance)',
+              'label_values(mssql_build_info{%(mssqlSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -795,7 +892,7 @@ local transactionLogExpansionsPanel = {
             template.new(
               'database',
               promDatasource,
-              'label_values(mssql_log_growths_total{job=~"$job", instance=~"$instance"}, db)',
+              'label_values(mssql_log_growths_total{%(mssqlSelector)s, instance=~"$instance"}, db)' % $._config,
               label='Database',
               refresh=1,
               includeAll=true,
@@ -809,21 +906,22 @@ local transactionLogExpansionsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            batchRequestsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-            severeErrorsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            deadlocksPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            osMemoryUsagePanel { gridPos: { h: 8, w: 16, x: 0, y: 16 } },
-            memoryUtilizationPanel { gridPos: { h: 8, w: 8, x: 16, y: 16 } },
+            connectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            batchRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            severeErrorsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            deadlocksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            osMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
+            memoryManagerPanel(getMatcher($._config)) { gridPos: { h: 8, w: 16, x: 0, y: 24 } },
+            committedMemoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+            errorLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
           ] else [],
           [
-            databaseRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
-            databaseWriteStallDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
-            databaseReadStallDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
-            transactionLogExpansionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 41 } },
+            databaseRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
+            databaseWriteStallDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
+            databaseReadStallDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+            transactionLogExpansionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 49 } },
           ],
         ])
       ),

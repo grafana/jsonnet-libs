@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/alainpham/app-archetypes.git",
+          "subdir": "camel-monitoring/camel-dashboards/"
+        }
+      },
+      "version": "master"
+    }
+  ],
+  "legacyImports": true
+}

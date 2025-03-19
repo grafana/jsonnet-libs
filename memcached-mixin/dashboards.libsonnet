@@ -1,13 +1,16 @@
 local g = (import 'grafana-builder/grafana.libsonnet');
 
 {
-  grafanaDashboards+: {
+  grafanaDashboards+:: {
     'memcached-overview.json':
       (
         g.dashboard('Memcached Overview') +
-        { uid: '124d5222454213f748dbfaf69b77ec48' }
+        {
+          uid: '124d5222454213f748dbfaf69b77ec48',
+          graphTooltip: $._config.graphTooltip,
+        }
       )
-      .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel)
+      .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel, allValue='.*')
       .addMultiTemplate('job', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster"}', 'job')
       .addMultiTemplate('instance', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster",job=~"$job"}', 'instance')
       .addRow(
@@ -115,6 +118,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
             'Value #B': { alias: 'Uptime', type: 'number', unit: 'dtdurations' },
           })
         )
-      ),
+      )
+      { editable: false },
   },
 }

@@ -1,0 +1,8 @@
+exclusions:
+  panel-datasource-rule:
+    entries:
+      - panel: GC duration
+      - panel: Allocated/promoted
+  panel-units-rule:
+    entries:
+      - panel: Process files open

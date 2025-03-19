@@ -1,0 +1,85 @@
+---
+name: Build
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  setup:
+    name: Setup tools
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.tools-cache.outputs.cache-hit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      - name: Tools cache
+        id: tools-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
+      - name: Install CI dependencies
+        if: steps.tools-cache.outputs.cache-hit != 'true'
+        run: make install-ci-deps
+
+  lint-fmt:
+    name: Lint and Format
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      - name: Restore Tools cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
+      - name: Lint and Format
+        run: make lint-fmt
+
+  tests:
+    name: Run Tests
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      - name: Restore Tools cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            /usr/local/bin/promtool
+          key: ${{ runner.os }}-tools-${{ hashFiles('Makefile') }}
+      - name: Run Tests
+        run: make tests

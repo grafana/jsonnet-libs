@@ -1,0 +1,4164 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "gnetId": null,
+      "graphTooltip": 1,
+      "hideControls": false,
+      "id": null,
+      "links": [ ],
+      "refresh": "",
+      "rows": [
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "datasource": "$datasource",
+                  "description": "System details for each discovered edgerouter device",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "string"
+                     }
+                  },
+                  "gridPos": { },
+                  "height": 3,
+                  "id": 2,
+                  "span": 12,
+                  "styles": [
+                     {
+                        "alias": "Time",
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "pattern": "Time",
+                        "type": "hidden"
+                     },
+                     {
+                        "alias": "Hostname",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "link": false,
+                        "linkTargetBlank": false,
+                        "linkTooltip": "Drill down",
+                        "linkUrl": "",
+                        "pattern": "snmp_target",
+                        "thresholds": [ ],
+                        "type": "number",
+                        "unit": "short"
+                     },
+                     {
+                        "alias": "Contact",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "link": false,
+                        "linkTargetBlank": false,
+                        "linkTooltip": "Drill down",
+                        "linkUrl": "",
+                        "pattern": "sysContact",
+                        "thresholds": [ ],
+                        "type": "number",
+                        "unit": "short"
+                     },
+                     {
+                        "alias": "Description",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "link": false,
+                        "linkTargetBlank": false,
+                        "linkTooltip": "Drill down",
+                        "linkUrl": "",
+                        "pattern": "sysDescr",
+                        "thresholds": [ ],
+                        "type": "number",
+                        "unit": "short"
+                     },
+                     {
+                        "alias": "Location",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "link": false,
+                        "linkTargetBlank": false,
+                        "linkTooltip": "Drill down",
+                        "linkUrl": "",
+                        "pattern": "sysLocation",
+                        "thresholds": [ ],
+                        "type": "number",
+                        "unit": "short"
+                     },
+                     {
+                        "alias": "Name",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "link": false,
+                        "linkTargetBlank": false,
+                        "linkTooltip": "Drill down",
+                        "linkUrl": "",
+                        "pattern": "sysName",
+                        "thresholds": [ ],
+                        "type": "number",
+                        "unit": "short"
+                     },
+                     {
+                        "alias": "",
+                        "colorMode": null,
+                        "colors": [ ],
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "decimals": 2,
+                        "pattern": "/.*/",
+                        "thresholds": [ ],
+                        "type": "string",
+                        "unit": "short"
+                     }
+                  ],
+                  "targets": [
+                     {
+                        "expr": "sysName{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "sysDescr{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "sysContact{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "sysLocation{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "",
+                        "refId": "D"
+                     }
+                  ],
+                  "title": "System Information",
+                  "transform": "table",
+                  "transformations": [
+                     {
+                        "id": "joinByField",
+                        "options": {
+                           "byField": "snmp_target",
+                           "mode": "outer"
+                        }
+                     },
+                     {
+                        "id": "filterFieldsByName",
+                        "options": {
+                           "include": {
+                              "pattern": "snmp_target|sys(Name|Descr|Contact|Location)"
+                           }
+                        }
+                     },
+                     {
+                        "id": "organize",
+                        "options": {
+                           "excludeByName": { },
+                           "indexByName": {
+                              "snmp_target": 1,
+                              "sysContact": 3,
+                              "sysDescr": 2,
+                              "sysLocation": 4,
+                              "sysName": 0
+                           },
+                           "renameByName": { }
+                        }
+                     }
+                  ],
+                  "type": "table"
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "System Identification",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "datasource": "$datasource",
+                  "description": "The time since the network management portion of the system was last re-initialized.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "light-blue",
+                           "mode": "fixed"
+                        },
+                        "links": [ ],
+                        "mappings": [ ],
+                        "noValue": "No Data",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": { },
+                  "id": 3,
+                  "links": [ ],
+                  "options": {
+                     "colorMode": "background",
+                     "graphMode": "none",
+                     "justifyMode": "auto",
+                     "orientation": "auto",
+                     "reduceOptions": {
+                        "calcs": [
+                           "last"
+                        ],
+                        "fields": "",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "7",
+                  "targets": [
+                     {
+                        "expr": "hrSystemUptime{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"} / 100",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "",
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Uptime",
+                  "transparent": false,
+                  "type": "stat"
+               },
+               {
+                  "datasource": "$datasource",
+                  "description": "The number of user sessions for which this host is storing state information. A session is a collection of processes requiring a single act of user authentication and possibly subject to collective job control.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "light-purple",
+                           "mode": "fixed"
+                        },
+                        "links": [ ],
+                        "mappings": [ ],
+                        "noValue": "No Data",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": { },
+                  "id": 4,
+                  "links": [ ],
+                  "options": {
+                     "colorMode": "background",
+                     "graphMode": "area",
+                     "justifyMode": "auto",
+                     "orientation": "auto",
+                     "reduceOptions": {
+                        "calcs": [
+                           "last"
+                        ],
+                        "fields": "",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "7",
+                  "targets": [
+                     {
+                        "expr": "hrSystemNumUsers{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "",
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Users",
+                  "transparent": false,
+                  "type": "stat"
+               },
+               {
+                  "datasource": "$datasource",
+                  "description": "The number of process contexts currently loaded or running on this system.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "light-blue",
+                           "mode": "fixed"
+                        },
+                        "links": [ ],
+                        "mappings": [ ],
+                        "noValue": "No Data",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": { },
+                  "id": 5,
+                  "links": [ ],
+                  "options": {
+                     "colorMode": "background",
+                     "graphMode": "area",
+                     "justifyMode": "auto",
+                     "orientation": "auto",
+                     "reduceOptions": {
+                        "calcs": [
+                           "last"
+                        ],
+                        "fields": "",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "7",
+                  "targets": [
+                     {
+                        "expr": "hrSystemProcesses{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "",
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Processes",
+                  "transparent": false,
+                  "type": "stat"
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Uptime & System",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The 1,5 and 15 minute load averages.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 6,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "laLoadInt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"} / 100",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{laNames}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "CPU Load Average",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of context switches, and interrupts processed.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 7,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ssRawContexts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Context Switches",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ssRawInterrupts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Interrupts",
+                        "refId": "B"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Interrupts / Ctx-Switches (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of blocks sent to, or received from, a block device.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Blocks Sent"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 8,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ssIORawReceived{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Blocks Received",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ssIORawSent{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Blocks Sent",
+                        "refId": "B"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Block I/O (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Percentage of CPU time spent by state.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "percentunit"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 9,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "User",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Nice",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "System",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Idle",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "I/O Wait",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Kernel",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Interrupt",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) / (increase(ssCpuRawUser{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawNice{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSystem{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawIdle{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])  + increase(ssCpuRawWait{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawKernel{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawInterrupt{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) + increase(ssCpuRawSoftIRQ{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Soft IRQ",
+                        "refId": "H"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "CPU Time",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The average, over the last minute, of the percentage of time that this processor was not idle.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 10,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "hrProcessorLoad{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Device ID: {{hrDeviceIndex}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Processor Load (1 Min Average)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "CPU",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The total amount of real or virtual memory currently allocated, by type.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "deckbytes"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 11,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "memBuffer{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Buffer",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "memCached{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Cached",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "memTotalFree{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Free",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "memShared{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Shared",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Memory Distribution",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The amount of real/physical memory currently unused or available.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "deckbytes"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 12,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "memAvailReal{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Real",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Memory Available",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The amount of physical memory which is currently allocated.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "percentunit"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 13,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "hrStorageUsed{hrStorageDescr=\"Physical memory\",job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"} / hrStorageSize{hrStorageDescr=\"Physical memory\",job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{hrStorageDescr}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Memory Utilized",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Memory",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Total throughput per interface, by direction.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "bps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 14,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ifHCInOctets{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) * 8",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ifHCOutOctets{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval]) * 8",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Out",
+                        "refId": "B"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Interface Traffic",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Packet throughput per interface, by type and direction.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 15,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ifHCInBroadcastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Bcast:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ifHCOutBroadcastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Bcast:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ifHCInMulticastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Mcast:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ifHCOutMulticastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Mcast:Out",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(ifHCInUcastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Ucast:In",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(ifHCOutUcastPkts{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Ucast:Out",
+                        "refId": "F"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Interface Traffic Distribution",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of packets dropped, in error, or unknown, by interface.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 16,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ifInDiscards{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Drop:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ifOutDiscards{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Drop:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ifInErrors{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Err:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ifOutErrors{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Err:Out",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(ifInUnknownProtos{ifIndex=~\"$interface\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{ifName}}:Unkwn:In",
+                        "refId": "E"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Interface Drops/Errors",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Interface",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Datagram packet throughput by direction and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 17,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsHCInBcastPkts{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Bcast:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutBcastPkts{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Bcast:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInMcastPkts{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Mcast:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutMcastPkts{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Mcast:Out",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInReceives{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Total:In",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutTransmits{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Total:Out",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInBcastPkts{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Bcast:In",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutBcastPkts{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Bcast:Out",
+                        "refId": "H"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInMcastPkts{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Mcast:In",
+                        "refId": "I"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutMcastPkts{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Mcast:Out",
+                        "refId": "J"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInReceives{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Total:In",
+                        "refId": "K"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutTransmits{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Total:Out",
+                        "refId": "L"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Distribution",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of fragements by action, direction and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 18,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsReasmReqds{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:ReasmReqd:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsReasmOKs{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:ReasmOK:In",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsReasmFails{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:ReasmFail:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragCreates{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:FragCreate:Out",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragFails{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:FragFail:Out",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragOKs{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:FragOK:Out",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragReqds{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:FragReqd:Out",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsReasmReqds{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:ReasmReqd:In",
+                        "refId": "H"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsReasmOKs{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:ReasmOK:In",
+                        "refId": "I"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsReasmFails{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:ReasmFail:In",
+                        "refId": "J"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragCreates{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:FragCreate:Out",
+                        "refId": "K"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragFails{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:FragFail:Out",
+                        "refId": "L"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragOKs{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:FragOK:Out",
+                        "refId": "M"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutFragReqds{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:FragReqd:Out",
+                        "refId": "N"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Fragmentation (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of IP datagrams forwarded by direction and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 19,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsHCInForwDatagrams{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutForwDatagrams{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInForwDatagrams{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutForwDatagrams{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Out",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Forwarding",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of IP forwarding datagrams dropped, or in error, by reason, direction, and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 20,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsInAddrErrors{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:AddrError:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInHdrErrors{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:HdrError:In",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInNoRoutes{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:NoRoute:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInTruncatedPkts{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Truncated:In",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInDiscards{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Drop:In",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutDiscards{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Drop:Out",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInAddrErrors{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:AddrError:In",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInHdrErrors{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:HdrError:In",
+                        "refId": "H"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInNoRoutes{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:NoRoute:In",
+                        "refId": "I"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInTruncatedPkts{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Truncated:In",
+                        "refId": "J"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInDiscards{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Drop:In",
+                        "refId": "K"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutDiscards{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Drop:Out",
+                        "refId": "L"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Forwarding Drops/Errors",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of IP datagrams by direction and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 21,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsHCInDelivers{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutRequests{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCInDelivers{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsHCOutRequests{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Out",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Non-Forwarding",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of IP datagrams dropped, or in error, by reason, direction, and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 22,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(ipSystemStatsInUnknownProtos{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:UnkwnProto:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutNoRoutes{ipSystemStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:NoRoute:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsInUnknownProtos{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:UnknwnProto:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(ipSystemStatsOutNoRoutes{ipSystemStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:NoRoute:Out",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "IP Non-Forwarding Drops/Errors",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "IP",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of TCP connections by type.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 23,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(tcpActiveOpens{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "ActiveOpen",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(tcpPassiveOpens{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "PassiveOpen",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(tcpAttemptFails{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Fail",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(tcpEstabResets{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Reset",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "TCP State Transitions (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The number of TCP connections for which the current state is either ESTABLISHED or CLOSE-WAIT.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 24,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(tcpCurrEstab{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Connections",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "TCP Sessions",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Total number of TCP segments by type and direction.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 25,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(tcpInSegs{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(tcpOutSegs{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(tcpRetransSegs{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Retrans:Out",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(tcpInErrs{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Error:In",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(tcpOutRsts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Reset:Out",
+                        "refId": "E"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "TCP Traffic, Non-Forward (seg/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "TCP",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of UDP datagrams sent and recieved, in error, or without destination application on port.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 26,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(udpInDatagrams{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(udpOutDatagrams{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(udpInErrors{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Error",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(udpNoPorts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "NoPort",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "UDP Traffic, Non-Forward (dgram/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "UDP",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of ICMP messages and errors by direction and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 27,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(icmpStatsInMsgs{icmpStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Msg:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(icmpStatsOutMsgs{icmpStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Msg:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(icmpStatsInErrors{icmpStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Error:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(icmpStatsOutErrors{icmpStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:Error:Out",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(icmpStatsInMsgs{icmpStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Msg:In",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(icmpStatsOutMsgs{icmpStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Msg:Out",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "rate(icmpStatsInErrors{icmpStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Error:In",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "rate(icmpStatsOutErrors{icmpStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:Error:Out",
+                        "refId": "H"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "ICMP Summary",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of ICMP messages by type, direction, and IP version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 28,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(icmpMsgStatsInPkts{icmpMsgStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:{{icmpMsgStatsType}}:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(icmpMsgStatsOutPkts{icmpMsgStatsIPVersion=\"1\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv4:{{icmpMsgStatsType}}:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(icmpMsgStatsInPkts{icmpMsgStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:{{icmpMsgStatsType}}:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(icmpMsgStatsOutPkts{icmpMsgStatsIPVersion=\"2\", job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "IPv6:{{icmpMsgStatsType}}:Out",
+                        "refId": "D"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "ICMP Message Type",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "ICMP",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of IP routing discards, total routes, and forward entries.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 29,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 12,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "ipRoutingDiscards{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Routes Discarded",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "inetCidrRouteNumber{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Route Entries",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "ipForwardNumber{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Forward Entries",
+                        "refId": "C"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Routing/Forwarding",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Routing/Forwarding",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "panels": [
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Number of SNMP packets and requests by direction and type.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "pps"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*Out"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.transform",
+                                 "value": "negative-Y"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 30,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(snmpInPkts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Messages:In",
+                        "refId": "A"
+                     },
+                     {
+                        "expr": "rate(snmpOutPkts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Messages:Out",
+                        "refId": "B"
+                     },
+                     {
+                        "expr": "rate(snmpInGetNexts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetNext:In",
+                        "refId": "C"
+                     },
+                     {
+                        "expr": "rate(snmpInGetRequests{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetReq:In",
+                        "refId": "D"
+                     },
+                     {
+                        "expr": "rate(snmpInGetResponses{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetResp:In",
+                        "refId": "E"
+                     },
+                     {
+                        "expr": "rate(snmpOutGetNexts{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetNext:Out",
+                        "refId": "F"
+                     },
+                     {
+                        "expr": "rate(snmpOutGetRequests{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetReq:Out",
+                        "refId": "G"
+                     },
+                     {
+                        "expr": "rate(snmpOutGetResponses{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "GetResp:Out",
+                        "refId": "H"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "SNMP Messages (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "The total number of MIB objects which have been retrieved successfully by the SNMP protocol entity as the result of receiving valid SNMP Get-Request and Get-Next PDUs.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10,
+                           "lineInterpolation": "linear",
+                           "showPoints": "never"
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": { },
+                  "id": 31,
+                  "legend": {
+                     "alignAsTable": false,
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "rightSide": false,
+                     "show": true,
+                     "sideWidth": null,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null",
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "max",
+                           "last"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                     }
+                  },
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "repeat": null,
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "rate(snmpInTotalReqVars{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}[$__rate_interval])",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "Objects",
+                        "refId": "A"
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "SNMP Objects Fetched (/sec)",
+                  "tooltip": {
+                     "shared": true,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "timeseries",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                     }
+                  ]
+               }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "SNMP",
+            "titleSize": "h6",
+            "type": "row"
+         }
+      ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [ ],
+      "templating": {
+         "list": [
+            {
+               "current": {
+                  "text": "default",
+                  "value": "default"
+               },
+               "hide": 0,
+               "label": "Data Source",
+               "name": "datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": "$datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": "label_values(up{snmp_target!=\"\"}, job)",
+               "refresh": 1,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": "$datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "instance",
+               "multi": true,
+               "name": "instance",
+               "options": [ ],
+               "query": "label_values(up{snmp_target!=\"\", job=~\"$job\"}, instance)",
+               "refresh": 1,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": "$datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "snmp_target",
+               "multi": true,
+               "name": "snmp_target",
+               "options": [ ],
+               "query": "label_values(up{snmp_target!=\"\", job=~\"$job\", instance=~\"$instance\"}, snmp_target)",
+               "refresh": 1,
+               "regex": "",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": { },
+               "datasource": "$datasource",
+               "hide": 0,
+               "includeAll": true,
+               "label": "interface",
+               "multi": true,
+               "name": "interface",
+               "options": [ ],
+               "query": "ifNiceName{job=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\"}",
+               "refresh": 1,
+               "regex": "/ifIndex=\\\"(?<value>[0-9]+)\\\".*nicename=\\\"(?<text>[\\w:\\s0-9\\.]+)\\\"/",
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "browser",
+      "title": "Ubiquiti EdgeRouter Overview",
+      "uid": "f7152918be0e80aa820c83bd0167701f",
+      "version": 0
+   }
