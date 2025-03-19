@@ -55,7 +55,7 @@ groups:
                 {{$labels.node}} has had {{ printf "%.0f" $value }}% disk usage over the last 5m which is above the threshold of 80.
             summary: The node disk usage has exceeded the critical threshold.
           expr: |
-            100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes{opensearch_cluster!=""} - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes{opensearch_cluster!=""}) > 80
+            100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes{opensearch_cluster!=""} - opensearch_fs_path_free_bytes{opensearch_cluster!=""}) / opensearch_fs_path_total_bytes{opensearch_cluster!=""}) > 80
           for: 5m
           labels:
             severity: critical
