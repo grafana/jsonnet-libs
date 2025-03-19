@@ -9,33 +9,41 @@ base {
   new(
     name,
     type,
-    infoLabel,
+    nameShort,
     description,
-    expr,
-    exprWrappers,
     aggLevel,
+    aggFunction,
     vars,
     datasource,
-    valueMapping,
-    legendCustomTemplate,
+    sourceMaps,
   ):
     base.new(
       name,
       type,
       'short',
+      nameShort,
       description,
-      expr,
-      exprWrappers,
       aggLevel,
+      aggFunction,
       vars,
       datasource,
-      valueMapping,
-      legendCustomTemplate,
-      rangeFunction=null,
+      sourceMaps=sourceMaps,
     )
     {
       local prometheusQuery = g.query.prometheus,
       local lokiQuery = g.query.loki,
+      local infoLabel =
+        std.join(
+          '|',
+          std.uniq(  // keep unique only
+            std.sort(
+              [
+                source.infoLabel
+                for source in sourceMaps
+              ]
+            )
+          )
+        ),
 
       unit:: 'short',
       //Return as grafana panel target(query+legend)
@@ -54,7 +62,8 @@ base {
       asStat()::
         super.asStat()
         + panels.generic.stat.info.stylize()
-          { options+: { reduceOptions+: { fields: '/^' + infoLabel + '$/' } } },
+          //TODO update infoLabel to multi
+          { options+: { reduceOptions+: { fields: '/^(' + infoLabel + ')$/' } } },
 
       //Return as gauge panel
       asGauge()::

@@ -43,7 +43,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
       },
     },
 
-    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2):: self {
+    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2, includeAll=true):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -54,7 +54,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: true,
+          includeAll: includeAll,
           label: name,
           multi: true,
           name: name,
@@ -332,17 +332,25 @@ local utils = import 'mixin-utils/utils.libsonnet';
   },
 
   statPanel(query, format='percentunit'):: {
+    local isNativeClassic = utils.isNativeClassicQuery(query),
     type: 'singlestat',
     thresholds: '70,80',
     format: format,
     targets: [
       {
-        expr: query,
+        expr: if isNativeClassic then utils.showClassicHistogramQuery(query) else query,
+        format: 'time_series',
+        instant: true,
+        refId: if isNativeClassic then 'A_classic' else 'A',
+      },
+    ] + if isNativeClassic then [
+      {
+        expr: utils.showNativeHistogramQuery(query),
         format: 'time_series',
         instant: true,
         refId: 'A',
       },
-    ],
+    ] else [],
   },
 
   tablePanel(queries, labelStyles):: {
@@ -531,13 +539,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr: utils.showClassicHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
+        expr: utils.showClassicHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
+        expr: utils.showNativeHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
@@ -583,37 +591,37 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '99th percentile',
         refId: 'A',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '99th percentile',
         refId: 'A_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '50th percentile',
         refId: 'B',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '50th percentile',
         refId: 'B_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C_classic',

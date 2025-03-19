@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'argocd-overview.json': (import 'dashboards/argocd-overview.json'),
   },
 
@@ -9,6 +9,6 @@
     groups+: std.parseYaml(rules).groups,
   },
 
-  prometheusAlerts+:
+  prometheusAlerts+::
     importRules(importstr 'alerts/argocd-alerts.yml'),
 }

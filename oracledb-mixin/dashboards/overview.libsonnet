@@ -279,7 +279,7 @@ local alertLogPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'builder',
-      expr: '{filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
+      expr: '{' + matcher + '} |= `` | (filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log" or log_type="oracledb")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1053,7 +1053,7 @@ local tablespaceSizePanel(matcher) = {
       dashboard.new(
         'OracleDB overview',
         time_from='%s' % $._config.dashboardPeriod,
-        editable=true,
+        editable=false,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,

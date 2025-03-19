@@ -5,10 +5,18 @@ local m1 = signal.init(
   filteringSelector=['job="abc"'],
 ).addSignal(
   name='Go version',
+  nameShort='Version',
   type='info',
+  aggLevel='instance',
   description='Go version.',
-  expr='go_info{%(queriesSelector)s}',
-  infoLabel='version'
+  sourceMaps=[
+    {
+      expr: 'go_info{%(queriesSelector)s}',
+      infoLabel: 'version',
+      legendCustomTemplate: null,
+      aggKeepLabels: [],
+    },
+  ]
 );
 
 {
@@ -18,7 +26,7 @@ local m1 = signal.init(
     testResult: test.suite({
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'go_info{job="abc",job=~"$job",instance=~"$instance"}',
+        expect: 'avg by (job,instance,version) (\n  go_info{job="abc",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },
@@ -36,7 +44,7 @@ local m1 = signal.init(
         },
         testTSversion: {
           actual: m1.asStat().pluginVersion,
-          expect: 'v10.0.0',
+          expect: 'v11.0.0',
         },
         testTSUid: {
           actual: m1.asStat().datasource,
@@ -44,6 +52,10 @@ local m1 = signal.init(
             uid: '${datasource}',
             type: 'prometheus',
           },
+        },
+        testInfoLabel: {
+          actual: m1.asStat().options.reduceOptions.fields,
+          expect: '/^(' + 'version' + ')$/',
         },
       }),
     },

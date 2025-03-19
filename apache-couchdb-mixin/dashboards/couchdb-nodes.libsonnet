@@ -1225,7 +1225,7 @@ local systemLogsPanel(cfg) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + getMatcher(cfg) + ', filename="/var/log/couchdb/couchdb.log"} |~ "$log_level"',
+      expr: '{' + getMatcher(cfg) + '} |= `` | (filename=~"/var/log/couchdb/couchdb.log" or log_type="couchdb") |~ "$log_level"',
       queryType: 'range',
       refId: 'A',
     },

@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'Siddhi_overall.json': (import 'dashboards/Siddhi_overall.json'),
     'Siddhi_server.json': (import 'dashboards/Siddhi_server.json'),
     'Siddhi_query.json': (import 'dashboards/Siddhi_query.json'),

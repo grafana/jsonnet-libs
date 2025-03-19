@@ -6,10 +6,34 @@ local gauge1 = signal.init(
   filteringSelector=['job="integrations/agent"'],
 ).addSignal(
   name='Up metric',
+  nameShort='Up',
   type='gauge',
   unit='short',
   description='abc',
-  expr='up{%(queriesSelector)s}',
+  sourceMaps=[
+    {
+      expr: 'up{%(queriesSelector)s}',
+      rangeFunction: null,
+      aggKeepLabels: [],
+      legendCustomTemplate: null,
+      infoLabel: null,
+      valueMappings: [{
+        type: 'value',
+        options: {
+          '1': {
+            text: 'Up',
+            color: 'light-green',
+            index: 1,
+          },
+          '0': {
+            text: 'Down',
+            color: 'light-red',
+            index: 0,
+          },
+        },
+      }],
+    },
+  ]
 );
 
 {
@@ -19,7 +43,7 @@ local gauge1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: gauge1.asTarget().legendFormat,
-        expect: '{{job}}: Up metric',
+        expect: '{{job}}: Up',
       },
       testExpression: {
         actual: gauge1.asTarget().expr,
@@ -27,28 +51,49 @@ local gauge1 = signal.init(
       },
     }),
   },
+  asTargetWithcombinedTransformations: {
+    local raw = gauge1
+                .withTopK(3)
+                .withOffset('30m')
+                .withFilteringSelectorMixin('region="us-east"')
+                .asTarget(),
+    testResult: test.suite({
+      testExpression: {
+        actual: raw.expr,
+        expect: 'topk(3,\n  avg by (job) (\n  (up{job="integrations/agent",job=~"$job",instance=~"$instance",region="us-east"} offset 30m)\n)\n)',
+      },
+      testLegend: {
+        actual: raw.legendFormat,
+        expect: '{{job}}: Up',
+      },
+    }),
+  },
   asTimeSeries:
     {
-      raw:: gauge1.asTimeSeries(),
+      local raw = gauge1.asTimeSeries(),
       testResult: test.suite({
         testTStitle: {
-          actual: gauge1.asTimeSeries().title,
+          actual: raw.title,
           expect: 'Up metric',
         },
         testUnit: {
-          actual: gauge1.asTimeSeries().fieldConfig.defaults.unit,
+          actual: raw.fieldConfig.overrides[0].properties[1].value,
           expect: 'short',
         },
+        testValueMapping: {
+          actual: raw.fieldConfig.overrides[0].properties[0].value,
+          expect: [{ options: { '0': { color: 'light-red', index: 0, text: 'Down' }, '1': { color: 'light-green', index: 1, text: 'Up' } }, type: 'value' }],
+        },
         testTStype: {
-          actual: gauge1.asTimeSeries().type,
+          actual: raw.type,
           expect: 'timeseries',
         },
         testTSversion: {
-          actual: gauge1.asTimeSeries().pluginVersion,
-          expect: 'v10.0.0',
+          actual: raw.pluginVersion,
+          expect: 'v11.0.0',
         },
         testTSUid: {
-          actual: gauge1.asTimeSeries().datasource,
+          actual: raw.datasource,
           expect: {
             uid: '${datasource}',
             type: 'prometheus',

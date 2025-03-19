@@ -9,6 +9,8 @@ local dashboardUid = 'apache-airflow-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local getMatcher(cfg) = '%(airflowSelector)s, instance=~"$instance"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -17,11 +19,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local dagFileParsingErrorsPanel = {
+local dagFileParsingErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'airflow_dag_processing_import_errors{job=~"$job", instance=~"$instance"}',
+      'airflow_dag_processing_import_errors{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -98,11 +100,11 @@ local dagFileParsingErrorsPanel = {
   },
 };
 
-local slaMissesPanel = {
+local slaMissesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_sla_missed{job=~"$job", instance=~"$instance"}[$__interval:])',
+      'increase(airflow_sla_missed{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -180,11 +182,11 @@ local slaMissesPanel = {
   },
 };
 
-local taskFailuresPanel = {
+local taskFailuresPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_ti_failures{job=~"$job", instance=~"$instance"}[$__interval:])',
+      'increase(airflow_ti_failures{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -262,11 +264,11 @@ local taskFailuresPanel = {
   },
 };
 
-local dagSuccessDurationPanel = {
+local dagSuccessDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_dagrun_duration_success_sum{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_success_count{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:]),1)',
+      'increase(airflow_dagrun_duration_success_sum{' + matcher + ', dag_id=~"$dag_id"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_success_count{' + matcher + ', dag_id=~"$dag_id"}[$__interval:]),1)',
       datasource=promDatasource,
       legendFormat='{{dag_id}}',
       interval='1m',
@@ -343,11 +345,11 @@ local dagSuccessDurationPanel = {
   },
 };
 
-local dagFailedDurationPanel = {
+local dagFailedDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_dagrun_duration_failed_sum{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_failed_count{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:]),1)',
+      'increase(airflow_dagrun_duration_failed_sum{' + matcher + ', dag_id=~"$dag_id"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_failed_count{' + matcher + ', dag_id=~"$dag_id"}[$__interval:]),1)',
       datasource=promDatasource,
       legendFormat='{{dag_id}}',
       interval='1m',
@@ -424,11 +426,11 @@ local dagFailedDurationPanel = {
   },
 };
 
-local taskDurationPanel = {
+local taskDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_dag_task_duration_sum{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}[$__interval:]) / clamp_min(increase(airflow_dag_task_duration_count{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}[$__interval:]),1) != 0',
+      'increase(airflow_dag_task_duration_sum{' + matcher + ', dag_id=~"$dag_id", task_id=~"$task_id"}[$__interval:]) / clamp_min(increase(airflow_dag_task_duration_count{' + matcher + ', dag_id=~"$dag_id", task_id=~"$task_id"}[$__interval:]),1) != 0',
       datasource=promDatasource,
       legendFormat='{{dag_id}} - {{task_id}}',
       interval='1m',
@@ -476,11 +478,11 @@ local taskDurationPanel = {
   transformations: [],
 };
 
-local taskCountSummaryPanel = {
+local taskCountSummaryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, instance, dag_id, state) (increase(airflow_task_finish_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:])) != 0',
+      'sum by(job, instance, dag_id, state) (increase(airflow_task_finish_total{' + matcher + ', dag_id=~"$dag_id"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{dag_id}} - {{state}}',
       interval='1m',
@@ -526,11 +528,11 @@ local taskCountSummaryPanel = {
   },
 };
 
-local taskCountsPanel = {
+local taskCountsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_task_finish_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id", state=~"$state"}[$__interval:])',
+      'increase(airflow_task_finish_total{' + matcher + ', dag_id=~"$dag_id", task_id=~"$task_id", state=~"$state"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{dag_id}} - {{task_id}} - {{state}}',
       interval='1m',
@@ -605,13 +607,13 @@ local taskCountsPanel = {
   pluginVersion: '9.2.3',
 };
 
-local taskLogsPanel = {
+local taskLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id", filename=~".*/airflow/logs/dag_id.*"} |= ``',
+      expr: '{' + matcher + ', dag_id=~"$dag_id", task_id=~"$task_id", filename=~".*/airflow/logs/dag_id.*"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -639,11 +641,11 @@ local schedulerDetailsRow = {
   collapsed: false,
 };
 
-local dagScheduleDelayPanel = {
+local dagScheduleDelayPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(airflow_dagrun_schedule_delay_sum{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:]) / clamp_min(increase(airflow_dagrun_schedule_delay_count{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}[$__interval:]),1)',
+      'increase(airflow_dagrun_schedule_delay_sum{' + matcher + ', dag_id=~"$dag_id"}[$__interval:]) / clamp_min(increase(airflow_dagrun_schedule_delay_count{' + matcher + ', dag_id=~"$dag_id"}[$__interval:]),1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{dag_id}}',
       interval='1m',
@@ -720,16 +722,16 @@ local dagScheduleDelayPanel = {
   },
 };
 
-local schedulerTasksPanel = {
+local schedulerTasksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'airflow_scheduler_tasks_executable{job=~"$job", instance=~"$instance"}',
+      'airflow_scheduler_tasks_executable{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - executable',
     ),
     prometheus.target(
-      'airflow_scheduler_tasks_starving{job=~"$job", instance=~"$instance"}',
+      'airflow_scheduler_tasks_starving{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - starving',
     ),
@@ -806,21 +808,21 @@ local schedulerTasksPanel = {
   },
 };
 
-local executorTasksPanel = {
+local executorTasksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'airflow_executor_running_tasks{job=~"$job", instance=~"$instance"}',
+      'airflow_executor_running_tasks{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - running',
     ),
     prometheus.target(
-      'airflow_executor_queued_tasks{job=~"$job", instance=~"$instance"}',
+      'airflow_executor_queued_tasks{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - queued',
     ),
     prometheus.target(
-      'airflow_executor_open_slots{job=~"$job", instance=~"$instance"}',
+      'airflow_executor_open_slots{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - open',
     ),
@@ -897,26 +899,26 @@ local executorTasksPanel = {
   },
 };
 
-local poolTaskSlotsPanel = {
+local poolTaskSlotsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'airflow_pool_running_slots{job=~"$job", instance=~"$instance", pool_name=~"$pool_name"}',
+      'airflow_pool_running_slots{' + matcher + ', pool_name=~"$pool_name"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{pool_name}} - running',
     ),
     prometheus.target(
-      'airflow_pool_queued_slots{job=~"$job", instance=~"$instance", pool_name=~"$pool_name"}',
+      'airflow_pool_queued_slots{' + matcher + ', pool_name=~"$pool_name"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{pool_name}} - queued',
     ),
     prometheus.target(
-      'airflow_pool_starving_tasks{job=~"$job", instance=~"$instance", pool_name=~"$pool_name"}',
+      'airflow_pool_starving_tasks{' + matcher + ', pool_name=~"$pool_name"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{pool_name}} - starving',
     ),
     prometheus.target(
-      'airflow_pool_open_slots{job=~"$job", instance=~"$instance", pool_name=~"$pool_name"}',
+      'airflow_pool_open_slots{' + matcher + ', pool_name=~"$pool_name"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{pool_name}} - open',
     ),
@@ -993,13 +995,13 @@ local poolTaskSlotsPanel = {
   },
 };
 
-local schedulerLogsPanel = {
+local schedulerLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", instance=~"$instance", dag_file=~"$dag_file", filename=~".*/airflow/logs/scheduler/latest/.*"} |= ``',
+      expr: '{' + matcher + ', dag_file=~"$dag_file", filename=~".*/airflow/logs/scheduler/latest/.*"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1065,9 +1067,21 @@ local schedulerLogsPanel = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(airflow_scheduler_tasks_executable{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(airflow_scheduler_tasks_executable{job=~"$job"}, instance)',
+              'label_values(airflow_scheduler_tasks_executable{%(airflowSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -1078,7 +1092,7 @@ local schedulerLogsPanel = {
             template.new(
               'dag_id',
               promDatasource,
-              'label_values(airflow_task_start_total{job=~"$job", instance=~"$instance"}, dag_id)',
+              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance"}, dag_id)' % $._config,
               label='DAG',
               refresh=2,
               includeAll=true,
@@ -1089,7 +1103,7 @@ local schedulerLogsPanel = {
             template.new(
               'task_id',
               promDatasource,
-              'label_values(airflow_task_start_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}, task_id)',
+              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id"}, task_id)' % $._config,
               label='Task',
               refresh=2,
               includeAll=true,
@@ -1100,7 +1114,7 @@ local schedulerLogsPanel = {
             template.new(
               'state',
               promDatasource,
-              'label_values(airflow_task_finish_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}, state)',
+              'label_values(airflow_task_finish_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}, state)' % $._config,
               label='Task state',
               refresh=2,
               includeAll=true,
@@ -1111,7 +1125,7 @@ local schedulerLogsPanel = {
             template.new(
               'pool_name',
               promDatasource,
-              'label_values(airflow_pool_open_slots{job=~"$job", instance=~"$instance"}, pool_name)',
+              'label_values(airflow_pool_open_slots{%(airflowSelector)s, instance=~"$instance"}, pool_name)' % $._config,
               label='Pool',
               refresh=2,
               includeAll=true,
@@ -1139,27 +1153,27 @@ local schedulerLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            dagFileParsingErrorsPanel { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
-            slaMissesPanel { gridPos: { h: 8, w: 8, x: 8, y: 0 } },
-            taskFailuresPanel { gridPos: { h: 8, w: 8, x: 16, y: 0 } },
-            dagSuccessDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            dagFailedDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            taskDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-            taskCountSummaryPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-            taskCountsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+            dagFileParsingErrorsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
+            slaMissesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 0 } },
+            taskFailuresPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 0 } },
+            dagSuccessDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            dagFailedDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            taskDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+            taskCountSummaryPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+            taskCountsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
           ],
           if $._config.enableLokiLogs then [
-            taskLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
+            taskLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
           ] else [],
           [
             schedulerDetailsRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-            dagScheduleDelayPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-            schedulerTasksPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-            executorTasksPanel { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
-            poolTaskSlotsPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
+            dagScheduleDelayPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
+            schedulerTasksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+            executorTasksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
+            poolTaskSlotsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
           ],
           if $._config.enableLokiLogs then [
-            schedulerLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 57 } },
+            schedulerLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 57 } },
           ] else [],
           [
           ],

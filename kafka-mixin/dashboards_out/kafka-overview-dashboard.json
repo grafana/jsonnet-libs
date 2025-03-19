@@ -1,0 +1,3519 @@
+{
+      "links": [
+         {
+            "asDropdown": false,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "kafka-integration"
+            ],
+            "title": "All Kafka dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Active kafka controllers count.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Active kafka controllers"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 0,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_controller_kafkacontroller_activecontrollercount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Active kafka controllers",
+                  "refId": "Active kafka controllers"
+               }
+            ],
+            "title": "Active kafka controllers",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Active brokers count.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Brokers count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 3,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,kafka_cluster) (\n  kafka_server_kafkaserver_brokerstate{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Brokers count",
+                  "refId": "Brokers count"
+               }
+            ],
+            "title": "Brokers count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Unclean leader election rate.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Unclean leader election"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 6,
+               "y": 1
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (kafka_controller_controllerstats_uncleanleaderelectionspersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Unclean leader election",
+                  "refId": "Unclean leader election"
+               }
+            ],
+            "title": "Unclean leader election",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The count of topic partitions for which the leader is not the preferred leader.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Preferred replica inbalance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 9,
+               "y": 1
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_controller_kafkacontroller_preferredreplicaimbalancecount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Preferred replica inbalance",
+                  "refId": "Preferred replica inbalance"
+               }
+            ],
+            "title": "Preferred replica inbalance",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster bytes in"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster bytes out"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 1
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Cluster bytes in",
+                  "refId": "Cluster bytes in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Cluster bytes out",
+                  "refId": "Cluster bytes out"
+               }
+            ],
+            "title": "Cluster network throughput",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster messages in"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 1
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Cluster messages in",
+                  "refId": "Cluster messages in"
+               }
+            ],
+            "title": "Cluster messages throughput",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Online partitions.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Online partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 0,
+               "y": 5
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_server_replicamanager_partitioncount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Online partitions",
+                  "refId": "Online partitions"
+               }
+            ],
+            "title": "Online partitions",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of partitions that dont have an active leader and are hence not writable or readable.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Offline partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 3,
+               "y": 5
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_controller_kafkacontroller_offlinepartitionscount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Offline partitions",
+                  "refId": "Offline partitions"
+               }
+            ],
+            "title": "Offline partitions",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of under replicated partitions (| ISR | < | all replicas |).\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Under replicated partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 6,
+               "y": 5
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_cluster_partition_underreplicated{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Under replicated partitions",
+                  "refId": "Under replicated partitions"
+               }
+            ],
+            "title": "Under replicated partitions",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Under min ISR(In-Sync replicas) partitions.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Under min ISR partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 9,
+               "y": 5
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster) (\n  kafka_cluster_partition_underminisr{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{kafka_cluster}}: Under min ISR partitions",
+                  "refId": "Under min ISR partitions"
+               }
+            ],
+            "title": "Under min ISR partitions",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "0 - follower, 1 - controller.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Current role"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "light-purple",
+                                       "index": 0,
+                                       "text": "follower"
+                                    },
+                                    "1": {
+                                       "color": "light-blue",
+                                       "index": 1,
+                                       "text": "controller"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Current zookeeper role"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "light-yellow",
+                                       "index": 0,
+                                       "text": "zookeeper"
+                                    },
+                                    "1": {
+                                       "color": "light-orange",
+                                       "index": 0,
+                                       "text": "zookeeper(leader)"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Current role (kraft)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "from": 0,
+                                    "result": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "broker(kraft)"
+                                    },
+                                    "to": 999
+                                 },
+                                 "type": "range"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 24,
+               "x": 0,
+               "y": 12
+            },
+            "maxDataPoints": 100,
+            "options": {
+               "showValue": "never"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_controller_kafkacontroller_activecontrollercount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Current role"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "clamp_max(zookeeper_leaderuptime{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, 1) or clamp_max(zookeeper_numaliveconnections{job=~\"integrations/kafka-zookeeper|integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Current zookeeper role"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_server_kafkaserver_brokerstate{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Current role (kraft)"
+               }
+            ],
+            "title": "Current role",
+            "type": "status-history"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 20
+            },
+            "panels": [ ],
+            "title": "Throughput",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Broker bytes in"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Broker bytes out"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 21
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Broker bytes in",
+                  "refId": "Broker bytes in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Broker bytes out",
+                  "refId": "Broker bytes out"
+               }
+            ],
+            "title": "Broker network throughput",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Broker messages in"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 21
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Broker messages in",
+                  "refId": "Broker messages in"
+               }
+            ],
+            "title": "Broker messages throughput",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 29
+            },
+            "panels": [ ],
+            "title": "Replication",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Online partitions.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Online partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 30
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_server_replicamanager_partitioncount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Online partitions",
+                  "refId": "Online partitions"
+               }
+            ],
+            "title": "Online partitions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of partitions that dont have an active leader and are hence not writable or readable.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "light-red",
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "noValue": "No errors"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Offline partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 30
+            },
+            "maxDataPoints": 100,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_controller_kafkacontroller_offlinepartitionscount{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Offline partitions",
+                  "refId": "Offline partitions"
+               }
+            ],
+            "title": "Offline partitions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of under replicated partitions (| ISR | < | all replicas |).\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "light-red",
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "noValue": "No errors"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Under replicated partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 36
+            },
+            "maxDataPoints": 100,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_cluster_partition_underreplicated{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Under replicated partitions",
+                  "refId": "Under replicated partitions"
+               }
+            ],
+            "title": "Under replicated partitions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Under min ISR(In-Sync replicas) partitions.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "light-red",
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "noValue": "No errors"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Under min ISR partitions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 36
+            },
+            "maxDataPoints": 100,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (\n  kafka_cluster_partition_underminisr{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Under min ISR partitions",
+                  "refId": "Under min ISR partitions"
+               }
+            ],
+            "title": "Under min ISR partitions",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of in-sync replicas (ISRs) for a particular partition should remain fairly static,\nthe only exceptions are when you are expanding your broker cluster or removing partitions.\nIn order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. \n\nA replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset\n(user-configurable by setting the replica.lag.max.messages configuration parameter),\nor it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason,\nan increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.\n\nThe Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "ISR shrinks"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 42
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (kafka_server_replicamanager_isrshrinkspersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: ISR shrinks",
+                  "refId": "ISR shrinks"
+               }
+            ],
+            "title": "ISR shrinks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of in-sync replicas (ISRs) for a particular partition should remain fairly static,\nthe only exceptions are when you are expanding your broker cluster or removing partitions.\nIn order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. \n\nA replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset\n(user-configurable by setting the replica.lag.max.messages configuration parameter),\nor it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason,\nan increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.\n\nThe Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "ISR expands"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 42
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,kafka_cluster,instance) (kafka_server_replicamanager_isrexpandspersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: ISR expands",
+                  "refId": "ISR expands"
+               }
+            ],
+            "title": "ISR expands",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 48
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Total time breakdown for producer requests.\nquantile: 0.95\n\n- `Request queue`: Time spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "none",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 0,
+                           "showPoints": "never",
+                           "stacking": {
+                              "mode": "normal"
+                           }
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Produce follower queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Produce follower local time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Produce follower remote time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Produce follower response queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Produce follower response time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 0,
+                     "y": 49
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "repeat": "instance",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_requestqueuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Produce\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "request queue time",
+                        "refId": "Produce follower queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_localtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Produce\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "local time",
+                        "refId": "Produce follower local time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_remotetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Produce\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "remote time",
+                        "refId": "Produce follower remote time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsequeuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Produce\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response queue time",
+                        "refId": "Produce follower response queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsesendtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Produce\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response time",
+                        "refId": "Produce follower response time"
+                     }
+                  ],
+                  "title": "Producer ($instance)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Total time breakdown for fetch-follower requests.\nquantile: 0.95\n\n- `Request queue`: Time spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "none",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 0,
+                           "showPoints": "never",
+                           "stacking": {
+                              "mode": "normal"
+                           }
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-follower queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-follower local time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-follower remote time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-follower response queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-follower response time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 8,
+                     "y": 49
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "repeat": "instance",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_requestqueuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"FetchFollower\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "request queue time",
+                        "refId": "Fetch-follower queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_localtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"FetchFollower\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "local time",
+                        "refId": "Fetch-follower local time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_remotetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"FetchFollower\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "remote time",
+                        "refId": "Fetch-follower remote time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsequeuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"FetchFollower\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response queue time",
+                        "refId": "Fetch-follower response queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsesendtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"FetchFollower\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response time",
+                        "refId": "Fetch-follower response time"
+                     }
+                  ],
+                  "title": "Fetch-follower ($instance)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Total time breakdown for fetch requests.\nquantile: 0.95\n\n- `Request queue`: Time   spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "none",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 0,
+                           "showPoints": "never",
+                           "stacking": {
+                              "mode": "normal"
+                           }
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-consumer queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-consumer local time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-consumer remote time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-consumer response queue time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Fetch-consumer response time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 16,
+                     "y": 49
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "repeat": "instance",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_requestqueuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Fetch\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "request queue time",
+                        "refId": "Fetch-consumer queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_localtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Fetch\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "local time",
+                        "refId": "Fetch-consumer local time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_remotetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Fetch\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "remote time",
+                        "refId": "Fetch-consumer remote time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsequeuetimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Fetch\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response queue time",
+                        "refId": "Fetch-consumer response queue time"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_network_requestmetrics_responsesendtimems{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\", request=\"Fetch\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "response time",
+                        "refId": "Fetch-consumer response time"
+                     }
+                  ],
+                  "title": "Fetch-consumer ($instance)",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Requests time breakdown",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 55
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of messages produced converted to match the log.message.format.version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Message conversion (producer)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "mps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 12,
+                     "x": 0,
+                     "y": 56
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,kafka_cluster) (\n  rate(kafka_server_brokertopicmetrics_producemessageconversionspersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Message conversion (producer)",
+                        "refId": "Message conversion (producer)"
+                     }
+                  ],
+                  "title": "Message conversion (producer)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of messages consumed converted at consumer to match the log.message.format.version.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Message conversion (consumer)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "mps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 12,
+                     "x": 12,
+                     "y": 56
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,kafka_cluster) (\n  rate(kafka_server_brokertopicmetrics_fetchmessageconversionspersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Message conversion (consumer)",
+                        "refId": "Message conversion (consumer)"
+                     }
+                  ],
+                  "title": "Message conversion (consumer)",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Message conversion",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 62
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Latency in millseconds for ZooKeeper requests from broker.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Zookeeper request latency"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 0,
+                     "y": 63
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Zookeeper request latency",
+                        "refId": "Zookeeper request latency"
+                     }
+                  ],
+                  "title": "Zookeeper request latency",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Zookeeper connections rate.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Zookeeper connections"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Zookeeper expired connections"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Zookeeper disconnects"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Zookeeper auth failures"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 8,
+                     "y": 63
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Zookeeper connections",
+                        "refId": "Zookeeper connections"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  rate(kafka_server_sessionexpirelistener_zookeeperexpirespersec{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Zookeeper expired connections",
+                        "refId": "Zookeeper expired connections"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Zookeeper disconnects",
+                        "refId": "Zookeeper disconnects"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster,instance) (\n  rate(kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{quantile=\"0.95\",job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{instance}}: Zookeeper auth failures",
+                        "refId": "Zookeeper auth failures"
+                     }
+                  ],
+                  "title": "Zookeeper connections",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Zookeeper client",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 69
+            },
+            "panels": [ ],
+            "title": "Process overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process uptime.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "orange",
+                           "value": null
+                        },
+                        {
+                           "color": "text",
+                           "value": 600
+                        }
+                     ]
+                  },
+                  "unit": "dtdurations"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 70
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "time()-process_start_time_seconds{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "Uptime"
+               }
+            ],
+            "title": "Uptime",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process start time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process start time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "dateTimeAsIso"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 70
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,kafka_cluster,instance) (\n  process_start_time_seconds{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} * 1000\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process start time",
+                  "refId": "Process start time"
+               }
+            ],
+            "title": "Process start time",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Load average: Signal not found.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*CPU count.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 70
+            },
+            "options": {
+               "content": "",
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "title": "",
+            "transparent": true,
+            "type": "text"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process CPU usage.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU usage (process)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 76
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,kafka_cluster,instance) (\n  rate(process_cpu_seconds_total{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval]) * 100\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: CPU usage (process)",
+                  "refId": "CPU usage (process)"
+               }
+            ],
+            "title": "CPU usage (process)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process resident memory size in bytes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process memory used (rss)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 76
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,kafka_cluster,instance) (\n  process_resident_memory_bytes{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process memory used (rss)",
+                  "refId": "Process memory used (rss)"
+               }
+            ],
+            "title": "Process memory used (rss)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process files opened.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process files open"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process files max"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 76
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,kafka_cluster,instance) (\n  process_open_fds{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process files open",
+                  "refId": "Process files open"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,kafka_cluster,instance) (\n  process_max_fds{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process files max",
+                  "refId": "Process files max"
+               }
+            ],
+            "title": "Process files open",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 82
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 0,
+                     "y": 83
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "((avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n))/(avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n))) * 100",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(heap)",
+                        "refId": "JVM memory used(heap)"
+                     }
+                  ],
+                  "title": "Memory used(heap)",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 4,
+                     "y": 83
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "((avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n))/(avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n))) * 100",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(nonheap)",
+                        "refId": "JVM memory used(nonheap)"
+                     }
+                  ],
+                  "title": "Memory used(nonheap)",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 8,
+                     "y": 83
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_current{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads",
+                        "refId": "Threads"
+                     }
+                  ],
+                  "title": "Threads",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of classes that are currently loaded in the JVM.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Classes loaded"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 4,
+                     "x": 12,
+                     "y": 83
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_classes_loaded{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Classes loaded",
+                        "refId": "Classes loaded"
+                     }
+                  ],
+                  "title": "Classes loaded",
+                  "type": "stat"
+               }
+            ],
+            "title": "JVM overview",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 87
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The used space is the amount of memory that is currently occupied by Java objects.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory used(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory max(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory committed(heap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 88
+                  },
+                  "h": 6,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(heap)",
+                        "refId": "JVM memory used(heap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory max(heap)",
+                        "refId": "JVM memory max(heap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"heap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory committed(heap)",
+                        "refId": "JVM memory committed(heap)"
+                     }
+                  ],
+                  "title": "JVM memory used(heap)",
+                  "type": "timeseries",
+                  "w": 12
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The amount of memory that is currently in non-heap.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory used(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": "/.*max.*/"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory max(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "JVM memory committed(nonheap)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 88
+                  },
+                  "h": 6,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory used(nonheap)",
+                        "refId": "JVM memory used(nonheap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"} != -1)\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory max(nonheap)",
+                        "refId": "JVM memory max(nonheap)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"nonheap\", job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: JVM memory committed(nonheap)",
+                        "refId": "JVM memory committed(nonheap)"
+                     }
+                  ],
+                  "title": "JVM memory used(nonheap)",
+                  "type": "timeseries",
+                  "w": 12
+               }
+            ],
+            "title": "JVM memory",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 96
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (daemon)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (peak)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*peak.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "light-orange",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads (deadlocked)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 97
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_current{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads",
+                        "refId": "Threads"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_daemon{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (daemon)",
+                        "refId": "Threads (daemon)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_peak{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (peak)",
+                        "refId": "Threads (peak)"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,kafka_cluster) (\n  jvm_threads_deadlocked{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{kafka_cluster}}: Threads (deadlocked)",
+                        "refId": "Threads (deadlocked)"
+                     }
+                  ],
+                  "title": "Threads",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Threads by current state.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Threads states"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 97
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (state, job,kafka_cluster) (jvm_threads_state{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"})",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{ state }}",
+                        "refId": "Threads states"
+                     }
+                  ],
+                  "title": "Threads states",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "JVM threads",
+            "type": "row"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "kafka-integration"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Kafka_cluster",
+               "multi": true,
+               "name": "kafka_cluster",
+               "query": "label_values(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",job=~\"$job\"}, kafka_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",job=~\"$job\",kafka_cluster=~\"$kafka_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "utc",
+      "title": "Kafka overview",
+      "uid": "kafka-kafka-overview-dashboard"
+   }

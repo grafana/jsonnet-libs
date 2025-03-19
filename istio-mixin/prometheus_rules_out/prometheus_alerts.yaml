@@ -1,0 +1,51 @@
+groups:
+    - name: Istio
+      rules:
+        - alert: IstioComponentDown
+          annotations:
+            description: '{{ $labels.component }} pods have stopped running for the last 5 minutes'
+            summary: Istio Component is Down.
+          expr: avg_over_time(istio_build{}[1m]) < 1
+          for: 5m
+          labels:
+            severity: critical
+        - alert: IstioHighGlobalRequestRate
+          annotations:
+            description: Istio has a high Global request rate which is more that 1000
+            summary: Istio Global Request Rate High.
+          expr: sum(irate(istio_requests_total{reporter="destination"}[5m])) > 1000
+          for: 5m
+          labels:
+            severity: warning
+        - alert: IstioGlobalRequestRateLow
+          annotations:
+            description: Istio has a very low Global request rate which is less that 50
+            summary: Istio Global Request Rate Low.
+          expr: sum(irate(istio_requests_total{reporter="destination"}[5m])) < 50
+          for: 5m
+          labels:
+            severity: warning
+        - alert: IstioHigh5xxResponseRatio
+          annotations:
+            description: High Percentage of {{ $labels.response_code }} responses have been observed in {{ $labels.cluster }}
+            summary: High Percentage of 5xx reponses in Istio.
+          expr: (istio_requests_total{response_code=~"5.*"} / istio_requests_total{}) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+        - alert: IstioHigh4xxResponseRatio
+          annotations:
+            description: High Percentage of {{ $labels.response_code }} responses have been observed in {{ $labels.cluster }}
+            summary: High Percentage of 4xx reponses in Istio.
+          expr: (istio_requests_total{response_code=~"4.*"} / istio_requests_total{}) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+        - alert: IstioPilotDuplicateEntry
+          annotations:
+            description: Istio pilot duplicate entry error detected
+            summary: Istio Pilot Duplicate Entry.
+          expr: sum(rate(pilot_duplicate_envoy_clusters{}[5m])) > 0
+          for: 5m
+          labels:
+            severity: critical

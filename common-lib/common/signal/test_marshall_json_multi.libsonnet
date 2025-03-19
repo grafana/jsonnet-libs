@@ -7,6 +7,7 @@ local jsonSignals =
     groupLabels: ['job'],
     instanceLabels: ['instance'],
     filteringSelector: 'job="integrations/agent"',
+    aggKeepLabels: ['xxx'],
     discoveryMetric: {
       otel: 'up2',
     },
@@ -33,6 +34,7 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'bar{%(queriesSelector)s}',
+            aggKeepLabels: ['bar'],
           },
           prometheus: {
             expr: 'bar{%(queriesSelector)s}',
@@ -128,7 +130,11 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+        expect: 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+      },
+      testLegend: {
+        actual: panel.legendFormat,
+        expect: '{{xxx}}: ABC',  // only last label is kept
       },
     }),
   },
@@ -147,7 +153,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
         },
         testVersion: {
           actual: panel.pluginVersion,
-          expect: 'v10.0.0',
+          expect: 'v11.0.0',
         },
         testUid: {
           actual: panel.datasource,

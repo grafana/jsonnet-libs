@@ -2,7 +2,7 @@ local commonlib = import './common-lib/common/main.libsonnet';
 function(this)
   {
     local s = self,
-    filteringSelector: this.filteringSelector,
+    filteringSelector: this.filteringSelector + ', ' + this.containerSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels + s.legendLabels,
     legendLabels: ['name'],
@@ -51,7 +51,8 @@ function(this)
             exprWrappers: [
               ['8 *', ''],
             ],
-            legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -66,7 +67,8 @@ function(this)
             exprWrappers: [
               ['8 *', ''],
             ],
-            legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -79,7 +81,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_receive_packets_dropped_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s rx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s rx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -91,7 +94,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_transmit_packets_dropped_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s tx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s tx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -103,7 +107,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_receive_errors_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s rx errors ' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s rx errors' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -115,7 +120,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_transmit_errors_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s tx errors ' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s tx errors' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -129,22 +135,34 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_fs_usage_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
-      diskIO: {
-        name: 'Disk I/O',
-        description: 'The number of I/O requests per second for the device/volume.',
+      diskReads: {
+        name: 'Disk reads',
+        description: 'The number of read requests per second for the device/volume.',
         type: 'counter',
-        unit: 'percent',
+        unit: 'reqps',
         sources: {
           cadvisor: {
-            expr: 'container_fs_io_time_seconds_total{%(queriesSelector)s}',
-            exprWrappers: [
-              ['100 *', ''],
-            ],
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            expr: 'container_fs_reads_total{%(queriesSelector)s}',
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s read' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
+          },
+        },
+      },
+      diskWrites: {
+        name: 'Disk writes',
+        description: 'The number of write requests per second for the device/volume.',
+        type: 'counter',
+        unit: 'reqps',
+        sources: {
+          cadvisor: {
+            expr: 'container_fs_writes_total{%(queriesSelector)s}',
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s write' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },

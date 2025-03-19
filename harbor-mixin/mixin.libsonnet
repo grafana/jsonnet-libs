@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'harbor-overview.json': (import 'dashboards/harbor-overview.json'),
   },
 
