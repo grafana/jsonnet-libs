@@ -2,10 +2,10 @@ local g = import '../g.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 local prometheus = grafana.prometheus;
 local commonlib = import 'common-lib/common/main.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 local utils = commonlib.utils;
 
 local dashboardUidSuffix = '-cluster-overview';
-
 
 {
   // variables
@@ -13,8 +13,10 @@ local dashboardUidSuffix = '-cluster-overview';
     filteringSelector=$._config.filteringSelector,
     groupLabels=$._config.groupLabels,
     instanceLabels=[],
-    varMetric='opensearch_cluster_status'
+    varMetric='opensearch_cluster_status',
   ),
+
+  local legendGroupLabels = xtd.array.slice($._config.groupLabels, -1),
 
   local panels = (import '../panels.libsonnet').new(
     $._config.groupLabels,
@@ -36,7 +38,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels)
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels)
       ),
     ],
     type: 'stat',
@@ -117,7 +119,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels)
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels)
       ),
     ],
     type: 'stat',
@@ -176,7 +178,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels)
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels)
       ),
     ],
     type: 'stat',
@@ -235,7 +237,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels)
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels)
       ),
     ],
     type: 'stat',
@@ -294,7 +296,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels)
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels)
       ),
 
     ],
@@ -588,7 +590,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels),
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels),
       ),
     ],
     type: 'timeseries',
@@ -667,7 +669,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels),
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels),
       ),
     ],
     type: 'timeseries',
@@ -746,7 +748,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels),
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels),
       ),
     ],
     type: 'timeseries',
@@ -825,7 +827,7 @@ local dashboardUidSuffix = '-cluster-overview';
           agg: std.join(',', $._config.groupLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.groupLabels),
+        legendFormat=utils.labelsToPanelLegend(legendGroupLabels),
       ),
     ],
     type: 'timeseries',

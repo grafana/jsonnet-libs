@@ -10,5 +10,8 @@
     alertsCriticalDiskUsage: 90,
     alertsWarningUnreachableTask: 3,
     enableLokiLogs: true,
+    enableMultiCluster: false,
+    mesosSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+    multiclusterSelector: 'job=~"$job"',
   },
 }

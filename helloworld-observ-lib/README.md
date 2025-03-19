@@ -19,6 +19,8 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
     //common options
   },
 
+  signals: {},
+
   grafana: {
    
    // grafana templated variables to reuse across mutltiple dashboards
@@ -32,20 +34,18 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
   	  queriesSelector: "",
    },
 
-   // grafana targets (queries) to attach to panels
-   targets: {
-    target1: <target1>,
-    target3: <target2>,
-    ...
-    targetN: <targetN>,
-   },
-
    // grafana panels
    panels: {
     panel1: <panel1>,
     panel2: <panel2>,
     ...
     panelN: <panelN>,
+   },
+
+   rows: {
+    row1: [],
+    row2: [],
+    row3: [],
    },
 
    // grafana dashboards

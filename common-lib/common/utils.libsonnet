@@ -7,6 +7,8 @@
   // For PromQL or LogQL
   labelsToPromQLSelector(labels): std.join(',', ['%s=~"$%s"' % [label, label] for label in labels]),
   labelsToLogQLSelector: self.labelsToPromQLSelector,
+  labelsToPromQLSelectorAdvanced(labels): std.join(',', ['%s=~"${%s:regex}"' % [label, label] for label in labels]),
+  labelsToLogQLSelectorAdvanced: self.labelsToPromQLSelectorAdvanced,
 
   labelsToPanelLegend(labels): std.join('/', ['{{%s}}' % [label] for label in labels]),
 

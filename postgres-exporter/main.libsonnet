@@ -6,6 +6,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     data_source_uri='$(HOSTNAME):$(PORT)/postgres',
     data_source_name='',
     ssl=true,
+    // Note that upgrading to an image version greater than 0.12.1
+    // will break dependencies using `withQueriesYaml`.
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
     local this = self,
@@ -78,5 +80,29 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           std.join(',', databases),
         ),
       ]),
+  },
+
+  // Upgrading to an image version greater than 0.12.1
+  // will break this function.
+  withQueriesYaml(content):: {
+    container+:
+      k.core.v1.container.withVolumeMounts([
+        k.core.v1.volumeMount.new(
+          'queries-yaml-volume',
+          '/etc/pg_exporter',
+        ),
+      ])
+      + k.core.v1.container.withEnvMixin([
+        k.core.v1.envVar.new('PG_EXPORTER_EXTEND_QUERY_PATH', '/etc/pg_exporter/queries.yaml'),
+      ]),
+    deployment+:
+      k.apps.v1.deployment.spec.template.spec.withVolumesMixin([
+        k.core.v1.volume.fromConfigMap('queries-yaml-volume', 'queries-yaml'),
+      ]),
+    local configMap = k.core.v1.configMap,
+    configMap:
+      configMap.new('queries-yaml', {
+        'queries.yaml': content,
+      }),
   },
 }

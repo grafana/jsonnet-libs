@@ -72,13 +72,13 @@ local utils = commonlib.utils;
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byRegexp.new('Product|^Hostname$')
           + fieldOverride.byRegexp.withProperty('custom.filterable', true),
-          fieldOverride.byName.new('Instance')
+          fieldOverride.byName.new(utils.toSentenceCase(instanceLabel))
           + fieldOverride.byName.withProperty('custom.filterable', true)
           + fieldOverride.byName.withProperty('links', [
             {
               targetBlank: false,
               title: 'Drill down to ${__field.name} ${__value.text}',
-              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.grafana.dashboards.overview.uid, instanceLabel, instanceLabel],
+              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${datasource:queryparam}' % [this.grafana.dashboards.overview.uid, instanceLabel, instanceLabel],
             },
           ]),
           fieldOverride.byRegexp.new(std.join('|', std.map(utils.toSentenceCase, this.config.groupLabels)))
@@ -87,35 +87,35 @@ local utils = commonlib.utils;
             {
               targetBlank: false,
               title: 'Filter by ${__field.name}',
-              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.grafana.dashboards.fleet.uid],
+              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}' % [this.grafana.dashboards.fleet.uid],
             },
           ]),
           fieldOverride.byName.new('Cores')
-          + fieldOverride.byName.withProperty('custom.width', '120'),
+          + fieldOverride.byName.withProperty('custom.width', 120),
           fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.cpu.timeSeries.utilization.stylize()
           ),
           fieldOverride.byName.new('Memory total')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('bytes')
           ),
           fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.cpu.timeSeries.utilization.stylize()
           ),
           fieldOverride.byName.new('Disk C: total')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('bytes')
           ),
           fieldOverride.byName.new('Disk C: used')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
@@ -138,7 +138,7 @@ local utils = commonlib.utils;
               options: {
                 include: {
                   //' 1' - would only match first occurence of group label, so no duplicates
-                  pattern: std.join(' 1|', this.config.groupLabels) + ' 1|' + instanceLabel + '|product|^hostname$|Value.+',
+                  pattern: std.join(' 1$|', this.config.groupLabels) + ' 1$|' + instanceLabel + '|product|^hostname$|Value.+',
                 },
               },
             },
@@ -187,7 +187,8 @@ local utils = commonlib.utils;
 
             A high number of context switches or interrupts can indicate that the system is overloaded or that there are problems with specific devices or processes.
           |||
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       systemExceptions:
         commonlib.panels.generic.timeSeries.base.new(
           'System calls and exceptions',
@@ -195,14 +196,16 @@ local utils = commonlib.utils;
             t.windowsSystemExceptions,
             t.windowsSystemCalls,
           ],
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       systemThreads:
         commonlib.panels.generic.timeSeries.base.new(
           'System threads',
           targets=[
             t.windowsSystemThreads,
           ],
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       timeNtpStatus:
         commonlib.panels.system.statusHistory.ntp.new(
           'NTP status',
@@ -224,7 +227,7 @@ local utils = commonlib.utils;
             Time offset: Absolute time offset between the system clock and the chosen time source, in seconds.
           |||
         )
-        + g.panel.timeSeries.standardOptions.withUnit('seconds')
+        + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
       cpuCount: commonlib.panels.cpu.stat.count.new(targets=[t.cpuCount]),
       cpuUsageTs: commonlib.panels.cpu.timeSeries.utilization.new(targets=[t.cpuUsage]),
@@ -242,17 +245,19 @@ local utils = commonlib.utils;
           CPU usage by different modes.
         |||
       ),
-      cpuQueue: commonlib.panels.generic.timeSeries.base.new(
-        'CPU average queue size',
-        targets=[t.cpuQueue],
-        description=|||
-          The CPU average queue size in Windows, often referred to as the "Processor Queue Length" or "CPU Queue Length," is a metric that measures the number of threads or tasks waiting to be processed by the central processing unit (CPU) at a given moment.
-          It is an essential performance indicator that reflects the workload and responsiveness of the CPU.
-          When the CPU queue length is high, it indicates that there are more tasks in line for processing than the CPU can handle immediately.
+      cpuQueue:
+        commonlib.panels.generic.timeSeries.base.new(
+          'CPU average queue size',
+          targets=[t.cpuQueue],
+          description=|||
+            The CPU average queue size in Windows, often referred to as the "Processor Queue Length" or "CPU Queue Length," is a metric that measures the number of threads or tasks waiting to be processed by the central processing unit (CPU) at a given moment.
+            It is an essential performance indicator that reflects the workload and responsiveness of the CPU.
+            When the CPU queue length is high, it indicates that there are more tasks in line for processing than the CPU can handle immediately.
 
-          This can lead to system slowdowns, decreased responsiveness, and potential performance issues. High CPU queue lengths are often associated with CPU saturation, where the CPU is struggling to keep up with the demands placed on it.
-        |||
-      ),
+            This can lead to system slowdowns, decreased responsiveness, and potential performance issues. High CPU queue lengths are often associated with CPU saturation, where the CPU is struggling to keep up with the demands placed on it.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
       memoryPageTotalBytes:
         commonlib.panels.memory.stat.total.new(
@@ -266,7 +271,7 @@ local utils = commonlib.utils;
           |||
         ),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),
-      memotyUsageTopKPercent: commonlib.panels.generic.timeSeries.topkPercentage.new(
+      memoryUsageTopKPercent: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='Memory usage',
         target=t.memoryUsagePercent,
         topk=25,
@@ -293,7 +298,7 @@ local utils = commonlib.utils;
       ),
       diskFreeTs:
         commonlib.panels.disk.timeSeries.available.new(
-          'Filesystem space availabe',
+          'Filesystem space available',
           targets=[
             t.diskFree,
           ],
@@ -363,7 +368,7 @@ local utils = commonlib.utils;
           targets=[t.osInfo],
           description="System's hostname."
         )
-        { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
+        { options+: { reduceOptions+: { fields: '/^instance$/' } } },
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
           'Network errors and dropped packets',

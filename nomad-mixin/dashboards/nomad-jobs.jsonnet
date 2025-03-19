@@ -25,7 +25,7 @@
           ],
         },
         description: 'Nomad jobs metrics',
-        editable: true,
+        editable: false,
         fiscalYearStartMonth: 0,
         gnetId: 6281,
         graphTooltip: 0,

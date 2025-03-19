@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'istio-overview.json': (import 'dashboards/istio-overview.json'),
     'istio-service-overview.json': (import 'dashboards/istio-service-overview.json'),
   },

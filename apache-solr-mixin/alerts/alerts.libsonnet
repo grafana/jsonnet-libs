@@ -7,7 +7,7 @@
           {
             alert: 'ApacheSolrZookeeperChangeInEnsembleSize',
             expr: |||
-              'changes(solr_zookeeper_ensemble_size[5m]) > 0'
+              changes(solr_zookeeper_ensemble_size[5m]) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -24,7 +24,7 @@
           {
             alert: 'ApacheSolrHighCPUUsageCritical',
             expr: |||
-              '100 * sum without (base_url, item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad"}[5m])) > %(alertsCriticalCPUUsage)s'
+              100 * sum without (base_url, item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad"}[5m])) > %(alertsCriticalCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -41,7 +41,7 @@
           {
             alert: 'ApacheSolrHighCPUUsageWarning',
             expr: |||
-              '100 * sum without (base_url, item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad"}[5m])) > %(alertsWarningCPUUsage)s'
+              100 * sum without (base_url, item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad"}[5m])) > %(alertsWarningCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -58,7 +58,7 @@
           {
             alert: 'ApacheSolrHighHeapMemoryUsageCritical',
             expr: |||
-              '100 * sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="used"}) / clamp_min(sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="max"}), 1) > %(alertsCriticalMemoryUsage)s'
+              100 * sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="used"}) / clamp_min(sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="max"}), 1) > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -74,7 +74,7 @@
           {
             alert: 'ApacheSolrHighHeapMemoryUsageWarning',
             expr: |||
-              '100 * sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="used"}) / clamp_min(sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="max"}), 1) > %(alertsWarningMemoryUsage)s'
+              100 * sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="used"}) / clamp_min(sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{item="max"}), 1) > %(alertsWarningMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -90,7 +90,7 @@
           {
             alert: 'ApacheSolrLowCacheHitRatio',
             expr: |||
-              '100 * sum without(base_url, category, collection, item, replica, shard) (solr_metrics_core_searcher_cache_ratio{item="hitratio", type=~"documentCache|filterCache|queryResultCache"}[10m]) < %(alertsWarningCacheUsage)s'
+              100 * sum without(base_url, category, collection, item, replica, shard) (solr_metrics_core_searcher_cache_ratio{item="hitratio", type=~"documentCache|filterCache|queryResultCache"}) < %(alertsWarningCacheUsage)s
             ||| % $._config,
             'for': '10m',
             labels: {
@@ -106,7 +106,7 @@
           {
             alert: 'ApacheSolrHighCoreErrors',
             expr: |||
-              '100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_errors_total[10m]) / clamp_min(avg_over_time(solr_metrics_core_errors_total[10m]), 1)) > %(alertsWarningCoreErrors)s'
+              100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_errors_total[10m]) / clamp_min(avg_over_time(solr_metrics_core_errors_total[10m]), 1)) > %(alertsWarningCoreErrors)s
             ||| % $._config,
             'for': '10m',
             labels: {
@@ -122,7 +122,7 @@
           {
             alert: 'ApacheSolrHighDocumentIndexing',
             expr: |||
-              '100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_update_handler_adds_total[15m]) / clamp_min(avg_over_time(solr_metrics_core_update_handler_adds_total[15m]), 1)) > %(alertsWarningDocumentIndexing)s'
+              100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_update_handler_adds_total[15m]) / clamp_min(avg_over_time(solr_metrics_core_update_handler_adds_total[15m]), 1)) > %(alertsWarningDocumentIndexing)s
             ||| % $._config,
             'for': '15m',
             labels: {

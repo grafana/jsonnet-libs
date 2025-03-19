@@ -109,7 +109,6 @@ local utils = commonlib.utils;
         },
       ]),
 
-
     osRoles:
       g.panel.table.new('Roles')
       + g.panel.table.panelOptions.withDescription('OpenSearch node roles.')

@@ -3,9 +3,8 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 local prometheus = grafana.prometheus;
-
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 local dashboardUidSuffix = '-node-overview';
-
 
 {
 
@@ -14,8 +13,11 @@ local dashboardUidSuffix = '-node-overview';
     filteringSelector=$._config.filteringSelector,
     groupLabels=$._config.groupLabels,
     instanceLabels=$._config.instanceLabels,
-    varMetric='opensearch_os_cpu_percent'
+    varMetric='opensearch_os_cpu_percent',
+    enableLokiLogs=$._config.enableLokiLogs,
   ),
+
+  local legendInstanceLabels = xtd.array.slice($._config.instanceLabels, -1),
 
   local panels = (import '../panels.libsonnet').new(
     $._config.groupLabels,
@@ -51,7 +53,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend(legendInstanceLabels)),
 
       ],
       description="CPU usage percentage of the node's Operating System.",
@@ -70,7 +72,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Memory usage percentage of the node for the Operating System and OpenSearch',
     )
@@ -88,7 +90,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat('%s - read' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat('%s - read' % utils.labelsToPanelLegend(legendInstanceLabels)),
         g.query.prometheus.new(
           promDatasource.uid,
           'sum by(%(agg)s) (rate(opensearch_fs_io_total_write_bytes{%(queriesSelector)s}[$__rate_interval]))'
@@ -97,7 +99,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat('%s - write' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat('%s - write' % utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Node file system read and write data.',
     )
@@ -115,7 +117,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Number of open connections for the selected node.',
     )
@@ -134,7 +136,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Disk usage percentage of the selected node.',
     ),
@@ -151,7 +153,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Percentage of swap space used by OpenSearch and the Operating System on the selected node.',
     )
@@ -169,7 +171,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
         )
-        + g.query.prometheus.withLegendFormat('%s - sent' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        + g.query.prometheus.withLegendFormat('%s - sent' % utils.labelsToPanelLegend(legendInstanceLabels)),
         g.query.prometheus.new(
           promDatasource.uid,
           'sum by (%(agg)s) (rate(opensearch_transport_rx_bytes_count{%(queriesSelector)s}[$__rate_interval])) * 8'
@@ -179,7 +181,7 @@ local dashboardUidSuffix = '-node-overview';
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           }
 
-        ) + g.query.prometheus.withLegendFormat('%s - received' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        ) + g.query.prometheus.withLegendFormat('%s - received' % utils.labelsToPanelLegend(legendInstanceLabels)),
       ],
       description='Node network traffic sent and received.',
     )
@@ -196,7 +198,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - {{ name }}' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - {{ name }}' % utils.labelsToPanelLegend(legendInstanceLabels),
         interval='1m',
       ),
     ],
@@ -284,7 +286,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - used' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - used' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
       prometheus.target(
         'sum by (%(agg)s) (opensearch_jvm_mem_heap_committed_bytes{%(queriesSelector)s})'
@@ -293,7 +295,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - commited' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - commited' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -372,7 +374,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - used' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - used' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
       prometheus.target(
         'sum by (%(agg)s) (opensearch_jvm_mem_nonheap_committed_bytes{%(queriesSelector)s})'
@@ -381,7 +383,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - commited' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - commited' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -460,7 +462,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -543,7 +545,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - {{bufferpool}}' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - {{bufferpool}}' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -626,7 +628,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -710,7 +712,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
         interval='1m',
       ),
     ],
@@ -794,7 +796,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
         interval='1m',
       ),
     ],
@@ -874,7 +876,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat='%s - {{bufferpool}}' % utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat='%s - {{bufferpool}}' % utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -965,7 +967,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -1047,7 +1049,7 @@ local dashboardUidSuffix = '-node-overview';
           agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
         },
         datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
+        legendFormat=utils.labelsToPanelLegend(legendInstanceLabels),
       ),
     ],
     type: 'timeseries',
@@ -1144,7 +1146,6 @@ local dashboardUidSuffix = '-node-overview';
       wrapLogMessage: false,
     },
   },
-
 
   grafanaDashboards+:: {
     'node-overview.json':

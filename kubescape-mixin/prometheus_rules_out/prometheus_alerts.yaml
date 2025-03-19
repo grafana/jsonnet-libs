@@ -1,0 +1,35 @@
+groups:
+    - name: Kubescape
+      rules:
+        - alert: HighRiskScore
+          annotations:
+            description: Cluster has a high risk score according to Kubescape
+            summary: High Risk Score.
+          expr: kubescape_cluster_complianceScore > 40
+          for: 10m
+          labels:
+            severity: critical
+        - alert: ScannedHighSeverityResource
+          annotations:
+            description: '{{ $labels.name }} has been detected with severity {{ $labels.severity }}. Check report at {{ $labels.link }}'
+            summary: High Severity Resource Detected.
+          expr: kubescape_control_count_resources_failed{severity = "High"} > 2
+          for: 2m
+          labels:
+            severity: critical
+        - alert: ScannedMediumSeverityResource
+          annotations:
+            description: '{{ $labels.name }} has been detected with severity {{ $labels.severity }}. Check report at {{ $labels.link }}'
+            summary: Medium Severity Resource Detected.
+          expr: kubescape_control_count_resources_failed{severity = "Medium"} > 2
+          for: 2m
+          labels:
+            severity: warning
+        - alert: LowComplianceScore
+          annotations:
+            description: Low Compliance score on {{ $labels.name }} framework
+            summary: Low Compliance Score.
+          expr: kubescape_framework_complianceScore < 50
+          for: 2m
+          labels:
+            severity: warning

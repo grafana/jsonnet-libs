@@ -730,7 +730,7 @@ local errorsPanel =
           showPoints: 'never',
           pointSize: 5,
           stacking: {
-            mode: 'none',
+            mode: 'normal',
             group: 'A',
           },
           axisPlacement: 'auto',
@@ -850,8 +850,8 @@ local errorsPanel =
     },
     targets: [
       {
-        expr: 'label_replace(\n  sum by (le,job, instance) (rate(apache_response_http_codes_bucket{le=~"499|599", ' + matcher + '}[$__rate_interval])),\n  "alias", "HTTP ${1}00-${1}99", "le", "(.).+"\n)\n',
-        legendFormat: '{{ alias }}',
+        expr: 'sum by (le,job, instance) (rate(apache_response_http_codes_bucket{le=~"499|599", ' + matcher + '}[$__rate_interval]))',
+        legendFormat: '',
         interval: '',
         exemplar: false,
         datasource: {
@@ -879,6 +879,15 @@ local errorsPanel =
         step: 240,
         hide: false,
         instant: false,
+      },
+    ],
+    transformations: [
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: '(\\d).+',
+          renamePattern: 'HTTP $100-$199',
+        },
       },
     ],
     description: 'Ratio of 4xx and 5xx HTTP responses to all calls.',

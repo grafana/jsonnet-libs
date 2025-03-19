@@ -4,6 +4,8 @@
     solrSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     multiclusterSelector: 'job=~"$job"',
     filterSelector: 'job=~"integrations/apache-solr"',
+    logLabels: if self.enableMultiCluster then ['job', 'cluster', 'solr_cluster', 'instance', 'level', 'filename']
+    else ['job', 'solr_cluster', 'instance', 'level', 'filename'],
 
     dashboardTags: ['apache-solr-mixin'],
     dashboardPeriod: 'now-30m',
