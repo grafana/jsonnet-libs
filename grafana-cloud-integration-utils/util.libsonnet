@@ -186,13 +186,13 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   // }
   // patch format:
   // {
-  //   Alert1+: {
+  //   Alert1: {
   //     labels+: {
   //       new_label: 'abc',
   //       asserts_severity: super.severity,
   //     }
   //   },
-  //   Alert2+: {
+  //   Alert2: {
   //     labels+: {
   //       new_label: 'zyx',
   //     }
@@ -200,16 +200,13 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   // }
   patch_alerts(prometheusAlerts, group_name, alert_rules_patch)::
     local patch_rules(rules, patch) =
-      std.objectValues(
-        {
-          [o.key]: o.value[0]
-          for o
-          in
-            std.objectKeysValues(xtd.aggregate.byKey(rules, 'alert'))
-        }
-        + patch
-      );
-
+      [
+        if std.objectHasAll(patch, rule.alert) then
+          rule + patch[rule.alert]
+        else rule
+        for rule
+        in rules
+      ];
     {
       groups+:
         [

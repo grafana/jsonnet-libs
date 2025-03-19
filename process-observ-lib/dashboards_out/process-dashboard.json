@@ -72,7 +72,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "process_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "process_uptime{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Uptime",
@@ -132,7 +132,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_start_time{job!=\"\",job=~\"$job\",instance=~\"$instance\"} * 1000\n)",
+                  "expr": "avg by (job,instance) (\n  process_start_time{job=~\"$job\",instance=~\"$instance\"} * 1000\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Process start time",
@@ -227,7 +227,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_system_cpu_load_1m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_system_cpu_load_1m{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Load average",
@@ -310,7 +310,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_cpu_utilization{job!=\"\",job=~\"$job\",instance=~\"$instance\"} * 100\n)",
+                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_cpu_utilization{job=~\"$job\",instance=~\"$instance\"} * 100\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU usage (process)",
@@ -321,7 +321,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU usage (system)",
@@ -469,7 +469,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_files_open{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  process_files_open{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Process files open",
@@ -480,7 +480,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  process_files_max{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  process_files_max{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Process files max",
@@ -514,7 +514,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(runtime_uptime{job!=\"\"}, job)",
+               "query": "label_values(runtime_uptime{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -529,7 +529,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(runtime_uptime{job!=\"\",job=~\"$job\"}, instance)",
+               "query": "label_values(runtime_uptime{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
