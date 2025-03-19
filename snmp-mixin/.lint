@@ -1,6 +1,6 @@
 exclusions:
   panel-units-rule:
-    reason: "The rule does not support detecting units properly from old table panel."
+    reason: "The rule does not support detecting units properly from table panel."
     entries:
       - panel: "Device Interfaces Information"
   template-datasource-rule:

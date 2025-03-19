@@ -693,7 +693,7 @@ local buildTraceOperationsPanel(matcher) = {
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),

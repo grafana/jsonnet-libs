@@ -3,6 +3,7 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
+local getMatcher(cfg) = '%(ibmmqSelector)s' % cfg;
 
 local dashboardUid = 'ibm-mq-queue-overview';
 
@@ -12,11 +13,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local averageQueueTimePanel = {
+local averageQueueTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_queue_average_queue_time_seconds{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_average_queue_time_seconds{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
       format='time_series',
@@ -88,11 +89,11 @@ local averageQueueTimePanel = {
   },
 };
 
-local expiredMessagesPanel = {
+local expiredMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_queue_expired_messages{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_expired_messages{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
       format='time_series',
@@ -167,11 +168,11 @@ local expiredMessagesPanel = {
   },
 };
 
-local depthPanel = {
+local depthPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_queue_depth{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_depth{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
       format='time_series',
@@ -246,17 +247,17 @@ local depthPanel = {
   },
 };
 
-local operationThroughputPanel = {
+local operationThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_queue_mqget_bytes{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqget_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQGET',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqput_bytes{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqput_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQPUT',
       format='time_series',
@@ -332,41 +333,41 @@ local operationThroughputPanel = {
   },
 };
 
-local operationsPanel = {
+local operationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_queue_mqset_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqset_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQSET',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqinq_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqinq_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQINQ',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqget_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqget_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQGET',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqopen_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqopen_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQOPEN',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqclose_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqclose_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQCLOSE',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_queue_mqput_mqput1_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      'ibmmq_queue_mqput_mqput1_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQPUT/MQPUT1',
       format='time_series',
@@ -512,6 +513,18 @@ local operationsPanel = {
             allValues='',
             sort=0
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(ibmmq_qmgr_commit_count{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
         ]
       )
       .addLink(grafana.link.dashboards(
@@ -523,11 +536,11 @@ local operationsPanel = {
       ))
       .addPanels(
         [
-          averageQueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          expiredMessagesPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          depthPanel { gridPos: { h: 8, w: 24, x: 0, y: 8 } },
-          operationThroughputPanel { gridPos: { h: 8, w: 9, x: 0, y: 16 } },
-          operationsPanel { gridPos: { h: 8, w: 15, x: 9, y: 16 } },
+          averageQueueTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          expiredMessagesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          depthPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 8 } },
+          operationThroughputPanel(getMatcher($._config)) { gridPos: { h: 8, w: 9, x: 0, y: 16 } },
+          operationsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 15, x: 9, y: 16 } },
         ]
       ),
   },

@@ -10,7 +10,7 @@ local logsDashboard = import 'logs-lib/logs/main.libsonnet';
             datasourceName='loki_datasource',
             datasourceRegex='',
             filterSelector=$._config.filterSelector,
-            labels=['job', 'instance', 'level'],
+            labels=$._config.logLabels,
             formatParser=null,
             showLogsVolume=true
           )

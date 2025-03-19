@@ -83,8 +83,8 @@ local diskReadLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Disk read elapsed',
+        expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
+        legendFormat: '{{ instance }} - disk read elapsed',
         range: true,
         refId: 'A',
       },
@@ -166,8 +166,8 @@ local diskWriteLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Disk write elapsed',
+        expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
+        legendFormat: '{{ instance }} - disk write elapsed',
         range: true,
         refId: 'A',
       },
@@ -176,7 +176,7 @@ local diskWriteLatencyPanel(matcher) =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel(matcher) =
+local networkTransmitLatencyInboundPanel(matcher) =
   {
     datasource: promDatasource,
     description: 'Latency of inbound network traffic',
@@ -249,8 +249,8 @@ local networkTransmitLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Network receive elapsed',
+        expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
+        legendFormat: '{{ instance }} - network receive elapsed',
         range: true,
         refId: 'A',
       },
@@ -259,7 +259,7 @@ local networkTransmitLatencyPanel(matcher) =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel(matcher) =
+local networkTransmitLatencyOutboundPanel(matcher) =
   {
     datasource: promDatasource,
     description: 'Latency of outbound network traffic',
@@ -332,8 +332,8 @@ local networkTransmitLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Network send elapsed',
+        expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
+        legendFormat: '{{ instance }} - network send elapsed',
         range: true,
         refId: 'A',
       },
@@ -415,8 +415,8 @@ local zooKeeperWaitTimePanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'ZooKeeper wait',
+        expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
+        legendFormat: '{{ instance }} - ZooKeeper wait',
         range: true,
         refId: 'A',
       },
@@ -458,7 +458,7 @@ local zooKeeperWaitTimePanel(matcher) =
             label='job',
             datasource=promDatasource,
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
-            current='',
+            current='all',
             refresh=2,
             includeAll=true,
             multi=true,
@@ -470,7 +470,8 @@ local zooKeeperWaitTimePanel(matcher) =
             label='instance',
             datasource=promDatasource,
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, instance)',
-            current='',
+            current='all',
+            allValues='.+',
             refresh=2,
             includeAll=true,
             sort=1
@@ -480,10 +481,11 @@ local zooKeeperWaitTimePanel(matcher) =
             promDatasource,
             'label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, cluster)',
             label='Cluster',
+            current='all',
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
@@ -497,8 +499,8 @@ local zooKeeperWaitTimePanel(matcher) =
           ],
           //next row
           [
-            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            networkTransmitLatencyInboundPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            networkTransmitLatencyOutboundPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           //next row
           [

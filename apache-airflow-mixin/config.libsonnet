@@ -12,5 +12,9 @@
     alertsCriticalFailedDAGs: 0,
 
     enableLokiLogs: true,
+    enableMultiCluster: false,
+
+    multiclusterSelector: 'job=~"$job"',
+    airflowSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }

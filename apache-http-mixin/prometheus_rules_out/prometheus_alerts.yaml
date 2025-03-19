@@ -1,0 +1,41 @@
+groups:
+    - name: apache-http
+      rules:
+        - alert: ApacheDown
+          annotations:
+            description: Apache is down on {{ $labels.instance }}.
+            summary: Apache is down.
+          expr: apache_up == 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: ApacheRestart
+          annotations:
+            description: Apache has just been restarted on {{ $labels.instance }}.
+            summary: Apache restart.
+          expr: apache_uptime_seconds_total / 60 < 1
+          for: "0"
+          labels:
+            severity: info
+        - alert: ApacheWorkersLoad
+          annotations:
+            description: |
+                Apache workers in busy state approach the max workers count 80% workers busy on {{ $labels.instance }}.
+                The current value is {{ $value }}%.
+            summary: Apache workers load is too high.
+          expr: |
+            (sum by (instance) (apache_workers{state="busy"}) / sum by (instance) (apache_scoreboard) ) * 100 > 80
+          for: 15m
+          labels:
+            severity: warning
+        - alert: ApacheResponseTimeTooHigh
+          annotations:
+            description: |
+                Apache average response time is above the threshold of 5000 ms on {{ $labels.instance }}.
+                The current value is {{ $value }} ms.
+            summary: Apache response time is too high.
+          expr: |
+            increase(apache_duration_ms_total[5m])/increase(apache_accesses_total[5m]) > 5000
+          for: 15m
+          labels:
+            severity: warning

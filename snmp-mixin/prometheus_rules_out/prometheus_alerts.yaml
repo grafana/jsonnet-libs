@@ -1,0 +1,27 @@
+groups:
+    - name: snmp
+      rules:
+        - alert: SNMPTargetDown
+          annotations:
+            description: SNMP target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.
+            summary: SNMP Target is down.
+          expr: up{job_snmp=~"integrations/snmp.*"} == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: SNMPTargetInterfaceDown
+          annotations:
+            description: SNMP interface {{$labels.ifDescr}} on target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.
+            summary: Network interface on SNMP target is down.
+          expr: ifOperStatus{job_snmp=~"integrations/snmp.*"} == 2
+          for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPRestarted
+          annotations:
+            description: The SNMP target on instance {{$labels.instance}} from job {{$labels.job}} has restarted.
+            summary: SNMP target restarted.
+          expr: sysUpTime < 300
+          for: 5s
+          labels:
+            severity: info

@@ -3,6 +3,7 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
+local getMatcher(cfg) = '%(ibmmqSelector)s' % cfg;
 
 local dashboardUid = 'ibm-mq-topics-overview';
 
@@ -25,11 +26,11 @@ local topicsRow = {
   title: 'Topics',
 };
 
-local topicMessagesReceivedPanel = {
+local topicMessagesReceivedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_topic_messages_received{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
+      'ibmmq_topic_messages_received{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
       format='time_series',
@@ -102,11 +103,11 @@ local topicMessagesReceivedPanel = {
   },
 };
 
-local timeSinceLastMessagePanel = {
+local timeSinceLastMessagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_topic_time_since_msg_received{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
+      'ibmmq_topic_time_since_msg_received{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
       format='time_series',
@@ -151,11 +152,11 @@ local timeSinceLastMessagePanel = {
   },
 };
 
-local topicSubscribersPanel = {
+local topicSubscribersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_topic_subscriber_count{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
+      'ibmmq_topic_subscriber_count{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
       format='time_series',
@@ -228,11 +229,11 @@ local topicSubscribersPanel = {
   },
 };
 
-local topicPublishersPanel = {
+local topicPublishersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_topic_publisher_count{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
+      'ibmmq_topic_publisher_count{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
       format='time_series',
@@ -319,11 +320,11 @@ local subscriptionsRow = {
   collapsed: false,
 };
 
-local subscriptionMessagesReceivedPanel = {
+local subscriptionMessagesReceivedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_subscription_messsages_received{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",subscription=~"$subscription"}',
+      'ibmmq_subscription_messsages_received{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",subscription=~"$subscription"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{subscription}}',
       format='time_series',
@@ -397,11 +398,11 @@ local subscriptionMessagesReceivedPanel = {
   transformations: [],
 };
 
-local subscriptionStatusPanel = {
+local subscriptionStatusPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_subscription_time_since_message_published{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",subscription=~"$subscription"}',
+      'ibmmq_subscription_time_since_message_published{' + matcher + ',mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",subscription=~"$subscription"}',
       datasource=promDatasource,
       legendFormat='{{label_name}}',
       format='table',
@@ -614,6 +615,19 @@ local subscriptionStatusPanel = {
             allValues='',
             sort=0
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(ibmmq_qmgr_commit_count{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+
         ]
       )
       .addLink(grafana.link.dashboards(
@@ -626,13 +640,13 @@ local subscriptionStatusPanel = {
       .addPanels(
         [
           topicsRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
-          topicMessagesReceivedPanel { gridPos: { h: 6, w: 16, x: 0, y: 1 } },
-          timeSinceLastMessagePanel { gridPos: { h: 6, w: 8, x: 16, y: 1 } },
-          topicSubscribersPanel { gridPos: { h: 6, w: 12, x: 0, y: 7 } },
-          topicPublishersPanel { gridPos: { h: 6, w: 12, x: 12, y: 7 } },
+          topicMessagesReceivedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 16, x: 0, y: 1 } },
+          timeSinceLastMessagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 1 } },
+          topicSubscribersPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 7 } },
+          topicPublishersPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 7 } },
           subscriptionsRow { gridPos: { h: 1, w: 24, x: 0, y: 13 } },
-          subscriptionMessagesReceivedPanel { gridPos: { h: 6, w: 24, x: 0, y: 14 } },
-          subscriptionStatusPanel { gridPos: { h: 10, w: 24, x: 0, y: 20 } },
+          subscriptionMessagesReceivedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 14 } },
+          subscriptionStatusPanel(getMatcher($._config)) { gridPos: { h: 10, w: 24, x: 0, y: 20 } },
         ]
       ),
   },

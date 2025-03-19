@@ -1,5 +1,8 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    couchbaseSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+    multiclusterSelector: 'job=~"$job"',
     dashboardTags: ['couchbase-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',

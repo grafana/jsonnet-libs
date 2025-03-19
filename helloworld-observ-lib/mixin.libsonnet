@@ -14,8 +14,4 @@ local helloworld =
   );
 
 // populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
-}
+helloworld.asMonitoringMixin()

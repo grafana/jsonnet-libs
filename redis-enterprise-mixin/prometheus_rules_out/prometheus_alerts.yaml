@@ -1,0 +1,75 @@
+groups:
+    - name: RedisEnterpriseAlerts
+      rules:
+        - alert: RedisEnterpriseClusterOutOfMemory
+          annotations:
+            description: Memory usage is at {{ printf "%.0f" $value }} percent on the cluster {{$labels.redis_cluster}}, which is above the configured threshold of 80% of the cluster's available memory
+            summary: Cluster has run out of memory.
+          expr: |
+            sum(redis_used_memory) by (redis_cluster, node) / sum(node_available_memory) by (redis_cluster, node) * 100 > 80
+          for: 5m
+          labels:
+            severity: critical
+        - alert: RedisEnterpriseNodeNotResponding
+          annotations:
+            description: The node {{$labels.node}} in {{$labels.redis_cluster}} is offline or unreachable.
+            summary: A node in the Redis Enterprise cluster is offline or unreachable.
+          expr: |
+            node_up == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: RedisEnterpriseDatabaseNotResponding
+          annotations:
+            description: The database {{$labels.bdb}} in {{$labels.redis_cluster}} is offline or unreachable.
+            summary: A database in the Redis Enterprise cluster is offline or unreachable.
+          expr: |
+            bdb_up == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: RedisEnterpriseShardNotResponding
+          annotations:
+            description: The shard {{$labels.redis}} on database {{$labels.bdb}} running on node {{$labels.node}} in the cluster {{$labels.redis_cluster}} is offline or unreachable.
+            summary: A shard in the Redis Enterprise cluster is offline or unreachable.
+          expr: |
+            redis_up == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: RedisEnterpriseNodeHighCPUUtilization
+          annotations:
+            description: The node {{$labels.node}} in cluster {{$labels.redis_cluster}} has a CPU percentage of ${{ printf "%.0f" $value }}, which exceeds the threshold 80%.
+            summary: Node CPU usage is above the configured threshold.
+          expr: |
+            (sum(node_cpu_user) by (node, redis_cluster, job) + sum(node_cpu_system) by (node, redis_cluster, job)) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RedisEnterpriseDatabaseHighMemoryUtilization
+          annotations:
+            description: The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utiliztaion of ${{ printf "%.0f" $value }}, which exceeds the threshold 80%.
+            summary: Node memory utilization is above the configured threshold.
+          expr: |
+            sum(bdb_used_memory) by (bdb, redis_cluster) / sum(bdb_memory_limit) by (bdb, redis_cluster) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RedisEnterpriseAverageLatencyIncreasing
+          annotations:
+            description: The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has high latency of ${{ printf "%.0f" $value }}, which exceeds the threshold of 1000 ms.
+            summary: Operation latency is above the configured threshold.
+          expr: |
+            bdb_avg_latency / 1000 > 1000
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RedisEnterpriseKeyEvictionsIncreasing
+          annotations:
+            description: The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} is evicting ${{ printf "%.0f" $value }} objects, which exceeds the threshold of 1 evicted objects.
+            summary: The number of evicted objects is greater than or equal to the configured threshold.
+          expr: |
+            bdb_evicted_objects >= 1
+          for: 5m
+          labels:
+            severity: warning

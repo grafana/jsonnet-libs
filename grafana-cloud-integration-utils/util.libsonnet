@@ -1,6 +1,8 @@
 local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
+local xtd = import 'xtd/main.libsonnet';
+local var = g.dashboard.variable;
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
@@ -48,7 +50,7 @@ local integration_status_panel(statusPanelQuery, statusPanelDataSource, height, 
           result: {
             color: 'green',
             index: 0,
-            text: 'Agent Configured - Sending Metrics',
+            text: 'Receiving Metrics',
           },
           to: 10000000000000,
         },
@@ -139,6 +141,166 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         ],
       },
     },
+
+  // This function can be used to patch dashboards variables, matching by name:
+  // patch format:
+  // {
+  //   cluster: {
+  //     allValues: ".*"
+  //   },
+  // }
+  patch_variables(dashboard, patch)::
+    {
+      templating: {
+        list+: [
+          t + std.get(patch, t.name, default={})
+          for t in dashboard.templating.list
+        ],
+      },
+    },
+
+  // This function can be used to patch alert rules:
+  // prometheusAlerts format (as in mixin):
+  // {
+  //   groups: [
+  //     {
+  //       name: 'abc',
+  //       rules: [
+  //         {
+  //           alert: 'Alert1',
+  //           expr: 'up==0',
+  //           labels: {
+  //             severity: "warning"
+  //           }
+  //         },
+  //         {
+  //           alert: 'Alert2',
+  //           expr: 'up!=0',
+  //           labels: {
+  //             severity: "warning"
+  //           }
+  //         },
+  //       ]
+  //     }
+  //   ]
+  // }
+  // patch format:
+  // {
+  //   Alert1: {
+  //     labels+: {
+  //       new_label: 'abc',
+  //       asserts_severity: super.severity,
+  //     }
+  //   },
+  //   Alert2: {
+  //     labels+: {
+  //       new_label: 'zyx',
+  //     }
+  //   }
+  // }
+  patch_alerts(prometheusAlerts, group_name, alert_rules_patch)::
+    local patch_rules(rules, patch) =
+      [
+        if std.objectHasAll(patch, rule.alert) then
+          rule + patch[rule.alert]
+        else rule
+        for rule
+        in rules
+      ];
+    {
+      groups+:
+        [
+          if group.name == group_name then
+            {
+              name: group_name,
+              rules: patch_rules(group.rules, alert_rules_patch),
+            }
+          else group
+          for group in prometheusAlerts.groups
+
+        ],
+    },
+
+  // Adds asserts specific variables to the dashboards
+  add_asserts_variables(dashboard, config, hidden=true)::
+    local ds_name =
+      std.prune([
+        if std.objectHas(template, 'type') && template.type == 'datasource' && template.query == 'prometheus'
+        then
+          std.get(template, 'name')
+        else null
+        for template in dashboard.templating.list
+      ])[0];
+    dashboard
+    {
+      templating: {
+        list: [
+          var.query.new('env')
+          + var.query.withDatasource('prometheus', '${%s}' % ds_name)
+          + var.query.queryTypes.withLabelValues(
+            'asserts_env',
+            'asserts:mixin_workload_job',
+          )
+          + var.query.generalOptions.withLabel('Asserts environment')
+          + (
+            if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.*'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
+          var.query.new('site')
+          + var.query.withDatasource('prometheus', '${%s}' % ds_name)
+          + var.query.queryTypes.withLabelValues(
+            'asserts_site',
+            'asserts:mixin_workload_job{asserts_env=~"$env"}',
+          )
+          + var.query.generalOptions.withLabel('Asserts site')
+          + (
+            if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.*'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
+        ] + dashboard.templating.list,
+      },
+      panels: [
+        if std.objectHas(panel, 'targets') then
+          panel {
+            targets: [
+              if std.objectHas(target, 'expr') then
+                target {
+                  expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                }
+              else target
+              for target in panel.targets
+            ],
+          } else panel
+        for panel in dashboard.panels
+      ],
+    },
+
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
       dashboard: $.decorate_dashboard(dashboards[k], tags, refresh, timeFrom),
@@ -149,7 +311,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
     for k in std.objectFields(dashboards)
     if !std.member(ignoreDashboards, k)
   },
-  prepare_alerts(namespace, prometheusAlerts, ignoreAlerts=[], ignoreAlertGroups=[])::
+  prepare_alerts(namespace, prometheusAlerts, ignoreAlerts=[], ignoreAlertGroups=[], extraAnnotations={}, extraLabels={})::
     {
       namespace: namespace,
     } +
@@ -157,10 +319,17 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       groups:
         std.map(function(el) el {
           rules:
-            std.filter(function(r) !std.member(ignoreAlerts, r.alert), super.rules),
+            std.map(function(r) r {
+                      annotations+: extraAnnotations,
+                      labels+: extraLabels,
+                    },
+                    std.filter(
+                      function(r) !std.member(ignoreAlerts, r.alert),
+                      super.rules
+                    )),
         }, std.filter(function(g) !std.member(ignoreAlertGroups, g.name), super.groups)),
     },
-  prepare_rules(namespace, rules, ignoreRules=[], ignoreRuleGroups=[])::
+  prepare_rules(namespace, rules, ignoreRules=[], ignoreRuleGroups=[], extraAnnotations={}, extraLabels={})::
     {
       namespace: namespace,
     } +
@@ -168,7 +337,14 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       groups:
         std.map(function(rr) rr {
           rules:
-            std.filter(function(r) !std.member(ignoreRules, r.record), super.rules),
+            std.map(function(r) r {
+                      annotations+: extraAnnotations,
+                      labels+: extraLabels,
+                    },
+                    std.filter(
+                      function(r) !std.member(ignoreRules, r.record),
+                      super.rules
+                    )),
         }, std.filter(function(g) !std.member(ignoreRuleGroups, g.name), super.groups)),
     },
   integration_status_panels(config, version, setId)::

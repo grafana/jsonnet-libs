@@ -1,7 +1,8 @@
-(import 'connect-overview.libsonnet') +
-(import 'kafka-overview.libsonnet') +
-(import 'kafka-lag-overview.libsonnet') +
-(import 'kafka-topics.libsonnet') +
-(import 'ksqldb-overview.libsonnet') +
-(import 'schema-registry-overview.libsonnet') +
-(import 'zookeeper-overview.libsonnet')
+// Outdated dashboards can be found in old-dashboards/
+{
+  grafanaDashboards+:: {
+    'connect-overview.json': (import 'connect-overview.json'),
+    'kafka-ksqldb-overview.json': (import 'kafka-ksqldb-overview.json'),
+    'schema-registry-overview.json': (import 'schema-registry-overview.json'),
+  },
+}

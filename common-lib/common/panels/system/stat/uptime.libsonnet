@@ -17,6 +17,7 @@ base {
     (if allLayers then super.stylize() else {})
     + stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('dtdurations')
+    + stat.standardOptions.color.withMode('thresholds')
     + stat.options.withColorMode('value')
     + stat.options.withGraphMode('none')
     + stat.standardOptions.thresholds.withMode('absolute')

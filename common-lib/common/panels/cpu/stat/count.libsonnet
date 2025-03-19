@@ -16,6 +16,7 @@ base {
 
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
-    + generic.info.stylize(allLayers=false),
+    + generic.info.stylize(allLayers=false)
+    + g.panel.stat.standardOptions.withUnit('none'),
 
 }

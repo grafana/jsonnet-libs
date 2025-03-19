@@ -21,3 +21,14 @@ lint: build
 			$(JSONNET_FMT) "$$f" | diff -u "$$f" -; \
 		done
 
+.PHONY: tests
+tests: build
+	@RESULT=0; \
+	for m in $$(find . -name 'test_*.libsonnet' -print); do \
+			echo "Testing $$m"; \
+			jsonnet -J vendor "$$m"; \
+			if [ $$? -ne 0 ]; then \
+				RESULT=1; \
+			fi; \
+	done; \
+	exit $$RESULT

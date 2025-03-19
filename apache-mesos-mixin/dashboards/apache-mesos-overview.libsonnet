@@ -14,11 +14,13 @@ local promDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local masterUptimePanel = {
+local getMatcher(cfg) = '%(mesosSelector)s, instance=~"$instance", mesos_cluster=~"$mesos_cluster"' % cfg;
+
+local masterUptimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_uptime_seconds{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_master_uptime_seconds{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -63,11 +65,11 @@ local masterUptimePanel = {
   pluginVersion: '9.5.2-cloud.2.0cb5a501',
 };
 
-local cpusAvailablePanel = {
+local cpusAvailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_cpus{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
+      'max by(mesos_cluster) (mesos_master_cpus{' + matcher + ', type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -112,11 +114,11 @@ local cpusAvailablePanel = {
   pluginVersion: '9.5.2-cloud.2.0cb5a501',
 };
 
-local memoryAvailablePanel = {
+local memoryAvailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
+      'max by(mesos_cluster) (mesos_master_mem{' + matcher + ', type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -161,11 +163,11 @@ local memoryAvailablePanel = {
   pluginVersion: '9.5.2-cloud.2.0cb5a501',
 };
 
-local gpusAvailablePanel = {
+local gpusAvailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_gpus{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
+      'max by(mesos_cluster) (mesos_master_gpus{' + matcher + ', type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -210,11 +212,11 @@ local gpusAvailablePanel = {
   pluginVersion: '9.5.2-cloud.2.0cb5a501',
 };
 
-local diskAvailablePanel = {
+local diskAvailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
+      'max by(mesos_cluster) (mesos_master_disk{' + matcher + ', type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -259,11 +261,11 @@ local diskAvailablePanel = {
   pluginVersion: '9.5.2-cloud.2.0cb5a501',
 };
 
-local memoryUtilizationPanel = {
+local memoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="percent"})',
+      'max by(mesos_cluster) (mesos_master_mem{' + matcher + ', type="percent"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -335,11 +337,11 @@ local memoryUtilizationPanel = {
   },
 };
 
-local diskUtilizationPanel = {
+local diskUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="percent"})',
+      'max by(mesos_cluster) (mesos_master_disk{' + matcher + ', type="percent"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -411,11 +413,11 @@ local diskUtilizationPanel = {
   },
 };
 
-local eventsInQueuePanel = {
+local eventsInQueuePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster, type) (mesos_master_event_queue_length{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster, type) (mesos_master_event_queue_length{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - {{type}}',
       format='time_series',
@@ -487,11 +489,11 @@ local eventsInQueuePanel = {
   },
 };
 
-local messagesPanel = {
+local messagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster, type) (increase(mesos_master_messages{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"}[$__interval:])) > 0',
+      'max by(mesos_cluster, type) (increase(mesos_master_messages{' + matcher + '}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - {{type}}',
       format='time_series',
@@ -564,17 +566,17 @@ local messagesPanel = {
   },
 };
 
-local registrarStatePanel = {
+local registrarStatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_state_store_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="mean"})',
+      'max by(mesos_cluster) (mesos_registrar_state_store_ms{' + matcher + ', type="mean"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - store',
       format='time_series',
     ),
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_state_fetch_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_registrar_state_fetch_ms{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - fetch',
       format='time_series',
@@ -646,11 +648,11 @@ local registrarStatePanel = {
   },
 };
 
-local registrarLogRecoveredPanel = {
+local registrarLogRecoveredPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_log_recovered{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_registrar_log_recovered{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -737,11 +739,11 @@ local allocatorRow = {
   collapsed: false,
 };
 
-local allocationRunsPanel = {
+local allocationRunsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (rate(mesos_master_allocation_run_ms_count{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"}[$__rate_interval]))',
+      'max by(mesos_cluster) (rate(mesos_master_allocation_run_ms_count{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -813,11 +815,11 @@ local allocationRunsPanel = {
   },
 };
 
-local allocationDurationPanel = {
+local allocationDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_allocation_run_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_master_allocation_run_ms{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -889,11 +891,11 @@ local allocationDurationPanel = {
   },
 };
 
-local allocationLatencyPanel = {
+local allocationLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -965,11 +967,11 @@ local allocationLatencyPanel = {
   },
 };
 
-local eventQueueDispatchesPanel = {
+local eventQueueDispatchesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_event_queue_dispatches{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
+      'max by(mesos_cluster) (mesos_master_event_queue_dispatches{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -1055,11 +1057,11 @@ local agentsRow = {
   collapsed: false,
 };
 
-local agentMemoryUtilizationPanel = {
+local agentMemoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"} / clamp_min(mesos_slave_mem_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"},1))',
+      'max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{' + matcher + '} / clamp_min(mesos_slave_mem_bytes{' + matcher + '},1))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -1131,11 +1133,11 @@ local agentMemoryUtilizationPanel = {
   },
 };
 
-local agentDiskUtilizationPanel = {
+local agentDiskUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"} / clamp_min(mesos_slave_disk_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"},1))',
+      'max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{' + matcher + '} / clamp_min(mesos_slave_disk_bytes{' + matcher + '},1))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -1221,13 +1223,13 @@ local logsRow = {
   collapsed: false,
 };
 
-local masterLogsPanel = {
+local masterLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", filename=~"/var/log/mesos/master/.*", mesos_cluster=~"$mesos_cluster"} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename=~"/var/log/mesos/master/.*" or log_type="master")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1247,13 +1249,13 @@ local masterLogsPanel = {
   },
 };
 
-local agentLogsPanel = {
+local agentLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", filename=~"/var/log/mesos/agent/.*", mesos_cluster=~"$mesos_cluster"} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename=~"/var/log/mesos/agent/.*" or log_type="agent")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1318,9 +1320,21 @@ local agentLogsPanel = {
               sort=1
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(mesos_exporter_build_info{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(mesos_exporter_build_info{job=~"$job", instance=~"$instance"}, instance)',
+              'label_values(mesos_exporter_build_info{%(mesosSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -1331,7 +1345,7 @@ local agentLogsPanel = {
             template.new(
               'mesos_cluster',
               promDatasource,
-              'label_values(mesos_exporter_build_info{job=~"$job", instance=~"$instance"}, mesos_cluster)',
+              'label_values(mesos_exporter_build_info{%(mesosSelector)s, instance=~"$instance"}, mesos_cluster)' % $._config,
               label='Mesos cluster',
               refresh=2,
               includeAll=true,
@@ -1345,25 +1359,25 @@ local agentLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            masterUptimePanel { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
-            cpusAvailablePanel { gridPos: { h: 6, w: 5, x: 4, y: 0 } },
-            memoryAvailablePanel { gridPos: { h: 6, w: 5, x: 9, y: 0 } },
-            gpusAvailablePanel { gridPos: { h: 6, w: 5, x: 14, y: 0 } },
-            diskAvailablePanel { gridPos: { h: 6, w: 5, x: 19, y: 0 } },
-            memoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            diskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            eventsInQueuePanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-            messagesPanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-            registrarStatePanel { gridPos: { h: 6, w: 18, x: 0, y: 18 } },
-            registrarLogRecoveredPanel { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
+            masterUptimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
+            cpusAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 4, y: 0 } },
+            memoryAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 9, y: 0 } },
+            gpusAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 14, y: 0 } },
+            diskAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 19, y: 0 } },
+            memoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            diskUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            eventsInQueuePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+            messagesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+            registrarStatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 18, x: 0, y: 18 } },
+            registrarLogRecoveredPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
             allocatorRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-            allocationRunsPanel { gridPos: { h: 6, w: 6, x: 0, y: 25 } },
-            allocationDurationPanel { gridPos: { h: 6, w: 6, x: 6, y: 25 } },
-            allocationLatencyPanel { gridPos: { h: 6, w: 6, x: 12, y: 25 } },
-            eventQueueDispatchesPanel { gridPos: { h: 6, w: 6, x: 18, y: 25 } },
+            allocationRunsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 25 } },
+            allocationDurationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 25 } },
+            allocationLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 25 } },
+            eventQueueDispatchesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 25 } },
             agentsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-            agentMemoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
-            agentDiskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
+            agentMemoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
+            agentDiskUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
@@ -1371,12 +1385,12 @@ local agentLogsPanel = {
           [
           ],
           if $._config.enableLokiLogs then [
-            masterLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
+            masterLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            agentLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
+            agentLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
           ] else [],
           [
           ],
