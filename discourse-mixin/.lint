@@ -1,0 +1,12 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Sidekiq Jobs"
+      - panel: "Scheduled Jobs"
+      - panel: "Page Views"
+      - panel: "Sidekiq Queued"
+      - panel: "Web Workers"
+      - panel: "Sidekiq Workers"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"

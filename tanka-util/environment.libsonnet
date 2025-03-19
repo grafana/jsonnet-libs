@@ -72,14 +72,14 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
 
   '#withApplyStrategy'::
     d.fn(
-        |||
-          `withApplyStrategy` sets the Kubernetes apply strategy used for this environment.
-          Must be `client` or `server`
-        |||,
-        [d.arg('applyStrategy', d.T.string)]
+      |||
+        `withApplyStrategy` sets the Kubernetes apply strategy used for this environment.
+        Must be `client` or `server`
+      |||,
+      [d.arg('applyStrategy', d.T.string)]
     ),
-  withApplyStrategy(applyStrategy):: 
-    local strategy = if std.member(["client", "server"], applyStrategy) then applyStrategy else error "applyStrategy must be `client` or `server";
+  withApplyStrategy(applyStrategy)::
+    local strategy = if std.member(['client', 'server'], applyStrategy) then applyStrategy else error 'applyStrategy must be `client` or `server';
     {
       spec+: {
         applyStrategy: strategy,

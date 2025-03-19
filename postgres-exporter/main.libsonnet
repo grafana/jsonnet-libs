@@ -4,7 +4,10 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   new(
     name,
     data_source_uri='$(HOSTNAME):$(PORT)/postgres',
+    data_source_name='',
     ssl=true,
+    // Note that upgrading to an image version greater than 0.12.1
+    // will break dependencies using `withQueriesYaml`.
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
     local this = self,
@@ -28,10 +31,18 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         1,
         [
           this.container
-          // Force DATA_SOURCE_URI to be declared after the variables it references
-          + container.withEnvMap({
-            DATA_SOURCE_URI: data_source_uri + ssl_suffix,
-          }),
+          // If data_source_name is not empty, use it instead of data_source_uri
+          // with variable name DATA_SOURCE_NAME
+          // Otherwise, use data_source_uri with variable name DATA_SOURCE_URI
+          + (
+            if data_source_name != ''
+            then container.withEnvMap({
+              DATA_SOURCE_NAME: data_source_name + ssl_suffix,
+            })
+            else container.withEnvMap({
+              DATA_SOURCE_URI: data_source_uri + ssl_suffix,
+            })
+          ),
         ]
       ),
   },
@@ -69,5 +80,29 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           std.join(',', databases),
         ),
       ]),
+  },
+
+  // Upgrading to an image version greater than 0.12.1
+  // will break this function.
+  withQueriesYaml(content):: {
+    container+:
+      k.core.v1.container.withVolumeMounts([
+        k.core.v1.volumeMount.new(
+          'queries-yaml-volume',
+          '/etc/pg_exporter',
+        ),
+      ])
+      + k.core.v1.container.withEnvMixin([
+        k.core.v1.envVar.new('PG_EXPORTER_EXTEND_QUERY_PATH', '/etc/pg_exporter/queries.yaml'),
+      ]),
+    deployment+:
+      k.apps.v1.deployment.spec.template.spec.withVolumesMixin([
+        k.core.v1.volume.fromConfigMap('queries-yaml-volume', 'queries-yaml'),
+      ]),
+    local configMap = k.core.v1.configMap,
+    configMap:
+      configMap.new('queries-yaml', {
+        'queries.yaml': content,
+      }),
   },
 }

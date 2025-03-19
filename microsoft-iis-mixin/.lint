@@ -1,0 +1,24 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Request errors"
+      - panel: "Blocked async I/O requests"
+      - panel: "Rejected async I/O requests"
+      - panel: "Files sent"
+      - panel: "Files received"
+      - panel: "Current connections"
+      - panel: "Attempted connections"
+      - panel: "Websocket connection attempts"
+      - panel: "Current worker threads"
+      - panel: "Current worker processes"
+      - panel: "Worker process failures"
+      - panel: "Worker process startup failures"
+      - panel: "Worker process shutdown failures"
+      - panel: "Worker process ping failures"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

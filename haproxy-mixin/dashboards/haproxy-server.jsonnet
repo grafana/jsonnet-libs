@@ -3,7 +3,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
 
 g.dashboard.new() + {
   title: 'HAProxy / Server',
-
+  editable: false,
   panels:
     local requests = d.util.section(
       g.panel.row.new(title='Requests'),
@@ -38,8 +38,8 @@ g.dashboard.new() + {
   templating: {
     list: [
       d.templates.datasource,
-      d.templates.instance,
       d.templates.job,
+      d.templates.instance,
       d.templates.backend,
       d.templates.server,
     ],

@@ -1,3 +1,5 @@
+local utils = import 'mixin-utils/utils.libsonnet';
+
 {
   dashboard(title, uid='', datasource='default', datasource_regex=''):: {
     // Stuff that isn't materialised.
@@ -13,7 +15,7 @@
       rows+: [row { panels: panels }],
     },
 
-    addTemplate(name, metric_name, label_name, hide=0, allValue=null):: self {
+    addTemplate(name, metric_name, label_name, hide=0, allValue=null, includeAll=false, sort=2):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -23,7 +25,7 @@
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: false,
+          includeAll: includeAll,
           label: name,
           multi: false,
           name: name,
@@ -31,7 +33,7 @@
           query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
           regex: '',
-          sort: 2,
+          sort: sort,
           tagValuesQuery: '',
           tags: [],
           tagsQuery: '',
@@ -41,7 +43,7 @@
       },
     },
 
-    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+'):: self {
+    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2, includeAll=true):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -52,7 +54,7 @@
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: true,
+          includeAll: includeAll,
           label: name,
           multi: true,
           name: name,
@@ -60,11 +62,45 @@
           query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
           regex: '',
-          sort: 2,
+          sort: sort,
           tagValuesQuery: '',
           tags: [],
           tagsQuery: '',
           type: 'query',
+          useTags: false,
+        }],
+      },
+    },
+
+    addShowNativeLatencyVariable():: self {
+      templating+: {
+        list+: [{
+          current: {
+            selected: true,
+            text: 'classic',
+            value: '1',
+          },
+          description: 'Choose between showing latencies based on low precision classic or high precision native histogram metrics.',
+          hide: 0,
+          includeAll: false,
+          label: 'Latency metrics',
+          multi: false,
+          name: 'latency_metrics',
+          query: 'native : -1,classic : 1',
+          options: [
+            {
+              selected: false,
+              text: 'native',
+              value: '-1',
+            },
+            {
+              selected: true,
+              text: 'classic',
+              value: '1',
+            },
+          ],
+          skipUrlSync: false,
+          type: 'custom',
           useTags: false,
         }],
       },
@@ -109,7 +145,7 @@
             value: datasource,
           },
           hide: 0,
-          label: 'Data Source',
+          label: 'Data source',
           name: 'datasource',
           options: [],
           query: 'prometheus',
@@ -178,6 +214,7 @@
     titleSize: 'h6',
   },
 
+  // "graph" type, now deprecated.
   panel(title):: {
     aliasColors: {},
     bars: false,
@@ -228,6 +265,46 @@
     yaxes: $.yaxes('short'),
   },
 
+  // "timeseries" panel, introduced with Grafana 7.4 and made standard in 8.0.
+  timeseriesPanel(title):: {
+    datasource: '$datasource',
+    fieldConfig: {
+      defaults: {
+        custom: {
+          drawStyle: 'line',
+          fillOpacity: 1,
+          lineWidth: 1,
+          pointSize: 5,
+          showPoints: 'never',
+          spanNulls: false,
+          stacking: {
+            group: 'A',
+            mode: 'none',
+          },
+        },
+        thresholds: {
+          mode: 'absolute',
+          steps: [],
+        },
+        unit: 's',
+      },
+      overrides: [],
+    },
+    options: {
+      legend: {
+        showLegend: true,
+      },
+      tooltip: {
+        mode: 'single',
+        sort: 'none',
+      },
+    },
+    links: [],
+    targets: [],
+    title: title,
+    type: 'timeseries',
+  },
+
   queryPanel(queries, legends, legendLink=null):: {
 
     local qs =
@@ -248,27 +325,32 @@
         legendLink: legendLink,
         expr: ql.q,
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: ql.l,
-        step: 10,
       }
       for ql in qsandls
     ],
   },
 
   statPanel(query, format='percentunit'):: {
+    local isNativeClassic = utils.isNativeClassicQuery(query),
     type: 'singlestat',
     thresholds: '70,80',
     format: format,
     targets: [
       {
-        expr: query,
+        expr: if isNativeClassic then utils.showClassicHistogramQuery(query) else query,
         format: 'time_series',
         instant: true,
-        intervalFactor: 2,
+        refId: if isNativeClassic then 'A_classic' else 'A',
+      },
+    ] + if isNativeClassic then [
+      {
+        expr: utils.showNativeHistogramQuery(query),
+        format: 'time_series',
+        instant: true,
         refId: 'A',
       },
-    ],
+    ] else [],
   },
 
   tablePanel(queries, labelStyles):: {
@@ -328,9 +410,7 @@
         expr: qs[i],
         format: 'table',
         instant: true,
-        intervalFactor: 2,
         legendFormat: '',
-        step: 10,
         refId: std.char(65 + i),
       }
       for i in std.range(0, std.length(qs) - 1)
@@ -384,16 +464,20 @@
       },
     ],
 
+  httpStatusColors:: {
+    '1xx': '#EAB839',
+    '2xx': '#7EB26D',
+    '3xx': '#6ED0E0',
+    '4xx': '#EF843C',
+    '5xx': '#E24D42',
+    OK: '#7EB26D',
+    success: '#7EB26D',
+    'error': '#E24D42',
+    cancel: '#A9A9A9',
+  },
+
   qpsPanel(selector, statusLabelName='status_code'):: {
-    aliasColors: {
-      '1xx': '#EAB839',
-      '2xx': '#7EB26D',
-      '3xx': '#6ED0E0',
-      '4xx': '#EF843C',
-      '5xx': '#E24D42',
-      success: '#7EB26D',
-      'error': '#E24D42',
-    },
+    aliasColors: $.httpStatusColors,
     targets: [
       {
         expr:
@@ -401,13 +485,70 @@
             sum by (status) (
               label_replace(label_replace(rate(%s[$__rate_interval]),
               "status", "${1}xx", "%s", "([0-9]).."),
-              "status", "${1}", "%s", "([a-z]+)"))
+              "status", "${1}", "%s", "([a-zA-Z]+)"))
           ||| % [selector, statusLabelName, statusLabelName],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '{{status}}',
         refId: 'A',
-        step: 10,
+      },
+    ],
+  } + $.stack,
+
+  // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
+  // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
+  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
+    local sumByStatus(nativeClassicQuery) = {
+      local template =
+        |||
+          sum by (status) (
+            label_replace(label_replace(%(metricQuery)s,
+            "status", "${1}xx", "%(label)s", "([0-9]).."),
+            "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+        |||,
+      native: template % { metricQuery: nativeClassicQuery.native, label: statusLabelName },
+      classic: template % { metricQuery: nativeClassicQuery.classic, label: statusLabelName },
+    },
+    fieldConfig+: {
+      defaults+: {
+        custom+: {
+          lineWidth: 0,
+          fillOpacity: 100,  // Get solid fill.
+          stacking: {
+            mode: 'normal',
+            group: 'A',
+          },
+        },
+        unit: 'reqps',
+        min: 0,
+      },
+      overrides+: [{
+        matcher: {
+          id: 'byName',
+          options: status,
+        },
+        properties: [
+          {
+            id: 'color',
+            value: {
+              mode: 'fixed',
+              fixedColor: $.httpStatusColors[status],
+            },
+          },
+        ],
+      } for status in std.objectFieldsAll($.httpStatusColors)],
+    },
+    targets: [
+      {
+        expr: utils.showClassicHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A',
       },
     ],
   } + $.stack,
@@ -418,26 +559,72 @@
       {
         expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '99th Percentile',
         refId: 'A',
-        step: 10,
       },
       {
         expr: 'histogram_quantile(0.50, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '50th Percentile',
         refId: 'B',
-        step: 10,
       },
       {
         expr: 'sum(rate(%s_sum%s[$__rate_interval])) * %s / sum(rate(%s_count%s[$__rate_interval]))' % [metricName, selector, multiplier, metricName, selector],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: 'Average',
         refId: 'C',
-        step: 10,
+      },
+    ],
+    yaxes: $.yaxes('ms'),
+  },
+
+  // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
+    nullPointMode: 'null as zero',
+    fieldConfig+: {
+      defaults+: {
+        custom+: {
+          fillOpacity: 10,
+        },
+        unit: 'ms',
+      },
+    },
+    targets: [
+      {
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C_classic',
       },
     ],
     yaxes: $.yaxes('ms'),

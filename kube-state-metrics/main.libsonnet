@@ -3,7 +3,7 @@ local kausal = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libso
 {
   new(
     namespace,
-    image='k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.1.0',
+    image='registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.1.0',
   ):: {
     local k = kausal {
       _config+: {

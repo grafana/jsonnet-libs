@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -18,16 +21,17 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 86,
-  "iteration": 1642009394026,
+  "id": 10,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,105 +40,124 @@
       },
       "id": 445,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Server Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "aliasColors": {
-        "localhost:9005": "light-red",
-        "localhost:9005 - PrometheusReporter": "semi-dark-green",
-        "localhost:9090": "semi-dark-green",
-        "localhost:9990": "semi-dark-blue"
+      "datasource": {
+        "uid": "$datasource"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 19,
         "x": 0,
         "y": 1
       },
-      "hiddenSeries": false,
       "id": 18,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.3.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "up{instance=~\"$instance\"}",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "up{job=~\"integrations/wso2-streaming-integrator\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "{{instance}} - {{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Servers Up/Down",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -144,6 +167,8 @@
       "id": 441,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Server Statistics",
         "showHeadings": false,
@@ -152,10 +177,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -165,7 +193,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -220,12 +250,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(count by (app,instance) (siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(count by (app,instance) (siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -234,7 +268,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -242,7 +278,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -294,8 +333,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -406,8 +447,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -453,8 +496,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -476,8 +521,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -495,7 +542,9 @@
       "id": 468,
       "interval": "1s",
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -504,13 +553,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
+          "expr": "sum(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -518,9 +569,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(jvm_os_system_load_average{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -528,9 +581,11 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(jvm_os_cpu_load_system{instance=~\"$instance\"}) by (insance)",
+          "expr": "sum(jvm_os_cpu_load_system{job=~\"$job\", instance=~\"$instance\"}) by (insance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -538,9 +593,11 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(jvm_memory_heap_usage{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -570,361 +627,386 @@
       "type": "table"
     },
     {
-      "aliasColors": {
-        "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "overall throughput{instance=\"instance\" }": "semi-dark-green",
-        "overall throughput{instance=\"localhost:9005\" }": "semi-dark-green",
-        "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\"})": "semi-dark-green"
+      "datasource": {
+        "uid": "$datasource"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 12
       },
-      "hiddenSeries": false,
       "id": 10,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.3.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\",instance=~\"$instance\"})",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\",job=~\"$job\", instance=~\"$instance\"})",
           "instant": false,
           "legendFormat": "overall throughput{instance=\"{{instance}}\" }",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Overall Throughput",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "jvm_os_system_load_average{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "system load average{instance=\"localhost:9005\" }": "light-red"
+      "datasource": {
+        "uid": "$datasource"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
         "overrides": []
       },
-      "fill": 2,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 12
       },
-      "hiddenSeries": false,
       "id": 8,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.3.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "jvm_os_system_load_average{instance=~\"$instance\"}",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "system load average{instance=\"{{instance}}\" }",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "System Load Average",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "cpu process load{instance=\"localhost:9005\" }": "semi-dark-blue",
-        "jvm_os_cpu_load_process{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-blue"
+      "datasource": {
+        "uid": "$datasource"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 12,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.3.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": true,
-          "expr": "jvm_os_cpu_load_process{instance=~\"$instance\"}",
+          "expr": "jvm_os_cpu_load_process{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "cpu process load{instance=\"{{instance}}\" }",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Process CPU Usage",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "ms",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "jvm_memory_heap_usage{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9005\" }": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9990\" }": "semi-dark-green"
+      "datasource": {
+        "uid": "$datasource"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 18
       },
-      "hiddenSeries": false,
       "id": 14,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.3.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": true,
-          "expr": "jvm_memory_heap_usage{instance=~\"$instance\"}",
+          "expr": "jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "memory heap usage{instance=\"{{instance}}\" }",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Memory Usage",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "decbytes",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -979,12 +1061,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(jvm_threads_count{instance=~\"$instance\"})",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(jvm_threads_count{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -994,7 +1080,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1049,12 +1137,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(jvm_threads_blocked_count{instance=~\"$instance\"})",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(jvm_threads_blocked_count{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -1064,7 +1156,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1119,12 +1213,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(jvm_memory_heap_used{instance=~\"$instance\"})",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(jvm_memory_heap_used{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -1134,7 +1232,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1190,12 +1290,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(jvm_os_file_descriptor_open_count{instance=~\"$instance\"})",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(jvm_os_file_descriptor_open_count{job=~\"$job\", instance=~\"$instance\"})",
           "instant": false,
           "intervalFactor": 1,
           "refId": "A"
@@ -1205,7 +1309,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1214,15 +1320,30 @@
       },
       "id": 444,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Stream Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1230,7 +1351,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1282,8 +1406,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1346,7 +1472,9 @@
       },
       "id": 282,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -1355,13 +1483,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1385,7 +1515,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -1395,6 +1527,8 @@
       "id": 442,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Stream Statistics",
         "showHeadings": false,
@@ -1403,10 +1537,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -1415,7 +1552,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1471,12 +1610,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -1485,7 +1628,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1494,15 +1639,30 @@
       },
       "id": 446,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Query Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1510,7 +1670,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1566,8 +1729,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1639,8 +1804,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1657,7 +1824,9 @@
       },
       "id": 380,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -1666,13 +1835,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_query_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1680,9 +1851,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_query_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_query_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1706,7 +1879,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -1716,6 +1891,8 @@
       "id": 447,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Query Statistics",
         "showHeadings": false,
@@ -1724,10 +1901,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -1736,7 +1916,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1792,12 +1974,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\"}))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(siddhi_query_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -1806,7 +1992,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1815,15 +2003,30 @@
       },
       "id": 448,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Source & Source Mapper Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1831,7 +2034,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1887,8 +2093,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1956,8 +2164,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2016,11 +2226,13 @@
         "h": 7,
         "w": 20,
         "x": 0,
-        "y": 45
+        "y": 44
       },
       "id": 466,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2029,13 +2241,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_sourcemapper_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
+          "expr": "sum(siddhi_sourcemapper_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2043,9 +2257,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2075,16 +2291,20 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 45
+        "y": 44
       },
       "id": 449,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Source Statistics",
         "showHeadings": false,
@@ -2093,10 +2313,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -2105,7 +2328,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2144,7 +2369,7 @@
         "h": 4,
         "w": 4,
         "x": 20,
-        "y": 48
+        "y": 47
       },
       "id": 368,
       "links": [],
@@ -2161,12 +2386,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_source_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -2175,24 +2404,41 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 51
       },
       "id": 450,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Sink Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2200,7 +2446,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -2256,8 +2505,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2325,8 +2576,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2385,11 +2638,13 @@
         "h": 7,
         "w": 20,
         "x": 0,
-        "y": 53
+        "y": 52
       },
       "id": 469,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2398,13 +2653,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_sinkmapper_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
+          "expr": "sum(siddhi_sinkmapper_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2412,9 +2669,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_sink_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_sink_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2444,16 +2703,20 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 53
+        "y": 52
       },
       "id": 453,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Sink Statistics",
         "showHeadings": false,
@@ -2462,10 +2725,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -2474,7 +2740,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2513,7 +2781,7 @@
         "h": 4,
         "w": 4,
         "x": 20,
-        "y": 56
+        "y": 55
       },
       "id": 374,
       "links": [],
@@ -2530,12 +2798,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_sink_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(siddhi_sink_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -2544,24 +2816,41 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 60
+        "y": 59
       },
       "id": 456,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Table Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2569,7 +2858,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -2625,8 +2917,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2694,8 +2988,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2731,11 +3027,13 @@
         "h": 7,
         "w": 19,
         "x": 0,
-        "y": 61
+        "y": 60
       },
       "id": 386,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2744,13 +3042,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_table_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_table_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2758,9 +3058,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_table_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_table_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2780,16 +3082,20 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 5,
         "x": 19,
-        "y": 61
+        "y": 60
       },
       "id": 457,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi Table Statistics",
         "showHeadings": false,
@@ -2798,10 +3104,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -2810,7 +3119,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2849,7 +3160,7 @@
         "h": 4,
         "w": 5,
         "x": 19,
-        "y": 64
+        "y": 63
       },
       "id": 385,
       "links": [],
@@ -2866,12 +3177,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(count by (element) (siddhi_table_latency{instance=~\"$instance\",app=~\"$application\",element!~\".*SECONDS|.*MINUTES|.*HOURS|.*DAYS|.*MONTHS|.*YEARS\"})))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(count by (element) (siddhi_table_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element!~\".*SECONDS|.*MINUTES|.*HOURS|.*DAYS|.*MONTHS|.*YEARS\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -2880,24 +3195,41 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 68
+        "y": 67
       },
       "id": 460,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<b><h5> Aggregation Statistics</h5></b>\n\n\n\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2905,7 +3237,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -2961,8 +3296,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3034,8 +3371,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3057,8 +3396,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3071,11 +3412,13 @@
         "h": 7,
         "w": 19,
         "x": 0,
-        "y": 69
+        "y": 68
       },
       "id": 421,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -3084,13 +3427,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3098,9 +3443,11 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3108,9 +3455,11 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3140,16 +3489,20 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 3,
         "w": 5,
         "x": 19,
-        "y": 69
+        "y": 68
       },
       "id": 461,
       "links": [],
       "options": {
+        "includeVars": false,
+        "keepTime": false,
         "maxItems": 10,
         "query": "Siddhi aggregation Statistics",
         "showHeadings": false,
@@ -3158,10 +3511,13 @@
         "showStarred": false,
         "tags": []
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -3170,7 +3526,9 @@
       "type": "dashlist"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3209,7 +3567,7 @@
         "h": 4,
         "w": 5,
         "x": 19,
-        "y": 72
+        "y": 71
       },
       "id": 418,
       "links": [],
@@ -3226,12 +3584,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -3240,12 +3602,14 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 76
+        "y": 75
       },
       "id": 465,
       "options": {
@@ -3253,11 +3617,21 @@
         "mode": "html"
       },
       "pluginVersion": "8.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3265,15 +3639,16 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3321,8 +3696,10 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3381,7 +3758,7 @@
         "h": 7,
         "w": 19,
         "x": 0,
-        "y": 78
+        "y": 76
       },
       "id": 416,
       "options": {
@@ -3398,9 +3775,11 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
-          "expr": "sum(siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\"}) by (app)",
+          "expr": "sum(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3430,12 +3809,14 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 7,
         "w": 5,
         "x": 19,
-        "y": 78
+        "y": 76
       },
       "id": 463,
       "links": [],
@@ -3452,6 +3833,9 @@
       "tags": [],
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "",
           "refId": "A"
         }
@@ -3460,41 +3844,72 @@
       "type": "dashlist"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 32,
-  "style": "dark",
+  "refresh": "30s",
+  "schemaVersion": 39,
   "tags": [
-    "prometheus",
-    "siddhi"
+    "wso2-streaming-integrator-integration"
   ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "skipUrlSync": false,
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": false,
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,instance)",
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
         "hide": 0,
         "includeAll": true,
         "label": "Instance",
@@ -3502,7 +3917,161 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total,instance)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},app)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Application",
+        "multi": true,
+        "name": "application",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},app)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, type)",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Type",
+        "multi": true,
+        "name": "type",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, type)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, metrics)",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Metrics",
+        "multi": true,
+        "name": "metrics",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, metrics)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, element)",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Element",
+        "multi": true,
+        "name": "element",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, element)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, quantile)",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Quantile",
+        "multi": true,
+        "name": "quantile",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, quantile)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -3516,151 +4085,14 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,app)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Application",
-        "multi": true,
-        "name": "application",
-        "options": [],
-        "query": {
-          "query": "label_values(siddhi_stream_throughput_total,app)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
           "selected": false,
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "$datasource",
-        "definition": "label_values(type)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Type",
-        "multi": true,
-        "name": "type",
-        "options": [],
-        "query": {
-          "query": "label_values(type)",
-          "refId": "StandardVariableQuery"
+        "datasource": {
+          "uid": "$datasource"
         },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(metrics)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Metrics",
-        "multi": true,
-        "name": "metrics",
-        "options": [],
-        "query": {
-          "query": "label_values(metrics)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(element)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Element",
-        "multi": true,
-        "name": "element",
-        "options": [],
-        "query": {
-          "query": "label_values(element)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "0",
-          "value": "0"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(quantile)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Quantile",
-        "multi": true,
-        "name": "quantile",
-        "options": [],
-        "query": {
-          "query": "label_values(quantile)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "contains",
-          "value": "contains"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(operation)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, operation)",
         "hide": 2,
         "includeAll": true,
         "label": "Operation",
@@ -3668,37 +4100,10 @@
         "name": "operation",
         "options": [],
         "query": {
-          "query": "label_values(operation)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, operation)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(job)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Job",
-        "multi": true,
-        "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -3710,7 +4115,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -3731,6 +4136,6 @@
   "timezone": "",
   "title": "WSO2 Siddhi Overall Statistics",
   "uid": "262-rPbWz",
-  "version": 11,
+  "version": 2,
   "weekStart": ""
 }

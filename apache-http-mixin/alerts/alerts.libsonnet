@@ -41,7 +41,7 @@
                      summary: 'Apache workers load is too high.',
                      description: |||
                        Apache workers in busy state approach the max workers count %(alertsWarningWorkersBusy)s%% workers busy on {{ $labels.instance }}.
-                       The currect value is {{ $value }}%%.
+                       The current value is {{ $value }}%%.
                      ||| % $._config,
                    },
                  },
@@ -58,7 +58,7 @@
                      summary: 'Apache response time is too high.',
                      description: |||
                        Apache average response time is above the threshold of %(alertsWarningResponseTimeMs)s ms on {{ $labels.instance }}.
-                       The currect value is {{ $value }} ms.
+                       The current value is {{ $value }} ms.
                      ||| % $._config,
                    },
                  },
@@ -77,12 +77,12 @@
                          increase(apache_response_http_codes_bucket{le=~"399"}[5m])
                        )
                        /
-                       increase(apache_response_http_codes_count{}[5m]) * 100
+                       increase(apache_response_http_codes_count[5m]) * 100
                        )
                        > %(alertsCriticalErrorsRate)s
                        unless 
                        # at least 100 calls
-                       increase(apache_accesses_total{}[5m]) > 100
+                       increase(apache_accesses_total[5m]) > 100
                      ||| % $._config,
                      'for': '5m',
                      labels: {
@@ -92,7 +92,7 @@
                        summary: 'Apache errors rate is too high.',
                        description: |||
                          Apache errors rate (4xx and 5xx HTTP codes) is above the threshold of %(alertsCriticalErrorsRate)s%% on {{ $labels.instance }}.
-                         The currect value is {{ $value }}%%.
+                         The current value is {{ $value }}%%.
                        ||| % $._config,
                      },
                    },

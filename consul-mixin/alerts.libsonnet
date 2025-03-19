@@ -13,7 +13,8 @@
             severity: 'critical',
           },
           annotations: {
-            message: "Consul '{{ $labels.job }}' is not up.",
+            summary: 'Consul is not up.',
+            description: "Consul '{{ $labels.job }}' is not up.",
           },
         },
         {
@@ -26,7 +27,8 @@
             severity: 'critical',
           },
           annotations: {
-            message: "Consul '{{ $labels.job }}' has no master.",
+            summary: 'Consul has no master.',
+            description: "Consul '{{ $labels.job }}' has no master.",
           },
         },
         {
@@ -39,7 +41,8 @@
             severity: 'critical',
           },
           annotations: {
-            message: "Consul '{{ $labels.job }}' does not have %(consul_replicas)s peers." % $._config,
+            summary: 'Consul does not have peers.' % $._config,
+            description: "Consul '{{ $labels.job }}' does not have %(consul_replicas)s peers." % $._config,
           },
         },
       ],

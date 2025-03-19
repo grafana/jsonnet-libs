@@ -8,7 +8,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: "Asterisk instance restarted in the last minute"
+      summary: "Asterisk instance restarted in the last minute."
       description: "Asterisk instance restarted in the last minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
   
   - alert: AsteriskReloaded
@@ -17,7 +17,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Asterisk instance reloaded in the last minute"
+      summary: "Asterisk instance reloaded in the last minute."
       description: "Asterisk instance reloaded in the last minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: AsteriskHighScrapeTime
@@ -26,7 +26,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: "Asterisk instance core high scrape time"
+      summary: "Asterisk instance core high scrape time."
       description: "Asterisk instance core high scrape time (Possible system performance degradation)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: AsteriskHighActiveCallsCount
@@ -35,6 +35,6 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Asterisk high active call count"
+      summary: "Asterisk high active call count."
       description: "Asterisk high active call count\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
       
