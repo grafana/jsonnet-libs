@@ -50,7 +50,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed mixins
         id: changed-mixins
-        uses: tj-actions/changed-files@v44
+        uses: step-security/changed-files@3dbe17c78367e7d60f00d78ae6781a35be47b4a1 # v45.0.1
         with:
           dir_names: true
           dir_names_exclude_current_dir: true
