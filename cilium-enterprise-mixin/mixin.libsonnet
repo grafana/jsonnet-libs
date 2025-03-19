@@ -1,6 +1,6 @@
 (import 'alerts/ciliumAlerts.libsonnet') +
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'cilium-agent-overview.json': (import 'dashboards/cilium-agent-overview.json'),
     'cilium-overview.json': (import 'dashboards/cilium-overview.json'),
     'cilium-operator.json': (import 'dashboards/cilium-operator.json'),
@@ -23,10 +23,5 @@
     'cilium-policy.json': (import 'dashboards/cilium-agent/cilium-policy.json'),
     'cilium-resource-utilization.json': (import 'dashboards/cilium-agent/cilium-resource-utilization.json'),
   },
-
-  // Helper function to ensure that we don't override other rules, by forcing
-  // the patching of the groups list, and not the overall rules object.
-  local importRules(rules) = {
-    groups+: std.native('parseYaml')(rules)[0].groups,
-  },
-}
+} +
+(import 'config.libsonnet')

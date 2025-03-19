@@ -1,0 +1,50 @@
+groups:
+    - name: GrafanaAgentHealthChecks
+      rules:
+        - alert: GrafanaAgentDown
+          annotations:
+            description: Grafana agent is down on {{ $labels.instance }} for the last 5 minutes
+            summary: Grafana agent is down.
+          expr: |
+            up{
+              job="integrations/agent",
+            } == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: GrafanaAgentUnstable
+          annotations:
+            description: Grafana agent is unstable or restarting on {{ $labels.instance }} over the last 15 minutes
+            summary: Grafana agent is unstable.
+          expr: |
+            avg_over_time(up{
+              job="integrations/agent",
+            }[5m]) < 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: GrafanaAgentCPUHigh
+          annotations:
+            description: Grafana agent is using more than 80 percent of CPU on {{ $labels.instance }} for the last 5 minutes
+            summary: Grafana agent high CPU usage.
+          expr: |
+            (
+              rate(process_cpu_seconds_total{
+                job=~"integrations/agent"
+              }[5m]) > 80 / 100
+            )
+          for: 5m
+          labels:
+            severity: warning
+        - alert: GrafanaAgentMemHigh
+          annotations:
+            description: Grafana agent is using more than 100 of memory on {{ $labels.instance }} for the last 5 minutes
+            summary: Grafana agent high memory usage.
+          expr: |
+            (
+              sum without (instance) (go_memstats_heap_inuse_bytes{job=~"integrations/agent"}) /
+              sum without (instance, instance_group_name) (agent_wal_storage_active_series{job=~"integrations/agent"}) / 1e3 > 100
+            )
+          for: 5m
+          labels:
+            severity: warning

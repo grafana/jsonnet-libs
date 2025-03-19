@@ -1,20 +1,22 @@
-{
-  grafanaDashboards: {
-    'kafka-overview.json': (import 'dashboards/kafka-overview.json'),
-    'kafka-topics.json': (import 'dashboards/kafka-topics.json'),
-    'zookeeper-overview.json': (import 'dashboards/zookeeper-overview.json'),
-    'ksqldb-overview.json': (import 'dashboards/ksqldb-overview.json'),
-    'connect-overview.json': (import 'dashboards/connect-overview.json'),
-    'schema-registry-overview.json': (import 'dashboards/schema-registry-overview.json'),
-    'kafka-lag-overview.json': (import 'dashboards/kafka-lag-overview.json'),
-  },
+// add dashboards from kafka-observ-lib(topic and consumer group overview dashboard):
+local kafkalib = import 'kafka-observ-lib/main.libsonnet';
+local config = (import 'config.libsonnet')._config;
+local kafka =
+  kafkalib.new()
+  + kafkalib.withConfigMixin(
+    {
+      filteringSelector: config.kafkaFilteringSelector,
+      zookeeperfilteringSelector: config.zookeeperFilteringSelector,
+      groupLabels: config.groupLabels,
+      instanceLabels: config.instanceLabels,
+      dashboardTags: config.dashboardTags,
+      metricsSource: 'grafanacloud',
+      jvmMetricsSource: 'prometheus_old',
+    }
+  );
 
-  // Helper function to ensure that we don't override other rules, by forcing
-  // the patching of the groups list, and not the overall rules object.
-  local importRules(rules) = {
-    groups+: std.native('parseYaml')(rules)[0].groups,
-  },
-
-  prometheusAlerts+:
-    importRules(importstr 'alerts/KafkaAlerts.yml'),
-}
+// generate monitoring-mixin format from kafka-observ-lib
+kafka.asMonitoringMixin() +
+// json dashboards and alerts:
+(import 'dashboards/dashboards.libsonnet') +
+(import 'config.libsonnet')

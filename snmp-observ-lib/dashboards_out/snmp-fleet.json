@@ -1,0 +1,1270 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n",
+               "hide": true,
+               "iconColor": "light-purple",
+               "name": "Critical alert",
+               "tagKeys": "job,instance",
+               "textFormat": "{{alertname}}",
+               "titleFormat": "Critical alert"
+            },
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=\"syslog\",instance=~\"$instance\", level=~\"critical|fatal|alert|error\"}\n",
+               "hide": true,
+               "iconColor": "light-purple",
+               "name": "Critical event logged",
+               "tagKeys": "job,instance,sysname,syslog_app_name,level",
+               "titleFormat": "Critical event logged"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"warning\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n",
+               "hide": true,
+               "name": "Warning alert",
+               "tagKeys": "job,instance",
+               "textFormat": "{{alertname}}",
+               "titleFormat": "Warning alert"
+            }
+         ]
+      },
+      "links": [
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "snmp"
+            ],
+            "title": "All network dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network devices overview.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": true
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Interfaces total"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Interfaces"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "System name"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "sysName"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "System name"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Version"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "version"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Version"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "thresholds"
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "orange",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "text",
+                                    "value": 600
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Network interface traffic out"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Transmitted"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Transmitted"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "fieldMinMax",
+                           "value": true
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Network interface traffic in"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Received"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Received"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "fieldMinMax",
+                           "value": true
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Network interface errors and drops"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Errors and drops"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "pps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Warning alert"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Warnings"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Critical alert"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Critical"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Drill down to ${__field.name} ${__value.text}",
+                                 "url": "d/snmp-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "Job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Filter by ${__field.name}",
+                                 "url": "d/snmp-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "options": {
+               "sortBy": [
+                  {
+                     "desc": true,
+                     "displayName": "Transmitted"
+                  }
+               ]
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count by (job,instance) (\n  ifOperStatus{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Interfaces",
+                  "refId": "Interfaces total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,instance,sysName) (\n  sysName{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: System name",
+                  "refId": "System name"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Version",
+                  "refId": "Version"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(\n  sum by (job,instance) (\n  sysUpTime{job=~\"$job\",instance=~\"$instance\"}\n)\n)/100",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "Uptime"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  cpmCPUTotal1minRev{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrProcessorLoad{hrDeviceType=\"1.3.6.1.2.1.25.3.1.3\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  jnxOperatingCPU{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: CPU utilization",
+                  "refId": "CPU utilization"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  # cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"2\" - processorMemory, cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  \n  (\n    cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"}\n    /\n    (cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"} + cempMemPoolFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n  ) * on (instance, cempMemPoolIndex) group_left () \n        (\n          cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 2)/2 \n          or (cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 10)/10 \n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"} + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}) * 100)\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  jnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Memory utilization",
+                  "refId": "Memory utilization"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "\n  (\n  sum by (job,instance) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: transmitted",
+                  "refId": "Network interface traffic out"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "\n  (\n  sum by (job,instance) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: received",
+                  "refId": "Network interface traffic in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,instance) (irate(ifOutErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifOutDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))+ \nsum by (job,instance) (irate(ifInUnknownProtos{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: errors and drops",
+                  "refId": "Network interface errors and drops"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count by (instance,job)(\n  count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"warning\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Warnings",
+                  "refId": "Warning alert"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count by (instance,job)(\n  count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Critical",
+                  "refId": "Critical alert"
+               }
+            ],
+            "title": "Network devices",
+            "transformations": [
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": {
+                        "instance": 1,
+                        "job": 0
+                     },
+                     "renameByName": {
+                        "Value": "Network devices",
+                        "instance": "Instance",
+                        "job": "Job"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface traffic out.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No traffic",
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 8
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: transmitted",
+                  "refId": "Network interface traffic out"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: received",
+                  "refId": "Network interface traffic in"
+               }
+            ],
+            "title": "Traffic",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface errors in.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No errors",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 16
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifInErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: errors in",
+                  "refId": "Network interface errors in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifOutErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: errors out",
+                  "refId": "Network interface errors out"
+               }
+            ],
+            "title": "Network errors",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface discards in.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No dropped packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifInDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: dropped in",
+                  "refId": "Network interface discards in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifOutDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: dropped out",
+                  "refId": "Network interface discards out"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifInUnknownProtos{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: unknown dropped in",
+                  "refId": "Network interface unknown protocol in packets dropped"
+               }
+            ],
+            "title": "Packets dropped",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface unicast packets in.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No unicast packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 24
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCInUcastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: unicast in",
+                  "refId": "Network interface unicast packets in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCOutUcastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: unicast out",
+                  "refId": "Network interface unicast packets out"
+               }
+            ],
+            "title": "Unicast",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface broadcast packets in.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No broadcast packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 24
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCInBroadcastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: broadcast in",
+                  "refId": "Network interface broadcast packets in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCOutBroadcastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: broadcast out",
+                  "refId": "Network interface broadcast packets out"
+               }
+            ],
+            "title": "Broadcast",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Network interface multicast packets in.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisLabel": "out(-) | in(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No multicast packets",
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/transmit|tx|out/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 24
+            },
+            "interval": "2m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCInMulticastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: multicast in",
+                  "refId": "Network interface multicast packets in"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  irate(ifHCOutMulticastPkts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)>0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: multicast out",
+                  "refId": "Network interface multicast packets out"
+               }
+            ],
+            "title": "Multicast",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "5m",
+      "schemaVersion": 39,
+      "tags": [
+         "snmp"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"ifOperStatus\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({__name__=~\"ifOperStatus\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "description": "Add additional filters",
+               "label": "Ad hoc filters",
+               "name": "adhoc",
+               "type": "adhoc"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "",
+      "title": "SNMP fleet overview",
+      "uid": "snmp-fleet"
+   }
