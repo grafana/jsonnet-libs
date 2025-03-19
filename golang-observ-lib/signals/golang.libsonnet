@@ -3,6 +3,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'go_info',
       otel: 'process_runtime_go_goroutines',
+      otel_with_suffixes: self.otel,
     },
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -23,6 +24,9 @@ function(this)
             },
           otel: {
             expr: 'runtime_uptime{%(queriesSelector)s}/1000',
+          },
+          otel_with_suffixes: {
+            expr: 'runtime_uptime_milliseconds_total{%(queriesSelector)s}/1000',
           },
         },
       },
@@ -54,6 +58,7 @@ function(this)
             {
               expr: 'process_runtime_go_goroutines{%(queriesSelector)s}',
             },
+          otel_with_suffixes: self.otel,
         },
       },
       cgoCalls: {
@@ -67,6 +72,7 @@ function(this)
           otel: {
             expr: 'process_runtime_go_cgo_calls{%(queriesSelector)s}',
           },
+          otel_with_suffixes: self.otel,
         },
       },
       // gc duration:
@@ -119,6 +125,7 @@ function(this)
           otel: {
             expr: 'process_runtime_go_gc_pause_ns_bucket{%(queriesSelector)s}',
           },
+          otel_with_suffixes: self.otel,
         },
       },
       goThreads: {
@@ -192,6 +199,9 @@ function(this)
           otel: {
             expr: 'process_runtime_go_mem_heap_alloc{%(queriesSelector)s}',
           },
+          otel_with_suffixes: {
+            expr: 'process_runtime_go_mem_heap_alloc_bytes{%(queriesSelector)s}',
+          },
         },
       },
       memHeapIdleBytes: {
@@ -208,6 +218,10 @@ function(this)
           otel: {
             expr: 'process_runtime_go_mem_heap_idle{%(queriesSelector)s}',
           },
+          otel_with_suffixes: {
+            expr: 'process_runtime_go_mem_heap_idle_bytes{%(queriesSelector)s}',
+          },
+
         },
       },
       memHeapInUseBytes: {
@@ -224,6 +238,9 @@ function(this)
           otel: {
             expr: 'process_runtime_go_mem_heap_inuse{%(queriesSelector)s}',
           },
+          otel_with_suffixes: {
+            expr: 'process_runtime_go_mem_heap_inuse_bytes{%(queriesSelector)s}',
+          },
         },
       },
       memHeapReleasedBytes: {
@@ -239,6 +256,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_go_mem_heap_released{%(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_go_mem_heap_released_bytes{%(queriesSelector)s}',
           },
         },
       },
@@ -258,6 +278,7 @@ function(this)
           otel: {
             expr: 'process_runtime_go_mem_heap_objects{%(queriesSelector)s}',
           },
+          otel_with_suffixes: self.otel,
         },
       },
 

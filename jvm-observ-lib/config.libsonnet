@@ -1,12 +1,12 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'jvm',
   dashboardNamePrefix: '',
   dashboardTags: ['java', 'jvm'],
-  metricsSource: ['java_micrometer', 'prometheus', 'prometheus_old', 'otel', 'jmx_exporter'],
+  metricsSource: ['java_micrometer', 'prometheus', 'prometheus_old', 'otel', 'otel_with_suffixes', 'jmx_exporter'],
   signals+:
     {
       memory: (import './signals/memory.libsonnet')(this),

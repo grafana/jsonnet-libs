@@ -1,7 +1,7 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
-  groupLabels: ['cluster'],
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
+  groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'zookeeper',
   dashboardNamePrefix: '',

@@ -82,7 +82,7 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
       // _config+:: this.config,
       grafanaDashboards+:: this.grafana.dashboards,
       prometheusAlerts+:: this.prometheus.alerts,
-      prometheusRuless+:: this.prometheus.recordingRules,
+      prometheusRules+:: this.prometheus.recordingRules,
     },
   },
 

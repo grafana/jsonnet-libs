@@ -273,8 +273,8 @@ local utils = commonlib.utils;
       )
       + gauge.queryOptions.withTargetsMixin(t.vCPUUsed)
       + gauge.standardOptions.withUnit('percent')
-      + gauge.standardOptions.withMin('0')
-      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.withMin(0)
+      + gauge.standardOptions.withMax(150)
       + gauge.standardOptions.thresholds.withSteps([
         gauge.standardOptions.threshold.step.withValue(0) +
         gauge.standardOptions.threshold.step.withColor('green'),
@@ -288,8 +288,8 @@ local utils = commonlib.utils;
       )
       + gauge.queryOptions.withTargetsMixin(t.RAMUsed)
       + gauge.standardOptions.withUnit('percent')
-      + gauge.standardOptions.withMin('0')
-      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.withMin(0)
+      + gauge.standardOptions.withMax(150)
       + gauge.standardOptions.thresholds.withSteps([
         gauge.standardOptions.threshold.step.withValue(0) +
         gauge.standardOptions.threshold.step.withColor('green'),

@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/kafka"
   zookeeperfilteringSelector: this.filteringSelector,
   groupLabels: ['kafka_cluster'],  // label(s) that defines kafka cluster
   instanceLabels: ['instance'],  // label(s) that defines single broker
@@ -17,6 +17,11 @@
 
   topicsFilteringSelector: 'topic!="__consumer_offsets"',
   consumerGroupFilteringSelector: 'consumergroup!=""',
+
+  // whether to use Grafana repeat panel feature for totalTime metrics
+  // when set to false, metrics are aggregated by cluster group level.
+  totalTimeMetricsRepeat: true,
+
   zookeeperEnabled: true,
   totalTimeMsQuantile: '0.95',  // quantile to use for totalTimeMs metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...
   zookeeperClientQuantile: '0.95',  // quantile to use for zookeeperClient metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...

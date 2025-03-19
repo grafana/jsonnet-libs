@@ -4,7 +4,7 @@
     // additional templates to wrap base expression
     functionTemplates::
       (
-        if aggLevel != 'none' && (type == 'counter' || type == 'gauge' || type == 'histogram')
+        if aggLevel != 'none' && (type == 'counter' || type == 'gauge' || type == 'histogram' || type == 'info')
         then
           [
             ['%(aggFunction)s by (%(agg)s) (', ')'],
@@ -41,8 +41,6 @@
 
   wrapLegend(legend, aggLevel, legendCustomTemplate):
     if legendCustomTemplate != null then legendCustomTemplate
-    else if
-      aggLevel == 'none' then legend
     else
       '%(aggLegend)s: ' + legend,
 
@@ -53,7 +51,6 @@
         if unit == 'seconds' || unit == 's' then 'percent'
         else if unit == 'requests' then 'rps'
         else if unit == 'packets' then 'pps'
-        else if unit == 'short' then '/s'
         else unit
       )
     else unit,

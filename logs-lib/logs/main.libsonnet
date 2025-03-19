@@ -16,6 +16,9 @@ local variables = import './variables.libsonnet';
     showLogsVolume=true,
     logsVolumeGroupBy='level',
     extraFilters='',
+    customAllValue='.*',
+    adHocEnabled=false,
+    adHocLabels=[],
   ): {
 
     local this = self,
@@ -25,6 +28,9 @@ local variables = import './variables.libsonnet';
       datasourceRegex,
       filterSelector,
       labels,
+      customAllValue,
+      adHocEnabled,
+      adHocLabels,
     ),
 
     targets: targets(

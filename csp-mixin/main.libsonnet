@@ -6,21 +6,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     config: config,
     signals:
       {
-        blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),
-        azureelasticpool: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureelasticpool, type=this.config.metricsSource),
-        azuresqldb: commonlib.signals.unmarshallJsonMulti(this.config.signals.azuresqldb, type=this.config.metricsSource),
+        [sig]: commonlib.signals.unmarshallJsonMulti(this.config.signals[sig], type=this.config.metricsSource)
+        for sig in std.objectFields(this.config.signals)
       },
     grafana: {
-      panels: (import './panels.libsonnet').new(this),
+      panels: (import './panels/main.libsonnet').new(this),
       rows: (import './rows.libsonnet').new(this),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
-      alerts: {},
+      alerts: this.config.prometheus.alerts,
       recordingRules: {},
     },
     asMonitoringMixin(): {
       grafanaDashboards+:: this.grafana.dashboards,
+      prometheusAlerts+:: this.prometheus.alerts,
     },
   },
 

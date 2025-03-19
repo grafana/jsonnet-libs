@@ -1,0 +1,168 @@
+groups:
+    - name: kafka-kafka-alerts
+      rules:
+        - alert: KafkaLagKeepsIncreasing
+          annotations:
+            description: 'Kafka lag keeps increasing over the last 15 minutes for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.'
+            summary: Kafka lag keeps increasing.
+          expr: |-
+            sum by (kafka_cluster, topic, consumergroup) (delta(kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}[5m])
+            or
+            delta(kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}[5m])) > 0
+          for: 15m
+          keep_firing_for: 10m
+          labels:
+            severity: warning
+        - alert: KafkaLagIsTooHigh
+          annotations:
+            description: 'Total kafka lag across all partitions is too high ({{ printf "%.0f" $value }}) for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.'
+            summary: Kafka lag is too high.
+          expr: |-
+            sum by (kafka_cluster, topic, consumergroup) (kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}
+            or
+            kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}) > 100
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaISRExpandRate
+          annotations:
+            description: Kafka broker {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} In-Sync Replica (ISR) is expanding by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR expansion rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.
+            summary: Kafka ISR expansion rate is expanding.
+          expr: |
+            sum by (kafka_cluster,instance) (sum by (kafka_cluster,instance) (kafka_server_replicamanager_isrexpandspersec{})
+            or
+            sum by (kafka_cluster,instance) (rate(kafka_server_replicamanager_isrexpands_total{}[5m]))
+            or
+            sum by (kafka_cluster,instance) (rate(kafka_server_replicamanager_total_isrexpandspersec_count{}[5m]))) != 0
+          for: 5m
+          keep_firing_for: 15m
+          labels:
+            severity: warning
+        - alert: KafkaISRShrinkRate
+          annotations:
+            description: Kafka broker {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} In-Sync Replica (ISR) is shrinking by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR shrink rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.
+            summary: Kafka ISR expansion rate is shrinking.
+          expr: |
+            sum by (kafka_cluster,instance) (sum by (kafka_cluster,instance)  (rate(kafka_server_replicamanager_isrshrinks_total{}[5m]))
+            or
+            sum by (kafka_cluster,instance)  (rate(kafka_server_replicamanager_total_isrshrinkspersec_count{}[5m]))
+            or
+            sum by (kafka_cluster,instance) (kafka_server_replicamanager_isrshrinkspersec{})) != 0
+          for: 5m
+          keep_firing_for: 15m
+          labels:
+            severity: warning
+        - alert: KafkaOfflinePartitonCount
+          annotations:
+            description: Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.
+            summary: Kafka has offline partitons.
+          expr: |
+            sum by (kafka_cluster) (kafka_controller_kafkacontroller_offlinepartitionscount_value{}
+            or
+            kafka_controller_kafkacontroller_offlinepartitionscount{}) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaUnderReplicatedPartitionCount
+          annotations:
+            description: Kafka broker {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} has {{ $value }} under replicated partitons
+            summary: Kafka has under replicated partitons.
+          expr: |
+            sum by (kafka_cluster,instance) (kafka_cluster_partition_underreplicated{}) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaNoActiveController
+          annotations:
+            description: Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} broker(s) reporting as the active controller in the last 5 minute interval. During steady state there should be only one active controller per cluster.
+            summary: Kafka has no active controller.
+          expr: |-
+            sum by(kafka_cluster) (kafka_controller_kafkacontroller_activecontrollercount_value{}
+            or
+            kafka_controller_kafkacontroller_activecontrollercount{}) != 1
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaUncleanLeaderElection
+          annotations:
+            description: Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} unclean partition leader elections reported in the last 5 minute interval. When unclean leader election is held among out-of-sync replicas, there is a possibility of data loss if any messages were not synced prior to the loss of the former leader. So if the number of unclean elections is greater than 0, investigate broker logs to determine why leaders were re-elected, and look for WARN or ERROR messages. Consider setting the broker configuration parameter unclean.leader.election.enable to false so that a replica outside of the set of in-sync replicas is never elected leader.
+            summary: Kafka has unclean leader elections.
+          expr: |-
+            (sum by (kafka_cluster,instance) (kafka_controller_controllerstats_uncleanleaderelectionspersec{})
+            or
+            sum by (kafka_cluster,instance) (rate(kafka_controller_controllerstats_uncleanleaderelections_total{}[5m]))) != 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaBrokerCount
+          annotations:
+            description: Kafka cluster {{ $labels.kafka_cluster }} broker count is 0.
+            summary: Kafka has no brokers online.
+          expr: |-
+            count by(kafka_cluster) (kafka_server_kafkaserver_brokerstate{}
+            or
+            kafka_server_kafkaserver_total_brokerstate_value{}) == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaZookeeperSyncConnect
+          annotations:
+            description: Kafka broker {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} has disconected from Zookeeper.
+            summary: Kafka Zookeeper sync disconected.
+          expr: |-
+            avg by(kafka_cluster,instance) (rate(kafka_server_sessionexpirelistener_zookeepersyncconnects_total{quantile="0.95",}[5m])
+            or
+            rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{quantile="0.95",}[5m])) < 0
+          for: 5m
+          labels:
+            severity: critical
+    - name: kafka-jvm-alerts
+      rules:
+        - alert: JvmMemoryFillingUp
+          annotations:
+            description: JVM heap memory usage is at {{ printf "%.0f" $value }}% over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 80%.
+            summary: JVM heap memory filling up.
+          expr: |-
+            ((java_lang_memory_heapmemoryusage_used{}
+            or
+            sum without (id) (jvm_memory_bytes_used{area="heap", })
+            or
+            sum without (id) (jvm_memory_used_bytes{area="heap", }))/(java_lang_memory_heapmemoryusage_max{} != -1
+            or
+            sum without (id) (jvm_memory_bytes_max{area="heap", } != -1)
+            or
+            sum without (id) (jvm_memory_max_bytes{area="heap", } != -1))) * 100 > 80
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: JvmThreadsDeadlocked
+          annotations:
+            description: 'JVM deadlock detected: Threads in the JVM application {{$labels.instance}} are in a cyclic dependency with each other. The restart is required to resolve the deadlock.'
+            summary: JVM deadlock detected.
+          expr: (jvm_threads_deadlocked{}) > 0
+          for: 2m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+    - name: kafka-zookeeper-jvm-alerts
+      rules:
+        - alert: JvmMemoryFillingUp
+          annotations:
+            description: JVM heap memory usage is at {{ printf "%.0f" $value }}% over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 80%.
+            summary: JVM heap memory filling up.
+          expr: ((sum without (id) (jvm_memory_bytes_used{area="heap", }))/(sum without (id) (jvm_memory_bytes_max{area="heap", } != -1))) * 100 > 80
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: JvmThreadsDeadlocked
+          annotations:
+            description: 'JVM deadlock detected: Threads in the JVM application {{$labels.instance}} are in a cyclic dependency with each other. The restart is required to resolve the deadlock.'
+            summary: JVM deadlock detected.
+          expr: (jvm_threads_deadlocked{}) > 0
+          for: 2m
+          keep_firing_for: 5m
+          labels:
+            severity: critical

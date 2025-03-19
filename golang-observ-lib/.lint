@@ -1,11 +1,18 @@
 exclusions:
   panel-units-rule:
     reason: "Table doesn't require units."
-    entities:
-      - panel: Table 1
+    entries:
+      - panel: "CGo calls"
+      - panel: "Threads used"
+
   target-job-rule:
     reason: Use filteringSelector with static job
   panel-datasource-rule:
     reason: "grafonnet created panels use --Mixed-- datasource by default."
   template-instance-rule:
     reason: "instanceLabels must be single-select for single instance dashboards."
+  panel-title-description-rule:
+    reason: "Memory panels don't require descriptions"
+    entries:
+      - panel: Memory off-heap
+      - panel: Memory stack

@@ -1,0 +1,53 @@
+groups:
+    - name: vsphere
+      rules:
+        - alert: VSphereHostInfoCpuUtilization
+          annotations:
+            description: |
+                The CPU utilization of the host system {{ $labels.vcenter_host_name }} is now above 90%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: CPU is approaching a high threshold of utilization for an ESXi host. High CPU utilization may lead to performance degradation and potential downtime for virtual machines running on a host.
+          expr: |
+            vcenter_host_cpu_utilization_percent{job=~"integrations/vsphere"} > 90
+          for: 15m
+          labels:
+            severity: info
+        - alert: VSphereHostWarningMemoryUtilization
+          annotations:
+            description: |
+                The memory utilization of the host system {{ $labels.vcenter_host_name }} is now above 90%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: Memory is approaching a high threshold of utilization for an ESXi host. High memory utilization may cause the host to become unresponsive and impact the performance of virtual machines running on this host.
+          expr: |
+            vcenter_host_memory_utilization_percent{job=~"integrations/vsphere"} > 90
+          for: 15m
+          labels:
+            severity: warning
+        - alert: VSphereDatastoreWarningDiskUtilization
+          annotations:
+            description: |
+                The disk utilization of the datastore {{ $labels.vcenter_datastore_name }} is now above 75%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: Disk space is approaching a warning threshold of utilization for a datastore. Low disk space may prevent virtual machines from functioning properly and cause data loss.
+          expr: |
+            vcenter_datastore_disk_utilization_percent{job=~"integrations/vsphere"} > 75
+          for: 5m
+          labels:
+            severity: warning
+        - alert: VSphereDatastoreCriticalDiskUtilization
+          annotations:
+            description: |
+                The disk utilization of the datastore {{ $labels.vcenter_datastore_name }} is now above 90%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: Disk space is approaching a critical threshold of utilization for a datastore. Low disk space may prevent virtual machines from functioning properly and cause data loss.
+          expr: |
+            vcenter_datastore_disk_utilization_percent{job=~"integrations/vsphere"} > 90
+          for: 5m
+          labels:
+            severity: critical
+        - alert: VSphereHostWarningHighPacketErrors
+          annotations:
+            description: |
+                The percentage of packet errors on the ESXi host {{ $labels.vcenter_host_name }} is now above 20%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: High percentage of packet errors seen for ESXi host. High packet errors may indicate network issues that can lead to poor performance and connectivity problems for virtual machines running on this host.
+          expr: |
+            100 * sum without (direction, object) (vcenter_host_network_packet_error_rate{object="",job=~"integrations/vsphere"}) / clamp_min(sum without (direction, object) (vcenter_host_network_packet_rate{object="",job=~"integrations/vsphere"}), 1) > 20
+          for: 5m
+          labels:
+            severity: warning

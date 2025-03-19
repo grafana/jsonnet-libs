@@ -6,7 +6,7 @@
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
   // 'uid' - UID to prefix all dashboards original uids
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
@@ -18,7 +18,7 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
-  metricsSource: ['prometheus'],  // or any combination of: prometheus, otel, java_otel, java_micrometer.
+  metricsSource: ['prometheus'],  // or any combination of: prometheus, otel, otel_with_suffixes, java_otel, java_otel_with_suffixes, java_micrometer.
   signals+:
     {
       system: (import './signals/system.libsonnet')(this),

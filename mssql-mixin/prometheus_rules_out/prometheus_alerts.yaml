@@ -1,0 +1,48 @@
+groups:
+    - name: MSSQLAlerts
+      rules:
+        - alert: MSSQLHighNumberOfDeadlocks
+          annotations:
+            description: '{{ printf "%.2f" $value }} deadlocks have occurred over the last 5 minutes on {{$labels.instance}}, which is above threshold of 10 deadlocks.'
+            summary: There are deadlocks ocurring in the database.
+          expr: |
+            increase(mssql_deadlocks_total{}[5m]) > 10
+          for: 5m
+          labels:
+            severity: warning
+        - alert: MSSQLModerateReadStallTime
+          annotations:
+            description: '{{ printf "%.2f" $value }}ms of IO read stall has occurred on {{$labels.instance}}, which is above threshold of 200ms.'
+            summary: There is a moderate amount of IO stall for database reads.
+          expr: |
+            1000 * increase(mssql_io_stall_seconds_total{operation="read"}[5m]) > 200
+          for: 5m
+          labels:
+            severity: warning
+        - alert: MSSQLHighReadStallTime
+          annotations:
+            description: '{{ printf "%.2f" $value }}ms of IO read stall has occurred on {{$labels.instance}}, which is above threshold of 400ms.'
+            summary: There is a high amount of IO stall for database reads.
+          expr: |
+            1000 * increase(mssql_io_stall_seconds_total{operation="read"}[5m]) > 400
+          for: 5m
+          labels:
+            severity: critical
+        - alert: MSSQLModerateWriteStallTime
+          annotations:
+            description: '{{ printf "%.2f" $value }}ms of IO write stall has occurred on {{$labels.instance}}, which is above threshold of 200ms.'
+            summary: There is a moderate amount of IO stall for database writes.
+          expr: |
+            1000 * increase(mssql_io_stall_seconds_total{operation="write"}[5m]) > 200
+          for: 5m
+          labels:
+            severity: warning
+        - alert: MSSQLHighWriteStallTime
+          annotations:
+            description: '{{ printf "%.2f" $value }}ms of IO write stall has occurred on {{$labels.instance}}, which is above threshold of 400ms.'
+            summary: There is a high amount of IO stall for database writes.
+          expr: |
+            1000 * increase(mssql_io_stall_seconds_total{operation="write"}[5m]) > 400
+          for: 5m
+          labels:
+            severity: critical

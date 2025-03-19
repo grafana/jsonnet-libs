@@ -12,7 +12,7 @@ base {
 
   // when attached to table, this function applies style to row named 'name="Uptime"'
   stylizeByName(name='Uptime'):
-    table.standardOptions.withOverrides(
+    table.standardOptions.withOverridesMixin(
       fieldOverride.byName.new(name)
       + fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' })
       + fieldOverride.byName.withPropertiesFromOptions(uptime.stylize(allLayers=false),)

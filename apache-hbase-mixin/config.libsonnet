@@ -1,6 +1,6 @@
 {
   _config+:: {
-    filterSelector: 'job=~"integrations/apache-hbase"',
+    filterSelector: 'job="integrations/apache-hbase"',
 
     dashboardTags: ['apache-hbase-mixin'],
     dashboardPeriod: 'now-30m',

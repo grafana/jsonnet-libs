@@ -8,6 +8,7 @@ base {
     name,
     type,
     unit,
+    nameShort,
     description,
     aggLevel,
     aggFunction,
@@ -19,6 +20,7 @@ base {
       name,
       type,
       unit,
+      nameShort,
       description,
       aggLevel,
       aggFunction,
@@ -28,6 +30,18 @@ base {
     )
 
     {
+      local this = self,
+      withQuantile(quantile=0.95):
+        self
+        {
+          sourceMaps:
+            [
+              source
+              {
+                quantile: quantile,
+              }
+              for source in super.sourceMaps
+            ],
+        },
     },
-
 }

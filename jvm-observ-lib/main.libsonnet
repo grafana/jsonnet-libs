@@ -21,6 +21,7 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           metricsSource:
             []
             + (if std.member(this.config.metricsSource, 'otel') then ['java_otel'] else [])
+            + (if std.member(this.config.metricsSource, 'otel_with_suffixes') then ['java_otel_with_suffixes'] else [])
             + (if std.member(this.config.metricsSource, 'prometheus') then ['prometheus'] else [])
             + (if std.member(this.config.metricsSource, 'jmx_exporter') then ['jmx_exporter'] else [])
             + (if std.member(this.config.metricsSource, 'prometheus_old') then ['prometheus'] else [])
@@ -51,7 +52,7 @@ local processlib = import 'process-observ-lib/main.libsonnet';
       // _config+:: this.config,
       grafanaDashboards+:: this.grafana.dashboards,
       prometheusAlerts+:: this.prometheus.alerts,
-      prometheusRuless+:: this.prometheus.recordingRules,
+      prometheusRules+:: this.prometheus.recordingRules,
     },
   },
 

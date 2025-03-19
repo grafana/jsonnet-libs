@@ -3,7 +3,9 @@ function(this)
     discoveryMetric: {
       // https://opentelemetry.io/docs/specs/semconv/system/process-metrics/
       otel: 'runtime_uptime',
+      otel_with_suffixes: 'runtime_uptime_milliseconds_total',
       java_otel: self.otel,  // some system metrics are calculated differently for java
+      java_otel_with_suffixes: self.otel_with_suffixes,
       java_micrometer: 'process_uptime_seconds',
       // https://prometheus.github.io/client_java/instrumentation/jvm/#process-metrics
       // https://github.com/prometheus/client_golang
@@ -28,6 +30,7 @@ function(this)
           java_otel: {
             expr: 'process_runtime_jvm_system_cpu_load_1m{%(queriesSelector)s}',
           },
+          java_otel_with_suffixes: self.java_otel,
           java_micrometer: {
             expr: 'system_load_average_1m{%(queriesSelector)s}',
           },
@@ -48,6 +51,9 @@ function(this)
           },
           java_otel: {
             expr: 'process_runtime_jvm_system_cpu_utilization{%(queriesSelector)s}',
+          },
+          java_otel_with_suffixes: {
+            expr: 'process_runtime_jvm_system_cpu_utilization_ratio{%(queriesSelector)s}',
           },
           jmx_exporter: {
             expr: 'java_lang_operatingsystem_cpuload{%(queriesSelector)s}',

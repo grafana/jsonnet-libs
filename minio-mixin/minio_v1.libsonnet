@@ -120,4 +120,6 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
       'Outbound-{{instance}}',
     ],)
   )
+
 )
+{ editable: false }

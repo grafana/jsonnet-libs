@@ -9,6 +9,7 @@ base {
   new(
     name,
     type,
+    nameShort,
     description,
     aggLevel,
     aggFunction,
@@ -20,6 +21,7 @@ base {
       name,
       type,
       'short',
+      nameShort,
       description,
       aggLevel,
       aggFunction,

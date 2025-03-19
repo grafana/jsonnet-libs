@@ -9,7 +9,6 @@ local signalInit = signal.init(
 {
   multiChoice: {
     local raw = signalInit.getVariablesMultiChoice(),
-    raw:: raw,
     testResult: test.suite({
       testDS: {
         actual: raw[0],
@@ -27,7 +26,6 @@ local signalInit = signal.init(
   },
   singleChoice: {
     local raw = signalInit.getVariablesSingleChoice(),
-    raw:: raw,
     testResult: test.suite({
       testDS: {
         actual: raw[0],

@@ -1,0 +1,981 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "OpenLDAP logs",
+            "type": "link",
+            "url": "/d/openldap-logs"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The total time since the LDAP server was last started.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               },
+               "textMode": "value"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Uptime,cn=Time,cn=Monitor\"}",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Uptime",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of LDAP referrals.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               },
+               "textMode": "value"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Referrals,cn=Statistics,cn=Monitor\"}",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Referrals",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\""
+            },
+            "pluginVersion": "v10.0.0",
+            "title": "OpenLDAP alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The increase of new LDAP connections over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 6
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Current,cn=Connections,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Connections / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of read and write waiters.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 6
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Read,cn=Waiters,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Read"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Write,cn=Waiters,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Write"
+               }
+            ],
+            "title": "Waiters",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The total increase of new directory entries added over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 6
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Directory entries / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The LDAP network connection attempts over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 12
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_dial{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Network connectivity / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of LDAP Protocol Data Units (PDUs) processed over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 12
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=PDU,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "PDU processed / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The total increase of authentication attempts over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 12
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_bind{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Authentication attempts / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The key LDAP operations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 18
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Add,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Add"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Bind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Bind"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Modify,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Modify"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Search,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Search"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Delete,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Delete"
+               }
+            ],
+            "title": "Core operations / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The less frequent but important LDAP operations.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 18
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Abandon"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Compare,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Compare"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Unbind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Unbind"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Extended,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Extended"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Modrdn,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - Modrdn"
+               }
+            ],
+            "title": "Auxiliary operations / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The active, open, and maximum threads in the LDAP server.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 24
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Open,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Open"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Active,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Active"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Max,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Max"
+               }
+            ],
+            "title": "Primary thread activity",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The LDAP server's thread backlog and pending status.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        },
+                        {
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 24
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Starting,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Starting"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Pending,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Pending"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Max Pending,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Max Pending"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Backload,cn=Threads,cn=Monitor\"}",
+                  "legendFormat": "{{instance}} - Backload"
+               }
+            ],
+            "title": "Thread queue management",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "openldap"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(openldap_dial{job=~\"integrations/openldap\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(openldap_dial{job=~\"integrations/openldap\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "OpenLDAP overview",
+      "uid": "openldap-overview"
+   }
