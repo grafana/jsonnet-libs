@@ -21,9 +21,11 @@ Workflow to generate dashboards would be as follows:
 
 These functions modify one of the signal's property and then  return signal back. Can be used as part of the builder pattern.
 
-- withTopK(limit=25) - wraps signal expression into topk().
-- withOffset(offset) - adds offset modifier to the expression.
-- withFilteringSelectorMixin(mixin) - adds additional selector to filteringSelector used.
+- withTopK(limit=25) - wrap signal expression into topk().
+- withExprWrappersMixin(wrapper=[]) - wrap signal expression into additional function on top of existing wrappers.
+- withOffset(offset) - add offset modifier to the expression.
+- withFilteringSelectorMixin(mixin) - add additional selector to filteringSelector used.
+- withQuantile(quantile=0.95) - add quantile modifier to the expression for histogram signals.
 
 ### Render functions
 
@@ -81,6 +83,7 @@ Init level:
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
 |varAdHocEnabled| Attach ad hoc labels to variables generated. |`true`,`false`|`false`|`false`|
 |varAdHocLabels| Limit ad hoc to the specific labels |*|`["environment"]`|`[]`|
+|enableLokiLogs| Add additional loki datasource to variables generation |`true`,`false`|`true`|`false`|
 
 Signal's level:
 
@@ -89,6 +92,7 @@ Signal's level:
 |name|Signal's name. Used to populate panel's titles. |*|CPU utilization|-|
 |nameShort|Signal's short name. Used to populate panel's legends and column names. |*|CPU|-|
 |type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
+|optional| Set this signal optional.| true,false | false | false|
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
 |sourceMaps[].expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
@@ -100,6 +104,7 @@ Signal's level:
 |sourceMaps[].valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |sourceMaps[].legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{topic}}`|
 |sourceMaps[].rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
+|sourceMaps[].quantile| Only applicable to `histogram` metrics. Defines quantile for histogram metrics. |0.01-0.99|`0.99`|`0.95`|
 
 ## Expressions templating
 
@@ -115,6 +120,9 @@ The following is supported in expressions and legends:
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
 
+## Making signals optional
+
+When defining signals from multiple sources, you can make some of the signals optional. In this case, rendering will not throw a validation error that signal is missing for the specific source, while internal 'stub' type will be used and empty panel will be rendered instead.
 
 ## Example 1: From JSON
 

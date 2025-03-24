@@ -1,3 +1,19 @@
+# 0.3.3
+- [Signal] add `withQuantile(quantile=0.95)` to histogram signals.
+
+# 0.3.2
+- [Signal] Fix combining info metrics.
+
+# 0.3.1
+- [Signal] Fix optional signals (type=stub).
+- [Signal] Add optional signals documentation.
+
+# 0.3.0
+
+- [Signal] Add new signal `log`.
+- [Signal] Add enableLokiLogs=true|false to signals init.
+- [Signal] `withExprWrappersMixin(offset)` - wrap signal expression into additional function on top of existing wrappers.
+
 # 0.2.0
 
 - [Signal] `withOffset(offset)` - add offset modifier to the expression.

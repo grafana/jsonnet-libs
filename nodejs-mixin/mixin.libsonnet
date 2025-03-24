@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
+  grafanaDashboards+:: {
     'nodejs-overview.json': (import 'dashboards/nodejs-overview.json'),
   },
 
@@ -9,5 +9,5 @@
     groups+: std.parseYaml(rules).groups,
   },
 
-  prometheusAlerts+: importRules(importstr 'alerts/alerts.yaml'),
+  prometheusAlerts+:: importRules(importstr 'alerts/alerts.yaml'),
 }

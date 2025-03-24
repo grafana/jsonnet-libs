@@ -5,6 +5,7 @@ local counter = import './counter.libsonnet';
 local gauge = import './gauge.libsonnet';
 local histogram = import './histogram.libsonnet';
 local info = import './info.libsonnet';
+local log = import './log.libsonnet';
 local raw = import './raw.libsonnet';
 local stub = import './stub.libsonnet';
 {
@@ -31,8 +32,8 @@ local stub = import './stub.libsonnet';
   // DEPRECATED. Use unmarshallJsonMulti instead.
   unmarshallJson(signalsJson):
     self.init(
-      datasource=std.get(signalsJson, 'datasource', 'datasource'),
-      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
+      datasource=std.get(signalsJson, 'datasource', if std.get(signalsJson, 'enableLokiLogs', false) then 'prometheus_datasource' else 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', if std.get(signalsJson, 'enableLokiLogs', false) then 'Prometheus data source' else 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -46,6 +47,7 @@ local stub = import './stub.libsonnet';
       rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'),  // rate, irate , delta, increase, idelta...
       varAdHocEnabled=std.get(signalsJson, 'varAdHocEnabled', false),
       varAdHocLabels=std.get(signalsJson, 'varAdHocLabels', []),
+      enableLokiLogs=std.get(signalsJson, 'enableLokiLogs', false),
     )
     +
     {
@@ -68,6 +70,7 @@ local stub = import './stub.libsonnet';
             type: std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
             legendCustomTemplate: std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             valueMappings: std.get(signalsJson.signals[s], 'valueMappings', []),
+            quantile: std.get(signalsJson.signals[s], 'quantile', 0.95),
           },
         ],
       )
@@ -85,8 +88,8 @@ local stub = import './stub.libsonnet';
       );
 
     self.init(
-      datasource=std.get(signalsJson, 'datasource', 'datasource'),
-      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
+      datasource=std.get(signalsJson, 'datasource', if std.get(signalsJson, 'enableLokiLogs', false) then 'prometheus_datasource' else 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', if std.get(signalsJson, 'enableLokiLogs', false) then 'Prometheus data source' else 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -100,6 +103,7 @@ local stub = import './stub.libsonnet';
       rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
       varAdHocEnabled=std.get(signalsJson, 'varAdHocEnabled', false),
       varAdHocLabels=std.get(signalsJson, 'varAdHocLabels', []),
+      enableLokiLogs=std.get(signalsJson, 'enableLokiLogs', false),
     )
     +
     {
@@ -129,6 +133,7 @@ local stub = import './stub.libsonnet';
                 infoLabel: std.get(source.value, 'infoLabel', null),
                 legendCustomTemplate: std.get(source.value, 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
                 valueMappings: std.get(source.value, 'valueMappings', []),
+                quantile: std.get(source.value, 'quantile', 0.95),
               }
               for source in std.objectKeysValues(signalsJson.signals[s].sources)
               if std.member(validatedArr, source.key)
@@ -149,6 +154,7 @@ local stub = import './stub.libsonnet';
            else
              super.addSignal(
                name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
+               nameShort=std.get(signalsJson.signals[s], 'nameShort', name),
                type='stub',
                description=std.get(signalsJson.signals[s], 'description', ''),
              ))
@@ -177,10 +183,12 @@ local stub = import './stub.libsonnet';
     rangeFunction='rate',
     varAdHocEnabled=false,
     varAdHocLabels=[],
+    enableLokiLogs=false,
   ): self {
 
     local this = self,
-    datasource:: datasource,
+    datasource:: if enableLokiLogs && datasource == 'datasource' then 'prometheus_datasource' else datasource,
+    datasourceLabel:: if enableLokiLogs && datasourceLabel == 'Data source' then 'Prometheus data source' else datasourceLabel,
     aggLevel:: aggLevel,
     aggKeepLabels:: aggKeepLabels,
     aggFunction:: aggFunction,
@@ -191,10 +199,11 @@ local stub = import './stub.libsonnet';
       groupLabels,
       instanceLabels,
       varMetric=varMetric,
-      prometheusDatasourceName=datasource,
-      prometheusDatasourceLabel=datasourceLabel,
+      prometheusDatasourceName=this.datasource,
+      prometheusDatasourceLabel=this.datasourceLabel,
       adHocEnabled=varAdHocEnabled,
       adHocLabels=varAdHocLabels,
+      enableLokiLogs=enableLokiLogs,
     ),
     // vars are used in templating(legend+expressions)
     templatingVariables: {
@@ -216,7 +225,7 @@ local stub = import './stub.libsonnet';
       grafanaVariables.datasources[type],
 
     //name: metric simple name
-    //type: counter, gauge, histogram, // TODO: info metric, status_map metric....
+    //type: counter, gauge, histogram, raw, info, log
     //unit: simple unit
     //description: metric description
     //exprTemplate: expression template
@@ -239,6 +248,7 @@ local stub = import './stub.libsonnet';
           type: type,
           legendCustomTemplate: null,
           valueMappings: [],
+          quantile: 0.95,
         },
       ],
     ):
@@ -246,7 +256,7 @@ local stub = import './stub.libsonnet';
       std.prune(
         {
           checks: [
-            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
+            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub' && type != 'log') then error "type must be one of 'gauge','histogram','counter','raw','info','log'. Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
           ],
         }
@@ -260,7 +270,7 @@ local stub = import './stub.libsonnet';
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          datasource=datasource,
+          datasource=this.datasource,
           vars=this.templatingVariables,
           sourceMaps=sourceMaps,
         )
@@ -273,7 +283,7 @@ local stub = import './stub.libsonnet';
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          datasource=datasource,
+          datasource=this.datasource,
           vars=this.templatingVariables,
           sourceMaps=sourceMaps,
         )
@@ -286,7 +296,7 @@ local stub = import './stub.libsonnet';
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          datasource=datasource,
+          datasource=this.datasource,
           vars=this.templatingVariables,
           sourceMaps=sourceMaps,
         )
@@ -299,7 +309,20 @@ local stub = import './stub.libsonnet';
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          datasource=datasource,
+          datasource=this.datasource,
+          vars=this.templatingVariables,
+          sourceMaps=sourceMaps,
+        )
+      else if type == 'log' then
+        log.new(
+          name=name,
+          type=type,
+          unit='none',
+          nameShort=nameShort,
+          description=description,
+          aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          datasource='loki_datasource',
           vars=this.templatingVariables,
           sourceMaps=sourceMaps,
         )
@@ -311,7 +334,7 @@ local stub = import './stub.libsonnet';
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          datasource=datasource,
+          datasource=this.datasource,
           vars=this.templatingVariables,
           sourceMaps=sourceMaps,
         )

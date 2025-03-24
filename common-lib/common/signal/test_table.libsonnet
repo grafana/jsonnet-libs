@@ -83,7 +83,25 @@ local m1 = signal.init(
             pluginVersion: 'v11.0.0',
             targets: [{ datasource: { type: 'prometheus', uid: '${datasource}' }, expr: 'max by (job,instance) (\n  rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m])\n)', format: 'table', instant: true, legendFormat: '{{instance}}: Requests', refId: 'API server requests' }],
             title: 'API server requests',
-            transformations: [{ id: 'merge' }, { id: 'renameByRegex', options: { regex: 'Value #(.*)', renamePattern: '$1' } }, { id: 'filterFieldsByName', options: { include: { pattern: '^(?!Time).*$' } } }, { id: 'organize', options: { indexByName: { instance: 1, job: 0 }, renameByName: { instance: 'Instance', job: 'Job' } } }],
+            transformations: [
+              { id: 'merge' },
+              { id: 'renameByRegex', options: { regex: 'Value #(.*)', renamePattern: '$1' } },
+              { id: 'filterFieldsByName', options: { include: { pattern: '^(?!Time).*$' } } },
+              {
+                id: 'organize',
+                options:
+                  {
+                    indexByName: { instance: 1, job: 0 },
+                    renameByName:
+                      {
+                        Value: 'API server requests',
+                        instance: 'Instance',
+                        job: 'Job',
+                      },
+
+                  },
+              },
+            ],
             type: 'table',
           },
         },
@@ -108,7 +126,12 @@ local m1 = signal.init(
               id: 'organize',
               options: {
                 indexByName: { instance: 1, job: 0 },
-                renameByName: { instance: 'Instance', job: 'Job' },
+                renameByName:
+                  {
+                    Value: 'API server requests',
+                    instance: 'Instance',
+                    job: 'Job',
+                  },
               },
             },
           ],

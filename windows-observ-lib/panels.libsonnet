@@ -298,7 +298,7 @@ local utils = commonlib.utils;
       ),
       diskFreeTs:
         commonlib.panels.disk.timeSeries.available.new(
-          'Filesystem space availabe',
+          'Filesystem space available',
           targets=[
             t.diskFree,
           ],

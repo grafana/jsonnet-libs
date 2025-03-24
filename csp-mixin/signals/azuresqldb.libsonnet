@@ -7,7 +7,8 @@ function(this)
     instanceLabels: this.instanceLabels,
     aggLevel: 'none',
     discoveryMetric: {
-      azuremonitor: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count',
+      azuremonitor: 'azure_microsoft_sql_servers_databases_sessions_count_average_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
 
     signals: {

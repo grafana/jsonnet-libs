@@ -51,7 +51,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.consumerGroup.consumerGroupTable { gridPos+: { w: 24, h: 8 } },
         ]
 
-
         +
         if std.member(type, 'grafanacloud') then
           [

@@ -18,7 +18,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   ): {
 
     local prometheusQuery = g.query.prometheus,
-    local lokiQuery = g.query.loki,
     local this = self,
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
     local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
@@ -26,7 +25,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
-        '\nor\n',
+        if type == 'info' then '\nor ignoring(%s)\n' % std.join(',', this.combineUniqueInfoLabels(sourceMaps)) else '\nor\n',
         std.uniq(  // keep unique only
           std.sort(expressions)
         )
@@ -144,6 +143,19 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             for source in this.sourceMaps
           ],
       },
+
+    withExprWrappersMixin(wrappers=[]):
+      this
+      {
+        sourceMaps:
+          [
+            source
+            {
+              exprWrappers+: [wrappers],
+            }
+            for source in this.sourceMaps
+          ],
+      },
     //Return as grafana panel target(query+legend)
     asTarget(name=signalName):
       prometheusQuery.new(
@@ -245,6 +257,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            q=std.get(source, 'quantile', default=0.95),
             aggLevel=aggLevel,
             rangeFunction=source.rangeFunction,
           ).applyFunctions()
@@ -262,6 +275,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            q=std.get(source, 'quantile', default=0.95),
             aggLevel='none',
             rangeFunction=source.rangeFunction,
           ).applyFunctions()
@@ -344,6 +358,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     std.mapWithIndex(function(i, e) { index: i, el: e }, this.vars.aggLabels)
                 },
                 renameByName:
+                  // If 'Value' is still present, then rename value to signal name.
+                  // this is the case if only single query is used in the table.
+                  {
+                    Value: name,
+                  }
+                  +
                   {
                     [label]: utils.toSentenceCase(label)
                     for label in this.vars.aggLabels

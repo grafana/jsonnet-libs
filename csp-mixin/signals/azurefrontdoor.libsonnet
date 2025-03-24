@@ -4,12 +4,14 @@ function(this)
     local s = self,
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: ['dimensionEndpoint'],
+    instanceLabels: [],
     aggLevel: 'instance',
     discoveryMetric: {
       azuremonitor: 'azure_microsoft_cdn_profiles_requestcount_total_count',
+      azuremonitor_agentless: self.azuremonitor,
     },
     signals: {
+
       requestsByEndpoint: {
         name: 'Total requests',
         description: 'Number of requests by endpoints.',
@@ -18,8 +20,14 @@ function(this)
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -32,8 +40,14 @@ function(this)
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_requestsize_total_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_requestsize_total_bytes{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_requestsize_total_bytes{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -46,8 +60,14 @@ function(this)
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_responsesize_total_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_responsesize_total_bytes{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_responsesize_total_bytes{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -60,8 +80,14 @@ function(this)
         aggFunction: 'avg',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_totallatency_average_milliseconds{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_totallatency_average_milliseconds{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_totallatency_average_milliseconds{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -73,8 +99,14 @@ function(this)
         unit: 'percent',
         sources: {
           azuremonitor: {
-            expr: 'avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{dimensionEndpoint!="",%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{dimensionEndpoint!="",%(queriesSelector)s})',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{dimension_Endpoint!="",%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{dimension_Endpoint!="",%(queriesSelector)s})',
+            legendCustomTemplate: '{{dimensionEndpoint}}{{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -87,8 +119,14 @@ function(this)
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_originrequestcount_total_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_originrequestcount_total_count{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_originrequestcount_total_count{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },
@@ -101,8 +139,14 @@ function(this)
         aggFunction: 'avg',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_cdn_profiles_originlatency_average_milliseconds{%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionEndpoint}}',
+            expr: 'azure_microsoft_cdn_profiles_originlatency_average_milliseconds{dimensionEndpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimensionEndpoint'],
+          },
+          azuremonitor_agentless: {
+            expr: 'azure_microsoft_cdn_profiles_originlatency_average_milliseconds{dimension_Endpoint!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionEndpoint}} {{dimension_Endpoint}}',
+            aggKeepLabels: ['dimension_Endpoint'],
           },
         },
       },

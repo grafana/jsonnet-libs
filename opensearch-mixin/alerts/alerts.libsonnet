@@ -89,7 +89,7 @@
           {
             alert: 'OpenSearchHighNodeDiskUsage',
             expr: |||
-              100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes{%(filteringSelector)s} - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes{%(filteringSelector)s}) > %(alertsCriticalDiskUsage)s
+              100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes{%(filteringSelector)s} - opensearch_fs_path_free_bytes{%(filteringSelector)s}) / opensearch_fs_path_total_bytes{%(filteringSelector)s}) > %(alertsCriticalDiskUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
