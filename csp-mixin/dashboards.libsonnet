@@ -170,27 +170,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                      )
                    ),
 
-                 [csplib.config.uid + '-virtualnetwork.json']:
-                   local variables = csplib.signals.azureloadbalancer.getVariablesMultiChoice();
-                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual network')
-                   + g.dashboard.withUid(csplib.config.uid + '-virtualnetwork')
-                   + g.dashboard.withTags(csplib.config.dashboardTags)
-                   + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
-                   + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
-                   + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
-                   + g.dashboard.withVariables(variables)
-                   + g.dashboard.withPanels(
-                     g.util.grid.wrapPanels(
-                       g.util.panel.resolveCollapsedFlagOnRows(
-                         [
-                           csplib.grafana.rows.vn_overview,
-                           csplib.grafana.rows.vn_bytes,
-                           csplib.grafana.rows.vn_packets,
-                         ]
-                       )
-                     )
-                   ),
-
                  [csplib.config.uid + '-virtualmachines.json']:
                    local variables = csplib.signals.azurevm.getVariablesMultiChoice();
                    g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Machines')
