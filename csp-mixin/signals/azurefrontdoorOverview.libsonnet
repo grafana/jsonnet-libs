@@ -40,7 +40,7 @@ function(this)
         unit: 'percent',
         sources: {
           azuremonitor: {
-            expr: 'avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_clientcountry, dimension_clientregion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
+            expr: 'avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_ClientCountry, dimension_ClientRegion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_ClientCountry, dimension_ClientRegion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
             legendCustomTemplate: '',
             exprWrappers: [['topk(5,', ')']],
           },
@@ -77,13 +77,13 @@ function(this)
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimensionClientCountry!="",%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionClientCountry}} {{dimension_clientcountry}}',
+            legendCustomTemplate: '{{dimensionClientCountry}} {{dimension_ClientCountry}}',
             aggKeepLabels: ['dimensionClientCountry'],
           },
           azuremonitor_agentless: {
-            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimension_clientcountry!="",%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionClientCountry}} {{dimension_clientcountry}}',
-            aggKeepLabels: ['dimension_clientcountry'],
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimension_ClientCountry!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionClientCountry}} {{dimension_ClientCountry}}',
+            aggKeepLabels: ['dimension_ClientCountry'],
           },
         },
       },
@@ -97,13 +97,13 @@ function(this)
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimensionHttpStatusGroup!="",%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionHttpStatusGroup}} {{dimension_httpstatusgroup}}',
+            legendCustomTemplate: '{{dimensionHttpStatusGroup}} {{dimension_HttpStatusGroup}}',
             aggKeepLabels: ['dimensionHttpStatusGroup'],
           },
           azuremonitor_agentless: {
-            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimension_httpstatusgroup!="",%(queriesSelector)s}',
-            legendCustomTemplate: '{{dimensionHttpStatusGroup}} {{dimension_httpstatusgroup}}',
-            aggKeepLabels: ['dimension_httpstatusgroup'],
+            expr: 'azure_microsoft_cdn_profiles_requestcount_total_count{dimension_HttpStatusGroup!="",%(queriesSelector)s}',
+            legendCustomTemplate: '{{dimensionHttpStatusGroup}} {{dimension_HttpStatusGroup}}',
+            aggKeepLabels: ['dimension_HttpStatusGroup'],
           },
         },
       },
