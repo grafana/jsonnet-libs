@@ -155,6 +155,34 @@ groups:
             service: Azure SQL database
             serviceId: microsoft.sql/servers/databases
             severity: critical
+        - alert: AzureVNetSubnetIPExhaustion
+          annotations:
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/vnet
+            description: IP addresses for the subnet {{ $labels.subnet_name }} on the Virtual network {{ $labels.resourceName }} have dropped below the critical threshold. This may cause connectivity issues for new resources requiring IP allocations. Consider resizing the subnet or optimizing IP usage.
+            summary: Subnet IP Address Exhaustion Detected.
+          expr: |
+            ((azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}/(azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"} + azure_microsoft_network_virtualnetworks_assignedsubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})) * 100) < 10
+          for: 5m
+          keep_firing_for: 10m
+          labels:
+            namespace: cloud-provider-azure
+            service: Azure Virtual network
+            serviceId: microsoft.network/virtualnetworks
+            severity: critical
+        - alert: AzureVNetPeeringConnectionFailures
+          annotations:
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/vnet
+            description: The success rate of Virtual Network {{ $labels.resourceName }} peering connections has fallen below the defined threshold, indicating possible connectivity failures. Investigate potential misconfigurations, network latency, or service disruptions affecting peering communication.
+            summary: Azure VNet Peering Connection Issues.
+          expr: |
+            ((azure_microsoft_network_virtualnetworks_connectedpeerings_count{job=~".+", resourceGroup=~".+", subscriptionName=~".+", resourceName=~".+"} / azure_microsoft_network_virtualnetworks_peerings_count{job=~".+", resourceGroup=~".+", subscriptionName=~".+", resourceName=~".+"}) * 100) < 80
+          for: 5m
+          keep_firing_for: 10m
+          labels:
+            namespace: cloud-provider-azure
+            service: Azure Virtual network
+            serviceId: microsoft.network/virtualnetworks
+            severity: critical
     - name: gcp
       rules:
         - alert: GcpCEHighCpuUtilization
