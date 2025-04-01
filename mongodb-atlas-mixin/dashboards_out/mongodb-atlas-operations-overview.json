@@ -1503,13 +1503,13 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": null,
                "current": { },
                "datasource": {
                   "uid": "${prometheus_datasource}"
                },
                "hide": 0,
-               "includeAll": true,
+               "includeAll": false,
                "label": "Job",
                "multi": true,
                "name": "job",
