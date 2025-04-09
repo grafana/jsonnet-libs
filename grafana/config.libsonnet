@@ -66,6 +66,7 @@
   // NOTE: This method will be enforced to only have `org_role` set 'Viewer'
   // Deprecated: Deprecated from G12
   withAnonymous():: self.withGrafanaIniConfig({
+    assert std.trace('DEPRECATED: Anonymous users will be enforced to Viewer from Grafana v12. Please use withAnonymousAuth', true),
     sections+: {
       'auth.anonymous': {
         enabled: true,
