@@ -64,11 +64,22 @@
   }),
 
   // NOTE: This method will be enforced to only have `org_role` set 'Viewer'
+  // Deprecated: Deprecated from G12
   withAnonymous():: self.withGrafanaIniConfig({
     sections+: {
       'auth.anonymous': {
         enabled: true,
         org_role: 'Admin',
+      },
+    },
+  }),
+
+  // NOTE: new method
+  withAnonymousAuth():: self.withGrafanaIniConfig({
+    sections+: {
+      'auth.anonymous': {
+        enabled: true,
+        org_role: 'Viewer',
       },
     },
   }),
