@@ -63,6 +63,7 @@
     },
   }),
 
+  // NOTE: This method will be enforced to only have `org_role` set 'Viewer'
   withAnonymous():: self.withGrafanaIniConfig({
     sections+: {
       'auth.anonymous': {
