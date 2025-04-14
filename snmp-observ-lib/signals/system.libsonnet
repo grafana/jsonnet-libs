@@ -104,7 +104,7 @@ function(this)
         type: 'info',
         sources: {
           generic: {
-            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "version", "$1", "sysDescr", "(.+)',
+            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version (.+?) .+")',
             infoLabel: 'version',
           },
           arista_sw: self.generic,
@@ -127,7 +127,7 @@ function(this)
           hpe: self.generic,
           huawei: self.generic,
           juniper: {
-            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS (.+?) .+"',
+            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS (.+?) .+")',
             infoLabel: 'version',
           },
           mikrotik: self.generic,

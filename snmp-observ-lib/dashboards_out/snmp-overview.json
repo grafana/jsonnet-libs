@@ -186,7 +186,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \"(.+)\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS (.+?) .+\"\n)",
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+JUNOS.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS (.+?) .+\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+Version.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+Version (.+?) .+\")\n)",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "{{instance}}: Version",
