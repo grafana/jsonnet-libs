@@ -1952,7 +1952,7 @@
                            "type": "prometheus",
                            "uid": "${prometheus_datasource}"
                         },
-                        "expr": "avg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"4\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                        "expr": "(\n  avg by (job,instance) (\n  mtxrHlVoltage\n)\n)/10\nor\navg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"4\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{entPhysicalName}}",

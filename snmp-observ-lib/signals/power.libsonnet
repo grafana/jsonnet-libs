@@ -22,7 +22,6 @@ function(this)
         unit: 'volt',
         optional: true,
         sources: {
-
           cisco: {
             expr: |||
               (entSensorValue{entSensorType="4", entSensorScale="9", %(queriesSelector)s}
@@ -38,13 +37,14 @@ function(this)
             |||,
             aggKeepLabels: ['entPhysicalName'],
           },
+          mikrotik: {
+            expr: 'mtxrHlVoltage',
+            exprWrappers: [
+              ['(', ')/10'],
+            ],
+          },
         },
-        mikrotik: {
-          expr: 'mtxrHlVoltage',
-          exprWrappers: [
-            ['(', ')/10'],
-          ],
-        },
+
       },
       power: {
         name: 'Power',
