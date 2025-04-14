@@ -38,7 +38,12 @@ function(this)
             |||,
             aggKeepLabels: ['entPhysicalName'],
           },
-
+        },
+        mikrotik: {
+          expr: 'mtxrHlVoltage',
+          exprWrappers: [
+            ['(', ')/10'],
+          ],
         },
       },
       power: {
@@ -65,7 +70,9 @@ function(this)
             |||,
             aggKeepLabels: ['entPhysicalName'],
           },
-
+          mikrotik: {
+            expr: 'mtxrHlPower',
+          },
         },
       },
       rxtxPower: {
