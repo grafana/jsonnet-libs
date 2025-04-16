@@ -91,137 +91,43 @@ In order to get syslog messages you need to do the following (example for cisco 
 module(load="imudp")
 #https://www.rsyslog.com/doc/master/configuration/modules/pmciscoios.html
 module(load="pmciscoios")
-# Pick your port to taste
-input(type="imudp" port="30514" ruleset="withOrigin")
-timezone(id="<yourtimezone>" offset="00:00")
+
+input(type="imudp" port="10516" ruleset="withOrigin")
+input(type="imudp" port="10517" ruleset="withoutOrigin")
+
+timezone(id="GMT" offset="+00:00")
 # instead of -x
 global(net.enableDNS="off")
 
 $template raw,"%msg:2:2048%\n"
 
-ruleset(name="common") {
-       # Forward everything
-       if ($fromhost-ip != "127.0.0.1" ) then action(type="omfwd"
-              protocol=tcp target=localhost port=30514
-              Template="RSYSLOG_SyslogProtocol23Format"
-              TCP_Framing="octet-counted" KeepAlive="on"
-              action.resumeRetryCount="-1"
-              queue.type="linkedlist" queue.size="50000")
+ruleset(name="alloy") {
+       action(
+       type="omfwd"
+       protocol="udp" target="127.0.0.1" port="10515"
+       Template="RSYSLOG_SyslogProtocol23Format"
+       )
        *.*    /dev/stdout; raw
 }
 
 ruleset(name="withoutOrigin" parser="rsyslog.ciscoios") {
-    /* this ruleset uses the default parser which was
-     * created during module load
-     */
-    call common
+       /* this ruleset uses the default parser which was
+       * created during module load
+       */
+       call alloy
 }
 
 parser(name="custom.ciscoios.withOrigin" type="pmciscoios"
        present.origin="on")
 ruleset(name="withOrigin" parser="custom.ciscoios.withOrigin") {
-    /* this ruleset uses the parser defined immediately above */
-    call common
+       /* this ruleset uses the parser defined immediately above */
+       call alloy
 }
 ```
 
 2. Setup alloy agent with the following snippet (adjust to your setup):
 
-```
-// LOGS
-loki.write "default" {
-    endpoint {
-        url = "loki:3100"
-    }
-}
-
-loki.source.api "default" {
-    http {
-        listen_address = "0.0.0.0"
-        listen_port = 3500
-    }
-    forward_to = [
-        loki.process.limit.receiver,
-    ]
-}
-loki.process "limit" {
-    stage.limit {
-        rate  = 10000
-        burst = 20000
-        drop  = drop
-        by_label_name = "hostname"
-    }
-    forward_to    = [
-        loki.write.default.receiver,
-    ]
-}
-
-
-// SYSLOG specific:
-loki.source.syslog "default" {
-  listener {
-    address  = "0.0.0.0:30514"
-    protocol = "tcp"
-    use_incoming_timestamp = true
-    labels   = { job = "syslog" }
-  }
-
-  forward_to = [loki.process.syslog.receiver]
-  relabel_rules = loki.relabel.syslog.rules
-}
-
-loki.relabel "syslog" {
-  forward_to = []
-
-  rule {
-    source_labels = ["__syslog_message_hostname"]
-    target_label         = "sysname"
-  }
-  rule {
-    source_labels = ["__syslog_message_hostname"]
-    target_label         = "instance"
-  }
-  rule {
-    source_labels = ["__syslog_message_app_name"]
-    target_label         = "syslog_app_name"
-  }
-  rule {
-    source_labels = ["__syslog_message_severity"]
-    target_label         = "level"
-  }
-  rule {
-    source_labels = ["__syslog_message_facility"]
-    target_label         = "facility"
-  }
-  rule {
-    source_labels = ["__syslog_message_msg_id"]
-    target_label         = "syslog_msg_id"
-  }
-}
-//cisco_rfc3164_logs
-loki.process "syslog" {
-    stage.match {
-        // match only cisco unparsed logs like https://regex101.com/r/v0MyiB/6
-        // from ASA or NX-OS
-        selector = `{instance!=""} |~ "<\\d+>.+%.+"`
-        stage.regex {
-          expression = `<\d+?>((?P<sysname>[a-zA-Z0-9\-\.]+):)?(?P<date_and_other>.+): (?P<appname>%.+?): (?P<msg>.+)`
-        }
-        stage.labels {
-          values = {
-              sysname = "",
-              syslog_app_name = "appname",
-          }
-        }
-        stage.output {
-          source   = "msg"
-        }
-    }
-
-    forward_to    = [loki.process.limit.receiver]
-}
-
-```
+https://github.com/grafana/integration-sample-apps/blob/main/sample-apps/snmp/jinja/templates/cloud-init-template.yaml#L202-L403
 
 3. Setup syslog at the device side according to vendor docs
 

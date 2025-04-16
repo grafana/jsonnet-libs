@@ -52,7 +52,7 @@
   // logs lib related
   enableLokiLogs: true,
   logsFilteringSelector: 'job="syslog"',
-  logsGroupLabels: [],
+  logsGroupLabels: this.groupLabels,
   logsInstanceLabels: this.instanceLabels,
   logsExtraFilters: '',
   extraLogLabels: ['sysname', 'syslog_app_name', 'level'],
