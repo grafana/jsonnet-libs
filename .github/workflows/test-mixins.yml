@@ -57,12 +57,12 @@ jobs:
           dir_names: true
           dir_names_exclude_current_dir: true
           dir_names_max_depth: 1
-          files: | 
+          files: |
             **-mixin/
             **-observ-lib/
           matrix: true
       - name: List all changed mixins
-        run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
+        run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}' # zizmor: ignore[template-injection]
 
   lint-mixin:
     name: Test mixin
@@ -120,7 +120,6 @@ jobs:
         run: |
           # Wait for Grafana to be ready
           timeout 60s bash -c 'until curl -s http://localhost:3000/api/health | grep "ok"; do sleep 1; done'
-          
           # Try to deploy dashboards
           make deploy_dashboards
       - name: Run promtool test for rules
