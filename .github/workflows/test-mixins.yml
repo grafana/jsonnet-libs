@@ -62,7 +62,9 @@ jobs:
             **-observ-lib/
           matrix: true
       - name: List all changed mixins
-        run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-mixins.outputs.all_changed_files }}
+        run: echo "${ALL_CHANGED_FILES}"
 
   lint-mixin:
     name: Test mixin
