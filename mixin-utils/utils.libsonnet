@@ -409,7 +409,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       if 'alert' in rule && std.objectHas(overrides, rule.alert)
       then rule + overrides[rule.alert]
       else rule,
-    local overrideInGroup(group) = group + { rules: std.map(overrideRule, super.rules) },
+    local overrideInGroup(group) = group { rules: std.map(overrideRule, super.rules) },
     prometheusAlerts+:: {
       groups: std.map(overrideInGroup, super.groups),
     },
@@ -421,7 +421,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       then std.objectFields(alerts)
       else alerts,
     local removeRule(rule) = !std.member(alertNames, std.get(rule, 'alert', '')),
-    local removeInGroup(group) = group + { rules: std.filter(removeRule, super.rules) },
+    local removeInGroup(group) = group { rules: std.filter(removeRule, super.rules) },
     prometheusAlerts+:: {
       groups: std.map(removeInGroup, super.groups),
     },
