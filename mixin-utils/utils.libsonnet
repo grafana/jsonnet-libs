@@ -416,7 +416,11 @@ local g = import 'grafana-builder/grafana.libsonnet';
   },
 
   removeAlerts(alerts):: {
-    local removeRule(rule) = !std.member(alerts, std.get(rule, 'alert', '')),
+    local alertNames =
+      if std.isObject(alerts)
+      then std.objectFields(alerts)
+      else alerts,
+    local removeRule(rule) = !std.member(alertNames, std.get(rule, 'alert', '')),
     local removeInGroup(group) = group + { rules: std.filter(removeRule, super.rules) },
     prometheusAlerts+:: {
       groups: std.map(removeInGroup, super.groups),
