@@ -39,6 +39,6 @@
   },
 
   _images+:: {
-    nginx: 'nginx:1.15.1-alpine',
+    nginx: 'nginx:1.27-alpine',
   },
 }
