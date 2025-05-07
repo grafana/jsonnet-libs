@@ -397,11 +397,11 @@ local g = import 'grafana-builder/grafana.libsonnet';
   },
 
   removeAlertRuleGroup(ruleName):: {
-    prometheusAlerts+:: $.removeRuleGroup(ruleName),
+    prometheusAlerts+: $.removeRuleGroup(ruleName),
   },
 
   removeRecordingRuleGroup(ruleName):: {
-    prometheusRules+:: $.removeRuleGroup(ruleName),
+    prometheusRules+: $.removeRuleGroup(ruleName),
   },
 
   overrideAlerts(overrides):: {
@@ -410,7 +410,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       then rule + overrides[rule.alert]
       else rule,
     local overrideInGroup(group) = group { rules: std.map(overrideRule, super.rules) },
-    prometheusAlerts+:: {
+    prometheusAlerts+: {
       groups: std.map(overrideInGroup, super.groups),
     },
   },
@@ -422,7 +422,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       else alerts,
     local removeRule(rule) = !std.member(alertNames, std.get(rule, 'alert', '')),
     local removeInGroup(group) = group { rules: std.filter(removeRule, super.rules) },
-    prometheusAlerts+:: {
+    prometheusAlerts+: {
       groups: std.map(removeInGroup, super.groups),
     },
   },
