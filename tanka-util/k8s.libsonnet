@@ -15,6 +15,38 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
     && std.objectHas(object, 'apiVersion')
     && std.objectHas(object, 'kind'),
 
+  '#findKubernetesObjects':: d.fn(
+    '`findKubernetesObjects` returns an array of all Kubernetes objects it finds in `object`',
+    [d.arg('object', d.T.any)]
+  ),
+  findKubernetesObjects(object, kind=null, name=null)::
+    // Find Kubernetes objects by descending recursively.
+    if self.isKubernetesObject(object) then
+      // Stop descending immediately, and check whether this object meets the
+      // kind and name filters, if provided.
+      if
+        (kind == null || object.kind == kind)
+        && (name == null || object.metadata.name == name)
+      then
+        [object]
+      else []
+
+    else if std.isObject(object) then
+      // Recurse into the object's values, flattening the returned arrays into one.
+      std.flatMap(
+        function(v) self.findKubernetesObjects(v, kind, name),
+        std.objectValues(object)
+      )
+
+    else if std.isArray(object) then
+      // Recurse into the array's elements, flattening the returned arrays into one.
+      std.flatMap(
+        function(v) self.findKubernetesObjects(v, kind, name),
+        object
+      )
+
+    else [],
+
   '#patchKubernetesObjects':: d.fn(
     '`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.',
     [
