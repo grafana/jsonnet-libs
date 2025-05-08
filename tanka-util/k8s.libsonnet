@@ -2,6 +2,19 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
 {
   local this = self,
 
+  '#isKubernetesObject':: d.fn(
+    |||
+      `isKubernetesObject` determines whether `object` is a Kubernetes object.
+
+      Note: this is characterized by being an object with `apiVersion` and `kind` fields.
+    |||,
+    [d.arg('object', d.T.any)]
+  ),
+  isKubernetesObject(object)::
+    std.isObject(object)
+    && std.objectHas(object, 'apiVersion')
+    && std.objectHas(object, 'kind'),
+
   '#patchKubernetesObjects':: d.fn(
     '`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.',
     [
@@ -12,9 +25,9 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
   patchKubernetesObjects(object, patch, kind=null, name=null)::
     if std.isObject(object)
     then
-      // a Kubernetes object is characterized by having an apiVersion and Kind
-      if std.objectHas(object, 'apiVersion') && std.objectHas(object, 'kind')
-         && (kind == null || object.kind == kind) && (name == null || object.metadata.name == name)
+      if self.isKubernetesObject(object)
+         && (kind == null || object.kind == kind)
+         && (name == null || object.metadata.name == name)
       then object + patch
       else
         std.mapWithKey(
