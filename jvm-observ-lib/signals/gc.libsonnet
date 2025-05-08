@@ -6,7 +6,8 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_memory_used_bytes',
+      java_micrometer: 'jvm_memory_used',
+      java_micrometer_with_suffixes: 'jvm_memory_used_bytes',
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       prometheus_old: 'jvm_memory_bytes_used',
       otel: 'process_runtime_jvm_memory_usage',  //https://opentelemetry.io/docs/specs/semconv/runtime/jvm-metrics/
@@ -28,6 +29,14 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_gc_pause_count{%(queriesSelector)s}',
+            aggKeepLabels: ['action', 'cause'],
+            legendCustomTemplate: '%(aggLegend)s',
+            exprWrappers: [
+              actionLabelPrettify,
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_gc_pause_seconds_count{%(queriesSelector)s}',
             aggKeepLabels: ['action', 'cause'],
             legendCustomTemplate: '%(aggLegend)s',
@@ -63,6 +72,13 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'avg by (action,cause, %(agg)s) (rate(jvm_gc_pause_max{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: '{{ %(agg)s }}: {{ action }} ({{ cause }}) (max)',
+            exprWrappers: [
+              actionLabelPrettify,
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: 'avg by (action,cause, %(agg)s) (rate(jvm_gc_pause_seconds_max{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ %(agg)s }}: {{ action }} ({{ cause }}) (max)',
             exprWrappers: [
@@ -79,6 +95,19 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: |||
+              avg by (%(agg)s, action, cause) (
+                rate(jvm_gc_pause_sum{%(queriesSelector)s}[$__rate_interval])
+                /
+                rate(jvm_gc_pause_count{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
+            legendCustomTemplate: '{{ %(agg)s }}: {{ action }} ({{ cause }}) (avg)',
+            exprWrappers: [
+              actionLabelPrettify,
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: |||
               avg by (%(agg)s, action, cause) (
                 rate(jvm_gc_pause_seconds_sum{%(queriesSelector)s}[$__rate_interval])
@@ -138,6 +167,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_gc_memory_promoted{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_gc_memory_promoted_bytes_total{%(queriesSelector)s}',
           },
         },
@@ -151,6 +183,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_gc_memory_allocated{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_gc_memory_allocated_bytes_total{%(queriesSelector)s}',
           },
           prometheus: {
@@ -192,6 +227,9 @@ function(this)
           java_micrometer: {
             expr: 'jvm_memory_used_bytes{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
           },
+          java_micrometer_with_suffixes: {
+            expr: 'jvm_memory_used{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
+          },
           prometheus: {
             expr: 'jvm_memory_pool_used_bytes{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
@@ -223,6 +261,12 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_max{id=~"(G1 )?Eden Space", area="heap", %(queriesSelector)s}',
+            exprWrappers: [
+              ['', ' != -1'],
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_max_bytes{id=~"(G1 )?Eden Space", area="heap", %(queriesSelector)s}',
             exprWrappers: [
               ['', ' != -1'],
@@ -255,6 +299,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_committed{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
@@ -283,6 +330,9 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
+            expr: 'jvm_memory_used{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_used_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
@@ -316,6 +366,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_max{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s} != -1',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_max_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s} != -1',
           },
           prometheus: {
@@ -342,6 +395,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_committed{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
@@ -369,6 +425,9 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
+            expr: 'jvm_memory_used{id="Tenured Gen", area="heap", %(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_used_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
@@ -402,6 +461,12 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_max{id="Tenured Gen", area="heap", %(queriesSelector)s}',
+            exprWrappers: [
+              ['', ' != -1'],
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
             exprWrappers: [
               ['', ' != -1'],
@@ -440,6 +505,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_memory_committed{id="Tenured Gen", area="heap", %(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_memory_committed_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
