@@ -78,6 +78,12 @@ function(this)
               ['(', ')!=0'],
             ],
           },
+          mikrotik: {
+            expr: 'mtxrHlTemperature',
+            exprWrappers: [
+              ['(', ')/10'],
+            ],
+          },
         },
       },
     },

@@ -16,16 +16,12 @@ function(
         g.util.grid.wrapPanels(
           (
             if showLogsVolume then
-              [panels.logsVolume
-               + g.panel.timeSeries.gridPos.withH(6)
-               + g.panel.timeSeries.gridPos.withW(24)]
+              [panels.logsVolume]
             else []
           )
           +
           [
-            panels.logs
-            + g.panel.logs.gridPos.withH(18)
-            + g.panel.logs.gridPos.withW(24),
+            panels.logs,
           ]
         )
       ),

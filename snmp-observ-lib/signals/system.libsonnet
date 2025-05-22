@@ -104,7 +104,7 @@ function(this)
         type: 'info',
         sources: {
           generic: {
-            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "version", "$1", "sysDescr", ".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*")',
+            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version (.+?) .+")',
             infoLabel: 'version',
           },
           arista_sw: self.generic,
@@ -126,7 +126,10 @@ function(this)
           fortigate: self.generic,
           hpe: self.generic,
           huawei: self.generic,
-          juniper: self.generic,
+          juniper: {
+            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS (.+?) .+")',
+            infoLabel: 'version',
+          },
           mikrotik: self.generic,
           netgear: self.generic,
           qtech: self.generic,

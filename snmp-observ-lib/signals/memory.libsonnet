@@ -50,18 +50,22 @@ function(this)
           },
           cisco: {
             expr: |||
-              # cisco CISCO-ENHANCED-MEMPOOL-MIB
-              # cempMemPoolType="2" - processorMemory, cempMemPoolType="10" - virtual memory, i.e in ASA(v).
+              # NX-OS:
               (
-                
+                cpmCPUMemoryUsed{%(queriesSelector)s}
+                /
+                (cpmCPUMemoryUsed{%(queriesSelector)s} + cpmCPUMemoryFree{%(queriesSelector)s}) * 100
+              )
+              or
+              # cisco CISCO-ENHANCED-MEMPOOL-MIB
+              # cempMemPoolType="10" - virtual memory, i.e in ASA(v).
+              (
                 (
                   cempMemPoolUsed{%(queriesSelector)s}
                   /
                   (cempMemPoolUsed{%(queriesSelector)s} + cempMemPoolFree{%(queriesSelector)s}) * 100
-                ) * on (instance, cempMemPoolIndex) group_left () 
-                      (
-                        cempMemPoolType{%(queriesSelector)s} == 2)/2 
-                        or (cempMemPoolType{%(queriesSelector)s} == 10)/10 
+                ) * on (instance, cempMemPoolIndex, entPhysicalIndex) group_left () 
+                      (cempMemPoolType{%(queriesSelector)s} == 10)/10
               )
               or
               # cisco firmwares that supports only CISCO-MEMORY-POOL-MIB

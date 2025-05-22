@@ -165,3 +165,33 @@ groups:
           summary: 'Low database tempdb log space.'
           description: 'Look for active sessions that might be using TempDB intensively, identify stored procedures or queries that create temporary tables or objects, and also look for long-running or memory-intensive queries that rely heavily on TempDB into the {{ $labels.resourceName }} database.'
           dashboard_url: '/a/grafana-csp-app/azure/dashboards/sqldatabase'
+
+      - alert: AzureVNetSubnetIPExhaustion
+        expr: |
+          ((azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}/(azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"} + azure_microsoft_network_virtualnetworks_assignedsubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})) * 100) < 10
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Azure Virtual network'
+          serviceId: 'microsoft.network/virtualnetworks'
+          namespace: cloud-provider-azure
+        annotations:
+          summary: 'Subnet IP Address Exhaustion Detected.'
+          description: 'IP addresses for the subnet {{ $labels.subnet_name }} on the Virtual network {{ $labels.resourceName }} have dropped below the critical threshold. This may cause connectivity issues for new resources requiring IP allocations. Consider resizing the subnet or optimizing IP usage.'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/vnet'
+
+      - alert: AzureVNetPeeringConnectionFailures
+        expr: |
+          ((azure_microsoft_network_virtualnetworks_connectedpeerings_count{job=~".+", resourceGroup=~".+", subscriptionName=~".+", resourceName=~".+"} / azure_microsoft_network_virtualnetworks_peerings_count{job=~".+", resourceGroup=~".+", subscriptionName=~".+", resourceName=~".+"}) * 100) < 80
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Azure Virtual network'
+          serviceId: 'microsoft.network/virtualnetworks'
+          namespace: cloud-provider-azure
+        annotations:
+          summary: 'Azure VNet Peering Connection Issues.'
+          description: 'The success rate of Virtual Network {{ $labels.resourceName }} peering connections has fallen below the defined threshold, indicating possible connectivity failures. Investigate potential misconfigurations, network latency, or service disruptions affecting peering communication.'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/vnet'

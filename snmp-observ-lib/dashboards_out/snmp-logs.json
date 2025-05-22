@@ -167,7 +167,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"syslog\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"syslog\",job=~\"$job\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -209,7 +209,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"syslog\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"syslog\",job=~\"$job\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -237,10 +237,25 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({job=\"syslog\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=\"syslog\"}, instance)",
+               "query": "label_values({job=\"syslog\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -255,7 +270,7 @@
                "label": "Sysname",
                "multi": true,
                "name": "sysname",
-               "query": "label_values({job=\"syslog\",instance=~\"$instance\"}, sysname)",
+               "query": "label_values({job=\"syslog\",job=~\"$job\",instance=~\"$instance\"}, sysname)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -270,7 +285,7 @@
                "label": "Syslog_app_name",
                "multi": true,
                "name": "syslog_app_name",
-               "query": "label_values({job=\"syslog\",instance=~\"$instance\",sysname=~\"$sysname\"}, syslog_app_name)",
+               "query": "label_values({job=\"syslog\",job=~\"$job\",instance=~\"$instance\",sysname=~\"$sysname\"}, syslog_app_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -285,7 +300,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"syslog\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\"}, level)",
+               "query": "label_values({job=\"syslog\",job=~\"$job\",instance=~\"$instance\",sysname=~\"$sysname\",syslog_app_name=~\"$syslog_app_name\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
