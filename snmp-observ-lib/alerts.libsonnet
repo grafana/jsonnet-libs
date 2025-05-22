@@ -15,26 +15,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       (%s) > 0
                     |||
                     % [
-                      this.signals.fiber.fcIfTxWaitCount.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcIfTxWaitCount) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcIfTxWaitCount) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
                       this.signals.fiber.fcIfFramesDiscard.asRuleExpression(),
                     ],
               labels: {
@@ -44,66 +24,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Too many packets with errors (fcIfFramesDiscard) on the FC network interface.',
                 description: |||
                   Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcIfTxWtAvgBBCreditTransitionToZero.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcHCIfBBCreditTransistionFromZero.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcHCIfBBCreditTransistionToZero.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcHCIfBBCreditTransistionToZero) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcHCIfBBCreditTransistionToZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
                 ||| % [instanceLabel],
               },
               'for': '15m',
