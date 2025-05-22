@@ -771,9 +771,7 @@ local hardwareIOWaitTimePanel = {
             'label_values(mongodb_network_bytesIn,job)',
             label='Job',
             refresh=2,
-            includeAll=true,
             multi=true,
-            allValues='.+',
             sort=0
           ),
           template.new(

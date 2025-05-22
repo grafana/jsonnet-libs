@@ -129,7 +129,7 @@
                   "legendFormat": "{{ volume }} available"
                }
             ],
-            "title": "Filesystem space availabe",
+            "title": "Filesystem space available",
             "type": "timeseries"
          },
          {

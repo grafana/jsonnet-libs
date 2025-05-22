@@ -44,7 +44,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
     sensors:
       g.panel.row.new('Sensors')
-      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withCollapsed(true)
       + g.panel.row.withPanels(
         [
           panels.temperature.temperature { gridPos+: { w: 12, h: 8 } },
