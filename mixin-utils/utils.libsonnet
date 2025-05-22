@@ -392,18 +392,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
       for group in groups
     ],
 
-  removeRuleGroup(ruleName):: {
-    local removeRuleGroup(rule) = if rule.name == ruleName then null else rule,
-    local currentRuleGroups = super.groups,
-    groups: std.prune(std.map(removeRuleGroup, currentRuleGroups)),
+  removeRuleGroup(groupName):: {
+    groups: std.filter(function(group) group.name != groupName, super.groups),
   },
 
   removeAlertRuleGroup(ruleName):: {
-    prometheusAlerts+:: $.removeRuleGroup(ruleName),
+    prometheusAlerts+: $.removeRuleGroup(ruleName),
   },
 
   removeRecordingRuleGroup(ruleName):: {
-    prometheusRules+:: $.removeRuleGroup(ruleName),
+    prometheusRules+: $.removeRuleGroup(ruleName),
   },
 
   overrideAlerts(overrides):: {
@@ -412,19 +410,20 @@ local g = import 'grafana-builder/grafana.libsonnet';
       then rule + overrides[rule.alert]
       else rule,
     local overrideInGroup(group) = group { rules: std.map(overrideRule, super.rules) },
-    prometheusAlerts+:: {
+    prometheusAlerts+: {
       groups: std.map(overrideInGroup, super.groups),
     },
   },
 
   removeAlerts(alerts):: {
-    local removeRule(rule) =
-      if 'alert' in rule && std.objectHas(alerts, rule.alert)
-      then {}
-      else rule,
-    local removeInGroup(group) = group { rules: std.map(removeRule, super.rules) },
-    prometheusAlerts+:: {
-      groups: std.prune(std.map(removeInGroup, super.groups)),
+    local alertNames =
+      if std.isObject(alerts)
+      then std.objectFields(alerts)
+      else alerts,
+    local removeRule(rule) = !std.member(alertNames, std.get(rule, 'alert', '')),
+    local removeInGroup(group) = group { rules: std.filter(removeRule, super.rules) },
+    prometheusAlerts+: {
+      groups: std.map(removeInGroup, super.groups),
     },
   },
 }

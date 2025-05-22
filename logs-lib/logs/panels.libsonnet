@@ -39,6 +39,9 @@ function(
           },
         }
       )
+      // default dimensions
+      + g.panel.timeSeries.gridPos.withH(6)
+      + g.panel.timeSeries.gridPos.withW(24)
       + timeSeries.standardOptions.withOverridesMixin(
         [
           {
@@ -77,7 +80,10 @@ function(
       + logsPanel.options.withEnableLogDetails(true)
       + logsPanel.options.withShowTime(true)
       + logsPanel.options.withWrapLogMessage(true)
-      + logsPanel.options.withPrettifyLogMessage(true),
+      + logsPanel.options.withPrettifyLogMessage(true)
+      // default dimensions
+      + g.panel.logs.gridPos.withH(18)
+      + g.panel.logs.gridPos.withW(24),
 
     logsVolume: self.logsVolumeInit(logsVolumeTarget),
     logs: self.logsInit(logsTarget),
