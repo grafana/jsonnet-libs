@@ -20,13 +20,13 @@ local logslib = import "logs-lib/logs/main.libsonnet";
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.interserverConnectionsPanel { gridPos+: { h: 8, w: 12, x: 0, y: 0 } },
-              panels.replicaQueueSizePanel { gridPos+: { h: 8, w: 12, x: 12, y: 0 } },
-              panels.replicaOperationsPanel { gridPos+: { h: 8, w: 12, x: 0, y: 8 } },
-              panels.replicaReadOnlyPanel { gridPos+: { h: 8, w: 12, x: 12, y: 8 } },
-              panels.zooKeeperWatchesPanel { gridPos+: { h: 8, w: 12, x: 0, y: 16 } },
-              panels.zooKeeperSessionsPanel { gridPos+: { h: 8, w: 12, x: 12, y: 16 } },
-              panels.zooKeeperRequestsPanel { gridPos+: { h: 8, w: 24, x: 0, y: 24 } },
+              panels.interserverConnectionsPanel,
+              panels.replicaQueueSizePanel,
+              panels.replicaOperationsPanel,
+              panels.replicaReadOnlyPanel,
+              panels.zooKeeperWatchesPanel,
+              panels.zooKeeperSessionsPanel,
+              panels.zooKeeperRequestsPanel,
             ]
           )
         )
@@ -46,14 +46,14 @@ local logslib = import "logs-lib/logs/main.libsonnet";
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.successfulQueriesPanel { gridPos+: { h: 8, w: 24, x: 0, y: 0 } },
-              panels.failedQueriesPanel { gridPos+: { h: 8, w: 12, x: 0, y: 8 } },
-              panels.rejectedInsertsPanel { gridPos+: { h: 8, w: 12, x: 12, y: 8 } },
-              panels.memoryUsagePanel { gridPos+: { h: 8, w: 12, x: 0, y: 16 } },
-              panels.memoryUsageGaugePanel { gridPos+: { h: 8, w: 12, x: 12, y: 16 } },
-              panels.activeConnectionsPanel { gridPos+: { h: 8, w: 24, x: 0, y: 24 } },
-              panels.networkReceivedPanel { gridPos+: { h: 8, w: 12, x: 0, y: 32 } },
-              panels.networkTransmittedPanel { gridPos+: { h: 8, w: 12, x: 12, y: 32 } },
+              panels.successfulQueriesPanel,
+              panels.failedQueriesPanel,
+              panels.rejectedInsertsPanel,
+              panels.memoryUsagePanel,
+              panels.memoryUsageGaugePanel,
+              panels.activeConnectionsPanel,
+              panels.networkReceivedPanel,
+              panels.networkTransmittedPanel,
             ]
           )
         )
@@ -73,11 +73,11 @@ local logslib = import "logs-lib/logs/main.libsonnet";
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.diskReadLatencyPanel { gridPos+: { h: 8, w: 12, x: 0, y: 0 } },
-              panels.diskWriteLatencyPanel { gridPos+: { h: 8, w: 12, x: 12, y: 0 } },
-              panels.networkTransmitLatencyInboundPanel { gridPos+: { h: 8, w: 12, x: 0, y: 8 } },
-              panels.networkTransmitLatencyOutboundPanel { gridPos+: { h: 8, w: 12, x: 12, y: 8 } },
-              panels.zooKeeperWaitTimePanel { gridPos+: { h: 8, w: 24, x: 0, y: 16 } },
+              panels.diskReadLatencyPanel,
+              panels.diskWriteLatencyPanel,
+              panels.networkTransmitLatencyInboundPanel,
+              panels.networkTransmitLatencyOutboundPanel,
+                panels.zooKeeperWaitTimePanel,
             ]
           )
         )
