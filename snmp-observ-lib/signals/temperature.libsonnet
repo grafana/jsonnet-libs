@@ -79,7 +79,7 @@ function(this)
             ],
           },
           mikrotik: {
-            expr: 'mtxrHlTemperature',
+            expr: 'mtxrHlTemperature{%(queriesSelector)s}',
             exprWrappers: [
               ['(', ')/10'],
             ],
