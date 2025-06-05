@@ -1,17 +1,35 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "ClickHouse Latency",
+            "type": "link",
+            "url": "/d/mixin_clickhouse_latency"
+         },
+         {
+            "keepTime": true,
+            "title": "ClickHouse Overview",
+            "type": "link",
+            "url": "/d/mixin_clickhouse_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "ClickHouse Replica",
+            "type": "link",
+            "url": "/d/mixin_clickhouse_replica"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "clickhouse-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other ClickHouse dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -161,7 +179,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/mixin\",job=~\"$job\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +212,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,7 +221,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/mixin\",job=~\"$job\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -234,37 +252,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\".*/clickhouse.*\"}, job)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values({job=~\".*/clickhouse.*\",job=~\"$job\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Level",
-               "multi": true,
-               "name": "level",
-               "query": "label_values({job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"integrations/mixin\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -286,14 +274,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "default",
       "title": "ClickHouse logs",
-      "uid": "clickhouse-logs-overview"
+      "uid": "mixin-logs"
    }
