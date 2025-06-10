@@ -41,9 +41,7 @@ The monitoring mixins in this repository use two linting tools to ensure quality
 
 Observability library is a flexible format to describe dashboards and alerts in a modular way so libraries can be imported into one another or into monitoring-mixins. Observability libraries can be found in folders with `-observ-lib` suffix. [Common library](https://github.com/grafana/jsonnet-libs/tree/master/common-lib) is also used to apply consistent style options.
 
-See [helloworld-observ-lib](helloworld-observ-lib/) for starter template and format description.
-
-More examples:
+Some examples:
  - [windows-observ-lib](windows-observ-lib/)
 
  ### Observability libraries signal extention
