@@ -9,13 +9,8 @@ local utils = commonlib.utils;
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
-      local instanceLabels = this.config.instanceLabels,
       local pureInstanceLabels = this.config.pureInstanceLabels,
       local root = self,
-
-      // Helper to ensure no duplicate labels between groupLabels and instanceLabels
-      local getUniqueLabels(groupLabels, instanceLabels) =
-        std.filter(function(label) !std.member(groupLabels, label), instanceLabels),
 
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -40,7 +35,7 @@ local utils = commonlib.utils;
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + getUniqueLabels(groupLabels, instanceLabels), [filteringSelector])),
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
 
       datasources: {
         prometheus:
@@ -58,11 +53,11 @@ local utils = commonlib.utils;
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       multiInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
+        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector),
 
       multiCluster:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, [], filteringSelector),
+        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector),
 
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
@@ -71,21 +66,18 @@ local utils = commonlib.utils;
 
       // Common selectors for queries
       queriesSelector:
-        '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels + getUniqueLabels(groupLabels, instanceLabels)),
-          filteringSelector,
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
         ],
 
       clusterQuerySelector:
-        '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels),
-          filteringSelector,
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
         ],
 
       instanceQueriesSelector:
-        '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels + getUniqueLabels(groupLabels, pureInstanceLabels)),
-          filteringSelector,
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
         ],
     }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},

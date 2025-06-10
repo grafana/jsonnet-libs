@@ -4,8 +4,8 @@ local mixin =
   mixinlib.new()
   + mixinlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"$job"',
-      uid: 'mixin',
+      filteringSelector: 'job=~"integrations/clickhouse"',
+      uid: 'clickhouse',
       enableLokiLogs: true,
     }
   );

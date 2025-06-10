@@ -7,26 +7,26 @@
             "keepTime": true,
             "title": "ClickHouse Overview",
             "type": "link",
-            "url": "/d/mixin_clickhouse_overview"
+            "url": "/d/clickhouse_clickhouse_overview"
          },
          {
             "keepTime": true,
             "title": "ClickHouse Replica",
             "type": "link",
-            "url": "/d/mixin_clickhouse_replica"
+            "url": "/d/clickhouse_clickhouse_replica"
          },
          {
             "keepTime": true,
             "title": "Logs",
             "type": "link",
-            "url": "/d/mixin-logs"
+            "url": "/d/clickhouse-logs"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "clickhouse-mixin"
+               "clickhouse"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -76,7 +76,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - disk read elapsed"
                }
@@ -127,7 +127,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - disk write elapsed"
                }
@@ -178,7 +178,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - network receive elapsed"
                }
@@ -229,7 +229,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - network send elapsed"
                }
@@ -280,7 +280,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - ZooKeeper wait"
                }
@@ -292,7 +292,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "clickhouse-mixin"
+         "clickhouse"
       ],
       "templating": {
          "list": [
@@ -309,11 +309,26 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
                "includeAll": false,
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"$job\"}, instance)",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -334,5 +349,5 @@
       },
       "timezone": "default",
       "title": "ClickHouse latency",
-      "uid": "mixin_clickhouse_latency"
+      "uid": "clickhouse_clickhouse_latency"
    }

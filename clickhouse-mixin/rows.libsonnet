@@ -1,6 +1,5 @@
 local g = import './g.libsonnet';
 
-// Use g.util.grid.wrapPanels() to import into custom dashboard
 {
   new(panels): {
     row_1:

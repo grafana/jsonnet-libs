@@ -7,26 +7,26 @@
             "keepTime": true,
             "title": "ClickHouse Latency",
             "type": "link",
-            "url": "/d/mixin_clickhouse_latency"
+            "url": "/d/clickhouse_clickhouse_latency"
          },
          {
             "keepTime": true,
             "title": "ClickHouse Replica",
             "type": "link",
-            "url": "/d/mixin_clickhouse_replica"
+            "url": "/d/clickhouse_clickhouse_replica"
          },
          {
             "keepTime": true,
             "title": "Logs",
             "type": "link",
-            "url": "/d/mixin-logs"
+            "url": "/d/clickhouse-logs"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "clickhouse-mixin"
+               "clickhouse"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -76,7 +76,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_SelectQuery{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_SelectQuery{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - select query"
                },
@@ -85,7 +85,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_InsertQuery{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_InsertQuery{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - insert query"
                },
@@ -94,7 +94,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_AsyncInsertQuery{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_AsyncInsertQuery{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - async insert query"
                }
@@ -145,7 +145,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_FailedSelectQuery{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_FailedSelectQuery{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - Failed Select Query"
                },
@@ -154,7 +154,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_FailedInsertQuery{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_FailedInsertQuery{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - Failed Insert Query"
                }
@@ -205,7 +205,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_RejectedInserts{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_RejectedInserts{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - Rejected Inserts"
                }
@@ -256,7 +256,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(ClickHouseMetrics_MemoryTracking{instance=~\"$instance\",job=~\"$job\"})",
+                  "expr": "(ClickHouseMetrics_MemoryTracking{job=~\"$job\",instance=~\"$instance\"})",
                   "legendFormat": "{{instance}} - Memory Tracking"
                }
             ],
@@ -307,7 +307,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(ClickHouseMetrics_MemoryTracking{instance=~\"$instance\",job=~\"$job\"} / ClickHouseAsyncMetrics_OSMemoryTotal{instance=~\"$instance\",job=~\"$job\"}) * 100",
+                  "expr": "(ClickHouseMetrics_MemoryTracking{job=~\"$job\",instance=~\"$instance\"} / ClickHouseAsyncMetrics_OSMemoryTotal{job=~\"$job\",instance=~\"$instance\"}) * 100",
                   "legendFormat": "{{instance}} - Memory Tracking Percent"
                }
             ],
@@ -357,7 +357,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_TCPConnection{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "ClickHouseMetrics_TCPConnection{job=~\"$job\",instance=~\"$instance\"}",
                   "legendFormat": "{{instance}} - TCP connection"
                },
                {
@@ -365,7 +365,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_HTTPConnection{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "ClickHouseMetrics_HTTPConnection{job=~\"$job\",instance=~\"$instance\"}",
                   "legendFormat": "{{instance}} - HTTP connection"
                },
                {
@@ -373,7 +373,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_MySQLConnection{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "ClickHouseMetrics_MySQLConnection{job=~\"$job\",instance=~\"$instance\"}",
                   "legendFormat": "{{instance}} - MySQL connection"
                },
                {
@@ -381,7 +381,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_PostgreSQLConnection{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "ClickHouseMetrics_PostgreSQLConnection{job=~\"$job\",instance=~\"$instance\"}",
                   "legendFormat": "{{instance}} - PostgreSQL connection"
                }
             ],
@@ -431,7 +431,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_NetworkReceiveBytes{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_NetworkReceiveBytes{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - network receive bytes"
                }
@@ -482,7 +482,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_NetworkSendBytes{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_NetworkSendBytes{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "interval": "30s",
                   "legendFormat": "{{instance}} - network send bytes"
                }
@@ -494,7 +494,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "clickhouse-mixin"
+         "clickhouse"
       ],
       "templating": {
          "list": [
@@ -511,11 +511,26 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
                "includeAll": false,
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"$job\"}, instance)",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -536,5 +551,5 @@
       },
       "timezone": "default",
       "title": "ClickHouse overview",
-      "uid": "mixin_clickhouse_overview"
+      "uid": "clickhouse_clickhouse_overview"
    }
