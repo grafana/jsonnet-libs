@@ -28,11 +28,6 @@ The library supports multiple metrics sources that corresponds to different netw
 |tplink | TP-LINK | TPLINK-SYSINFO-MIB,HOST-RESOURCES-MIB,SNMPv2-MIB,TPLINK-SYSMONITOR-MIB,IF-MIB | T2600G-28TS | https://www.tp-link.com/en/support/download/t2600g-28ts/#MIBs_Files https://www.tp-link.com/ru/support/faq/1330/ |system,if_mib|
 |ubiquiti_airos | Ubiquiti AirOS | FROGFOOT-RESOURCES-MIB,HOST-RESOURCES-MIB,SNMPv2-MIB,IEEE802dot11-MIB,IF-MIB | NanoStation M5, UAP-LR |  |system,if_mib,ubiquiti_airos|
 
-
-## Usage
-
-For detailed usage examples see [helloworld-observ-lib README](../helloworld-observ-lib/README.md).
-
 ### Import as a library
 
 Import into another library or mixin:
