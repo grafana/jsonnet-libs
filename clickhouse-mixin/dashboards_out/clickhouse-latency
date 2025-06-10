@@ -54,7 +54,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 0
             },
@@ -76,8 +76,9 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\",test=~\"$test\"}[$__rate_interval])",
-                  "legendFormat": "{{job}} - {{instance}}"
+                  "expr": "increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - disk read elapsed"
                }
             ],
             "title": "Disk read latency",
@@ -104,8 +105,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 0
             },
             "id": 2,
@@ -126,8 +127,9 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\",test=~\"$test\"}[$__rate_interval])",
-                  "legendFormat": "{{job}} - {{instance}}"
+                  "expr": "increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - disk write elapsed"
                }
             ],
             "title": "Disk write latency",
@@ -154,9 +156,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 0
+               "w": 12,
+               "x": 0,
+               "y": 8
             },
             "id": 3,
             "options": {
@@ -176,8 +178,9 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\",test=~\"$test\"}[$__rate_interval])",
-                  "legendFormat": "{{job}} - {{instance}}"
+                  "expr": "increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - network receive elapsed"
                }
             ],
             "title": "Network receive latency",
@@ -204,8 +207,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 0,
+               "w": 12,
+               "x": 12,
                "y": 8
             },
             "id": 4,
@@ -226,8 +229,9 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\",test=~\"$test\"}[$__rate_interval])",
-                  "legendFormat": "{{job}} - {{instance}}"
+                  "expr": "increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - network send elapsed"
                }
             ],
             "title": "Network transmit latency",
@@ -254,9 +258,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 8
+               "w": 24,
+               "x": 0,
+               "y": 16
             },
             "id": 5,
             "options": {
@@ -276,8 +280,9 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{job=~\"$job\",instance=~\"$instance\",test=~\"$test\"}[$__rate_interval])",
-                  "legendFormat": "{{job}} - {{instance}}"
+                  "expr": "increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - ZooKeeper wait"
                }
             ],
             "title": "ZooKeeper wait time",
@@ -304,29 +309,22 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "includeAll": true,
-               "label": "Job",
-               "multi": true,
-               "name": "job",
-               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/mixin\"}, job)",
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
-               },
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/mixin\",job=~\"$job\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },

@@ -46,33 +46,37 @@ local utils = commonlib.utils;
           targets=[t.ClickHouseMetrics_ReadonlyReplica],
           description='Shows replicas in read-only state over time'
         )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperWatchesPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Zookeeper watches',
+          'ZooKeeper watches',
           targets=[t.ClickHouseMetrics_ZooKeeperWatch],
           description='Current number of watches in ZooKeeper'
         )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperSessionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Zookeeper sessions',
+          'ZooKeeper sessions',
           targets=[t.ClickHouseMetrics_ZooKeeperSession],
           description='Current number of sessions to ZooKeeper'
         )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Zookeeper requests',
+          'ZooKeeper requests',
           targets=[t.ClickHouseMetrics_ZooKeeperRequest],
           description='Current number of active requests to ZooKeeper'
         )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -117,10 +121,20 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       memoryUsageGaugePanel:
-        barGauge.new(title='Memory usage')
-        + barGauge.queryOptions.withTargets([t.ClickHouseMetrics_MemoryTracking])
-        + barGauge.panelOptions.withDescription('Percentage of memory allocated by ClickHouse compared to OS total')
-        + barGauge.options.withOrientation('auto'),
+        g.panel.gauge.new('Memory usage')
+        + g.panel.gauge.queryOptions.withTargets([t.ClickHouseMetrics_MemoryTrackingPercent])
+        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
+        + g.panel.gauge.panelOptions.withDescription('Percentage of memory allocated by ClickHouse compared to OS total')
+        + g.panel.gauge.options.withShowThresholdLabels(true)
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(0),
+          g.panel.gauge.standardOptions.threshold.step.withColor('#EAB839')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(80),
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-red')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(90),
+        ])
+        + g.panel.gauge.standardOptions.withUnit('percent'),
 
       activeConnectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(

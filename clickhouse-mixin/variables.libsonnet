@@ -10,10 +10,13 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
-      local nodeNameLabel = if std.objectHas(this.config, 'nodeNameLabel') then this.config.nodeNameLabel else ['node'],
-      local testNameLabel = if std.objectHas(this.config, 'testNameLabel') then this.config.testNameLabel else ['test'],
-
+      local pureInstanceLabels = this.config.pureInstanceLabels,
       local root = self,
+
+      // Helper to ensure no duplicate labels between groupLabels and instanceLabels
+      local getUniqueLabels(groupLabels, instanceLabels) =
+        std.filter(function(label) !std.member(groupLabels, label), instanceLabels),
+
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
           var.query.new(chainVar.label)
@@ -24,10 +27,12 @@ local utils = commonlib.utils;
           )
           + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
           + var.query.selectionOptions.withIncludeAll(
-            value=true,
+            value=if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
             customAllValue='.+'
           )
-          + var.query.selectionOptions.withMulti(true)
+          + var.query.selectionOptions.withMulti(
+            if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
+          )
           + var.query.refresh.onTime()
           + var.query.withSort(
             i=1,
@@ -35,7 +40,8 @@ local utils = commonlib.utils;
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + getUniqueLabels(groupLabels, instanceLabels), [filteringSelector])),
+
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
@@ -44,35 +50,48 @@ local utils = commonlib.utils;
         loki:
           var.datasource.new('loki_datasource', 'loki')
           + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex(''),
+          + var.datasource.withRegex('')
+          // hide by default (used for annotations)
+          + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
 
+      // Use on dashboards where multiple entities can be selected, like fleet dashboards
       multiInstance:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
 
+      multiCluster:
+        [root.datasources.prometheus]
+        + variablesFromLabels(groupLabels, [], filteringSelector),
+
+      // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
+        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector, multiInstance=false),
 
-      overviewVariables:
-        [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels + testNameLabel, filteringSelector, multiInstance=true),
-
+      // Common selectors for queries
       queriesSelector:
-        '%s' % [
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels + getUniqueLabels(groupLabels, instanceLabels)),
+          filteringSelector,
+        ],
+
+      clusterQuerySelector:
+        '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
+          filteringSelector,
         ],
 
-      testNameSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + instanceLabels + testNameLabel),
+      instanceQueriesSelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels + getUniqueLabels(groupLabels, pureInstanceLabels)),
+          filteringSelector,
         ],
+    }
+    + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
 
-      nodeNameSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + instanceLabels + nodeNameLabel),
-        ],
-
-    },
+  withLokiLogs(this): {
+    multiInstance+: [this.grafana.variables.datasources.loki],
+    singleInstance+: [this.grafana.variables.datasources.loki],
+  },
 }

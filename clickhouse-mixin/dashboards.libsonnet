@@ -1,5 +1,5 @@
-local g = import "./g.libsonnet";
-local logslib = import "logs-lib/logs/main.libsonnet";
+local g = import './g.libsonnet';
+local logslib = import 'logs-lib/logs/main.libsonnet';
 {
   local root = self,
   new(this)::
@@ -15,24 +15,24 @@ local logslib = import "logs-lib/logs/main.libsonnet";
     local panels = this.grafana.panels;
 
     {
-      "clickhouse-replica":
-        g.dashboard.new(prefix + " replica")
+      'clickhouse-replica':
+        g.dashboard.new(prefix + ' replica')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.interserverConnectionsPanel,
-              panels.replicaQueueSizePanel,
-              panels.replicaOperationsPanel,
-              panels.replicaReadOnlyPanel,
-              panels.zooKeeperWatchesPanel,
-              panels.zooKeeperSessionsPanel,
-              panels.zooKeeperRequestsPanel,
+              panels.interserverConnectionsPanel { gridPos+: { w: 12 } },
+              panels.replicaQueueSizePanel { gridPos+: { w: 12 } },
+              panels.replicaOperationsPanel { gridPos+: { w: 12 } },
+              panels.replicaReadOnlyPanel { gridPos+: { w: 12 } },
+              panels.zooKeeperWatchesPanel { gridPos+: { w: 12 } },
+              panels.zooKeeperSessionsPanel { gridPos+: { w: 12 } },
+              panels.zooKeeperRequestsPanel { gridPos+: { w: 24 } },
             ]
           )
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + "_clickhouse_replica",
+          uid + '_clickhouse_replica',
           tags,
           links { clickhouseReplica+:: {} },
           annotations,
@@ -41,25 +41,25 @@ local logslib = import "logs-lib/logs/main.libsonnet";
           period
         ),
 
-      "clickhouse-overview":
-        g.dashboard.new(prefix + " overview")
+      'clickhouse-overview':
+        g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.successfulQueriesPanel,
-              panels.failedQueriesPanel,
-              panels.rejectedInsertsPanel,
-              panels.memoryUsagePanel,
-              panels.memoryUsageGaugePanel,
-              panels.activeConnectionsPanel,
-              panels.networkReceivedPanel,
-              panels.networkTransmittedPanel,
+              panels.successfulQueriesPanel { gridPos+: { w: 24 } },
+              panels.failedQueriesPanel { gridPos+: { w: 12 } },
+              panels.rejectedInsertsPanel { gridPos+: { w: 12 } },
+              panels.memoryUsagePanel { gridPos+: { w: 12 } },
+              panels.memoryUsageGaugePanel { gridPos+: { w: 12 } },
+              panels.activeConnectionsPanel { gridPos+: { w: 24 } },
+              panels.networkReceivedPanel { gridPos+: { w: 12 } },
+              panels.networkTransmittedPanel { gridPos+: { w: 12 } },
             ]
           )
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + "_clickhouse_overview",
+          uid + '_clickhouse_overview',
           tags,
           links { clickhouseOverview+:: {} },
           annotations,
@@ -68,22 +68,22 @@ local logslib = import "logs-lib/logs/main.libsonnet";
           period
         ),
 
-      "clickhouse-latency":
-        g.dashboard.new(prefix + " latency")
+      'clickhouse-latency':
+        g.dashboard.new(prefix + ' latency')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.diskReadLatencyPanel,
-              panels.diskWriteLatencyPanel,
-              panels.networkTransmitLatencyInboundPanel,
-              panels.networkTransmitLatencyOutboundPanel,
-                panels.zooKeeperWaitTimePanel,
+              panels.diskReadLatencyPanel { gridPos+: { w: 12 } },
+              panels.diskWriteLatencyPanel { gridPos+: { w: 12 } },
+              panels.networkTransmitLatencyInboundPanel { gridPos+: { w: 12 } },
+              panels.networkTransmitLatencyOutboundPanel { gridPos+: { w: 12 } },
+              panels.zooKeeperWaitTimePanel { gridPos+: { w: 24 } },
             ]
           )
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + "_clickhouse_latency",
+          uid + '_clickhouse_latency',
           tags,
           links { clickhouseLatency+:: {} },
           annotations,
@@ -96,9 +96,9 @@ local logslib = import "logs-lib/logs/main.libsonnet";
     +
     if this.config.enableLokiLogs then
       {
-        "clickhouse-logs":
+        logs:
           logslib.new(
-            prefix + " logs",
+            prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
             datasourceRegex=this.grafana.variables.datasources.loki.regex,
             filterSelector=this.config.filteringSelector,
@@ -111,7 +111,7 @@ local logslib = import "logs-lib/logs/main.libsonnet";
               {
                 logs+:
                   // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
-                  root.applyCommon(super.logs.templating.list, uid=uid + "-logs", tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {

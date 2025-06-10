@@ -4,13 +4,12 @@ local mixin =
   mixinlib.new()
   + mixinlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/mixin"',
+      filteringSelector: 'job=~"$job"',
       uid: 'mixin',
       enableLokiLogs: true,
     }
   );
 
-// populate monitoring-mixin:
 {
   grafanaDashboards+:: mixin.grafana.dashboards,
   prometheusAlerts+:: mixin.prometheus.alerts,

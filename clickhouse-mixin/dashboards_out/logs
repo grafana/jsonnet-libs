@@ -179,7 +179,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/mixin\",job=~\"$job\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -221,7 +221,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/mixin\",job=~\"$job\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",instance=~\"$instance\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -249,10 +249,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Job",
+               "label": "Instance",
                "multi": true,
-               "name": "job",
-               "query": "label_values({job=~\"integrations/mixin\"}, job)",
+               "name": "instance",
+               "query": "label_values({job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
