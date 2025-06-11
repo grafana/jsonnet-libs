@@ -1,16 +1,10 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 
 {
   new(this)::
     {
       local t = this.grafana.targets,
-      local stat = g.panel.stat,
-      local fieldOverride = g.panel.table.fieldOverride,
-      local alertList = g.panel.alertList,
-      local pieChart = g.panel.pieChart,
-      local barGauge = g.panel.barGauge,
 
       interserverConnectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
