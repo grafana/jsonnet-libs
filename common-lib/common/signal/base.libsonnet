@@ -230,7 +230,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
              ],
            )
          else {}),
-
     //Return query
     asPanelExpression():
       self.combineUniqueExpressions(
@@ -252,7 +251,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               if source.infoLabel != null then [source.infoLabel]
               else []
             );
-          local vars = this.vars { agg: std.join(',', aggLabels) };
           signalUtils.wrapExpr(
             type,
             source.expr,
@@ -260,8 +258,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             q=std.get(source, 'quantile', default=0.95),
             aggLevel=aggLevel,
             rangeFunction=source.rangeFunction,
+            alertRule=false,
           ).applyFunctions()
-          % vars
+          % this.vars {
+            agg: std.join(',', aggLabels),
+          }
           for source in this.sourceMaps
         ]
       ),
@@ -278,6 +279,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             q=std.get(source, 'quantile', default=0.95),
             aggLevel='none',
             rangeFunction=source.rangeFunction,
+            // ensure that interval doesn't have Grafana dashboard dynamic intervals:
+            alertRule=true,
           ).applyFunctions()
           % this.vars
             {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
