@@ -4,7 +4,7 @@ groups:
         - alert: MSSQLHighNumberOfDeadlocks
           annotations:
             description: '{{ printf "%.2f" $value }} deadlocks have occurred over the last 5 minutes on {{$labels.instance}}, which is above threshold of 10 deadlocks.'
-            summary: There are deadlocks ocurring in the database.
+            summary: There are deadlocks occurring in the database.
           expr: |
             increase(mssql_deadlocks_total{}[5m]) > 10
           for: 5m
