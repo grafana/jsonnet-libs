@@ -4,8 +4,8 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/grafonnet-lib.git",
-          "subdir": "grafonnet"
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "common-lib"
         }
       },
       "version": "master"
@@ -13,11 +13,11 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs.git",
-          "subdir": "grafana-cloud-integration-utils"
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v10.0.0"
         }
       },
-      "version": "master"
+      "version": "main"
     },
     {
       "source": {

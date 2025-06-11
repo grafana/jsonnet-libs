@@ -1,0 +1,353 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "ClickHouse Overview",
+            "type": "link",
+            "url": "/d/clickhouse_clickhouse_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "ClickHouse Replica",
+            "type": "link",
+            "url": "/d/clickhouse_clickhouse_replica"
+         },
+         {
+            "keepTime": true,
+            "title": "Logs",
+            "type": "link",
+            "url": "/d/clickhouse-logs"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "clickhouse"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time spent waiting for read syscall",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - disk read elapsed"
+               }
+            ],
+            "title": "Disk read latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time spent waiting for write syscall",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - disk write elapsed"
+               }
+            ],
+            "title": "Disk write latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Latency of inbound network traffic",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 8
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - network receive elapsed"
+               }
+            ],
+            "title": "Network receive latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Latency of outbound network traffic",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 8
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - network send elapsed"
+               }
+            ],
+            "title": "Network transmit latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Time spent waiting for ZooKeeper request to process",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 16
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "interval": "30s",
+                  "legendFormat": "{{instance}} - ZooKeeper wait"
+               }
+            ],
+            "title": "ZooKeeper wait time",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "clickhouse"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "ClickHouse latency",
+      "uid": "clickhouse_clickhouse_latency"
+   }
