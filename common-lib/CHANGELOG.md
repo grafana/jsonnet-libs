@@ -1,3 +1,6 @@
+# 0.3.4
+- [Signal] Fix interval template for increase/delta functions.
+
 # 0.3.3
 - [Signal] add `withQuantile(quantile=0.95)` to histogram signals.
 
