@@ -1,0 +1,333 @@
+{
+    "signalGroup":
+    [
+        {
+    "aggLevel": "instance",
+    "alertsInterval": "5m",
+    "discoveryMetric": {
+       "otel": "process_runtime_go_goroutines",
+       "otel_with_suffixes": "process_runtime_go_goroutines",
+       "prometheus": "go_info"
+    },
+    "signals": {
+       "cgoCalls": {
+          "description": "Number of cgo calls made by the current process",
+          "name": "CGo calls",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_cgo_calls{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_cgo_calls{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_cgo_go_to_c_calls_calls_total{%(queriesSelector)s}"
+             }
+          },
+          "type": "counter"
+       },
+       "gcDurationMax": {
+          "description": "Maximum amount of time in GC stop-the-world pauses.\nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n",
+          "name": "GC duration (max)",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_gc_duration_seconds{%(queriesSelector)s, quantile=\"1\"}",
+                "exprWrappers": [
+                   [
+                      "",
+                      "*10^6"
+                   ]
+                ]
+             }
+          },
+          "type": "gauge",
+          "unit": "ns"
+       },
+       "gcDurationMin": {
+          "description": "Minimum amount of time in GC stop-the-world pauses. \nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n",
+          "name": "GC duration (min)",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_gc_duration_seconds{%(queriesSelector)s, quantile=\"0\"}",
+                "exprWrappers": [
+                   [
+                      "",
+                      "*10^6"
+                   ]
+                ]
+             }
+          },
+          "type": "gauge",
+          "unit": "ns"
+       },
+       "gcDurationPercentile": {
+          "description": "Amount of time in GC stop-the-world pauses (95th percentile).\nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n",
+          "name": "GC duration",
+          "optional": true,
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_gc_pause_ns_bucket{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_gc_pause_ns_bucket{%(queriesSelector)s}"
+             }
+          },
+          "type": "histogram",
+          "unit": "ns"
+       },
+       "goRoutines": {
+          "description": "Number of goroutines.",
+          "name": "Goroutines",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_goroutines{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_goroutines{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_goroutines{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "short"
+       },
+       "goThreads": {
+          "description": "System threads used.\n",
+          "name": "Threads used",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_threads{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge"
+       },
+       "memBuckHash": {
+          "description": "Memory reserved by mcache",
+          "name": "Memory buck hash",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_buck_hash_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memGc": {
+          "description": "Memory reserved by gc metadata",
+          "name": "Memory gc metadata",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_gc_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memHeapAllocatedObjects": {
+          "description": "Number of allocated heap objects.\nThis changes as GC is performed and new objects are allocated.\n",
+          "name": "Heap allocated objects",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_mem_heap_objects{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_mem_heap_objects{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_memstats_heap_objects{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "short"
+       },
+       "memHeapIdleBytes": {
+          "description": "Bytes in idle (unused) spans.\n",
+          "name": "Heap idle spans, bytes",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_mem_heap_idle{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_mem_heap_idle_bytes{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_memstats_heap_idle_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memHeapInUseBytes": {
+          "description": "Bytes in in-use spans.\n",
+          "name": "Heap in-use spans, bytes",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_mem_heap_inuse{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_mem_heap_inuse_bytes{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_memstats_heap_inuse_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memHeapObjBytes": {
+          "description": "Bytes of allocated heap objects.\n",
+          "name": "Heap objects, bytes",
+          "optional": true,
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_mem_heap_alloc{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_mem_heap_alloc_bytes{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_memstats_heap_alloc_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memHeapReleasedBytes": {
+          "description": "Bytes of idle spans whose physical memory has been returned to the OS.\n",
+          "name": "Heap released, bytes",
+          "sources": {
+             "otel": {
+                "expr": "process_runtime_go_mem_heap_released{%(queriesSelector)s}"
+             },
+             "otel_with_suffixes": {
+                "expr": "process_runtime_go_mem_heap_released_bytes{%(queriesSelector)s}"
+             },
+             "prometheus": {
+                "expr": "go_memstats_heap_released_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memHeapReserved": {
+          "description": "Memory reserved from system by heap.\n",
+          "name": "Memory reserved from system by heap",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_heap_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memMcache": {
+          "description": "Memory reserved by mcache",
+          "name": "Memory mcache",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_mcache_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memMspan": {
+          "description": "Memory reserved by mspan",
+          "name": "Memory mspan",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_mspan_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memOther": {
+          "description": "Memory reserved for other needs",
+          "name": "Memory other",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_other_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memReserved": {
+          "description": "Memory reserved from system.\n",
+          "name": "Memory reserved from system",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memStack": {
+          "description": "Memory reserved by stack.\n",
+          "name": "Memory reserved by stack",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_stack_sys_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "memTotal": {
+          "name": "Memory allocated from system",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_memstats_alloc_bytes{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "decbytes"
+       },
+       "uptime": {
+          "description": "Golang process uptime.",
+          "name": "Uptime",
+          "sources": {
+             "otel": {
+                "expr": "runtime_uptime{%(queriesSelector)s}/1000"
+             },
+             "otel_with_suffixes": {
+                "expr": "runtime_uptime_milliseconds_total{%(queriesSelector)s}/1000"
+             },
+             "prometheus": {
+                "expr": "time()-process_start_time_seconds{%(queriesSelector)s}"
+             }
+          },
+          "type": "gauge",
+          "unit": "dtdurations"
+       },
+       "version": {
+          "description": "Golang version used.",
+          "name": "Golang version",
+          "optional": true,
+          "sources": {
+             "prometheus": {
+                "expr": "go_info{%(queriesSelector)s}",
+                "infoLabel": "version"
+             }
+          },
+          "type": "info"
+       }
+    }
+ }
+ 
+]}

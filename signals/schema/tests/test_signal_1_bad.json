@@ -1,0 +1,39 @@
+{
+    "signalGroup":
+    [
+        {
+            "discoveryMetric": {
+                "prometheus": "up",
+                "loki": "up"
+            },
+            "signals":  {
+                    "signal1":
+                    {
+                        "name": "http_requests_total",
+                        "type": "BADcounter",
+                        "unit": "requests",
+                        "description": "Total number of HTTP requests",
+                        "optional": false,
+                        "aggLevel": "instance",
+                        "aggFunction": "sum",
+                        "sources": {
+                            "prometheus": {
+                                "expr": "sum(rate(http_requests_total[5m]))",
+                                "rangeFunction": "rate",
+                                "aggFunction": "badfunction",
+                                "infoLabel": "HTTP Requests Rate",
+                                "legendCustomTemplate": "{{method}} {{path}}",
+                                "quantile": 1
+                            },
+                            "loki": {
+                                "expr": "sum(count_over_time({job=\"apiserver\"} |~ \"GET /api/v1/.*\" [5m]))",
+                                "rangeFunction": "rate",
+                                "aggFunction": "sum",
+                                "infoLabel": "API Requests Rate"
+                            }
+                        }
+                    }
+            }
+        }
+    ]
+}

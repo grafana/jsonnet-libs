@@ -1,0 +1,520 @@
+openapi: 3.0.3
+info:
+  title: Signal Interface Specification
+  description: |
+    Language-agnostic interface specification for Signal objects and their methods.
+    This defines the contract that must be implemented in each target language.
+  version: 1.0.0
+
+components:
+  schemas:
+    # Core data types
+    Signal:
+      type: object
+      description: Core signal object with all properties and methods
+      properties:
+        # Properties
+        name:
+          type: string
+        nameShort: 
+          type: string
+        type:
+          type: string
+          enum: [counter, gauge, histogram, info, raw, stub]
+        unit:
+          type: string
+        description:
+          type: string
+        optional:
+          type: boolean
+        aggLevel:
+          type: string
+          enum: [none, instance, group]
+        aggFunction:
+          type: string
+          enum: [avg, min, max, sum]
+        sourceMaps:
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalSource'
+    
+    SignalSource:
+      type: object
+      properties:
+        expr:
+          type: string
+        exprWrappers:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        rangeFunction:
+          type: string
+          enum: [rate, irate, delta, idelta, increase]
+        aggKeepLabels:
+          type: array
+          items:
+            type: string
+        infoLabel:
+          type: string
+        valueMappings:
+          type: array
+          items:
+            type: object
+        legendCustomTemplate:
+          type: string
+        quantile:
+          type: number
+    
+    Panel:
+      type: object
+      description: Generic panel object (Grafana panel structure)
+      
+    Target:
+      type: object
+      description: Query target for panels
+      
+    Override:
+      type: object
+      description: Panel field override
+      
+    Variables:
+      type: array
+      description: Dashboard variables collection
+      items:
+        type: object
+
+# Interface Methods Specification
+paths:
+  # Grafana-specific Methods
+  /grafana/asTimeSeries:
+    post:
+      summary: asTimeSeries()
+      description: Render signal as Grafana TimeSeries panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: TimeSeries panel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Panel'
+  
+  /grafana/asStat:
+    post:
+      summary: asStat()
+      description: Render signal as Grafana Stat panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Stat panel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Panel'
+  
+  /grafana/asGauge:
+    post:
+      summary: asGauge()
+      description: Render signal as Grafana Gauge panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Gauge panel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Panel'
+  
+  /grafana/asStatusHistory:
+    post:
+      summary: asStatusHistory()
+      description: Render signal as Grafana StatusHistory panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: StatusHistory panel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Panel'
+  
+  /grafana/asTable:
+    post:
+      summary: asTable(format='table|time_series')
+      description: Render signal as Grafana Table panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                format:
+                  type: string
+                  enum: [table, time_series]
+                  default: table
+      responses:
+        '200':
+          description: Table panel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Panel'
+
+  /grafana/asPanelMixin:
+    post:
+      summary: asPanelMixin()
+      description: Add signal as target and override to existing Grafana panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                existingPanel:
+                  $ref: '#/components/schemas/Panel'
+      responses:
+        '200':
+          description: Panel mixin object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  targets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Target'
+                  overrides:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Override'
+  
+  /grafana/asTableColumn:
+    post:
+      summary: asTableColumn(format='table|time_series')
+      description: Add signal as column to existing Grafana table panel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                format:
+                  type: string
+                  enum: [table, time_series]
+                  default: table
+      responses:
+        '200':
+          description: Table column mixin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  targets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Target'
+                  overrides:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Override'
+  
+  /grafana/asTarget:
+    post:
+      summary: asTarget()
+      description: Generate Grafana query target for signal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Query target
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Target'
+  
+  /grafana/asTableTarget:
+    post:
+      summary: asTableTarget()
+      description: Generate Grafana table-formatted query target
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Table query target
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Target'
+  
+  /grafana/asOverride:
+    post:
+      summary: asOverride()
+      description: Generate Grafana panel field override for signal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Panel override
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Override'
+  
+  /grafana/asPanelExpression:
+    post:
+      summary: asPanelExpression()
+      description: Generate expression for Grafana panel target
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Panel expression
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expression:
+                    type: string
+
+  /grafana/getVariablesMultiChoice:
+    post:
+      summary: getVariablesMultiChoice()
+      description: Generate Grafana dashboard variables for signals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signals:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Dashboard variables
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variables'
+
+  # Prometheus-specific Methods
+  /prometheus/withTopK:
+    post:
+      summary: withTopK(limit=25)
+      description: Wrap signal expression into topk() function
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                limit:
+                  type: integer
+                  default: 25
+      responses:
+        '200':
+          description: Modified signal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signal'
+  
+  /prometheus/withExprWrappersMixin:
+    post:
+      summary: withExprWrappersMixin(wrapper=[])
+      description: Add additional expression wrappers on top of existing ones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                wrapper:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Modified signal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signal'
+  
+  /prometheus/withOffset:
+    post:
+      summary: withOffset(offset)
+      description: Add offset modifier to the expression
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                offset:
+                  type: string
+      responses:
+        '200':
+          description: Modified signal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signal'
+  
+  /prometheus/withFilteringSelectorMixin:
+    post:
+      summary: withFilteringSelectorMixin(mixin)
+      description: Add additional selector to filteringSelector
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                mixin:
+                  type: string
+      responses:
+        '200':
+          description: Modified signal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signal'
+  
+  /prometheus/withQuantile:
+    post:
+      summary: withQuantile(quantile=0.95)
+      description: Add quantile modifier for histogram signals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+                quantile:
+                  type: number
+                  default: 0.95
+                  minimum: 0
+                  maximum: 1
+      responses:
+        '200':
+          description: Modified signal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signal'
+
+  /prometheus/asRuleExpression:
+    post:
+      summary: asRuleExpression()
+      description: Generate Prometheus rule expression (no Grafana variables)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signal:
+                  $ref: '#/components/schemas/Signal'
+      responses:
+        '200':
+          description: Rule expression
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expression:
+                    type: string 
