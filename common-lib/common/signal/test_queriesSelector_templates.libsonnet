@@ -9,7 +9,7 @@ local test = import 'jsonnetunit/test.libsonnet';
       instanceLabels=['instance'],
       aggLevel='group',
     ),
-    
+
     local testSignal = signalInit.addSignal(
       name='Test metric',
       nameShort='test',
@@ -48,7 +48,7 @@ local test = import 'jsonnetunit/test.libsonnet';
       instanceLabels=['instance'],
       aggLevel='group',
     ),
-    
+
     local testSignal = signalInit.addSignal(
       name='Test metric',
       nameShort='test',
@@ -91,7 +91,7 @@ local test = import 'jsonnetunit/test.libsonnet';
         aggLevel='group',
         alertsInterval='5m',
       ),
-      
+
       local testSignal = signalInit.addSignal(
         name='Test metric',
         nameShort='test',
@@ -132,7 +132,7 @@ local test = import 'jsonnetunit/test.libsonnet';
         aggLevel='group',
         alertsInterval='5m',
       ),
-      
+
       local testSignal = signalInit.addSignal(
         name='Test counter',
         nameShort='counter',
@@ -175,7 +175,7 @@ local test = import 'jsonnetunit/test.libsonnet';
         instanceLabels=['instance'],
         aggLevel='group',
       ),
-      
+
       local testSignal = signalInit.addSignal(
         name='Test metric',
         nameShort='test',
@@ -216,7 +216,7 @@ local test = import 'jsonnetunit/test.libsonnet';
         aggLevel='group',
         alertsInterval='5m',
       ),
-      
+
       local testSignal = signalInit.addSignal(
         name='Test metric',
         nameShort='test',
@@ -248,4 +248,4 @@ local test = import 'jsonnetunit/test.libsonnet';
       }),
     },
   },
-} 
+}
