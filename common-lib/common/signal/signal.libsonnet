@@ -1,3 +1,4 @@
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 local g = import '../g.libsonnet';
 local utils = import '../utils.libsonnet';
 local variables = import '../variables/variables.libsonnet';
@@ -211,6 +212,8 @@ local stub = import './stub.libsonnet';
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
       queriesSelector: grafanaVariables.queriesSelector,
+      queriesSelectorGroupOnly: grafanaVariables.queriesSelectorGroupOnly,
+      queriesSelectorFilterOnly: grafanaVariables.queriesSelectorFilterOnly,
       interval: interval,
       alertsInterval: alertsInterval,
     },

@@ -1,3 +1,7 @@
+# 0.3.5
+- [Variables] add queriesSelectorGroupOnly, queriesSelectorFilterOnly attributes
+- [Signal] add %(queriesSelectorGroupOnly)s, %(queriesSequeriesSelectorFilterOnly)s templates
+
 # 0.3.4
 - [Signal] Fix interval template for increase/delta functions.
 

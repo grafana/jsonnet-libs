@@ -123,6 +123,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ),
               ],
             queriesSelector+: ',' + mixin,
+            queriesSelectorGroupOnly+: ',' + mixin,
+            queriesSelectorFilterOnly+: ',' + mixin,
           },
       },
 
@@ -287,6 +289,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             interval: this.vars.alertsInterval,
             // keep only filteringSelector, remove any Grafana dashboard variables:
             queriesSelector: this.vars.filteringSelector[0],
+            queriesSelectorGroupOnly: this.vars.filteringSelector[0],
+            queriesSelectorFilterOnly: this.vars.filteringSelector[0],
           }
           for source in this.sourceMaps
         ]
