@@ -11,7 +11,7 @@ local prometheusQuery = g.query.prometheus;
     //
     // Cluster Overview Dashboard Targets
     //
-    
+
     // Top nodes metrics
     topNodesByMemoryUsage:
       prometheusQuery.new(
@@ -263,7 +263,7 @@ local prometheusQuery = g.query.prometheus;
     //
 
     // Detailed bucket metrics (instance-level)
-    topBucketsByMemoryUsedDetailed:
+    bucketTopBucketsByMemoryUsed:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk(5, kv_mem_used_bytes{%(bucketSelector)s})' % vars
@@ -319,13 +319,6 @@ local prometheusQuery = g.query.prometheus;
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{%(bucketSelector)s}))' % vars
-      )
-      + prometheusQuery.withLegendFormat('{{instance}} - {{bucket}}'),
-
-    topBucketsByVBucketQueueMemory:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{%(bucketSelector)s}))' % vars
       )
       + prometheusQuery.withLegendFormat('{{instance}} - {{bucket}}'),
   },

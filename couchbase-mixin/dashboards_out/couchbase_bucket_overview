@@ -343,7 +343,7 @@
                      "showPoints": "never",
                      "spanNulls": true
                   },
-                  "max": 100,
+                  "max": 1,
                   "unit": "percentunit"
                }
             },
@@ -465,7 +465,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\",bucket=~\"$bucket\"}))",
+                  "expr": "topk(5, kv_mem_used_bytes{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\",bucket=~\"$bucket\"})",
                   "legendFormat": "{{instance}} - {{bucket}}"
                }
             ],

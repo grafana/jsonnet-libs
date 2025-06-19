@@ -77,22 +77,18 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       couchbase_cluster_overview:
         g.dashboard.new(prefix + ' cluster overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.cluster_topNodesByMemoryUsagePanel { gridPos+: { w: 12 }},
-              panels.cluster_topNodesByHTTPRequestsPanel { gridPos+: { w: 12 }},
-              panels.cluster_topNodesByQueryServiceRequestsPanel { gridPos+: { w: 12 }},
-              panels.cluster_topNodesByIndexAverageScanLatencyPanel { gridPos+: { w: 12 }},
-              panels.cluster_xdcrReplicationRatePanel { gridPos+: { w: 8 }},
-              panels.cluster_xdcrDocsReceivedPanel { gridPos+: { w: 8 }},
-              panels.cluster_localBackupSizePanel { gridPos+: { w: 8 }},
-              panels.cluster_topBucketsByMemoryUsedPanel { gridPos+: { w: 12 }},
-              panels.cluster_topBucketsByDiskUsedPanel { gridPos+: { w: 12 }},
-              panels.cluster_topBucketsByOperationsPanel { gridPos+: { w: 12 }},
-              panels.cluster_topBucketsByOperationsFailedPanel { gridPos+: { w: 12 }},
-              panels.cluster_topBucketsByVBucketsCountPanel { gridPos+: { w: 12 }},
-              panels.cluster_topBucketsByVBucketQueueMemoryPanel { gridPos+: { w: 12 }},
-            ]
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                panels.cluster_topNodesByMemoryUsagePanel { gridPos+: { w: 12 } },
+                panels.cluster_topNodesByHTTPRequestsPanel { gridPos+: { w: 12 } },
+                panels.cluster_topNodesByQueryServiceRequestsPanel { gridPos+: { w: 12 } },
+                panels.cluster_topNodesByIndexAverageScanLatencyPanel { gridPos+: { w: 12 } },
+                panels.cluster_xdcrReplicationRatePanel { gridPos+: { w: 8 } },
+                panels.cluster_xdcrDocsReceivedPanel { gridPos+: { w: 8 } },
+                panels.cluster_localBackupSizePanel { gridPos+: { w: 8 } },
+              ] + this.grafana.rows.clusterOverviewBucket,
+            )
           )
         )
         + root.applyCommon(

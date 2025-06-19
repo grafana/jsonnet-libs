@@ -20,7 +20,7 @@ local utils = commonlib.utils;
           + var.query.queryTypes.withLabelValues(
             chainVar.label,
             // Combine filteringSelector with chainSelector, avoiding duplicate label filters
-            local combinedSelector = 
+            local combinedSelector =
               if std.length(std.stripChars(filteringSelector, ' ')) == 0 then chainVar.chainSelector
               else if std.length(chainVar.chainSelector) == 0 then std.stripChars(filteringSelector, ' ')
               else
@@ -32,9 +32,10 @@ local utils = commonlib.utils;
                   if std.length(std.split(part, '=')) > 1
                 ]);
                 local chainParts = std.split(chainVar.chainSelector, ',');
-                local chainFiltered = std.filter(function(part)
-                  local label = std.stripChars(std.split(std.stripChars(part, ' '), '=')[0], ' ');
-                  !std.setMember(label, filteringLabels),
+                local chainFiltered = std.filter(
+                  function(part)
+                    local label = std.stripChars(std.split(std.stripChars(part, ' '), '=')[0], ' ');
+                    !std.setMember(label, filteringLabels),
                   chainParts
                 );
                 std.join(',', std.filter(function(x) std.length(x) > 0, [std.stripChars(filteringSelector, ' ')] + chainFiltered));

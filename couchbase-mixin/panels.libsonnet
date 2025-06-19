@@ -1,6 +1,5 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 
 {
   new(this)::
@@ -16,7 +15,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by memory used',
           targets=[
-            t.topBucketsByMemoryUsedDetailed,
+            t.bucketTopBucketsByMemoryUsed,
           ],
           description='Memory used for the top buckets.'
         )
@@ -119,7 +118,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by vBucket queue memory',
           targets=[
-            t.topBucketsByVBucketQueueMemory,
+            t.bucketTopBucketsByMemoryUsed,
           ],
           description='Memory occupied by the queue for a virtual bucket for the top buckets.'
         )
@@ -433,13 +432,14 @@ local utils = commonlib.utils;
           + barGauge.thresholdStep.withValue(null),
         ])
         + barGauge.standardOptions.withUnit('none'),
-      
+
       cluster_topBucketsByVBucketQueueMemoryPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by vBucket queue memory',
           targets=[
             t.clusterTopBucketsByVBucketQueueMemory,
           ],
+          description='Memory occupied by the queue for a virtual bucket for the top buckets across the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)

@@ -361,6 +361,19 @@
             "type": "bargauge"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 24
+            },
+            "id": 8,
+            "panels": [ ],
+            "title": "Buckets",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -383,9 +396,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 24
+               "y": 25
             },
-            "id": 8,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -434,9 +447,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 24
+               "y": 25
             },
-            "id": 9,
+            "id": 10,
             "options": {
                "orientation": "horizontal"
             },
@@ -477,9 +490,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 32
+               "y": 33
             },
-            "id": 10,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -527,9 +540,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 32
+               "y": 33
             },
-            "id": 11,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -578,9 +591,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 40
+               "y": 41
             },
-            "id": 12,
+            "id": 13,
             "options": {
                "orientation": "horizontal"
             },
@@ -603,7 +616,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "",
+            "description": "Memory occupied by the queue for a virtual bucket for the top buckets across the cluster.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -621,9 +634,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 40
+               "y": 41
             },
-            "id": 13,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],

@@ -3,6 +3,7 @@ local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
+local rows = import './rows.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
 
@@ -23,6 +24,7 @@ local variables = import './variables.libsonnet';
       links: links.new(this),
       panels: panels.new(this),
       dashboards: dashboards.new(this),
+      rows: rows.new(panels.new(this)),
     },
 
     prometheus: {
