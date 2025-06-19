@@ -18,16 +18,19 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       mssql_overview:
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.connectionsPanel { gridPos+: { w: 12 } },
-              panels.batchRequestsPanel { gridPos+: { w: 12 } },
-              panels.severeErrorsPanel { gridPos+: { w: 12 } },
-              panels.deadlocksPanel { gridPos+: { w: 12 } },
-              panels.osMemoryUsagePanel { gridPos+: { w: 24 } },
-              panels.memoryManagerPanel { gridPos+: { w: 16 } },
-              panels.committedMemoryUtilizationPanel { gridPos+: { w: 8 } },
-            ] + this.grafana.rows.database,
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                panels.connectionsPanel { gridPos+: { w: 12 } },
+                panels.batchRequestsPanel { gridPos+: { w: 12 } },
+                panels.severeErrorsPanel { gridPos+: { w: 12 } },
+                panels.deadlocksPanel { gridPos+: { w: 12 } },
+                panels.osMemoryUsagePanel { gridPos+: { w: 24 } },
+                panels.memoryManagerPanel { gridPos+: { w: 16 } },
+                panels.committedMemoryUtilizationPanel { gridPos+: { w: 8 } },
+              ] +
+              [this.grafana.rows.database + g.panel.row.withCollapsed(false)],
+            ),
           )
         )
         + root.applyCommon(
