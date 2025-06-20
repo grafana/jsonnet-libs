@@ -671,7 +671,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Mean",
-                  "refId": "CPU usage"
+                  "refId": "Mean"
                }
             ],
             "title": "CPU usage",
@@ -782,7 +782,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Mean",
-                  "refId": "Memory usage"
+                  "refId": "Mean"
                }
             ],
             "title": "Memory usage",
@@ -893,7 +893,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Mean",
-                  "refId": "Disk I/O utilization"
+                  "refId": "Mean"
                }
             ],
             "title": "Disk IO",
@@ -1004,7 +1004,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Mean",
-                  "refId": "Disk usage"
+                  "refId": "Mean"
                }
             ],
             "title": "Disk space usage",
