@@ -82,7 +82,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           (
             if aggLevel == 'group' then super.groupLabels
             else if aggLevel == 'instance' then super.instanceLabels
-            else if aggLevel == 'none' then []
+            else if aggLevel == 'none' then super.instanceLabels
           ),
         aggLegend: utils.labelsToPanelLegend(
           // keep last label
