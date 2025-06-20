@@ -31,7 +31,6 @@ local dashboardUid = 'netflow-overview';
       + g.dashboard.withTimezone($._config.dashboardTimezone)
       + g.dashboard.withVariables([
         var.datasource.new('prometheus_datasource', 'prometheus')
-        + var.datasource.withRegex('(ops|dev)-cortex')
         + var.query.generalOptions.withLabel('Prometheus data source'),
         var.datasource.new('loki_datasource', 'loki')
         + var.query.generalOptions.withLabel('Loki data source'),

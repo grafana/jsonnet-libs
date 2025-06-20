@@ -1201,7 +1201,6 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "(ops|dev)-cortex",
                "type": "datasource"
             },
             {
