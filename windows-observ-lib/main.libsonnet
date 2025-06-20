@@ -16,7 +16,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       {
         [sig]: commonlib.signals.unmarshallJsonMulti(
           this.config.signals[sig],
-           type=this.config.metricsSource)
+          type=this.config.metricsSource
+        )
         for sig in std.objectFields(this.config.signals)
       },
     grafana: {

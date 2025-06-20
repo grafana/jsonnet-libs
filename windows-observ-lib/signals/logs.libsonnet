@@ -6,13 +6,13 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    
+
     // logs-lib compatibility fields
     extraLogLabels: this.extraLogLabels,
     logsVolumeGroupBy: this.logsVolumeGroupBy,
     showLogsVolume: this.showLogsVolume,
     logsExtraFilters: this.logsExtraFilters,
-    
+
     aggLevel: 'instance',
     aggFunction: 'avg',
     discoveryMetric: {
@@ -42,4 +42,4 @@ function(this)
         },
       },
     },
-  } 
+  }

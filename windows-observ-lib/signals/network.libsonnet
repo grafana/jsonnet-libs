@@ -157,11 +157,11 @@ function(this)
                     color: 'light-red',
                     index: 0,
                   },
-                }
+                },
               },
             ],
           },
         },
       },
     },
-  } 
+  }

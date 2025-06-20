@@ -7,14 +7,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     local signals = this.signals,
 
     reboot: commonlib.annotations.reboot.new(
-      title='Reboot',
-      target=signals.system.bootTime.asTarget() +
-        {
-          expr: signals.system.bootTime.asPanelExpression() + '*1000 > $__from < $__to',
-        },
-      instanceLabels=std.join(',', config.instanceLabels),
-    )
-    + commonlib.annotations.base.withTagKeys(std.join(',', config.groupLabels + config.instanceLabels)),
+              title='Reboot',
+              target=signals.system.bootTime.asTarget() +
+                     {
+                       expr: signals.system.bootTime.asPanelExpression() + '*1000 > $__from < $__to',
+                     },
+              instanceLabels=std.join(',', config.instanceLabels),
+            )
+            + commonlib.annotations.base.withTagKeys(std.join(',', config.groupLabels + config.instanceLabels)),
 
     serviceFailed: if config.enableLokiLogs then
       commonlib.annotations.serviceFailed.new(
@@ -34,4 +34,4 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.annotations.base.withTextFormat('{{message}}')
     else {},
   },
-} 
+}

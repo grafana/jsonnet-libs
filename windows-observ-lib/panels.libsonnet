@@ -206,14 +206,14 @@ local utils = commonlib.utils;
           ],
         )
         + g.panel.timeSeries.standardOptions.withUnit('short'),
-            timeNtpStatus:
+      timeNtpStatus:
         commonlib.panels.system.statusHistory.ntp.new(
           'NTP status',
           targets=[signals.system.timeNtpStatus.asTarget()],
           description='Status of time synchronization.'
         )
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
-            timeNtpDelay:
+      timeNtpDelay:
         commonlib.panels.generic.timeSeries.base.new(
           'NTP delay',
           targets=[
@@ -325,8 +325,8 @@ local utils = commonlib.utils;
       diskIOps:
         commonlib.panels.disk.timeSeries.iops.new(
           targets=[
-                      signals.disk.diskReads.asTarget(),
-          signals.disk.diskWrites.asTarget(),
+            signals.disk.diskReads.asTarget(),
+            signals.disk.diskWrites.asTarget(),
           ]
         ),
 
@@ -461,7 +461,7 @@ local utils = commonlib.utils;
                    + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
       replicationPendingOperations: commonlib.panels.generic.stat.info.new(
         'Replication pending operations',
-        targets=[signals.activeDirectory.replicationPendingOperations.withExprWrappersMixin(['sum(',')']).asTarget()],
+        targets=[signals.activeDirectory.replicationPendingOperations.withExprWrappersMixin(['sum(', ')']).asTarget()],
         description=|||
           The number of replication operations that are pending in Active Directory.
           These operations could include a variety of tasks, such as updating directory objects, processing changes made on other domain controllers, or applying new schema updates.
@@ -469,14 +469,14 @@ local utils = commonlib.utils;
       ),
       directoryServiceThreads: commonlib.panels.generic.stat.info.new(
         'Directory service threads',
-        targets=[signals.activeDirectory.directoryServiceThreads.withExprWrappersMixin(['sum(',')']).asTarget()],
+        targets=[signals.activeDirectory.directoryServiceThreads.withExprWrappersMixin(['sum(', ')']).asTarget()],
         description=|||
           The current number of active threads in the directory service.
         |||
       ),
       replicationPendingSynchronizations: commonlib.panels.generic.stat.info.new(
         'Replication pending synchronizations',
-        targets=[signals.activeDirectory.replicationPendingSynchronizations.withExprWrappersMixin(['sum(',')']).asTarget()],
+        targets=[signals.activeDirectory.replicationPendingSynchronizations.withExprWrappersMixin(['sum(', ')']).asTarget()],
         description=|||
           The number of synchronization requests that are pending in Active Directory. Synchronization in AD refers to the process of ensuring that changes (like updates to user accounts, group policies, etc.) are consistently applied across all domain controllers.
         |||

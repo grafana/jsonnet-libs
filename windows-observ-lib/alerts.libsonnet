@@ -86,162 +86,161 @@
       {
         name: 'windows-alerts-' + config.uid,
         rules: [
-          {
-            alert: 'WindowsCPUHighUsage',
-            expr: |||
-              (%s) > %s
-            ||| % [
-              signals.cpu.cpuUsage.asRuleExpression(),
-              config.alertsCPUThresholdWarning,
-            ],
-            'for': '15m',
-            keep_firing_for: '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'High CPU usage on Windows host.',
-              description: |||
-                CPU usage on host {{ $labels.%s }} is above %s%%. The current value is {{ $value | printf "%%.2f" }}%%.
-              ||| % [instanceLabel,  config.alertsCPUThresholdWarning],
-            },
-          },
-          {
-            alert: 'WindowsMemoryHighUtilization',
-            expr: |||
-              (%s) > %s
-            ||| % [
-              signals.memory.memoryUsagePercent.asRuleExpression(),
-              config.alertMemoryUsageThresholdCritical,
-            ],
-            'for': '15m',
-            keep_firing_for: '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'High memory usage on Windows host.',
-              description: |||
-                Memory usage on host {{ $labels.%s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
-                This exceeds the threshold of %s%%.
-                Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total memory: {{ with printf `windows_cs_physical_memory_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
-                Consider investigating processes consuming high memory or increasing available memory.
-              ||| % [instanceLabel, config.alertMemoryUsageThresholdCritical],
-            },
-          },
-          {
-            alert: 'WindowsDiskAlmostOutOfSpace',
-            expr: |||
-              (%s) > %s
-            ||| % [
-              signals.disk.diskUsagePercent.asRuleExpression(),
-              config.alertDiskUsageThresholdCritical,
-            ],
-            'for': '15m',
-            keep_firing_for: '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'Disk is almost full on Windows host.',
-              description: |||
-                Disk space on volume {{ $labels.volume }} of host {{ $labels.%s }} is critically low, with {{ printf "%%.2f" $value }}%% of total space used.
-                This exceeds the threshold of %s%%.
-                Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                Consider cleaning up unnecessary files or increasing disk capacity.
-              ||| % [instanceLabel, config.alertDiskUsageThresholdCritical, config.filteringSelector, config.filteringSelector],
-            },
-          },
-          {
-            alert: 'WindowsServiceNotHealthy',
-            expr: |||
-              (%s) > 0
-            ||| % [
-              signals.services.serviceNotHealthy.asRuleExpression(),
-            ],
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'Windows service is not healthy.',
-              description: 'Windows service {{ $labels.name }} is not in healthy state, currently in \'{{ $labels.status }}\'.',
-            },
-          },
-          {
-            alert: 'WindowsDiskDriveNotHealthy',
-            expr: |||
-              (%s) != 1
-            ||| % [
-              signals.disk.diskDriveStatus.withFilteringSelectorMixin('status="OK"').asRuleExpression(),
-            ],
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'Windows physical disk is not healthy.',
-              description: 'Windows disk {{ $labels.name }} is not in healthy state, currently in \'{{ $labels.status }}\' status.',
-            },
-          },
-          {
-            alert: 'WindowsNTPClientDelay',
-            expr: |||
-              (%s) > 1
-            ||| % [
-              signals.services.ntpDelay.asRuleExpression(),
-            ],
-            'for': '5m',
-            keep_firing_for: '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'NTP client delay.',
-              description: 'Round-trip time of NTP client on instance {{ $labels.%s }} is greater than 1 second. Delay is {{ printf "%%.2f" $value }} sec.' % instanceLabel,
-            },
-          },
-          {
-            alert: 'WindowsNTPTimeOffset',
-            expr: |||
-              (%s) > 1
-            ||| % [
-              signals.services.ntpTimeOffset.asRuleExpression(),
-            ],
-            'for': '5m',
-            keep_firing_for: '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'NTP time offset is too large.',
-              description: 'NTP time offset for instance {{ $labels.%s }} is greater than 1 second. Offset is {{ $value }} sec.' % instanceLabel,
-            },
-          },
-          {
-            alert: 'WindowsNodeHasRebooted',
-            expr: |||
-              (%s) < 600
-              and
-              (%s) > 600
-            ||| % [
-              signals.system.uptime.asRuleExpression(),
-              signals.system.uptime.withOffset('10m').asRuleExpression(),
-            ],
-            labels: {
-              severity: 'info',
-            },
-            annotations: {
-              summary: 'Node has rebooted.',
-              description: 'Node {{ $labels.%s }} has rebooted {{ $value | humanize }} seconds ago.' % instanceLabel,
-            },
-          },
-        ]
-        + if config.enableADDashboard then ADAlerts else [],
+                 {
+                   alert: 'WindowsCPUHighUsage',
+                   expr: |||
+                     (%s) > %s
+                   ||| % [
+                     signals.cpu.cpuUsage.asRuleExpression(),
+                     config.alertsCPUThresholdWarning,
+                   ],
+                   'for': '15m',
+                   keep_firing_for: '5m',
+                   labels: {
+                     severity: 'warning',
+                   },
+                   annotations: {
+                     summary: 'High CPU usage on Windows host.',
+                     description: |||
+                       CPU usage on host {{ $labels.%s }} is above %s%%. The current value is {{ $value | printf "%%.2f" }}%%.
+                     ||| % [instanceLabel, config.alertsCPUThresholdWarning],
+                   },
+                 },
+                 {
+                   alert: 'WindowsMemoryHighUtilization',
+                   expr: |||
+                     (%s) > %s
+                   ||| % [
+                     signals.memory.memoryUsagePercent.asRuleExpression(),
+                     config.alertMemoryUsageThresholdCritical,
+                   ],
+                   'for': '15m',
+                   keep_firing_for: '5m',
+                   labels: {
+                     severity: 'critical',
+                   },
+                   annotations: {
+                     summary: 'High memory usage on Windows host.',
+                     description: |||
+                       Memory usage on host {{ $labels.%s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
+                       This exceeds the threshold of %s%%.
+                       Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Total memory: {{ with printf `windows_cs_physical_memory_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Consider investigating processes consuming high memory or increasing available memory.
+                     ||| % [instanceLabel, config.alertMemoryUsageThresholdCritical],
+                   },
+                 },
+                 {
+                   alert: 'WindowsDiskAlmostOutOfSpace',
+                   expr: |||
+                     (%s) > %s
+                   ||| % [
+                     signals.disk.diskUsagePercent.asRuleExpression(),
+                     config.alertDiskUsageThresholdCritical,
+                   ],
+                   'for': '15m',
+                   keep_firing_for: '5m',
+                   labels: {
+                     severity: 'critical',
+                   },
+                   annotations: {
+                     summary: 'Disk is almost full on Windows host.',
+                     description: |||
+                       Disk space on volume {{ $labels.volume }} of host {{ $labels.%s }} is critically low, with {{ printf "%%.2f" $value }}%% of total space used.
+                       This exceeds the threshold of %s%%.
+                       Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Consider cleaning up unnecessary files or increasing disk capacity.
+                     ||| % [instanceLabel, config.alertDiskUsageThresholdCritical, config.filteringSelector, config.filteringSelector],
+                   },
+                 },
+                 {
+                   alert: 'WindowsServiceNotHealthy',
+                   expr: |||
+                     (%s) > 0
+                   ||| % [
+                     signals.services.serviceNotHealthy.asRuleExpression(),
+                   ],
+                   'for': '5m',
+                   labels: {
+                     severity: 'critical',
+                   },
+                   annotations: {
+                     summary: 'Windows service is not healthy.',
+                     description: "Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.",
+                   },
+                 },
+                 {
+                   alert: 'WindowsDiskDriveNotHealthy',
+                   expr: |||
+                     (%s) != 1
+                   ||| % [
+                     signals.disk.diskDriveStatus.withFilteringSelectorMixin('status="OK"').asRuleExpression(),
+                   ],
+                   'for': '5m',
+                   labels: {
+                     severity: 'critical',
+                   },
+                   annotations: {
+                     summary: 'Windows physical disk is not healthy.',
+                     description: "Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}' status.",
+                   },
+                 },
+                 {
+                   alert: 'WindowsNTPClientDelay',
+                   expr: |||
+                     (%s) > 1
+                   ||| % [
+                     signals.services.ntpDelay.asRuleExpression(),
+                   ],
+                   'for': '5m',
+                   keep_firing_for: '5m',
+                   labels: {
+                     severity: 'warning',
+                   },
+                   annotations: {
+                     summary: 'NTP client delay.',
+                     description: 'Round-trip time of NTP client on instance {{ $labels.%s }} is greater than 1 second. Delay is {{ printf "%%.2f" $value }} sec.' % instanceLabel,
+                   },
+                 },
+                 {
+                   alert: 'WindowsNTPTimeOffset',
+                   expr: |||
+                     (%s) > 1
+                   ||| % [
+                     signals.services.ntpTimeOffset.asRuleExpression(),
+                   ],
+                   'for': '5m',
+                   keep_firing_for: '5m',
+                   labels: {
+                     severity: 'warning',
+                   },
+                   annotations: {
+                     summary: 'NTP time offset is too large.',
+                     description: 'NTP time offset for instance {{ $labels.%s }} is greater than 1 second. Offset is {{ $value }} sec.' % instanceLabel,
+                   },
+                 },
+                 {
+                   alert: 'WindowsNodeHasRebooted',
+                   expr: |||
+                     (%s) < 600
+                     and
+                     (%s) > 600
+                   ||| % [
+                     signals.system.uptime.asRuleExpression(),
+                     signals.system.uptime.withOffset('10m').asRuleExpression(),
+                   ],
+                   labels: {
+                     severity: 'info',
+                   },
+                   annotations: {
+                     summary: 'Node has rebooted.',
+                     description: 'Node {{ $labels.%s }} has rebooted {{ $value | humanize }} seconds ago.' % instanceLabel,
+                   },
+                 },
+               ]
+               + if config.enableADDashboard then ADAlerts else [],
       },
     ],
   },
 }
-

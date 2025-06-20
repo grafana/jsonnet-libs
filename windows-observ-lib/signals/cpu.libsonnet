@@ -19,7 +19,7 @@ function(this)
         type: 'raw',
         description: 'CPU usage percentage',
         unit: 'percent',
-        
+
         sources: {
           prometheus: {
             expr: '100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode="idle", %(queriesSelector)s}[%(interval)s])*100))',
@@ -54,4 +54,4 @@ function(this)
         },
       },
     },
-  } 
+  }
