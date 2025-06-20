@@ -1,0 +1,1278 @@
+{
+      "panels": [
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Total observed traffic, aggregated by receiving device",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisPlacement": "right",
+                     "lineInterpolation": "smooth"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 15,
+               "x": 0,
+               "y": 1
+            },
+            "id": 1,
+            "interval": "1m",
+            "options": {
+               "legend": {
+                  "showLegend": false
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (device_name)\n"
+               }
+            ],
+            "title": "Total traffic",
+            "transparent": true,
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Known sources, destinations, endpoints and total overall traffic",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "fieldMinMax": true,
+                  "min": 0
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TotalTraffic"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 9,
+               "x": 15,
+               "y": 1
+            },
+            "id": 2,
+            "interval": "1m",
+            "options": {
+               "colorMode": "background"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (device_name))\n",
+                  "legendFormat": "Collecting devices"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_local_address))\n",
+                  "legendFormat": "Sources"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_peer_address))\n",
+                  "legendFormat": "Destinations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range]))\n",
+                  "legendFormat": "Total observed traffic",
+                  "refId": "TotalTraffic"
+               }
+            ],
+            "title": "",
+            "transparent": true,
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Source adresses ordered by observed traffic during the time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "green",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value (sum)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 6
+            },
+            "id": 3,
+            "interval": "1m",
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "topk(5,network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n})\n",
+                  "format": "table"
+               }
+            ],
+            "title": "Top sources",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value": {
+                           "aggregations": [
+                              "sum"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "network_local_address": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "network_peer_address": {
+                           "aggregations": [
+                              "distinctCount"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "network_protocol_name": {
+                           "aggregations": [
+                              "distinctCount"
+                           ],
+                           "operation": "aggregate"
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Value (sum)": 3,
+                        "network_local_address": 0,
+                        "network_peer_address (distinctCount)": 2,
+                        "network_protocol_name (distinctCount)": 1
+                     },
+                     "renameByName": {
+                        "Value (sum)": "Bytes transferred",
+                        "network_local_address": "Source",
+                        "network_peer_address (distinctCount)": "Destinations",
+                        "network_protocol_name (distinctCount)": "Protocols"
+                     }
+                  }
+               },
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Bytes transferred"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Destination adresses ordered by observed traffic during the time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "green",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value (sum)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 6
+            },
+            "id": 4,
+            "interval": "1m",
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "topk(5,network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n})\n",
+                  "format": "table"
+               }
+            ],
+            "title": "Top destinations",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value": {
+                           "aggregations": [
+                              "sum"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "device_name": {
+                           "aggregations": [
+                              "distinctCount"
+                           ]
+                        },
+                        "network_local_address": {
+                           "aggregations": [
+                              "distinctCount"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "network_peer_address": {
+                           "aggregations": [
+                              "distinctCount"
+                           ],
+                           "operation": "groupby"
+                        },
+                        "network_protocol_name": {
+                           "aggregations": [
+                              "distinctCount"
+                           ],
+                           "operation": "aggregate"
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Value (sum)": 3,
+                        "network_local_address (distinctCount)": 2,
+                        "network_peer_address": 0,
+                        "network_protocol_name (distinctCount)": 1
+                     },
+                     "renameByName": {
+                        "Value (sum)": "Bytes Transferred",
+                        "device_name (distinctCount)": "Devices",
+                        "network_local_address": "Source",
+                        "network_local_address (distinctCount)": "Sources",
+                        "network_peer_address": "Destination",
+                        "network_peer_address (distinctCount)": "Devices",
+                        "network_protocol_name (distinctCount)": "Protocols"
+                     }
+                  }
+               },
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Bytes transferred"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 14
+            },
+            "id": 5,
+            "title": "Conversations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Source/Destination pairs and their total traffic across all dimensions. Ordered by total traffic during selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byType",
+                        "options": "string"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 15,
+               "w": 15,
+               "x": 0,
+               "y": 15
+            },
+            "id": 6,
+            "interval": "1m",
+            "options": {
+               "footer": {
+                  "enablePagination": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(\n  sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])\n) by (network_local_address,network_peer_address)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "Conversation total bytes",
+            "transformations": [
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Value"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true
+                     },
+                     "includeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Bytes",
+                        "network_local_address": "Source",
+                        "network_peer_address": "Destination"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Traffic distribution of source/destination pairs over time",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 80,
+                     "lineInterpolation": "smooth",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 9,
+               "x": 15,
+               "y": 15
+            },
+            "id": 7,
+            "interval": "1m",
+            "options": {
+               "legend": {
+                  "showLegend": false
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_local_address,network_peer_address,device_name)\n"
+               }
+            ],
+            "title": "Conversation traffic over time",
+            "transparent": true,
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Breakdown of total traffic between source/destination pairs observed during the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 9,
+               "x": 15,
+               "y": 22
+            },
+            "id": 8,
+            "interval": "1m",
+            "options": {
+               "legend": {
+                  "placement": "right",
+                  "values": [
+                     "value"
+                  ]
+               },
+               "pieType": "donut",
+               "reduceOptions": {
+                  "values": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_local_address,network_peer_address)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "Breakdown by source/destination pair",
+            "transparent": true,
+            "type": "piechart"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 30
+            },
+            "id": 9,
+            "title": "Protocols",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "List of protocols and the total amount of observed traffic during the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 15,
+               "w": 15,
+               "x": 0,
+               "y": 31
+            },
+            "id": 10,
+            "interval": "1m",
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_protocol_name)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "Total bytes",
+            "transformations": [
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Value"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true
+                     },
+                     "includeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Bytes",
+                        "network_protocol_name": "Protocol"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Distribution of protocols and the total amount of observed traffic during the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 9,
+               "x": 15,
+               "y": 31
+            },
+            "id": 11,
+            "interval": "1m",
+            "options": {
+               "legend": {
+                  "displayMode": "table",
+                  "placement": "right",
+                  "values": [
+                     "value"
+                  ]
+               },
+               "pieType": "donut",
+               "reduceOptions": {
+                  "values": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_protocol_name)\n",
+                  "instant": true,
+                  "legendFormat": "{{network_protocol_name}}"
+               }
+            ],
+            "title": "Distribution",
+            "transparent": true,
+            "type": "piechart"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Protocols and the amount of observed traffic over the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 80,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 9,
+               "x": 15,
+               "y": 38
+            },
+            "id": 12,
+            "interval": "1m",
+            "maxDataPoints": 20,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__interval])) by (network_protocol_name)\n",
+                  "legendFormat": "{{network_protocol_name}}"
+               }
+            ],
+            "title": "Protocol traffic over time",
+            "transparent": true,
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 46
+            },
+            "id": 13,
+            "title": "Geographic data",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Geographic heatmap showing the total amount of traffic to specific countries",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 8,
+               "x": 0,
+               "y": 47
+            },
+            "id": 14,
+            "interval": "1m",
+            "options": {
+               "layers": [
+                  {
+                     "config": {
+                        "blur": 19,
+                        "radius": 21,
+                        "weight": {
+                           "fixed": 1,
+                           "max": 1,
+                           "min": 0
+                        }
+                     },
+                     "filterData": {
+                        "id": "byRefId",
+                        "options": "A"
+                     },
+                     "location": {
+                        "lookup": "network_peer_country",
+                        "mode": "lookup"
+                     },
+                     "name": "Destinations",
+                     "opacity": 0.5,
+                     "tooltip": true,
+                     "type": "heatmap"
+                  }
+               ]
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "Top destination",
+            "type": "geomap"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Total traffic to specific countries during the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byType",
+                        "options": "string"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 4,
+               "x": 8,
+               "y": 47
+            },
+            "id": 15,
+            "interval": "1m",
+            "options": {
+               "footer": {
+                  "enablePagination": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "",
+            "transformations": [
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Value"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true
+                     },
+                     "includeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Bytes",
+                        "network_local_country": "Country",
+                        "network_peer_country": "Country"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Geographic heatmap showing the total amount of traffic from specific countries",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 8,
+               "x": 12,
+               "y": 47
+            },
+            "id": 16,
+            "interval": "1m",
+            "options": {
+               "layers": [
+                  {
+                     "config": {
+                        "blur": 19,
+                        "radius": 21,
+                        "weight": {
+                           "fixed": 1,
+                           "max": 1,
+                           "min": 0
+                        }
+                     },
+                     "filterData": {
+                        "id": "byRefId",
+                        "options": "A"
+                     },
+                     "location": {
+                        "lookup": "network_local_country",
+                        "mode": "lookup"
+                     },
+                     "name": "Destinations",
+                     "opacity": 0.5,
+                     "tooltip": true,
+                     "type": "heatmap"
+                  }
+               ]
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_local_country!=\"Private IP\"}[$__range])) by (network_local_country)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "Top sources",
+            "type": "geomap"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Total traffic from specific countries during the selected time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byType",
+                        "options": "string"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 4,
+               "x": 20,
+               "y": 47
+            },
+            "id": 17,
+            "interval": "1m",
+            "options": {
+               "footer": {
+                  "enablePagination": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_local_country!=\"Private IP\"}[$__range])) by (network_local_country)\n",
+                  "format": "table",
+                  "instant": true
+               }
+            ],
+            "title": "",
+            "transformations": [
+               {
+                  "id": "sortBy",
+                  "options": {
+                     "fields": { },
+                     "sort": [
+                        {
+                           "desc": true,
+                           "field": "Value"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true
+                     },
+                     "includeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Bytes",
+                        "network_local_country": "Country",
+                        "network_peer_country": "Country"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 60
+            },
+            "id": 18,
+            "title": "Collector details",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Logs of the ktranslate instance",
+            "gridPos": {
+               "h": 8,
+               "w": 17,
+               "x": 0,
+               "y": 61
+            },
+            "id": 19,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "$loki_datasource"
+                  },
+                  "expr": "{service_name=\"integrations/ktranslate-netflow\"}\n"
+               }
+            ],
+            "title": "Collector logs",
+            "type": "logs"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Protocol statistics per device sending them",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 7,
+               "x": 17,
+               "y": 61
+            },
+            "id": 20,
+            "interval": "1m",
+            "options": {
+               "colorMode": "background",
+               "textMode": "value_and_name"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "$prometheus_datasource"
+                  },
+                  "expr": "sum(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (device_name)\n",
+                  "legendFormat": "{{device_name}}"
+               }
+            ],
+            "title": "Devices sending flows",
+            "type": "stat"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "neflow-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "type": "datasource"
+            },
+            {
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$prometheus_datasource"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(job)",
+               "refresh": 2,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$prometheus_datasource"
+               },
+               "includeAll": true,
+               "label": "Device name",
+               "multi": true,
+               "name": "device_name",
+               "query": "label_values(device_name)",
+               "refresh": 2,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$prometheus_datasource"
+               },
+               "includeAll": true,
+               "label": "Source",
+               "multi": true,
+               "name": "network_local_address",
+               "query": "label_values(network_local_address)",
+               "refresh": 2,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "$prometheus_datasource"
+               },
+               "includeAll": true,
+               "label": "Destination",
+               "multi": true,
+               "name": "network_peer_address",
+               "query": "label_values(network_peer_address)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Netflow overview",
+      "uid": "netflow-overview"
+   }

@@ -1,0 +1,25 @@
+exclusions:
+  target-instance-rule:
+    reason: "Instance based filtering does not make sense here. Using device_name as reported by ktranslate instead"
+  template-instance-rule:
+    reason: "Instance based filtering does not make sense here. Using device_name as reported by ktranslate instead"
+  panel-datasource-rule:
+    reason: "newer grafonnet versions use -- Mixed -- data sources and specify the template at the query level"
+  panel-title-description-rule:
+    reason: "no title on purpose"
+    entries:
+    - id: 2
+    - id: 15
+    - id: 17
+  target-job-rule:
+    reason: "Status panel queries require exact match and not regex match"
+    entries:
+    - panel: "Metrics"
+    - panel: "Latest metrics received"
+    - panel: "Logs"
+    - panel: "Latest logs received"
+    - panel: "Collector logs"
+  panel-no-targets-rule:
+    reason: "Fixed static value - no target required"
+    entries:
+    - panel: "Integration version"
