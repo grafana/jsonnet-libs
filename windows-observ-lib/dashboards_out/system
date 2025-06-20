@@ -123,7 +123,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100))",
-                  "legendFormat": "CPU usage"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "CPU usage",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -178,7 +181,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100))",
-                  "legendFormat": "CPU usage"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "CPU usage",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -293,8 +299,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, mode) (irate(windows_cpu_time_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) \n/ on(instance) \ngroup_left sum by (instance) ((irate(windows_cpu_time_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))) * 100\n",
-                  "legendFormat": "{{ mode }}"
+                  "expr": "sum by(instance, mode, ) (irate(windows_cpu_time_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) \n/ on(instance) \ngroup_left sum by (instance) ((irate(windows_cpu_time_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ mode }}",
+                  "refId": "CPU usage by mode"
                }
             ],
             "title": "CPU usage by modes",
@@ -342,8 +351,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_system_processor_queue_length{job=~\"$job\",instance=~\"$instance\"}\n",
-                  "legendFormat": "CPU average queue"
+                  "expr": "windows_system_processor_queue_length{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "CPU average queue",
+                  "refId": "CPU queue length"
                }
             ],
             "title": "CPU average queue size",
@@ -392,7 +404,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_system_context_switches_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "Context switches"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Context switches",
+                  "refId": "Context switches"
                },
                {
                   "datasource": {
@@ -400,7 +415,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum without (core) (irate(windows_cpu_interrupts_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))",
-                  "legendFormat": "Interrupts"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Interrupts",
+                  "refId": "System interrupts"
                }
             ],
             "title": "Context switches/Interrupts",
@@ -457,7 +475,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_os_timezone{job=~\"$job\",instance=~\"$instance\"}",
-                  "format": "table"
+                  "format": "table",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Timezone",
+                  "refId": "OS timezone"
                }
             ],
             "title": "Timezone",
@@ -510,7 +531,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "clamp_max(windows_time_ntp_client_time_sources{job=~\"$job\",instance=~\"$instance\"}, 1)",
-                  "legendFormat": "NTP status"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "NTP status",
+                  "refId": "NTP status"
                }
             ],
             "title": "NTP status",
@@ -560,7 +584,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_time_ntp_round_trip_delay_seconds{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "NTP trip delay"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "NTP trip delay",
+                  "refId": "NTP delay"
                },
                {
                   "datasource": {
@@ -568,7 +595,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_time_computed_time_offset_seconds{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "Time offset"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Time offset",
+                  "refId": "Time offset"
                }
             ],
             "title": "NTP delay",

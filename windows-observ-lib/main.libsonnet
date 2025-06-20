@@ -12,6 +12,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     local this = self,
     config: config,
+    signals:
+      {
+        [sig]: commonlib.signals.unmarshallJsonMulti(
+          this.config.signals[sig],
+          type=this.config.metricsSource
+        )
+        for sig in std.objectFields(this.config.signals)
+      },
     grafana: {
       variables: commonlib.variables.new(
         filteringSelector=this.config.filteringSelector,
@@ -21,37 +29,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         customAllValue='.+',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
-      targets: targets.new(this),
-      annotations:
-        {
-          reboot: commonlib.annotations.reboot.new(
-                    title='Reboot',
-                    target=this.grafana.targets.reboot,
-                    instanceLabels=std.join(',', this.config.instanceLabels),
-                  )
-                  + commonlib.annotations.base.withTagKeys(std.join(',', this.config.groupLabels + this.config.instanceLabels)),
-        }
-        +
-        if
-          this.config.enableLokiLogs
-        then
-          {
-            serviceFailed: commonlib.annotations.serviceFailed.new(
-                             title='Service failed',
-                             target=this.grafana.targets.serviceFailed,
-                           )
-                           + commonlib.annotations.base.withTagKeys(std.join(',', this.config.groupLabels + this.config.instanceLabels + ['level']))
-                           + commonlib.annotations.base.withTextFormat('{{message}}'),
-            criticalEvents: commonlib.annotations.fatal.new(
-                              title='Critical system event',
-                              target=this.grafana.targets.criticalEvents,
-                            )
-                            + commonlib.annotations.base.withTagKeys(std.join(',', this.config.groupLabels + this.config.instanceLabels + ['level']))
-                            + commonlib.annotations.base.withTextFormat('{{message}}'),
-          }
-        else
-          {},
-      // common links here
+      annotations: (import './annotations.libsonnet').new(this),
       links: {
         local link = g.dashboard.link,
         backToFleet:
