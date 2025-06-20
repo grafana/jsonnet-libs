@@ -111,6 +111,8 @@ Signal's level:
 The following is supported in expressions and legends:
 
 - `%(queriesSelector)s` - expands to filteringSelector matchers and matchers based on instanceLabels, and groupLabels
+- `%(queriesSelectorGroupOnly)s` - expands to filteringSelector matchers and matchers based on groupLabels only
+- `%(queriesSelectorFilterOnly)s` - expands to filteringSelector matchers only
 - `%(filteringSelector)s` - expands to filteringSelector matchers
 - `%(groupLabels)s` - expands to groupLabels list
 - `%(instanceLabels)s` - expands to instanceLabels list

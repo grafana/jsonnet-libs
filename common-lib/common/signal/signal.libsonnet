@@ -8,6 +8,7 @@ local info = import './info.libsonnet';
 local log = import './log.libsonnet';
 local raw = import './raw.libsonnet';
 local stub = import './stub.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 {
   //Expected signalsJson format:
   // {
@@ -211,6 +212,8 @@ local stub = import './stub.libsonnet';
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
       queriesSelector: grafanaVariables.queriesSelector,
+      queriesSelectorGroupOnly: grafanaVariables.queriesSelectorGroupOnly,
+      queriesSelectorFilterOnly: grafanaVariables.queriesSelectorFilterOnly,
       interval: interval,
       alertsInterval: alertsInterval,
     },
