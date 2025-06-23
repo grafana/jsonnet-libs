@@ -128,7 +128,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "time() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "time() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "System uptime"
                }
             ],
             "title": "Uptime",
@@ -173,7 +177,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_os_info{job=~\"$job\",instance=~\"$instance\"}",
-                  "format": "table"
+                  "format": "table",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: OS info",
+                  "refId": "OS information"
                }
             ],
             "title": "Hostname",
@@ -218,7 +225,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_os_info{job=~\"$job\",instance=~\"$instance\"}",
-                  "format": "table"
+                  "format": "table",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: OS info",
+                  "refId": "OS information"
                }
             ],
             "title": "OS version",
@@ -263,7 +273,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_os_info{job=~\"$job\",instance=~\"$instance\"}",
-                  "format": "table"
+                  "format": "table",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: OS info",
+                  "refId": "OS information"
                }
             ],
             "title": "OS family",
@@ -307,7 +320,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "windows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Cores",
+                  "refId": "CPU count"
                }
             ],
             "title": "CPU count",
@@ -352,7 +369,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "Memory total"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory total",
+                  "refId": "Memory total"
                }
             ],
             "title": "Memory total",
@@ -396,7 +416,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_os_paging_limit_bytes{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "windows_os_paging_limit_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Page total",
+                  "refId": "Page file total"
                }
             ],
             "title": "Pagefile size",
@@ -440,7 +464,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{volume}}: C:",
+                  "refId": "C: drive"
                }
             ],
             "title": "Disk C: size",
@@ -499,7 +527,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100))",
-                  "legendFormat": "CPU usage"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "CPU usage",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -554,7 +585,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100))",
-                  "legendFormat": "CPU usage"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "CPU usage",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -612,7 +646,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100"
+                  "expr": "100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Usage",
+                  "refId": "Memory usage"
                }
             ],
             "title": "Memory usage",
@@ -693,7 +731,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "Memory used"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory used",
+                  "refId": "Memory used"
                },
                {
                   "datasource": {
@@ -701,7 +742,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "Memory total"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory total",
+                  "refId": "Memory total"
                }
             ],
             "title": "Memory usage",
@@ -784,7 +828,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_logical_disk_read_bytes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ volume }} read"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ volume }} read",
+                  "refId": "Disk read bytes"
                },
                {
                   "datasource": {
@@ -792,7 +839,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_logical_disk_write_bytes_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ volume }} written"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ volume }} written",
+                  "refId": "Disk write bytes"
                },
                {
                   "datasource": {
@@ -800,7 +850,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "(1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100",
-                  "legendFormat": "{{ volume }} io util"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ volume }} io util",
+                  "refId": "Disk I/O utilization"
                }
             ],
             "title": "Disk reads/writes",
@@ -928,6 +981,7 @@
                   "expr": "windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{volume}}: Total",
                   "refId": "TOTAL"
                },
                {
@@ -1108,16 +1162,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "irate(windows_net_bytes_received_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*8",
-                  "legendFormat": "{{ nic }} received"
+                  "expr": "\n  irate(windows_net_bytes_received_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n*8",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} received",
+                  "refId": "Network bytes received"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "irate(windows_net_bytes_sent_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*8",
-                  "legendFormat": "{{ nic }} transmitted"
+                  "expr": "\n  irate(windows_net_bytes_sent_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n*8",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} transmitted",
+                  "refId": "Network bytes transmitted"
                }
             ],
             "title": "Network traffic",
@@ -1184,7 +1244,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_net_packets_outbound_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ nic }} transmitted"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} errors out",
+                  "refId": "Network errors transmitted"
                },
                {
                   "datasource": {
@@ -1192,7 +1255,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_net_packets_received_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ nic }} received"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} errors in",
+                  "refId": "Network errors received"
                },
                {
                   "datasource": {
@@ -1200,7 +1266,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_net_packets_received_unknown_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ nic }} received (unknown)"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} unknown in",
+                  "refId": "Network unknown packets received"
                },
                {
                   "datasource": {
@@ -1208,7 +1277,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_net_packets_outbound_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ nic }} transmitted packets dropped"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} discards out",
+                  "refId": "Network discards transmitted"
                },
                {
                   "datasource": {
@@ -1216,7 +1288,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "irate(windows_net_packets_received_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{ nic }} received packets dropped"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ nic }} discards in",
+                  "refId": "Network discards received"
                }
             ],
             "title": "Network errors and dropped packets",
