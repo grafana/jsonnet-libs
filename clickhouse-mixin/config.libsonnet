@@ -1,20 +1,26 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    clickhouseSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
+  enableMultiCluster: false,
+  filteringSelector: 'job="integrations/clickhouse"',
+  groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
+  logLabels: if self.enableMultiCluster then ['job', 'cluster', 'instance'] else ['job', 'instance'],
+  pureInstanceLabels: ['instance'],
 
-    dashboardTags: ['clickhouse-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
-    logLabels: if self.enableMultiCluster then ['job', 'instance', 'cluster', 'level']
-    else ['job', 'instance', 'level'],
+  dashboardTags: [self.uid],
+  uid: 'clickhouse',
+  dashboardNamePrefix: 'ClickHouse',
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
 
-    // for alerts
-    alertsReplicasMaxQueueSize: '99',
+  // Legend panel configuration
+  legendLabels: ['instance'],
 
-    filterSelector: 'job=~".*/clickhouse.*"',
+  // Logging configuration
+  enableLokiLogs: true,
+  extraLogLabels: ['level'],  // Required by logs-lib
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
 
-    enableLokiLogs: true,
-  },
+  // Alerts configuration
+  alertsReplicasMaxQueueSize: '99',
 }
