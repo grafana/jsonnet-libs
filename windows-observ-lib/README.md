@@ -63,6 +63,7 @@ local config = (import 'config.libsonnet')._config;
     uid: 'windows',
     // prefix dashboards titles
     dashboardNamePrefix: '',
+    metricSource: ['prometheus', 'prometheus_pre_0_30'],
     dashboardTags: ['windows'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
@@ -100,7 +101,7 @@ Drill down disks dashboard:
 
 ## Collectors used:
 
-Grafana Agent or combination of windows_exporter/promtail can be used in order to collect data required.
+Grafana Agent/Alloy or combination of windows_exporter/promtail can be used in order to collect data required.
 
 The following collectors should be enabled in windows_exporter/windows integration:
 

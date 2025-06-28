@@ -21,7 +21,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "expr": "windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
                "hide": true,
                "iconColor": "light-yellow",
                "name": "Reboot",
@@ -128,7 +128,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "time() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "time() - windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\ntime() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Uptime",
@@ -320,7 +320,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cpu_logical_processor{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Cores",
@@ -368,7 +368,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Memory total",
@@ -646,7 +646,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
+                  "expr": "100 - windows_memory_physical_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"} * 100\nor\n100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Usage",
@@ -730,7 +730,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"} - windows_memory_physical_free_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Memory used",
@@ -741,7 +741,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Memory total",

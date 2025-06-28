@@ -22,7 +22,9 @@ groups:
                 Consider investigating processes consuming high memory or increasing available memory.
             summary: High memory usage on Windows host.
           expr: |
-            (100 - windows_os_physical_memory_free_bytes{} / windows_cs_physical_memory_bytes{} * 100) > 90
+            (100 - windows_memory_physical_free_bytes{} / windows_memory_physical_total_bytes{} * 100
+            or
+            100 - windows_os_physical_memory_free_bytes{} / windows_cs_physical_memory_bytes{} * 100) > 90
           for: 15m
           keep_firing_for: 5m
           labels:
@@ -85,8 +87,12 @@ groups:
             description: Node {{ $labels.instance }} has rebooted {{ $value | humanize }} seconds ago.
             summary: Node has rebooted.
           expr: |
-            (time() - windows_system_system_up_time{}) < 600
+            (time() - windows_system_boot_time_timestamp_seconds{}
+            or
+            time() - windows_system_system_up_time{}) < 600
             and
-            ((time() - windows_system_system_up_time{} offset 10m)) > 600
+            ((time() - windows_system_boot_time_timestamp_seconds{} offset 10m)
+            or
+            (time() - windows_system_system_up_time{} offset 10m)) > 600
           labels:
             severity: info

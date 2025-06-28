@@ -21,7 +21,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "expr": "windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
                "hide": true,
                "iconColor": "light-yellow",
                "name": "Reboot",
@@ -474,7 +474,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_os_timezone{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_os_timezone{job=~\"$job\",instance=~\"$instance\"}\nor ignoring(timezone)\nwindows_time_timezone{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "{{instance}}: Timezone",
@@ -530,7 +530,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "clamp_max(windows_time_ntp_client_time_sources{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "expr": "clamp_max(\n  windows_time_ntp_client_time_sources{job=~\"$job\",instance=~\"$instance\"}\n,1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "NTP status",
