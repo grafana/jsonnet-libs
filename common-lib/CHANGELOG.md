@@ -1,3 +1,6 @@
+# 0.4.0
+- [Signal] Add defaultSignalSource param to set default signal source.
+
 # 0.3.5
 - [Variables] Add queriesSelectorGroupOnly, queriesSelectorFilterOnly attributes
 - [Signal] Add %(queriesSelectorGroupOnly)s, %(queriesSequeriesSelectorFilterOnly)s templates
