@@ -84,6 +84,7 @@ Init level:
 |varAdHocEnabled| Attach ad hoc labels to variables generated. |`true`,`false`|`false`|`false`|
 |varAdHocLabels| Limit ad hoc to the specific labels |*|`["environment"]`|`[]`|
 |enableLokiLogs| Add additional loki datasource to variables generation |`true`,`false`|`true`|`false`|
+|defaultSignalSource| Set default signal source (see below) | * | `prometheus` |
 
 Signal's level:
 
@@ -124,7 +125,7 @@ The following is supported in expressions and legends:
 
 ## Making signals optional
 
-When defining signals from multiple sources, you can make some of the signals optional. In this case, rendering will not throw a validation error that signal is missing for the specific source, while internal 'stub' type will be used and empty panel will be rendered instead.
+When defining signals from multiple sources, you can make some of the signals optional. In this case, rendering will not throw a validation error that signal is missing for the specific source (and also in source defined as `defaultSignalSource`), while internal 'stub' type will be used and empty panel will be rendered instead.
 
 ## Example 1: From JSON
 
