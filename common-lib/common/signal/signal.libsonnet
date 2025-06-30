@@ -8,6 +8,7 @@ local info = import './info.libsonnet';
 local log = import './log.libsonnet';
 local raw = import './raw.libsonnet';
 local stub = import './stub.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 {
   //Expected signalsJson format:
   // {
@@ -86,6 +87,7 @@ local stub = import './stub.libsonnet';
         else  //array
           type
       );
+    local defaultSignalSource = std.get(signalsJson, 'defaultSignalSource', 'prometheus');
 
     self.init(
       datasource=std.get(signalsJson, 'datasource', if std.get(signalsJson, 'enableLokiLogs', false) then 'prometheus_datasource' else 'datasource'),
@@ -95,7 +97,7 @@ local stub = import './stub.libsonnet';
       instanceLabels=signalsJson.instanceLabels,
       interval=std.get(signalsJson, 'interval', '$__rate_interval'),
       alertsInterval=std.get(signalsJson, 'alertsInterval', '5m'),
-      varMetric=self.getVarMetric(signalsJson, type),
+      varMetric=self.getVarMetric(signalsJson, type, defaultSignalSource),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
@@ -117,9 +119,18 @@ local stub = import './stub.libsonnet';
             if
               std.get(signalsJson.signals[s], 'optional', false) == false
               &&
-              !std.objectHas(signalsJson.signals[s].sources, sourceName)
+              (
+                !std.objectHas(signalsJson.signals[s].sources, sourceName)
+                &&
+                !std.objectHas(signalsJson.signals[s].sources, defaultSignalSource)
+              )
             then error 'must provide source for signal %s of type=%s' % [s, sourceName]
-            else sourceName
+            else (
+              if
+                std.objectHas(signalsJson.signals[s].sources, sourceName) then sourceName
+              else if
+                std.objectHas(signalsJson.signals[s].sources, defaultSignalSource) then defaultSignalSource
+            )
             for sourceName in typeArr
           ];
           local sourceMaps =
@@ -211,6 +222,8 @@ local stub = import './stub.libsonnet';
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
       queriesSelector: grafanaVariables.queriesSelector,
+      queriesSelectorGroupOnly: grafanaVariables.queriesSelectorGroupOnly,
+      queriesSelectorFilterOnly: grafanaVariables.queriesSelectorFilterOnly,
       interval: interval,
       alertsInterval: alertsInterval,
     },
@@ -345,14 +358,14 @@ local stub = import './stub.libsonnet';
         ),
   },
 
-  getVarMetric(signalsJson, type):
+  getVarMetric(signalsJson, type, defaultSignalSource):
     if std.objectHas(signalsJson, 'discoveryMetric')
     then
       if std.type(type) == 'array' then
         std.prune(
-          [std.get(signalsJson.discoveryMetric, t, null) for t in type]
+          [std.get(signalsJson.discoveryMetric, t, std.get(signalsJson.discoveryMetric, defaultSignalSource, null)) for t in type]
         )
       else
-        std.get(signalsJson.discoveryMetric, type, 'up')
+        std.get(signalsJson.discoveryMetric, type, std.get(signalsJson.discoveryMetric, defaultSignalSource, 'up'))
     else 'up',
 }
