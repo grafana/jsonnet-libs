@@ -7,19 +7,19 @@
             "keepTime": true,
             "title": "ClickHouse Latency",
             "type": "link",
-            "url": "/d/clickhouse_clickhouse_latency"
+            "url": "/d/clickhouse_latency"
          },
          {
             "keepTime": true,
             "title": "ClickHouse Overview",
             "type": "link",
-            "url": "/d/clickhouse_clickhouse_overview"
+            "url": "/d/clickhouse_overview"
          },
          {
             "keepTime": true,
             "title": "ClickHouse Replica",
             "type": "link",
-            "url": "/d/clickhouse_clickhouse_replica"
+            "url": "/d/clickhouse_replica"
          },
          {
             "asDropdown": true,

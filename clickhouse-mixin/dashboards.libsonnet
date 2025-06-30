@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
 
     {
-      'clickhouse-replica':
+      'clickhouse-replica.json':
         g.dashboard.new(prefix + ' replica')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -32,7 +32,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + '_clickhouse_replica',
+          uid + '_replica',
           tags,
           links { clickhouseReplica+:: {} },
           annotations,
@@ -41,7 +41,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      'clickhouse-overview':
+      'clickhouse-overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -59,7 +59,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + '_clickhouse_overview',
+          uid + '_overview',
           tags,
           links { clickhouseOverview+:: {} },
           annotations,
@@ -68,7 +68,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      'clickhouse-latency':
+      'clickhouse-latency.json':
         g.dashboard.new(prefix + ' latency')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -83,7 +83,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + root.applyCommon(
           vars.singleInstance,
-          uid + '_clickhouse_latency',
+          uid + '_latency',
           tags,
           links { clickhouseLatency+:: {} },
           annotations,
@@ -96,7 +96,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,

@@ -4,12 +4,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this)::
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
 
       interserverConnectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Interserver connections',
-          targets=[t.ClickHouseMetrics_InterserverConnection],
+          targets=[signals.replica.interserverConnections.asTarget()],
           description='Number of connections due to interserver communication'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
@@ -18,7 +18,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       replicaQueueSizePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Replica queue size',
-          targets=[t.ClickHouseAsyncMetrics_ReplicasMaxQueueSize],
+          targets=[signals.replica.replicasMaxQueueSize.asTarget()],
           description='Number of replica tasks in queue'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
@@ -27,7 +27,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       replicaOperationsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Replica operations',
-          targets=[t.ClickHouseProfileEvents_ReplicatedPartFetches, t.ClickHouseProfileEvents_ReplicatedPartMerges, t.ClickHouseProfileEvents_ReplicatedPartMutations, t.ClickHouseProfileEvents_ReplicatedPartChecks],
+          targets=[signals.replica.replicatedPartFetches.asTarget(), signals.replica.replicatedPartMerges.asTarget(), signals.replica.replicatedPartMutations.asTarget(), signals.replica.replicatedPartChecks.asTarget()],
           description='Replica Operations over time to other nodes'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -37,7 +37,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       replicaReadOnlyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Replica read only',
-          targets=[t.ClickHouseMetrics_ReadonlyReplica],
+          targets=[signals.replica.readonlyReplica.asTarget()],
           description='Shows replicas in read-only state over time'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -47,7 +47,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       zooKeeperWatchesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'ZooKeeper watches',
-          targets=[t.ClickHouseMetrics_ZooKeeperWatch],
+          targets=[signals.zookeeper.zooKeeperWatches.asTarget()],
           description='Current number of watches in ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -57,7 +57,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       zooKeeperSessionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'ZooKeeper sessions',
-          targets=[t.ClickHouseMetrics_ZooKeeperSession],
+          targets=[signals.zookeeper.zooKeeperSessions.asTarget()],
           description='Current number of sessions to ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -67,7 +67,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       zooKeeperRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'ZooKeeper requests',
-          targets=[t.ClickHouseMetrics_ZooKeeperRequest],
+          targets=[signals.zookeeper.zooKeeperRequests.asTarget()],
           description='Current number of active requests to ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -77,7 +77,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       successfulQueriesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Successful queries',
-          targets=[t.ClickHouseProfileEvents_SelectQuery, t.ClickHouseProfileEvents_InsertQuery, t.ClickHouseProfileEvents_AsyncInsertQuery],
+          targets=[signals.queries.selectQueries.asTarget(), signals.queries.insertQueries.asTarget(), signals.queries.asyncInsertQueries.asTarget()],
           description='Rate of successful queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -87,7 +87,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       failedQueriesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Failed queries',
-          targets=[t.ClickHouseProfileEvents_FailedSelectQuery, t.ClickHouseProfileEvents_FailedInsertQuery],
+          targets=[signals.queries.failedSelectQueries.asTarget(), signals.queries.failedInsertQueries.asTarget()],
           description='Rate of failed queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -97,7 +97,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       rejectedInsertsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Rejected inserts',
-          targets=[t.ClickHouseProfileEvents_RejectedInserts],
+          targets=[signals.queries.rejectedInserts.asTarget()],
           description='Number of rejected inserts per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -107,7 +107,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       memoryUsagePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Memory usage',
-          targets=[t.ClickHouseMetrics_MemoryTracking],
+          targets=[signals.memory.memoryUsage.asTarget()],
           description='Memory usage over time'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -116,7 +116,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       memoryUsageGaugePanel:
         g.panel.gauge.new('Memory usage')
-        + g.panel.gauge.queryOptions.withTargets([t.ClickHouseMetrics_MemoryTrackingPercent])
+        + g.panel.gauge.queryOptions.withTargets([signals.memory.memoryUsagePercent.asTarget()])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
         + g.panel.gauge.panelOptions.withDescription('Percentage of memory allocated by ClickHouse compared to OS total')
         + g.panel.gauge.options.withShowThresholdLabels(true)
@@ -133,7 +133,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       activeConnectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Active connections',
-          targets=[t.ClickHouseMetrics_TCPConnection, t.ClickHouseMetrics_HTTPConnection, t.ClickHouseMetrics_MySQLConnection, t.ClickHouseMetrics_PostgreSQLConnection],
+          targets=[signals.connections.tcpConnections.asTarget(), signals.connections.httpConnections.asTarget(), signals.connections.mysqlConnections.asTarget(), signals.connections.postgresqlConnections.asTarget()],
           description='Current number of connections to ClickHouse'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -143,7 +143,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkReceivedPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network received',
-          targets=[t.ClickHouseProfileEvents_NetworkReceiveBytes],
+          targets=[signals.network.networkReceiveBytes.asTarget()],
           description='Received network throughput'
         )
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
@@ -153,7 +153,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmittedPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network transmitted',
-          targets=[t.ClickHouseProfileEvents_NetworkSendBytes],
+          targets=[signals.network.networkSendBytes.asTarget()],
           description='Transmitted network throughput'
         )
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
@@ -163,7 +163,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskReadLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Disk read latency',
-          targets=[t.ClickHouseProfileEvents_DiskReadElapsedMicroseconds],
+          targets=[signals.disk.diskReadLatency.asTarget()],
           description='Time spent waiting for read syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -173,7 +173,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskWriteLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Disk write latency',
-          targets=[t.ClickHouseProfileEvents_DiskWriteElapsedMicroseconds],
+          targets=[signals.disk.diskWriteLatency.asTarget()],
           description='Time spent waiting for write syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -183,7 +183,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmitLatencyInboundPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network receive latency',
-          targets=[t.ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds],
+          targets=[signals.network.networkReceiveLatency.asTarget()],
           description='Latency of inbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -193,7 +193,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmitLatencyOutboundPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network transmit latency',
-          targets=[t.ClickHouseProfileEvents_NetworkSendElapsedMicroseconds],
+          targets=[signals.network.networkSendLatency.asTarget()],
           description='Latency of outbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -203,7 +203,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       zooKeeperWaitTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'ZooKeeper wait time',
-          targets=[t.ClickHouseProfileEvents_ZooKeeperWaitMicroseconds],
+          targets=[signals.zookeeper.zooKeeperWaitTime.asTarget()],
           description='Time spent waiting for ZooKeeper request to process'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')

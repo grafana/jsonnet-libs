@@ -7,13 +7,13 @@
             "keepTime": true,
             "title": "ClickHouse Latency",
             "type": "link",
-            "url": "/d/clickhouse_clickhouse_latency"
+            "url": "/d/clickhouse_latency"
          },
          {
             "keepTime": true,
-            "title": "ClickHouse Overview",
+            "title": "ClickHouse Replica",
             "type": "link",
-            "url": "/d/clickhouse_clickhouse_overview"
+            "url": "/d/clickhouse_replica"
          },
          {
             "keepTime": true,
@@ -38,7 +38,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of connections due to interserver communication",
+            "description": "Rate of successful queries per second",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -48,12 +48,13 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  }
+                  },
+                  "unit": "/ sec"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 24,
                "x": 0,
                "y": 0
             },
@@ -75,11 +76,36 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_InterserverConnection{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - Interserver Connections"
+                  "expr": "rate(ClickHouseProfileEvents_SelectQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Select query",
+                  "refId": "Select queries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(ClickHouseProfileEvents_InsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Insert query",
+                  "refId": "Insert queries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(ClickHouseProfileEvents_AsyncInsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Async insert query",
+                  "refId": "Async insert queries"
                }
             ],
-            "title": "Interserver connections",
+            "title": "Successful queries",
             "type": "timeseries"
          },
          {
@@ -87,7 +113,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of replica tasks in queue",
+            "description": "Rate of failed queries per second",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -97,14 +123,15 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  }
+                  },
+                  "unit": "/ sec"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 12,
-               "y": 0
+               "x": 0,
+               "y": 8
             },
             "id": 2,
             "options": {
@@ -124,11 +151,25 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseAsyncMetrics_ReplicasMaxQueueSize{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - Max Queue Size"
+                  "expr": "rate(ClickHouseProfileEvents_FailedSelectQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Failed select query",
+                  "refId": "Failed select queries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(ClickHouseProfileEvents_FailedInsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Failed insert query",
+                  "refId": "Failed insert queries"
                }
             ],
-            "title": "Replica queue size",
+            "title": "Failed queries",
             "type": "timeseries"
          },
          {
@@ -136,7 +177,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Replica Operations over time to other nodes",
+            "description": "Number of rejected inserts per second",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -153,7 +194,7 @@
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 0,
+               "x": 12,
                "y": 8
             },
             "id": 3,
@@ -174,39 +215,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartFetches{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "interval": "30s",
-                  "legendFormat": "{{instance}} - Part Fetches"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMerges{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "interval": "30s",
-                  "legendFormat": "{{instance}} - Part Merges"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMutations{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "interval": "30s",
-                  "legendFormat": "{{instance}} - Part Mutations"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartChecks{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "interval": "30s",
-                  "legendFormat": "{{instance}} - Part Checks"
+                  "expr": "rate(ClickHouseProfileEvents_RejectedInserts{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Rejected inserts",
+                  "refId": "Rejected inserts"
                }
             ],
-            "title": "Replica operations",
+            "title": "Rejected inserts",
             "type": "timeseries"
          },
          {
@@ -214,7 +230,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Shows replicas in read-only state over time",
+            "description": "Memory usage over time",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -225,14 +241,14 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "none"
+                  "unit": "decbytes"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 12,
-               "y": 8
+               "x": 0,
+               "y": 16
             },
             "id": 4,
             "options": {
@@ -252,11 +268,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ReadonlyReplica{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - Read Only"
+                  "expr": "ClickHouseMetrics_MemoryTracking{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory tracking",
+                  "refId": "Memory usage"
                }
             ],
-            "title": "Replica read only",
+            "title": "Memory usage",
             "type": "timeseries"
          },
          {
@@ -264,68 +283,26 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Current number of watches in ZooKeeper",
+            "description": "Percentage of memory allocated by ClickHouse compared to OS total",
             "fieldConfig": {
                "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green",
+                           "value": 0
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 80
+                        },
+                        {
+                           "color": "super-light-red",
+                           "value": 90
+                        }
+                     ]
                   },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 16
-            },
-            "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "ClickHouseMetrics_ZooKeeperWatch{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - ZooKeeper watches"
-               }
-            ],
-            "title": "ZooKeeper watches",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Current number of sessions to ZooKeeper",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "none"
+                  "unit": "percent"
                }
             },
             "gridPos": {
@@ -334,16 +311,9 @@
                "x": 12,
                "y": 16
             },
-            "id": 6,
+            "id": 5,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
+               "showThresholdLabels": true
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -352,19 +322,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ZooKeeperSession{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - ZooKeeper sessions"
+                  "expr": "(ClickHouseMetrics_MemoryTracking{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"} / ClickHouseAsyncMetrics_OSMemoryTotal{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory tracking percent",
+                  "refId": "Memory usage percentage"
                }
             ],
-            "title": "ZooKeeper sessions",
-            "type": "timeseries"
+            "title": "Memory usage",
+            "type": "gauge"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Current number of active requests to ZooKeeper",
+            "description": "Current number of connections to ClickHouse",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -384,6 +357,92 @@
                "x": 0,
                "y": 24
             },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "ClickHouseMetrics_TCPConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "TCP connection",
+                  "refId": "TCP connections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "ClickHouseMetrics_HTTPConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "HTTP connection",
+                  "refId": "HTTP connections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "ClickHouseMetrics_MySQLConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "MySQL connection",
+                  "refId": "MySQL connections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "ClickHouseMetrics_PostgreSQLConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "PostgreSQL connection",
+                  "refId": "PostgreSQL connections"
+               }
+            ],
+            "title": "Active connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Received network throughput",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 32
+            },
             "id": 7,
             "options": {
                "legend": {
@@ -402,11 +461,67 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ZooKeeperRequest{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - ZooKeeper requests"
+                  "expr": "rate(ClickHouseProfileEvents_NetworkReceiveBytes{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Network receive bytes",
+                  "refId": "Network received"
                }
             ],
-            "title": "ZooKeeper requests",
+            "title": "Network received",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Transmitted network throughput",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 32
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(ClickHouseProfileEvents_NetworkSendBytes{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Network send bytes",
+                  "refId": "Network transmitted"
+               }
+            ],
+            "title": "Network transmitted",
             "type": "timeseries"
          }
       ],
@@ -469,6 +584,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "ClickHouse replica",
-      "uid": "clickhouse_clickhouse_replica"
+      "title": "ClickHouse overview",
+      "uid": "clickhouse_overview"
    }
