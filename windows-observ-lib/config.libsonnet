@@ -16,7 +16,7 @@
   // 'prometheus_pre_0_30' points to old metrics schema prior to breaking changes in windows_exporter v0.30.0,
   // 'prometheus' points to actual metrics schema.
   // Use any of the above or both.
-  metricsSource: ['prometheus', 'prometheus_pre_0_30'],  
+  metricsSource: ['prometheus', 'prometheus_pre_0_30'],
 
   // optional
   ignoreVolumes: 'HarddiskVolume.*',

@@ -143,7 +143,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'windows_time_ntp_client_time_sources{%(queriesSelector)s}',
-            exprWrappers: [["clamp_max(", ",1)"]],
+            exprWrappers: [['clamp_max(', ',1)']],
             legendCustomTemplate: 'NTP status',
           },
         },

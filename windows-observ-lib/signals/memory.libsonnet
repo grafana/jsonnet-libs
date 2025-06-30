@@ -60,7 +60,7 @@ function(this)
             expr: 'windows_memory_physical_total_bytes{%(queriesSelector)s} - windows_memory_physical_free_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Memory used',
           },
-          
+
         },
       },
       memoryUsagePercent: {
@@ -118,7 +118,7 @@ function(this)
           },
           prometheus: {
             expr: 'windows_pagefile_limit_bytes{%(queriesSelector)s} - windows_pagefile_free_bytes{%(queriesSelector)s}',
-          }
+          },
         },
       },
     },
