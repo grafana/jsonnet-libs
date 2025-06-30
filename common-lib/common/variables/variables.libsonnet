@@ -101,6 +101,22 @@ local utils = import '../utils.libsonnet';
              utils.labelsToPromQLSelector(groupLabels + instanceLabels),
            ])
          ),
+       queriesSelectorGroupOnly:
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             _filteringSelector,
+             utils.labelsToPromQLSelector(groupLabels),
+           ])
+         ),
+       queriesSelectorFilterOnly:
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             _filteringSelector,
+             '',
+           ])
+         ),
 
      }
      + if enableLokiLogs then self.withLokiLogs() else {},
