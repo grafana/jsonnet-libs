@@ -6,7 +6,7 @@
         // TraefikConfigReloadFailuresIncreasing
         {
           alert: 'TraefikConfigReloadFailuresIncreasing',
-          expr: "sum(rate(traefik_config_reloads_failure_total[5m])) > 0",
+          expr: 'sum(rate(traefik_config_reloads_failure_total[5m])) > 0',
           'for': '5m',
           labels: {
             severity: 'critical',
@@ -18,7 +18,7 @@
         // TraefikTLSCertificatesExpiring
         {
           alert: 'TraefikTLSCertificatesExpiring',
-          expr: "max by (sans) ((last_over_time(traefik_tls_certs_not_after[5m]) - time()) / 86400) < 7",
+          expr: 'max by (sans) ((last_over_time(traefik_tls_certs_not_after[5m]) - time()) / 86400) < 7',
           'for': '5m',
           labels: {
             severity: 'critical',
