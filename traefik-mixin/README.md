@@ -5,14 +5,14 @@ The Traefik mixin is a set of configurable, reusable, and extensible dashboards 
 To use them, you need to have mixtool and jsonnetfmt installed. If you have a working Go development environment, it's easiest to run the following:
 
 ```shell
-$ go get github.com/monitoring-mixins/mixtool/cmd/mixtool
-$ go get github.com/google/go-jsonnet/cmd/jsonnetfmt
+go get github.com/monitoring-mixins/mixtool/cmd/mixtool
+go get github.com/google/go-jsonnet/cmd/jsonnetfmt
 ```
 
 You can then build the Prometheus rules files and dashboards for Grafana:
 
 ```shell
-$ make build
+make build
 ```
 
 This will generate:
@@ -26,6 +26,25 @@ This will generate:
 The following Prometheus alerts are included:
 
 - **TraefikConfigReloadFailuresIncreasing**: Fires if Traefik is failing to reload its config.
-- **TraefikTLSCertificatesExpiring**: Fires if Traefik is serving certificates that will expire soon.
+- **TraefikTLSCertificatesExpiring**: Fires if Traefik is serving certificates that will expire very soon (critical, threshold configurable).
+- **TraefikTLSCertificatesExpiringSoon**: Fires if Traefik is serving certificates that will expire soon (warning, threshold configurable, only fires if the expiry is less than the warning threshold but greater than the critical threshold).
+
+## Configuration
+
+You can configure alert thresholds and labels in `config.libsonnet`:
+
+```jsonnet
+{
+  _config+:: {
+    traefik_tls_expiry_days_critical: 7,   // critical threshold (days)
+    traefik_tls_expiry_days_warning: 14,   // warning threshold (days)
+    alertLabels: {},                       // optional alert labels
+    alertAnnotations: {},                  // optional alert annotations
+    timeSeriesLabels: "component=\"traefik\",environment=\"production\"", // optional time series labels
+    sumByLabels: "instance",              // optional sum by labels
+    maxByLabels: "sans",                  // optional max by labels
+  },
+}
+```
 
 For more advanced uses of mixins, see https://github.com/monitoring-mixins/docs.
