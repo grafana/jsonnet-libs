@@ -21,9 +21,9 @@ groups:
   - alert: TraefikTLSCertificatesExpiringSoon
     annotations:
       description: |
-        The minimum number of days until a Traefik-served certificate expires is {{ printf "%.0f" $value }} days on {{ $labels.sans }} which is below the warning threshold of 14.
+        The minimum number of days until a Traefik-served certificate expires is {{ printf "%.0f" $value }} days on {{ $labels.sans }} which is less than 14 but greater than 7.
     expr: |
-      max by (sans) ((last_over_time(traefik_tls_certs_not_after{}[5m]) - time()) / 86400) < 14
+      max by (sans) ((last_over_time(traefik_tls_certs_not_after{}[5m]) - time()) / 86400) < 14 > 7
     for: 5m
     labels:
       severity: warning
