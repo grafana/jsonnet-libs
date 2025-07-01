@@ -22,9 +22,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_DiskReadElapsedMicroseconds{%(queriesSelector)s}',
-            legendCustomTemplate: 'Disk read elapsed',
+            legendCustomTemplate: '{{ instance }} - Disk read elapsed',
             rangeFunction: 'increase',
-            interval: '30s',
           },
         },
       },
@@ -37,9 +36,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{%(queriesSelector)s}',
-            legendCustomTemplate: 'Disk write elapsed',
+            legendCustomTemplate: '{{ instance }} - Disk write elapsed',
             rangeFunction: 'increase',
-            interval: '30s',
           },
         },
       },

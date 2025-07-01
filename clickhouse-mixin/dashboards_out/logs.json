@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "ClickHouse Latency",
+            "title": "Clickhouse latency",
             "type": "link",
             "url": "/d/clickhouse_latency"
          },
          {
             "keepTime": true,
-            "title": "ClickHouse Overview",
+            "title": "Clickhouse overview",
             "type": "link",
             "url": "/d/clickhouse_overview"
          },
          {
             "keepTime": true,
-            "title": "ClickHouse Replica",
+            "title": "Clickhouse replica",
             "type": "link",
             "url": "/d/clickhouse_replica"
          },
@@ -320,6 +320,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "ClickHouse logs",
+      "title": "Clickhouse logs",
       "uid": "clickhouse-logs"
    }

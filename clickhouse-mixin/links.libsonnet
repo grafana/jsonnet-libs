@@ -4,15 +4,15 @@ local g = import './g.libsonnet';
   new(this):
     {
       clickhouseReplica:
-        link.link.new(this.config.dashboardNamePrefix + ' Replica', '/d/' + this.grafana.dashboards['clickhouse-replica.json'].uid)
+        link.link.new(this.config.dashboardNamePrefix + ' replica', '/d/' + this.grafana.dashboards['clickhouse-replica.json'].uid)
         + link.link.options.withKeepTime(true),
 
       clickhouseOverview:
-        link.link.new(this.config.dashboardNamePrefix + ' Overview', '/d/' + this.grafana.dashboards['clickhouse-overview.json'].uid)
+        link.link.new(this.config.dashboardNamePrefix + ' overview', '/d/' + this.grafana.dashboards['clickhouse-overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       clickhouseLatency:
-        link.link.new(this.config.dashboardNamePrefix + ' Latency', '/d/' + this.grafana.dashboards['clickhouse-latency.json'].uid)
+        link.link.new(this.config.dashboardNamePrefix + ' latency', '/d/' + this.grafana.dashboards['clickhouse-latency.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:
@@ -25,7 +25,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('Logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
+          link.link.new(this.config.dashboardNamePrefix + ' logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
           + link.link.options.withKeepTime(true),
       }
     else {},

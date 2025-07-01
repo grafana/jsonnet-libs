@@ -22,7 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_InterserverConnection{%(queriesSelector)s}',
-            legendCustomTemplate: 'Interserver connections',
+            legendCustomTemplate: '{{ instance }} - Interserver connections',
           },
         },
       },
@@ -35,7 +35,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseAsyncMetrics_ReplicasMaxQueueSize{%(queriesSelector)s}',
-            legendCustomTemplate: 'Max queue size',
+            legendCustomTemplate: '{{ instance }} - Max queue size',
           },
         },
       },
@@ -48,8 +48,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_ReplicatedPartFetches{%(queriesSelector)s}',
-            legendCustomTemplate: 'Part fetches',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - Part fetches',
           },
         },
       },
@@ -62,8 +61,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_ReplicatedPartMerges{%(queriesSelector)s}',
-            legendCustomTemplate: 'Part merges',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - Part merges',
           },
         },
       },
@@ -76,8 +74,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_ReplicatedPartMutations{%(queriesSelector)s}',
-            legendCustomTemplate: 'Part mutations',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - Part mutations',
           },
         },
       },
@@ -90,8 +87,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_ReplicatedPartChecks{%(queriesSelector)s}',
-            legendCustomTemplate: 'Part checks',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - Part checks',
           },
         },
       },
@@ -104,7 +100,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_ReadonlyReplica{%(queriesSelector)s}',
-            legendCustomTemplate: 'Read only',
+            legendCustomTemplate: '{{ instance }} - Read only',
           },
         },
       },

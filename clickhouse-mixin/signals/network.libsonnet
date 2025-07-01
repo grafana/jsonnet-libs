@@ -22,8 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_NetworkReceiveBytes{%(queriesSelector)s}',
-            legendCustomTemplate: 'Network receive bytes',
-            interval: '1m',
+            legendCustomTemplate: '{{ instance }} - Network receive bytes',
           },
         },
       },
@@ -36,8 +35,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_NetworkSendBytes{%(queriesSelector)s}',
-            legendCustomTemplate: 'Network send bytes',
-            interval: '1m',
+            legendCustomTemplate: '{{ instance }} - Network send bytes',
           },
         },
       },
@@ -50,8 +48,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{%(queriesSelector)s}',
-            legendCustomTemplate: 'Network receive elapsed',
-            interval: '1m',
+            legendCustomTemplate: '{{ instance }} - Network receive elapsed',
           },
         },
       },
@@ -64,8 +61,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{%(queriesSelector)s}',
-            legendCustomTemplate: 'Network send elapsed',
-            interval: '1m',
+            legendCustomTemplate: '{{ instance }} - Network send elapsed',
           },
         },
       },

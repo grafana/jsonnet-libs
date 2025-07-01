@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "ClickHouse Latency",
+            "title": "Clickhouse latency",
             "type": "link",
             "url": "/d/clickhouse_latency"
          },
          {
             "keepTime": true,
-            "title": "ClickHouse Overview",
+            "title": "Clickhouse overview",
             "type": "link",
             "url": "/d/clickhouse_overview"
          },
          {
             "keepTime": true,
-            "title": "Logs",
+            "title": "Clickhouse logs",
             "type": "link",
             "url": "/d/clickhouse-logs"
          },
@@ -78,7 +78,7 @@
                   "expr": "ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Interserver connections",
+                  "legendFormat": "{{ instance }} - Interserver connections",
                   "refId": "Interserver connections"
                }
             ],
@@ -130,7 +130,7 @@
                   "expr": "ClickHouseAsyncMetrics_ReplicasMaxQueueSize{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Max queue size",
+                  "legendFormat": "{{ instance }} - Max queue size",
                   "refId": "Replica queue size"
                }
             ],
@@ -183,7 +183,8 @@
                   "expr": "rate(ClickHouseProfileEvents_ReplicatedPartFetches{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Part fetches",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Part fetches",
                   "refId": "Replicated part fetches"
                },
                {
@@ -194,7 +195,8 @@
                   "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMerges{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Part merges",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Part merges",
                   "refId": "Replicated part merges"
                },
                {
@@ -205,7 +207,8 @@
                   "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMutations{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Part mutations",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Part mutations",
                   "refId": "Replicated part mutations"
                },
                {
@@ -216,7 +219,8 @@
                   "expr": "rate(ClickHouseProfileEvents_ReplicatedPartChecks{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Part checks",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Part checks",
                   "refId": "Replicated part checks"
                }
             ],
@@ -269,7 +273,7 @@
                   "expr": "ClickHouseMetrics_ReadonlyReplica{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Read only",
+                  "legendFormat": "{{ instance }} - Read only",
                   "refId": "Read-only replicas"
                }
             ],
@@ -322,7 +326,7 @@
                   "expr": "ClickHouseMetrics_ZooKeeperWatch{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "ZooKeeper watches",
+                  "legendFormat": "{{ instance }} - ZooKeeper watches",
                   "refId": "ZooKeeper watches"
                }
             ],
@@ -375,7 +379,7 @@
                   "expr": "ClickHouseMetrics_ZooKeeperSession{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "ZooKeeper sessions",
+                  "legendFormat": "{{ instance }} - ZooKeeper sessions",
                   "refId": "ZooKeeper sessions"
                }
             ],
@@ -428,7 +432,7 @@
                   "expr": "ClickHouseMetrics_ZooKeeperRequest{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "ZooKeeper requests",
+                  "legendFormat": "{{ instance }} - ZooKeeper requests",
                   "refId": "ZooKeeper requests"
                }
             ],
@@ -495,6 +499,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "ClickHouse replica",
+      "title": "Clickhouse replica",
       "uid": "clickhouse_replica"
    }

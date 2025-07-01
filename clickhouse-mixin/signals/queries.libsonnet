@@ -22,7 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_SelectQuery{%(queriesSelector)s}',
-            legendCustomTemplate: 'Select query',
+            legendCustomTemplate: '{{ instance }} - Select query',
             interval: '30s',
           },
         },
@@ -36,7 +36,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_InsertQuery{%(queriesSelector)s}',
-            legendCustomTemplate: 'Insert query',
+            legendCustomTemplate: '{{ instance }} - Insert query',
             interval: '30s',
           },
         },
@@ -50,7 +50,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_AsyncInsertQuery{%(queriesSelector)s}',
-            legendCustomTemplate: 'Async insert query',
+            legendCustomTemplate: '{{ instance }} - Async insert query',
             interval: '30s',
           },
         },
@@ -64,7 +64,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_FailedSelectQuery{%(queriesSelector)s}',
-            legendCustomTemplate: 'Failed select query',
+            legendCustomTemplate: '{{ instance }} - Failed select query',
             interval: '30s',
           },
         },
@@ -78,7 +78,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_FailedInsertQuery{%(queriesSelector)s}',
-            legendCustomTemplate: 'Failed insert query',
+            legendCustomTemplate: '{{ instance }} - Failed insert query',
             interval: '30s',
           },
         },
@@ -92,8 +92,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_RejectedInserts{%(queriesSelector)s}',
-            legendCustomTemplate: 'Rejected inserts',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - Rejected inserts',
           },
         },
       },

@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "ClickHouse Latency",
+            "title": "Clickhouse latency",
             "type": "link",
             "url": "/d/clickhouse_latency"
          },
          {
             "keepTime": true,
-            "title": "ClickHouse Replica",
+            "title": "Clickhouse replica",
             "type": "link",
             "url": "/d/clickhouse_replica"
          },
          {
             "keepTime": true,
-            "title": "Logs",
+            "title": "Clickhouse logs",
             "type": "link",
             "url": "/d/clickhouse-logs"
          },
@@ -79,7 +79,8 @@
                   "expr": "rate(ClickHouseProfileEvents_SelectQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Select query",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Select query",
                   "refId": "Select queries"
                },
                {
@@ -90,7 +91,8 @@
                   "expr": "rate(ClickHouseProfileEvents_InsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Insert query",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Insert query",
                   "refId": "Insert queries"
                },
                {
@@ -101,7 +103,8 @@
                   "expr": "rate(ClickHouseProfileEvents_AsyncInsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Async insert query",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Async insert query",
                   "refId": "Async insert queries"
                }
             ],
@@ -154,7 +157,8 @@
                   "expr": "rate(ClickHouseProfileEvents_FailedSelectQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Failed select query",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Failed select query",
                   "refId": "Failed select queries"
                },
                {
@@ -165,7 +169,8 @@
                   "expr": "rate(ClickHouseProfileEvents_FailedInsertQuery{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Failed insert query",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Failed insert query",
                   "refId": "Failed insert queries"
                }
             ],
@@ -218,7 +223,8 @@
                   "expr": "rate(ClickHouseProfileEvents_RejectedInserts{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Rejected inserts",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Rejected inserts",
                   "refId": "Rejected inserts"
                }
             ],
@@ -271,7 +277,8 @@
                   "expr": "ClickHouseMetrics_MemoryTracking{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Memory tracking",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Memory tracking",
                   "refId": "Memory usage"
                }
             ],
@@ -325,7 +332,7 @@
                   "expr": "(ClickHouseMetrics_MemoryTracking{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"} / ClickHouseAsyncMetrics_OSMemoryTotal{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}) * 100",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Memory tracking percent",
+                  "legendFormat": "{{ instance }} - Memory tracking percent",
                   "refId": "Memory usage percentage"
                }
             ],
@@ -378,7 +385,7 @@
                   "expr": "ClickHouseMetrics_TCPConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "TCP connection",
+                  "legendFormat": "{{ instance }} - TCP connection",
                   "refId": "TCP connections"
                },
                {
@@ -389,7 +396,7 @@
                   "expr": "ClickHouseMetrics_HTTPConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "HTTP connection",
+                  "legendFormat": "{{ instance }} - HTTP connection",
                   "refId": "HTTP connections"
                },
                {
@@ -400,7 +407,7 @@
                   "expr": "ClickHouseMetrics_MySQLConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "MySQL connection",
+                  "legendFormat": "{{ instance }} - MySQL connection",
                   "refId": "MySQL connections"
                },
                {
@@ -411,7 +418,7 @@
                   "expr": "ClickHouseMetrics_PostgreSQLConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "PostgreSQL connection",
+                  "legendFormat": "{{ instance }} - PostgreSQL connection",
                   "refId": "PostgreSQL connections"
                }
             ],
@@ -444,6 +451,7 @@
                "y": 32
             },
             "id": 7,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -464,7 +472,8 @@
                   "expr": "rate(ClickHouseProfileEvents_NetworkReceiveBytes{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Network receive bytes",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Network receive bytes",
                   "refId": "Network received"
                }
             ],
@@ -517,7 +526,8 @@
                   "expr": "rate(ClickHouseProfileEvents_NetworkSendBytes{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Network send bytes",
+                  "interval": "1m",
+                  "legendFormat": "{{ instance }} - Network send bytes",
                   "refId": "Network transmitted"
                }
             ],
@@ -584,6 +594,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "ClickHouse overview",
+      "title": "Clickhouse overview",
       "uid": "clickhouse_overview"
    }

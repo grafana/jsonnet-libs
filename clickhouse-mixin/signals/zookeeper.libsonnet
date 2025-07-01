@@ -22,7 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_ZooKeeperWatch{%(queriesSelector)s}',
-            legendCustomTemplate: 'ZooKeeper watches',
+            legendCustomTemplate: '{{ instance }} - ZooKeeper watches',
           },
         },
       },
@@ -35,7 +35,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_ZooKeeperSession{%(queriesSelector)s}',
-            legendCustomTemplate: 'ZooKeeper sessions',
+            legendCustomTemplate: '{{ instance }} - ZooKeeper sessions',
           },
         },
       },
@@ -48,7 +48,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_ZooKeeperRequest{%(queriesSelector)s}',
-            legendCustomTemplate: 'ZooKeeper requests',
+            legendCustomTemplate: '{{ instance }} - ZooKeeper requests',
           },
         },
       },
@@ -61,8 +61,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{%(queriesSelector)s}',
-            legendCustomTemplate: 'ZooKeeper wait',
-            interval: '30s',
+            legendCustomTemplate: '{{ instance }} - ZooKeeper wait',
           },
         },
       },

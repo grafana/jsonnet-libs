@@ -22,7 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_MemoryTracking{%(queriesSelector)s}',
-            legendCustomTemplate: 'Memory tracking',
+            legendCustomTemplate: '{{ instance }} - Memory tracking',
           },
         },
       },
@@ -35,7 +35,7 @@ function(this)
         sources: {
           prometheus: {
             expr: '(ClickHouseMetrics_MemoryTracking{%(queriesSelector)s} / ClickHouseAsyncMetrics_OSMemoryTotal{%(queriesSelector)s}) * 100',
-            legendCustomTemplate: 'Memory tracking percent',
+            legendCustomTemplate: '{{ instance }} - Memory tracking percent',
           },
         },
       },

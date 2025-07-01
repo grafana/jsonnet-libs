@@ -27,7 +27,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       replicaOperationsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Replica operations',
-          targets=[signals.replica.replicatedPartFetches.asTarget(), signals.replica.replicatedPartMerges.asTarget(), signals.replica.replicatedPartMutations.asTarget(), signals.replica.replicatedPartChecks.asTarget()],
+          targets=[signals.replica.replicatedPartFetches.asTarget() { interval: '1m'}, signals.replica.replicatedPartMerges.asTarget() { interval: '1m'}, signals.replica.replicatedPartMutations.asTarget() { interval: '1m'}, signals.replica.replicatedPartChecks.asTarget() { interval: '1m'}],
           description='Replica Operations over time to other nodes'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -77,7 +77,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       successfulQueriesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Successful queries',
-          targets=[signals.queries.selectQueries.asTarget(), signals.queries.insertQueries.asTarget(), signals.queries.asyncInsertQueries.asTarget()],
+          targets=[signals.queries.selectQueries.asTarget() { interval: '1m'}, signals.queries.insertQueries.asTarget() { interval: '1m'}, signals.queries.asyncInsertQueries.asTarget() { interval: '1m'}],
           description='Rate of successful queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -87,7 +87,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       failedQueriesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Failed queries',
-          targets=[signals.queries.failedSelectQueries.asTarget(), signals.queries.failedInsertQueries.asTarget()],
+          targets=[signals.queries.failedSelectQueries.asTarget() { interval: '1m'}, signals.queries.failedInsertQueries.asTarget() { interval: '1m'}],
           description='Rate of failed queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -97,7 +97,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       rejectedInsertsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Rejected inserts',
-          targets=[signals.queries.rejectedInserts.asTarget()],
+          targets=[signals.queries.rejectedInserts.asTarget() { interval: '1m'}],
           description='Number of rejected inserts per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
@@ -107,7 +107,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       memoryUsagePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Memory usage',
-          targets=[signals.memory.memoryUsage.asTarget()],
+          targets=[signals.memory.memoryUsage.asTarget() { interval: '1m'}],
           description='Memory usage over time'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -143,9 +143,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkReceivedPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network received',
-          targets=[signals.network.networkReceiveBytes.asTarget()],
+          targets=[signals.network.networkReceiveBytes.asTarget() { interval: '1m'}],
           description='Received network throughput'
         )
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
@@ -153,9 +154,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmittedPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network transmitted',
-          targets=[signals.network.networkSendBytes.asTarget()],
+          targets=[signals.network.networkSendBytes.asTarget() { interval: '1m'}],
           description='Transmitted network throughput'
-        )
+        ) 
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
@@ -163,7 +164,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskReadLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Disk read latency',
-          targets=[signals.disk.diskReadLatency.asTarget()],
+          # setting min interval to 2m to allow for enough data to be collected for an accurate increase
+          targets=[signals.disk.diskReadLatency.asTarget() { interval: '2m'}],
           description='Time spent waiting for read syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -173,7 +175,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskWriteLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Disk write latency',
-          targets=[signals.disk.diskWriteLatency.asTarget()],
+          # setting min interval to 2m to allow for enough data to be collected for an accurate increase
+          targets=[signals.disk.diskWriteLatency.asTarget() { interval: '2m'}],
           description='Time spent waiting for write syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -183,7 +186,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmitLatencyInboundPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network receive latency',
-          targets=[signals.network.networkReceiveLatency.asTarget()],
+          targets=[signals.network.networkReceiveLatency.asTarget() { interval: '1m'}],
           description='Latency of inbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -193,7 +196,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       networkTransmitLatencyOutboundPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Network transmit latency',
-          targets=[signals.network.networkSendLatency.asTarget()],
+          targets=[signals.network.networkSendLatency.asTarget() { interval: '1m'}],
           description='Latency of outbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
@@ -203,7 +206,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       zooKeeperWaitTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'ZooKeeper wait time',
-          targets=[signals.zookeeper.zooKeeperWaitTime.asTarget()],
+          targets=[signals.zookeeper.zooKeeperWaitTime.asTarget() { interval: '1m'}],
           description='Time spent waiting for ZooKeeper request to process'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')

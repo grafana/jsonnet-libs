@@ -22,7 +22,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_TCPConnection{%(queriesSelector)s}',
-            legendCustomTemplate: 'TCP connection',
+            legendCustomTemplate: '{{ instance }} - TCP connection',
           },
         },
       },
@@ -35,7 +35,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_HTTPConnection{%(queriesSelector)s}',
-            legendCustomTemplate: 'HTTP connection',
+            legendCustomTemplate: '{{ instance }} - HTTP connection',
           },
         },
       },
@@ -48,7 +48,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_MySQLConnection{%(queriesSelector)s}',
-            legendCustomTemplate: 'MySQL connection',
+            legendCustomTemplate: '{{ instance }} - MySQL connection',
           },
         },
       },
@@ -61,7 +61,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'ClickHouseMetrics_PostgreSQLConnection{%(queriesSelector)s}',
-            legendCustomTemplate: 'PostgreSQL connection',
+            legendCustomTemplate: '{{ instance }} - PostgreSQL connection',
           },
         },
       },

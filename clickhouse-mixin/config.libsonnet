@@ -8,14 +8,11 @@
 
   dashboardTags: [self.uid],
   uid: 'clickhouse',
-  dashboardNamePrefix: 'ClickHouse',
+  dashboardNamePrefix: 'Clickhouse',
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
   metricsSource: 'prometheus',  // metrics source for signals
-
-  // Legend panel configuration
-  legendLabels: ['instance'],
 
   // Logging configuration
   enableLokiLogs: true,
