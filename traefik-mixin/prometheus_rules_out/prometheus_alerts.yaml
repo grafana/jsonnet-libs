@@ -3,7 +3,8 @@ groups:
   rules:
   - alert: TraefikConfigReloadFailuresIncreasing
     annotations:
-      description: Traefik is failing to reload its config
+      description: |
+        Traefik is failing to reload its config in {{ $labels.environment }}.
       summary: Traefik is failing to reload its configuration.
     expr: |
       sum by (job, environment) (rate(traefik_config_reloads_failure_total{}[5m])) > 0

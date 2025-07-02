@@ -7,7 +7,7 @@
           {
             alert: 'TraefikConfigReloadFailuresIncreasing',
             expr: |||
-              sum by (%(groupLabels)s) (rate(traefik_config_reloads_failure_total{%(filteringSelector)s}[5m])) > 0
+              sum by (%(groupLabels)s, environment) (rate(traefik_config_reloads_failure_total{%(filteringSelector)s}[5m])) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -15,7 +15,9 @@
             } + std.get($._config, 'alertLabels', {}),
             annotations: {
               summary: 'Traefik is failing to reload its configuration.',
-              description: 'Traefik is failing to reload its config',
+              description: |||
+                Traefik is failing to reload its config in {{ $labels.environment }}.
+              |||,
             } + std.get($._config, 'alertAnnotations', {}),
           },
           {

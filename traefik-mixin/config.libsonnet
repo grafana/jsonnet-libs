@@ -7,7 +7,7 @@
     // Example:
     // filteringSelector: "component=\"traefik\",environment=\"production\"",
     // for config reload alert
-    groupLabels: 'job, environment',
+    groupLabels: 'job',
     // for TLS alerts
     instanceLabels: 'instance',
     alertLabels: {},
