@@ -7,7 +7,7 @@
           {
             alert: 'TraefikConfigReloadFailuresIncreasing',
             expr: |||
-              sum by (%(groupLabels)s, environment) (rate(traefik_config_reloads_failure_total{%(filteringSelector)s}[5m])) > 0
+              sum by (%(groupLabels)s) (rate(traefik_config_reloads_failure_total{%(filteringSelector)s}[5m])) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
