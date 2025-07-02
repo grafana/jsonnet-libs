@@ -290,6 +290,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
+            "description": "Percentage of memory allocated by ClickHouse compared to OS total",
             "fieldConfig": {
                "defaults": {
                   "thresholds": {
