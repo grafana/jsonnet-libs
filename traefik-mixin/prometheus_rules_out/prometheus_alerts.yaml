@@ -7,7 +7,7 @@ groups:
         Traefik is failing to reload its config in {{ $labels.job }}.
       summary: Traefik is failing to reload its configuration.
     expr: |
-      sum by (job, environment) (rate(traefik_config_reloads_failure_total{}[5m])) > 0
+      sum by (job) (rate(traefik_config_reloads_failure_total{}[5m])) > 0
     for: 5m
     labels:
       severity: critical
