@@ -1,9 +1,8 @@
 {
   local this = self,
-  enableMultiCluster: false,
   filteringSelector: 'job="integrations/clickhouse"',
-  groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
-  logLabels: if self.enableMultiCluster then ['job', 'cluster', 'instance'] else ['job', 'instance'],
+  groupLabels: ['job', 'cluster'],
+  logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
 
   dashboardTags: [self.uid],

@@ -17,7 +17,7 @@ function(this)
         name: 'Disk read latency',
         nameShort: 'Read latency',
         type: 'counter',
-        description: 'Time spent waiting for read syscall',
+        description: 'Time spent waiting for read syscall.',
         unit: 'µs',
         sources: {
           prometheus: {
@@ -31,7 +31,7 @@ function(this)
         name: 'Disk write latency',
         nameShort: 'Write latency',
         type: 'counter',
-        description: 'Time spent waiting for write syscall',
+        description: 'Time spent waiting for write syscall.',
         unit: 'µs',
         sources: {
           prometheus: {

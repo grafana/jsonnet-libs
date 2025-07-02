@@ -75,7 +75,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - Interserver connections",
@@ -127,7 +127,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseAsyncMetrics_ReplicasMaxQueueSize{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseAsyncMetrics_ReplicasMaxQueueSize{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - Max queue size",
@@ -180,7 +180,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartFetches{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartFetches{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -192,7 +192,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMerges{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMerges{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -204,7 +204,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMutations{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartMutations{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -216,7 +216,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartChecks{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(ClickHouseProfileEvents_ReplicatedPartChecks{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -270,7 +270,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ReadonlyReplica{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseMetrics_ReadonlyReplica{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - Read only",
@@ -323,7 +323,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ZooKeeperWatch{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseMetrics_ZooKeeperWatch{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - ZooKeeper watches",
@@ -376,7 +376,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ZooKeeperSession{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseMetrics_ZooKeeperSession{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - ZooKeeper sessions",
@@ -429,7 +429,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ClickHouseMetrics_ZooKeeperRequest{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "ClickHouseMetrics_ZooKeeperRequest{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - ZooKeeper requests",
@@ -455,7 +455,7 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -470,7 +470,22 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -479,7 +494,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\"}, instance)",
+               "query": "label_values(ClickHouseMetrics_InterserverConnection{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

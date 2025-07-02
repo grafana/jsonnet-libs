@@ -17,7 +17,7 @@ function(this)
         name: 'Network received',
         nameShort: 'Net RX',
         type: 'counter',
-        description: 'Received network throughput',
+        description: 'Received network throughput.',
         unit: 'Bps',
         sources: {
           prometheus: {
@@ -30,7 +30,7 @@ function(this)
         name: 'Network transmitted',
         nameShort: 'Net TX',
         type: 'counter',
-        description: 'Transmitted network throughput',
+        description: 'Transmitted network throughput.',
         unit: 'Bps',
         sources: {
           prometheus: {
@@ -43,7 +43,7 @@ function(this)
         name: 'Network receive latency',
         nameShort: 'RX latency',
         type: 'counter',
-        description: 'Latency of inbound network traffic',
+        description: 'Latency of inbound network traffic.',
         unit: 'µs',
         sources: {
           prometheus: {
@@ -56,7 +56,7 @@ function(this)
         name: 'Network transmit latency',
         nameShort: 'TX latency',
         type: 'counter',
-        description: 'Latency of outbound network traffic',
+        description: 'Latency of outbound network traffic.',
         unit: 'µs',
         sources: {
           prometheus: {

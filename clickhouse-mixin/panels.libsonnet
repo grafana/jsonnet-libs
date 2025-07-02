@@ -118,7 +118,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.gauge.new('Memory usage')
         + g.panel.gauge.queryOptions.withTargets([signals.memory.memoryUsagePercent.asTarget()])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
-        + g.panel.gauge.panelOptions.withDescription('Percentage of memory allocated by ClickHouse compared to OS total')
         + g.panel.gauge.options.withShowThresholdLabels(true)
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')

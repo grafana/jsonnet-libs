@@ -13,21 +13,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
     local panels = this.grafana.panels;
+    local rows = this.grafana.rows;
 
     {
       'clickhouse-replica.json':
         g.dashboard.new(prefix + ' replica')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            [
-              panels.interserverConnectionsPanel { gridPos+: { w: 12 } },
-              panels.replicaQueueSizePanel { gridPos+: { w: 12 } },
-              panels.replicaOperationsPanel { gridPos+: { w: 12 } },
-              panels.replicaReadOnlyPanel { gridPos+: { w: 12 } },
-              panels.zooKeeperWatchesPanel { gridPos+: { w: 12 } },
-              panels.zooKeeperSessionsPanel { gridPos+: { w: 12 } },
-              panels.zooKeeperRequestsPanel { gridPos+: { w: 24 } },
-            ]
+            rows.replicaOperationsPanels + rows.replicaZookeeperPanels,
           )
         )
         + root.applyCommon(

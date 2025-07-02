@@ -4,6 +4,7 @@ local dashboards = import './dashboards.libsonnet';
 local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
+local rows = import './rows.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -30,13 +31,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
         varMetric='ClickHouseMetrics_InterserverConnection',
-        customAllValue='.+',
+        customAllValue='.*',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),
       dashboards: dashboards.new(this),
+      rows: rows.new(this),
     },
 
     prometheus: {

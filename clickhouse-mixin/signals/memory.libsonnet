@@ -17,7 +17,7 @@ function(this)
         name: 'Memory usage',
         nameShort: 'Memory',
         type: 'gauge',
-        description: 'Memory usage over time',
+        description: 'Memory usage over time.',
         unit: 'bytes',
         sources: {
           prometheus: {
@@ -29,8 +29,8 @@ function(this)
       memoryUsagePercent: {
         name: 'Memory usage percentage',
         nameShort: 'Memory %',
-        type: 'gauge',
-        description: 'Percentage of memory allocated by ClickHouse compared to OS total',
+        type: 'raw',
+        description: 'Percentage of memory allocated by ClickHouse compared to OS total.',
         unit: 'percent',
         sources: {
           prometheus: {

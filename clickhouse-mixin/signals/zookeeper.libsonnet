@@ -17,7 +17,7 @@ function(this)
         name: 'ZooKeeper watches',
         nameShort: 'Watches',
         type: 'gauge',
-        description: 'Current number of watches in ZooKeeper',
+        description: 'Current number of watches in ZooKeeper.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -30,7 +30,7 @@ function(this)
         name: 'ZooKeeper sessions',
         nameShort: 'Sessions',
         type: 'gauge',
-        description: 'Current number of sessions to ZooKeeper',
+        description: 'Current number of sessions to ZooKeeper.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -43,7 +43,7 @@ function(this)
         name: 'ZooKeeper requests',
         nameShort: 'Requests',
         type: 'gauge',
-        description: 'Current number of active requests to ZooKeeper',
+        description: 'Current number of active requests to ZooKeeper.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -56,7 +56,7 @@ function(this)
         name: 'ZooKeeper wait time',
         nameShort: 'Wait time',
         type: 'counter',
-        description: 'Time spent waiting for ZooKeeper request to process',
+        description: 'Time spent waiting for ZooKeeper request to process.',
         unit: 'µs',
         sources: {
           prometheus: {

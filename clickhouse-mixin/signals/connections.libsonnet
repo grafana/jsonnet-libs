@@ -17,7 +17,7 @@ function(this)
         name: 'TCP connections',
         nameShort: 'TCP',
         type: 'gauge',
-        description: 'Current number of TCP connections to ClickHouse',
+        description: 'Current number of TCP connections to ClickHouse.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -30,7 +30,7 @@ function(this)
         name: 'HTTP connections',
         nameShort: 'HTTP',
         type: 'gauge',
-        description: 'Current number of HTTP connections to ClickHouse',
+        description: 'Current number of HTTP connections to ClickHouse.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -43,7 +43,7 @@ function(this)
         name: 'MySQL connections',
         nameShort: 'MySQL',
         type: 'gauge',
-        description: 'Current number of MySQL connections to ClickHouse',
+        description: 'Current number of MySQL connections to ClickHouse.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -56,7 +56,7 @@ function(this)
         name: 'PostgreSQL connections',
         nameShort: 'PostgreSQL',
         type: 'gauge',
-        description: 'Current number of PostgreSQL connections to ClickHouse',
+        description: 'Current number of PostgreSQL connections to ClickHouse.',
         unit: 'short',
         sources: {
           prometheus: {

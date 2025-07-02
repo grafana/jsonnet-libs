@@ -179,7 +179,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -221,7 +221,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -264,10 +264,25 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\"}, instance)",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -282,7 +297,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

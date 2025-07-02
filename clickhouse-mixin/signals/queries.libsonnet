@@ -17,13 +17,12 @@ function(this)
         name: 'Select queries',
         nameShort: 'SELECT',
         type: 'counter',
-        description: 'Rate of SELECT queries per second',
+        description: 'Rate of SELECT queries per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_SelectQuery{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - Select query',
-            interval: '30s',
           },
         },
       },
@@ -31,13 +30,12 @@ function(this)
         name: 'Insert queries',
         nameShort: 'INSERT',
         type: 'counter',
-        description: 'Rate of INSERT queries per second',
+        description: 'Rate of INSERT queries per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_InsertQuery{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - Insert query',
-            interval: '30s',
           },
         },
       },
@@ -45,13 +43,12 @@ function(this)
         name: 'Async insert queries',
         nameShort: 'Async INSERT',
         type: 'counter',
-        description: 'Rate of async INSERT queries per second',
+        description: 'Rate of async INSERT queries per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_AsyncInsertQuery{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - Async insert query',
-            interval: '30s',
           },
         },
       },
@@ -59,13 +56,12 @@ function(this)
         name: 'Failed select queries',
         nameShort: 'Failed SELECT',
         type: 'counter',
-        description: 'Rate of failed SELECT queries per second',
+        description: 'Rate of failed SELECT queries per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_FailedSelectQuery{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - Failed select query',
-            interval: '30s',
           },
         },
       },
@@ -73,13 +69,12 @@ function(this)
         name: 'Failed insert queries',
         nameShort: 'Failed INSERT',
         type: 'counter',
-        description: 'Rate of failed INSERT queries per second',
+        description: 'Rate of failed INSERT queries per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
             expr: 'ClickHouseProfileEvents_FailedInsertQuery{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - Failed insert query',
-            interval: '30s',
           },
         },
       },
@@ -87,7 +82,7 @@ function(this)
         name: 'Rejected inserts',
         nameShort: 'Rejected',
         type: 'counter',
-        description: 'Number of rejected inserts per second',
+        description: 'Number of rejected inserts per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
