@@ -4,7 +4,6 @@
       {
         name: 'traefik',
         rules: [
-          // TraefikConfigReloadFailuresIncreasing
           {
             alert: 'TraefikConfigReloadFailuresIncreasing',
             expr: |||
@@ -18,7 +17,6 @@
               description: 'Traefik is failing to reload its config',
             } + std.get($._config, 'alertAnnotations', {}),
           },
-          // TraefikTLSCertificatesExpiring (critical)
           {
             alert: 'TraefikTLSCertificatesExpiring',
             expr: |||
@@ -34,7 +32,6 @@
               ||| % $._config,
             } + std.get($._config, 'alertAnnotations', {}),
           },
-          // TraefikTLSCertificatesExpiring (warning)
           {
             alert: 'TraefikTLSCertificatesExpiringSoon',
             expr: |||

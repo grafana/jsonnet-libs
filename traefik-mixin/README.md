@@ -31,20 +31,32 @@ The following Prometheus alerts are included:
 
 ## Configuration
 
-You can configure alert thresholds and labels in `config.libsonnet`:
+You can configure alert thresholds, selectors, and labels in `config.libsonnet`:
 
 ```jsonnet
 {
   _config+:: {
     traefik_tls_expiry_days_critical: 7,   // critical threshold (days)
     traefik_tls_expiry_days_warning: 14,   // warning threshold (days)
+    filteringSelector: '',                 // optional metric label selector for all alerts
+    // Example:
+    // filteringSelector: "component=\"traefik\",environment=\"production\"",
+    groupLabels: 'job, environment',       // for config reload alert (sum by)
+    instanceLabels: 'instance',            // for TLS alerts (max by)
     alertLabels: {},                       // optional alert labels
+    // Example:
+    // alertLabels: {
+    //   environment: 'production',
+    //   component: 'traefik',
+    // },
     alertAnnotations: {},                  // optional alert annotations
-    timeSeriesLabels: "component=\"traefik\",environment=\"production\"", // optional time series labels
-    sumByLabels: "instance",              // optional sum by labels
-    maxByLabels: "sans",                  // optional max by labels
+    // Example:
+    // alertAnnotations: {
+    //   runbook: 'https://runbooks.example.com/traefik-tls',
+    //   grafana: 'https://grafana.example.com/d/traefik',
+    // },
   },
 }
 ```
 
-For more advanced uses of mixins, see https://github.com/monitoring-mixins/docs.
+For more advanced uses of mixins, see [monitoring-mixins/docs](https://github.com/monitoring-mixins/docs).
