@@ -30,7 +30,7 @@ function(this)
         type: 'gauge',
         sources: {
           azuremonitor: {
-            expr: 'label_replace(azure_microsoft_sql_servers_databases_deadlock_total_count{%(queriesSelector)s}, "database", "$1", "resourceID", ".+/(.*)")',
+            expr: 'label_replace(max_over_time(azure_microsoft_sql_servers_databases_deadlock_total_count{%(queriesSelector)s}[$__interval]), "database", "$1", "resourceID", ".+/(.*)")',
             legendCustomTemplate: '{{database}}',
           },
         },
