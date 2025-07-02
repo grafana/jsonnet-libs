@@ -19,7 +19,7 @@ local k8s_patch = {
 };
 
 {
-  grafanaDashboards+::  {
+  grafanaDashboards+:: {
     local tags = config.dashboardTags,
     [fname]:
       local dashboard = util.decorate_dashboard(mixin.grafana.dashboards[fname], tags=tags);
