@@ -34,6 +34,9 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
+            expr: 'time() - windows_system_boot_time_timestamp_seconds{%(queriesSelector)s}',
+          },
+          prometheus_pre_0_30: {
             expr: 'time() - windows_system_system_up_time{%(queriesSelector)s}',
           },
         },
@@ -45,8 +48,12 @@ function(this)
         description: 'System boot time',
         unit: 's',
         sources: {
-          prometheus: {
+          prometheus_pre_0_30: {
             expr: 'windows_system_system_up_time{%(queriesSelector)s}',
+          },
+          // https://github.com/prometheus-community/windows_exporter/releases/tag/v0.30.0
+          prometheus: {
+            expr: 'windows_system_boot_time_timestamp_seconds{%(queriesSelector)s}',
           },
         },
       },
@@ -58,6 +65,9 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
+            expr: 'windows_cpu_logical_processor{%(queriesSelector)s}',
+          },
+          prometheus_pre_0_30: {
             expr: 'windows_cs_logical_processors{%(queriesSelector)s}',
           },
         },
@@ -132,7 +142,8 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'clamp_max(windows_time_ntp_client_time_sources{%(queriesSelector)s}, 1)',
+            expr: 'windows_time_ntp_client_time_sources{%(queriesSelector)s}',
+            exprWrappers: [['clamp_max(', ',1)']],
             legendCustomTemplate: 'NTP status',
           },
         },
@@ -171,6 +182,11 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
+            expr: 'windows_time_clock_frequency_adjustment_ppb{%(queriesSelector)s}',
+            legendCustomTemplate: 'Time adjustments',
+          },
+          // https://github.com/prometheus-community/windows_exporter/pull/1910
+          prometheus_pre_0_30: {
             expr: 'windows_time_clock_frequency_adjustment_ppb_total{%(queriesSelector)s}',
             legendCustomTemplate: 'Time adjustments',
           },
@@ -184,6 +200,10 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
+            expr: 'windows_time_timezone{%(queriesSelector)s}',
+            infoLabel: 'timezone',
+          },
+          prometheus_pre_0_30: {
             expr: 'windows_os_timezone{%(queriesSelector)s}',
             infoLabel: 'timezone',
           },
