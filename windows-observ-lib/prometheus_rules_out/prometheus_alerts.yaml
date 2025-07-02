@@ -17,8 +17,12 @@ groups:
             description: |
                 Memory usage on host {{ $labels.instance }} is critically high, with {{ printf "%.2f" $value }}% of total memory used.
                 This exceeds the threshold of 90%.
-                Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total memory: {{ with printf `windows_cs_physical_memory_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                Current memory free: {{ with printf `windows_memory_physical_free_bytes{}
+                or
+                windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total memory: {{ with printf `windows_cs_physical_memory_bytes{}
+                or
+                windows_memory_physical_total_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
                 Consider investigating processes consuming high memory or increasing available memory.
             summary: High memory usage on Windows host.
           expr: |
