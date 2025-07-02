@@ -2,6 +2,8 @@
       "annotations": {
          "list": [ ]
       },
+      "editable": false,
+      "id": null,
       "links": [
          {
             "keepTime": true,
@@ -228,7 +230,7 @@
             "type": "logs"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
          "clickhouse"
@@ -239,7 +241,7 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
             },
             {
@@ -325,7 +327,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             }
          ]

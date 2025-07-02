@@ -13,7 +13,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   },
 
   new(): {
-
     local this = self,
     config: config,
     signals:
@@ -31,7 +30,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
         varMetric='ClickHouseMetrics_InterserverConnection',
-        customAllValue='.*',
+        customAllValue='.+',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
       annotations: {},
