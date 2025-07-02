@@ -48,15 +48,6 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: critical
-        - alert: WindowsServiceNotHealthy
-          annotations:
-            description: Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.
-            summary: Windows service is not healthy.
-          expr: |
-            (windows_service_status{status!~"starting|stopping|ok", }) > 0
-          for: 5m
-          labels:
-            severity: critical
         - alert: WindowsDiskDriveNotHealthy
           annotations:
             description: Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}' status.
@@ -100,3 +91,12 @@ groups:
             (time() - windows_system_system_up_time{} offset 10m)) > 600
           labels:
             severity: info
+        - alert: WindowsServiceNotHealthy
+          annotations:
+            description: Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.
+            summary: Windows service is not healthy.
+          expr: |
+            (windows_service_status{status!~"starting|stopping|ok", }) > 0
+          for: 5m
+          labels:
+            severity: critical

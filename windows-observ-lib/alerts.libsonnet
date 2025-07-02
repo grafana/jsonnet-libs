@@ -160,22 +160,6 @@
                    },
                  },
                  {
-                   alert: 'WindowsServiceNotHealthy',
-                   expr: |||
-                     (%s) > 0
-                   ||| % [
-                     signals.services.serviceNotHealthy.asRuleExpression(),
-                   ],
-                   'for': '5m',
-                   labels: {
-                     severity: 'critical',
-                   },
-                   annotations: {
-                     summary: 'Windows service is not healthy.',
-                     description: "Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.",
-                   },
-                 },
-                 {
                    alert: 'WindowsDiskDriveNotHealthy',
                    expr: |||
                      (%s) != 1
@@ -244,6 +228,25 @@
                    },
                  },
                ]
+               + if std.member(config.metricsSource, 'prometheus_pre_0_30') then 
+                [
+                  {
+                    alert: 'WindowsServiceNotHealthy',
+                    expr: |||
+                      (%s) > 0
+                    ||| % [
+                      signals.services.serviceNotHealthy.asRuleExpression(),
+                    ],
+                    'for': '5m',
+                    labels: {
+                      severity: 'critical',
+                    },
+                    annotations: {
+                      summary: 'Windows service is not healthy.',
+                      description: "Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.",
+                    },
+                  }
+                ] else []
                + if config.enableADDashboard then ADAlerts else [],
       },
     ],
