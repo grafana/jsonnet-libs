@@ -3,13 +3,13 @@
     // alerts thresholds
     traefik_tls_expiry_days_critical: 7,
     traefik_tls_expiry_days_warning: 14,
-    timeSeriesLabels: '',
+    filteringSelector: '',
     // Example:
-    // timeSeriesLabels: "component=\"traefik\",environment=\"production\"",
-    // for config alert
-    sumByLabels: 'instance',
+    // filteringSelector: "component=\"traefik\",environment=\"production\"",
+    // for config reload alert
+    groupLabels: 'job, environment',
     // for TLS alerts
-    maxByLabels: 'sans',
+    instanceLabels: 'instance',
     alertLabels: {},
     // Example:
     // alertLabels: {

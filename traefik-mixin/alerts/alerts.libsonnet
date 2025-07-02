@@ -8,7 +8,7 @@
           {
             alert: 'TraefikConfigReloadFailuresIncreasing',
             expr: |||
-              sum by (%(sumByLabels)s) (rate(traefik_config_reloads_failure_total{%(timeSeriesLabels)s}[5m])) > 0
+              sum by (%(groupLabels)s) (rate(traefik_config_reloads_failure_total{%(filteringSelector)s}[5m])) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -22,7 +22,7 @@
           {
             alert: 'TraefikTLSCertificatesExpiring',
             expr: |||
-              max by (%(maxByLabels)s) ((last_over_time(traefik_tls_certs_not_after{%(timeSeriesLabels)s}[5m]) - time()) / 86400) < %(traefik_tls_expiry_days_critical)s
+              max by (%(instanceLabels)s, sans) ((last_over_time(traefik_tls_certs_not_after{%(filteringSelector)s}[5m]) - time()) / 86400) < %(traefik_tls_expiry_days_critical)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -38,7 +38,7 @@
           {
             alert: 'TraefikTLSCertificatesExpiringSoon',
             expr: |||
-              max by (%(maxByLabels)s) ((last_over_time(traefik_tls_certs_not_after{%(timeSeriesLabels)s}[5m]) - time()) / 86400) < %(traefik_tls_expiry_days_warning)s > %(traefik_tls_expiry_days_critical)s
+              max by (%(instanceLabels)s, sans) ((last_over_time(traefik_tls_certs_not_after{%(filteringSelector)s}[5m]) - time()) / 86400) < %(traefik_tls_expiry_days_warning)s > %(traefik_tls_expiry_days_critical)s
             ||| % $._config,
             'for': '5m',
             labels: {
