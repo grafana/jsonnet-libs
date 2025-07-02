@@ -14,6 +14,7 @@
               severity: 'critical',
             } + std.get($._config, 'alertLabels', {}),
             annotations: {
+              summary: 'Traefik is failing to reload its configuration.',
               description: 'Traefik is failing to reload its config',
             } + std.get($._config, 'alertAnnotations', {}),
           },
@@ -27,6 +28,7 @@
               severity: 'critical',
             } + std.get($._config, 'alertLabels', {}),
             annotations: {
+              summary: 'A Traefik-served TLS certificate will expire very soon.',
               description: |||
                 The minimum number of days until a Traefik-served certificate expires is {{ printf "%%.0f" $value }} days on {{ $labels.sans }} which is below the critical threshold of %(traefik_tls_expiry_days_critical)s.
               ||| % $._config,
@@ -42,6 +44,7 @@
               severity: 'warning',
             } + std.get($._config, 'alertLabels', {}),
             annotations: {
+              summary: 'A Traefik-served TLS certificate will expire soon.',
               description: |||
                 The minimum number of days until a Traefik-served certificate expires is {{ printf "%%.0f" $value }} days on {{ $labels.sans }} which is less than %(traefik_tls_expiry_days_warning)s but greater than %(traefik_tls_expiry_days_critical)s.
               ||| % $._config,
