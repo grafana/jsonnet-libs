@@ -17,7 +17,7 @@
               summary: 'Traefik is failing to reload its configuration.',
               description: |||
                 Traefik is failing to reload its config in {{ $labels.%(firstGroupLabel)s }}.
-              ||| % {firstGroupLabel: std.split($._config.groupLabels, ',')[0]},
+              ||| % { firstGroupLabel: std.split($._config.groupLabels, ',')[0] },
             } + std.get($._config, 'alertAnnotations', {}),
           },
           {
