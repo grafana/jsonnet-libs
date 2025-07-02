@@ -41,8 +41,9 @@ You can configure alert thresholds, selectors, and labels in `config.libsonnet`:
     filteringSelector: '',                 // optional metric label selector for all alerts
     // Example:
     // filteringSelector: "component=\"traefik\",environment=\"production\"",
-    groupLabels: 'job, environment',       // for config reload alert (sum by)
-    instanceLabels: 'instance',            // for TLS alerts (max by)
+    groupLabels: 'job, environment',
+    instanceLabels: 'instance',
+
     alertLabels: {},                       // optional alert labels
     // Example:
     // alertLabels: {
