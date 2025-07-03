@@ -105,7 +105,7 @@ Grafana Agent/Alloy or combination of windows_exporter/promtail can be used in o
 
 The following collectors should be enabled in windows_exporter/windows integration:
 
-`enabled_collectors: cpu,cs,logical_disk,net,os,service,system,textfile,time,diskdrive`
+`enabled_collectors: cpu,logical_disk,net,os,service,system,textfile,time,diskdrive,pagefile,memory`
 
 ### Logs collection
 

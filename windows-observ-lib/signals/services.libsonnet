@@ -9,7 +9,8 @@ function(this)
     aggLevel: 'none',
     aggFunction: 'avg',
     discoveryMetric: {
-      prometheus: 'windows_service_status',
+      prometheus: 'windows_service_state',
+      prometheus_pre_0_30: 'windows_service_status',
     },
     signals: {
       serviceStatus: {
@@ -18,8 +19,10 @@ function(this)
         type: 'gauge',
         description: 'Windows service status',
         unit: 'short',
+        //https://github.com/prometheus-community/windows_exporter/pull/1584
+        optional: true,
         sources: {
-          prometheus: {
+          prometheus_pre_0_30: {
             expr: 'windows_service_status{%(queriesSelector)s}',
             legendCustomTemplate: '{{ name }}',
             valueMappings: [
@@ -46,10 +49,12 @@ function(this)
         name: 'Service not healthy',
         nameShort: 'Not healthy',
         type: 'gauge',
-        description: 'Services not in healthy state',
+        description: 'Service not in healthy state',
         unit: 'short',
+        optional: true,
         sources: {
-          prometheus: {
+
+          prometheus_pre_0_30: {
             expr: 'windows_service_status{status!~"starting|stopping|ok", %(queriesSelector)s}',
             legendCustomTemplate: '{{ name }} ({{ status }})',
           },

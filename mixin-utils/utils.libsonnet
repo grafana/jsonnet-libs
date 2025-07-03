@@ -392,6 +392,31 @@ local g = import 'grafana-builder/grafana.libsonnet';
       for group in groups
     ],
 
+  // withLabels adds custom labels to all alert rules in a group or groups
+  // Parameters:
+  //   labels: A map of label names to values to add to each alert
+  //   groups: The alert groups to modify
+  //   filter_func: Optional function that returns true for alerts that should be modified
+  withLabels(labels, groups, filter_func=null)::
+    local defaultFilter = function(rule) true;
+    local filterToUse = if filter_func != null then filter_func else defaultFilter;
+
+    std.map(
+      function(group)
+        group {
+          rules: std.map(
+            function(rule)
+              if std.objectHas(rule, 'alert') && filterToUse(rule)
+              then rule {
+                labels+: labels,
+              }
+              else rule,
+            group.rules
+          ),
+        },
+      groups
+    ),
+
   removeRuleGroup(groupName):: {
     groups: std.filter(function(group) group.name != groupName, super.groups),
   },

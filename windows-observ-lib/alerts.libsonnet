@@ -122,12 +122,17 @@
                    annotations: {
                      summary: 'High memory usage on Windows host.',
                      description: |||
-                       Memory usage on host {{ $labels.%s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
-                       This exceeds the threshold of %s%%.
-                       Current memory free: {{ with printf `windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
-                       Total memory: {{ with printf `windows_cs_physical_memory_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Memory usage on host {{ $labels.%(instanceLabel)s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
+                       This exceeds the threshold of %(threshold)s%%.
+                       Current memory free: {{ with printf `%(memoryFree)s` | query | first | value | humanize }}{{ . }}{{ end }}.
+                       Total memory: {{ with printf `%(memoryTotal)s` | query | first | value | humanize }}{{ . }}{{ end }}.
                        Consider investigating processes consuming high memory or increasing available memory.
-                     ||| % [instanceLabel, config.alertMemoryUsageThresholdCritical],
+                     ||| % {
+                       instanceLabel: instanceLabel,
+                       threshold: config.alertMemoryUsageThresholdCritical,
+                       memoryFree: signals.memory.memoryFree.asRuleExpression(),
+                       memoryTotal: signals.memory.memoryTotal.asRuleExpression(),
+                     },
                    },
                  },
                  {
@@ -152,22 +157,6 @@
                        Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
                        Consider cleaning up unnecessary files or increasing disk capacity.
                      ||| % [instanceLabel, config.alertDiskUsageThresholdCritical, config.filteringSelector, config.filteringSelector],
-                   },
-                 },
-                 {
-                   alert: 'WindowsServiceNotHealthy',
-                   expr: |||
-                     (%s) > 0
-                   ||| % [
-                     signals.services.serviceNotHealthy.asRuleExpression(),
-                   ],
-                   'for': '5m',
-                   labels: {
-                     severity: 'critical',
-                   },
-                   annotations: {
-                     summary: 'Windows service is not healthy.',
-                     description: "Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.",
                    },
                  },
                  {
@@ -239,7 +228,26 @@
                    },
                  },
                ]
-               + if config.enableADDashboard then ADAlerts else [],
+               + if std.member(config.metricsSource, 'prometheus_pre_0_30') then
+                 [
+                   {
+                     alert: 'WindowsServiceNotHealthy',
+                     expr: |||
+                       (%s) > 0
+                     ||| % [
+                       signals.services.serviceNotHealthy.asRuleExpression(),
+                     ],
+                     'for': '5m',
+                     labels: {
+                       severity: 'critical',
+                     },
+                     annotations: {
+                       summary: 'Windows service is not healthy.',
+                       description: "Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.",
+                     },
+                   },
+                 ] else []
+                        + if config.enableADDashboard then ADAlerts else [],
       },
     ],
   },
