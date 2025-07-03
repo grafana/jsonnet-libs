@@ -86,6 +86,9 @@ function(this)
         unit: 'bytes',
         sources: {
           prometheus: {
+            expr: 'windows_pagefile_limit_bytes{%(queriesSelector)s}',
+          },
+          prometheus_pre_0_30: {
             expr: 'windows_os_paging_limit_bytes{%(queriesSelector)s}',
           },
         },

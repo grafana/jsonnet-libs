@@ -416,7 +416,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_os_paging_limit_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_os_paging_limit_bytes{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_pagefile_limit_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Page total",
