@@ -12,15 +12,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
     local rows = this.grafana.rows;
 
     {
       'clickhouse-replica.json':
         g.dashboard.new(prefix + ' replica')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            rows.replicaOperationsPanels + rows.replicaZookeeperPanels,
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [rows.replicaOperationsPanels, rows.replicaZookeeperPanels]
+            )
           )
         )
         + root.applyCommon(
@@ -37,17 +38,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'clickhouse-overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.successfulQueriesPanel { gridPos+: { w: 24 } },
-              panels.failedQueriesPanel { gridPos+: { w: 12 } },
-              panels.rejectedInsertsPanel { gridPos+: { w: 12 } },
-              panels.memoryUsagePanel { gridPos+: { w: 12 } },
-              panels.memoryUsageGaugePanel { gridPos+: { w: 12 } },
-              panels.activeConnectionsPanel { gridPos+: { w: 24 } },
-              panels.networkReceivedPanel { gridPos+: { w: 12 } },
-              panels.networkTransmittedPanel { gridPos+: { w: 12 } },
-            ]
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [rows.overviewQueriesPanels, rows.overviewMemoryPanels, rows.overviewNetworkPanels]
+            )
           )
         )
         + root.applyCommon(
@@ -64,14 +58,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'clickhouse-latency.json':
         g.dashboard.new(prefix + ' latency')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.diskReadLatencyPanel { gridPos+: { w: 12 } },
-              panels.diskWriteLatencyPanel { gridPos+: { w: 12 } },
-              panels.networkTransmitLatencyInboundPanel { gridPos+: { w: 12 } },
-              panels.networkTransmitLatencyOutboundPanel { gridPos+: { w: 12 } },
-              panels.zooKeeperWaitTimePanel { gridPos+: { w: 24 } },
-            ]
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [rows.latencyDiskPanels, rows.latencyNetworkPanels, rows.latencyZooKeeperPanels]
+            )
           )
         )
         + root.applyCommon(

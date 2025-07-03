@@ -36,6 +36,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Operations",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -57,9 +70,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -109,9 +122,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -162,9 +175,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -252,9 +265,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -283,6 +296,19 @@
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "ZooKeeper",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -305,9 +331,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 18
             },
-            "id": 5,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -358,9 +384,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 18
             },
-            "id": 6,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -411,9 +437,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 24
+               "y": 26
             },
-            "id": 7,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],

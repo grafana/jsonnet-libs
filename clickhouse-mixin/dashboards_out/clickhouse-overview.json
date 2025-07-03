@@ -36,6 +36,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Queries",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -58,9 +71,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -136,9 +149,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -202,9 +215,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -234,6 +247,19 @@
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 5,
+            "panels": [ ],
+            "title": "Memory",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -256,9 +282,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 18
             },
-            "id": 4,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -318,9 +344,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 18
             },
-            "id": 5,
+            "id": 7,
             "options": {
                "showThresholdLabels": true
             },
@@ -340,6 +366,19 @@
             ],
             "title": "Memory usage",
             "type": "gauge"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
+            },
+            "id": 8,
+            "panels": [ ],
+            "title": "Network",
+            "type": "row"
          },
          {
             "datasource": {
@@ -364,9 +403,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 24
+               "y": 27
             },
-            "id": 6,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -450,9 +489,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 32
+               "y": 35
             },
-            "id": 7,
+            "id": 10,
             "interval": "1m",
             "options": {
                "legend": {
@@ -505,9 +544,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 32
+               "y": 35
             },
-            "id": 8,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
