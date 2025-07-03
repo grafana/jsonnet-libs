@@ -27,10 +27,10 @@ local panels = import './panels.libsonnet';
       g.panel.row.new('Queries')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-      this.grafana.panels.successfulQueriesPanel { gridPos+: { w: 24 } },
-      this.grafana.panels.failedQueriesPanel { gridPos+: { w: 12 } },
-      this.grafana.panels.rejectedInsertsPanel { gridPos+: { w: 12 } },
-    ]),
+        this.grafana.panels.successfulQueriesPanel { gridPos+: { w: 24 } },
+        this.grafana.panels.failedQueriesPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.rejectedInsertsPanel { gridPos+: { w: 12 } },
+      ]),
 
     overviewMemoryPanels:
       g.panel.row.new('Memory')
@@ -44,25 +44,25 @@ local panels = import './panels.libsonnet';
       g.panel.row.new('Network')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-      this.grafana.panels.activeConnectionsPanel { gridPos+: { w: 24 } },
-      this.grafana.panels.networkReceivedPanel { gridPos+: { w: 12 } },
-      this.grafana.panels.networkTransmittedPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.activeConnectionsPanel { gridPos+: { w: 24 } },
+        this.grafana.panels.networkReceivedPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.networkTransmittedPanel { gridPos+: { w: 12 } },
       ]),
 
     latencyDiskPanels:
       g.panel.row.new('Disk')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-      this.grafana.panels.diskReadLatencyPanel { gridPos+: { w: 12 } },
-      this.grafana.panels.diskWriteLatencyPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.diskReadLatencyPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.diskWriteLatencyPanel { gridPos+: { w: 12 } },
       ]),
 
     latencyNetworkPanels:
       g.panel.row.new('Network')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-      this.grafana.panels.networkTransmitLatencyInboundPanel { gridPos+: { w: 12 } },
-      this.grafana.panels.networkTransmitLatencyOutboundPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.networkTransmitLatencyInboundPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.networkTransmitLatencyOutboundPanel { gridPos+: { w: 12 } },
       ]),
 
     latencyZooKeeperPanels:
