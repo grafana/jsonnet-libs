@@ -1,17 +1,37 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Clickhouse latency",
+            "type": "link",
+            "url": "/d/clickhouse_latency"
+         },
+         {
+            "keepTime": true,
+            "title": "Clickhouse overview",
+            "type": "link",
+            "url": "/d/clickhouse_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Clickhouse replica",
+            "type": "link",
+            "url": "/d/clickhouse_replica"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "clickhouse-mixin"
+               "clickhouse"
             ],
-            "targetBlank": false,
-            "title": "Other ClickHouse dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -161,7 +181,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +214,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,17 +223,17 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
             "type": "logs"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "clickhouse-mixin"
+         "clickhouse"
       ],
       "templating": {
          "list": [
@@ -221,7 +241,7 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
             },
             {
@@ -234,7 +254,22 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\".*/clickhouse.*\"}, job)",
+               "query": "label_values({job=~\"integrations/clickhouse\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -249,7 +284,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=~\".*/clickhouse.*\",job=~\"$job\"}, instance)",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -264,7 +299,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\".*/clickhouse.*\",job=~\"$job\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"integrations/clickhouse\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -286,14 +321,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
-      "title": "ClickHouse logs",
-      "uid": "clickhouse-logs-overview"
+      "timezone": "default",
+      "title": "Clickhouse logs",
+      "uid": "clickhouse-logs"
    }
