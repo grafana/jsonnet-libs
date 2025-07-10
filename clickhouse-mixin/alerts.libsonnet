@@ -1,6 +1,6 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    groups: [
       {
         name: 'ClickHouseAlerts',
         rules: [
@@ -8,7 +8,7 @@
             alert: 'ClickHouseReplicationQueueBackingUp',
             expr: |||
               ClickHouseAsyncMetrics_ReplicasMaxQueueSize > %(alertsReplicasMaxQueueSize)s
-            ||| % $._config,
+            ||| % this.config,
             labels: {
               severity: 'warning',
             },
@@ -16,7 +16,7 @@
               summary: 'ClickHouse replica max queue size backing up.',
               description: |||
                 ClickHouse replication tasks are processing slower than expected on {{ $labels.instance }} causing replication queue size to back up at {{ $value }} exceeding the threshold value of %(alertsReplicasMaxQueueSize)s.
-              ||| % $._config,
+              ||| % this.config,
             },
             'for': '5m',
             keep_firing_for: '5m',

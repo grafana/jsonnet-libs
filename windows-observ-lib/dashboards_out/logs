@@ -21,7 +21,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "expr": "windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
                "hide": true,
                "iconColor": "light-yellow",
                "name": "Reboot",

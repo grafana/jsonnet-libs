@@ -1,5 +1,5 @@
 {
-  wrapExpr(type, expr, exprWrappers=[], q=0.95, aggLevel, rangeFunction): {
+  wrapExpr(type, expr, exprWrappers=[], q=0.95, aggLevel, rangeFunction, alertRule): {
 
     // additional templates to wrap base expression
     functionTemplates::
@@ -22,7 +22,10 @@
     expr: if type == 'counter' then
       (
         // for increase/delta/idelta - must be $__interval with negative offset for proper Total calculations, else use default from init function.
-        local interval = if (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then '[$__interval:] offset -$__interval' else '[%(interval)s]';
+        local interval =
+          if (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then
+            (if alertRule then '[%(interval)s:] offset -%(interval)s' else '[$__interval:] offset -$__interval')
+          else '[%(interval)s]';
         local baseExpr = rangeFunction + '(' + expr + interval + ')';
         baseExpr
       )
