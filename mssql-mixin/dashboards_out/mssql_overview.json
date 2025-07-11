@@ -655,9 +655,9 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "includeAll": false,
+               "includeAll": true,
                "label": "Instance",
-               "multi": false,
+               "multi": true,
                "name": "instance",
                "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,

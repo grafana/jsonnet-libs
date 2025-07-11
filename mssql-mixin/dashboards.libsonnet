@@ -29,7 +29,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.singleInstance,
+          vars.multiInstance,
           uid + '_mssql_overview',
           tags,
           links { mssqlOverview+:: {} },
@@ -51,7 +51,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.singleInstance,
+          vars.multiInstance,
           uid + '_mssql_pages',
           tags,
           links { mssqlPages+:: {} },
