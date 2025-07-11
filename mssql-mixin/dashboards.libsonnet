@@ -15,21 +15,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
 
     {
-      mssql_overview:
+      'mssql_overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                panels.connectionsPanel { gridPos+: { w: 12 } },
-                panels.batchRequestsPanel { gridPos+: { w: 12 } },
-                panels.severeErrorsPanel { gridPos+: { w: 12 } },
-                panels.deadlocksPanel { gridPos+: { w: 12 } },
-                panels.osMemoryUsagePanel { gridPos+: { w: 24 } },
-                panels.memoryManagerPanel { gridPos+: { w: 16 } },
-                panels.committedMemoryUtilizationPanel { gridPos+: { w: 8 } },
-              ] +
-              [this.grafana.rows.database + g.panel.row.withCollapsed(false)],
+                this.grafana.rows.connections + g.panel.row.withCollapsed(false),
+                this.grafana.rows.memory + g.panel.row.withCollapsed(false),
+                this.grafana.rows.database + g.panel.row.withCollapsed(false),
+              ],
             ),
           )
         )
@@ -44,16 +39,15 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      mssql_pages:
+      'mssql_pages.json':
         g.dashboard.new(prefix + ' pages')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.pageFileMemoryPanel { gridPos+: { w: 12 } },
-              panels.bufferCacheHitPercentagePanel { gridPos+: { w: 12 } },
-              panels.pageCheckpointsPanel { gridPos+: { w: 12 } },
-              panels.pageFaultsPanel { gridPos+: { w: 12 } },
-            ]
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                this.grafana.rows.pages + g.panel.row.withCollapsed(false),
+              ]
+            ),
           )
         )
         + root.applyCommon(
@@ -71,7 +65,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,

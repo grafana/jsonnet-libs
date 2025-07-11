@@ -4,11 +4,11 @@ local g = import './g.libsonnet';
   new(this):
     {
       mssqlOverview:
-        link.link.new('MSSQL Overview', '/d/' + this.grafana.dashboards.mssql_overview.uid)
+        link.link.new('MSSQL Overview', '/d/' + this.grafana.dashboards['mssql_overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       mssqlPages:
-        link.link.new('MSSQL Pages', '/d/' + this.grafana.dashboards.mssql_pages.uid)
+        link.link.new('MSSQL Pages', '/d/' + this.grafana.dashboards['mssql_pages.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:
@@ -21,7 +21,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('Logs', '/d/' + this.grafana.dashboards.logs.uid)
+          link.link.new('Logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
           + link.link.options.withKeepTime(true),
       }
     else {},

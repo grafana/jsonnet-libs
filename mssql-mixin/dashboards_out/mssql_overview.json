@@ -2,6 +2,8 @@
       "annotations": {
          "list": [ ]
       },
+      "editable": false,
+      "id": null,
       "links": [
          {
             "keepTime": true,
@@ -20,13 +22,26 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "mssql-mixin"
+               "mssql"
             ],
             "title": "All dashboards",
             "type": "dashboards"
          }
       ],
       "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
          {
             "datasource": {
                "type": "prometheus",
@@ -50,9 +65,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -70,8 +85,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_connections{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}}"
+                  "expr": "mssql_connections{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "SQL Server connections"
                }
             ],
             "title": "Connections",
@@ -100,9 +118,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -120,9 +138,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_batch_requests_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mssql_batch_requests_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Batch requests"
                }
             ],
             "title": "Batch requests",
@@ -151,9 +172,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -171,9 +192,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_kill_connection_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "expr": "increase(mssql_kill_connection_errors_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Severe errors"
                }
             ],
             "title": "Severe errors",
@@ -202,9 +226,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -222,13 +246,29 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_deadlocks_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mssql_deadlocks_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Deadlocks"
                }
             ],
             "title": "Deadlocks",
             "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Memory",
+            "type": "row"
          },
          {
             "datasource": {
@@ -253,9 +293,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 16
+               "y": 18
             },
-            "id": 5,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -273,8 +313,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_os_memory{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - {{ state }}"
+                  "expr": "mssql_os_memory{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ state }}",
+                  "refId": "OS memory usage"
                }
             ],
             "title": "OS memory usage",
@@ -303,9 +346,9 @@
                "h": 8,
                "w": 16,
                "x": 0,
-               "y": 24
+               "y": 26
             },
-            "id": 6,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -323,16 +366,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_server_total_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - total"
+                  "expr": "mssql_server_total_memory_bytes{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total",
+                  "refId": "Memory manager total"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_server_target_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - target"
+                  "expr": "mssql_server_target_memory_bytes{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - target",
+                  "refId": "Memory manager target"
                }
             ],
             "title": "Memory manager",
@@ -360,9 +409,9 @@
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 24
+               "y": 26
             },
-            "id": 7,
+            "id": 9,
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -370,8 +419,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * mssql_server_total_memory_bytes{job=~\"$job\",instance=~\"$instance\"} / clamp_min(mssql_available_commit_memory_bytes{job=~\"$job\",instance=~\"$instance\"}, 1)",
-                  "legendFormat": "{{instance}}"
+                  "expr": "100 * mssql_server_total_memory_bytes{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} / clamp_min(mssql_available_commit_memory_bytes{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Committed memory utilization"
                }
             ],
             "title": "Committed memory utilization",
@@ -383,9 +435,9 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 32
+               "y": 34
             },
-            "id": 8,
+            "id": 10,
             "panels": [ ],
             "title": "Database",
             "type": "row"
@@ -413,9 +465,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 33
+               "y": 35
             },
-            "id": 9,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -433,9 +485,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"$job\",instance=~\"$instance\", db=~\"$db\", operation=\"write\"}[$__rate_interval:])",
+                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"write\"}[$__rate_interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{db}}"
+                  "legendFormat": "{{ instance }} - {{ db }}",
+                  "refId": "Database write stall duration"
                }
             ],
             "title": "Database write stall duration",
@@ -464,9 +519,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 33
+               "y": 35
             },
-            "id": 10,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -484,9 +539,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"$job\",instance=~\"$instance\", db=~\"$db\", operation=\"read\"}[$__rate_interval:])",
+                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"read\"}[$__rate_interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{db}}"
+                  "legendFormat": "{{ instance }} - {{ db }}",
+                  "refId": "Database read stall duration"
                }
             ],
             "title": "Database read stall duration",
@@ -515,9 +573,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 41
+               "y": 43
             },
-            "id": 11,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -535,19 +593,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_log_growths_total{job=~\"$job\",instance=~\"$instance\", db=~\"$db\"}[$__rate_interval:])",
+                  "expr": "increase(mssql_log_growths_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\"}[$__rate_interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{db}}"
+                  "legendFormat": "{{ instance }} - {{ db }}",
+                  "refId": "Transaction log expansions"
                }
             ],
             "title": "Transaction log expansions",
             "type": "timeseries"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "mssql-mixin"
+         "mssql"
       ],
       "templating": {
          "list": [
@@ -555,7 +616,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
@@ -574,16 +635,16 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "Cluster",
                "multi": true,
-               "name": "instance",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\"}, instance)",
+               "name": "cluster",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -594,11 +655,34 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
                "includeAll": true,
-               "label": "Database",
+               "label": "DB",
                "multi": true,
                "name": "db",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",instance=~\"$instance\"}, db)",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -606,7 +690,7 @@
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
       "timezone": "default",

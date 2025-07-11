@@ -5,7 +5,7 @@ local utils = commonlib.utils;
 {
   new(this)::
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local fieldOverride = g.panel.table.fieldOverride,
       local alertList = g.panel.alertList,
@@ -15,7 +15,7 @@ local utils = commonlib.utils;
       connectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Connections',
-          targets=[t.mssql_connections],
+          targets=[signals.connections.mssqlConnections.asTarget()],
           description='The number of network connections to each database.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('connections')
@@ -26,7 +26,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Batch requests',
           targets=[
-            t.batch_requests,
+            signals.connections.batchRequests.asTarget() { interval: '1m' },
           ],
           description='Number of batch requests.'
         )
@@ -37,7 +37,7 @@ local utils = commonlib.utils;
       severeErrorsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Severe errors',
-          targets=[t.severe_errors],
+          targets=[signals.connections.severeErrors.asTarget() { interval: '1m' }],
           description='Number of severe errors that caused connections to be killed.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('errors')
@@ -47,7 +47,7 @@ local utils = commonlib.utils;
       deadlocksPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Deadlocks',
-          targets=[t.deadlocks],
+          targets=[signals.connections.deadlocks.asTarget() { interval: '1m' }],
           description='Rate of deadlocks occurring over time.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('deadlocks')
@@ -57,7 +57,7 @@ local utils = commonlib.utils;
       osMemoryUsagePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'OS memory usage',
-          targets=[t.os_memory_usage],
+          targets=[signals.memory.osMemoryUsage.asTarget()],
           description='The amount of physical memory available and used by SQL Server.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
@@ -67,7 +67,7 @@ local utils = commonlib.utils;
       memoryManagerPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Memory manager',
-          targets=[t.memory_manager_total, t.memory_manager_target],
+          targets=[signals.memory.memoryManagerTotal.asTarget(), signals.memory.memoryManagerTarget.asTarget()],
           description='The committed memory and target committed memory for the SQL Server memory manager. See https://learn.microsoft.com/en-us/sql/relational-databases/performance-monitor/monitor-memory-usage?view=sql-server-ver16#isolating-memory-used-by-'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
@@ -77,7 +77,7 @@ local utils = commonlib.utils;
       committedMemoryUtilizationPanel:
         g.panel.gauge.new(title='Committed memory utilization')
         + g.panel.gauge.queryOptions.withTargets([
-          t.committed_memory_utilization,
+          signals.memory.committedMemoryUtilization.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The committed memory utilization')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -88,7 +88,7 @@ local utils = commonlib.utils;
       databaseWriteStallDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Database write stall duration',
-          targets=[t.database_write_stall_duration],
+          targets=[signals.database.databaseWriteStallDuration.asTarget() { interval: '1m' }],
           description='The current stall (latency) for database writes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
@@ -98,7 +98,7 @@ local utils = commonlib.utils;
       databaseReadStallDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Database read stall duration',
-          targets=[t.database_read_stall_duration],
+          targets=[signals.database.databaseReadStallDuration.asTarget() { interval: '1m' }],
           description='The current stall (latency) for database reads.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
@@ -108,7 +108,7 @@ local utils = commonlib.utils;
       transactionLogExpansionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Transaction log expansions',
-          targets=[t.transaction_log_expansions],
+          targets=[signals.database.transactionLogExpansions.asTarget() { interval: '1m' }],
           description='Number of times the transaction log has been expanded for a database.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('expansions')
@@ -118,7 +118,7 @@ local utils = commonlib.utils;
       pageFileMemoryPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Page file memory',
-          targets=[t.page_file_memory],
+          targets=[signals.memory.pageFileMemory.asTarget()],
           description='Memory used for the OS page file.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
@@ -128,7 +128,7 @@ local utils = commonlib.utils;
       bufferCacheHitPercentagePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Buffer cache hit percentage',
-          targets=[t.buffer_cache_hit_percentage],
+          targets=[signals.memory.bufferCacheHitPercentage.asTarget()],
           description='Percentage of page found and read from the SQL Server buffer cache.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -138,7 +138,7 @@ local utils = commonlib.utils;
       pageCheckpointsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Page checkpoints',
-          targets=[t.page_checkpoints],
+          targets=[signals.memory.pageCheckpoints.asTarget()],
           description='Rate of page checkpoints per second.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('checkpoints/s')
@@ -148,7 +148,7 @@ local utils = commonlib.utils;
       pageFaultsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Page faults',
-          targets=[t.page_faults],
+          targets=[signals.memory.pageFaults.asTarget() { interval: '1m' }],
           description='The number of page faults that were incurred by the SQL Server process.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('faults')

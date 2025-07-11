@@ -2,6 +2,8 @@
       "annotations": {
          "list": [ ]
       },
+      "editable": false,
+      "id": null,
       "links": [
          {
             "keepTime": true,
@@ -20,7 +22,7 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "mssql-mixin"
+               "mssql"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -173,7 +175,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/mssql\",job=~\"$job\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -215,17 +217,17 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/mssql\",job=~\"$job\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
             "type": "logs"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "mssql-mixin"
+         "mssql"
       ],
       "templating": {
          "list": [
@@ -233,7 +235,7 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
             },
             {
@@ -247,6 +249,21 @@
                "multi": true,
                "name": "job",
                "query": "label_values({job=~\"integrations/mssql\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=~\"integrations/mssql\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -274,13 +291,13 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
       "timezone": "default",

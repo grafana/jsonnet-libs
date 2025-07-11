@@ -2,6 +2,8 @@
       "annotations": {
          "list": [ ]
       },
+      "editable": false,
+      "id": null,
       "links": [
          {
             "keepTime": true,
@@ -20,13 +22,26 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "mssql-mixin"
+               "mssql"
             ],
             "title": "All dashboards",
             "type": "dashboards"
          }
       ],
       "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Pages",
+            "type": "row"
+         },
          {
             "datasource": {
                "type": "prometheus",
@@ -50,9 +65,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -70,8 +85,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_os_page_file{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}} - {{ state}}"
+                  "expr": "mssql_os_page_file{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ state }}",
+                  "refId": "Page file memory"
                }
             ],
             "title": "Page file memory",
@@ -100,9 +118,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -120,8 +138,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_buffer_cache_hit_ratio{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}}"
+                  "expr": "mssql_buffer_cache_hit_ratio{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Buffer cache hit percentage"
                }
             ],
             "title": "Buffer cache hit percentage",
@@ -150,9 +171,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -170,8 +191,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "mssql_checkpoint_pages_sec{job=~\"$job\",instance=~\"$instance\"}",
-                  "legendFormat": "{{instance}}"
+                  "expr": "mssql_checkpoint_pages_sec{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Page checkpoints"
                }
             ],
             "title": "Page checkpoints",
@@ -200,9 +224,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -220,19 +244,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_page_fault_count_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "expr": "increase(mssql_page_fault_count_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Page faults"
                }
             ],
             "title": "Page faults",
             "type": "timeseries"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "mssql-mixin"
+         "mssql"
       ],
       "templating": {
          "list": [
@@ -240,7 +267,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
@@ -259,16 +286,16 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "Cluster",
                "multi": true,
-               "name": "instance",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\"}, instance)",
+               "name": "cluster",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -279,11 +306,34 @@
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
                "includeAll": true,
-               "label": "Database",
+               "label": "DB",
                "multi": true,
                "name": "db",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",instance=~\"$instance\"}, db)",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -291,7 +341,7 @@
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
       "timezone": "default",
