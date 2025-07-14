@@ -24,7 +24,8 @@ base {
                       );
     local meanTarget = target
                        { expr: 'avg(' + target.expr + ')' }
-                       + g.query.prometheus.withLegendFormat('Mean');
+                       + g.query.prometheus.withLegendFormat('Mean')
+                       + g.query.prometheus.withRefId('Mean');
     super.new(title, targets=[topTarget, meanTarget], description=description)
     + self.withDataLink(instanceLabels, drillDownDashboardUid),
 

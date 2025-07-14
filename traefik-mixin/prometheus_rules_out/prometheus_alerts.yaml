@@ -1,0 +1,33 @@
+groups:
+    - name: traefik
+      rules:
+        - alert: TraefikConfigReloadFailuresIncreasing
+          annotations:
+            description: |
+                Traefik is failing to reload its config in {{ $labels.job }}.
+            summary: Traefik is failing to reload its configuration.
+          expr: |
+            sum by (job) (rate(traefik_config_reloads_failure_total{}[5m])) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: TraefikTLSCertificatesExpiring
+          annotations:
+            description: |
+                The minimum number of days until a Traefik-served certificate expires is {{ printf "%.0f" $value }} days on {{ $labels.sans }} which is below the critical threshold of 7.
+            summary: A Traefik-served TLS certificate will expire very soon.
+          expr: |
+            max by (instance, sans) ((last_over_time(traefik_tls_certs_not_after{}[5m]) - time()) / 86400) < 7
+          for: 5m
+          labels:
+            severity: critical
+        - alert: TraefikTLSCertificatesExpiringSoon
+          annotations:
+            description: |
+                The minimum number of days until a Traefik-served certificate expires is {{ printf "%.0f" $value }} days on {{ $labels.sans }} which is less than 14 but greater than 7.
+            summary: A Traefik-served TLS certificate will expire soon.
+          expr: |
+            max by (instance, sans) ((last_over_time(traefik_tls_certs_not_after{}[5m]) - time()) / 86400) < 14 > 7
+          for: 5m
+          labels:
+            severity: warning
