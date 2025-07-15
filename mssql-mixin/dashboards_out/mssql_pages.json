@@ -316,14 +316,6 @@
                "type": "query"
             },
             {
-               "hide": 2,
-               "label": "Loki data source",
-               "name": "loki_datasource",
-               "query": "loki",
-               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
-               "type": "datasource"
-            },
-            {
                "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
@@ -333,10 +325,18 @@
                "label": "Database",
                "multi": true,
                "name": "db",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, db)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
             }
          ]
       },

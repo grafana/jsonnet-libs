@@ -6,11 +6,6 @@ local utils = commonlib.utils;
   new(this)::
     {
       local signals = this.signals,
-      local stat = g.panel.stat,
-      local fieldOverride = g.panel.table.fieldOverride,
-      local alertList = g.panel.alertList,
-      local pieChart = g.panel.pieChart,
-      local barGauge = g.panel.barGauge,
 
       connectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(

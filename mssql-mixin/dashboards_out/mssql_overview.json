@@ -485,7 +485,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"write\"}[$__rate_interval])",
+                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"write\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -539,7 +539,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"read\"}[$__rate_interval])",
+                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"read\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -593,7 +593,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_log_growths_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\"}[$__rate_interval])",
+                  "expr": "rate(mssql_log_growths_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -665,14 +665,6 @@
                "type": "query"
             },
             {
-               "hide": 2,
-               "label": "Loki data source",
-               "name": "loki_datasource",
-               "query": "loki",
-               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
-               "type": "datasource"
-            },
-            {
                "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
@@ -682,10 +674,18 @@
                "label": "Database",
                "multi": true,
                "name": "db",
-               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",
+               "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, db)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
             }
          ]
       },

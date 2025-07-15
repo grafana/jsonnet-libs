@@ -27,36 +27,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
-      variables:
-        local baseVars = commonlib.variables.new(
-          filteringSelector=this.config.filteringSelector,
-          groupLabels=this.config.groupLabels,
-          instanceLabels=this.config.instanceLabels,
-          varMetric='mssql_io_stall_seconds_total',
-          customAllValue='.+',
-          enableLokiLogs=this.config.enableLokiLogs,
-        );
-
-        local dbVariable = {
-          label: 'Database',
-          name: 'db',
-          query: 'label_values(mssql_io_stall_seconds_total{%s}, db)' % this.config.filteringSelector,
-          datasource: {
-            type: 'prometheus',
-            uid: '${prometheus_datasource}',
-          },
-          refresh: 2,
-          sort: 1,
-          type: 'query',
-          includeAll: true,
-          allValue: '.*',
-          multi: true,
-        };
-
-        baseVars {
-          multiInstance+: [dbVariable],
-          singleInstance+: [dbVariable],
-        },
+      variables: commonlib.variables.new(
+        filteringSelector=this.config.filteringSelector,
+        groupLabels=this.config.groupLabels,
+        instanceLabels=this.config.instanceLabels + this.config.databaseLabels,
+        varMetric='mssql_io_stall_seconds_total',
+        customAllValue='.+',
+        enableLokiLogs=this.config.enableLokiLogs,
+      ),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),

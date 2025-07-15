@@ -4,6 +4,7 @@
   filteringSelector: 'job=~"integrations/mssql"',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
+  databaseLabels: ['db'],
 
 
   dashboardTags: [self.uid],

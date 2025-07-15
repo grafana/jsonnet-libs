@@ -5,10 +5,10 @@ function(this)
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,
+    instanceLabels: this.instanceLabels + this.databaseLabels,
     enableLokiLogs: this.enableLokiLogs,
     aggLevel: 'none',
-    aggFunction: 'avg',
+    aggFunction: 'sum',
     alertsInterval: '2m',
     discoveryMetric: {
       prometheus: 'mssql_io_stall_seconds_total',
@@ -23,7 +23,7 @@ function(this)
         unit: 'seconds',
         sources: {
           prometheus: {
-            expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, db=~"$db", operation="write"}',
+            expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, operation="write"}',
             legendCustomTemplate: '{{ instance }} - {{ db }}',
           },
         },
@@ -36,7 +36,7 @@ function(this)
         unit: 'seconds',
         sources: {
           prometheus: {
-            expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, db=~"$db", operation="read"}',
+            expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, operation="read"}',
             legendCustomTemplate: '{{ instance }} - {{ db }}',
           },
         },
@@ -49,7 +49,7 @@ function(this)
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'mssql_log_growths_total{%(queriesSelector)s, db=~"$db"}',
+            expr: 'mssql_log_growths_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - {{ db }}',
           },
         },

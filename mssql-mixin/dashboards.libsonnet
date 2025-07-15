@@ -12,11 +12,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
 
     {
       'mssql_overview.json':
         g.dashboard.new(prefix + ' overview')
+        + g.dashboard.withVariables(
+          std.setUnion(
+            this.signals.database.getVariablesMultiChoice(),
+            keyF=function(x) x.name
+          )
+        )
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
