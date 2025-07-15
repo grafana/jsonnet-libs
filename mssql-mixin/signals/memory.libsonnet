@@ -15,7 +15,7 @@ function(this)
     signals: {
       osMemoryUsage: {
         name: 'OS memory usage',
-        nameShort: 'OS Memory',
+        nameShort: 'OS memory',
         type: 'gauge',
         description: 'Operating system memory usage by state.',
         unit: 'bytes',
@@ -28,7 +28,7 @@ function(this)
       },
       memoryManagerTotal: {
         name: 'Memory manager total',
-        nameShort: 'Memory Total',
+        nameShort: 'Memory total',
         type: 'gauge',
         description: 'Total memory allocated by SQL Server memory manager.',
         unit: 'bytes',
@@ -41,7 +41,7 @@ function(this)
       },
       memoryManagerTarget: {
         name: 'Memory manager target',
-        nameShort: 'Memory Target',
+        nameShort: 'Memory target',
         type: 'gauge',
         description: 'Target memory for SQL Server memory manager.',
         unit: 'bytes',
@@ -54,7 +54,7 @@ function(this)
       },
       committedMemoryUtilization: {
         name: 'Committed memory utilization',
-        nameShort: 'Memory Utilization',
+        nameShort: 'Memory utilization',
         type: 'raw',
         description: 'Percentage of committed memory utilization.',
         unit: 'percent',
@@ -67,7 +67,7 @@ function(this)
       },
       pageFileMemory: {
         name: 'Page file memory',
-        nameShort: 'Page File',
+        nameShort: 'Page file',
         type: 'gauge',
         description: 'Page file memory usage by state.',
         unit: 'bytes',
@@ -80,7 +80,7 @@ function(this)
       },
       bufferCacheHitPercentage: {
         name: 'Buffer cache hit percentage',
-        nameShort: 'Buffer Cache Hit',
+        nameShort: 'Buffer cache hit',
         type: 'gauge',
         description: 'Buffer cache hit ratio percentage.',
         unit: 'percent',
@@ -106,13 +106,13 @@ function(this)
       },
       pageFaults: {
         name: 'Page faults',
-        nameShort: 'Page Faults',
-        type: 'raw',
+        nameShort: 'Page faults',
+        type: 'counter',
         description: 'Rate of page faults per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'increase(mssql_page_fault_count_total{%(queriesSelector)s}[$__rate_interval:])',
+            expr: 'mssql_page_fault_count_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }}',
           },
         },

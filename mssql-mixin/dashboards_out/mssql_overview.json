@@ -192,7 +192,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_kill_connection_errors_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "expr": "rate(mssql_kill_connection_errors_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -485,7 +485,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"write\"}[$__rate_interval:])",
+                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"write\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -539,7 +539,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"read\"}[$__rate_interval:])",
+                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\", operation=\"read\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -593,7 +593,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_log_growths_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\"}[$__rate_interval:])",
+                  "expr": "rate(mssql_log_growths_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", db=~\"$db\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -679,7 +679,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "DB",
+               "label": "Database",
                "multi": true,
                "name": "db",
                "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",

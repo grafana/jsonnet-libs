@@ -29,7 +29,7 @@ function(this)
       },
       batchRequests: {
         name: 'Batch requests',
-        nameShort: 'Batch Requests',
+        nameShort: 'Batch requests',
         type: 'counter',
         description: 'Rate of batch requests per second.',
         unit: '/ sec',
@@ -42,13 +42,13 @@ function(this)
       },
       severeErrors: {
         name: 'Severe errors',
-        nameShort: 'Severe Errors',
-        type: 'raw',
+        nameShort: 'Severe errors',
+        type: 'counter',
         description: 'Rate of severe connection errors per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'increase(mssql_kill_connection_errors_total{%(queriesSelector)s}[$__rate_interval:])',
+            expr: 'mssql_kill_connection_errors_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }}',
           },
         },
@@ -56,12 +56,12 @@ function(this)
       deadlocks: {
         name: 'Deadlocks',
         nameShort: 'Deadlocks',
-        type: 'raw',
+        type: 'counter',
         description: 'Rate of deadlocks per second.',
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'rate(mssql_deadlocks_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'mssql_deadlocks_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }}',
           },
         },

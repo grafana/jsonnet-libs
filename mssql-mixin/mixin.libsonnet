@@ -17,7 +17,7 @@ local optional_labels = {
     allValue: '.*',
   },
   db+: {
-    label: 'DB',
+    label: 'Database',
     allValue: '.*',
   },
 };

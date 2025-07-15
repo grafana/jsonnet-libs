@@ -2,7 +2,7 @@
   local this = self,
   enableMultiCluster: false,
   filteringSelector: 'job=~"integrations/mssql"',
-  groupLabels: ['job', 'cluster'],  // Remove 'db' from here
+  groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
 
 
@@ -19,7 +19,7 @@
 
   // logs lib related
   enableLokiLogs: true,
-  logLabels: ['job', 'cluster', 'instance'],
+  logLabels: self.groupLabels + self.instanceLabels,
   extraLogLabels: [],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

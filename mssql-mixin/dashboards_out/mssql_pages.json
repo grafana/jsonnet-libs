@@ -244,7 +244,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(mssql_page_fault_count_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval:])",
+                  "expr": "rate(mssql_page_fault_count_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -330,7 +330,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "DB",
+               "label": "Database",
                "multi": true,
                "name": "db",
                "query": "label_values(mssql_io_stall_seconds_total{job=~\"integrations/mssql\"}, db)",
