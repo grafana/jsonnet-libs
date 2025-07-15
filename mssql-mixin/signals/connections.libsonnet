@@ -50,6 +50,7 @@ function(this)
           prometheus: {
             expr: 'mssql_kill_connection_errors_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }}',
+            rangeFunction: 'increase',
           },
         },
       },

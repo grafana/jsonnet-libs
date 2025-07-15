@@ -25,6 +25,7 @@ function(this)
           prometheus: {
             expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, operation="write"}',
             legendCustomTemplate: '{{ instance }} - {{ db }}',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -38,6 +39,7 @@ function(this)
           prometheus: {
             expr: 'mssql_io_stall_seconds_total{%(queriesSelector)s, operation="read"}',
             legendCustomTemplate: '{{ instance }} - {{ db }}',
+            rangeFunction: 'increase',
           },
         },
       },

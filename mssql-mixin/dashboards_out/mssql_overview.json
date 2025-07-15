@@ -192,10 +192,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_kill_connection_errors_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(mssql_kill_connection_errors_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "legendFormat": "{{ instance }}",
                   "refId": "Severe errors"
                }
@@ -485,10 +485,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"write\"}[$__rate_interval])",
+                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"write\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{ db }}",
                   "refId": "Database write stall duration"
                }
@@ -539,10 +539,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"read\"}[$__rate_interval])",
+                  "expr": "increase(mssql_io_stall_seconds_total{job=~\"integrations/mssql\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",db=~\"$db\", operation=\"read\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{ db }}",
                   "refId": "Database read stall duration"
                }

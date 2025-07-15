@@ -32,7 +32,7 @@ local utils = commonlib.utils;
       severeErrorsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Severe errors',
-          targets=[signals.connections.severeErrors.asTarget() { interval: '1m' }],
+          targets=[signals.connections.severeErrors.asTarget() { interval: '2m' }],
           description='Number of severe errors that caused connections to be killed.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('errors')
@@ -83,7 +83,7 @@ local utils = commonlib.utils;
       databaseWriteStallDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Database write stall duration',
-          targets=[signals.database.databaseWriteStallDuration.asTarget() { interval: '1m' }],
+          targets=[signals.database.databaseWriteStallDuration.asTarget() { interval: '2m' }],
           description='The current stall (latency) for database writes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
@@ -93,7 +93,7 @@ local utils = commonlib.utils;
       databaseReadStallDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Database read stall duration',
-          targets=[signals.database.databaseReadStallDuration.asTarget() { interval: '1m' }],
+          targets=[signals.database.databaseReadStallDuration.asTarget() { interval: '2m' }],
           description='The current stall (latency) for database reads.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
