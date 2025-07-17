@@ -14,8 +14,8 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'The sending queue has filled up',
-              description: 'The sending queue is full; the collector might start dropping data',
+              summary: 'The sending queue has filled up.',
+              description: 'The sending queue is full for {{ $labels.instance }}. The collector might start dropping data',
             },
           },
         ],
