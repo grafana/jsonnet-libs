@@ -3,6 +3,7 @@ local row = g.panel.row;
 local variables = import './utils/variables.libsonnet';
 local panels = import './utils/panels.libsonnet';
 local queries = import './utils/queries.libsonnet';
+local cfg = import '../config.libsonnet';
 
 {
   grafanaDashboards+:: {
@@ -19,6 +20,7 @@ local queries = import './utils/queries.libsonnet';
         variables.namespaceVariable,
         variables.instanceVariable,
       ])
+      + g.dashboard.withUid(cfg._config.grafanaDashboardIDs['collector.json'])
       + g.dashboard.withPanels(
         g.util.grid.wrapPanels([
           // Overview row
