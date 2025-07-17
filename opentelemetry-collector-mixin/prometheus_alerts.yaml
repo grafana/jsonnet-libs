@@ -1,0 +1,12 @@
+"groups":
+- "name": "otelcol"
+  "rules":
+  - "alert": "OtelcolSendingQueueFull"
+    "annotations":
+      "description": "The sending queue is full; the collector might start dropping data"
+      "summary": "The sending queue has filled up"
+    "expr": |
+      otelcol_exporter_queue_size >= otelcol_exporter_queue_capacity
+    "for": "30m"
+    "labels":
+      "severity": "warning"
