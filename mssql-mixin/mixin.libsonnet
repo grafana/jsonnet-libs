@@ -22,12 +22,10 @@ local optional_labels = {
   },
 };
 
-// populate monitoring-mixin:
 {
   grafanaDashboards+:: {
-    local tags = config.dashboardTags,
     [fname]:
-      local dashboard = util.decorate_dashboard(mssql.grafana.dashboards[fname], tags=tags);
+      local dashboard = mssql.grafana.dashboards[fname];
       dashboard + util.patch_variables(dashboard, optional_labels)
 
     for fname in std.objectFields(mssql.grafana.dashboards)

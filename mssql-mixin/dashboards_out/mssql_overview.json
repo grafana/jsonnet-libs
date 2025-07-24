@@ -2,8 +2,6 @@
       "annotations": {
          "list": [ ]
       },
-      "editable": false,
-      "id": null,
       "links": [
          {
             "keepTime": true,
@@ -605,7 +603,7 @@
             "type": "timeseries"
          }
       ],
-      "refresh": "30s",
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "mssql"
@@ -616,7 +614,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "regex": "",
                "type": "datasource"
             },
             {
@@ -684,13 +682,13 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "regex": "",
                "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-30m",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "default",
