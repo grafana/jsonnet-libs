@@ -1,0 +1,219 @@
+{
+   "signalGroup":
+   [
+      {
+         "aggFunction": "sum",
+         "aggLevel": "group",
+         "discoveryMetric": {
+            "bitnami": "kafka_log_log_logstartoffset",
+            "grafanacloud": "kafka_log_log_logstartoffset",
+            "prometheus": "kafka_log_log_logstartoffset"
+         },
+         "legendCustomTemplate": "{{ topic }}",
+         "signals": {
+            "topicBytesInPerSec": {
+               "description": "Topic bytes in rate.",
+               "name": "Topic bytes in",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesin_total{%(queriesSelector)s}"
+                  }
+               },
+               "type": "counter",
+               "unit": "Bps"
+            },
+            "topicBytesOutPerSec": {
+               "description": "Topic bytes out rate.",
+               "name": "Topic bytes out",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_server_brokertopicmetrics_bytesout_total{%(queriesSelector)s}"
+                  }
+               },
+               "type": "counter",
+               "unit": "Bps"
+            },
+            "topicLogEndOffset": {
+               "aggFunction": "max",
+               "description": "Topic end offset.",
+               "legendCustomTemplate": "{{ topic }}/{{ partition }}",
+               "name": "Topic end offset",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logendoffset{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logendoffset{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logendoffset{%(queriesSelector)s}"
+                  }
+               },
+               "type": "gauge",
+               "unit": "none"
+            },
+            "topicLogSize": {
+               "aggFunction": "max",
+               "description": "Size in bytes of the current topic-partition.",
+               "legendCustomTemplate": "{{ topic }}/{{ partition }}",
+               "name": "Topic log size",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_size{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_size{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_size{%(queriesSelector)s}"
+                  }
+               },
+               "type": "gauge",
+               "unit": "decbytes"
+            },
+            "topicLogStartOffset": {
+               "aggFunction": "max",
+               "description": "Topic start offset.",
+               "legendCustomTemplate": "{{ topic }}/{{ partition }}",
+               "name": "Topic start offset",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logstartoffset{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logstartoffset{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_log_log_logstartoffset{%(queriesSelector)s}"
+                  }
+               },
+               "type": "gauge",
+               "unit": "none"
+            },
+            "topicMessagesPerSec": {
+               "description": "Messages in per second.",
+               "name": "Messages in per second",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  }
+               },
+               "type": "counter",
+               "unit": "mps"
+            },
+            "topicMessagesPerSecByPartition": {
+               "description": "Messages in per second.",
+               "legendCustomTemplate": "{{ topic }}/{{ partition }}",
+               "name": "Messages in per second",
+               "sources": {
+                  "bitnami": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  },
+                  "grafanacloud": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  },
+                  "prometheus": {
+                     "aggKeepLabels": [
+                        "topic",
+                        "partition"
+                     ],
+                     "expr": "kafka_topic_partition_current_offset{%(queriesSelector)s}"
+                  }
+               },
+               "type": "counter",
+               "unit": "mps"
+            }
+         }
+      }
+      
+   ]
+}
