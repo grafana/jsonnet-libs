@@ -1,6 +1,9 @@
-{ pkgs ? import <nixpkgs> }:
+{
+  pkgs ? import <nixpkgs>,
+}:
 
-let common = import ./common.nix { inherit pkgs; };
+let
+  common = import ./common.nix { inherit pkgs; };
 in
 with pkgs;
 dockerTools.buildImage {
