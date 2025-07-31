@@ -1,0 +1,11 @@
+{
+  grafanaDashboards+:: {
+    'anthropic-usage-observability.json': (import 'dashboards/anthropic-usage-observability.json'),
+  },
+
+  // Helper function to ensure that we don't override other rules, by forcing
+  // the patching of the groups list, and not the overall rules object.
+  local importRules(rules) = {
+    groups+: std.parseYaml(rules).groups,
+  },
+}
