@@ -1,0 +1,769 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Couchbase Bucket Overview",
+            "type": "link",
+            "url": "/d/couchbase_couchbase_bucket_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Couchbase Cluster Overview",
+            "type": "link",
+            "url": "/d/couchbase_couchbase_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Logs",
+            "type": "link",
+            "url": "/d/couchbase-logs"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "couchbase-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Percentage of memory allocated to Couchbase on this node actually in use.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sys_mem_actual_used{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"} / (clamp_min(sys_mem_actual_free{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"} + sys_mem_actual_used{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}, 1))",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Memory utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "CPU utilization percentage across all available cores on this Couchbase node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, job, instance) (sys_cpu_utilization_rate{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"})",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "CPU utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Memory used by the index, analytics, and data services for a node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 8
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, instance, job) (kv_mem_used_bytes{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"})",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - data"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "index_memory_used_total{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - index"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "cbas_direct_memory_used_bytes{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - analytics"
+               }
+            ],
+            "title": "Total memory used by service",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Size of the backup for a node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 8
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, instance, job) (backup_data_size{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"})",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Backup size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of active connections to a node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 8
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "kv_curr_connections{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Current connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of HTTP response codes handled by the cluster manager.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 16
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, instance, couchbase_cluster, code) (rate(cm_http_requests_total{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]))",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{code}}"
+               }
+            ],
+            "title": "HTTP response codes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of HTTP request methods handled by the cluster manager.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, instance, couchbase_cluster, method) (rate(cm_http_requests_total{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]))",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{method}}"
+               }
+            ],
+            "title": "HTTP request methods",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of N1QL requests processed by the query service for a node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 24
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]) + rate(n1ql_invalid_requests{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_errors{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - error"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_invalid_requests{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - invalid"
+               }
+            ],
+            "title": "Query service requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of queries grouped by processing time.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 24
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - >0ms"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests_250ms{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - >250ms"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests_500ms{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - >500ms"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests_1000ms{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - >1000ms"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(n1ql_requests_5000ms{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - >5000ms"
+               }
+            ],
+            "title": "Query service request processing time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of index service requests served.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 32
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, instance, job) (rate(index_num_requests{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]))",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Index service requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Ratio at which cache scans result in a hit rather than a miss.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": true
+                  },
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 32
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance) (increase(index_cache_misses{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])))",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+               }
+            ],
+            "title": "Index cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average time to serve a scan request per index.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "ns"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 32
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(couchbase_cluster, index, instance, job) (index_avg_scan_latency{job=~\"$job\",instance=~\"$instance\",couchbase_cluster=~\"$couchbase_cluster\"})",
+                  "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{index}}"
+               }
+            ],
+            "title": "Average scan latency",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "couchbase-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Couchbase_cluster",
+               "multi": true,
+               "name": "couchbase_cluster",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\",instance=~\"$instance\"}, couchbase_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Couchbase node overview",
+      "uid": "couchbase_couchbase_node_overview"
+   }
