@@ -30,7 +30,7 @@ function(this)
       cpuUtilization: {
         name: 'CPU utilization',
         nameShort: 'CPU %',
-        type: 'gauge',
+        type: 'raw',
         description: 'CPU utilization percentage across all available cores on this Couchbase node.',
         unit: 'percent',
         sources: {
@@ -86,7 +86,7 @@ function(this)
       backupSize: {
         name: 'Backup size',
         nameShort: 'Backup',
-        type: 'gauge',
+        type: 'raw',
         description: 'Size of the backup for a node.',
         unit: 'decbytes',
         sources: {
@@ -114,7 +114,7 @@ function(this)
       httpResponseCodes: {
         name: 'HTTP response codes',
         nameShort: 'HTTP Codes',
-        type: 'counter',
+        type: 'raw',
         description: 'Rate of HTTP response codes handled by the cluster manager.',
         unit: 'reqps',
         sources: {
@@ -127,7 +127,7 @@ function(this)
       httpRequestMethods: {
         name: 'HTTP request methods',
         nameShort: 'HTTP Methods',
-        type: 'counter',
+        type: 'raw',
         description: 'Rate of HTTP request methods handled by the cluster manager.',
         unit: 'reqps',
         sources: {
@@ -138,4 +138,4 @@ function(this)
         },
       },
     },
-  } 
+  }

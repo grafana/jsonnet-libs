@@ -17,7 +17,7 @@ function(this)
       indexServiceRequests: {
         name: 'Index service requests',
         nameShort: 'Index Requests',
-        type: 'counter',
+        type: 'raw',
         description: 'Rate of index service requests served.',
         unit: 'reqps',
         sources: {
@@ -47,7 +47,7 @@ function(this)
       indexAverageScanLatency: {
         name: 'Index average scan latency',
         nameShort: 'Scan Latency',
-        type: 'gauge',
+        type: 'raw',
         description: 'Average time to serve a scan request per index.',
         unit: 'ns',
         sources: {
@@ -58,4 +58,4 @@ function(this)
         },
       },
     },
-  } 
+  }

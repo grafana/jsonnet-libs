@@ -4,15 +4,15 @@ local g = import './g.libsonnet';
   new(this):
     {
       couchbaseBucketOverview:
-        link.link.new('Couchbase Bucket Overview', '/d/' + this.grafana.dashboards['couchbase_bucket_overview.json'].uid)
+        link.link.new('Couchbase Bucket Overview', '/d/' + this.grafana.dashboards['couchbase-bucket-overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       couchbaseNodeOverview:
-        link.link.new('Couchbase Node Overview', '/d/' + this.grafana.dashboards['couchbase_node_overview.json'].uid)
+        link.link.new('Couchbase Node Overview', '/d/' + this.grafana.dashboards['couchbase-node-overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       couchbaseClusterOverview:
-        link.link.new('Couchbase Cluster Overview', '/d/' + this.grafana.dashboards['couchbase_cluster_overview.json'].uid)
+        link.link.new('Couchbase Cluster Overview', '/d/' + this.grafana.dashboards['couchbase-cluster-overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:

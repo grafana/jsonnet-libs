@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
 
     {
-      'couchbase_bucket_overview.json':
+      'couchbase-bucket-overview.json':
         g.dashboard.new(prefix + ' bucket overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      'couchbase_node_overview.json':
+      'couchbase-node-overview.json':
         g.dashboard.new(prefix + ' node overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -74,7 +74,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      'couchbase_cluster_overview.json':
+      'couchbase-cluster-overview.json':
         g.dashboard.new(prefix + ' cluster overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(

@@ -22,7 +22,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_requests{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_requests{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - >0ms',
           },
         },
@@ -30,7 +30,7 @@ function(this)
       queryServiceRequestsTotal: {
         name: 'Query service requests total',
         nameShort: 'N1QL Total',
-        type: 'counter',
+        type: 'raw',
         description: 'Total rate of N1QL requests processed by the query service (including valid and invalid).',
         unit: 'reqps',
         sources: {
@@ -48,7 +48,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_errors{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_errors{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - error',
           },
         },
@@ -61,7 +61,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_invalid_requests{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_invalid_requests{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - invalid',
           },
         },
@@ -76,7 +76,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_requests_250ms{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_requests_250ms{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - >250ms',
           },
         },
@@ -89,7 +89,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_requests_500ms{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_requests_500ms{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - >500ms',
           },
         },
@@ -102,7 +102,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_requests_1000ms{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_requests_1000ms{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - >1000ms',
           },
         },
@@ -115,10 +115,10 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(n1ql_requests_5000ms{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'n1ql_requests_5000ms{%(queriesSelector)s}',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - >5000ms',
           },
         },
       },
     },
-  } 
+  }

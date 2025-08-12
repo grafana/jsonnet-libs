@@ -1,7 +1,6 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 
-
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -127,4 +126,4 @@ function(this)
         },
       },
     },
-  } 
+  }
