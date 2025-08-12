@@ -39,4 +39,16 @@
   alertsCriticalMemoryUsage: 85,  // %
   alertsWarningMemoryEvictionRate: 10,  // count
   alertsWarningInvalidRequestVolume: 1000,  // count
+
+  // metrics source for signals library
+  metricsSource: 'prometheus',
+
+  // expose signals library
+  signals+: {
+    cluster: (import './signals/cluster.libsonnet')(config),
+    node: (import './signals/node.libsonnet')(config),
+    query: (import './signals/query.libsonnet')(config),
+    bucket: (import './signals/bucket.libsonnet')(config),
+    index: (import './signals/index.libsonnet')(config),
+  },
 }

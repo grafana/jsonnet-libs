@@ -4,7 +4,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this)::
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local barGauge = g.panel.barGauge,
 
       //
@@ -15,7 +15,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by memory used',
           targets=[
-            t.bucketTopBucketsByMemoryUsed,
+            signals.bucket.bucketMemoryUsed.asTarget(),
           ],
           description='Memory used for the top buckets.'
         )
@@ -28,7 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Top buckets by disk used'
         )
         + barGauge.queryOptions.withTargets([
-          t.topBucketsByDiskUsedDetailed,
+          signals.bucket.bucketDiskUsed.asTarget(),
         ])
         + barGauge.standardOptions.withUnit('decbytes')
         + barGauge.standardOptions.withMin(0)
@@ -43,7 +43,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by current items',
           targets=[
-            t.topBucketsByCurrentItems,
+            signals.bucket.bucketCurrentItems.asTarget(),
           ],
           description='Number of active items for the largest buckets.'
         )
@@ -55,7 +55,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by operations',
           targets=[
-            t.topBucketsByOperationsWithOp,
+            signals.bucket.bucketOperationsWithOp.asTarget(),
           ],
           description='Rate of operations for the busiest buckets.'
         )
@@ -67,7 +67,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by operations failed',
           targets=[
-            t.topBucketsByOperationsFailedDetailed,
+            signals.bucket.bucketOperationsFailed.asTarget(),
           ],
           description='Rate of operations failed for the most problematic buckets.'
         )
@@ -79,7 +79,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by high priority requests',
           targets=[
-            t.topBucketsByHighPriorityRequests,
+            signals.bucket.bucketHighPriorityRequests.asTarget(),
           ],
           description='Rate of high priority requests processed by the KV engine for the top buckets.'
         )
@@ -91,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom buckets by cache hit ratio',
           targets=[
-            t.bottomBucketsByCacheHitRatio,
+            signals.bucket.bucketCacheHitRatio.asTarget(),
           ],
           description='Worst buckets by cache hit ratio.'
         )
@@ -103,7 +103,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       bucket_topBucketsByVBucketsCountPanel:
         barGauge.new(title='Top buckets by vBuckets count')
         + barGauge.queryOptions.withTargets([
-          t.bucketTopBucketsByVBucketsCount,
+          signals.bucket.bucketVBucketsCount.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The number of vBuckets for the top buckets.')
         + barGauge.standardOptions.withMin(0)
@@ -118,7 +118,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by vBucket queue memory',
           targets=[
-            t.bucketTopBucketsByMemoryUsed,
+            signals.cluster.topBucketsByVBucketQueueMemory.asTarget(),
           ],
           description='Memory occupied by the queue for a virtual bucket for the top buckets.'
         )
@@ -134,7 +134,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Memory utilization',
           targets=[
-            t.memoryUtilization,
+            signals.node.memoryUtilization.asTarget(),
           ],
           description='Percentage of memory allocated to Couchbase on this node actually in use.'
         )
@@ -146,7 +146,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'CPU utilization',
           targets=[
-            t.cpuUtilization,
+            signals.node.cpuUtilization.asTarget(),
           ],
           description='CPU utilization percentage across all available cores on this Couchbase node.'
         )
@@ -158,9 +158,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Total memory used by service',
           targets=[
-            t.totalMemoryUsedByService,
-            t.totalMemoryUsedByIndexService,
-            t.totalMemoryUsedByAnalyticsService,
+            signals.node.dataServiceMemoryUsed.asTarget(),
+            signals.node.indexServiceMemoryUsed.asTarget(),
+            signals.node.analyticsServiceMemoryUsed.asTarget(),
           ],
           description='Memory used by the index, analytics, and data services for a node.'
         )
@@ -172,7 +172,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Backup size',
           targets=[
-            t.backupSize,
+            signals.node.backupSize.asTarget(),
           ],
           description='Size of the backup for a node.'
         )
@@ -184,7 +184,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Current connections',
           targets=[
-            t.currentConnections,
+            signals.node.currentConnections.asTarget(),
           ],
           description='Number of active connections to a node.'
         )
@@ -196,7 +196,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP response codes',
           targets=[
-            t.httpResponseCodes,
+            signals.node.httpResponseCodes.asTarget(),
           ],
           description='Rate of HTTP response codes handled by the cluster manager.'
         )
@@ -208,7 +208,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP request methods',
           targets=[
-            t.httpRequestMethods,
+            signals.node.httpRequestMethods.asTarget(),
           ],
           description='Rate of HTTP request methods handled by the cluster manager.'
         )
@@ -220,9 +220,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Query service requests',
           targets=[
-            t.queryServiceRequestsTotal,
-            t.queryServiceErrors,
-            t.queryServiceInvalidRequests,
+            signals.query.queryServiceRequestsTotal.asTarget(),
+            signals.query.queryServiceErrors.asTarget(),
+            signals.query.queryServiceInvalidRequests.asTarget(),
           ],
           description='Rate of N1QL requests processed by the query service for a node.'
         )
@@ -234,11 +234,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Query service request processing time',
           targets=[
-            t.queryServiceRequests,
-            t.queryServiceRequests250ms,
-            t.queryServiceRequests500ms,
-            t.queryServiceRequests1000ms,
-            t.queryServiceRequests5000ms,
+            signals.query.queryServiceRequests.asTarget(),
+            signals.query.queryServiceRequests250ms.asTarget(),
+            signals.query.queryServiceRequests500ms.asTarget(),
+            signals.query.queryServiceRequests1000ms.asTarget(),
+            signals.query.queryServiceRequests5000ms.asTarget(),
           ],
           description='Rate of queries grouped by processing time.'
         )
@@ -250,7 +250,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Index service requests',
           targets=[
-            t.indexServiceRequests,
+            signals.index.indexServiceRequests.asTarget(),
           ],
           description='Rate of index service requests served.'
         )
@@ -262,7 +262,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Index cache hit ratio',
           targets=[
-            t.indexCacheHitRatio,
+            signals.index.indexCacheHitRatio.asTarget(),
           ],
           description='Ratio at which cache scans result in a hit rather than a miss.'
         )
@@ -274,7 +274,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Average scan latency',
           targets=[
-            t.indexAverageScanLatency,
+            signals.index.indexAverageScanLatency.asTarget(),
           ],
           description='Average time to serve a scan request per index.'
         )
@@ -290,7 +290,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top nodes by memory usage',
           targets=[
-            t.topNodesByMemoryUsage,
+            signals.cluster.topNodesByMemoryUsage.asTarget(),
           ],
           description='Top nodes by memory usage across the Couchbase cluster.'
         )
@@ -302,7 +302,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top nodes by HTTP requests',
           targets=[
-            t.topNodesByHTTPRequests,
+            signals.cluster.topNodesByHTTPRequests.asTarget(),
           ],
           description='Rate of HTTP requests handled by the cluster manager for the top nodes.'
         )
@@ -314,7 +314,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top nodes by query service requests',
           targets=[
-            t.topNodesByQueryServiceRequests,
+            signals.cluster.topNodesByQueryServiceRequests.asTarget(),
           ],
           description='Rate of N1QL requests processed by the query service for the top nodes.'
         )
@@ -326,7 +326,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top nodes by index average scan latency',
           targets=[
-            t.topNodesByIndexAverageScanLatency,
+            signals.cluster.topNodesByIndexAverageScanLatency.asTarget(),
           ],
           description='Average time to serve an index service scan request for the top nodes.'
         )
@@ -338,7 +338,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'XDCR replication rate',
           targets=[
-            t.xdcrReplicationRate,
+            signals.cluster.xdcrReplicationRate.asTarget(),
           ],
           description='Rate of replication through the Cross Data Center Replication feature.'
         )
@@ -350,7 +350,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'XDCR docs received',
           targets=[
-            t.xdcrDocsReceived,
+            signals.cluster.xdcrDocsReceived.asTarget(),
           ],
           description='The rate of mutations received by this cluster.'
         )
@@ -363,7 +363,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Local backup size'
         )
         + barGauge.queryOptions.withTargets([
-          t.localBackupSize,
+          signals.cluster.localBackupSize.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('Size of the local backup for a node.'),
 
@@ -371,7 +371,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by memory used',
           targets=[
-            t.topBucketsByMemoryUsed,
+            signals.cluster.topBucketsByMemoryUsed.asTarget(),
           ],
           description='Memory used for the top buckets across the cluster.'
         )
@@ -384,7 +384,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Top buckets by disk used'
         )
         + barGauge.queryOptions.withTargets([
-          t.topBucketsByDiskUsed,
+          signals.cluster.topBucketsByDiskUsed.asTarget(),
         ])
         + barGauge.standardOptions.withUnit('decbytes')
         + barGauge.standardOptions.withMin(0)
@@ -399,7 +399,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by operations',
           targets=[
-            t.clusterTopBucketsByOperations,
+            signals.cluster.topBucketsByOperations.asTarget(),
           ],
           description='Rate of operations for the busiest buckets across the cluster.'
         )
@@ -411,7 +411,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by operations failed',
           targets=[
-            t.clusterTopBucketsByOperationsFailed,
+            signals.cluster.topBucketsByOperationsFailed.asTarget(),
           ],
           description='Rate of operations failed for the most problematic buckets across the cluster.'
         )
@@ -422,7 +422,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       cluster_topBucketsByVBucketsCountPanel:
         barGauge.new(title='Top buckets by vBuckets count')
         + barGauge.queryOptions.withTargets([
-          t.clusterTopBucketsByVBucketsCount,
+          signals.cluster.topBucketsByVBucketsCount.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The number of vBuckets for the top buckets across the cluster.')
         + barGauge.standardOptions.withMin(0)
@@ -437,7 +437,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Top buckets by vBucket queue memory',
           targets=[
-            t.clusterTopBucketsByVBucketQueueMemory,
+            signals.cluster.topBucketsByVBucketQueueMemory.asTarget(),
           ],
           description='Memory occupied by the queue for a virtual bucket for the top buckets across the cluster.'
         )

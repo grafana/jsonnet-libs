@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
 
     {
-      couchbase_bucket_overview:
+      'couchbase_bucket_overview.json':
         g.dashboard.new(prefix + ' bucket overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -33,7 +33,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.bucketVariables,
+          vars.multiInstance,
           uid + '_couchbase_bucket_overview',
           tags,
           links { couchbaseBucketOverview+:: {} },
@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      couchbase_node_overview:
+      'couchbase_node_overview.json':
         g.dashboard.new(prefix + ' node overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -64,7 +64,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.nodeVariables,
+          vars.multiInstance,
           uid + '_couchbase_node_overview',
           tags,
           links { couchbaseNodeOverview+:: {} },
@@ -74,7 +74,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
 
-      couchbase_cluster_overview:
+      'couchbase_cluster_overview.json':
         g.dashboard.new(prefix + ' cluster overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -92,7 +92,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.clusterVariables,
+          vars.multiInstance,
           uid + '_couchbase_cluster_overview',
           tags,
           links { couchbaseClusterOverview+:: {} },
@@ -106,7 +106,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,

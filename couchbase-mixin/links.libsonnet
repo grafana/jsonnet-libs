@@ -4,15 +4,15 @@ local g = import './g.libsonnet';
   new(this):
     {
       couchbaseBucketOverview:
-        link.link.new('Couchbase Bucket Overview', '/d/' + this.grafana.dashboards.couchbase_bucket_overview.uid)
+        link.link.new('Couchbase Bucket Overview', '/d/' + this.grafana.dashboards['couchbase_bucket_overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       couchbaseNodeOverview:
-        link.link.new('Couchbase Node Overview', '/d/' + this.grafana.dashboards.couchbase_node_overview.uid)
+        link.link.new('Couchbase Node Overview', '/d/' + this.grafana.dashboards['couchbase_node_overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       couchbaseClusterOverview:
-        link.link.new('Couchbase Cluster Overview', '/d/' + this.grafana.dashboards.couchbase_cluster_overview.uid)
+        link.link.new('Couchbase Cluster Overview', '/d/' + this.grafana.dashboards['couchbase_cluster_overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:
@@ -25,7 +25,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('Logs', '/d/' + this.grafana.dashboards.logs.uid)
+          link.link.new('Logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
           + link.link.options.withKeepTime(true),
       }
     else {},

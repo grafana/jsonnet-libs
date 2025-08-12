@@ -5,9 +5,9 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Couchbase Bucket Overview",
+            "title": "Couchbase Cluster Overview",
             "type": "link",
-            "url": "/d/couchbase_couchbase_bucket_overview"
+            "url": "/d/couchbase_couchbase_cluster_overview"
          },
          {
             "keepTime": true,
@@ -38,7 +38,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top nodes by memory usage across the Couchbase cluster.",
+            "description": "Memory used for the top buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -49,7 +49,7 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "percentunit"
+                  "unit": "decbytes"
                }
             },
             "gridPos": {
@@ -76,30 +76,34 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(job, couchbase_cluster, instance) (sys_mem_actual_used{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"})) / (sum by(job, couchbase_cluster, instance) (clamp_min(sys_mem_actual_free{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}, 1)) + sum by(couchbase_cluster, instance, job) (sys_mem_actual_used{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+                  "expr": "topk(5, kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket memory used"
                }
             ],
-            "title": "Top nodes by memory usage",
+            "title": "Top buckets by memory used",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Rate of HTTP requests handled by the cluster manager for the top nodes.",
+            "description": "Disk used for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "light-green",
+                           "value": null
+                        }
+                     ]
                   },
-                  "unit": "reqps"
+                  "unit": "decbytes"
                }
             },
             "gridPos": {
@@ -110,35 +114,31 @@
             },
             "id": 2,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
+               "orientation": "horizontal"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(job, couchbase_cluster, instance) (rate(cm_http_requests_total{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])))",
-                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+                  "expr": "topk(5, couch_docs_actual_disk_size{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket disk used"
                }
             ],
-            "title": "Top nodes by HTTP requests",
-            "type": "timeseries"
+            "title": "Top buckets by disk used",
+            "type": "bargauge"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of N1QL requests processed by the query service for the top nodes.",
+            "description": "Number of active items for the largest buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -149,12 +149,12 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "reqps"
+                  "unit": "none"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 8,
                "x": 0,
                "y": 8
             },
@@ -176,11 +176,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(job, instance, couchbase_cluster) (rate(n1ql_requests{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])))",
-                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_curr_items{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket current items"
                }
             ],
-            "title": "Top nodes by query service requests",
+            "title": "Top buckets by current items",
             "type": "timeseries"
          },
          {
@@ -188,7 +191,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Average time to serve an index service scan request for the top nodes.",
+            "description": "Rate of operations for the busiest buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -199,13 +202,13 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "ns"
+                  "unit": "ops"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 8,
+               "x": 8,
                "y": 8
             },
             "id": 4,
@@ -226,11 +229,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, avg by(instance, couchbase_cluster, job) (index_avg_scan_latency{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}} - {{op}}",
+                  "refId": "Bucket operations by operation type"
                }
             ],
-            "title": "Top nodes by index average scan latency",
+            "title": "Top buckets by operations",
             "type": "timeseries"
          },
          {
@@ -238,7 +244,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of replication through the Cross Data Center Replication feature.",
+            "description": "Rate of operations failed for the most problematic buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -249,14 +255,14 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "Bps"
+                  "unit": "ops"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
-               "x": 0,
-               "y": 16
+               "x": 16,
+               "y": 8
             },
             "id": 5,
             "options": {
@@ -276,11 +282,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, job) (rate(xdcr_data_replicated_bytes{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]))",
-                  "legendFormat": "{{couchbase_cluster}}"
+                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket operations failed"
                }
             ],
-            "title": "XDCR replication rate",
+            "title": "Top buckets by operations failed",
             "type": "timeseries"
          },
          {
@@ -288,7 +297,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate of mutations received by this cluster.",
+            "description": "Rate of high priority requests processed by the KV engine for the top buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -299,13 +308,13 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "mut/sec"
+                  "unit": "reqps"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 0,
                "y": 16
             },
             "id": 6,
@@ -326,26 +335,53 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchbase_cluster) (rate(xdcr_docs_received_from_dcp_total{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval]))",
-                  "legendFormat": "{{couchbase_cluster}}"
+                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket high priority requests"
                }
             ],
-            "title": "XDCR docs received",
+            "title": "Top buckets by high priority requests",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "description": "Size of the local backup for a node.",
+            "description": "Worst buckets by cache hit ratio.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": true
+                  },
+                  "max": 1,
+                  "unit": "percentunit"
+               }
+            },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
+               "w": 12,
+               "x": 12,
                "y": 16
             },
             "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -353,32 +389,69 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, job, instance) (backup_data_size{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"})",
-                  "legendFormat": "{{couchbase_cluster}} - {{instance}}"
+                  "expr": "bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket cache hit ratio"
                }
             ],
-            "title": "Local backup size",
-            "type": "bargauge"
+            "title": "Bottom buckets by cache hit ratio",
+            "type": "timeseries"
          },
          {
-            "collapsed": false,
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of vBuckets for the top buckets.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "light-green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
             "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 24,
+               "h": 8,
+               "w": 12,
+               "x": 0,
                "y": 24
             },
             "id": 8,
-            "panels": [ ],
-            "title": "Buckets",
-            "type": "row"
+            "options": {
+               "orientation": "horizontal"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket vBuckets count"
+               }
+            ],
+            "title": "Top buckets by vBuckets count",
+            "type": "bargauge"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Memory used for the top buckets across the cluster.",
+            "description": "Memory occupied by the queue for a virtual bucket for the top buckets.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -395,8 +468,8 @@
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 0,
-               "y": 25
+               "x": 12,
+               "y": 24
             },
             "id": 9,
             "options": {
@@ -416,246 +489,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, job) (kv_mem_used_bytes{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
-               }
-            ],
-            "title": "Top buckets by memory used",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
-            },
-            "description": "Disk used for the top buckets across the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "min": 0,
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "light-green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "decbytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 25
-            },
-            "id": 10,
-            "options": {
-               "orientation": "horizontal"
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk(5, sum by(job, couchbase_cluster, bucket) (couch_docs_actual_disk_size{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
-               }
-            ],
-            "title": "Top buckets by disk used",
-            "type": "bargauge"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of operations for the busiest buckets across the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "ops"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 33
-            },
-            "id": 11,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (rate(kv_ops{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
-               }
-            ],
-            "title": "Top buckets by operations",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of operations failed for the most problematic buckets across the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "ops"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 33
-            },
-            "id": 12,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (rate(kv_ops_failed{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}[$__rate_interval])))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
-               }
-            ],
-            "title": "Top buckets by operations failed",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
-            },
-            "description": "The number of vBuckets for the top buckets across the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "min": 0,
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "light-green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 41
-            },
-            "id": 13,
-            "options": {
-               "orientation": "horizontal"
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_num_vbuckets{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
-               }
-            ],
-            "title": "Top buckets by vBuckets count",
-            "type": "bargauge"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Memory occupied by the queue for a virtual bucket for the top buckets across the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "decbytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 41
-            },
-            "id": 14,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_vb_queue_memory_bytes{job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}))",
-                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}"
+                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_vb_queue_memory_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}",
+                  "refId": "Top buckets by vBucket queue memory"
                }
             ],
             "title": "Top buckets by vBucket queue memory",
@@ -684,7 +522,7 @@
                },
                "includeAll": true,
                "label": "Job",
-               "multi": false,
+               "multi": true,
                "name": "job",
                "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\"}, job)",
                "refresh": 2,
@@ -699,12 +537,35 @@
                },
                "includeAll": true,
                "label": "Couchbase_cluster",
-               "multi": false,
+               "multi": true,
                "name": "couchbase_cluster",
-               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\"}, couchbase_cluster)",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\"}, couchbase_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
@@ -713,6 +574,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Couchbase cluster overview",
-      "uid": "couchbase_couchbase_cluster_overview"
+      "title": "Couchbase bucket overview",
+      "uid": "couchbase_couchbase_bucket_overview"
    }
