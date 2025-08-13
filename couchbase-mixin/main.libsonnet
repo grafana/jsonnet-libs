@@ -4,7 +4,6 @@ local dashboards = import './dashboards.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
-local targets = import './targets.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -35,7 +34,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         customAllValue='.+',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
-      targets: targets.new(this),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),

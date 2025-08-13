@@ -46,6 +46,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'couchbase-node-overview.json':
         g.dashboard.new(prefix + ' node overview')
         + g.dashboard.withPanels(
+          g.util.panel.resolveCollapsedFlagOnRows(
           g.util.grid.wrapPanels(
             [
               panels.node_memoryUtilizationPanel { gridPos+: { w: 12 } },
@@ -61,6 +62,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.node_indexCacheHitRatioPanel { gridPos+: { w: 8 } },
               panels.node_averageScanLatencyPanel { gridPos+: { w: 8 } },
             ]
+          )
           )
         )
         + root.applyCommon(
