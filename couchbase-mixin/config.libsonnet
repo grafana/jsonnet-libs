@@ -7,7 +7,7 @@
   uid: 'couchbase',
   dashboardNamePrefix: 'Couchbase',
 
-  
+
   // additional params
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',

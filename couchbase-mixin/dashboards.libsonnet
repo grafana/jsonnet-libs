@@ -47,22 +47,22 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         g.dashboard.new(prefix + ' node overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
-          g.util.grid.wrapPanels(
-            [
-              panels.node_memoryUtilizationPanel { gridPos+: { w: 12 } },
-              panels.node_cpuUtilizationPanel { gridPos+: { w: 12 } },
-              panels.node_totalMemoryUsedByServicePanel { gridPos+: { w: 8 } },
-              panels.node_backupSizePanel { gridPos+: { w: 8 } },
-              panels.node_currentConnectionsPanel { gridPos+: { w: 8 } },
-              panels.node_httpResponseCodesPanel { gridPos+: { w: 12 } },
-              panels.node_httpRequestMethodsPanel { gridPos+: { w: 12 } },
-              panels.node_queryServiceRequestsPanel { gridPos+: { w: 12 } },
-              panels.node_queryServiceRequestProcessingTimePanel { gridPos+: { w: 12 } },
-              panels.node_indexServiceRequestsPanel { gridPos+: { w: 8 } },
-              panels.node_indexCacheHitRatioPanel { gridPos+: { w: 8 } },
-              panels.node_averageScanLatencyPanel { gridPos+: { w: 8 } },
-            ]
-          )
+            g.util.grid.wrapPanels(
+              [
+                panels.node_memoryUtilizationPanel { gridPos+: { w: 12 } },
+                panels.node_cpuUtilizationPanel { gridPos+: { w: 12 } },
+                panels.node_totalMemoryUsedByServicePanel { gridPos+: { w: 8 } },
+                panels.node_backupSizePanel { gridPos+: { w: 8 } },
+                panels.node_currentConnectionsPanel { gridPos+: { w: 8 } },
+                panels.node_httpResponseCodesPanel { gridPos+: { w: 12 } },
+                panels.node_httpRequestMethodsPanel { gridPos+: { w: 12 } },
+                panels.node_queryServiceRequestsPanel { gridPos+: { w: 12 } },
+                panels.node_queryServiceRequestProcessingTimePanel { gridPos+: { w: 12 } },
+                panels.node_indexServiceRequestsPanel { gridPos+: { w: 8 } },
+                panels.node_indexCacheHitRatioPanel { gridPos+: { w: 8 } },
+                panels.node_averageScanLatencyPanel { gridPos+: { w: 8 } },
+              ]
+            )
           )
         )
         + root.applyCommon(
