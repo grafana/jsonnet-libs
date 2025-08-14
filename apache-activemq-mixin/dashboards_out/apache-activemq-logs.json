@@ -1,17 +1,35 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Apache ActiveMQ Cluster Overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ Queues",
+            "type": "link",
+            "url": "/d/apacheactivemq_queues"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ Topics",
+            "type": "link",
+            "url": "/d/apacheactivemq_topics"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-activemq-mixin"
+               "apache-activemq"
             ],
-            "targetBlank": false,
-            "title": "Other Apache ActiveMQ dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -161,7 +179,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/apache-activemq\",job=~\"$job\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +212,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,7 +221,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/apache-activemq\",job=~\"$job\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -213,7 +231,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "apache-activemq-mixin"
+         "apache-activemq"
       ],
       "templating": {
          "list": [
@@ -246,40 +264,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Activemq_cluster",
+               "label": "Cluster",
                "multi": true,
-               "name": "activemq_cluster",
-               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\"}, activemq_cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Level",
-               "multi": true,
-               "name": "level",
-               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}, level)",
+               "name": "cluster",
+               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -301,14 +289,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "default",
       "title": "Apache ActiveMQ logs",
-      "uid": "apache-activemq-logs"
+      "uid": "apacheactivemq-logs"
    }

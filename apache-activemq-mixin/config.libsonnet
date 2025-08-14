@@ -1,23 +1,38 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    activemqSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
-    activemqAlertsSelector: if self.enableMultiCluster then 'job=~"${job:regex}", cluster=~"${cluster:regex}"' else 'job=~"${job:regex}"',
-    dashboardTags: ['apache-activemq-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
-    grafanaDashboardIDs: {
-      'apache-activemq-logs-overview.json': 'apache-activemq-logs',
-    },
+  local this = self,
+  enableMultiCluster: false,
+  filteringSelector: 'job=~"integrations/apache-activemq"',
+  groupLabels: ['job', 'cluster'],
+  instanceLabels: ['instance'],
+  activemqLabels: ['activemq_cluster'],
 
-    // alerts thresholds
-    alertsHighTopicMemoryUsage: 70,  // %
-    alertsHighQueueMemoryUsage: 70,  // %
-    alertsHighStoreMemoryUsage: 70,  // %
-    alertsHighTemporaryMemoryUsage: 70,  // %
+  dashboardTags: [self.uid],
+  legendLabels: ['instance', 'activemq_cluster'],
+  uid: 'apache-activemq',
+  dashboardNamePrefix: 'Apache ActiveMQ',
 
-    enableLokiLogs: true,
-    filterSelector: 'job=~"integrations/apache-activemq"',
+  // additional params
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
+  metricsSource: 'prometheus',
+
+  // logs lib related
+  enableLokiLogs: true,
+  logLabels: self.groupLabels + self.instanceLabels + self.activemqLabels,
+  extraLogLabels: [],  // Required by logs-lib
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
+  // alert thresholds
+  alertsHighTopicMemoryUsage: 70,  // %
+  alertsHighQueueMemoryUsage: 70,  // %
+  alertsHighStoreMemoryUsage: 70,  // %
+  alertsHighTemporaryMemoryUsage: 70,  // %
+
+  signals+: {
+    broker: (import './signals/broker.libsonnet')(this),
+    queues: (import './signals/queues.libsonnet')(this),
+    topics: (import './signals/topics.libsonnet')(this),
   },
 }

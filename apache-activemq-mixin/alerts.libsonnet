@@ -1,14 +1,14 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    groups: [
       {
         name: 'apache-activemq-alerts',
         rules: [
           {
             alert: 'ApacheActiveMQHighTopicMemoryUsage',
             expr: |||
-              sum without (destination) (activemq_topic_memory_percent_usage{destination!~"ActiveMQ.Advisory.*"}) > %(alertsHighTopicMemoryUsage)s
-            ||| % $._config,
+              sum without (destination) (activemq_topic_memory_percent_usage}) > %(alertsHighTopicMemoryUsage)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -19,14 +19,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of memory used by topics on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighTopicMemoryUsage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheActiveMQHighQueueMemoryUsage',
             expr: |||
               sum without (destination) (activemq_queue_memory_percent_usage) > %(alertsHighQueueMemoryUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -37,14 +37,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of memory used by queues on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighQueueMemoryUsage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheActiveMQHighStoreMemoryUsage',
             expr: |||
               activemq_store_usage_ratio > %(alertsHighStoreMemoryUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -55,14 +55,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of store memory used on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighStoreMemoryUsage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheActiveMQHighTemporaryMemoryUsage',
             expr: |||
               activemq_temp_usage_ratio > %(alertsHighTemporaryMemoryUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -73,7 +73,7 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of temporary memory used on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighTemporaryMemoryUsage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
