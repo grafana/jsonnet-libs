@@ -7,7 +7,7 @@
           {
             alert: 'ApacheActiveMQHighTopicMemoryUsage',
             expr: |||
-              sum without (destination) (activemq_topic_memory_percent_usage}) > %(alertsHighTopicMemoryUsage)s
+              sum without (destination) (activemq_topic_memory_percent_usage) > %(alertsHighTopicMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
