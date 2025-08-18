@@ -1,293 +1,205 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Geographic overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_geomap_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Worker overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_worker_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Zone overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_zone_overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare-mixin"
+               "cloudflare"
             ],
-            "targetBlank": false,
-            "title": "Other Cloudflare dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The P50, P75, P99, P999 quantiles for worker CPU time.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "ms"
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 8,
-               "w": 24,
+               "h": 1,
+               "w": 0,
                "x": 0,
                "y": 0
             },
-            "id": 2,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "cloudflare_worker_cpu_time{job=~\"$job\", instance=~\"$instance\", script_name=~\"$script_name\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{script_name}} - {{quantile}}"
-               }
-            ],
-            "title": "Worker CPU time quantiles",
-            "type": "timeseries"
+            "id": 1,
+            "panels": [ ],
+            "title": "Workers",
+            "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The P50, P75, P99, P999 quantiles for worker duration.",
+            "description": "CPU time consumed by the worker.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 8
-            },
-            "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
                }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "cloudflare_worker_duration{job=~\"$job\", instance=~\"$instance\", script_name=~\"$script_name\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{script_name}} - {{quantile}}"
-               }
-            ],
-            "title": "Worker duration quantiles",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The rate of worker requests.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 1
             },
-            "id": 4,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_worker_requests_count{job=~\"$job\", instance=~\"$instance\", script_name=~\"$script_name\"}[$__rate_interval])",
+                  "expr": "cloudflare_worker_cpu_time{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{script_name}}"
+                  "instant": false,
+                  "legendFormat": "{{ script_name }} - {{ quantile }}",
+                  "refId": "Worker CPU time"
+               }
+            ],
+            "title": "Worker CPU time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Duration of worker execution.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "cloudflare_worker_duration{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ script_name }} - {{ quantile }}",
+                  "refId": "Worker duration"
+               }
+            ],
+            "title": "Worker duration",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of requests to the worker.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_worker_requests_count{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ script_name }}",
+                  "refId": "Worker requests"
                }
             ],
             "title": "Worker requests",
@@ -295,180 +207,146 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The number of worker errors.",
+            "description": "Number of errors from the worker.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_worker_errors_count{job=~\"$job\", instance=~\"$instance\", script_name=~\"$script_name\"}[$__interval:])",
+                  "expr": "increase(cloudflare_worker_errors_count{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{script_name}}"
+                  "instant": false,
+                  "legendFormat": "{{ script_name }}",
+                  "refId": "Worker errors"
                }
             ],
-            "title": "Worker errors / $__interval",
+            "title": "Worker errors",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
-         "cloudflare-mixin"
+         "cloudflare"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total,job)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Instance",
+               "label": "Cluster",
                "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\"},instance)",
+               "name": "cluster",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
+               "includeAll": true,
+               "label": "Zone",
+               "multi": true,
+               "name": "zone",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
                "includeAll": true,
                "label": "Script",
                "multi": true,
                "name": "script_name",
-               "options": [ ],
-               "query": "label_values(cloudflare_worker_requests_count{job=~\"$job\", instance=~\"$instance\"},script_name)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             }
          ]
       },
@@ -476,33 +354,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Cloudflare worker overview",
-      "uid": "cloudflare-worker-overview",
-      "version": 0
+      "uid": "cloudflare_cloudflare_worker_overview"
    }

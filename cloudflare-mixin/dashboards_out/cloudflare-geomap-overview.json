@@ -1,88 +1,42 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Geographic overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_geomap_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Worker overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_worker_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Zone overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_zone_overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare-mixin"
+               "cloudflare"
             ],
-            "targetBlank": false,
-            "title": "Other Cloudflare dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
             "datasource": {
                "type": "datasource",
-               "uid": "-- Dashboard --"
-            },
-            "description": "Table currently showing $geo_metric for the zone.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "custom": {
-                     "align": "auto",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "inspect": false
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byRegexp",
-                        "options": "/Total|Mean|Last/"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.cellOptions",
-                           "value": {
-                              "mode": "basic",
-                              "type": "gauge",
-                              "valueDisplayMode": "text"
-                           }
-                        },
-                        {
-                           "id": "color",
-                           "value": {
-                              "mode": "continuous-BlPu"
-                           }
-                        }
-                     ]
-                  }
-               ]
+               "uid": "-- Mixed --"
             },
             "gridPos": {
                "h": 7,
@@ -90,346 +44,173 @@
                "x": 0,
                "y": 0
             },
-            "id": 2,
-            "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true,
-               "sortBy": [
-                  {
-                     "desc": true,
-                     "displayName": "Total"
-                  }
-               ]
-            },
-            "pluginVersion": "10.2.0-62263",
+            "id": 1,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "type": "datasource",
-                     "uid": "-- Dashboard --"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "panelId": 3,
-                  "refId": "A",
-                  "withTransforms": true
+                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "format": "table",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "$geo_metric Distribution"
                }
             ],
-            "title": "$geo_metric by country",
+            "title": "Geographic Distribution",
             "type": "table"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Geomap panel currently showing $geo_metric for the zone.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "continuous-BlPu"
-                  },
-                  "custom": {
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "gridPos": {
-               "h": 24,
+               "h": 12,
                "w": 24,
                "x": 0,
-               "y": 7
+               "y": 12
             },
-            "id": 3,
-            "options": {
-               "basemap": {
-                  "config": { },
-                  "name": "Layer 0",
-                  "type": "default"
-               },
-               "controls": {
-                  "mouseWheelZoom": true,
-                  "showAttribution": true,
-                  "showDebug": false,
-                  "showMeasure": false,
-                  "showScale": false,
-                  "showZoom": true
-               },
-               "layers": [
-                  {
-                     "config": {
-                        "showLegend": true,
-                        "style": {
-                           "color": {
-                              "field": "Total",
-                              "fixed": "dark-green"
-                           },
-                           "opacity": 0.40000000000000002,
-                           "rotation": {
-                              "fixed": 0,
-                              "max": 360,
-                              "min": -360,
-                              "mode": "mod"
-                           },
-                           "size": {
-                              "field": "Total",
-                              "fixed": 5,
-                              "max": 15,
-                              "min": 7
-                           },
-                           "symbol": {
-                              "fixed": "img/icons/marker/circle.svg",
-                              "mode": "fixed"
-                           },
-                           "symbolAlign": {
-                              "horizontal": "center",
-                              "vertical": "center"
-                           },
-                           "textConfig": {
-                              "fontSize": 12,
-                              "offsetX": 0,
-                              "offsetY": 0,
-                              "textAlign": "center",
-                              "textBaseline": "middle"
-                           }
-                        }
-                     },
-                     "location": {
-                        "gazetteer": "public/gazetteer/countries.json",
-                        "lookup": "country",
-                        "mode": "lookup"
-                     },
-                     "name": "Total",
-                     "tooltip": true,
-                     "type": "markers"
-                  }
-               ],
-               "tooltip": {
-                  "mode": "multi"
-               },
-               "view": {
-                  "allLayers": true,
-                  "id": "zero",
-                  "lat": 0,
-                  "lon": 0,
-                  "zoom": 1
-               }
-            },
-            "pluginVersion": "10.2.0-62263",
+            "id": 2,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase($geo_metric{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "legendFormat": "",
+                  "refId": "$geo_metric Distribution"
                }
             ],
-            "title": "$geo_metric by country",
-            "transformations": [
-               {
-                  "id": "groupBy",
-                  "options": {
-                     "fields": {
-                        "Value": {
-                           "aggregations": [
-                              "sum",
-                              "mean",
-                              "lastNotNull"
-                           ],
-                           "operation": "aggregate"
-                        },
-                        "country": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "host": {
-                           "aggregations": [ ]
-                        },
-                        "instance": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "job": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "region": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "status": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "zone": {
-                           "aggregations": [ ]
-                        }
-                     }
-                  }
-               },
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": { },
-                     "indexByName": { },
-                     "renameByName": {
-                        "Value (lastNotNull)": "Last",
-                        "Value (mean)": "Mean",
-                        "Value (sum)": "Total",
-                        "country": "Country",
-                        "instance": "Instance",
-                        "job": "Job",
-                        "region": "Region",
-                        "status": "Status",
-                        "zone": "Zone"
-                     }
-                  }
-               }
-            ],
+            "title": "Geographic Distribution",
             "type": "geomap"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
-         "cloudflare-mixin"
+         "cloudflare"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
-               "name": "job",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total,job)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": false,
-               "label": "Instance",
                "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total{job=\"$job\"},instance)",
+               "name": "job",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
                "includeAll": true,
                "label": "Zone",
                "multi": true,
                "name": "zone",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\", instance=~\"$instance\"},zone)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Script",
+               "multi": true,
+               "name": "script_name",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
                "current": {
+                  "selected": false,
                   "text": "cloudflare_zone_requests_country",
                   "value": "cloudflare_zone_requests_country"
                },
-               "hide": 0,
                "includeAll": false,
                "label": "Geomap metric",
                "multi": false,
                "name": "geo_metric",
                "options": [
                   {
+                     "selected": true,
                      "text": "cloudflare_zone_requests_country",
                      "value": "cloudflare_zone_requests_country"
                   },
                   {
+                     "selected": false,
                      "text": "cloudflare_zone_bandwidth_country",
                      "value": "cloudflare_zone_bandwidth_country"
                   },
                   {
+                     "selected": false,
                      "text": "cloudflare_zone_threats_country",
                      "value": "cloudflare_zone_threats_country"
                   }
                ],
-               "query": "cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country",
-               "refresh": 0,
+               "query": "cloudflare_zone_requests_country : cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country : cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country : cloudflare_zone_threats_country",
                "type": "custom"
             }
          ]
@@ -438,33 +219,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Cloudflare Geomap overview",
-      "uid": "cloudflare-geomap-overview",
-      "version": 0
+      "uid": "cloudflare_cloudflare_geomap_overview"
    }

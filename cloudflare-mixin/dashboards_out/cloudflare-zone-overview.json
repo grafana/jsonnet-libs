@@ -1,1269 +1,866 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Geographic overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_geomap_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Worker overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_worker_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Zone overview",
+            "type": "link",
+            "url": "/d/cloudflare_cloudflare_zone_overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare-mixin"
+               "cloudflare"
             ],
-            "targetBlank": false,
-            "title": "Other Cloudflare dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Zone overview",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of requests to the zone.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
-               "alertInstanceLabelFilter": "{job=~\"${job:regex}\", instance=~\"${instance:regex}\"}",
-               "alertName": "",
-               "dashboardAlerts": false,
-               "groupBy": [ ],
-               "groupMode": "default",
-               "maxItems": 5,
-               "sortOrder": 1,
-               "stateFilter": {
-                  "error": true,
-                  "firing": true,
-                  "noData": true,
-                  "normal": true,
-                  "pending": true
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
-               "viewMode": "list"
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
             },
-            "targets": [ ],
-            "title": "Alerts",
-            "type": "alertlist"
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone requests total"
+               }
+            ],
+            "title": "Requests",
+            "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "A table view of the pools in your zone showing their health and rate of requests.",
+            "description": "Percentage of cached requests.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
                   "custom": {
-                     "align": "left",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "inspect": false
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [
-                     {
-                        "options": {
-                           "Health=1": {
-                              "index": 0,
-                              "text": "Healthy"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Health"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.cellOptions",
-                           "value": {
-                              "type": "color-text"
-                           }
-                        },
-                        {
-                           "id": "mappings",
-                           "value": [
-                              {
-                                 "options": {
-                                    "0": {
-                                       "color": "red",
-                                       "index": 1,
-                                       "text": "Unhealthy"
-                                    },
-                                    "1": {
-                                       "color": "green",
-                                       "index": 0,
-                                       "text": "Healthy"
-                                    }
-                                 },
-                                 "type": "value"
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
+                  "unit": "percent"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
-               "frameIndex": 0,
-               "showHeader": true,
-               "sortBy": [ ]
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
             },
-            "pluginVersion": "10.2.0-61719",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "cloudflare_zone_pool_health_status{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}",
-                  "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(cloudflare_zone_pool_requests_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__rate_interval])",
-                  "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "expr": "increase(cloudflare_zone_requests_cached{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:]) / increase(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone cached requests"
                }
             ],
-            "title": "Pool status",
-            "transformations": [
-               {
-                  "id": "joinByField",
-                  "options": {
-                     "byField": "pool_name",
-                     "mode": "outer"
-                  }
-               },
-               {
-                  "id": "filterFieldsByName",
-                  "options": {
-                     "include": {
-                        "names": [
-                           "pool_name",
-                           "Value #A",
-                           "load_balancer_name 2",
-                           "origin_name",
-                           "Value #B",
-                           "zone 2"
-                        ]
-                     }
-                  }
-               },
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": { },
-                     "indexByName": {
-                        "Value #A": 5,
-                        "Value #B": 4,
-                        "load_balancer_name 2": 1,
-                        "origin_name": 2,
-                        "pool_name": 0,
-                        "zone 2": 3
-                     },
-                     "renameByName": {
-                        "Value #A": "Health",
-                        "Value #B": "Requests",
-                        "load_balancer_name 2": "Load balancer",
-                        "origin_name": "Origin",
-                        "pool_name": "Pool",
-                        "zone 2": "Zone"
-                     }
-                  }
-               }
-            ],
-            "type": "table"
+            "title": "Cached requests",
+            "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The rate at which requests to the zone occur.",
+            "description": "Number of threats blocked.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_requests_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_threats_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}}"
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone threats"
                }
             ],
-            "title": "Request rate",
+            "title": "Threats",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The percentage of requests to the zone that are cached.",
+            "description": "Total bandwidth usage.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "area"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "max": 1,
-                  "min": 0,
-                  "thresholds": {
-                     "mode": "percentage",
-                     "steps": [
-                        {
-                           "color": "red",
-                           "value": null
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "green",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [ ]
+                  "unit": "bytes"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_cached{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:]) / increase(cloudflare_zone_requests_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
+                  "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}}"
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone bandwidth"
                }
             ],
-            "title": "Cached requests / $__interval",
+            "title": "Bandwidth",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
             },
-            "description": "The number of threats that have targeted the zone.",
+            "id": 6,
+            "panels": [ ],
+            "title": "Zone bandwidth",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "SSL encrypted and cached bandwidth.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  "unit": "bytes"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
-            },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(cloudflare_zone_threats_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}}"
-               }
-            ],
-            "title": "Threats / $__interval",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The rate at which all bandwidth in the zone occurs.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "Bps"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 16
+               "y": 18
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_bandwidth_ssl_encrypted{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}}"
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone SSL encrypted bandwidth"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_bandwidth_cached{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone cached bandwidth"
                }
             ],
-            "title": "Bandwidth rate",
+            "title": "SSL encrypted bandwidth",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The amount of cached and encrypted bandwidth that occurs in the zone.",
+            "description": "Bandwidth usage by content type.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "bars",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 0,
-               "y": 24
+               "x": 12,
+               "y": 18
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_bandwidth_ssl_encrypted{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
+                  "expr": "rate(cloudflare_zone_bandwidth_content_type{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - encrypted"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(cloudflare_zone_bandwidth_cached{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - cached"
+                  "instant": false,
+                  "legendFormat": "{{ content_type }}",
+                  "refId": "Zone bandwidth by content type"
                }
             ],
-            "title": "Bandwidth type / $__interval",
+            "title": "Bandwidth by content type",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The content types that bandwidth is being used for in the zone.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "bars",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "bytes"
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 24
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
             },
             "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(cloudflare_zone_bandwidth_content_type{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - {{content_type}}"
-               }
-            ],
-            "title": "Bandwidth content type / $__interval",
-            "type": "timeseries"
+            "panels": [ ],
+            "title": "Zone visitors",
+            "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The number of zone views by browser family.",
+            "description": "Unique and repeat visitors.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 32
+               "y": 27
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_browser_map_page_views_count{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
+                  "expr": "rate(cloudflare_zone_uniques_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - {{family}}"
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone unique visitors"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "cloudflare_zone_pageviews_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"} - cloudflare_zone_uniques_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone repeat visitors"
                }
             ],
-            "title": "Browser page views / $__interval",
+            "title": "Unique visitors",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The number of unique and total page views.",
+            "description": "Browser map pageviews count.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 32
+               "y": 27
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_uniques_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
+                  "expr": "rate(cloudflare_zone_requests_browser_map_page_views_count{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - unique"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(cloudflare_zone_pageviews_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:]) - increase(cloudflare_zone_uniques_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - non-unique"
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone browser map pageviews"
                }
             ],
-            "title": "Unique page views / $__interval",
+            "title": "Browser map pageviews",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of different HTTP status codes used for requests in the zone.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 8,
-               "w": 24,
+               "h": 1,
+               "w": 0,
                "x": 0,
-               "y": 40
+               "y": 35
             },
             "id": 12,
-            "options": {
-               "legend": {
-                  "calcs": [
-                     "min",
-                     "max",
-                     "mean"
-                  ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(cloudflare_zone_requests_status{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{zone}} - {{status}}"
-               }
-            ],
-            "title": "Request HTTP status / $__interval",
-            "type": "timeseries"
+            "panels": [ ],
+            "title": "Zone status and location",
+            "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The different colocations being used by the zone and their request rates.",
+            "description": "Requests broken down by HTTP status code.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
                   "custom": {
-                     "align": "left",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "inspect": false
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
+               "w": 12,
                "x": 0,
-               "y": 48
+               "y": 36
             },
             "id": 13,
             "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
-               "showHeader": true
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
             },
-            "pluginVersion": "10.2.0-61719",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_colocation_requests_total{job=~\"$job\", instance=~\"$instance\", zone=~\"$zone\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_requests_status{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{ status }}",
+                  "refId": "Zone requests by status"
                }
             ],
-            "title": "Colocation requests",
-            "transformations": [
-               {
-                  "id": "reduce",
-                  "options": {
-                     "reducers": [
-                        "lastNotNull"
-                     ]
-                  }
+            "title": "Requests by status",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Requests by colocation center.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 36
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
                {
-                  "id": "extractFields",
-                  "options": {
-                     "format": "auto",
-                     "source": "Field"
-                  }
-               },
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": {
-                        "Field": true,
-                        "host": true,
-                        "instance": true,
-                        "job": true
-                     },
-                     "indexByName": {
-                        "Field": 3,
-                        "Last *": 2,
-                        "colocation": 1,
-                        "host": 4,
-                        "instance": 5,
-                        "job": 6,
-                        "zone": 0
-                     },
-                     "renameByName": {
-                        "Last *": "Requests",
-                        "colocation": "Colocation",
-                        "zone": "Zone"
-                     }
-                  }
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_colocation_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ colo_code }}",
+                  "refId": "Zone colocation requests"
                }
             ],
-            "type": "table"
+            "title": "Requests by colocation",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "id": 15,
+            "panels": [ ],
+            "title": "Load balancer pools",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Health status of the pool (0=unhealthy, 1=healthy).",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 45
+            },
+            "id": 16,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "cloudflare_zone_pool_health_status{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ pool_name }}",
+                  "refId": "Pool status"
+               }
+            ],
+            "title": "Pool health status",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of requests to the pool.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 45
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_pool_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ pool_name }}",
+                  "refId": "Request rate"
+               }
+            ],
+            "title": "Pool requests",
+            "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
-         "cloudflare-mixin"
+         "cloudflare"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total,job)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Instance",
+               "label": "Cluster",
                "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\"},instance)",
+               "name": "cluster",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Zone",
                "multi": true,
                "name": "zone",
-               "options": [ ],
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\", instance=~\"$instance\"},zone)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Script",
+               "multi": true,
+               "name": "script_name",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "cloudflare_zone_requests_country",
+                  "value": "cloudflare_zone_requests_country"
+               },
+               "includeAll": false,
+               "label": "Geomap metric",
+               "multi": false,
+               "name": "geo_metric",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "cloudflare_zone_requests_country",
+                     "value": "cloudflare_zone_requests_country"
+                  },
+                  {
+                     "selected": false,
+                     "text": "cloudflare_zone_bandwidth_country",
+                     "value": "cloudflare_zone_bandwidth_country"
+                  },
+                  {
+                     "selected": false,
+                     "text": "cloudflare_zone_threats_country",
+                     "value": "cloudflare_zone_threats_country"
+                  }
+               ],
+               "query": "cloudflare_zone_requests_country : cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country : cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country : cloudflare_zone_threats_country",
+               "type": "custom"
             }
          ]
       },
@@ -1271,33 +868,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Cloudflare zone overview",
-      "uid": "cloudflare-zone-overview",
-      "version": 0
+      "uid": "cloudflare_cloudflare_zone_overview"
    }
