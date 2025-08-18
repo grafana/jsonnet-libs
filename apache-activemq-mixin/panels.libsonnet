@@ -6,6 +6,95 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     {
       local signals = this.signals,
 
+      // Cluster panels
+
+      clustersCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Clusters',
+          targets=[signals.clusters.clusterCount.asTarget()],
+          description='Number of Apache ActiveMQ clusters.'
+        ),
+
+      brokerCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Brokers',
+          targets=[signals.clusters.brokerCount.asTarget()],
+          description='Number of broker instances across clusters.'
+        ),
+
+      producersCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Producers',
+          targets=[signals.clusters.producerCount.asTarget()],
+          description='Number of message producers active on destinations across clusters.'
+        ),
+
+      consumersCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Consumers',
+          targets=[signals.clusters.consumerCount.asTarget()],
+          description='The number of consumers subscribed to destinations across clusters.'
+        ),
+
+      enqueueRatePanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Enqueue / 2m',
+          targets=[signals.clusters.enqueueRate.asTarget() { interval: '2m' }],
+          description='Number of messages that have been sent to destinations in a cluster.'
+        ),
+
+      dequeueRatePanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Dequeue / 2m',
+          targets=[signals.clusters.dequeueRate.asTarget() { interval: '2m' }],
+          description='Number of messages that have been acknowledged (and removed) from destinations in a cluster.'
+        ),
+
+      averageTemporaryMemoryUsagePanel:
+        commonlib.panels.generic.stat.percentage.new(
+          'Average temporary memory usage',
+          targets=[signals.clusters.averageTemporaryMemoryUsage.asTarget()],
+          description='Average percentage of temporary memory used across clusters.'
+        )
+        + g.panel.stat.standardOptions.withUnit('percentunit')
+        + g.panel.stat.standardOptions.withMax(1)
+        + g.panel.stat.standardOptions.withMin(0)
+        + { type: 'bargauge' }
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.color.withMode('fixed')
+        + g.panel.barGauge.standardOptions.color.withFixedColor('green'),
+
+
+      averageStoreMemoryUsagePanel:
+        commonlib.panels.generic.stat.percentage.new(
+          'Average store memory usage',
+          targets=[signals.clusters.averageStoreMemoryUsage.asTarget()],
+          description='Average percentage of store memory used across clusters.'
+        )
+        + g.panel.stat.standardOptions.withUnit('percentunit')
+        + g.panel.stat.standardOptions.withMax(1)
+        + g.panel.stat.standardOptions.withMin(0)
+        + { type: 'bargauge' }
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.color.withMode('fixed')
+        + g.panel.barGauge.standardOptions.color.withFixedColor('green'),
+
+
+      averageBrokerMemoryUsagePanel:
+        commonlib.panels.generic.stat.percentage.new(
+          'Average broker memory usage',
+          targets=[signals.clusters.averageBrokerMemoryUsage.asTarget()],
+          description='Average percentage of broker memory used across clusters.'
+        )
+        + g.panel.stat.standardOptions.withUnit('percentunit')
+        + g.panel.stat.standardOptions.withMax(1)
+        + g.panel.stat.standardOptions.withMin(0)
+        + { type: 'bargauge' }
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.color.withMode('fixed')
+        + g.panel.barGauge.standardOptions.color.withFixedColor('green'),
+
+
       // Broker panels
       memoryUsagePanel:
         g.panel.gauge.new(title='Average broker memory usage')
@@ -132,6 +221,99 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(54)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
+      queueSummaryPanel:
+        commonlib.panels.generic.table.base.new(
+          'Queue summary',
+          targets=[
+            signals.queues.queueEnqueueRateSummary.asTableTarget() { interval: '1m' },
+            signals.queues.queueDequeueRateSummary.asTableTarget() { interval: '1m' },
+            signals.queues.queueAverageEnqueueTimeSummary.asTableTarget(),
+            signals.queues.queueAverageMessageSizeSummary.asTableTarget(),
+          ],
+        )
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Enqueue rate')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'mps'),
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Dequeue rate')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'mps'),
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Average enqueue time')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Average message size')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'decbytes'),
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('ActiveMQ cluster')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
+            {
+              title: 'Cluster link',
+              url: 'd/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
+            },
+          ]),
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Instance')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
+            {
+              title: 'Instance link',
+              url: 'd/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
+            },
+          ]),
+        ])
+        + g.panel.table.options.withCellHeight('sm')
+        + g.panel.table.options.footer.withCountRows(false)
+        + g.panel.table.options.footer.withFields('')
+        + g.panel.table.options.footer.withReducer(['sum'])
+        + g.panel.table.options.footer.withShow(false)
+        + g.panel.table.options.withShowHeader(true)
+
+        + g.panel.table.queryOptions.withTransformations([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'destination',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              indexByName: {},
+              renameByName: {
+                'Value #Queue enqueue rate summary': 'Enqueue rate',
+                'Value #Queue dequeue rate summary': 'Dequeue rate',
+                'Value #Queue average enqueue time summary': 'Average enqueue time',
+                'Value #Queue average message size summary': 'Average message size',
+                'activemq_cluster 1': 'ActiveMQ cluster',
+                destination: 'Destination',
+                'instance 1': 'Instance',
+              },
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'Destination',
+                  'ActiveMQ cluster',
+                  'Instance',
+                  'Enqueue rate',
+                  'Dequeue rate',
+                  'Average enqueue time',
+                  'Average message size',
+                ],
+              },
+            },
+          },
+        ]),
+
+
       // Topic panels
       topicCountPanel:
         commonlib.panels.generic.stat.base.new(
@@ -142,14 +324,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       topicProducersPanel:
         commonlib.panels.generic.stat.base.new(
-          'Total topic producers',
+          'Producers',
           targets=[signals.topics.totalProducers.asTarget()],
           description='Total number of topic producers.'
         ),
 
       topicConsumersPanel:
         commonlib.panels.generic.stat.base.new(
-          'Total topic consumers',
+          'Consumers',
           targets=[signals.topics.totalConsumers.asTarget()],
           description='Total number of topic consumers.'
         ),
@@ -163,7 +345,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       topicEnqueueRatePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Topic enqueue rate',
+          'Top topics by enqueue rate',
           targets=[signals.topics.enqueueRate.asTarget() { interval: '1m' }],
           description='Rate of messages being enqueued to topics.'
         )
@@ -173,7 +355,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       topicDequeueRatePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Topic dequeue rate',
+          'Top topics by dequeue rate',
           targets=[signals.topics.dequeueRate.asTarget() { interval: '1m' }],
           description='Rate of messages being dequeued from topics.'
         )
@@ -183,7 +365,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       topicAverageEnqueueTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Topic average enqueue time',
+          'Top topics by average enqueue time',
           targets=[signals.topics.averageEnqueueTime.asTarget()],
           description='Average time to enqueue messages to topics.'
         )
@@ -193,7 +375,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       topicExpiredRatePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Topic expired rate',
+          'Top topics by expired rate',
           targets=[signals.topics.expiredRate.asTarget() { interval: '1m' }],
           description='Rate of messages expiring in topics.'
         )
@@ -210,5 +392,118 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(54)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+
+      topicTopicsByConsumers:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Top topics by consumers',
+          targets=[signals.topics.topTopicsByConsumers.asTarget()],
+          description='Top topics by consumers.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.options.withOrientation('horizontal')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+
+      topicSummaryPanel:
+        commonlib.panels.generic.table.base.new(
+          'Topic summary',
+          targets=[
+            signals.topics.enqueueRateSummary.asTableTarget() { interval: '1m' },
+            signals.topics.dequeueRateSummary.asTableTarget() { interval: '1m' },
+            signals.topics.averageEnqueueTimeSummary.asTableTarget(),
+            signals.topics.averageMessageSizeSummary.asTableTarget(),
+          ],
+          description='Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.'
+        )
+        // Field configuration defaults
+        + g.panel.table.fieldConfig.defaults.custom.withAlign('left')
+        + g.panel.table.fieldConfig.defaults.custom.withCellOptions({
+          type: 'auto',
+        })
+        + g.panel.table.fieldConfig.defaults.custom.withInspect(false)
+        + g.panel.table.standardOptions.thresholds.withMode('absolute')
+        + g.panel.table.standardOptions.thresholds.withSteps([
+          g.panel.table.thresholdStep.withColor('green'),
+        ])
+
+        // Field overrides for units and links
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Enqueue rate')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'mps'),
+
+          g.panel.table.fieldOverride.byName.new('Dequeue rate')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'mps'),
+
+          g.panel.table.fieldOverride.byName.new('Average enqueue time')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+
+          g.panel.table.fieldOverride.byName.new('Average message size')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'decbytes'),
+
+          g.panel.table.fieldOverride.byName.new('ActiveMQ cluster')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
+            {
+              title: 'Cluster link',
+              url: 'd/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
+            },
+          ]),
+
+          g.panel.table.fieldOverride.byName.new('Instance')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
+            {
+              title: 'Instance link',
+              url: 'd/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
+            },
+          ]),
+        ])
+
+        // Table options
+        + g.panel.table.options.withCellHeight('sm')
+        + g.panel.table.options.footer.withCountRows(false)
+        + g.panel.table.options.footer.withFields('')
+        + g.panel.table.options.footer.withReducer(['sum'])
+        + g.panel.table.options.footer.withShow(false)
+        + g.panel.table.options.withShowHeader(true)
+
+        // Transformations
+        + g.panel.table.queryOptions.withTransformations([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'destination',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              indexByName: {},
+              renameByName: {
+                'Value #Enqueue rate': 'Enqueue rate',
+                'Value #Dequeue rate': 'Dequeue rate',
+                'Value #Average enqueue time': 'Average enqueue time',
+                'Value #Average message size': 'Average message size',
+                'activemq_cluster 1': 'ActiveMQ cluster',
+                destination: 'Destination',
+                'instance 1': 'Instance',
+              },
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'ActiveMQ cluster',
+                  'Instance',
+                  'Enqueue rate',
+                  'Dequeue rate',
+                  'Average enqueue time',
+                  'Average message size',
+                  'Destination',
+                ],
+              },
+            },
+          },
+        ]),
     },
 }

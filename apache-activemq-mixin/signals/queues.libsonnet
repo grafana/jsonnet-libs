@@ -66,67 +66,125 @@ function(this)
         },
       },
       enqueueRate: {
-        name: 'Enqueue rate',
-        nameShort: 'Enqueue rate',
-        type: 'counter',
+        name: 'Top queues by enqueue rate',
+        nameShort: 'Top queues by enqueue rate',
+        type: 'raw',
         description: 'Rate of messages being enqueued to queues.',
-        unit: '/ sec',
+        unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'activemq_queue_enqueue_count{%(queriesSelector)s}',
+            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
           },
         },
       },
       dequeueRate: {
-        name: 'Dequeue rate',
-        nameShort: 'Dequeue rate',
-        type: 'counter',
+        name: 'Top queues by dequeue rate',
+        nameShort: 'Top queues by dequeue rate',
+        type: 'raw',
         description: 'Rate of messages being dequeued from queues.',
-        unit: '/ sec',
+        unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'activemq_queue_dequeue_count{%(queriesSelector)s}',
+            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_dequeue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
           },
         },
       },
       averageEnqueueTime: {
-        name: 'Average enqueue time',
-        nameShort: 'Avg enqueue time',
-        type: 'gauge',
+        name: 'Top queues by average enqueue time',
+        nameShort: 'Top queues by average enqueue time',
+        type: 'raw',
         description: 'Average time to enqueue messages to queues.',
         unit: 'ms',
         sources: {
           prometheus: {
-            expr: 'activemq_queue_average_enqueue_time{%(queriesSelector)s}',
+            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_enqueue_time{%(queriesSelector)s, destination=~".*$name.*"})',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
           },
         },
       },
       expiredRate: {
-        name: 'Expired rate',
-        nameShort: 'Expired rate',
-        type: 'counter',
+        name: 'Top queues by expired rate',
+        nameShort: 'Top queues by expired rate',
+        type: 'raw',
         description: 'Rate of messages expiring in queues.',
-        unit: '/ sec',
+        unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'activemq_queue_expired_count{%(queriesSelector)s}',
+            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
           },
         },
       },
       averageMessageSize: {
-        name: 'Average message size',
-        nameShort: 'Avg message size',
-        type: 'gauge',
+        name: 'Top queues by average message size',
+        nameShort: 'Top queues by average message size',
+        type: 'raw',
         description: 'Average size of messages in queues.',
-        unit: 'bytes',
+        unit: 'decbytes',
         sources: {
           prometheus: {
-            expr: 'activemq_queue_average_message_size{%(queriesSelector)s}',
+            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{%(queriesSelector)s, destination=~".*$name.*"})',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+          },
+        },
+      },
+
+      queueEnqueueRateSummary: {
+        name: 'Queue enqueue rate summary',
+        nameShort: 'Queue enqueue rate summary',
+        type: 'counter',
+        description: 'Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.',
+        unit: 'none',
+        sources: {
+          prometheus: {
+            expr: 'activemq_queue_enqueue_count{%(queriesSelector)s, destination=~".*$name.*"}',
+            rangeFunction: 'rate',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      queueDequeueRateSummary: {
+        name: 'Queue dequeue rate summary',
+        nameShort: 'Queue dequeue rate summary',
+        type: 'counter',
+        description: 'Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.',
+        unit: 'none',
+        sources: {
+          prometheus: {
+            expr: 'activemq_queue_dequeue_count{%(queriesSelector)s, destination=~".*$name.*"}',
+            rangeFunction: 'rate',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      queueAverageEnqueueTimeSummary: {
+        name: 'Queue average enqueue time summary',
+        nameShort: 'Queue average enqueue time summary',
+        type: 'gauge',
+        description: 'Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.',
+        unit: 'none',
+        sources: {
+          prometheus: {
+            expr: 'activemq_queue_average_enqueue_time{%(queriesSelector)s, destination=~".*$name.*"}',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      queueAverageMessageSizeSummary: {
+        name: 'Queue average message size summary',
+        nameShort: 'Queue average message size summary',
+        type: 'gauge',
+        description: 'Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.',
+        unit: 'none',
+        sources: {
+          prometheus: {
+            expr: 'activemq_queue_average_message_size{%(queriesSelector)s, destination=~".*$name.*"}',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },

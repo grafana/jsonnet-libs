@@ -3,6 +3,23 @@ local g = import './g.libsonnet';
 // Use g.util.grid.wrapPanels() to import into custom dashboard
 {
   new(this): {
+    // Cluster overview
+    clusterOverview:
+      g.panel.row.new('Cluster Overview')
+      + g.panel.row.withPanels(
+        [
+          this.grafana.panels.clustersCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.brokerCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.producersCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.consumersCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.enqueueRatePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.dequeueRatePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.averageTemporaryMemoryUsagePanel + g.panel.stat.gridPos.withW(8),
+          this.grafana.panels.averageStoreMemoryUsagePanel + g.panel.stat.gridPos.withW(8),
+          this.grafana.panels.averageBrokerMemoryUsagePanel + g.panel.stat.gridPos.withW(8),
+        ]
+      ),
+
     // Broker overview
     broker:
       g.panel.row.new('Broker Overview')
@@ -29,6 +46,7 @@ local g = import './g.libsonnet';
           this.grafana.panels.queueAverageEnqueueTimePanel + g.panel.timeSeries.gridPos.withW(8),
           this.grafana.panels.queueExpiredRatePanel + g.panel.timeSeries.gridPos.withW(8),
           this.grafana.panels.queueAverageMessageSizePanel + g.panel.timeSeries.gridPos.withW(8),
+          this.grafana.panels.queueSummaryPanel + g.panel.table.gridPos.withW(24),
         ]
       ),
 
@@ -46,6 +64,7 @@ local g = import './g.libsonnet';
           this.grafana.panels.topicAverageEnqueueTimePanel + g.panel.timeSeries.gridPos.withW(8),
           this.grafana.panels.topicExpiredRatePanel + g.panel.timeSeries.gridPos.withW(8),
           this.grafana.panels.topicAverageMessageSizePanel + g.panel.timeSeries.gridPos.withW(8),
+          this.grafana.panels.topicSummaryPanel + g.panel.table.gridPos.withW(24),
         ]
       ),
   },

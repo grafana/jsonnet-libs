@@ -43,7 +43,7 @@
             },
             "id": 1,
             "panels": [ ],
-            "title": "Broker Overview",
+            "title": "Cluster Overview",
             "type": "row"
          },
          {
@@ -51,7 +51,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of Apache ActiveMQ brokers that are online.",
+            "description": "Number of Apache ActiveMQ clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -74,40 +74,28 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count by () (activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "count(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Brokers online"
+                  "legendFormat": "{{instance}}: Count",
+                  "refId": "Clusters"
                }
             ],
-            "title": "Brokers online",
+            "title": "Clusters",
             "type": "stat"
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "description": "The percentage of memory used by both topics and queues across brokers.",
+            "description": "Number of broker instances across clusters.",
             "fieldConfig": {
                "defaults": {
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
                }
             },
             "gridPos": {
@@ -117,47 +105,35 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "count(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
-                  "refId": "Broker memory usage"
+                  "legendFormat": "{{instance}}: Brokers",
+                  "refId": "Brokers"
                }
             ],
-            "title": "Average broker memory usage",
-            "type": "gauge"
+            "title": "Brokers",
+            "type": "stat"
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "description": "The percentage of store used by both topics and queues across brokers.",
+            "description": "Number of message producers active on destinations across clusters.",
             "fieldConfig": {
                "defaults": {
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
                }
             },
             "gridPos": {
@@ -167,47 +143,35 @@
                "y": 1
             },
             "id": 4,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "sum (activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
-                  "refId": "Broker store usage"
+                  "legendFormat": "{{instance}}: Producers",
+                  "refId": "Producers"
                }
             ],
-            "title": "Average broker store usage",
-            "type": "gauge"
+            "title": "Producers",
+            "type": "stat"
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "description": "The percentage of temporary storage used by both topics and queues across brokers.",
+            "description": "The number of consumers subscribed to destinations across clusters.",
             "fieldConfig": {
                "defaults": {
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
                }
             },
             "gridPos": {
@@ -217,57 +181,109 @@
                "y": 1
             },
             "id": 5,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "sum (activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
-                  "refId": "Broker temporary usage"
+                  "legendFormat": "{{instance}}: Consumers",
+                  "refId": "Consumers"
                }
             ],
-            "title": "Average broker temporary usage",
-            "type": "gauge"
+            "title": "Consumers",
+            "type": "stat"
          },
          {
-            "collapsed": false,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of messages that have been sent to destinations in a cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
+            },
             "gridPos": {
-               "h": 1,
-               "w": 0,
+               "h": 8,
+               "w": 12,
                "x": 0,
                "y": 9
             },
             "id": 6,
-            "panels": [ ],
-            "title": "Queues",
-            "type": "row"
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{activemq_cluster}}",
+                  "refId": "Enqueue / $__interval"
+               }
+            ],
+            "title": "Enqueue / 2m",
+            "type": "timeseries"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of active queues.",
+            "description": "Number of messages that have been acknowledged (and removed) from destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   }
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 0,
-               "y": 10
+               "w": 12,
+               "x": 12,
+               "y": 9
             },
             "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -275,37 +291,51 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Queue count"
+                  "interval": "2m",
+                  "legendFormat": "{{activemq_cluster}}",
+                  "refId": "Dequeue / $__interval"
                }
             ],
-            "title": "Queue count",
-            "type": "stat"
+            "title": "Dequeue / 2m",
+            "type": "timeseries"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total number of messages in all queues.",
+            "description": "Average percentage of temporary memory used across clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "green",
                      "mode": "fixed"
-                  }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "unit": "percentunit"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 10
+               "w": 8,
+               "x": 0,
+               "y": 17
             },
             "id": 8,
+            "options": {
+               "colorMode": "value",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -313,37 +343,50 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "avg by (activemq_cluster, job) (activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Total queue size"
+                  "legendFormat": "{{activemq_cluster}}",
+                  "refId": "Average temporary memory usage"
                }
             ],
-            "title": "Total queue size",
-            "type": "stat"
+            "title": "Average temporary memory usage",
+            "type": "bargauge"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total number of queue producers.",
+            "description": "Average percentage of store memory used across clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "green",
                      "mode": "fixed"
-                  }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "unit": "percentunit"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 10
+               "w": 8,
+               "x": 8,
+               "y": 17
             },
             "id": 9,
+            "options": {
+               "colorMode": "value",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -351,88 +394,48 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "avg by (activemq_cluster, job) (activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Total producers"
+                  "legendFormat": "{{activemq_cluster}}",
+                  "refId": "Average store memory usage"
                }
             ],
-            "title": "Total queue producers",
-            "type": "stat"
+            "title": "Average store memory usage",
+            "type": "bargauge"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total number of queue consumers.",
+            "description": "Average percentage of broker memory used across clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "green",
                      "mode": "fixed"
-                  }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "unit": "percentunit"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 10
+               "w": 8,
+               "x": 16,
+               "y": 17
             },
             "id": 10,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum (activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Total consumers"
-               }
-            ],
-            "title": "Total queue consumers",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages being enqueued to queues.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 18
-            },
-            "id": 11,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
+               "colorMode": "value",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
                }
             },
             "pluginVersion": "v11.0.0",
@@ -442,663 +445,15 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "avg by (activemq_cluster, job) (activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Enqueue rate"
+                  "legendFormat": "{{activemq_cluster}}",
+                  "refId": "Average broker memory usage"
                }
             ],
-            "title": "Queue enqueue rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages being dequeued from queues.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 18
-            },
-            "id": 12,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Dequeue rate"
-               }
-            ],
-            "title": "Queue dequeue rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average time to enqueue messages to queues.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "ms"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 0,
-               "y": 26
-            },
-            "id": 13,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Average enqueue time"
-               }
-            ],
-            "title": "Queue average enqueue time",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages expiring in queues.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 26
-            },
-            "id": 14,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Expired rate"
-               }
-            ],
-            "title": "Queue expired rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average size of messages in queues.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 54,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 26
-            },
-            "id": 15,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Average message size"
-               }
-            ],
-            "title": "Queue average message size",
-            "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 34
-            },
-            "id": 16,
-            "panels": [ ],
-            "title": "Topics",
-            "type": "row"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Number of active topics (excluding advisory topics).",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  }
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 6,
-               "x": 0,
-               "y": 35
-            },
-            "id": 17,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "count (activemq_topic_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Topic count"
-               }
-            ],
-            "title": "Topic count",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Total number of topic producers.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  }
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 35
-            },
-            "id": 18,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum (activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Total producers"
-               }
-            ],
-            "title": "Total topic producers",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Total number of topic consumers.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  }
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 35
-            },
-            "id": 19,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Total consumers"
-               }
-            ],
-            "title": "Total topic consumers",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average number of consumers per topic.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  }
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 35
-            },
-            "id": 20,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "__auto",
-                  "refId": "Average consumers per topic"
-               }
-            ],
-            "title": "Average consumers per topic",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages being enqueued to topics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 43
-            },
-            "id": 21,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Enqueue rate"
-               }
-            ],
-            "title": "Topic enqueue rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages being dequeued from topics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 43
-            },
-            "id": 22,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Dequeue rate"
-               }
-            ],
-            "title": "Topic dequeue rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average time to enqueue messages to topics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "ms"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 0,
-               "y": 51
-            },
-            "id": 23,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Average enqueue time"
-               }
-            ],
-            "title": "Topic average enqueue time",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Rate of messages expiring in topics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "/ sec"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 51
-            },
-            "id": 24,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Expired rate"
-               }
-            ],
-            "title": "Topic expired rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average size of messages in topics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 54,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 51
-            },
-            "id": 25,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Average message size"
-               }
-            ],
-            "title": "Topic average message size",
-            "type": "timeseries"
+            "title": "Average broker memory usage",
+            "type": "bargauge"
          }
       ],
       "refresh": "1m",

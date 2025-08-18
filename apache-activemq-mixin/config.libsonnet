@@ -31,6 +31,7 @@
   alertsHighTemporaryMemoryUsage: 70,  // %
 
   signals+: {
+    clusters: (import './signals/clusters.libsonnet')(this),
     broker: (import './signals/broker.libsonnet')(this),
     queues: (import './signals/queues.libsonnet')(this),
     topics: (import './signals/topics.libsonnet')(this),

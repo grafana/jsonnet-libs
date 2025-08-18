@@ -119,7 +119,7 @@
                   "refId": "Total producers"
                }
             ],
-            "title": "Total topic producers",
+            "title": "Producers",
             "type": "stat"
          },
          {
@@ -157,7 +157,7 @@
                   "refId": "Total consumers"
                }
             ],
-            "title": "Total topic consumers",
+            "title": "Consumers",
             "type": "stat"
          },
          {
@@ -241,15 +241,15 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Enqueue rate"
+                  "refId": "Top topics by enqueue rate"
                }
             ],
-            "title": "Topic enqueue rate",
+            "title": "Top topics by enqueue rate",
             "type": "timeseries"
          },
          {
@@ -295,15 +295,15 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Dequeue rate"
+                  "refId": "Top topics by dequeue rate"
                }
             ],
-            "title": "Topic dequeue rate",
+            "title": "Top topics by dequeue rate",
             "type": "timeseries"
          },
          {
@@ -349,14 +349,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Average enqueue time"
+                  "refId": "Top topics by average enqueue time"
                }
             ],
-            "title": "Topic average enqueue time",
+            "title": "Top topics by average enqueue time",
             "type": "timeseries"
          },
          {
@@ -402,15 +402,15 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval])",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
-                  "refId": "Expired rate"
+                  "refId": "Top topics by expired rate"
                }
             ],
-            "title": "Topic expired rate",
+            "title": "Top topics by expired rate",
             "type": "timeseries"
          },
          {
@@ -465,6 +465,228 @@
             ],
             "title": "Topic average message size",
             "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Enqueue rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Dequeue rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Average enqueue time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Average message size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "ActiveMQ cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "Cluster link",
+                                 "url": "d/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "Instance link",
+                                 "url": "d/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 25
+            },
+            "id": 11,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": [
+                     ""
+                  ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}: Enqueue rate",
+                  "refId": "Enqueue rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}: Dequeue rate",
+                  "refId": "Dequeue rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Average enqueue time",
+                  "refId": "Average enqueue time"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Average message size",
+                  "refId": "Average message size"
+               }
+            ],
+            "title": "Topic summary",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "destination",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value #Average enqueue time": "Average enqueue time",
+                        "Value #Average message size": "Average message size",
+                        "Value #Dequeue rate": "Dequeue rate",
+                        "Value #Enqueue rate": "Enqueue rate",
+                        "activemq_cluster 1": "ActiveMQ cluster",
+                        "destination": "Destination",
+                        "instance 1": "Instance"
+                     }
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "ActiveMQ cluster",
+                           "Instance",
+                           "Enqueue rate",
+                           "Dequeue rate",
+                           "Average enqueue time",
+                           "Average message size",
+                           "Destination"
+                        ]
+                     }
+                  }
+               }
+            ],
+            "type": "table"
          }
       ],
       "refresh": "1m",
@@ -548,6 +770,64 @@
                "query": "loki",
                "regex": "",
                "type": "datasource"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "4",
+                  "value": "4"
+               },
+               "includeAll": false,
+               "label": "Top topic count",
+               "multi": false,
+               "name": "k_selector",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "2",
+                     "value": "2"
+                  },
+                  {
+                     "selected": false,
+                     "text": "4",
+                     "value": "4"
+                  },
+                  {
+                     "selected": false,
+                     "text": "6",
+                     "value": "6"
+                  },
+                  {
+                     "selected": false,
+                     "text": "8",
+                     "value": "8"
+                  },
+                  {
+                     "selected": false,
+                     "text": "10",
+                     "value": "10"
+                  }
+               ],
+               "query": "2 : 2,4 : 4,6 : 6,8 : 8,10 : 10",
+               "type": "custom"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+               },
+               "label": "Topic by name",
+               "name": "name",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "",
+                     "value": ""
+                  }
+               ],
+               "query": "",
+               "type": "textbox"
             }
          ]
       },
