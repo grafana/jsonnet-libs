@@ -1,5 +1,5 @@
 local activemqlib = import './main.libsonnet';
-local config = (import './config.libsonnet');
+local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
 local activemq =
   activemqlib.new()
@@ -11,9 +11,20 @@ local activemq =
     }
   );
 
+
+local var_patch = {
+  activemq_cluster+: {
+    label: 'ActiveMQ Cluster',
+  },
+};
+
+
 {
   grafanaDashboards+:: {
-    [fname]: activemq.grafana.dashboards[fname]
+    [fname]:
+      local dashboard = activemq.grafana.dashboards[fname];
+      dashboard + util.patch_variables(dashboard, var_patch)
+
     for fname in std.objectFields(activemq.grafana.dashboards)
   },
 

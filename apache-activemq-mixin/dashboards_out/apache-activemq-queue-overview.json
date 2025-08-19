@@ -7,7 +7,7 @@
             "keepTime": true,
             "title": "Apache ActiveMQ Cluster Overview",
             "type": "link",
-            "url": "/d/apacheactivemq_overview"
+            "url": "/d/apacheactivemq_cluster_overview"
          },
          {
             "keepTime": true,
@@ -533,7 +533,7 @@
                            "value": [
                               {
                                  "title": "Cluster link",
-                                 "url": "d/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
+                                 "url": "d/apacheactivemq_cluster_overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
                               }
                            ]
                         }
@@ -550,7 +550,7 @@
                            "value": [
                               {
                                  "title": "Instance link",
-                                 "url": "d/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
+                                 "url": "d/apacheactivemq_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
                               }
                            ]
                         }
@@ -738,7 +738,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Activemq_cluster",
+               "label": "ActiveMQ Cluster",
                "multi": true,
                "name": "activemq_cluster",
                "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, activemq_cluster)",

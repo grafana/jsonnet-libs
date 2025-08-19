@@ -242,12 +242,11 @@
                   "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
                   "legendFormat": "{{activemq_cluster}}",
                   "refId": "Enqueue / $__interval"
                }
             ],
-            "title": "Enqueue / 2m",
+            "title": "Enqueue / $__interval",
             "type": "timeseries"
          },
          {
@@ -294,12 +293,11 @@
                   "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
                   "legendFormat": "{{activemq_cluster}}",
                   "refId": "Dequeue / $__interval"
                }
             ],
-            "title": "Dequeue / 2m",
+            "title": "Dequeue / $__interval",
             "type": "timeseries"
          },
          {
@@ -522,7 +520,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Activemq_cluster",
+               "label": "ActiveMQ Cluster",
                "multi": true,
                "name": "activemq_cluster",
                "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, activemq_cluster)",
@@ -545,6 +543,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Apache ActiveMQ overview",
-      "uid": "apacheactivemq_overview"
+      "title": "Apache ActiveMQ cluster overview",
+      "uid": "apacheactivemq_cluster_overview"
    }

@@ -16,7 +16,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
 
     {
       'apache-activemq-cluster-overview.json':
-        g.dashboard.new(prefix + ' overview')
+        g.dashboard.new(prefix + ' cluster overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
@@ -28,7 +28,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + root.applyCommon(
           vars.multiInstance,
-          uid + '_overview',
+          uid + '_cluster_overview',
           tags,
           links { activemqOverview+:: {} },
           annotations,
@@ -44,9 +44,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.broker + g.panel.row.withCollapsed(false),
-                this.grafana.rows.queues + g.panel.row.withCollapsed(false),
-                this.grafana.rows.topics + g.panel.row.withCollapsed(false),
+                this.grafana.rows.instance + g.panel.row.withCollapsed(false),
+                this.grafana.rows.instanceJVM + g.panel.row.withCollapsed(false),
               ]
             ),
           )

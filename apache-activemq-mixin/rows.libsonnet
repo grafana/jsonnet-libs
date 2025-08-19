@@ -20,6 +20,35 @@ local g = import './g.libsonnet';
         ]
       ),
 
+    instance:
+      g.panel.row.new('Instance')
+      + g.panel.row.withPanels(
+        [
+          this.grafana.panels.instanceBrokerMemoryUsagePanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.instanceAverageStoreUsagePanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.instanceAverageBrokerMemoryUsagePanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.instanceAverageTemporaryMemoryUsagePanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.activeMQAlertsPanel + g.panel.stat.gridPos.withW(12),
+          this.grafana.panels.producerCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.consumerCountPanel + g.panel.stat.gridPos.withW(6),
+          this.grafana.panels.queueSizePanel + g.panel.stat.gridPos.withW(12),
+          this.grafana.panels.destinationMemoryUsagePanel + g.panel.stat.gridPos.withW(12),
+          this.grafana.panels.enqueueRatePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.dequeueRatePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.averageEnqueueTimePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.expiredMessagesPanel + g.panel.timeSeries.gridPos.withW(12),
+        ]
+      ),
+
+    instanceJVM:
+      g.panel.row.new('JVM resources')
+      + g.panel.row.withPanels(
+        [
+          this.grafana.panels.garbageCollectionDurationPanel + g.panel.stat.gridPos.withW(12),
+          this.grafana.panels.garbageCollectionCountPanel + g.panel.stat.gridPos.withW(12),
+        ]
+      ),
+
     // Broker overview
     broker:
       g.panel.row.new('Broker Overview')

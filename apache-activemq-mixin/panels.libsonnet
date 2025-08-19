@@ -38,15 +38,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       enqueueRatePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Enqueue / 2m',
-          targets=[signals.clusters.enqueueRate.asTarget() { interval: '2m' }],
+          'Enqueue / $__interval',
+          targets=[signals.clusters.enqueueRate.asTarget()],
           description='Number of messages that have been sent to destinations in a cluster.'
         ),
 
       dequeueRatePanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Dequeue / 2m',
-          targets=[signals.clusters.dequeueRate.asTarget() { interval: '2m' }],
+          'Dequeue / $__interval',
+          targets=[signals.clusters.dequeueRate.asTarget()],
           description='Number of messages that have been acknowledged (and removed) from destinations in a cluster.'
         ),
 
@@ -141,6 +141,159 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.broker.brokersOnline.asTarget()],
           description='Number of Apache ActiveMQ brokers that are online.'
         ),
+
+      instanceBrokerMemoryUsagePanel:
+        g.panel.gauge.new(title='Average broker memory usage')
+        + g.panel.gauge.queryOptions.withTargets([
+          signals.broker.memoryUsage.asTarget(),
+        ])
+        + g.panel.gauge.panelOptions.withDescription('The percentage of memory used by both topics and queues across brokers.')
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.thresholdStep.withColor('green'),
+        ])
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+      instanceAverageStoreUsagePanel:
+        g.panel.gauge.new(title='Average store memory usage')
+        + g.panel.gauge.queryOptions.withTargets([
+          signals.broker.storeUsage.asTarget(),
+        ])
+        + g.panel.gauge.panelOptions.withDescription('The percentage of store memory used by both topics and queues across brokers.')
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.thresholdStep.withColor('green'),
+        ])
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+
+      instanceAverageBrokerMemoryUsagePanel:
+        g.panel.gauge.new(title='Average temporary memory usage')
+        + g.panel.gauge.queryOptions.withTargets([
+          signals.broker.tempUsage.asTarget(),
+        ])
+        + g.panel.gauge.panelOptions.withDescription('The percentage of temporary memory used by both topics and queues across brokers.')
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.thresholdStep.withColor('green'),
+        ])
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+      instanceAverageTemporaryMemoryUsagePanel:
+        commonlib.panels.generic.stat.base.new(
+          'Unacknowledged messages / $__interval',
+          targets=[signals.broker.unacknowledgedMessages.asTarget()],
+          description='Recent number of unacknowledged messages on the broker.'
+        ),
+
+      activeMQAlertsPanel: {
+        datasource: {
+          uid: 'datasource',
+        },
+        targets: [],
+        type: 'alertlist',
+        title: 'ActiveMQ alerts',
+        description: 'Firing alerts for Apache ActiveMQ environment.',
+        options: {
+          alertName: '',
+          dashboardAlerts: false,
+          alertInstanceLabelFilter: '{%(queriesSelector)s}',
+          groupBy: [],
+          datasource: {
+            type: 'prometheus',
+            uid: 'datasource',
+          },
+          groupMode: 'default',
+          maxItems: 5,
+          sortOrder: 1,
+          stateFilter: {
+            'error': true,
+            firing: true,
+            noData: true,
+            normal: true,
+            pending: true,
+          },
+          viewMode: 'list',
+        },
+      },
+
+      producerCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Producers',
+          targets=[signals.broker.producerCount.asTarget()],
+          description='The number of producers attached to destinations.'
+        ),
+
+      consumerCountPanel:
+        commonlib.panels.generic.stat.base.new(
+          'Consumers',
+          targets=[signals.broker.consumerCount.asTarget()],
+          description='The number of consumers subscribed to destinations on the broker.'
+        ),
+
+      queueSizePanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Queue size',
+          targets=[signals.broker.queueSize.asTarget()],
+          description='Number of messages on queue destinations, including any that have been dispatched but not yet acknowledged.'
+        ),
+
+      destinationMemoryUsagePanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Destination memory usage',
+          targets=[
+            signals.broker.queueMemoryUsage.asTarget(),
+            signals.broker.topicMemoryUsage.asTarget(),
+          ],
+          description='The percentage of memory being used by topic and queue destinations.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(25)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+
+
+      averageEnqueueTimePanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Average enqueue time',
+          targets=[
+            signals.broker.queueAverageEnqueueTime.asTarget(),
+            signals.broker.topicAverageEnqueueTime.asTarget(),
+          ],
+          description='Average time a message was held across all destinations.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(25)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+
+      expiredMessagesPanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Expired messages / $__interval',
+          targets=[
+            signals.broker.queueExpiredMessages.asTarget(),
+            signals.broker.topicExpiredMessages.asTarget(),
+          ],
+          description='Number of messages across destinations that are expired.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(25)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+
+      garbageCollectionDurationPanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Garbage collection duration',
+          targets=[signals.broker.garbageCollectionDuration.asTarget()],
+          description='The time spent performing recent garbage collections'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('s')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(25)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+
+      garbageCollectionCountPanel:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Garbage collection count / $__interval',
+          targets=[signals.broker.garbageCollectionCount.asTarget()],
+          description='The recent increase in the number of garbage collection events for the JVM.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(25)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // Queue panels
       queueCountPanel:
@@ -252,7 +405,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: 'Cluster link',
-              url: 'd/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
+              url: 'd/apacheactivemq_cluster_overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
             },
           ]),
         ])
@@ -261,7 +414,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: 'Instance link',
-              url: 'd/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
+              url: 'd/apacheactivemq_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
             },
           ]),
         ])
@@ -443,7 +596,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: 'Cluster link',
-              url: 'd/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
+              url: 'd/apacheactivemq_cluster_overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
             },
           ]),
 
@@ -451,7 +604,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: 'Instance link',
-              url: 'd/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
+              url: 'd/apacheactivemq_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
             },
           ]),
         ])
