@@ -89,7 +89,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum (increase(activemq_message_total[$__interval:]))',
+            expr: 'sum (increase(activemq_message_total{%(queriesSelector)s}[$__interval:]))',
             legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
           },
         },
