@@ -32,7 +32,7 @@
 
   signals+: {
     clusters: (import './signals/clusters.libsonnet')(this),
-    broker: (import './signals/broker.libsonnet')(this),
+    instance: (import './signals/instance.libsonnet')(this),
     queues: (import './signals/queues.libsonnet')(this),
     topics: (import './signals/topics.libsonnet')(this),
   },

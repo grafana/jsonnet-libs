@@ -62,7 +62,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         ),
 
       'apache-activemq-queue-overview.json':
-        g.dashboard.new(prefix + ' queues')
+        g.dashboard.new(prefix + ' queue overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
@@ -94,7 +94,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         ),
 
       'apache-activemq-topic-overview.json':
-        g.dashboard.new(prefix + ' topics')
+        g.dashboard.new(prefix + ' topic overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(

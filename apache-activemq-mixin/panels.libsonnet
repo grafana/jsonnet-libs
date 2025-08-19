@@ -99,7 +99,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       memoryUsagePanel:
         g.panel.gauge.new(title='Average broker memory usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.memoryUsage.asTarget(),
+          signals.instance.memoryUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of memory used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -112,7 +112,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       storeUsagePanel:
         g.panel.gauge.new(title='Average broker store usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.storeUsage.asTarget(),
+          signals.instance.storeUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of store used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -125,7 +125,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       tempUsagePanel:
         g.panel.gauge.new(title='Average broker temporary usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.tempUsage.asTarget(),
+          signals.instance.tempUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of temporary storage used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -138,14 +138,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       brokersOnlinePanel:
         commonlib.panels.generic.stat.base.new(
           'Brokers online',
-          targets=[signals.broker.brokersOnline.asTarget()],
+          targets=[signals.instance.brokersOnline.asTarget()],
           description='Number of Apache ActiveMQ brokers that are online.'
         ),
 
       instanceBrokerMemoryUsagePanel:
         g.panel.gauge.new(title='Average broker memory usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.memoryUsage.asTarget(),
+          signals.instance.memoryUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of memory used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -156,7 +156,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       instanceAverageStoreUsagePanel:
         g.panel.gauge.new(title='Average store memory usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.storeUsage.asTarget(),
+          signals.instance.storeUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of store memory used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -168,7 +168,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       instanceAverageBrokerMemoryUsagePanel:
         g.panel.gauge.new(title='Average temporary memory usage')
         + g.panel.gauge.queryOptions.withTargets([
-          signals.broker.tempUsage.asTarget(),
+          signals.instance.tempUsage.asTarget(),
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of temporary memory used by both topics and queues across brokers.')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
@@ -179,7 +179,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       instanceAverageTemporaryMemoryUsagePanel:
         commonlib.panels.generic.stat.base.new(
           'Unacknowledged messages / $__interval',
-          targets=[signals.broker.unacknowledgedMessages.asTarget()],
+          targets=[signals.instance.unacknowledgedMessages.asTarget()],
           description='Recent number of unacknowledged messages on the broker.'
         ),
 
@@ -217,21 +217,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       producerCountPanel:
         commonlib.panels.generic.stat.base.new(
           'Producers',
-          targets=[signals.broker.producerCount.asTarget()],
+          targets=[signals.instance.producerCount.asTarget()],
           description='The number of producers attached to destinations.'
         ),
 
       consumerCountPanel:
         commonlib.panels.generic.stat.base.new(
           'Consumers',
-          targets=[signals.broker.consumerCount.asTarget()],
+          targets=[signals.instance.consumerCount.asTarget()],
           description='The number of consumers subscribed to destinations on the broker.'
         ),
 
       queueSizePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Queue size',
-          targets=[signals.broker.queueSize.asTarget()],
+          targets=[signals.instance.queueSize.asTarget()],
           description='Number of messages on queue destinations, including any that have been dispatched but not yet acknowledged.'
         ),
 
@@ -239,8 +239,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Destination memory usage',
           targets=[
-            signals.broker.queueMemoryUsage.asTarget(),
-            signals.broker.topicMemoryUsage.asTarget(),
+            signals.instance.queueMemoryUsage.asTarget(),
+            signals.instance.topicMemoryUsage.asTarget(),
           ],
           description='The percentage of memory being used by topic and queue destinations.'
         )
@@ -253,8 +253,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Average enqueue time',
           targets=[
-            signals.broker.queueAverageEnqueueTime.asTarget(),
-            signals.broker.topicAverageEnqueueTime.asTarget(),
+            signals.instance.queueAverageEnqueueTime.asTarget(),
+            signals.instance.topicAverageEnqueueTime.asTarget(),
           ],
           description='Average time a message was held across all destinations.'
         )
@@ -266,8 +266,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Expired messages / $__interval',
           targets=[
-            signals.broker.queueExpiredMessages.asTarget(),
-            signals.broker.topicExpiredMessages.asTarget(),
+            signals.instance.queueExpiredMessages.asTarget(),
+            signals.instance.topicExpiredMessages.asTarget(),
           ],
           description='Number of messages across destinations that are expired.'
         )
@@ -278,7 +278,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       garbageCollectionDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Garbage collection duration',
-          targets=[signals.broker.garbageCollectionDuration.asTarget()],
+          targets=[signals.instance.garbageCollectionDuration.asTarget()],
           description='The time spent performing recent garbage collections'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
@@ -288,7 +288,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       garbageCollectionCountPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Garbage collection count / $__interval',
-          targets=[signals.broker.garbageCollectionCount.asTarget()],
+          targets=[signals.instance.garbageCollectionCount.asTarget()],
           description='The recent increase in the number of garbage collection events for the JVM.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')

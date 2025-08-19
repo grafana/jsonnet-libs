@@ -5,21 +5,27 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Apache ActiveMQ Cluster Overview",
-            "type": "link",
-            "url": "/d/apacheactivemq_cluster_overview"
-         },
-         {
-            "keepTime": true,
-            "title": "Apache ActiveMQ Queues",
+            "title": "Apache ActiveMQ queue overview",
             "type": "link",
             "url": "/d/apacheactivemq_queues"
          },
          {
             "keepTime": true,
-            "title": "Apache ActiveMQ Topics",
+            "title": "Apache ActiveMQ topic overview",
             "type": "link",
             "url": "/d/apacheactivemq_topics"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ cluster overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ instance overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_instance_overview"
          },
          {
             "asDropdown": true,
