@@ -176,18 +176,17 @@ local utils = commonlib.utils;
 
       geoMetricByCountryGeomapPanel:
         g.panel.geomap.new('Geographic Distribution')
+        + g.panel.geomap.panelOptions.withDescription('Geomap panel currently showing $geo_metric for the zone.')
         + g.panel.geomap.queryOptions.withTargets([
-          signals.geomap.geoMapByCountry.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInterval('1m')
+          signals.geomap.geoMapByCountry.asTarget() { interval: '1m' }
           + g.query.prometheus.withLegendFormat(''),
         ]),
       geoMetricsByCountryTablePanel:
         g.panel.table.new('Geographic Distribution')
+        + g.panel.table.panelOptions.withDescription('Table currently showing $geo_metric for the zone.')
         + g.panel.table.queryOptions.withTargets([
           signals.geomap.geoMetricsByCountryTable.asTarget()
           + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInterval('1m')
           + g.query.prometheus.withLegendFormat(''),
         ]),
     },

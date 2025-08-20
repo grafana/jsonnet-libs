@@ -1,7 +1,7 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job=~"integrations/cloudflare"',
+  filteringSelector: 'job="integrations/cloudflare"',
   groupLabels: ['job', 'cluster', 'zone', 'script_name'],
   instanceLabels: ['instance'],
 

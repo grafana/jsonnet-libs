@@ -6,7 +6,7 @@ groups:
             description: The number of detected threats targeting the zone {{$labels.zone}} is {{ printf "%.0f" $value }} which is greater than the threshold of 3.
             summary: There are detected threats targeting the zone.
           expr: |
-            sum without (instance) (increase(cloudflare_zone_threats_total{job=~"integrations/cloudflare"}[5m])) > 3
+            sum without (instance) (increase(cloudflare_zone_threats_total[5m])) > 3
           for: 5m
           labels:
             severity: critical
@@ -15,7 +15,7 @@ groups:
             description: The rate of requests to {{$labels.zone}} is {{ printf "%.0f" $value }}% of the prior 50 minute baseline which is above the threshold of 150%.
             summary: A high spike in requests is occurring which may indicate an attack or unexpected load.
           expr: |
-            sum without (instance) (100 * (rate(cloudflare_zone_requests_total{job=~"integrations/cloudflare"}[10m]) / clamp_min(rate(cloudflare_zone_requests_total{job=~"integrations/cloudflare"}[50m] offset 10m), 1))) > 150
+            sum without (instance) (100 * (rate(cloudflare_zone_requests_total[10m]) / clamp_min(rate(cloudflare_zone_requests_total[50m] offset 10m), 1))) > 150
           for: 5m
           labels:
             severity: warning
@@ -24,7 +24,7 @@ groups:
             description: The number of {{$labels.status}} HTTP status codes occurring in the zone {{$labels.zone}} is {{ printf "%.0f" $value }} which is greater than the threshold of 100.
             summary: A high number of 4xx or 5xx HTTP status codes are occurring.
           expr: |
-            sum without (instance) (increase(cloudflare_zone_requests_status{job=~"integrations/cloudflare",status=~"4.*|5.*"}[5m])) > 100
+            sum without (instance) (increase(cloudflare_zone_requests_status{status=~"4.*|5.*"}[5m])) > 100
           for: 5m
           labels:
             severity: warning
@@ -33,7 +33,7 @@ groups:
             description: The pool {{$labels.pool_name}} in zone {{$labels.zone}} is currently down and unhealthy.
             summary: There are unhealthy pools.
           expr: |
-            sum without (instance, load_balancer_name) (cloudflare_zone_pool_health_status{job=~"integrations/cloudflare"}) == 0
+            sum without (instance, load_balancer_name) (cloudflare_zone_pool_health_status) == 0
           for: 5m
           labels:
             severity: critical

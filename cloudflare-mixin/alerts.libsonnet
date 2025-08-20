@@ -7,7 +7,7 @@
           {
             alert: 'CloudflareHighThreatCount',
             expr: |||
-              sum without (instance) (increase(cloudflare_zone_threats_total{%(filteringSelector)s}[5m])) > %(alertsHighThreatCount)s
+              sum without (instance) (increase(cloudflare_zone_threats_total[5m])) > %(alertsHighThreatCount)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -21,7 +21,7 @@
           {
             alert: 'CloudflareHighRequestRate',
             expr: |||
-              sum without (instance) (100 * (rate(cloudflare_zone_requests_total{%(filteringSelector)s}[10m]) / clamp_min(rate(cloudflare_zone_requests_total{%(filteringSelector)s}[50m] offset 10m), 1))) > %(alertsHighRequestRate)s
+              sum without (instance) (100 * (rate(cloudflare_zone_requests_total[10m]) / clamp_min(rate(cloudflare_zone_requests_total[50m] offset 10m), 1))) > %(alertsHighRequestRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -35,7 +35,7 @@
           {
             alert: 'CloudflareHighHTTPErrorCodes',
             expr: |||
-              sum without (instance) (increase(cloudflare_zone_requests_status{%(filteringSelector)s,status=~"4.*|5.*"}[5m])) > %(alertsHighHTTPErrorCodeCount)s
+              sum without (instance) (increase(cloudflare_zone_requests_status{status=~"4.*|5.*"}[5m])) > %(alertsHighHTTPErrorCodeCount)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -49,7 +49,7 @@
           {
             alert: 'CloudflareUnhealthyPools',
             expr: |||
-              sum without (instance, load_balancer_name) (cloudflare_zone_pool_health_status{%(filteringSelector)s}) == 0
+              sum without (instance, load_balancer_name) (cloudflare_zone_pool_health_status) == 0
             ||| % this.config,
             'for': '5m',
             labels: {
