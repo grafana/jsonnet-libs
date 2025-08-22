@@ -48,22 +48,7 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Rate of requests to the zone.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "reqps"
-               }
+               "uid": "prometheus"
             },
             "gridPos": {
                "h": 8,
@@ -73,51 +58,32 @@
             },
             "id": 2,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+               "alertInstanceLabelFilter": "{job=~\"${job:regex}\", instance=~\"${instance:regex}\"}",
+               "alertName": "",
+               "dashboardAlerts": false,
+               "groupBy": [ ],
+               "groupMode": "default",
+               "maxItems": 5,
+               "sortOrder": 1,
+               "stateFilter": {
+                  "error": true,
+                  "firing": true,
+                  "noData": true,
+                  "normal": true,
+                  "pending": true
                },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
+               "viewMode": "list"
             },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "rate(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ zone }}",
-                  "refId": "Zone requests total"
-               }
-            ],
-            "title": "Requests",
-            "type": "timeseries"
+            "targets": [ ],
+            "title": "Alerts",
+            "type": "alertlist"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Percentage of cached requests.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "percent"
-               }
-            },
+            "description": "A table view of the pools in your zone showing their health and rate of requests.",
             "gridPos": {
                "h": 8,
                "w": 12,
@@ -125,16 +91,6 @@
                "y": 1
             },
             "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -142,33 +98,44 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_cached{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:]) / increase(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:])",
-                  "format": "time_series",
+                  "expr": "cloudflare_zone_pool_health_status{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "format": "table",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
-                  "refId": "Zone cached requests"
+                  "legendFormat": "{{ pool_name }}",
+                  "refId": "Pool status"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_pool_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "table",
+                  "instant": false,
+                  "legendFormat": "{{ pool_name }}",
+                  "refId": "Request rate"
                }
             ],
-            "title": "Cached requests",
-            "type": "timeseries"
+            "title": "Pool status",
+            "type": "table"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of threats blocked.",
+            "description": "The rate at which requests to the zone occur.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "short"
+                  "unit": "reqps"
                }
             },
             "gridPos": {
@@ -195,14 +162,14 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_threats_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ zone }}",
-                  "refId": "Zone threats"
+                  "refId": "Zone requests total"
                }
             ],
-            "title": "Threats",
+            "title": "Request rate",
             "type": "timeseries"
          },
          {
@@ -210,18 +177,40 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total bandwidth usage.",
+            "description": "The percentage of requests to the zone that are cached.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 54,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false
+                     "spanNulls": false,
+                     "thresholdsStyle": {
+                        "mode": "area"
+                     }
                   },
-                  "unit": "bytes"
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "percentage",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 50
+                        },
+                        {
+                           "color": "green",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
                }
             },
             "gridPos": {
@@ -248,6 +237,112 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
+                  "expr": "increase(cloudflare_zone_requests_cached{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:]) / increase(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone cached requests"
+               }
+            ],
+            "title": "Cached requests / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of threats that have targeted the zone.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_threats_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone threats"
+               }
+            ],
+            "title": "Threats / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate at which all bandwidth in the zone occurs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 17
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
                   "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
@@ -255,32 +350,20 @@
                   "refId": "Zone bandwidth"
                }
             ],
-            "title": "Bandwidth",
+            "title": "Bandwidth rate",
             "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 17
-            },
-            "id": 6,
-            "panels": [ ],
-            "title": "Zone bandwidth",
-            "type": "row"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "SSL encrypted and cached bandwidth.",
+            "description": "The amount of cached and encrypted bandwidth that occurs in the zone.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 54,
+                     "drawStyle": "bars",
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -294,9 +377,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 25
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -332,7 +415,7 @@
                   "refId": "Zone cached bandwidth"
                }
             ],
-            "title": "SSL encrypted bandwidth",
+            "title": "Bandwidth type / $__interval",
             "type": "timeseries"
          },
          {
@@ -340,15 +423,16 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Bandwidth usage by content type.",
+            "description": "The content types that bandwidth is being used for in the zone.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 54,
+                     "drawStyle": "bars",
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
+                     "showPoints": "auto",
                      "spanNulls": false
                   },
                   "unit": "bytes"
@@ -358,9 +442,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 25
             },
-            "id": 8,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -385,48 +469,91 @@
                   "refId": "Zone bandwidth by content type"
                }
             ],
-            "title": "Bandwidth by content type",
+            "title": "Bandwidth content type / $__interval",
             "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 26
-            },
-            "id": 9,
-            "panels": [ ],
-            "title": "Zone visitors",
-            "type": "row"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Unique and repeat visitors.",
+            "description": "The number of zone views by browser family.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 54,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "short"
+                  "unit": "none"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 27
+               "y": 33
             },
             "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_requests_browser_map_page_views_count{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone browser map pageviews"
+               }
+            ],
+            "title": "Browser page views / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of unique and total page views.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 33
+            },
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -462,7 +589,7 @@
                   "refId": "Zone repeat visitors"
                }
             ],
-            "title": "Unique visitors",
+            "title": "Unique page views / $__interval",
             "type": "timeseries"
          },
          {
@@ -470,97 +597,39 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Browser map pageviews count.",
+            "description": "The number of different HTTP status codes used for requests in the zone.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 54,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false
+                     "spanNulls": false,
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
-                  "unit": "short"
+                  "unit": "none"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 27
-            },
-            "id": 11,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "rate(cloudflare_zone_requests_browser_map_page_views_count{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ zone }}",
-                  "refId": "Zone browser map pageviews"
-               }
-            ],
-            "title": "Browser map pageviews",
-            "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
+               "w": 24,
                "x": 0,
-               "y": 35
+               "y": 41
             },
             "id": 12,
-            "panels": [ ],
-            "title": "Zone status and location",
-            "type": "row"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Requests broken down by HTTP status code.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 54,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "short"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 36
-            },
-            "id": 13,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -581,7 +650,7 @@
                   "refId": "Zone requests by status"
                }
             ],
-            "title": "Requests by status",
+            "title": "Request HTTP status / $__interval",
             "type": "timeseries"
          },
          {
@@ -589,37 +658,19 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Requests by colocation center.",
+            "description": "The different colocations being used by the zone and their request rates.",
             "fieldConfig": {
                "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
                   "unit": "reqps"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 36
+               "w": 24,
+               "x": 0,
+               "y": 49
             },
-            "id": 14,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
+            "id": 13,
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -634,113 +685,8 @@
                   "refId": "Zone colocation requests"
                }
             ],
-            "title": "Requests by colocation",
-            "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 44
-            },
-            "id": 15,
-            "panels": [ ],
-            "title": "Load balancer pools",
-            "type": "row"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Health status of the pool (0=unhealthy, 1=healthy).",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  },
-                  "unit": "short"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 45
-            },
-            "id": 16,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "cloudflare_zone_pool_health_status{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ pool_name }}",
-                  "refId": "Pool status"
-               }
-            ],
-            "title": "Pool health status",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Rate of requests to the pool.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "reqps"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 45
-            },
-            "id": 17,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "rate(cloudflare_zone_pool_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ pool_name }}",
-                  "refId": "Request rate"
-               }
-            ],
-            "title": "Pool requests",
-            "type": "timeseries"
+            "title": "Colocation requests",
+            "type": "table"
          }
       ],
       "refresh": "1m",

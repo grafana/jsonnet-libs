@@ -21,10 +21,6 @@ local g = import './g.libsonnet';
             g.util.grid.wrapPanels(
               [
                 this.grafana.rows.zoneOverview + g.panel.row.withCollapsed(false),
-                this.grafana.rows.zoneBandwidth + g.panel.row.withCollapsed(false),
-                this.grafana.rows.zoneVisitors + g.panel.row.withCollapsed(false),
-                this.grafana.rows.zoneStatusLocation + g.panel.row.withCollapsed(false),
-                this.grafana.rows.pools + g.panel.row.withCollapsed(false),
               ]
             )
           )

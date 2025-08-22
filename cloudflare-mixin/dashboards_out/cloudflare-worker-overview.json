@@ -67,7 +67,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 24,
                "x": 0,
                "y": 1
             },
@@ -96,7 +96,7 @@
                   "refId": "Worker CPU time"
                }
             ],
-            "title": "Worker CPU time",
+            "title": "Worker CPU time quantiles",
             "type": "timeseries"
          },
          {
@@ -120,9 +120,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 1
+               "w": 24,
+               "x": 0,
+               "y": 9
             },
             "id": 3,
             "options": {
@@ -149,7 +149,7 @@
                   "refId": "Worker duration"
                }
             ],
-            "title": "Worker duration",
+            "title": "Worker duration quantiles",
             "type": "timeseries"
          },
          {
@@ -175,7 +175,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 9
+               "y": 17
             },
             "id": 4,
             "options": {
@@ -228,7 +228,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 9
+               "y": 17
             },
             "id": 5,
             "options": {
