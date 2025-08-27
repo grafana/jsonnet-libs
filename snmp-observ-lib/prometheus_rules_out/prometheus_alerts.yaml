@@ -4,54 +4,10 @@ groups:
         - alert: SNMPInterfaceFCerrors
           annotations:
             description: |
-                Too many packets with errors (fcIfTxWaitCount) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-            summary: Too many packets with errors (fcIfTxWaitCount) on the FC network interface.
-          expr: |
-            (irate(fcIfTxWaitCount{}[5m])) > 0
-          for: 15m
-          keep_firing_for: 5m
-          labels:
-            severity: warning
-        - alert: SNMPInterfaceFCerrors
-          annotations:
-            description: |
                 Too many packets with errors (fcIfFramesDiscard) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
             summary: Too many packets with errors (fcIfFramesDiscard) on the FC network interface.
           expr: |
             (irate(fcIfFramesDiscard{}[5m])) > 0
-          for: 15m
-          keep_firing_for: 5m
-          labels:
-            severity: warning
-        - alert: SNMPInterfaceFCerrors
-          annotations:
-            description: |
-                Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-            summary: Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on the FC network interface.
-          expr: |
-            (irate(fcIfTxWtAvgBBCreditTransitionToZero{}[5m])) > 0
-          for: 15m
-          keep_firing_for: 5m
-          labels:
-            severity: warning
-        - alert: SNMPInterfaceFCerrors
-          annotations:
-            description: |
-                Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-            summary: Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on the FC network interface.
-          expr: |
-            (irate(fcHCIfBBCreditTransistionFromZero{}[5m])) > 0
-          for: 15m
-          keep_firing_for: 5m
-          labels:
-            severity: warning
-        - alert: SNMPInterfaceFCerrors
-          annotations:
-            description: |
-                Too many packets with errors (fcHCIfBBCreditTransistionToZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-            summary: Too many packets with errors (fcHCIfBBCreditTransistionToZero) on the FC network interface.
-          expr: |
-            (irate(fcHCIfBBCreditTransistionToZero{}[5m])) > 0
           for: 15m
           keep_firing_for: 5m
           labels:

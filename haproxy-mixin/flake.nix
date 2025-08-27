@@ -4,25 +4,34 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs =
     {
-      overlay =
-        (final: prev: {
-          jsonnet-bundler = prev.callPackage ./nix/jsonnet-bundler.nix { pkgs = prev; };
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    {
+      overlay = (
+        final: prev: {
           mixtool = prev.callPackage ./nix/mixtool.nix { pkgs = prev; };
-        });
-    } //
-    (flake-utils.lib.eachDefaultSystem
-      (system:
-        let pkgs = import nixpkgs { inherit system; overlays = [ self.overlay ]; };
-        in
-        {
-          devShell = import ./shell.nix {
-            inherit pkgs;
-          };
-          packages = {
-            haproxy-mixin-build-image = import ./build-image.nix { inherit pkgs; };
-          };
         }
-      ));
+      );
+    }
+    // (flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ self.overlay ];
+        };
+      in
+      {
+        devShell = import ./shell.nix {
+          inherit pkgs;
+        };
+        packages = {
+          haproxy-mixin-build-image = import ./build-image.nix { inherit pkgs; };
+        };
+      }
+    ));
 }
