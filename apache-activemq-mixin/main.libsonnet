@@ -1,7 +1,6 @@
 local alerts = import './alerts.libsonnet';
 local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
-local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
@@ -30,7 +29,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       variables: commonlib.variables.new(
         filteringSelector=this.config.filteringSelector,
         groupLabels=this.config.groupLabels,
-        instanceLabels=this.config.instanceLabels + this.config.activemqLabels,
+        instanceLabels=this.config.instanceLabels,
         varMetric='activemq_memory_usage_ratio',
         customAllValue='.+',
         enableLokiLogs=this.config.enableLokiLogs,

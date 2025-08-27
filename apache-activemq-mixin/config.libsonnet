@@ -1,10 +1,8 @@
 {
   local this = self,
-  enableMultiCluster: false,
   filteringSelector: 'job=~"integrations/apache-activemq"',
-  groupLabels: ['job', 'cluster'],
+  groupLabels: ['job', 'cluster', 'activemq_cluster'],
   instanceLabels: ['instance'],
-  activemqLabels: ['activemq_cluster'],
 
   dashboardTags: [self.uid],
   legendLabels: ['instance', 'activemq_cluster'],
@@ -19,7 +17,7 @@
 
   // logs lib related
   enableLokiLogs: true,
-  logLabels: self.groupLabels + self.instanceLabels + self.activemqLabels,
+  logLabels: self.groupLabels + self.instanceLabels,
   extraLogLabels: [],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

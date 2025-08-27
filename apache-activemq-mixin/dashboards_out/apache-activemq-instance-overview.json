@@ -90,7 +90,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "avg(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}}",
@@ -132,7 +132,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg(activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "avg(activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}}",
@@ -174,7 +174,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg(activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "avg(activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}}",
@@ -212,7 +212,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (increase(activemq_message_total{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum (increase(activemq_message_total{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -287,7 +287,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) + sum(activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum(activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -325,7 +325,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) + sum(activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum(activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -376,7 +376,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -429,7 +429,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -440,7 +440,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
@@ -491,7 +491,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}}",
@@ -542,7 +542,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}}",
@@ -595,7 +595,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -606,7 +606,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
@@ -659,7 +659,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
@@ -670,7 +670,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"}[$__interval:]))",
+                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
@@ -736,7 +736,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration_seconds{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_gc_duration_seconds{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}}",
@@ -789,7 +789,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:])",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}}",
@@ -851,10 +851,10 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "ActiveMQ Cluster",
                "multi": true,
-               "name": "instance",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "name": "activemq_cluster",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -866,10 +866,10 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "ActiveMQ Cluster",
+               "label": "Instance",
                "multi": true,
-               "name": "activemq_cluster",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, activemq_cluster)",
+               "name": "instance",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
