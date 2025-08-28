@@ -96,7 +96,7 @@
           {
             alert: 'AerospikeHighClientReadErrorRate',
             expr: |||
-              sum without(service) (rate(aerospike_namespace_client_read_error[5m])) / (clamp_min(sum without(service) (rate(aerospike_namespace_client_read_error[5m])) + sum without(service) (rate(aerospike_namespace_client_read_success[5m])), 1)) > %(alertsWarningHighClientReadErrorRate)s
+              sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_read_error[5m])) / (clamp_min(sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_read_error[5m])) + sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_read_success[5m])), 1)) > %(alertsWarningHighClientReadErrorRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -114,7 +114,7 @@
           {
             alert: 'AerospikeHighClientWriteErrorRate',
             expr: |||
-              sum without(service) (rate(aerospike_namespace_client_write_error[5m])) / (clamp_min(sum without(service) (rate(aerospike_namespace_client_write_error[5m])) + sum without(service) (rate(aerospike_namespace_client_write_success[5m])), 1)) > %(alertsWarningHighClientWriteErrorRate)s
+              sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_write_error[5m])) / (clamp_min(sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_write_error[5m])) + sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_write_success[5m])), 1)) > %(alertsWarningHighClientWriteErrorRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -132,7 +132,7 @@
           {
             alert: 'AerospikeHighClientUDFErrorRate',
             expr: |||
-              sum without(service) (rate(aerospike_namespace_client_udf_error[5m])) / (clamp_min(sum without(service) (rate(aerospike_namespace_client_udf_error[5m])) + sum without(service) (rate(aerospike_namespace_client_udf_complete[5m])), 1)) > %(alertsWarningHighClientUDFErrorRate)s
+              sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_udf_error[5m])) / (clamp_min(sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_udf_error[5m])) + sum by(instance, aerospike_cluster, ns) (rate(aerospike_namespace_client_udf_complete[5m])), 1)) > %(alertsWarningHighClientUDFErrorRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
