@@ -1,7 +1,9 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
+local topicLegendTemplate = '{{activemq_cluster}} - {{instance}} - {{destination}}';
 
 function(this)
   {
+    topicLegendTemplate: topicLegendTemplate,
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
@@ -22,7 +24,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'count (activemq_topic_queue_size{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '__auto',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -35,7 +37,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum (activemq_topic_producer_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '__auto',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -48,7 +50,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum (activemq_topic_consumer_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '__auto',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -61,7 +63,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg (activemq_topic_consumer_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '__auto',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -74,7 +76,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"}[$__rate_interval]))',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -87,7 +89,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"}[$__rate_interval]))',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -100,7 +102,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -113,7 +115,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_expired_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -127,7 +129,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },
@@ -140,7 +142,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'activemq_topic_average_message_size{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"}',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+            legendCustomTemplate: topicLegendTemplate,
           },
         },
       },

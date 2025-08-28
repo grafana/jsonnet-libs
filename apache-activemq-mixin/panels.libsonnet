@@ -503,6 +503,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages being enqueued to topics.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -513,6 +515,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages being dequeued from topics.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -523,6 +527,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Average time to enqueue messages to topics.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -533,6 +539,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages expiring in topics.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -543,6 +551,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Average size of messages in topics.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(54)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -553,6 +563,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Top topics by consumers.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.withOrientation('horizontal')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
 

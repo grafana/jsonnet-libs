@@ -23,7 +23,7 @@
          },
          {
             "keepTime": true,
-            "title": "Logs",
+            "title": "Apache ActiveMQ Logs",
             "type": "link",
             "url": "/d/apacheactivemq-logs"
          },
@@ -83,7 +83,7 @@
                   "expr": "count (activemq_topic_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
                   "refId": "Topic count"
                }
             ],
@@ -121,7 +121,7 @@
                   "expr": "sum (activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
                   "refId": "Total producers"
                }
             ],
@@ -159,7 +159,7 @@
                   "expr": "sum (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
                   "refId": "Total consumers"
                }
             ],
@@ -197,7 +197,7 @@
                   "expr": "avg (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "__auto",
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
                   "refId": "Average consumers per topic"
                }
             ],
@@ -232,8 +232,10 @@
             "id": 6,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -286,8 +288,10 @@
             "id": 7,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -333,15 +337,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -386,15 +392,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 17
             },
             "id": 9,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -424,6 +432,61 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
+            "description": "Top topics by consumers.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 25
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "orientation": "horizontal",
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "refId": "Top topics by consumers"
+               }
+            ],
+            "title": "Top topics by consumers",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
             "description": "Average size of messages in topics.",
             "fieldConfig": {
                "defaults": {
@@ -440,15 +503,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 17
+               "w": 12,
+               "x": 12,
+               "y": 25
             },
-            "id": 10,
+            "id": 11,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -585,9 +650,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 25
+               "y": 33
             },
-            "id": 11,
+            "id": 12,
             "options": {
                "cellHeight": "sm",
                "footer": {
@@ -746,7 +811,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "ActiveMQ Cluster",
+               "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
                "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",

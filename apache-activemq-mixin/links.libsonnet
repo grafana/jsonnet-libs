@@ -29,7 +29,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('Logs', '/d/' + this.grafana.dashboards['apache-activemq-logs.json'].uid)
+          link.link.new(this.config.dashboardNamePrefix + ' Logs', '/d/' + this.grafana.dashboards['apache-activemq-logs.json'].uid)
           + link.link.options.withKeepTime(true),
       }
     else {},

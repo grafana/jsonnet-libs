@@ -14,7 +14,7 @@ local activemq =
 
 local var_patch = {
   activemq_cluster+: {
-    label: 'ActiveMQ Cluster',
+    label: 'ActiveMQ cluster',
   },
 };
 

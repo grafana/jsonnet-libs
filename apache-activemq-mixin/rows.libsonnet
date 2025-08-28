@@ -78,9 +78,10 @@ local g = import './g.libsonnet';
           this.grafana.panels.topicAverageConsumersPanel + g.panel.stat.gridPos.withW(6) + g.panel.stat.gridPos.withH(6),
           this.grafana.panels.topicEnqueueRatePanel + g.panel.timeSeries.gridPos.withW(12),
           this.grafana.panels.topicDequeueRatePanel + g.panel.timeSeries.gridPos.withW(12),
-          this.grafana.panels.topicAverageEnqueueTimePanel + g.panel.timeSeries.gridPos.withW(8),
-          this.grafana.panels.topicExpiredRatePanel + g.panel.timeSeries.gridPos.withW(8),
-          this.grafana.panels.topicAverageMessageSizePanel + g.panel.timeSeries.gridPos.withW(8),
+          this.grafana.panels.topicAverageEnqueueTimePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.topicExpiredRatePanel + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.topicTopicsByConsumers + g.panel.timeSeries.gridPos.withW(12),
+          this.grafana.panels.topicAverageMessageSizePanel + g.panel.timeSeries.gridPos.withW(12),
           this.grafana.panels.topicSummaryPanel + g.panel.table.gridPos.withW(24),
         ]
       ),

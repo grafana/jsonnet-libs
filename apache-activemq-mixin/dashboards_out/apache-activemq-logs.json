@@ -285,7 +285,7 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "ActiveMQ Cluster",
+               "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
                "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",

@@ -1,4 +1,5 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
+local instanceLegendTemplate = '{{activemq_cluster}} - {{instance}}';
 
 function(this)
   {
@@ -22,7 +23,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg(activemq_memory_usage_ratio{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}}',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
@@ -35,7 +36,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg(activemq_store_usage_ratio{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}}',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
@@ -48,7 +49,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg(activemq_temp_usage_ratio{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}}',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
@@ -62,7 +63,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum(activemq_queue_producer_count{%(queriesSelector)s}) + sum(activemq_topic_producer_count{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -76,7 +77,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum(activemq_queue_consumer_count{%(queriesSelector)s}) + sum(activemq_topic_consumer_count{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -89,8 +90,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum (increase(activemq_message_total{%(queriesSelector)s}[$__interval:]))',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            expr: 'sum (increase(activemq_message_total{%(queriesSelector)s}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -105,7 +106,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -119,7 +120,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by (instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -133,7 +134,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by (instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - topic',
+            legendCustomTemplate: instanceLegendTemplate + ' - topic',
           },
         },
       },
@@ -147,8 +148,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_enqueue_count{%(queriesSelector)s})[$__interval:])',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_enqueue_count{%(queriesSelector)s}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -161,8 +162,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_dequeue_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"})[$__interval:])',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_dequeue_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -176,7 +177,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by (instance, activemq_cluster, job) (activemq_queue_average_enqueue_time{%(queriesSelector)s})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -189,8 +190,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_enqueue_count{%(queriesSelector)s})[$__interval:])',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - topic',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_enqueue_count{%(queriesSelector)s}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - topic',
           },
         },
       },
@@ -203,8 +204,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_dequeue_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"})[$__interval:])',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - topic',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_dequeue_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - topic',
           },
         },
       },
@@ -218,7 +219,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by (instance, activemq_cluster, job) (activemq_topic_average_enqueue_time{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"})',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - topic',
+            legendCustomTemplate: instanceLegendTemplate + ' - topic',
           },
         },
       },
@@ -231,8 +232,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{%(queriesSelector)s}[$__interval:]))',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - queue',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{%(queriesSelector)s}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - queue',
           },
         },
       },
@@ -245,8 +246,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"}[$__interval:]))',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - topic',
+            expr: 'sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{%(queriesSelector)s, destination!~"^ActiveMQ.Advisory.+"}[$__interval] offset $__interval))',
+            legendCustomTemplate: instanceLegendTemplate + ' - topic',
           },
         },
       },
@@ -261,7 +262,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'jvm_gc_duration_seconds{%(queriesSelector)s}',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}}',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
@@ -274,8 +275,8 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(jvm_gc_collection_count{%(queriesSelector)s, name="G1 Young Generation"}[$__interval:])',
-            legendCustomTemplate: '{{activemq_cluster}} - {{instance}}',
+            expr: 'increase(jvm_gc_collection_count{%(queriesSelector)s, name="G1 Young Generation"}[$__interval] offset $__interval)',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
@@ -290,7 +291,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'count by (%(agg)s) (activemq_memory_usage_ratio{%(queriesSelector)s})',
-            legendCustomTemplate: '__auto',
+            legendCustomTemplate: instanceLegendTemplate,
           },
         },
       },
