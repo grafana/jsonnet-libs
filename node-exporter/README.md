@@ -22,7 +22,7 @@ local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main
     + node_exporter.mountRoot(),
 
   prometheus_config+: {
-    scape_configs+: [
+    scrape_configs+: [
       node_exporter.scrape_config(namespace),
     ],
   },
