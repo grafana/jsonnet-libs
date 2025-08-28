@@ -1,5 +1,5 @@
 groups:
-    - name: aerospike
+    - name: aerospike.rules
       rules:
         - alert: AerospikeNodeHighMemoryUsage
           annotations:
