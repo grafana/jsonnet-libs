@@ -94,19 +94,8 @@ function(this)
             expr: 'topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_device_free_pct{%(queriesSelector)s}[$__interval])))',
             legendCustomTemplate: '{{instance}}',
           },
-        },
-      },
-
-
-      topNodesByDiskUsage7: {
-        name: 'Top nodes by disk usage',
-        nameShort: 'Top disk',
-        type: 'gauge',
-        description: 'Disk utilization for the top k nodes in an Aerospike cluster. Compatible with Database 7.0+ using data_used_pct metric.',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: 'topk($k, sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_data_used_pct{%(queriesSelector)s}[$__interval])))',
+          prometheusAerospike7: {
+            expr: 'topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_data_used_pct{%(queriesSelector)s}[$__interval])))',
             legendCustomTemplate: '{{instance}}',
           },
         },

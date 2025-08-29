@@ -17,25 +17,15 @@ function(this)
         name: 'Namespace disk usage',
         nameShort: 'Disk usage',
         type: 'gauge',
-        description: 'Disk usage percentage for Aerospike namespaces. Note: This uses legacy device_free_pct metric which may not be available in Aerospike 7.0+.',
+        description: 'Disk usage percentage for Aerospike namespaces. Supports both legacy (device_free_pct) and modern (data_used_pct) metrics.',
         unit: 'percent',
         sources: {
           prometheus: {
             expr: '100 - aerospike_namespace_device_free_pct{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
-        },
-      },
-
-      namespaceDiskUsage7: {
-        name: 'Namespace disk usage',
-        nameShort: 'Disk usage',
-        type: 'gauge',
-        description: 'Disk usage percentage for Aerospike namespaces. Compatible with Aerospike Database 7.0+ using data_used_pct metric.',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: 'aerospike_namespace_data_used_pct{%(queriesSelector)s}',
+          prometheusAerospike7: {
+            expr: 'aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="device"}',
             legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
@@ -52,90 +42,13 @@ function(this)
             expr: '100 - aerospike_namespace_memory_free_pct{%(queriesSelector)s}',
             legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
-        },
-      },
-
-      // this is compatible with Aerospike 7.0+ compared to namespaceMemoryUsage
-      namespaceMemoryUsageBytes: {
-        name: 'Namespace memory usage bytes',
-        nameShort: 'Memory bytes',
-        type: 'gauge',
-        description: 'Total memory usage in bytes for Aerospike namespaces.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: |||
-              (
-                aerospike_namespace_data_used_bytes{%(queriesSelector)s}
-              ) + (
-                aerospike_namespace_index_used_bytes{%(queriesSelector)s}
-              ) + (
-                aerospike_namespace_set_index_used_bytes{%(queriesSelector)s}
-              ) + (
-                aerospike_namespace_sindex_used_bytes{%(queriesSelector)s}
-              )
-            |||,
+          prometheusAerospike7: {
+            expr: 'aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="memory"}',
             legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
       },
 
-      // Individual memory component signals for debugging which metrics exist
-      namespaceDataUsedBytes: {
-        name: 'Namespace data used bytes',
-        nameShort: 'Data bytes',
-        type: 'gauge',
-        description: 'Data memory usage in bytes for Aerospike namespaces.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: 'aerospike_namespace_data_used_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }} - data',
-          },
-        },
-      },
-
-      namespaceIndexUsedBytes: {
-        name: 'Namespace index used bytes',
-        nameShort: 'Index bytes',
-        type: 'gauge',
-        description: 'Primary index memory usage in bytes for Aerospike namespaces.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: 'aerospike_namespace_index_used_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }} - index',
-          },
-        },
-      },
-
-      namespaceSetIndexUsedBytes: {
-        name: 'Namespace set index used bytes',
-        nameShort: 'Set index bytes',
-        type: 'gauge',
-        description: 'Set index memory usage in bytes for Aerospike namespaces.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: 'aerospike_namespace_set_index_used_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }} - set_index',
-          },
-        },
-      },
-
-      namespaceSindexUsedBytes: {
-        name: 'Namespace secondary index used bytes',
-        nameShort: 'Sindex bytes',
-        type: 'gauge',
-        description: 'Secondary index memory usage in bytes for Aerospike namespaces.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: 'aerospike_namespace_sindex_used_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }} - sindex',
-          },
-        },
-      },
 
       unavailablePartitions: {
         name: 'Unavailable partitions',

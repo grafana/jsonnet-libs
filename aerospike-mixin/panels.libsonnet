@@ -209,43 +209,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true),
         ]),
 
-      topNodesByDiskUsage7Panel:
-        commonlib.panels.generic.table.base.new(
-          'Top nodes by disk usage',
-          targets=[
-            signals.overview.topNodesByDiskUsage7.asTableTarget() { interval: '1m' }
-            + g.query.prometheus.withLegendFormat(''),  // Clear legend format for table
-          ],
-          description='Disk utilization for the top k nodes in an Aerospike cluster. Compatible with Database 7.0+ using data_used_pct metric.'
-        )
-        + g.panel.table.standardOptions.withOverridesMixin([
-          g.panel.table.fieldOverride.byName.new('Value')
-          + g.panel.table.fieldOverride.byName.withProperty('displayName', 'Usage')
-          + g.panel.table.fieldOverride.byName.withProperty('unit', 'percent'),
-        ])
-        + g.panel.table.standardOptions.withOverridesMixin([
-          g.panel.table.fieldOverride.byName.new('Time')
-          + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true),
-        ])
-        + g.panel.table.standardOptions.withOverridesMixin([
-          g.panel.table.fieldOverride.byName.new('aerospike_cluster')
-          + g.panel.table.fieldOverride.byName.withProperty('displayName', 'Aerospike cluster'),
-        ])
-        + g.panel.table.standardOptions.withOverridesMixin([
-          g.panel.table.fieldOverride.byName.new('instance')
-          + g.panel.table.fieldOverride.byName.withProperty('displayName', 'Instance')
-          + g.panel.table.fieldOverride.byName.withProperty('links', [
-            {
-              title: 'Instance overview',
-              url: '/d/aerospike_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
-            },
-          ]),
-        ])
-        + g.panel.table.standardOptions.withOverridesMixin([
-          g.panel.table.fieldOverride.byName.new('job')
-          + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true),
-        ]),
-
       readTransactionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Client reads',
@@ -366,18 +329,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
-      instanceDiskUsage7Panel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Disk usage bytes',
-          targets=[signals.instance.diskUsage7.asTarget()],
-          description='Disk usage in bytes on an Aerospike node. Compatible with Aerospike 7.0+ using new metrics.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.options.legend.withAsTable(true)
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
-
       heapMemoryEfficiencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Heap memory efficiency',
@@ -490,22 +441,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.standardOptions.color.withFixedColor('green'),
 
       namespaceDiskUsagePanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Disk usage (%)',
-          targets=[signals.namespace.namespaceDiskUsage.asTarget()],
-          description='Disk utilization in an Aerospike namespace. Compatible with Aerospike versions < 7.0 using legacy metrics.'
-        )
+        g.panel.timeSeries.new('Disk usage')
+        + signals.namespace.namespaceDiskUsage.asPanelMixin()
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
-
-      namespaceDiskUsage7Panel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Disk usage bytes',
-          targets=[signals.namespace.namespaceDiskUsage7.asTarget()],
-          description='Disk usage in bytes in an Aerospike namespace. Compatible with Aerospike 7.0+ using new metrics.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('bytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
@@ -521,22 +459,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.standardOptions.color.withFixedColor('green'),
 
       namespaceMemoryUsagePanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Memory usage (%)',
-          targets=[signals.namespace.namespaceMemoryUsage.asTarget()],
-          description='Memory utilization in an Aerospike namespace. Compatible with Aerospike versions < 7.0 using legacy metrics.'
-        )
+        g.panel.timeSeries.new('Memory usage')
+        + g.panel.timeSeries.panelOptions.withDescription('Memory utilization in an Aerospike namespace')
+        + signals.namespace.namespaceMemoryUsage.asPanelMixin()
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
-
-      namespaceMemoryUsageBytesPanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Memory usage bytes',
-          targets=[signals.namespace.namespaceMemoryUsageBytes.asTarget()],
-          description='Memory utilization in an Aerospike namespace. Compatible with Aerospike 7.0+ using new metrics.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('bytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 

@@ -218,7 +218,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 9,
+               "w": 18,
                "x": 6,
                "y": 9
             },
@@ -242,7 +242,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - sum by (job,aerospike_cluster, instance) (aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "100 - sum by (job,aerospike_cluster, instance) (aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})\nor\nsum by (job, aerospike_cluster, instance) (aerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"device\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -250,61 +250,6 @@
                }
             ],
             "title": "Disk usage (%)",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Disk usage in bytes on an Aerospike node. Compatible with Aerospike 7.0+ using new metrics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 9,
-               "x": 15,
-               "y": 9
-            },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "asTable": true,
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by (job, aerospike_cluster, instance) (aerospike_namespace_data_used_bytes{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ instance }}",
-                  "refId": "Disk usage"
-               }
-            ],
-            "title": "Disk usage bytes",
             "type": "timeseries"
          },
          {
@@ -332,7 +277,7 @@
                "x": 0,
                "y": 17
             },
-            "id": 7,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -385,7 +330,7 @@
                "x": 12,
                "y": 17
             },
-            "id": 8,
+            "id": 7,
             "options": {
                "legend": {
                   "asTable": true,
@@ -469,7 +414,7 @@
                "x": 0,
                "y": 25
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
                   "asTable": true,
@@ -577,7 +522,7 @@
                "x": 12,
                "y": 25
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
                   "asTable": true,
@@ -673,7 +618,7 @@
                "x": 0,
                "y": 33
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "asTable": true,
@@ -769,7 +714,7 @@
                "x": 12,
                "y": 33
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],

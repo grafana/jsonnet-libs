@@ -98,108 +98,54 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Disk utilization in an Aerospike namespace. Compatible with Aerospike versions < 7.0 using legacy metrics.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Namespace disk usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
-               "w": 9,
+               "w": 18,
                "x": 6,
                "y": 1
             },
             "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
+                  "expr": "100 - aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"device\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ ns }}",
                   "refId": "Namespace disk usage"
                }
             ],
-            "title": "Disk usage (%)",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Disk usage in bytes in an Aerospike namespace. Compatible with Aerospike 7.0+ using new metrics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 9,
-               "x": 15,
-               "y": 1
-            },
-            "id": 4,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "aerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ instance }} - {{ ns }}",
-                  "refId": "Namespace disk usage"
-               }
-            ],
-            "title": "Disk usage bytes",
+            "title": "Disk usage",
             "type": "timeseries"
          },
          {
@@ -223,7 +169,7 @@
                "x": 0,
                "y": 9
             },
-            "id": 5,
+            "id": 4,
             "options": {
                "colorMode": "fixed",
                "graphMode": "none",
@@ -252,108 +198,55 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Memory utilization in an Aerospike namespace. Compatible with Aerospike versions < 7.0 using legacy metrics.",
+            "description": "Memory utilization in an Aerospike namespace",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Namespace memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
-               "w": 9,
+               "w": 18,
                "x": 6,
                "y": 9
             },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
+            "id": 5,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - aerospike_namespace_memory_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
+                  "expr": "100 - aerospike_namespace_memory_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"memory\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ ns }}",
                   "refId": "Namespace memory usage"
                }
             ],
-            "title": "Memory usage (%)",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Memory utilization in an Aerospike namespace. Compatible with Aerospike 7.0+ using new metrics.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 9,
-               "x": 15,
-               "y": 9
-            },
-            "id": 7,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "(\n  aerospike_namespace_data_used_bytes{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\n) + (\n  aerospike_namespace_index_used_bytes{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\n) + (\n  aerospike_namespace_set_index_used_bytes{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\n) + (\n  aerospike_namespace_sindex_used_bytes{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\n)\n",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ instance }} - {{ ns }}",
-                  "refId": "Namespace memory usage bytes"
-               }
-            ],
-            "title": "Memory usage bytes",
+            "title": "Memory usage",
             "type": "timeseries"
          },
          {
@@ -381,7 +274,7 @@
                "x": 0,
                "y": 17
             },
-            "id": 8,
+            "id": 6,
             "options": {
                "legend": {
                   "asTable": true,
@@ -489,7 +382,7 @@
                "x": 12,
                "y": 17
             },
-            "id": 9,
+            "id": 7,
             "options": {
                "legend": {
                   "asTable": true,
@@ -585,7 +478,7 @@
                "x": 0,
                "y": 25
             },
-            "id": 10,
+            "id": 8,
             "options": {
                "legend": {
                   "asTable": true,
@@ -681,7 +574,7 @@
                "x": 12,
                "y": 25
             },
-            "id": 11,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],

@@ -594,7 +594,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
+               "w": 12,
                "x": 12,
                "y": 9
             },
@@ -606,115 +606,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
-                  "format": "table",
-                  "instant": true,
-                  "interval": "1m",
-                  "legendFormat": "",
-                  "refId": "Top nodes by disk usage"
-               }
-            ],
-            "title": "Top nodes by disk usage",
-            "type": "table"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Disk utilization for the top k nodes in an Aerospike cluster. Compatible with Database 7.0+ using data_used_pct metric.",
-            "fieldConfig": {
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Value"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Usage"
-                        },
-                        {
-                           "id": "unit",
-                           "value": "percent"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Time"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "aerospike_cluster"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Aerospike cluster"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "instance"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Instance"
-                        },
-                        {
-                           "id": "links",
-                           "value": [
-                              {
-                                 "title": "Instance overview",
-                                 "url": "/d/aerospike_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "job"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 9
-            },
-            "id": 8,
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "topk($k, sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
+                  "expr": "topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_data_used_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))\nor\ntopk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_device_free_pct{job=~\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -750,7 +642,7 @@
                "x": 0,
                "y": 17
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
                   "asTable": true,
@@ -858,7 +750,7 @@
                "x": 12,
                "y": 17
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
                   "asTable": true,
@@ -954,7 +846,7 @@
                "x": 0,
                "y": 25
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "asTable": true,
@@ -1050,7 +942,7 @@
                "x": 12,
                "y": 25
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],

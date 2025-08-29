@@ -304,18 +304,8 @@ function(this)
             expr: '100 - sum by (job,aerospike_cluster, instance) (aerospike_namespace_device_free_pct{%(queriesSelector)s})',
             legendCustomTemplate: '{{ instance }}',
           },
-        },
-      },
-
-      diskUsage7: {
-        name: 'Disk usage',
-        nameShort: 'Disk usage',
-        type: 'raw',
-        description: 'Disk utilization in an Aerospike node.',
-        unit: 'bytes',
-        sources: {
-          prometheus: {
-            expr: 'sum by (job, aerospike_cluster, instance) (aerospike_namespace_data_used_bytes{%(queriesSelector)s})',
+          prometheusAerospike7: {
+            expr: 'sum by (job, aerospike_cluster, instance) (aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="device"})',
             legendCustomTemplate: '{{ instance }}',
           },
         },

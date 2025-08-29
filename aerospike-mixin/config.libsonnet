@@ -11,7 +11,10 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: 'prometheus',  // metrics source for signals
+  metricsSource: [
+    'prometheusAerospike7',  // For queries that are required for Aerospike 7.0+ with metric changes
+    'prometheus',  // For Aerospike < 7.0
+  ],
 
   // Logging configuration
   enableLokiLogs: true,
