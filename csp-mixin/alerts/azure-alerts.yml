@@ -1,5 +1,5 @@
 groups:
-  - name: azure
+  - name: azure.virtualmachines
     rules:
       - alert: AzureVMHighCpuUtilization
         expr: |
@@ -31,6 +31,8 @@ groups:
           description: 'The VM {{ $labels.resourceName }} is not functioning or crashed, which may require immediate action.'
           dashboard_url: '/a/grafana-csp-app/azure/dashboards/vm'
 
+  - name: azure.databases
+    rules:
       - alert: AzureDatabaseHighDtuConsumption
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
@@ -166,6 +168,8 @@ groups:
           description: 'Look for active sessions that might be using TempDB intensively, identify stored procedures or queries that create temporary tables or objects, and also look for long-running or memory-intensive queries that rely heavily on TempDB into the {{ $labels.resourceName }} database.'
           dashboard_url: '/a/grafana-csp-app/azure/dashboards/sqldatabase'
 
+  - name: azure.virtualnetworks
+    rules:
       - alert: AzureVNetSubnetIPExhaustion
         expr: |
           ((azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}/(azure_microsoft_network_virtualnetworks_availablesubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"} + azure_microsoft_network_virtualnetworks_assignedsubnetaddresses_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})) * 100) < 10
