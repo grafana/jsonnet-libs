@@ -9,7 +9,7 @@ local cfg = import '../config.libsonnet';
   grafanaDashboards+:: {
     'collector.json':
       g.dashboard.new(
-        'OpenTelemetry Collector Health',
+        'OpenTelemetry collector health',
       )
       + g.dashboard.withDescription('A dashboard for monitoring the health of OpenTelemetry Collector instances using their internal metrics.')
       + g.dashboard.graphTooltip.withSharedCrosshair()
@@ -25,7 +25,7 @@ local cfg = import '../config.libsonnet';
         g.util.grid.wrapPanels([
           // Overview row
           row.new('Overview'),
-          panels.stat.base('Running Collectors', [queries.runningCollectors]),
+          panels.stat.base('Running collectors', [queries.runningCollectors]),
           panels.table.uptime('Collector uptime', [queries.collectorUptime]),
 
           // Resources row
@@ -34,7 +34,7 @@ local cfg = import '../config.libsonnet';
           + { gridPos: { w: 8 } },
           panels.timeSeries.memoryUsage('Memory (RSS)', queries.memUsageRSS)
           + { gridPos: { w: 8 } },
-          panels.timeSeries.memoryUsage('Memory (Heap Alloc)', queries.memUsageHeapAlloc)
+          panels.timeSeries.memoryUsage('Memory (heap alloc)', queries.memUsageHeapAlloc)
           + { gridPos: { w: 8 } },
 
           // Receivers row
