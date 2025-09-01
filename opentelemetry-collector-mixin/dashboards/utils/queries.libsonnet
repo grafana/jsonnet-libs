@@ -1,505 +1,327 @@
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 
 local prometheusQuery = g.query.prometheus;
 local variables = import './variables.libsonnet';
+local cfg = import '../../config.libsonnet';
+
+// Build dynamic label selectors and legend formats
+local groupByLabels = std.join(', ', cfg._config.groupLabels + cfg._config.instanceLabels);
+local legendFormat = commonlib.utils.labelsToPanelLegend(cfg._config.groupLabels + cfg._config.instanceLabels);
+
+// Helper function to create queries with dynamic selectors
+local buildQuery(queryTemplate, legendPrefix='', format='') =
+  prometheusQuery.new(
+    '$' + variables.datasources.prometheus.name,
+    queryTemplate % {
+      groupByLabels: groupByLabels,
+      selector: variables.queriesSelector,
+    }
+  )
+  + prometheusQuery.withIntervalFactor(2)
+  + prometheusQuery.withLegendFormat(
+    if legendPrefix != '' then legendPrefix + ' - ' + legendFormat
+    else legendFormat
+  )
+  + (if format != '' then prometheusQuery.withFormat(format) else {})
+  + (if format == 'table' then prometheusQuery.withInstant(true) else {});
 
 {
-  // Existing queries (modified to work with instance variable)
+  // Process metrics
   cpuUsage:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by (job, cluster, namespace, instance) (
-            rate(
-                {
-                    __name__=~"otelcol_process_cpu_seconds(_total)?",
-                    job=~"$job",
-                    cluster=~"$cluster",
-                    namespace=~"$namespace",
-                    instance=~"$instance"
-                }
-            [$__rate_interval])
-        )
-      |||
-    )
-    + prometheusQuery.withIntervalFactor(2)
-    + prometheusQuery.withLegendFormat(|||
-      {{cluster}} - {{namespace}} - {{instance}}
+    buildQuery(|||
+      sum by (%(groupByLabels)s) (
+          rate(
+              {
+                  __name__=~"otelcol_process_cpu_seconds(_total)?",
+                  %(selector)s
+              }
+          [$__rate_interval])
+      )
     |||),
 
   memUsageRSS:
     [
-      prometheusQuery.new(
-        '$' + variables.datasourceVariable.name,
-        |||
-          sum by (job, cluster, namespace, instance) (
-            {__name__=~"otelcol_process_memory_rss(_bytes)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}
-          )
-        |||
-      )
-      + prometheusQuery.withIntervalFactor(2)
-      + prometheusQuery.withLegendFormat(|||
-        RSS - {{cluster}} - {{namespace}} - {{instance}}
-      |||),
+      buildQuery(|||
+        sum by (%(groupByLabels)s) (
+          {__name__=~"otelcol_process_memory_rss(_bytes)?", %(selector)s}
+        )
+      |||, 'RSS'),
     ],
 
   memUsageHeapAlloc:
     [
-      prometheusQuery.new(
-        '$' + variables.datasourceVariable.name,
-        |||
-          sum by (job, cluster, namespace, instance) (
-            {__name__=~"otelcol_process_runtime_total_sys_memory_bytes(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}
-          )
-        |||
-      )
-      + prometheusQuery.withIntervalFactor(2)
-      + prometheusQuery.withLegendFormat(|||
-        RSS - {{cluster}} - {{namespace}} - {{instance}}
-      |||),
+      buildQuery(|||
+        sum by (%(groupByLabels)s) (
+          {__name__=~"otelcol_process_runtime_total_sys_memory_bytes(_total)?", %(selector)s}
+        )
+      |||, 'RSS'),
     ],
 
   // Fleet Overview queries
   runningCollectors:
     prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
+      '$' + variables.datasources.prometheus.name,
       |||
-        count({__name__=~"otelcol_process_uptime(_seconds_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"})
-      |||
+        count({__name__=~"otelcol_process_uptime(_seconds_total)?", %(selector)s})
+      ||| % {
+        selector: variables.queriesSelector,
+      }
     ),
 
   collectorUptime:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        {__name__=~"otelcol_process_uptime(_seconds_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}
-      |||
-    )
-    + prometheusQuery.withFormat('table')
-    + prometheusQuery.withInstant(true),
+    buildQuery(|||
+      {__name__=~"otelcol_process_uptime(_seconds_total)?", %(selector)s}
+    |||, format='table'),
 
   // Receivers status queries
   acceptedMetricPoints:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_accepted_metric_points(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_accepted_metric_points(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   acceptedLogRecords:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_accepted_log_records(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_accepted_log_records(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   acceptedSpans:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_accepted_spans(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_accepted_spans(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   incomingItems:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_processor_incoming_items(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_processor_incoming_items(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   refusedMetricPoints:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_refused_metric_points(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_refused_metric_points(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   refusedLogRecords:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_refused_log_records(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_refused_log_records(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   refusedSpans:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_receiver_refused_spans(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_receiver_refused_spans(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   outgoingItems:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_processor_outgoing_items(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_processor_outgoing_items(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   // Processors status queries
   batchSendSize:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by (job, cluster, namespace, instance, le) (increase({__name__=~"otelcol_processor_batch_batch_send_size_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}} - {{le}}'),
+    buildQuery(|||
+      sum by (%(groupByLabels)s, le) (increase({__name__=~"otelcol_processor_batch_batch_send_size_bucket", %(selector)s}[$__rate_interval]))
+    |||),
 
   batchCardinality:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) ({__name__=~"otelcol_processor_batch_metadata_cardinality(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"})
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) ({__name__=~"otelcol_processor_batch_metadata_cardinality(_total)?", %(selector)s})
+    |||),
 
   queueSize:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) ({__name__=~"otelcol_exporter_queue_size(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"})
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}} queue current size'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) ({__name__=~"otelcol_exporter_queue_size(_total)?", %(selector)s})
+    |||, 'queue current size'),
 
   queueCapacity:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) ({__name__=~"otelcol_exporter_queue_capacity(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"})
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}} queue capacity'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) ({__name__=~"otelcol_exporter_queue_capacity(_total)?", %(selector)s})
+    |||, 'queue capacity'),
 
   batchSizeSendTrigger:
     prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
+      '$' + variables.datasources.prometheus.name,
       |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_processor_batch_timeout_trigger_send(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
+        sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_processor_batch_timeout_trigger_send(_total)?", %(selector)s}[$__rate_interval]))
+      ||| % {
+        groupByLabels: groupByLabels,
+        selector: variables.queriesSelector,
+      }
     ),
 
   batchTimeoutSendTrigger:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_processor_batch_timeout_trigger_send(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_processor_batch_timeout_trigger_send(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   // Exporters status queries
   exportedMetrics:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_sent_metric_points(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_sent_metric_points(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   exportedLogs:
     prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
+      '$' + variables.datasources.prometheus.name,
       |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_sent_log_records(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
+        sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_sent_log_records(_total)?", %(selector)s}[$__rate_interval]))
+      ||| % {
+        groupByLabels: groupByLabels,
+        selector: variables.queriesSelector,
+      }
     ),
 
   exportedSpans:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_sent_spans(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_sent_spans(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   failedMetrics:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_send_failed_metric_points(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_send_failed_metric_points(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   failedLogs:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_send_failed_log_records(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_send_failed_log_records(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   failedSpans:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_send_failed_spans(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_send_failed_spans(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   enqueueFailedMetrics:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_enqueue_failed_metric_points(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_enqueue_failed_metric_points(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   enqueueFailedLogs:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_enqueue_failed_log_records(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_enqueue_failed_log_records(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   enqueueFailedSpans:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        sum by(job, cluster, namespace, instance) (rate({__name__=~"otelcol_exporter_enqueue_failed_spans(_total)?", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval]))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('{{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      sum by(%(groupByLabels)s) (rate({__name__=~"otelcol_exporter_enqueue_failed_spans(_total)?", %(selector)s}[$__rate_interval]))
+    |||),
 
   // Network traffic queries
   grpcInboundDurationP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   grpcInboundDurationP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   grpcInboundDurationP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   httpInboundDurationP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   httpInboundDurationP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   httpInboundDurationP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   grpcInboundSizeP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   grpcInboundSizeP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   grpcInboundSizeP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_server_request_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   httpInboundSizeP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   httpInboundSizeP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   httpInboundSizeP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_server_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   grpcOutboundDurationP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   grpcOutboundDurationP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   grpcOutboundDurationP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_duration_milliseconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   httpOutboundDurationP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   httpOutboundDurationP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   httpOutboundDurationP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_duration_seconds_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   grpcOutboundSizeP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   grpcOutboundSizeP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   grpcOutboundSizeP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"rpc_client_request_size(_bytes_?)_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 
   httpOutboundSizeP50:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.50, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p50 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.50, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p50'),
 
   httpOutboundSizeP90:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.90, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p90 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.90, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p90'),
 
   httpOutboundSizeP99:
-    prometheusQuery.new(
-      '$' + variables.datasourceVariable.name,
-      |||
-        histogram_quantile(0.99, sum by (job, cluster, namespace, instance, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", job=~"$job", cluster=~"$cluster", namespace=~"$namespace", instance=~"$instance"}[$__rate_interval])))
-      |||
-    )
-    + prometheusQuery.withLegendFormat('p99 - {{cluster}} - {{namespace}} - {{instance}}'),
+    buildQuery(|||
+      histogram_quantile(0.99, sum by (%(groupByLabels)s, le) (rate({__name__=~"http_client_request_body_size_bytes_bucket", %(selector)s}[$__rate_interval])))
+    |||, 'p99'),
 }

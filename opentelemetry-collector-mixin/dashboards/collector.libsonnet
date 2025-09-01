@@ -13,13 +13,7 @@ local cfg = import '../config.libsonnet';
       )
       + g.dashboard.withDescription('A dashboard for monitoring the health of OpenTelemetry Collector instances using their internal metrics.')
       + g.dashboard.graphTooltip.withSharedCrosshair()
-      + g.dashboard.withVariables([
-        variables.datasourceVariable,
-        variables.jobVariable,
-        variables.clusterVariable,
-        variables.namespaceVariable,
-        variables.instanceVariable,
-      ])
+      + g.dashboard.withVariables(variables.multiInstance)
       + g.dashboard.withUid(cfg._config.grafanaDashboardIDs['collector.json'])
       + g.dashboard.withPanels(
         g.util.grid.wrapPanels([
