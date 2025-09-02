@@ -2,7 +2,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 
 function(this)
-local groupAggListWithInstance = std.join(',', this.groupLabels) + (if std.length(this.instanceLabels) > 0 then ',' + std.join(',', this.instanceLabels) else '');
+  local groupAggListWithInstance = std.join(',', this.groupLabels) + (if std.length(this.instanceLabels) > 0 then ',' + std.join(',', this.instanceLabels) else '');
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
