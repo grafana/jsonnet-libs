@@ -1,5 +1,5 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 local prometheusQuery = g.query.prometheus;
 local variables = import './variables.libsonnet';

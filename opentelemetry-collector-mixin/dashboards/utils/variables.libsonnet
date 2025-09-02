@@ -1,5 +1,5 @@
-local commonlib = import 'common-lib/common/main.libsonnet';
 local cfg = import '../../config.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 
 // Create variables using common-lib - clean and simple!
 commonlib.variables.new(
