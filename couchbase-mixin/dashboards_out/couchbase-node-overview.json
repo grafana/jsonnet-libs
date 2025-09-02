@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Couchbase Bucket Overview",
+            "title": "Couchbase bucket overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_bucket_overview"
          },
          {
             "keepTime": true,
-            "title": "Couchbase Cluster Overview",
+            "title": "Couchbase cluster overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_cluster_overview"
          },
          {
             "keepTime": true,
-            "title": "Logs",
+            "title": "Couchbase logs",
             "type": "link",
             "url": "/d/couchbase-logs"
          },
@@ -129,7 +129,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, job, instance) (sys_cpu_utilization_rate{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,couchbase_cluster,instance) (sys_cpu_utilization_rate{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}}",
@@ -182,7 +182,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, instance, job) (kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,couchbase_cluster,instance) (kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}} - data",
@@ -257,7 +257,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, instance, job) (backup_data_size{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,couchbase_cluster,instance) (backup_data_size{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}}",
@@ -363,7 +363,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, couchbase_cluster, code) (rate(cm_http_requests_total{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,couchbase_cluster,instance, code) (rate(cm_http_requests_total{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{code}}",
@@ -416,7 +416,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, couchbase_cluster, method) (rate(cm_http_requests_total{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,couchbase_cluster,instance, method) (rate(cm_http_requests_total{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{method}}",
@@ -641,7 +641,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, instance, job) (rate(index_num_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,couchbase_cluster,instance) (rate(index_num_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}}",
@@ -694,7 +694,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "expr": "sum by(job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)) / (clamp_min(sum by(job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)), 1) + sum by(job,couchbase_cluster,instance) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}}",
@@ -747,7 +747,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchbase_cluster, index, instance, job) (index_avg_scan_latency{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,couchbase_cluster,instance, index) (index_avg_scan_latency{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{instance}} - {{index}}",

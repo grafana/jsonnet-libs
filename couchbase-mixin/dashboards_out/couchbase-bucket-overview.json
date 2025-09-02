@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Couchbase Cluster Overview",
+            "title": "Couchbase cluster overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_cluster_overview"
          },
          {
             "keepTime": true,
-            "title": "Couchbase Node Overview",
+            "title": "Couchbase node overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_node_overview"
          },
          {
             "keepTime": true,
-            "title": "Logs",
+            "title": "Couchbase logs",
             "type": "link",
             "url": "/d/couchbase-logs"
          },
@@ -229,7 +229,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance, op) (rate(kv_ops{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{bucket}} - {{op}}",
@@ -282,7 +282,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (rate(kv_ops_failed{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{bucket}}",
@@ -335,7 +335,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (kv_num_high_pri_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{bucket}}",
@@ -389,7 +389,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))))",
+                  "expr": "bottomk(5, sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)) / (clamp_min(sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)), 1) + sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval))))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{bucket}}",
@@ -436,7 +436,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (kv_num_vbuckets{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{bucket}}",
@@ -489,7 +489,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_vb_queue_memory_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
+                  "expr": "topk(5, sum by(job,couchbase_cluster, bucket) (kv_vb_queue_memory_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{couchbase_cluster}} - {{bucket}}",

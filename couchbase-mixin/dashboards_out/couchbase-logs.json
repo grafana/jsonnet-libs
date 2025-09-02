@@ -5,19 +5,19 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Couchbase Bucket Overview",
+            "title": "Couchbase bucket overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_bucket_overview"
          },
          {
             "keepTime": true,
-            "title": "Couchbase Cluster Overview",
+            "title": "Couchbase cluster overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_cluster_overview"
          },
          {
             "keepTime": true,
-            "title": "Couchbase Node Overview",
+            "title": "Couchbase node overview",
             "type": "link",
             "url": "/d/couchbase_couchbase_node_overview"
          },

@@ -1,4 +1,5 @@
 {
+  local this = self,
   enableMultiCluster: false,
   filteringSelector: 'job=~"integrations/couchbase"',
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'couchbase_cluster'] else ['job', 'couchbase_cluster'],
@@ -29,13 +30,11 @@
   // metrics source for signals library
   metricsSource: 'prometheus',
 
-  // expose signals library
-  local config = self,
   signals+: {
-    cluster: (import './signals/cluster.libsonnet')(config),
-    node: (import './signals/node.libsonnet')(config),
-    query: (import './signals/query.libsonnet')(config),
-    bucket: (import './signals/bucket.libsonnet')(config),
-    index: (import './signals/index.libsonnet')(config),
+    cluster: (import './signals/cluster.libsonnet')(this),
+    node: (import './signals/node.libsonnet')(this),
+    query: (import './signals/query.libsonnet')(this),
+    bucket: (import './signals/bucket.libsonnet')(this),
+    index: (import './signals/index.libsonnet')(this),
   },
 }

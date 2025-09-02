@@ -108,7 +108,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        'logs.json':
+        'couchbase-logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,

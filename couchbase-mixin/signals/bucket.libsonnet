@@ -2,11 +2,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 
 function(this)
+local groupAggListWithInstance = std.join(',', this.groupLabels) + (if std.length(this.instanceLabels) > 0 then ',' + std.join(',', this.instanceLabels) else '');
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)) + ' - {{bucket}}',
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -24,7 +26,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(5, kv_mem_used_bytes{%(queriesSelector)s})',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
           },
         },
       },
@@ -37,7 +38,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(5, couch_docs_actual_disk_size{%(queriesSelector)s})',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
           },
         },
       },
@@ -50,7 +50,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(5, sum by(couchbase_cluster, job, bucket) (kv_curr_items{%(queriesSelector)s}))',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
           },
         },
       },
@@ -64,7 +63,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'topk(5, sum by(bucket, ' + groupAggListWithInstance + ', op) (rate(kv_ops{%(queriesSelector)s}[$__rate_interval])))',
             legendCustomTemplate: '{{instance}} - {{bucket}} - {{op}}',
           },
         },
@@ -77,8 +76,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{%(queriesSelector)s}[$__rate_interval])))',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
+            expr: 'topk(5, sum by(bucket, ' + groupAggListWithInstance + ') (rate(kv_ops_failed{%(queriesSelector)s}[$__rate_interval])))',
           },
         },
       },
@@ -90,8 +88,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{%(queriesSelector)s}))',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
+            expr: 'topk(5, sum by(bucket, ' + groupAggListWithInstance + ') (kv_num_high_pri_requests{%(queriesSelector)s}))',
           },
         },
       },
@@ -99,14 +96,13 @@ function(this)
       // Bucket cache performance
       bucketCacheHitRatio: {
         name: 'Bucket cache hit ratio',
-        nameShort: 'Cache Hit %',
+        nameShort: 'Cache hit %',
         type: 'raw',
         description: 'Worst buckets by cache hit ratio.',
         unit: 'percentunit',
         sources: {
           prometheus: {
-            expr: 'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{%(queriesSelector)s}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{%(queriesSelector)s}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{%(queriesSelector)s}[$__rate_interval]))))',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
+            expr: 'bottomk(5, sum by(bucket, ' + groupAggListWithInstance + ') (increase(index_cache_hits{%(queriesSelector)s}[$__interval:] offset $__interval)) / (clamp_min(sum by(bucket, ' + groupAggListWithInstance + ') (increase(index_cache_hits{%(queriesSelector)s}[$__interval:] offset $__interval)), 1) + sum by(bucket, ' + groupAggListWithInstance + ') (increase(index_cache_misses{%(queriesSelector)s}[$__interval:] offset $__interval))))',
           },
         },
       },
@@ -114,14 +110,13 @@ function(this)
       // Bucket vBuckets
       bucketVBucketsCount: {
         name: 'Bucket vBuckets count',
-        nameShort: 'vBuckets',
+        nameShort: 'vBuckets count',
         type: 'raw',
         description: 'The number of vBuckets for the top buckets.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{%(queriesSelector)s}))',
-            legendCustomTemplate: '{{instance}} - {{bucket}}',
+            expr: 'topk(5, sum by(bucket, ' + groupAggListWithInstance + ') (kv_num_vbuckets{%(queriesSelector)s}))',
           },
         },
       },

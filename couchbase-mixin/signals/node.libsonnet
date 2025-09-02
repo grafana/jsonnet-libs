@@ -1,11 +1,13 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
+  local groupAggListWithInstance = std.join(',', this.groupLabels) + (if std.length(this.instanceLabels) > 0 then ',' + std.join(',', this.instanceLabels) else '');
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: '{{couchbase_cluster}} - ' + std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -23,7 +25,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sys_mem_actual_used{%(queriesSelector)s} / (clamp_min(sys_mem_actual_free{%(queriesSelector)s} + sys_mem_actual_used{%(queriesSelector)s}, 1))',
-            legendCustomTemplate: '{{couchbase_cluster}} - {{instance}}',
           },
         },
       },
@@ -35,8 +36,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(couchbase_cluster, job, instance) (sys_cpu_utilization_rate{%(queriesSelector)s})',
-            legendCustomTemplate: '{{couchbase_cluster}} - {{instance}}',
+            expr: 'sum by(' + groupAggListWithInstance + ') (sys_cpu_utilization_rate{%(queriesSelector)s})',
           },
         },
       },
@@ -44,13 +44,13 @@ function(this)
       // Memory by service
       dataServiceMemoryUsed: {
         name: 'Data service memory used',
-        nameShort: 'Data Memory',
+        nameShort: 'Data memory',
         type: 'gauge',
         description: 'Memory used by the data service for a node.',
         unit: 'decbytes',
         sources: {
           prometheus: {
-            expr: 'sum by(couchbase_cluster, instance, job) (kv_mem_used_bytes{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithInstance + ') (kv_mem_used_bytes{%(queriesSelector)s})',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - data',
           },
         },
@@ -91,8 +91,7 @@ function(this)
         unit: 'decbytes',
         sources: {
           prometheus: {
-            expr: 'sum by(couchbase_cluster, instance, job) (backup_data_size{%(queriesSelector)s})',
-            legendCustomTemplate: '{{couchbase_cluster}} - {{instance}}',
+            expr: 'sum by(' + groupAggListWithInstance + ') (backup_data_size{%(queriesSelector)s})',
           },
         },
       },
@@ -105,7 +104,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'kv_curr_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{couchbase_cluster}} - {{instance}}',
           },
         },
       },
@@ -113,26 +111,26 @@ function(this)
       // HTTP metrics
       httpResponseCodes: {
         name: 'HTTP response codes',
-        nameShort: 'HTTP Codes',
+        nameShort: 'HTTP codes',
         type: 'raw',
         description: 'Rate of HTTP response codes handled by the cluster manager.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(job, instance, couchbase_cluster, code) (rate(cm_http_requests_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithInstance + ', code) (rate(cm_http_requests_total{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - {{code}}',
           },
         },
       },
       httpRequestMethods: {
         name: 'HTTP request methods',
-        nameShort: 'HTTP Methods',
+        nameShort: 'HTTP methods',
         type: 'raw',
         description: 'Rate of HTTP request methods handled by the cluster manager.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(job, instance, couchbase_cluster, method) (rate(cm_http_requests_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithInstance + ', method) (rate(cm_http_requests_total{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{couchbase_cluster}} - {{instance}} - {{method}}',
           },
         },

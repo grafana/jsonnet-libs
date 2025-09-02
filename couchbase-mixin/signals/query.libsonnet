@@ -29,7 +29,7 @@ function(this)
       },
       queryServiceRequestsTotal: {
         name: 'Query service requests total',
-        nameShort: 'N1QL Total',
+        nameShort: 'N1QL total',
         type: 'raw',
         description: 'Total rate of N1QL requests processed by the query service (including valid and invalid).',
         unit: 'reqps',
@@ -42,7 +42,7 @@ function(this)
       },
       queryServiceErrors: {
         name: 'Query service errors',
-        nameShort: 'N1QL Errors',
+        nameShort: 'N1QL errors',
         type: 'counter',
         description: 'Rate of N1QL query errors.',
         unit: 'reqps',
@@ -55,7 +55,7 @@ function(this)
       },
       queryServiceInvalidRequests: {
         name: 'Query service invalid requests',
-        nameShort: 'N1QL Invalid',
+        nameShort: 'N1QL invalid',
         type: 'counter',
         description: 'Rate of invalid N1QL requests.',
         unit: 'reqps',
