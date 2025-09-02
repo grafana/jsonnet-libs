@@ -1,11 +1,12 @@
 local oracledblib = import './main.libsonnet';
+local config = (import './config.libsonnet');
 local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
 local oracledb =
   oracledblib.new()
   + oracledblib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/oracledb"',
+      filteringSelector: config.filteringSelector,
       uid: 'oracledb',
       enableLokiLogs: true,
     }
