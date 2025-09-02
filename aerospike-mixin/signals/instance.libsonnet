@@ -1,11 +1,13 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
+  local groupAggListWithInstance = std.join(',', this.groupLabels) + (if std.length(this.instanceLabels) > 0 then ',' + std.join(',', this.instanceLabels) else '');
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -22,7 +24,6 @@ function(this)
         sources: {
           prometheus: {
             expr: '100 - aerospike_node_stats_system_free_mem_pct{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -36,7 +37,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_node_stats_client_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -50,7 +50,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_node_stats_fabric_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -64,7 +63,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_node_stats_heartbeat_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -78,7 +76,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_node_stats_heap_efficiency_pct{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -91,8 +88,7 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (aerospike_namespace_unavailable_partitions{%(queriesSelector)s})',
-            legendCustomTemplate: '{{ instance }}',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (aerospike_namespace_unavailable_partitions{%(queriesSelector)s})',
           },
         },
       },
@@ -105,8 +101,7 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (aerospike_namespace_dead_partitions{%(queriesSelector)s})',
-            legendCustomTemplate: '{{ instance }}',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (aerospike_namespace_dead_partitions{%(queriesSelector)s})',
           },
         },
       },
@@ -119,7 +114,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_read_success{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_read_success{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - success',
           },
         },
@@ -133,7 +128,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_read_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_read_error{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - error',
           },
         },
@@ -147,7 +142,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_read_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_read_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - timeout',
           },
         },
@@ -161,7 +156,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_read_not_found{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_read_not_found{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - not found',
           },
         },
@@ -175,7 +170,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_read_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_read_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - filtered',
           },
         },
@@ -189,7 +184,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_write_success{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_write_success{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - success',
           },
         },
@@ -203,7 +198,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_write_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_write_error{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - error',
           },
         },
@@ -217,7 +212,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_write_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_write_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - timeout',
           },
         },
@@ -231,7 +226,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_write_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_write_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - filtered',
           },
         },
@@ -245,7 +240,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_udf_complete{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_udf_complete{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - complete',
           },
         },
@@ -259,7 +254,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_udf_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_udf_error{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - error',
           },
         },
@@ -273,7 +268,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_udf_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_udf_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - timeout',
           },
         },
@@ -287,7 +282,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(instance) (rate(aerospike_namespace_client_udf_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + std.join(',', this.instanceLabels) + ') (rate(aerospike_namespace_client_udf_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{ instance }} - filtered',
           },
         },
@@ -301,12 +296,10 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: '100 - sum by (job,aerospike_cluster, instance) (aerospike_namespace_device_free_pct{%(queriesSelector)s})',
-            legendCustomTemplate: '{{ instance }}',
+            expr: '100 - sum by (' + groupAggListWithInstance + ') (aerospike_namespace_device_free_pct{%(queriesSelector)s})',
           },
           prometheusAerospike7: {
-            expr: 'sum by (job, aerospike_cluster, instance) (aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="device"})',
-            legendCustomTemplate: '{{ instance }}',
+            expr: 'sum by (' + groupAggListWithInstance + ') (aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="device"})',
           },
         },
       },

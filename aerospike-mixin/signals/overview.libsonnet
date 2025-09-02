@@ -1,11 +1,14 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
+  local groupAggListWithoutInstance = std.join(',', this.groupLabels);
+  local groupAggListWithInstance = groupAggListWithoutInstance + ', ' + std.join(',', this.instanceLabels);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)) + ' - {{aerospike_cluster}}',
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -21,7 +24,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, aerospike_cluster, instance) (aerospike_namespace_ns_cluster_size{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithInstance + ') (aerospike_namespace_ns_cluster_size{%(queriesSelector)s})',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -35,7 +38,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, aerospike_cluster, instance, ns) (aerospike_namespace_ns_cluster_size{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithInstance + ') (aerospike_namespace_ns_cluster_size{%(queriesSelector)s})',
             legendCustomTemplate: '{{ns}}',
           },
         },
@@ -49,7 +52,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, aerospike_cluster) (aerospike_namespace_unavailable_partitions{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (aerospike_namespace_unavailable_partitions{%(queriesSelector)s})',
             legendCustomTemplate: '{{aerospike_cluster}}',
           },
         },
@@ -63,7 +66,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, aerospike_cluster) (aerospike_namespace_dead_partitions{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (aerospike_namespace_dead_partitions{%(queriesSelector)s})',
             legendCustomTemplate: '{{aerospike_cluster}}',
           },
         },
@@ -77,7 +80,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_node_stats_system_free_mem_pct{%(queriesSelector)s}[$__interval])))',
+            expr: 'topk($k, 100 - sum by(' + groupAggListWithInstance + ') (avg_over_time(aerospike_node_stats_system_free_mem_pct{%(queriesSelector)s}[$__interval])))',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -91,11 +94,11 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_device_free_pct{%(queriesSelector)s}[$__interval])))',
+            expr: 'topk($k, 100 - sum by(' + groupAggListWithInstance + ') (avg_over_time(aerospike_namespace_device_free_pct{%(queriesSelector)s}[$__interval])))',
             legendCustomTemplate: '{{instance}}',
           },
           prometheusAerospike7: {
-            expr: 'topk($k, 100 - sum by(job, aerospike_cluster, instance) (avg_over_time(aerospike_namespace_data_used_pct{%(queriesSelector)s}[$__interval])))',
+            expr: 'topk($k, 100 - sum by(' + groupAggListWithInstance + ') (avg_over_time(aerospike_namespace_data_used_pct{%(queriesSelector)s}[$__interval])))',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -109,7 +112,7 @@ function(this)
         unit: 'rps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_read_success{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_read_success{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - success',
           },
         },
@@ -123,7 +126,7 @@ function(this)
         unit: 'rps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_read_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_read_error{%(queriesSelector)s}[$__rate_interval]))',
             rangeFunction: 'rate',
             legendCustomTemplate: '{{aerospike_cluster}} - error',
           },
@@ -138,7 +141,7 @@ function(this)
         unit: 'rps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_read_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_read_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - filtered',
           },
         },
@@ -152,7 +155,7 @@ function(this)
         unit: 'rps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_read_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_read_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - timeout',
           },
         },
@@ -166,7 +169,7 @@ function(this)
         unit: 'rps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_read_not_found{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_read_not_found{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - not found',
           },
         },
@@ -180,7 +183,7 @@ function(this)
         unit: 'wps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_write_success{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_write_success{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - success',
           },
         },
@@ -194,7 +197,7 @@ function(this)
         unit: 'wps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_write_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_write_error{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - error',
           },
         },
@@ -208,7 +211,7 @@ function(this)
         unit: 'wps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_write_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_write_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - filtered',
           },
         },
@@ -222,7 +225,7 @@ function(this)
         unit: 'wps',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_write_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_write_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - timeout',
           },
         },
@@ -236,7 +239,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_udf_complete{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_udf_complete{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - complete',
           },
         },
@@ -250,7 +253,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_udf_error{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_udf_error{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - error',
           },
         },
@@ -264,7 +267,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_udf_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_udf_filtered_out{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - filtered',
           },
         },
@@ -278,7 +281,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (rate(aerospike_namespace_client_udf_timeout{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (rate(aerospike_namespace_client_udf_timeout{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{aerospike_cluster}} - timeout',
           },
         },
@@ -292,7 +295,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (aerospike_node_stats_client_connections{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (aerospike_node_stats_client_connections{%(queriesSelector)s})',
             legendCustomTemplate: '{{aerospike_cluster}} - client',
           },
         },
@@ -306,7 +309,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (aerospike_node_stats_fabric_connections{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (aerospike_node_stats_fabric_connections{%(queriesSelector)s})',
             legendCustomTemplate: '{{aerospike_cluster}} - fabric',
           },
         },
@@ -320,7 +323,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(aerospike_cluster, job) (aerospike_node_stats_heartbeat_connections{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggListWithoutInstance + ') (aerospike_node_stats_heartbeat_connections{%(queriesSelector)s})',
             legendCustomTemplate: '{{aerospike_cluster}} - heartbeat',
           },
         },

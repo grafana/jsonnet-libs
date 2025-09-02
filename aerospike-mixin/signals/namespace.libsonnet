@@ -6,6 +6,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)) + ' - {{ns}}',
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -22,11 +23,9 @@ function(this)
         sources: {
           prometheus: {
             expr: '100 - aerospike_namespace_device_free_pct{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
           prometheusAerospike7: {
             expr: 'aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="device"}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
       },
@@ -40,11 +39,9 @@ function(this)
         sources: {
           prometheus: {
             expr: '100 - aerospike_namespace_memory_free_pct{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
           prometheusAerospike7: {
             expr: 'aerospike_namespace_data_used_pct{%(queriesSelector)s, storage_engine="memory"}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
       },
@@ -59,7 +56,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_namespace_unavailable_partitions{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
       },
@@ -73,7 +69,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'aerospike_namespace_dead_partitions{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }} - {{ ns }}',
           },
         },
       },
@@ -92,7 +87,6 @@ function(this)
         },
       },
 
-      // Individual namespace transaction rates (not aggregated by cluster)
       readTransactionSuccess: {
         name: 'Read transaction success rate',
         nameShort: 'Read success',

@@ -6,7 +6,7 @@ local mixin =
   mixinlib.new()
   + mixinlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/aerospike"',
+      filteringSelector: config.filteringSelector,
       uid: 'aerospike',
       enableLokiLogs: true,
     }
