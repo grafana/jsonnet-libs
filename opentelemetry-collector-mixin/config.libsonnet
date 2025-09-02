@@ -20,10 +20,10 @@
       'collector.json': std.md5('collector.json'),
     },
 
-    // Config for the Grafana dashboards in the Kubernetes Mixin
+    // Config for the Grafana dashboards in the OpenTelemetry Collector Mixin
     grafana: {
-      // The default refresh time for all dashboards, default to 10s
-      refresh: '10s',
+      // The default refresh time for all dashboards, default to 60s
+      refresh: '60s',
 
       // Timezone for Grafana dashboards:: UTC, browser, ...
       grafanaTimezone: 'UTC',

@@ -1,7 +1,7 @@
 exclusions:
  template-job-rule:
-   reason: Allows All value to be '.*' instead of '.*' to accommodate for non-K8S environments
+   reason: Allows All value to be '.*' instead of '.+' to accommodate for non-K8S environments
  template-instance-rule:
-   reason: Allows All value to be '.*' instead of '.*' to accommodate for non-K8S environments
+   reason: Allows All value to be '.*' instead of '.+' to accommodate for non-K8S environments
  panel-datasource-rule:
   reason: The new Grafonnet promotes the use of datasources at the query level. This should probably end up in the linter as a valid option.
