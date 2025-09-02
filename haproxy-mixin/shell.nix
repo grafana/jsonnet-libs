@@ -1,7 +1,10 @@
-{ pkgs ? import <nixpkgs> }:
+{
+  pkgs ? import <nixpkgs>,
+}:
 
 with pkgs;
-let common = import ./common.nix { inherit pkgs; };
+let
+  common = import ./common.nix { inherit pkgs; };
 in
 mkShell {
   buildInputs = common.buildTools ++ common.devTools;

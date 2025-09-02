@@ -1,5 +1,5 @@
 groups:
-    - name: azure
+    - name: azure.virtualmachines
       rules:
         - alert: AzureVMHighCpuUtilization
           annotations:
@@ -29,6 +29,8 @@ groups:
             service: Azure Virtual Machines
             serviceId: microsoft.compute/virtualmachines
             severity: critical
+    - name: azure.databases
+      rules:
         - alert: AzureDatabaseHighDtuConsumption
           annotations:
             dashboard_url: /a/grafana-csp-app/azure/dashboards/sqldatabase
@@ -155,6 +157,8 @@ groups:
             service: Azure SQL database
             serviceId: microsoft.sql/servers/databases
             severity: critical
+    - name: azure.virtualnetworks
+      rules:
         - alert: AzureVNetSubnetIPExhaustion
           annotations:
             dashboard_url: /a/grafana-csp-app/azure/dashboards/vnet
@@ -183,7 +187,7 @@ groups:
             service: Azure Virtual network
             serviceId: microsoft.network/virtualnetworks
             severity: critical
-    - name: gcp
+    - name: gcp.compute
       rules:
         - alert: GcpCEHighCpuUtilization
           annotations:
@@ -213,6 +217,8 @@ groups:
             service: Compute Engine
             serviceId: compute
             severity: critical
+    - name: gcp.cloudsql
+      rules:
         - alert: GcpCloudSQLHighCpu
           annotations:
             dashboard_url: /a/grafana-csp-app/gcp/dashboards/cloud-sql
@@ -297,6 +303,8 @@ groups:
             service: Cloud SQL
             serviceId: cloudsql
             severity: warning
+    - name: gcp.pubsub
+      rules:
         - alert: GcpPubSubNumUndeliveredMessages
           annotations:
             dashboard_url: /a/grafana-csp-app/gcp/dashboards/pub-sub
