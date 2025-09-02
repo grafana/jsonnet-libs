@@ -1,12 +1,12 @@
-local commonlib = import 'common-lib/common/main.libsonnet';
-local queueLegendTemplate = '{{activemq_cluster}} - {{instance}} - {{destination}}';
-
 function(this)
+  local groupAggListWithoutInstance = std.join(',', this.groupLabels);
+  local groupAggListWithInstance = groupAggListWithoutInstance + (if std.length(this.instanceLabels) > 0 then ', ' + std.join(',', this.instanceLabels) else '');
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
     aggLevel: 'none',
     aggFunction: 'sum',
     alertsInterval: '2m',
@@ -23,7 +23,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'count (activemq_queue_queue_size{%(queriesSelector)s})',
-            legendCustomTemplate: queueLegendTemplate,
           },
         },
       },
@@ -36,7 +35,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum (activemq_queue_queue_size{%(queriesSelector)s})',
-            legendCustomTemplate: queueLegendTemplate,
           },
         },
       },
@@ -49,7 +47,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum (activemq_queue_producer_count{%(queriesSelector)s})',
-            legendCustomTemplate: queueLegendTemplate,
           },
         },
       },
@@ -62,7 +59,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum (activemq_queue_consumer_count{%(queriesSelector)s})',
-            legendCustomTemplate: queueLegendTemplate,
           },
         },
       },
@@ -74,8 +70,7 @@ function(this)
         unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
-            legendCustomTemplate: queueLegendTemplate,
+            expr: 'topk by (' + groupAggListWithInstance + ') ($k_selector, rate(activemq_queue_enqueue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
           },
         },
       },
@@ -87,8 +82,7 @@ function(this)
         unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_dequeue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
-            legendCustomTemplate: queueLegendTemplate,
+            expr: 'topk by (' + groupAggListWithInstance + ') ($k_selector, rate(activemq_queue_dequeue_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
           },
         },
       },
@@ -100,8 +94,7 @@ function(this)
         unit: 'ms',
         sources: {
           prometheus: {
-            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_enqueue_time{%(queriesSelector)s, destination=~".*$name.*"})',
-            legendCustomTemplate: queueLegendTemplate,
+            expr: 'topk by (' + groupAggListWithInstance + ') ($k_selector, activemq_queue_average_enqueue_time{%(queriesSelector)s, destination=~".*$name.*"})',
           },
         },
       },
@@ -113,8 +106,7 @@ function(this)
         unit: 'mps',
         sources: {
           prometheus: {
-            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
-            legendCustomTemplate: queueLegendTemplate,
+            expr: 'topk by (' + groupAggListWithInstance + ') ($k_selector, rate(activemq_queue_expired_count{%(queriesSelector)s, destination=~".*$name.*"}[$__rate_interval]))',
           },
         },
       },
@@ -126,8 +118,7 @@ function(this)
         unit: 'decbytes',
         sources: {
           prometheus: {
-            expr: 'topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{%(queriesSelector)s, destination=~".*$name.*"})',
-            legendCustomTemplate: queueLegendTemplate,
+            expr: 'topk by (' + groupAggListWithInstance + ') ($k_selector, activemq_queue_average_message_size{%(queriesSelector)s, destination=~".*$name.*"})',
           },
         },
       },

@@ -23,7 +23,7 @@
          },
          {
             "keepTime": true,
-            "title": "Apache ActiveMQ Logs",
+            "title": "Apache ActiveMQ logs",
             "type": "link",
             "url": "/d/apacheactivemq-logs"
          },
@@ -247,7 +247,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -301,7 +301,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -355,7 +355,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
@@ -408,7 +408,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -462,7 +462,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",

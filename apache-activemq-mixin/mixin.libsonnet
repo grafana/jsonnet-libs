@@ -1,11 +1,12 @@
 local activemqlib = import './main.libsonnet';
+local config = (import './config.libsonnet');
 local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
 local activemq =
   activemqlib.new()
   + activemqlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/apache-activemq"',
+      filteringSelector: config.filteringSelector,
       uid: 'apache-activemq',
       enableLokiLogs: true,
     }

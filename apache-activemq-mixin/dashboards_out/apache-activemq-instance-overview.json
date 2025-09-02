@@ -29,7 +29,7 @@
          },
          {
             "keepTime": true,
-            "title": "Apache ActiveMQ Logs",
+            "title": "Apache ActiveMQ logs",
             "type": "link",
             "url": "/d/apacheactivemq-logs"
          },
