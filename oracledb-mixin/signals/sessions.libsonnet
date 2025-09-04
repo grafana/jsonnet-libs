@@ -4,6 +4,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '5m',
@@ -20,7 +21,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },

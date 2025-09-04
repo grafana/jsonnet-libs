@@ -4,6 +4,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '5m',
@@ -20,7 +21,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_application{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -33,7 +33,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_commit{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -46,7 +45,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_concurrency{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -59,7 +57,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_configuration{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -72,7 +69,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_network{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -85,7 +81,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_scheduler{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -98,7 +93,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_system_io{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },
@@ -111,7 +105,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'oracledb_wait_time_user_io{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ instance }}',
           },
         },
       },

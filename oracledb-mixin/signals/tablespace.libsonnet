@@ -4,6 +4,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels + this.tablespaceLabels,
     enableLokiLogs: this.enableLokiLogs,
+    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels + this.tablespaceLabels)),
     aggLevel: 'none',
     aggFunction: 'sum',
     alertsInterval: '5m',

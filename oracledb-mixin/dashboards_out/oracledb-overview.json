@@ -81,7 +81,7 @@
                   "expr": "oracledb_up{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Database status"
                }
             ],
@@ -278,7 +278,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Application wait time"
                }
             ],
@@ -332,7 +332,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Commit wait time"
                }
             ],
@@ -386,7 +386,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Concurrency wait time"
                }
             ],
@@ -440,7 +440,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Configuration wait time"
                }
             ],
@@ -494,7 +494,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Network wait time"
                }
             ],
@@ -548,7 +548,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Scheduler wait time"
                }
             ],
@@ -602,7 +602,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "System I/O wait time"
                }
             ],
@@ -656,7 +656,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{ instance }}",
+                  "legendFormat": "{{instance}}",
                   "refId": "User I/O wait time"
                }
             ],
