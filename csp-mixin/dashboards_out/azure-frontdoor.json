@@ -1,0 +1,1322 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of endpoints",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Endpoints Count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(\n  sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)\nor\ncount(\n  sum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Endpoints Count"
+               }
+            ],
+            "title": "Endpoints Count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 5 Endpoints with higher percentage of client requests for which the response status code is 4XX or 5XX",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        },
+                        {
+                           "id": "color"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "percentage",
+                              "steps": [
+                                 {
+                                    "color": "text",
+                                    "value": 0
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 1
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
+            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_ClientCountry, dimension_ClientRegion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion, dimension_ClientCountry, dimension_ClientRegion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"})\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Top 5 Endpoints by Errors"
+               }
+            ],
+            "title": "Top 5 Endpoints by Errors",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "subscriptionName": true
+                     },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Time": 0,
+                        "Value": 7,
+                        "dimensionClientCountry": 6,
+                        "dimensionClientRegion": 5,
+                        "dimension_ClientCountry": 6,
+                        "dimension_ClientRegion": 5,
+                        "job": 1,
+                        "resourceGroup": 2,
+                        "resourceName": 3,
+                        "subscriptionName": 4
+                     },
+                     "renameByName": {
+                        "dimensionClientCountry": "Country",
+                        "dimensionClientRegion": "Region",
+                        "dimension_ClientCountry": "Country",
+                        "dimension_ClientRegion": "Region",
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Resource"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of client requests served by the HTTP/S proxy",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total Requests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 17
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum(\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Total Requests",
+                  "refId": "Total Requests"
+               }
+            ],
+            "title": "Total Requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of client requests served by the HTTP/S proxy grouped by country",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 17
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,dimensionClientCountry) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimensionClientCountry!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_ClientCountry) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimension_ClientCountry!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{dimensionClientCountry}} {{dimension_ClientCountry}}",
+                  "refId": "Requests by country"
+               }
+            ],
+            "title": "Requests by country",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of client requests served by the HTTP/S proxy grouped by status group",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 25
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,dimensionHttpStatusGroup) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimensionHttpStatusGroup!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_HttpStatusGroup) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimension_HttpStatusGroup!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{dimensionHttpStatusGroup}} {{dimension_HttpStatusGroup}}",
+                  "refId": "Requests by status"
+               }
+            ],
+            "title": "Requests by status",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "4xx"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "5xx"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 25
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  azure_microsoft_cdn_profiles_percentage4xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "4xx",
+                  "refId": "4XX Errors percentage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  azure_microsoft_cdn_profiles_percentage5xx_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "5xx",
+                  "refId": "5XX Errors percentage"
+               }
+            ],
+            "title": "Request by Errors percentage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of bytes sent as requests/responses from clients to AFDX and from HTTP/S proxy to clients.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisLabel": "requests(-) | responses(+)",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Requests"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 33
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  azure_microsoft_cdn_profiles_requestsize_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Requests",
+                  "refId": "Requests size"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  azure_microsoft_cdn_profiles_responsesize_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Responses",
+                  "refId": "Responses size"
+               }
+            ],
+            "title": "Request/Responses size",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The time calculated from when the client request was received by the HTTP/S proxy until the client acknowledged the last response byte from the HTTP/S proxy\tTotalLatency",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 33
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  azure_microsoft_cdn_profiles_totallatency_average_milliseconds{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Total latency"
+               }
+            ],
+            "title": "Total latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The percentage of successful health probes from AFDX to backends.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "percentage",
+                              "steps": [
+                                 {
+                                    "color": "text",
+                                    "value": 0
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 1
+                                 },
+                                 {
+                                    "color": "yellow",
+                                    "value": 85
+                                 },
+                                 {
+                                    "color": "green",
+                                    "value": 90
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "thresholds"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 41
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  azure_microsoft_cdn_profiles_originhealthpercentage_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Origin Health percentage"
+               }
+            ],
+            "title": "Origin Health percentage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The time calculated from when the request was sent by AFDX edge to the backend until AFDX received the last response byte from the backend.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Origin Latency average"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 41
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  azure_microsoft_cdn_profiles_originlatency_average_milliseconds{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Origin Latency average"
+               }
+            ],
+            "title": "Origin Latency average",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 49
+            },
+            "id": 12,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Number of requests by endpoints.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Total requests"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 24,
+                     "x": 0,
+                     "y": 50
+                  },
+                  "id": 13,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestcount_total_count{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Total requests"
+                     }
+                  ],
+                  "title": "Total requests",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of bytes sent as requests from clients to AFDX.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Requests size"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 58
+                  },
+                  "id": 14,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_requestsize_total_bytes{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_requestsize_total_bytes{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Requests size"
+                     }
+                  ],
+                  "title": "Requests size",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of bytes sent as responses from HTTP/S proxy to clients.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Responses size"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 58
+                  },
+                  "id": 15,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_responsesize_total_bytes{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_responsesize_total_bytes{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Responses size"
+                     }
+                  ],
+                  "title": "Responses size",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The time calculated from when the client request was received by the HTTP/S proxy until the client acknowledged the last response byte from the HTTP/S proxy\tTotalLatency",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Total latency"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 66
+                  },
+                  "id": 16,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_totallatency_average_milliseconds{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\navg by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_totallatency_average_milliseconds{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Total latency"
+                     }
+                  ],
+                  "title": "Total latency",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Value"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "red",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "unit",
+                                 "value": "percent"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 66
+                  },
+                  "id": 17,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}) + avg by (job, resourceGroup, subscriptionName, dimensionEndpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"})\nor\navg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}) + avg by (job, resourceGroup, subscriptionName, dimension_Endpoint) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"})",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Percentage of errors"
+                     }
+                  ],
+                  "title": "Percentage of errors",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of requests sent from AFDX to origin.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Origin Request count"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 74
+                  },
+                  "id": 18,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_originrequestcount_total_count{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\nsum by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_originrequestcount_total_count{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Origin Request count"
+                     }
+                  ],
+                  "title": "Origin Request count",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The time calculated from when the request was sent by AFDX edge to the backend until AFDX received the last response byte from the backend.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Origin Latency average"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "ms"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 74
+                  },
+                  "id": 19,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,dimensionEndpoint) (\n  azure_microsoft_cdn_profiles_originlatency_average_milliseconds{dimensionEndpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\nor\navg by (job,resourceGroup,subscriptionName,dimension_Endpoint) (\n  azure_microsoft_cdn_profiles_originlatency_average_milliseconds{dimension_Endpoint!=\"\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{dimensionEndpoint}} {{dimension_Endpoint}}",
+                        "refId": "Origin Latency average"
+                     }
+                  ],
+                  "title": "Origin Latency average",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Endpoints",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "azure-cloud-provider"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"azure_microsoft_cdn_profiles_requestcount_total_count\",job=\"integrations/azure\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Group",
+               "multi": true,
+               "name": "resourceGroup",
+               "query": "label_values({__name__=~\"azure_microsoft_cdn_profiles_requestcount_total_count\",job=\"integrations/azure\",job=~\"$job\"}, resourceGroup)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Subscription",
+               "multi": true,
+               "name": "subscriptionName",
+               "query": "label_values({__name__=~\"azure_microsoft_cdn_profiles_requestcount_total_count\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\"}, subscriptionName)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timepicker": {
+         "time_options": [
+            "now-1h"
+         ]
+      },
+      "timezone": "default",
+      "title": "Azure Front Door",
+      "uid": "azure-frontdoor"
+   }

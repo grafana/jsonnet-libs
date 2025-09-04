@@ -1,88 +1,56 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Couchbase cluster overview",
+            "type": "link",
+            "url": "/d/couchbase_couchbase_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Couchbase node overview",
+            "type": "link",
+            "url": "/d/couchbase_couchbase_node_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Couchbase logs",
+            "type": "link",
+            "url": "/d/couchbase-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "couchbase-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Couchbase dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Memory used for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "Bps"
-               },
-               "overrides": [ ]
+                  "unit": "decbytes"
+               }
             },
             "gridPos": {
                "h": 8,
@@ -90,28 +58,29 @@
                "x": 0,
                "y": 0
             },
-            "id": 2,
+            "id": 1,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, kv_mem_used_bytes{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" })",
+                  "expr": "topk(5, kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket memory used"
                }
             ],
             "title": "Top buckets by memory used",
@@ -119,33 +88,23 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Total space on disk used for the top buckets.",
+            "description": "Disk used for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "green",
-                     "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "min": 1,
+                  "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
+                           "color": "light-green",
                            "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
                         }
                      ]
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -153,32 +112,22 @@
                "x": 12,
                "y": 0
             },
-            "id": 3,
+            "id": 2,
             "options": {
-               "displayMode": "basic",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
-               "orientation": "horizontal",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true,
-               "valueMode": "color"
+               "orientation": "horizontal"
             },
-            "pluginVersion": "10.0.2-cloud.1.94a6f396",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, couch_docs_actual_disk_size{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" })",
+                  "expr": "topk(5, couch_docs_actual_disk_size{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket disk used"
                }
             ],
             "title": "Top buckets by disk used",
@@ -186,61 +135,22 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of active items for the largest buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -248,28 +158,29 @@
                "x": 0,
                "y": 8
             },
-            "id": 4,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, kv_curr_items{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" })",
+                  "expr": "topk(5, sum by(couchbase_cluster, job, bucket) (kv_curr_items{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket current items"
                }
             ],
             "title": "Top buckets by current items",
@@ -277,61 +188,22 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Rate of operations for the busiest buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
                   "unit": "ops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -339,28 +211,29 @@
                "x": 8,
                "y": 8
             },
-            "id": 5,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }[$__rate_interval])))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance, op) (rate(kv_ops{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}} - {{op}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}} - {{op}}",
+                  "refId": "Bucket operations by operation type"
                }
             ],
             "title": "Top buckets by operations",
@@ -368,61 +241,22 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of failed operations for the most problematic buckets.",
+            "description": "Rate of operations failed for the most problematic buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
                   "unit": "ops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -430,28 +264,29 @@
                "x": 16,
                "y": 8
             },
-            "id": 6,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }[$__rate_interval])))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (rate(kv_ops_failed{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__rate_interval])))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket operations failed"
                }
             ],
             "title": "Top buckets by operations failed",
@@ -459,61 +294,22 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Rate of high priority requests processed by the KV engine for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -521,28 +317,29 @@
                "x": 0,
                "y": 16
             },
-            "id": 7,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (kv_num_high_pri_requests{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket high priority requests"
                }
             ],
             "title": "Top buckets by high priority requests",
@@ -550,62 +347,23 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Worst buckets by cache hit ratio.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": true
                   },
-                  "mappings": [ ],
                   "max": 1,
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -613,28 +371,29 @@
                "x": 12,
                "y": 16
             },
-            "id": 8,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }[$__rate_interval]))) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }[$__rate_interval])))",
+                  "expr": "bottomk(5, sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)) / (clamp_min(sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_hits{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)), 1) + sum by(bucket, job,couchbase_cluster,instance) (increase(index_cache_misses{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval))))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket cache hit ratio"
                }
             ],
             "title": "Bottom buckets by cache hit ratio",
@@ -642,32 +401,23 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Number of virtual buckets across the cluster for the top buckets.",
+            "description": "The number of vBuckets for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "green",
-                     "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "min": 1,
+                  "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
+                           "color": "light-green",
+                           "value": null
                         }
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -675,32 +425,22 @@
                "x": 0,
                "y": 24
             },
-            "id": 9,
+            "id": 8,
             "options": {
-               "displayMode": "basic",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
-               "orientation": "horizontal",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true,
-               "valueMode": "color"
+               "orientation": "horizontal"
             },
-            "pluginVersion": "10.0.2-cloud.1.94a6f396",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }))",
+                  "expr": "topk(5, sum by(bucket, job,couchbase_cluster,instance) (kv_num_vbuckets{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - {{bucket}}",
+                  "refId": "Bucket vBuckets count"
                }
             ],
             "title": "Top buckets by vBuckets count",
@@ -708,60 +448,22 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Memory occupied by the queue for a virtual bucket for the top buckets.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -769,28 +471,29 @@
                "x": 12,
                "y": 24
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{job=~\"$job\", couchbase_cluster=~\"$couchbase_cluster\", instance=~\"$instance\", bucket=~\"$bucket\" }))",
+                  "expr": "topk(5, sum by(job,couchbase_cluster, bucket) (kv_vb_queue_memory_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{bucket}}"
+                  "instant": false,
+                  "legendFormat": "{{couchbase_cluster}} - {{bucket}}",
+                  "refId": "Top buckets by vBucket queue memory"
                }
             ],
             "title": "Top buckets by vBucket queue memory",
@@ -798,134 +501,71 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "couchbase-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
-               "name": "job",
-               "options": [ ],
-               "query": "label_values(kv_mem_used_bytes,job)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
                "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(kv_mem_used_bytes{job=~\"$job\"}, cluster)",
+               "name": "job",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Couchbase cluster",
+               "label": "Couchbase_cluster",
                "multi": true,
                "name": "couchbase_cluster",
-               "options": [ ],
-               "query": "label_values(kv_mem_used_bytes{job=~\"$job\"},couchbase_cluster)",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\"}, couchbase_cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(kv_mem_used_bytes{job=~\"$job\"},instance)",
+               "query": "label_values(kv_mem_used_bytes{job=~\"integrations/couchbase\",job=~\"$job\",couchbase_cluster=~\"$couchbase_cluster\"}, instance)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Bucket",
-               "multi": true,
-               "name": "bucket",
-               "options": [ ],
-               "query": "label_values(kv_mem_used_bytes{job=~\"$job\"},bucket)",
-               "refresh": 2,
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -933,33 +573,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Couchbase bucket overview",
-      "uid": "couchbase-bucket-overview",
-      "version": 0
+      "uid": "couchbase_couchbase_bucket_overview"
    }
