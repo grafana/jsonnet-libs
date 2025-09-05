@@ -1,18 +1,36 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    oracledbSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
-    dashboardTags: ['oracledb-mixin'],
-    dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
+  local this = self,
+  filteringSelector: 'job=~"integrations/oracledb"',
+  enableMultiCluster: false,
+  groupLabels: if self.enableMultiCluster then ['cluster', 'job'] else ['job'],
+  instanceLabels: ['instance'],
+  tablespaceLabels: ['tablespace'],
+  uid: 'oracledb',
 
-    alertsFileDescriptorThreshold: '85',  // %
-    alertsProcessThreshold: '85',  // %
-    alertsSessionThreshold: '85',  // %
-    alertsTablespaceThreshold: '85',  // %
+  dashboardNamePrefix: 'Oracle Database',
+  dashboardTags: ['oracledb-mixin'],
+  dashboardPeriod: 'now-1h',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
 
-    // enable Loki logs
-    enableLokiLogs: true,
+  // Data source configuration
+  metricsSource: 'prometheus',
+  enableLokiLogs: true,
+  logLabels: this.groupLabels + this.instanceLabels,
+  extraLogLabels: [],
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
+  // Alerting thresholds
+  alertsFileDescriptorThreshold: 85,  // %
+  alertsProcessThreshold: 85,  // %
+  alertsSessionThreshold: 85,  // %
+  alertsTablespaceThreshold: 85,  // %
+
+  // Signals configuration
+  signals+: {
+    sessions: (import './signals/sessions.libsonnet')(this),
+    waittimes: (import './signals/waittimes.libsonnet')(this),
+    tablespace: (import './signals/tablespace.libsonnet')(this),
   },
 }
