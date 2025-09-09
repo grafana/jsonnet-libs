@@ -20,10 +20,5 @@ exclusions:
       - panel: "Applications state"
       - panel: "Available virtual cores"
       - panel: "Garbage collection count"
-  alert-name-length:
-    reason: "Alerts are best described with the longer names."
-    entries:
-      - alert: "ApacheHadoopHighResourceManagerVirtualCoreCPUUsage"
-      - alert: "ApacheHadoopHighResourceManagerMemoryUsage"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"

@@ -1,7 +1,7 @@
 groups:
     - name: apache-hadoop
       rules:
-        - alert: ApacheHadoopLowHDFSCapacity
+        - alert: HadoopLowHDFSCapacity
           annotations:
             description: '{{ printf "%.0f" $value }} percent remaining HDFS usage on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is below the threshold of 20.'
             summary: Remaining HDFS cluster capacity is low which may result in DataNode failures or prevent DataNodes from writing data.
@@ -10,7 +10,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: ApacheHadoopHDFSMissingBlocks
+        - alert: HadoopHDFSMissingBlocks
           annotations:
             description: '{{ printf "%.0f" $value }} HDFS missing blocks on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 0.'
             summary: There are missing blocks in the HDFS cluster which may indicate potential data loss.
@@ -19,7 +19,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHDFSHighVolumeFailures
+        - alert: HadoopHDFSHighVolumeFailures
           annotations:
             description: '{{ printf "%.0f" $value }} HDFS volume failures on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 0.'
             summary: A volume failure in HDFS cluster may indicate hardware failures.
@@ -28,7 +28,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHighDeadDataNodes
+        - alert: HadoopHighDeadDataNodes
           annotations:
             description: '{{ printf "%.0f" $value }} dead HDFS volume failures on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 0.'
             summary: Number of dead DataNodes has increased, which could result in data loss and increased network activity.
@@ -37,7 +37,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHighNodeManagerCPUUsage
+        - alert: HadoopHighNodeManagerCPUUsage
           annotations:
             description: '{{ printf "%.0f" $value }} CPU usage on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 80.'
             summary: A NodeManager has a CPU usage higher than the configured threshold.
@@ -46,7 +46,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHighNodeManagerMemoryUsage
+        - alert: HadoopHighNodeManagerMemoryUsage
           annotations:
             description: '{{ printf "%.0f" $value}} percent NodeManager memory usage on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 80.'
             summary: A NodeManager has a higher memory utilization than the configured threshold.
@@ -55,7 +55,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHighResourceManagerVirtualCoreCPUUsage
+        - alert: HadoopHighResourceManagervCoreCPUUsage
           annotations:
             description: '{{ printf "%.0f" $value }} virtual core CPU usage on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 80.'
             summary: A ResourceManager has a virtual core CPU usage higher than the configured threshold.
@@ -64,7 +64,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: ApacheHadoopHighResourceManagerMemoryUsage
+        - alert: HadoopHighResourceManagerMemoryUsage
           annotations:
             description: '{{ printf "%.0f" $value}} percent ResourceManager memory usage on {{$labels.hadoop_cluster}} - {{$labels.instance}}, which is above the threshold of 80.'
             summary: A ResourceManager has a higher memory utilization than the configured threshold.

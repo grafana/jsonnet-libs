@@ -5,7 +5,7 @@
         name: 'apache-hadoop',
         rules: [
           {
-            alert: 'ApacheHadoopLowHDFSCapacity',
+            alert: 'HadoopLowHDFSCapacity',
             expr: |||
               min without(job, name) (100 * hadoop_namenode_capacityremaining / clamp_min(hadoop_namenode_capacitytotal, 1)) < %(alertsWarningHDFSCapacity)s
             ||| % this.config,
@@ -23,7 +23,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHDFSMissingBlocks',
+            alert: 'HadoopHDFSMissingBlocks',
             expr: |||
               max without(job, name) (hadoop_namenode_missingblocks) > %(alertsCriticalHDFSMissingBlocks)s
             ||| % this.config,
@@ -41,7 +41,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHDFSHighVolumeFailures',
+            alert: 'HadoopHDFSHighVolumeFailures',
             expr: |||
               max without(job, name) (hadoop_namenode_volumefailurestotal) > %(alertsCriticalHDFSVolumeFailures)s
             ||| % this.config,
@@ -59,7 +59,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHighDeadDataNodes',
+            alert: 'HadoopHighDeadDataNodes',
             expr: |||
               max without(job, name) (hadoop_namenode_numdeaddatanodes) > %(alertsCriticalDeadDataNodes)s
             ||| % this.config,
@@ -77,7 +77,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHighNodeManagerCPUUsage',
+            alert: 'HadoopHighNodeManagerCPUUsage',
             expr: |||
               max without(job, name) (100 * hadoop_nodemanager_nodecpuutilization) > %(alertsCriticalNodeManagerCPUUsage)s
             ||| % this.config,
@@ -95,7 +95,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHighNodeManagerMemoryUsage',
+            alert: 'HadoopHighNodeManagerMemoryUsage',
             expr: |||
               max without(job, name) (100 * hadoop_nodemanager_allocatedgb / clamp_min(hadoop_nodemanager_availablegb + hadoop_nodemanager_allocatedgb,1)) > %(alertsCriticalNodeManagerMemoryUsage)s
             ||| % this.config,
@@ -113,7 +113,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHighResourceManagerVirtualCoreCPUUsage',
+            alert: 'HadoopHighResourceManagervCoreCPUUsage',
             expr: |||
               max without(job, name) (100 * hadoop_resourcemanager_allocatedvcores / clamp_min(hadoop_resourcemanager_availablevcores + hadoop_resourcemanager_allocatedvcores,1)) > %(alertsCriticalResourceManagerVCoreCPUUsage)s
             ||| % this.config,
@@ -131,7 +131,7 @@
             },
           },
           {
-            alert: 'ApacheHadoopHighResourceManagerMemoryUsage',
+            alert: 'HadoopHighResourceManagerMemoryUsage',
             expr: |||
               max without(job, name) (100 * hadoop_resourcemanager_allocatedmb / clamp_min(hadoop_resourcemanager_availablemb + hadoop_resourcemanager_allocatedmb,1)) > %(alertsCriticalResourceManagerMemoryUsage)s
             ||| % this.config,
