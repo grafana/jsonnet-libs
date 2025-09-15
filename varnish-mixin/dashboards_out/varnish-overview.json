@@ -414,7 +414,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -511,7 +512,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -586,7 +588,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -678,7 +681,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -735,7 +739,8 @@
                      "mean",
                      "max"
                   ],
-                  "displayMode": "table"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -795,7 +800,8 @@
                      "mean",
                      "max"
                   ],
-                  "displayMode": "table"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -862,7 +868,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -948,7 +955,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",

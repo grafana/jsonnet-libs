@@ -141,6 +141,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('conn/s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
       // Sessions timeseries
@@ -156,6 +157,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('sess/s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // Requests timeseries
@@ -170,6 +172,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // Cache hit ratio timeseries
@@ -184,6 +187,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('percent')
         + g.panel.timeSeries.standardOptions.withMax(100)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('area')
@@ -210,6 +214,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
         + g.panel.timeSeries.options.legend.withDisplayMode('table'),
@@ -226,6 +231,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
@@ -245,6 +251,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -262,6 +269,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }
