@@ -6,7 +6,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    legendCustomTemplate: '{{activemq_cluster}} - {{instance}} - {{destination}}',
+    legendCustomTemplate: this.legendCustomTemplate,
     aggLevel: 'none',
     aggFunction: 'sum',
     alertsInterval: '2m',

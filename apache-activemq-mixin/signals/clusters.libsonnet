@@ -1,7 +1,5 @@
-local commonlib = import 'common-lib/common/main.libsonnet';
-local clusterLegendTemplate = '{{activemq_cluster}}';
-
 function(this) {
+  local legendCustomTemplate = this.legendCustomTemplate,
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -74,7 +72,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{%(queriesSelector)s}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"}[$__interval] offset $__interval))',
-          legendCustomTemplate: clusterLegendTemplate,
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },
@@ -87,7 +85,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{%(queriesSelector)s}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{%(queriesSelector)s, destination!~"ActiveMQ.Advisory.*"}[$__interval] offset $__interval))',
-          legendCustomTemplate: clusterLegendTemplate,
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },
@@ -100,7 +98,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'avg by (activemq_cluster, job) (activemq_temp_usage_ratio{%(queriesSelector)s})',
-          legendCustomTemplate: clusterLegendTemplate,
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },
@@ -113,7 +111,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'avg by (activemq_cluster, job) (activemq_store_usage_ratio{%(queriesSelector)s})',
-          legendCustomTemplate: clusterLegendTemplate,
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },
@@ -126,7 +124,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'avg by (activemq_cluster, job) (activemq_memory_usage_ratio{%(queriesSelector)s})',
-          legendCustomTemplate: clusterLegendTemplate,
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },

@@ -83,7 +83,7 @@
                   "expr": "count (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Queue count"
                }
             ],
@@ -121,7 +121,7 @@
                   "expr": "sum (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Total queue size"
                }
             ],
@@ -159,7 +159,7 @@
                   "expr": "sum (activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Total producers"
                }
             ],
@@ -197,7 +197,7 @@
                   "expr": "sum (activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Total consumers"
                }
             ],
@@ -251,7 +251,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top queues by enqueue rate"
                }
             ],
@@ -305,7 +305,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top queues by dequeue rate"
                }
             ],
@@ -358,7 +358,7 @@
                   "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top queues by average enqueue time"
                }
             ],
@@ -412,7 +412,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top queues by expired rate"
                }
             ],
@@ -465,7 +465,7 @@
                   "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top queues by average message size"
                }
             ],
@@ -708,7 +708,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"

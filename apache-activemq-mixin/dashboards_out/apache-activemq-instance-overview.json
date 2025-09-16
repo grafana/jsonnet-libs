@@ -93,7 +93,7 @@
                   "expr": "avg(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
                   "refId": "Average broker memory usage"
                }
             ],
@@ -135,7 +135,7 @@
                   "expr": "avg(activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
                   "refId": "Average broker store usage"
                }
             ],
@@ -177,7 +177,7 @@
                   "expr": "avg(activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
                   "refId": "Broker temporary usage"
                }
             ],
@@ -215,7 +215,7 @@
                   "expr": "sum (increase(activemq_message_total{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Unacknowledged messages"
                }
             ],
@@ -290,7 +290,7 @@
                   "expr": "sum(activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Producers"
                }
             ],
@@ -328,7 +328,7 @@
                   "expr": "sum(activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Consumers"
                }
             ],
@@ -379,7 +379,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Queue size"
                }
             ],
@@ -432,7 +432,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Queue memory usage"
                },
                {
@@ -443,7 +443,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
                   "refId": "Topic memory usage"
                }
             ],
@@ -494,7 +494,7 @@
                   "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}}",
+                  "legendFormat": "{{ activemq_cluster }}",
                   "refId": "Enqueue / $__interval"
                }
             ],
@@ -545,7 +545,7 @@
                   "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}}",
+                  "legendFormat": "{{ activemq_cluster }}",
                   "refId": "Dequeue / $__interval"
                }
             ],
@@ -598,7 +598,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Queue average enqueue time"
                },
                {
@@ -609,7 +609,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
                   "refId": "Topic average enqueue time"
                }
             ],
@@ -662,7 +662,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
                   "refId": "Queue expired messages"
                },
                {
@@ -673,7 +673,7 @@
                   "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
                   "refId": "Topic expired messages"
                }
             ],
@@ -739,7 +739,7 @@
                   "expr": "jvm_gc_duration_seconds{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
                   "refId": "Garbage collection duration"
                }
             ],
@@ -792,7 +792,7 @@
                   "expr": "increase(jvm_gc_collection_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}",
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
                   "refId": "Garbage collection count"
                }
             ],
@@ -830,7 +830,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"

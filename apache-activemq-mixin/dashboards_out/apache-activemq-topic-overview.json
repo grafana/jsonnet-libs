@@ -83,7 +83,7 @@
                   "expr": "count (activemq_topic_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Topic count"
                }
             ],
@@ -121,7 +121,7 @@
                   "expr": "sum (activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Total producers"
                }
             ],
@@ -159,7 +159,7 @@
                   "expr": "sum (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Total consumers"
                }
             ],
@@ -197,7 +197,7 @@
                   "expr": "avg (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Average consumers per topic"
                }
             ],
@@ -253,7 +253,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top topics by enqueue rate"
                }
             ],
@@ -309,7 +309,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top topics by dequeue rate"
                }
             ],
@@ -364,7 +364,7 @@
                   "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top topics by average enqueue time"
                }
             ],
@@ -420,7 +420,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top topics by expired rate"
                }
             ],
@@ -475,7 +475,7 @@
                   "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Top topics by consumers"
                }
             ],
@@ -530,7 +530,7 @@
                   "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Average message size"
                }
             ],
@@ -678,7 +678,7 @@
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Enqueue rate"
                },
                {
@@ -690,7 +690,7 @@
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Dequeue rate"
                },
                {
@@ -701,7 +701,7 @@
                   "expr": "activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Average enqueue time"
                },
                {
@@ -712,7 +712,7 @@
                   "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
                   "refId": "Average message size"
                }
             ],
@@ -790,7 +790,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"

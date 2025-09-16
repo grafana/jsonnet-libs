@@ -29,9 +29,9 @@
   alertsHighTemporaryMemoryUsage: 70,  // %
 
   signals+: {
-    clusters: (import './signals/clusters.libsonnet')(this),
-    instance: (import './signals/instance.libsonnet')(this),
-    queues: (import './signals/queues.libsonnet')(this),
-    topics: (import './signals/topics.libsonnet')(this),
+    clusters: (import './signals/clusters.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }}'}),
+    instance: (import './signals/instance.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }} - {{ instance }}'}),
+    queues: (import './signals/queues.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}'}),
+    topics: (import './signals/topics.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}'}),
   },
 }

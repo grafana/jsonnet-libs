@@ -7,13 +7,16 @@ local activemq =
   + activemqlib.withConfigMixin(
     {
       filteringSelector: config.filteringSelector,
-      uid: 'apache-activemq',
-      enableLokiLogs: true,
+      uid: config.uid,
+      enableLokiLogs: config.enableLokiLogs,
     }
   );
 
 
 local var_patch = {
+  cluster+: {
+    allValue: '.*',
+  },
   activemq_cluster+: {
     label: 'ActiveMQ cluster',
   },
