@@ -291,7 +291,9 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
             targets: [
               if std.objectHas(target, 'expr') then
                 target {
-                  expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                  expr: local temp = std.strReplace(target.expr, '${', '___DOLLAR_BRACE___');
+                        local replaced = std.strReplace(temp, '{', '{asserts_env=~"$env", asserts_site=~"$site", ');
+                        std.strReplace(replaced, '___DOLLAR_BRACE___', '${'),
                 }
               else target
               for target in panel.targets
@@ -308,7 +310,9 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
                 targets: [
                   if std.objectHas(target, 'expr') then
                     target {
-                      expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                      expr: local temp = std.strReplace(target.expr, '${', '___DOLLAR_BRACE___');
+                            local replaced = std.strReplace(temp, '{', '{asserts_env=~"$env", asserts_site=~"$site", ');
+                            std.strReplace(replaced, '___DOLLAR_BRACE___', '${'),
                     }
                   else target
                   for target in panel.targets
