@@ -5,7 +5,7 @@ commonlib.variables.new(
   filteringSelector=cfg._config.filteringSelector,
   groupLabels=cfg._config.groupLabels,
   instanceLabels=cfg._config.instanceLabels,
-  varMetric='{__name__=~"otelcol_process_uptime.*"}',
+  varMetric='otelcol_process_uptime',
   enableLokiLogs=false,
   customAllValue='.*',
   prometheusDatasourceName='datasource',
