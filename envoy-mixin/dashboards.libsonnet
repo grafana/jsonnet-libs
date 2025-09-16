@@ -44,7 +44,7 @@ local template = import 'grafonnet/template.libsonnet';
       g.dashboard('Envoy Overview', std.md5('20210205-envoy'))
 
       // Hidden variables to be able to repeat panels for each upstream/downstream.
-      .addMultiTemplate('envoy_cluster', 'envoy_cluster_version{job=~"$job",instance=~"$instance",envoy_cluster_name!="envoy-admin"}', 'envoy_cluster_name', 2)
+      .addMultiTemplate('envoy_cluster', 'envoy_cluster_warming_state{job=~"$job",instance=~"$instance",envoy_cluster_name!="envoy-admin"}', 'envoy_cluster_name', 2)
       .addMultiTemplate('envoy_listener_filter', 'envoy_http_downstream_rq_total{job=~"$job",instance=~"$instance",envoy_http_conn_manager_prefix!~"admin|metrics",}', 'envoy_http_conn_manager_prefix', 2)
 
       .addRow(

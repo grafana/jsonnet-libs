@@ -11,14 +11,14 @@ The Apache Hadoop mixin contains the following dashboards:
 
 and the following alerts:
 
-- ApacheHadoopLowHDFSCapacity
-- ApacheHadoopHDFSMissingBlocks
-- ApacheHadoopHDFSHighVolumeFailures
-- ApacheHadoopHighDeadDataNodes
-- ApacheHadoopHighNodeManagerCPUUsage
-- ApacheHadoopHighNodeManagerMemoryUsage
-- ApacheHadoopHighResourceManagerVirtualCoreCPUUsage
-- ApacheHadoopHighResourceManagerMemoryUsage
+- HadoopLowHDFSCapacity
+- HadoopHDFSMissingBlocks
+- HadoopHDFSHighVolumeFailures
+- HadoopHighDeadDataNodes
+- HadoopHighNodeManagerCPUUsage
+- HadoopHighNodeManagerMemoryUsage
+- HadoopHighResourceManagervCoreCPUUsage
+- HadoopHighResourceManagerMemoryUsage
 
 ## Apache Hadoop NameNode overview
 
