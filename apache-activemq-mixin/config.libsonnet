@@ -29,9 +29,9 @@
   alertsHighTemporaryMemoryUsage: 70,  // %
 
   signals+: {
-    clusters: (import './signals/clusters.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }}'}),
-    instance: (import './signals/instance.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }} - {{ instance }}'}),
-    queues: (import './signals/queues.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}'}),
-    topics: (import './signals/topics.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}'}),
+    clusters: (import './signals/clusters.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }}' }),
+    instance: (import './signals/instance.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }} - {{ instance }}' }),
+    queues: (import './signals/queues.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}' }),
+    topics: (import './signals/topics.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}' }),
   },
 }
