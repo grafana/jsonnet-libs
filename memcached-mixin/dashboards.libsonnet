@@ -16,12 +16,12 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addRow(
         g.row('Hits')
         .addPanel(
-          g.panel('Hit Rate') +
+          g.timeseriesPanel('Hit Rate') +
           g.queryPanel('sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance", command="get", status="hit"}[$__rate_interval])) / sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", command="get"}[$__rate_interval]))', 'Hit Rate') +
           { yaxes: g.yaxes('percentunit') },
         )
         .addPanel(
-          g.panel('Top 20 Highest Connection Usage') +
+          g.timeseriesPanel('Top 20 Highest Connection Usage') +
           g.queryPanel(|||
             topk(20,
               max by (%s, job, instance) (
@@ -34,22 +34,22 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addRow(
         g.row('Ops')
         .addPanel(
-          g.panel('Commands') +
+          g.timeseriesPanel('Commands') +
           g.queryPanel('sum by(command, status) (rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{command}} {{status}}')
         )
         .addPanel(
-          g.panel('Evictions') +
+          g.timeseriesPanel('Evictions') +
           g.queryPanel('sum by(instance) (rate(memcached_items_evicted_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}')
         )
         .addPanel(
-          g.panel('Stored') +
+          g.timeseriesPanel('Stored') +
           g.queryPanel('sum by(instance) (rate(memcached_items_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}')
         )
       )
       .addRow(
         g.row('Resources')
         .addPanel(
-          g.panel('CPU') +
+          g.timeseriesPanel('CPU') +
           g.queryPanel(|||
             sum by (instance) (
               rate(memcached_process_user_cpu_seconds_total{%(cluster)s=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]) +
@@ -59,14 +59,14 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           g.stack,
         )
         .addPanel(
-          g.panel('Memory') +
+          g.timeseriesPanel('Memory') +
           g.queryPanel('sum by(instance) (memcached_current_bytes{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})', '{{instance}}') +
           g.stack +
           { yaxes: g.yaxes('bytes') },
           // TODO add memcached_limit_bytes
         )
         .addPanel(
-          g.panel('Items') +
+          g.timeseriesPanel('Items') +
           g.queryPanel('sum by(instance) (memcached_current_items{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})', '{{instance}}') +
           g.stack,
         )
@@ -74,7 +74,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addRow(
         g.row('Network')
         .addPanel(
-          g.panel('Current Connections') +
+          g.timeseriesPanel('Current Connections') +
           g.queryPanel([
             'sum by(instance) (memcached_current_connections{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})',
             // Be conservative showing the lowest setting for max connections among all selected instances.
@@ -85,7 +85,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           ])
         )
         .addPanel(
-          g.panel('Connections / sec') +
+          g.timeseriesPanel('Connections / sec') +
           g.queryPanel([
             'sum by(instance) (rate(memcached_connections_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))',
           ], [
@@ -93,12 +93,12 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           ])
         )
         .addPanel(
-          g.panel('Bytes received') +
+          g.timeseriesPanel('Bytes received') +
           g.queryPanel('sum by(instance) (rate(memcached_read_bytes_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
           { yaxes: g.yaxes('Bps') },
         )
         .addPanel(
-          g.panel('Bytes transmitted') +
+          g.timeseriesPanel('Bytes transmitted') +
           g.queryPanel('sum by(instance) (rate(memcached_written_bytes_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
           { yaxes: g.yaxes('Bps') },
         )
@@ -106,7 +106,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addRow(
         g.row('Memcached Info')
         .addPanel(
-          g.panel('Memcached Info') +
+          g.timeseriesPanel('Memcached Info') +
           g.tablePanel([
             'count by (job, instance, version) (memcached_version{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})',
             'max by (job, instance) (memcached_uptime_seconds{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})',
