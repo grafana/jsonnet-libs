@@ -22,7 +22,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_build_calls{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'increase(:tensorflow:core:graph_build_calls{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -34,7 +34,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_runs{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'increase(:tensorflow:core:graph_runs{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -46,7 +46,7 @@ function(this)
         unit: 'µs',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_build_time_usecs{%(queriesSelector)s}[$__rate_interval])/increase(:tensorflow:core:graph_build_calls{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'increase(:tensorflow:core:graph_build_time_usecs{%(queriesSelector)s}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_build_calls{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -58,7 +58,7 @@ function(this)
         unit: 'µs',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_run_time_usecs{%(queriesSelector)s}[$__rate_interval])/increase(:tensorflow:core:graph_runs{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'increase(:tensorflow:core:graph_run_time_usecs{%(queriesSelector)s}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_runs{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },

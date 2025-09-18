@@ -19,12 +19,12 @@ function(this)
       requestCount: {
         name: 'Model request rate',
         nameShort: 'Request rate',
-        type: 'raw',
+        type: 'counter',
         description: 'Rate of requests over time for the selected model. Grouped by statuses.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'rate(:tensorflow:serving:request_count{%(queriesSelector)s, model_name=~"$model_name"}[$__rate_interval])',
+            expr: ':tensorflow:serving:request_count{%(queriesSelector)s, model_name=~"$model_name"}',
           },
         },
       },
@@ -36,7 +36,7 @@ function(this)
         unit: 'µs',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:serving:request_latency_sum{%(queriesSelector)s, model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{%(queriesSelector)s, model_name=~"$model_name"}[$__rate_interval])',
+            expr: 'increase(:tensorflow:serving:request_latency_sum{%(queriesSelector)s, model_name=~"$model_name"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:request_latency_count{%(queriesSelector)s, model_name=~"$model_name"}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -48,7 +48,7 @@ function(this)
         unit: 'µs',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:serving:runtime_latency_sum{%(queriesSelector)s, model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{%(queriesSelector)s, model_name=~"$model_name"}[$__rate_interval])',
+            expr: 'increase(:tensorflow:serving:runtime_latency_sum{%(queriesSelector)s, model_name=~"$model_name"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:runtime_latency_count{%(queriesSelector)s, model_name=~"$model_name"}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -60,7 +60,7 @@ function(this)
         unit: 'batches/s',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:serving:batching_session:queuing_latency_sum{%(queriesSelector)s}[$__rate_interval])/increase(:tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'increase(:tensorflow:serving:batching_session:queuing_latency_sum{%(queriesSelector)s}[$__interval:] offset $__interval)/increase(:tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },
@@ -72,7 +72,7 @@ function(this)
         unit: 'batches/s',
         sources: {
           prometheus: {
-            expr: 'rate(:tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(:tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}[$__interval:] offset $__interval)',
           },
         },
       },

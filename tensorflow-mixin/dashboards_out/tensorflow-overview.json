@@ -45,7 +45,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -79,9 +79,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "rate(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Model request rate"
                }
@@ -98,7 +99,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -132,9 +133,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:request_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:request_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:request_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Model predict request latency"
                }
@@ -151,7 +153,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -185,9 +187,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:runtime_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:runtime_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:runtime_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Model runtime latency"
                }
@@ -217,7 +220,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -251,9 +254,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Graph build calls"
                }
@@ -270,7 +274,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -304,9 +308,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Graph runs"
                }
@@ -323,7 +328,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -357,9 +362,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_build_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_build_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Average graph build time"
                }
@@ -376,7 +382,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -410,9 +416,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_run_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_run_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Average graph run time"
                }
@@ -429,7 +436,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -463,9 +470,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Batch queuing latency"
                }
@@ -482,7 +490,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -516,9 +524,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{instance}}",
                   "refId": "Batch queuing rate"
                }
@@ -572,21 +581,6 @@
                "type": "query"
             },
             {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
-               },
-               "includeAll": true,
-               "label": "Model name",
-               "multi": true,
-               "name": "model_name",
-               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"}, model_name)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
@@ -596,7 +590,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\"}, instance)",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -608,6 +602,19 @@
                "query": "loki",
                "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "label": "Model name",
+               "multi": true,
+               "name": "model_name",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, model_name)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },

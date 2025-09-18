@@ -2,7 +2,7 @@
   local this = self,
   enableMultiCluster: false,
   filteringSelector: 'job=~"$job", cluster=~"$cluster"',
-  groupLabels: ['job', 'cluster', 'model_name'],
+  groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['tensorflow-mixin'],
   uid: 'tensorflow',

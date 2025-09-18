@@ -26,7 +26,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+            g.dashboard.variable.query.new(
+              'model_name',
+              query='label_values(:tensorflow:serving:request_count{%(queriesSelector)s}, model_name)' % vars,
+            ) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='model_name', metric=':tensorflow:serving:request_count{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus),
+          ],
           uid + '_tensorflow_overview',
           tags,
           links { tensorflowOverview+:: {} },

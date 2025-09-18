@@ -169,7 +169,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -211,7 +211,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",model_name=~\"$model_name\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -258,21 +258,6 @@
                "multi": true,
                "name": "cluster",
                "query": "label_values({job=~\"integrations/tensorflow\",job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Model name",
-               "multi": true,
-               "name": "model_name",
-               "query": "label_values({job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"}, model_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
