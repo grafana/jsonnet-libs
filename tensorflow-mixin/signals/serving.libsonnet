@@ -67,12 +67,12 @@ function(this)
       batchQueuingRate: {
         name: 'Batch queuing rate',
         nameShort: 'Batch rate',
-        type: 'raw',
+        type: 'counter',
         description: 'Rate of batch queuing operations.',
         unit: 'batches/s',
         sources: {
           prometheus: {
-            expr: 'rate(:tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}[$__interval:] offset $__interval)',
+            expr: ':tensorflow:serving:batching_session:queuing_latency_count{%(queriesSelector)s}',
           },
         },
       },

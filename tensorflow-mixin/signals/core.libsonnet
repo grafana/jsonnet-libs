@@ -17,24 +17,26 @@ function(this)
       graphBuildCalls: {
         name: 'Graph build calls',
         nameShort: 'Build calls',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of graph build calls over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_build_calls{%(queriesSelector)s}[$__interval:] offset $__interval)',
+            expr: ':tensorflow:core:graph_build_calls{%(queriesSelector)s}',
+            rangeFunction: 'increase',
           },
         },
       },
       graphRuns: {
         name: 'Graph runs',
         nameShort: 'Graph runs',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of graph runs over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(:tensorflow:core:graph_runs{%(queriesSelector)s}[$__interval:] offset $__interval)',
+            expr: ':tensorflow:core:graph_runs{%(queriesSelector)s}',
+            rangeFunction: 'increase',
           },
         },
       },

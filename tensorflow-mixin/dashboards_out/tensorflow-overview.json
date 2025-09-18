@@ -254,7 +254,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
+                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -308,7 +308,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
+                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -524,7 +524,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
+                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
