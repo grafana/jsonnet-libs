@@ -1,757 +1,485 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Apache ActiveMQ topic overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_topics"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ cluster overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ instance overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_instance_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ logs",
+            "type": "link",
+            "url": "/d/apacheactivemq-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-activemq-mixin"
+               "apache-activemq"
             ],
-            "targetBlank": false,
-            "title": "Other Apache ActiveMQ dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Number of queues connected with the broker instance.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 4,
-               "w": 6,
+               "h": 1,
+               "w": 0,
                "x": 0,
                "y": 0
             },
-            "id": 2,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
+            "id": 1,
+            "panels": [ ],
+            "title": "Queues",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "pluginVersion": "10.2.0-60139",
+            "description": "Number of active queues.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count (activemq_queue_queue_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "count (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Queue count"
                }
             ],
-            "title": "Queues",
+            "title": "Queue count",
             "type": "stat"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of messages in queue destinations.",
+            "description": "Total number of messages in all queues.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 6,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_queue_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Total queue size"
                }
             ],
-            "title": "Queue size",
+            "title": "Total queue size",
             "type": "stat"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of producers attached to queue destinations.",
+            "description": "Total number of queue producers.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 4,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum (activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Total producers"
                }
             ],
-            "title": "Producers",
+            "title": "Total queue producers",
             "type": "stat"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of consumers subscribed to queue destinations.",
+            "description": "Total number of queue consumers.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 18,
-               "y": 0
+               "y": 1
             },
             "id": 5,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum (activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Total consumers"
                }
             ],
-            "title": "Consumers",
+            "title": "Total queue consumers",
             "type": "stat"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate messages sent to queue destinations.",
+            "description": "Rate of messages being enqueued to queues.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "mps"
-               },
-               "overrides": [ ]
+                  "unit": "/ sec"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 4
+               "y": 9
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Top queues by enqueue rate"
                }
             ],
-            "title": "Top queues by enqueue rate",
+            "title": "Queue enqueue rate",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate messages have been acknowledged (and removed) from queue destinations.",
+            "description": "Rate of messages being dequeued from queues.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "mps"
-               },
-               "overrides": [ ]
+                  "unit": "/ sec"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 4
+               "y": 9
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Top queues by dequeue rate"
                }
             ],
-            "title": "Top queues by dequeue rate",
+            "title": "Queue dequeue rate",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Average time a message was held on queue destinations.",
+            "description": "Average time to enqueue messages to queues.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 8,
                "x": 0,
-               "y": 12
+               "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(instance, activemq_cluster) ($k_selector, activemq_queue_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"})",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Top queues by average enqueue time"
                }
             ],
-            "title": "Top queues by average enqueue time",
+            "title": "Queue average enqueue time",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate messages have expired on queue destinations.",
+            "description": "Rate of messages expiring in queues.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "mps"
-               },
-               "overrides": [ ]
+                  "unit": "/ sec"
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 12
+               "w": 8,
+               "x": 8,
+               "y": 17
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, rate(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Top queues by expired rate"
                }
             ],
-            "title": "Top queues by expired message rate",
+            "title": "Queue expired rate",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Average message size on queue destinations.",
+            "description": "Average size of messages in queues.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "axisSoftMin": 0,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 54,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
-                  "min": 0,
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "decbytes"
-               },
-               "overrides": [ ]
+                  "unit": "bytes"
+               }
             },
             "gridPos": {
-               "h": 7,
-               "w": 24,
-               "x": 0,
-               "y": 20
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 17
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"})",
+                  "expr": "topk by (job,cluster,activemq_cluster, instance) ($k_selector, activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - {{destination}}"
+                  "instant": false,
+                  "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
+                  "refId": "Top queues by average message size"
                }
             ],
-            "title": "Top queues by average message size",
+            "title": "Queue average message size",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.",
+            "description": "",
             "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "inspect": false
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  }
-               },
                "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Average message size"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "decbytes"
-                        }
-                     ]
-                  },
                   {
                      "matcher": {
                         "id": "byName",
@@ -791,6 +519,18 @@
                   {
                      "matcher": {
                         "id": "byName",
+                        "options": "Average message size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
                         "options": "ActiveMQ cluster"
                      },
                      "properties": [
@@ -799,7 +539,7 @@
                            "value": [
                               {
                                  "title": "Cluster link",
-                                 "url": "d/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
+                                 "url": "d/apacheactivemq_cluster_overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}"
                               }
                            ]
                         }
@@ -816,7 +556,7 @@
                            "value": [
                               {
                                  "title": "Instance link",
-                                 "url": "d/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
+                                 "url": "d/apacheactivemq_instance_overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}"
                               }
                            ]
                         }
@@ -825,62 +565,73 @@
                ]
             },
             "gridPos": {
-               "h": 7,
+               "h": 8,
                "w": 24,
                "x": 0,
-               "y": 27
+               "y": 25
             },
             "id": 11,
             "options": {
                "cellHeight": "sm",
                "footer": {
                   "countRows": false,
-                  "fields": "",
+                  "fields": [
+                     ""
+                  ],
                   "reducer": [
                      "sum"
                   ],
                   "show": false
                },
-               "showHeader": true,
-               "sortBy": [ ]
+               "showHeader": true
             },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_queue_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval:])",
+                  "expr": "rate(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval])",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queue enqueue rate summary"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_queue_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval:])",
+                  "expr": "rate(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}[$__rate_interval])",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queue dequeue rate summary"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_queue_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}",
+                  "expr": "activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queue average enqueue time summary"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_queue_average_message_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination=~\".*$name.*\"}",
+                  "expr": "activemq_queue_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination=~\".*$name.*\"}",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queue average message size summary"
                }
             ],
             "title": "Queue summary",
@@ -897,11 +648,10 @@
                   "options": {
                      "indexByName": { },
                      "renameByName": {
-                        "Time 1": "",
-                        "Value #A": "Enqueue rate",
-                        "Value #B": "Dequeue rate",
-                        "Value #C": "Average enqueue time",
-                        "Value #D": "Average message size",
+                        "Value #Queue average enqueue time summary": "Average enqueue time",
+                        "Value #Queue average message size summary": "Average message size",
+                        "Value #Queue dequeue rate summary": "Dequeue rate",
+                        "Value #Queue enqueue rate summary": "Enqueue rate",
                         "activemq_cluster 1": "ActiveMQ cluster",
                         "destination": "Destination",
                         "instance 1": "Instance"
@@ -913,13 +663,13 @@
                   "options": {
                      "include": {
                         "names": [
+                           "Destination",
                            "ActiveMQ cluster",
                            "Instance",
                            "Enqueue rate",
                            "Dequeue rate",
                            "Average enqueue time",
-                           "Average message size",
-                           "Destination"
+                           "Average message size"
                         ]
                      }
                   }
@@ -929,148 +679,125 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
-         "apache-activemq-mixin"
+         "apache-activemq"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(activemq_topic_producer_count,job)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".*",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
-               "options": [ ],
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},activemq_cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(activemq_topic_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\"},instance)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
                "current": {
+                  "selected": false,
                   "text": "4",
                   "value": "4"
                },
-               "hide": 0,
                "includeAll": false,
                "label": "Top queue count",
                "multi": false,
                "name": "k_selector",
                "options": [
                   {
+                     "selected": true,
                      "text": "2",
                      "value": "2"
                   },
                   {
+                     "selected": false,
                      "text": "4",
                      "value": "4"
                   },
                   {
+                     "selected": false,
                      "text": "6",
                      "value": "6"
                   },
                   {
+                     "selected": false,
                      "text": "8",
                      "value": "8"
                   },
                   {
+                     "selected": false,
                      "text": "10",
                      "value": "10"
                   }
                ],
-               "query": "2,4,6,8,10",
-               "refresh": 0,
+               "query": "2 : 2,4 : 4,6 : 6,8 : 8,10 : 10",
                "type": "custom"
             },
             {
@@ -1081,6 +808,13 @@
                },
                "label": "Queue by name",
                "name": "name",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "",
+                     "value": ""
+                  }
+               ],
                "query": "",
                "type": "textbox"
             }
@@ -1090,33 +824,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache ActiveMQ queue overview",
-      "uid": "apache-activemq-queue-overview",
-      "version": 0
+      "uid": "apacheactivemq_queues"
    }
