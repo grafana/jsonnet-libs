@@ -41,65 +41,11 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of HTTP traffic over time, grouped by status.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 0,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "unit": "reqps"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 1
-            },
-            "id": 2,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by (status) (rate(http_requests_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{ status }}",
-                  "refId": "Traffic by Response Code"
-               }
-            ],
-            "title": "Traffic by Response Code",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
             "description": "The rate of user logins.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -113,9 +59,9 @@
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 9
+               "y": 1
             },
-            "id": 3,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -153,7 +99,6 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
                      "spanNulls": false
                   },
                   "unit": "ms"
@@ -163,9 +108,9 @@
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 9
+               "y": 1
             },
-            "id": 4,
+            "id": 3,
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -199,9 +144,9 @@
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 9
+               "y": 1
             },
-            "id": 5,
+            "id": 4,
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -271,6 +216,60 @@
             "type": "table"
          },
          {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of HTTP traffic over time, grouped by status.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (status) (rate(http_requests_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{ status }}",
+                  "refId": "Traffic by Response Code"
+               }
+            ],
+            "title": "Traffic by Response Code",
+            "type": "timeseries"
+         },
+         {
             "collapsed": false,
             "gridPos": {
                "h": 1,
@@ -292,7 +291,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -346,7 +345,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -400,7 +399,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -454,7 +453,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,

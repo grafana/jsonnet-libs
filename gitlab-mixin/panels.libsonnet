@@ -13,7 +13,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of HTTP traffic over time, grouped by status.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       userSessionsPanel:
@@ -23,14 +22,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The rate of user logins.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('sessions/s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       avgRequestLatencyPanel:
         g.panel.timeSeries.new('Average Request Latency')
         + g.panel.timeSeries.panelOptions.withDescription('Average latency of inbound HTTP requests.')
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
         + g.panel.timeSeries.queryOptions.withTargets([
@@ -91,7 +88,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The number of jobs activated per second.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('activations/s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       pipelinesCreatedPanel:
@@ -101,7 +97,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of pipeline instances created.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('pipelines/s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       pipelineBuildsCreatedPanel:
@@ -111,7 +106,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The number of builds created within a pipeline per second, grouped by source.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('builds/s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       buildTraceOperationsPanel:
@@ -121,7 +115,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The rate of build trace operations performed, grouped by source.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }
