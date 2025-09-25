@@ -1,17 +1,29 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "InfluxDB cluster overview",
+            "type": "link",
+            "url": "/d/influxdb_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "InfluxDB instance overview",
+            "type": "link",
+            "url": "/d/influxdb_instance_overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
-            "tags": [
+            "title": "All dashboards",
+            "type": "link",
+            "url": [
                "influxdb-mixin"
-            ],
-            "targetBlank": false,
-            "title": "Other InfluxDB dashboards",
-            "type": "dashboards",
-            "url": ""
+            ]
          }
       ],
       "panels": [
@@ -161,7 +173,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\",level=~\"$level\",service=~\"$service\",engine=~\"$engine\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +206,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,7 +215,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\",level=~\"$level\",service=~\"$service\",engine=~\"$engine\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -234,7 +246,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/influxdb\"}, job)",
+               "query": "label_values({job=\"integrations/influxdb\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -246,70 +258,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Influxdb_cluster",
+               "label": "InfluxDB cluster",
                "multi": true,
                "name": "influxdb_cluster",
-               "query": "label_values({job=~\"integrations/influxdb\",job=~\"$job\"}, influxdb_cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values({job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Level",
-               "multi": true,
-               "name": "level",
-               "query": "label_values({job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}, level)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Service",
-               "multi": true,
-               "name": "service",
-               "query": "label_values({job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\",level=~\"$level\"}, service)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Engine",
-               "multi": true,
-               "name": "engine",
-               "query": "label_values({job=~\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\",level=~\"$level\",service=~\"$service\"}, engine)",
+               "query": "label_values({job=\"integrations/influxdb\",job=~\"$job\"}, influxdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -331,14 +283,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
-      "title": "InfluxDB logs overview",
-      "uid": "influxdb-logs-overview"
+      "timezone": "default",
+      "title": "InfluxDB logs",
+      "uid": "influxdb-logs"
    }
