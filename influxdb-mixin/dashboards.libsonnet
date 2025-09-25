@@ -81,7 +81,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     if this.config.enableLokiLogs then
       {
         'influxdb-logs.json':
-           logslib.new(
+          logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
             datasourceRegex=this.grafana.variables.datasources.loki.regex,
