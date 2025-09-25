@@ -58,7 +58,7 @@ Default thresholds can be configured in `config.libsonnet`.
   _config+:: {
     enableMultiCluster: false,
     filteringSelector: 'job=~"integrations/apache-activemq"',
-    groupLabels: ['job', 'cluster'],
+    groupLabels: ['job', 'cluster', 'activemq_cluster'],
     instanceLabels: ['instance'],
     
     dashboardTags: ['apache-activemq'],
