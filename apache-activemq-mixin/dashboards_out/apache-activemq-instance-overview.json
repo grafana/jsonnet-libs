@@ -1,94 +1,100 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Apache ActiveMQ queue overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_queues"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ topic overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_topics"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ cluster overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_cluster_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ instance overview",
+            "type": "link",
+            "url": "/d/apacheactivemq_instance_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache ActiveMQ logs",
+            "type": "link",
+            "url": "/d/apacheactivemq-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-activemq-mixin"
+               "apache-activemq"
             ],
-            "targetBlank": false,
-            "title": "Other Apache ActiveMQ dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Instance",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The percentage of memory used by both topics and queues across brokers.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
+                           "color": "green"
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (activemq_memory_usage_ratio{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "avg(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
+                  "refId": "Average broker memory usage"
                }
             ],
             "title": "Average broker memory usage",
@@ -96,67 +102,41 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The percentage of store memory used by both topics and queues across brokers.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
+                           "color": "green"
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 6,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (activemq_store_usage_ratio{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "avg(activemq_store_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
+                  "refId": "Average broker store usage"
                }
             ],
             "title": "Average store memory usage",
@@ -164,67 +144,41 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The percentage of temporary memory used by both topics and queues across brokers.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 70
+                           "color": "green"
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 4,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (activemq_temp_usage_ratio{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "avg(activemq_temp_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
+                  "refId": "Broker temporary usage"
                }
             ],
             "title": "Average temporary memory usage",
@@ -232,60 +186,37 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Recent number of unacknowledged messages on the broker.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 4,
+               "h": 6,
                "w": 6,
                "x": 18,
-               "y": 0
+               "y": 1
             },
             "id": 5,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (increase(activemq_message_total{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum (increase(activemq_message_total{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Unacknowledged messages"
                }
             ],
             "title": "Unacknowledged messages / $__interval",
@@ -293,22 +224,23 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "uid": "datasource"
             },
             "description": "Firing alerts for Apache ActiveMQ environment.",
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 4
+               "y": 9
             },
             "id": 6,
             "options": {
-               "alertInstanceLabelFilter": "{job=~\"${job:regex}\", activemq_cluster=~\"${activemq_cluster:regex}\", instance=~\"${instance:regex}\"}",
+               "alertInstanceLabelFilter": "{%(queriesSelector)s}",
                "alertName": "",
                "dashboardAlerts": false,
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "datasource"
                },
                "groupBy": [ ],
                "groupMode": "default",
@@ -329,59 +261,37 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of producers attached to destinations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 6,
                "x": 12,
-               "y": 4
+               "y": 9
             },
             "id": 7,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}) + sum (activemq_topic_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum(activemq_queue_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Producers"
                }
             ],
             "title": "Producers",
@@ -389,59 +299,37 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of consumers subscribed to destinations on the broker.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 6,
                "x": 18,
-               "y": 4
+               "y": 9
             },
             "id": 8,
-            "options": {
-               "colorMode": "none",
-               "graphMode": "area",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_queue_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}) + sum (activemq_topic_consumer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum(activemq_queue_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}) + sum(activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "__auto"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Consumers"
                }
             ],
             "title": "Consumers",
@@ -449,88 +337,50 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of messages on queue destinations, including any that have been dispatched but not acknowledged.",
+            "description": "Number of messages on queue destinations, including any that have been dispatched but not yet acknowledged.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 10
+               "y": 17
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (activemq_queue_queue_size{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Queue size"
                }
             ],
             "title": "Queue size",
@@ -538,99 +388,63 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The percentage of memory being used by topic and queue destinations.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "max": 100,
-                  "min": 0,
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 10
+               "y": 17
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Queue memory usage"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
+                  "refId": "Topic memory usage"
                }
             ],
             "title": "Destination memory usage",
@@ -638,99 +452,50 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of messages that have been sent to the destination.",
+            "description": "Number of messages that have been sent to destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 25
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval] offset $__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by(instance, activemq_cluster, job) (increase(activemq_topic_enqueue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }}",
+                  "refId": "Enqueue / $__interval"
                }
             ],
             "title": "Enqueue / $__interval",
@@ -738,99 +503,50 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of messages that have been acknowledged (and removed) from the destinations.",
+            "description": "Number of messages that have been acknowledged (and removed) from destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 25
             },
             "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster) (increase(activemq_queue_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval)) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval] offset $__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by(instance, activemq_cluster) (increase(activemq_topic_dequeue_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }}",
+                  "refId": "Dequeue / $__interval"
                }
             ],
             "title": "Dequeue / $__interval",
@@ -838,97 +554,63 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average time a message was held across all destinations.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 26
+               "y": 33
             },
             "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (activemq_cluster, instance, job) (activemq_queue_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_queue_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Queue average enqueue time"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (activemq_cluster, instance, job) (activemq_topic_average_enqueue_time{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum by (instance, activemq_cluster, job) (activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
+                  "refId": "Topic average enqueue time"
                }
             ],
             "title": "Average enqueue time",
@@ -936,99 +618,63 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of messages across destinations that are expired.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 26
+               "y": 33
             },
             "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (increase(activemq_queue_expired_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}[$__interval:]))",
+                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_queue_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - queue"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - queue",
+                  "refId": "Queue expired messages"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, activemq_cluster, job) (increase(activemq_topic_expired_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__interval:]))",
+                  "expr": "sum by (instance, activemq_cluster, job) (increase(activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"^ActiveMQ.Advisory.+\"}[$__interval] offset $__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}} - topic"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }} - topic",
+                  "refId": "Topic expired messages"
                }
             ],
             "title": "Expired messages / $__interval",
@@ -1036,104 +682,65 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 34
+               "y": 41
             },
             "id": 15,
-            "targets": [ ],
+            "panels": [ ],
             "title": "JVM resources",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The time spent performing recent garbage collections",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 35
+               "y": 42
             },
             "id": 16,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration_seconds{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\"}",
+                  "expr": "jvm_gc_duration_seconds{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
+                  "refId": "Garbage collection duration"
                }
             ],
             "title": "Garbage collection duration",
@@ -1141,88 +748,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The recent increase in the number of garbage collection events for the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "axisShow": false,
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 25,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 35
+               "y": 42
             },
             "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\", instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:])",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval] offset $__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{activemq_cluster}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{ activemq_cluster }} - {{ instance }}",
+                  "refId": "Garbage collection count"
                }
             ],
             "title": "Garbage collection count / $__interval",
@@ -1230,112 +801,86 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
-         "apache-activemq-mixin"
+         "apache-activemq"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(activemq_topic_producer_count,job)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".*",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
-               "options": [ ],
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"},activemq_cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(activemq_topic_producer_count{job=~\"$job\", activemq_cluster=~\"$activemq_cluster\"},instance)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
                "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -1343,33 +888,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache ActiveMQ instance overview",
-      "uid": "apache-activemq-instance-overview",
-      "version": 0
+      "uid": "apacheactivemq_instance_overview"
    }
