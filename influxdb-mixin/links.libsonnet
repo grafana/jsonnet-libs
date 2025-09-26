@@ -12,7 +12,7 @@ local g = import './g.libsonnet';
                  + link.link.options.withKeepTime(true),
 
                otherDashboards:
-                 link.link.new('All dashboards', this.config.dashboardTags)
+                 link.dashboards.new('All dashboards', this.config.dashboardTags)
                  + link.dashboards.options.withIncludeVars(true)
                  + link.dashboards.options.withKeepTime(true)
                  + link.dashboards.options.withAsDropdown(true),

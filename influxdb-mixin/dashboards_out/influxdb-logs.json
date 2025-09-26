@@ -19,11 +19,11 @@
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
-            "title": "All dashboards",
-            "type": "link",
-            "url": [
+            "tags": [
                "influxdb-mixin"
-            ]
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [

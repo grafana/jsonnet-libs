@@ -176,7 +176,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (' + groupAggListWithInstance + ') (rate(http_query_request_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by (' + groupAggListWithInstance + ', status) (rate(http_query_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{instance}} - query - {{status}}',
           },
         },
@@ -190,7 +190,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by (' + groupAggListWithInstance + ') (rate(http_write_request_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum by (' + groupAggListWithInstance + ', status) (rate(http_write_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '{{instance}} - write - {{status}}',
           },
         },
