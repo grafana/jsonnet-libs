@@ -127,7 +127,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       httpAPIRequestDurationPanel:
         g.panel.histogram.new('HTTP API request duration')
-        + g.panel.histogram.panelOptions.withDescription('Distribution of HTTP API request durations across the cluster.')
+        + g.panel.histogram.panelOptions.withDescription('Time taken to respond to HTTP API requests for the cluster.')
         + g.panel.histogram.queryOptions.withTargets([
           signals.overview.httpAPIRequestDuration.asTarget() { interval: '1m' },
         ])
@@ -137,7 +137,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.pieChart.new(
           'HTTP API response codes',
         )
-        + g.panel.pieChart.panelOptions.withDescription('Share of HTTP API responses by status code across the cluster.')
+        + g.panel.pieChart.panelOptions.withDescription('Rate of different HTTP response codes for the entire cluster.')
         + g.panel.pieChart.queryOptions.withTargets([
           signals.overview.httpAPIResponseCodes.asTarget() { interval: '1m' },
         ])
@@ -146,27 +146,30 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.pieChart.options.reduceOptions.withCalcs(['sum']),
 
       // Query operations panels
-      httpQueryOperationsPanel:
+      httpOperationsPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'HTTP query operations',
+          'HTTP operations',
           targets=[
             signals.overview.httpQueryOperations.asTarget() { interval: '1m' },
+            signals.overview.httpWriteOperations.asTarget() { interval: '1m' },
           ],
-          description='Rate of HTTP query operations by status in the cluster.',
+          description='Rate of database operations from HTTP for the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-
-      httpWriteOperationsPanel:
+      httpOperationsDataPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'HTTP write operations',
+          'HTTP operation data',
           targets=[
-            signals.overview.httpWriteOperations.asTarget() { interval: '1m' },
+            signals.overview.httpQueryRequestOperationsData.asTarget() { interval: '1m' },
+            signals.overview.httpQueryResponseOperationsData.asTarget() { interval: '1m' },
+            signals.overview.httpWriteRequestOperationsData.asTarget() { interval: '1m' },
+            signals.overview.httpWriteResponseOperationsData.asTarget() { interval: '1m' },
           ],
-          description='Rate of HTTP write operations by status in the cluster.',
+          description='Rate of data transferred for HTTP query and write operations in the cluster.',
         )
-        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.standardOptions.withUnit('bytes')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
 
@@ -177,7 +180,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.topInstancesByIQLQueryRate.asTarget() { interval: '1m' },
           ],
-          description='Top 5 instances by InfluxQL query rate in the cluster.',
+          description='Rate of InfluxQL queries for the instances with the most traffic in the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
@@ -187,7 +190,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.iqlQueryResponseTime.asTarget() { interval: '1m' },
           ],
-          description='Total time spent executing InfluxQL queries in the cluster.',
+          description='Response time for recent InfluxQL queries, organized by result.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -198,7 +201,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.boltdbReadOperations.asTarget() { interval: '1m' },
             signals.overview.boltdbWriteOperations.asTarget() { interval: '1m' },
           ],
-          description='Rate of BoltDB read and write operations in the cluster.',
+          description='Rate of reads and writes to the underlying BoltDB storage engine for the entire cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -209,7 +212,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.activeTasks.asTarget() { interval: '1m' },
           ],
-          description='Number of currently executing tasks in the cluster.',
+          description='Number of tasks currently being executed for the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -219,7 +222,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.activeWorkers.asTarget() { interval: '1m' },
           ],
-          description='Number of active task executor workers in the cluster.',
+          description='Number of workers currently running tasks on the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -231,7 +234,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.executionTotals.asTarget() { interval: '1m' },
             signals.overview.executionFailures.asTarget() { interval: '1m' },
           ],
-          description='Total number of task executions in the cluster.',
+          description='Rate of execution operations and execution failures for the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -243,7 +246,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.scheduleTotals.asTarget() { interval: '1m' },
             signals.overview.scheduleFailures.asTarget() { interval: '1m' },
           ],
-          description='Total and failed task schedules across the cluster.',
+          description='Rate of schedule operations and schedule operation failures for the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -254,7 +257,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.topInstancesByHeapMemoryUsage.asTarget() { interval: '1m' },
           ],
-          description='Top instances by Go heap memory usage percentage.',
+          description='Heap memory usage for the largest instances in the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
@@ -265,7 +268,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.overview.topInstancesByGCCPUUsage.asTarget() { interval: '1m' },
           ],
-          description='Instances with the highest Go garbage collection CPU usage.',
+          description='Fraction of CPU time used for garbage collection for the top instances in the cluster.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -348,7 +351,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.stat.base.new(
           'Threads',
           targets=[signals.instance.goThreads.asTarget()],
-          description='Number of threads on the server.',
+          description='Number of threads currenty active on the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
@@ -358,7 +361,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP API requests',
           targets=[signals.instance.httpAPIRequests.asTarget() { interval: '1m' }],
-          description='Rate of HTTP API requests received by this instance.',
+          description='Rate of HTTP API requests to the API, organized by response code.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
@@ -424,7 +427,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.instance.boltdbReadOperations.asTarget() { interval: '1m' },
             signals.instance.boltdbWriteOperations.asTarget() { interval: '1m' },
           ],
-          description='Rate of BoltDB read and write operations performed by this instance.',
+          description='Rate of reads and writes to the underlying BoltDB storage engine for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -432,7 +435,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Active tasks',
           targets=[signals.instance.activeTasks.asTarget() { interval: '1m' }],
-          description='Number of currently executing tasks on this instance.',
+          description='Number of tasks currently being executed for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -440,7 +443,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Active workers',
           targets=[signals.instance.activeWorkers.asTarget() { interval: '1m' }],
-          description='Number of active task executor workers on this instance.',
+          description='Number of workers currently running tasks on the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -448,7 +451,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Worker usage',
           targets=[signals.instance.workerUsage.asTarget() { interval: '1m' }],
-          description='Worker utilization for task execution on this instance.',
+          description='Percentage of available workers that are currently busy.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -459,7 +462,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.instance.executionsTotal.asTarget() { interval: '1m' },
             signals.instance.executionsFailures.asTarget() { interval: '1m' },
           ],
-          description='Total and failed task executions on this instance.',
+          description='Rate of executions and execution failures for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -470,7 +473,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.instance.scheduleTotals.asTarget() { interval: '1m' },
             signals.instance.scheduleFailures.asTarget() { interval: '1m' },
           ],
-          description='Total and failed task schedules on this instance.',
+          description='Rate of schedule operations and schedule operation failures for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -480,7 +483,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.stat.base.new(
           'Time since last GC',
           targets=[signals.instance.timeSinceLastGC.asTarget()],
-          description='Elapsed seconds since the Go runtime last performed a GC.',
+          description='Amount of time since the last garbage collection cycle.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
@@ -490,7 +493,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'GC time',
           targets=[signals.instance.gcTime.asTarget() { interval: '2m' }],
-          description='Time spent in Go garbage collection during each $__interval.',
+          description='Server CPU time spent on garbage collection.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -499,7 +502,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'GC CPU usage',
           targets=[signals.instance.gcCPUUsage.asTarget()],
-          description='Fraction of CPU time used by Go garbage collection.',
+          description='Percent of server CPU time used for garbage collection.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -507,7 +510,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Heap memory usage',
           targets=[signals.instance.goHeapMemoryUsage.asTarget()],
-          description='Estimated Go heap memory utilization of this instance.',
+          description='Heap memory usage for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -516,7 +519,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Threads',
           targets=[signals.instance.goThreads.asTarget()],
-          description='Number of OS threads created by this process.',
+          description='Number of OS threads created for the server.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 

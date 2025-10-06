@@ -1,10 +1,9 @@
 function(this)
-  local groupAggListWithoutInstance = std.join(',', this.groupLabels);
-  local groupAggListWithInstance = groupAggListWithoutInstance + ', ' + std.join(',', this.instanceLabels);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,
+    // note for the cluster overview we are intentionally dropping the instance labels
+    instanceLabels: [],
     enableLokiLogs: this.enableLokiLogs,
     legendCustomTemplate: '{{influxdb_cluster}} - ' + std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
     aggLevel: 'none',
@@ -163,7 +162,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by(job, influxdb_cluster, status) (rate(http_query_request_count{%(queriesSelector)s}[$__rate_interval])) > 0',
-            legendCustomTemplate: '{{influxdb_cluster}} - query -{{status}}',
+            legendCustomTemplate: '{{influxdb_cluster}} - query - {{status}}',
           },
         },
       },
@@ -177,7 +176,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'sum by(job, influxdb_cluster, status) (rate(http_write_request_count{%(queriesSelector)s}[$__rate_interval])) > 0',
-            legendCustomTemplate: '{{influxdb_cluster}} - write -{{status}}',
+            legendCustomTemplate: '{{influxdb_cluster}} - write - {{status}}',
           },
         },
       },

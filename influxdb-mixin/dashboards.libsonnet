@@ -32,7 +32,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         + root.applyCommon(
-          vars.multiInstance + [
+          std.filter(
+            function(x) x.name != 'instance',
+            vars.multiInstance,
+          ) + [
             g.dashboard.variable.custom.new(
               'k',
               values=['5', '10', '20', '50'],

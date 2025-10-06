@@ -340,7 +340,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of threads on the server.",
+            "description": "Number of threads currenty active on the server.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -395,7 +395,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of HTTP API requests received by this instance.",
+            "description": "Rate of HTTP API requests to the API, organized by response code.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -788,7 +788,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of BoltDB read and write operations performed by this instance.",
+            "description": "Rate of reads and writes to the underlying BoltDB storage engine for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -866,7 +866,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of currently executing tasks on this instance.",
+            "description": "Number of tasks currently being executed for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -919,7 +919,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of active task executor workers on this instance.",
+            "description": "Number of workers currently running tasks on the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -972,7 +972,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Worker utilization for task execution on this instance.",
+            "description": "Percentage of available workers that are currently busy.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1025,7 +1025,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total and failed task executions on this instance.",
+            "description": "Rate of executions and execution failures for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1090,7 +1090,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total and failed task schedules on this instance.",
+            "description": "Rate of schedule operations and schedule operation failures for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1168,7 +1168,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Elapsed seconds since the Go runtime last performed a GC.",
+            "description": "Amount of time since the last garbage collection cycle.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1210,7 +1210,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Time spent in Go garbage collection during each $__interval.",
+            "description": "Server CPU time spent on garbage collection.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1263,7 +1263,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Fraction of CPU time used by Go garbage collection.",
+            "description": "Percent of server CPU time used for garbage collection.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1315,7 +1315,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Estimated Go heap memory utilization of this instance.",
+            "description": "Heap memory usage for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1367,7 +1367,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of OS threads created by this process.",
+            "description": "Number of OS threads created for the server.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
