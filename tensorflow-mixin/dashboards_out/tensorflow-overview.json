@@ -1,897 +1,620 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "Overview of a TensorFlow Serving instance.",
       "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
       "id": null,
-      "links": [ ],
+      "links": [
+         {
+            "keepTime": true,
+            "title": "TensorFlow logs",
+            "type": "link",
+            "url": "/d/tensorflow-logs"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "tensorflow-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Rate of requests over time for the selected model. Grouped by statuses.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(:tensorflow:serving:request_count{job=~\"$job\", instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "rate(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "model_name=\"{{model_name}}\",status=\"{{status}}\""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Model request rate"
                }
             ],
             "title": "Model request rate",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average request latency of predict requests for the selected model.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:request_latency_sum{job=~\"$job\", instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{job=~\"$job\", instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:request_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:request_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "model_name=\"{{model_name}}\""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Model predict request latency"
                }
             ],
             "title": "Model predict request latency",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average runtime latency to fulfill a predict request for the selected model.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:runtime_latency_sum{job=~\"$job\", instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{job=~\"$job\", instance=~\"$instance\", model_name=~\"$model_name\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:runtime_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:runtime_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", model_name=~\"$model_name\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "model_name=\"{{model_name}}\""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Model runtime latency"
                }
             ],
             "title": "Model predict runtime latency",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "collapsed": false,
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 16
+               "y": 17
             },
             "id": 5,
+            "panels": [ ],
             "title": "Serving overview",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of times TensorFlow Serving has created a new client graph.",
+            "description": "Number of graph build calls over time.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "calls"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 17
+               "y": 18
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Graph build calls"
                }
             ],
             "title": "Graph build calls",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of graph executions.",
+            "description": "Number of graph runs over time.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "runs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 17
+               "y": 18
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Graph runs"
                }
             ],
             "title": "Graph runs",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Amount of time Tensorflow has spent creating new client graphs.",
+            "description": "Average time taken to build graphs.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 26
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_build_time_usecs{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:core:graph_build_calls{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_build_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_build_calls{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Average graph build time"
                }
             ],
-            "title": "Graph build time",
-            "transformations": [ ],
+            "title": "Average graph build time",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Amount of time spent executing graphs.",
+            "description": "Average time taken to run graphs.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 26
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:core:graph_run_time_usecs{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:core:graph_runs{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:core:graph_run_time_usecs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:core:graph_runs{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Average graph run time"
                }
             ],
-            "title": "Graph run time",
-            "transformations": [ ],
+            "title": "Average graph run time",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Current latency in the batching queue.",
+            "description": "Average batch queuing latency for the selected model.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 33
+               "y": 34
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Batch queuing latency"
                }
             ],
             "title": "Batch queuing latency",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of batch queue throughput over time.",
+            "description": "Rate of batch queuing operations.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "unit": "batches/s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 33
+               "y": 34
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Batch queuing rate"
                }
             ],
             "title": "Batch queue throughput",
-            "transformations": [ ],
             "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "Logs from the TensorFlow Serving Docker container.",
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 41
-            },
-            "id": 12,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": true,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{name=\"tensorflow\",job=~\"$job\", instance=~\"$instance\"}",
-                  "legendFormat": "",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "Container logs",
-            "transformations": [ ],
-            "type": "logs"
          }
       ],
-      "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "refresh": "30s",
+      "schemaVersion": 39,
       "tags": [
          "tensorflow-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(:tensorflow:serving:request_count{}, job)",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\"}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".*",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(:tensorflow:serving:request_count{}, cluster)",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(:tensorflow:serving:request_count{job=~\"$job\"}, instance)",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
-               "allValue": ".+",
-               "current": { },
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
                "label": "Model name",
-               "multi": false,
+               "multi": true,
                "name": "model_name",
-               "options": [ ],
-               "query": "label_values(:tensorflow:serving:request_count{job=~\"$job\"}, model_name)",
+               "query": "label_values(:tensorflow:serving:request_count{job=~\"integrations/tensorflow\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, model_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "current": { },
-               "hide": 0,
-               "label": "Loki datasource",
-               "name": "loki_datasource",
-               "options": [ ],
-               "query": "loki",
-               "refresh": 1,
-               "regex": "",
-               "type": "datasource"
+               "type": "query"
             }
          ]
       },
@@ -899,33 +622,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "TensorFlow Serving overview",
-      "uid": "tensorflow-overview",
-      "version": 0
+      "title": "TensorFlow overview",
+      "uid": "tensorflow_tensorflow_overview"
    }
