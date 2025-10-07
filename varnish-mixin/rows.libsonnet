@@ -17,10 +17,10 @@ local g = import './g.libsonnet';
           this.grafana.panels.threadsPanel { gridPos+: { w: 12 } },
         ]),
 
-     varnishStats: 
-      g.panel.row.new('Stats')
-      + g.panel.row.withCollapsed(false)
-      + g.panel.row.withPanels([
+      varnishStats:
+        g.panel.row.new('Stats')
+        + g.panel.row.withCollapsed(false)
+        + g.panel.row.withPanels([
           this.grafana.panels.cacheHitRatePanel { gridPos+: { w: 3, h: 4 } },
           this.grafana.panels.frontendRequestsPanel { gridPos+: { w: 3, h: 4 } },
           this.grafana.panels.backendRequestsPanel { gridPos+: { w: 3, h: 4 } },
@@ -29,6 +29,6 @@ local g = import './g.libsonnet';
           this.grafana.panels.cacheHitPassPanel { gridPos+: { w: 3, h: 4 } },
           this.grafana.panels.sessionQueueLengthPanel { gridPos+: { w: 3, h: 4 } },
           this.grafana.panels.poolsPanel { gridPos+: { w: 3, h: 4 } },
-      ]),
+        ]),
     },
 }
