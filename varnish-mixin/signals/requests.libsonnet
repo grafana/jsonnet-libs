@@ -17,12 +17,11 @@ function(this)
         name: 'Frontend requests',
         nameShort: 'Frontend req',
         type: 'counter',
-        description: 'The rate of requests sent to the Varnish Cache frontend.',
+        description: 'The delta of requests sent to the Varnish Cache frontend.',
         unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'varnish_main_client_req{%(queriesSelector)s}',
-            rangeFunction: 'irate',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -32,14 +31,12 @@ function(this)
       backendRequests: {
         name: 'Backend requests',
         nameShort: 'Backend req',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of requests sent to the Varnish Cache backends.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'varnish_main_backend_req{%(queriesSelector)s}',
-            rangeFunction: 'irate',
-            legendCustomTemplate: '{{instance}}',
+            expr: 'sum by () (rate(varnish_main_backend_req{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -54,7 +51,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'varnish_main_client_req{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{instance}} - Frontend',
           },
         },
@@ -70,7 +67,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_req{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{instance}} - Backend',
           },
         },

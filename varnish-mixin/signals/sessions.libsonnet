@@ -17,13 +17,12 @@ function(this)
       sessionsRate: {
         name: 'Sessions rate',
         nameShort: 'Sessions',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of total sessions created in the Varnish Cache instance.',
-        unit: '/ sec',
+        unit: 'sess/s',
         sources: {
           prometheus: {
-            expr: 'varnish_main_sessions_total{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            expr: 'sum by () (irate(varnish_main_sessions_total{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -34,11 +33,11 @@ function(this)
         nameShort: 'Connected',
         type: 'counter',
         description: 'Rate of new connected sessions.',
-        unit: 'sess/s',
+        unit: 'sess',
         sources: {
           prometheus: {
             expr: 'varnish_main_sessions{%(queriesSelector)s,type="conn"}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Connected',
           },
         },
@@ -50,11 +49,11 @@ function(this)
         nameShort: 'Queued',
         type: 'counter',
         description: 'Rate of queued sessions.',
-        unit: 'sess/s',
+        unit: 'sess',
         sources: {
           prometheus: {
             expr: 'varnish_main_sessions{%(queriesSelector)s,type="queued"}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Queued',
           },
         },
@@ -66,11 +65,11 @@ function(this)
         nameShort: 'Dropped',
         type: 'counter',
         description: 'Rate of dropped sessions.',
-        unit: 'sess/s',
+        unit: 'sess',
         sources: {
           prometheus: {
             expr: 'varnish_main_sessions{%(queriesSelector)s,type="dropped"}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Dropped',
           },
         },
@@ -80,13 +79,12 @@ function(this)
       sessionQueueLength: {
         name: 'Session queue length',
         nameShort: 'Queue length',
-        type: 'counter',
+        type: 'raw',
         description: 'Length of session queue waiting for threads.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'varnish_main_thread_queue_len{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            expr: 'sum by () (varnish_main_thread_queue_len{%(queriesSelector)s})',
             legendCustomTemplate: legendCustomTemplate,
           },
         },

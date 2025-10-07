@@ -20,6 +20,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
+                this.grafana.rows.varnishStats,
                 this.grafana.rows.varnishOverview,
               ]
             )

@@ -23,7 +23,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'varnish_main_s_resp_hdrbytes{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Frontend header',
           },
         },
@@ -39,7 +39,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'varnish_main_s_resp_bodybytes{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Frontend body',
           },
         },
@@ -51,11 +51,10 @@ function(this)
         nameShort: 'Backend header',
         type: 'counter',
         description: 'Rate of response header bytes for backend.',
-        unit: 'decbytes',
+        unit: 'decbytes/s',
         sources: {
           prometheus: {
             expr: 'varnish_backend_beresp_hdrbytes{%(queriesSelector)s}',
-            rangeFunction: 'irate',
             legendCustomTemplate: legendCustomTemplate + ' - {{backend}} - Backend header',
           },
         },
@@ -67,11 +66,10 @@ function(this)
         nameShort: 'Backend body',
         type: 'counter',
         description: 'Rate of response body bytes for backend.',
-        unit: 'decbytes',
+        unit: 'decbytes/s',
         sources: {
           prometheus: {
             expr: 'varnish_backend_beresp_bodybytes{%(queriesSelector)s}',
-            rangeFunction: 'irate',
             legendCustomTemplate: legendCustomTemplate + ' - {{backend}} - Backend body',
           },
         },

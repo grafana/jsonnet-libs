@@ -22,7 +22,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'avg((rate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval]) + rate(varnish_main_cache_miss{%(queriesSelector)s}[$__rate_interval]), 1))) * 100',
+            expr: 'avg((rate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval]) + rate(varnish_main_cache_miss{%(queriesSelector)s}[$__rate_interval]), 1))) by () * 100',
           },
         },
       },
@@ -50,7 +50,7 @@ function(this)
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'irate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by () (rate(varnish_main_cache_hit{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -64,7 +64,7 @@ function(this)
         unit: '/ sec',
         sources: {
           prometheus: {
-            expr: 'irate(varnish_main_cache_hitpass{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by () (rate(varnish_main_cache_hitpass{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -73,12 +73,13 @@ function(this)
       cacheExpired: {
         name: 'Cache expired',
         nameShort: 'Expired',
-        type: 'raw',
+        type: 'counter',
         description: 'Rate of expired objects.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'irate(varnish_main_n_expired{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'varnish_main_n_expired{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Expired',
           },
         },
@@ -88,12 +89,13 @@ function(this)
       cacheLruNuked: {
         name: 'Cache LRU nuked',
         nameShort: 'LRU nuked',
-        type: 'raw',
+        type: 'counter',
         description: 'Rate of LRU (least recently used) nuked objects.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'irate(varnish_main_n_lru_nuked{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'varnish_main_n_lru_nuked{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Nuked',
           },
         },

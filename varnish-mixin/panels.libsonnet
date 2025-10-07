@@ -40,11 +40,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.stat.base.new(
           'Frontend requests',
           targets=[
-            signals.requests.frontendRequests.asTarget(),
+            signals.requests.frontendRequests.asTarget() { interval: '2m' },
           ],
           description='The rate of requests sent to the Varnish Cache frontend.'
         )
-        + g.panel.stat.standardOptions.withUnit('reqps')
+        + g.panel.stat.standardOptions.withUnit('req')
         + g.panel.stat.panelOptions.withTransparent(true)
         + g.panel.stat.options.withGraphMode('none'),
 
@@ -55,9 +55,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[
             signals.requests.backendRequests.asTarget(),
           ],
-          description='The rate of requests sent to the Varnish Cache backends.'
+          description='The requests sent to the Varnish Cache backends over the last $__interval.'
         )
-        + g.panel.stat.standardOptions.withUnit('reqps')
+        + g.panel.stat.standardOptions.withUnit('req')
         + g.panel.stat.panelOptions.withTransparent(true)
         + g.panel.stat.options.withGraphMode('none'),
 
@@ -83,7 +83,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='The rate of cache hits.'
         )
-        + g.panel.stat.standardOptions.withUnit('/ sec')
+        + g.panel.stat.standardOptions.withUnit('none')
         + g.panel.stat.panelOptions.withTransparent(true)
         + g.panel.stat.options.withGraphMode('none'),
 
@@ -96,8 +96,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Rate of cache hits for pass objects (fulfilled requests that are not cached).'
         )
-        + g.panel.stat.standardOptions.withUnit('/ sec')
-        + g.panel.stat.panelOptions.withTransparent(true),
+        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.panelOptions.withTransparent(true)
+        + g.panel.stat.options.withGraphMode('none'),
 
       // Session queue length stat
       sessionQueueLengthPanel:
@@ -130,15 +131,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Backend connections',
           targets=[
-            signals.backend.backendConnectionsAccepted.asTarget(),
-            signals.backend.backendConnectionsRecycled.asTarget(),
-            signals.backend.backendConnectionsReused.asTarget(),
-            signals.backend.backendConnectionsBusy.asTarget(),
-            signals.backend.backendConnectionsUnhealthy.asTarget(),
+            signals.backend.backendConnectionsAccepted.asTarget() { interval: '2m' },
+            signals.backend.backendConnectionsRecycled.asTarget() { interval: '2m' },
+            signals.backend.backendConnectionsReused.asTarget() { interval: '2m' },
+            signals.backend.backendConnectionsBusy.asTarget() { interval: '2m' },
+            signals.backend.backendConnectionsUnhealthy.asTarget() { interval: '2m' },
           ],
           description='Rate of recycled, reused, busy, unhealthy, and accepted backend connections by Varnish Cache.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('conn/s')
+        + g.panel.timeSeries.standardOptions.withUnit('conn')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.options.legend.withPlacement('right')
@@ -149,13 +150,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Sessions',
           targets=[
-            signals.sessions.sessionsConnected.asTarget(),
-            signals.sessions.sessionsQueued.asTarget(),
-            signals.sessions.sessionsDropped.asTarget(),
+            signals.sessions.sessionsConnected.asTarget() { interval: '2m' },
+            signals.sessions.sessionsQueued.asTarget() { interval: '2m' },
+            signals.sessions.sessionsDropped.asTarget() { interval: '2m' },
           ],
           description='Rate of new connected, queued, and dropped sessions.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('sess/s')
+        + g.panel.timeSeries.standardOptions.withUnit('sess')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
@@ -165,12 +166,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Requests',
           targets=[
-            signals.requests.frontendRequestsTimeseries.asTarget(),
-            signals.requests.backendRequestsTimeseries.asTarget(),
+            signals.requests.frontendRequestsTimeseries.asTarget() { interval: '2m' },
+            signals.requests.backendRequestsTimeseries.asTarget() { interval: '2m' },
           ],
           description='Rate of frontend and backend requests received.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.standardOptions.withUnit('req')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20)
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
@@ -224,8 +225,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Cache events',
           targets=[
-            signals.cache.cacheExpired.asTarget(),
-            signals.cache.cacheLruNuked.asTarget(),
+            signals.cache.cacheExpired.asTarget() { interval: '2m' },
+            signals.cache.cacheLruNuked.asTarget() { interval: '2m' },
           ],
           description='Rate of expired and LRU (least recently used) nuked objects.'
         )

@@ -19,7 +19,7 @@ function(this)
         nameShort: 'Accepted',
         type: 'counter',
         description: 'Rate of accepted backend connections.',
-        unit: 'conn/s',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_conn{%(queriesSelector)s}',
@@ -35,11 +35,11 @@ function(this)
         nameShort: 'Recycled',
         type: 'counter',
         description: 'Rate of recycled backend connections.',
-        unit: 'conn/s',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_recycle{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Recycled',
           },
         },
@@ -51,11 +51,11 @@ function(this)
         nameShort: 'Reused',
         type: 'counter',
         description: 'Rate of reused backend connections.',
-        unit: 'conn/s',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_reuse{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Reused',
           },
         },
@@ -67,11 +67,11 @@ function(this)
         nameShort: 'Busy',
         type: 'counter',
         description: 'Rate of busy backend connections.',
-        unit: 'conn/s',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_busy{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Busy',
           },
         },
@@ -83,11 +83,11 @@ function(this)
         nameShort: 'Unhealthy',
         type: 'counter',
         description: 'Rate of unhealthy backend connections.',
-        unit: 'conn/s',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'varnish_main_backend_unhealthy{%(queriesSelector)s}',
-            rangeFunction: 'irate',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate + ' - Unhealthy',
           },
         },

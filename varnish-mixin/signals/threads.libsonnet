@@ -22,7 +22,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'varnish_main_pools{%(queriesSelector)s}',
+            expr: 'sum by () (varnish_main_pools{%(queriesSelector)s})',
           },
         },
       },
