@@ -21,10 +21,10 @@
       }
     ]
   },
-  "editable": false,
+  "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 79757552328704,
+  "id": 0,
   "links": [],
   "panels": [
     {
@@ -48,7 +48,7 @@
         "content": "<img\n src=\"https://pbs.twimg.com/profile_images/1621223040444157952/H4i3mbS7_400x400.jpg\"\n width=\"100%\"\n height=\"100%\">",
         "mode": "html"
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "title": "",
       "transparent": true,
       "type": "text"
@@ -103,7 +103,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -178,7 +178,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -254,7 +254,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -334,7 +334,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -409,7 +409,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -487,7 +487,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -566,7 +566,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -646,7 +646,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -730,7 +730,7 @@
           "unit": "short"
         }
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -828,7 +828,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -933,7 +933,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1018,7 +1018,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1128,7 +1128,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17940193463.patch4",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1237,7 +1237,7 @@
           }
         ]
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1351,7 +1351,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1433,7 +1433,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1476,7 +1476,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 4,
         "x": 0,
         "y": 37
       },
@@ -1502,7 +1502,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1545,8 +1545,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 8,
+        "w": 4,
+        "x": 4,
         "y": 37
       },
       "id": 104,
@@ -1571,7 +1571,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1614,8 +1614,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
+        "w": 4,
+        "x": 8,
         "y": 37
       },
       "id": 105,
@@ -1640,7 +1640,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1658,6 +1658,300 @@
       ],
       "title": "Successful workflow by Task Queue",
       "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Task queue backlog distribution with color-coded severity",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 37
+      },
+      "id": 112,
+      "options": {
+        "displayMode": "lcd",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(task_type) (temporal_cloud_v1_approximate_backlog_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
+          "hide": false,
+          "legendFormat": "{{task_type}} Queue",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Task Queue Backlog Levels",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The number of failed workflow completions per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 43
+      },
+      "id": 65,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(temporal_cloud_v1_workflow_failed_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Failed / Workflow Type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The number of failed workflow completions per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 43
+      },
+      "id": 66,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(temporal_cloud_v1_workflow_failed_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_task_queue)",
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Failed / Task Queue",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -1747,7 +2041,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -1771,327 +2065,6 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "The number of failed workflow completions per second",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 12,
-        "y": 45
-      },
-      "id": 65,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Max",
-          "sortDesc": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.2.0-17638611789",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(temporal_cloud_v1_workflow_failed_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Failed / Workflow Type",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "The number of failed workflow completions per second",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 18,
-        "y": 45
-      },
-      "id": 66,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Max",
-          "sortDesc": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.2.0-17638611789",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(temporal_cloud_v1_workflow_failed_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_task_queue)",
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Failed / Task Queue",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "The number of continued-as-new workflow completions per second",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 54
-      },
-      "id": 13,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Max",
-          "sortDesc": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.2.0-17638611789",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(temporal_cloud_v1_workflow_continued_as_new_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Continued as New",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
       "description": "The number of continued-as-new workflow completions per second",
       "fieldConfig": {
         "defaults": {
@@ -2153,7 +2126,7 @@
         "h": 9,
         "w": 6,
         "x": 12,
-        "y": 54
+        "y": 52
       },
       "id": 67,
       "options": {
@@ -2175,7 +2148,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2260,7 +2233,7 @@
         "h": 9,
         "w": 6,
         "x": 18,
-        "y": 54
+        "y": 52
       },
       "id": 68,
       "options": {
@@ -2282,7 +2255,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2306,7 +2279,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "The number of canceled workflow completions per second",
+      "description": "The number of continued-as-new workflow completions per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2364,12 +2337,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 0,
-        "y": 63
+        "y": 54
       },
-      "id": 50,
+      "id": 13,
       "options": {
         "legend": {
           "calcs": [
@@ -2389,7 +2362,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2397,15 +2370,15 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_workflow_cancel_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "exemplar": false,
+          "expr": "sum(temporal_cloud_v1_workflow_continued_as_new_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Cancels",
+      "title": "Continued as New",
       "type": "timeseries"
     },
     {
@@ -2471,10 +2444,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 6,
         "x": 12,
-        "y": 63
+        "y": 61
       },
       "id": 69,
       "options": {
@@ -2496,7 +2469,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2578,10 +2551,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 6,
         "x": 18,
-        "y": 63
+        "y": 61
       },
       "id": 70,
       "options": {
@@ -2603,7 +2576,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2627,7 +2600,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "The number of timed-out workflow completions per second",
+      "description": "The number of canceled workflow completions per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2685,12 +2658,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 0,
-        "y": 72
+        "y": 62
       },
-      "id": 41,
+      "id": 50,
       "options": {
         "legend": {
           "calcs": [
@@ -2710,7 +2683,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2719,14 +2692,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_workflow_timeout_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "expr": "sum(temporal_cloud_v1_workflow_cancel_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Timeouts",
+      "title": "Cancels",
       "type": "timeseries"
     },
     {
@@ -2792,10 +2765,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 6,
         "x": 12,
-        "y": 72
+        "y": 69
       },
       "id": 71,
       "options": {
@@ -2817,7 +2790,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2899,10 +2872,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 6,
         "x": 18,
-        "y": 72
+        "y": 69
       },
       "id": 72,
       "options": {
@@ -2924,7 +2897,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -2944,16 +2917,123 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The number of timed-out workflow completions per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 70
+      },
+      "id": 41,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum(temporal_cloud_v1_workflow_timeout_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Timeouts",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 81
+        "y": 77
       },
       "id": 73,
       "panels": [],
-      "title": "Task Queue",
+      "title": "Pollers",
       "type": "row"
     },
     {
@@ -2993,7 +3073,7 @@
         "h": 2,
         "w": 5,
         "x": 0,
-        "y": 82
+        "y": 78
       },
       "id": 107,
       "options": {
@@ -3013,7 +3093,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3067,9 +3147,9 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
+        "w": 5,
         "x": 5,
-        "y": 82
+        "y": 78
       },
       "id": 108,
       "options": {
@@ -3089,7 +3169,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3100,6 +3180,81 @@
           "expr": "sum(temporal_cloud_v1_poll_success_sync_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
           "hide": false,
           "legendFormat": "Sync Poll Success/sec",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Asynchronous poll successes ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "green",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 10,
+        "y": 78
+      },
+      "id": 113,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(temporal_cloud_v1_poll_success_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_task_queue) - sum(temporal_cloud_v1_poll_success_sync_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_task_queue)",
+          "hide": false,
+          "legendFormat": "Async Poll Success/sec",
           "range": true,
           "refId": "A"
         }
@@ -3146,9 +3301,9 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
-        "x": 11,
-        "y": 82
+        "w": 5,
+        "x": 15,
+        "y": 78
       },
       "id": 109,
       "options": {
@@ -3168,7 +3323,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3223,9 +3378,9 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 7,
-        "x": 17,
-        "y": 82
+        "w": 4,
+        "x": 20,
+        "y": 78
       },
       "id": 110,
       "options": {
@@ -3245,7 +3400,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3253,7 +3408,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(temporal_cloud_v1_poll_success_count{}) / (sum(temporal_cloud_v1_poll_success_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"}) + sum(temporal_cloud_v1_poll_timeout_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})) * 100",
+          "expr": "sum(temporal_cloud_v1_poll_success_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"}) / (sum(temporal_cloud_v1_poll_success_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"}) + sum(temporal_cloud_v1_poll_timeout_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})) * 100",
           "hide": false,
           "legendFormat": "Poll Success Rate",
           "range": true,
@@ -3330,7 +3485,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 84
+        "y": 80
       },
       "id": 75,
       "options": {
@@ -3350,7 +3505,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3434,7 +3589,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 84
+        "y": 80
       },
       "id": 80,
       "options": {
@@ -3456,7 +3611,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3541,7 +3696,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 93
+        "y": 89
       },
       "id": 81,
       "options": {
@@ -3563,7 +3718,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3648,7 +3803,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 93
+        "y": 89
       },
       "id": 82,
       "options": {
@@ -3670,7 +3825,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3755,7 +3910,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 102
+        "y": 98
       },
       "id": 83,
       "options": {
@@ -3777,7 +3932,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -3802,7 +3957,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 109
+        "y": 105
       },
       "id": 29,
       "panels": [],
@@ -3916,7 +4071,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 110
+        "y": 106
       },
       "id": 31,
       "options": {
@@ -3938,7 +4093,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4004,7 +4159,7 @@
         "h": 9,
         "w": 4,
         "x": 12,
-        "y": 110
+        "y": 106
       },
       "id": 32,
       "options": {
@@ -4024,7 +4179,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4076,7 +4231,7 @@
         "h": 9,
         "w": 4,
         "x": 16,
-        "y": 110
+        "y": 106
       },
       "id": 33,
       "options": {
@@ -4096,7 +4251,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4148,7 +4303,7 @@
         "h": 9,
         "w": 4,
         "x": 20,
-        "y": 110
+        "y": 106
       },
       "id": 34,
       "options": {
@@ -4168,7 +4323,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4279,7 +4434,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 119
+        "y": 115
       },
       "id": 85,
       "options": {
@@ -4301,7 +4456,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4425,7 +4580,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 119
+        "y": 115
       },
       "id": 86,
       "options": {
@@ -4447,7 +4602,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4499,7 +4654,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 128
+        "y": 124
       },
       "id": 40,
       "panels": [],
@@ -4572,7 +4727,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 129
+        "y": 125
       },
       "id": 11,
       "options": {
@@ -4594,7 +4749,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4679,7 +4834,7 @@
         "h": 9,
         "w": 4,
         "x": 12,
-        "y": 129
+        "y": 125
       },
       "id": 42,
       "options": {
@@ -4701,7 +4856,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4786,7 +4941,7 @@
         "h": 9,
         "w": 4,
         "x": 16,
-        "y": 129
+        "y": 125
       },
       "id": 43,
       "options": {
@@ -4808,7 +4963,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4893,7 +5048,7 @@
         "h": 9,
         "w": 4,
         "x": 20,
-        "y": 129
+        "y": 125
       },
       "id": 44,
       "options": {
@@ -4915,7 +5070,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0-17638611789",
+      "pluginVersion": "12.3.0-18186912471",
       "targets": [
         {
           "datasource": {
@@ -4940,7 +5095,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 138
+        "y": 134
       },
       "id": 19,
       "panels": [],
@@ -5039,7 +5194,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 139
+        "y": 135
       },
       "id": 60,
       "options": {
@@ -5159,7 +5314,7 @@
         "h": 9,
         "w": 13,
         "x": 11,
-        "y": 139
+        "y": 135
       },
       "id": 6,
       "options": {
@@ -5266,7 +5421,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 148
+        "y": 144
       },
       "id": 8,
       "options": {
@@ -5373,7 +5528,7 @@
         "h": 9,
         "w": 6,
         "x": 11,
-        "y": 148
+        "y": 144
       },
       "id": 61,
       "options": {
@@ -5480,7 +5635,7 @@
         "h": 9,
         "w": 7,
         "x": 17,
-        "y": 148
+        "y": 144
       },
       "id": 45,
       "options": {
@@ -5588,7 +5743,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 157
+        "y": 153
       },
       "id": 52,
       "options": {
@@ -5657,7 +5812,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 164
+        "y": 160
       },
       "id": 55,
       "panels": [],
@@ -5731,7 +5886,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 165
+        "y": 161
       },
       "id": 30,
       "options": {
@@ -5860,7 +6015,7 @@
         "h": 10,
         "w": 8,
         "x": 8,
-        "y": 165
+        "y": 161
       },
       "id": 74,
       "options": {
@@ -5989,7 +6144,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 165
+        "y": 161
       },
       "id": 35,
       "options": {
@@ -6057,7 +6212,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 175
+        "y": 171
       },
       "id": 17,
       "panels": [
@@ -6503,15 +6658,13 @@
   "templating": {
     "list": [
       {
+        "allowCustomValue": false,
         "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "text": "grafanacloud-devexp-prom",
+          "value": "grafanacloud-prom"
         },
-        "includeAll": true,
+        "includeAll": false,
         "label": "Prometheus data source",
-        "multi": true,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
@@ -6523,9 +6676,7 @@
         "allValue": ".*",
         "current": {
           "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "value": "$__all"
         },
         "datasource": {
           "type": "prometheus",
@@ -6578,5 +6729,5 @@
   "timezone": "",
   "title": "Temporal overview",
   "uid": "fexoud2w07gn4c",
-  "version": 41
+  "version": 7
 }
