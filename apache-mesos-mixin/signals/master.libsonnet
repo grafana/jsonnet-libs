@@ -188,7 +188,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'max by(mesos_cluster) (rate(mesos_master_allocation_run_ms_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'max by(mesos_cluster) (increase(mesos_master_allocation_run_ms_count{%(queriesSelector)s}[$__interval] offset $__interval))',
             legendCustomTemplate: '{{mesos_cluster}}',
           },
         },

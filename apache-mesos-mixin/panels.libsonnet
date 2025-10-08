@@ -12,6 +12,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.master.masterUptime.asTarget()
         )
         + g.panel.stat.standardOptions.withUnit('s')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
+        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Master uptime in seconds'),
       cpusAvailablePanel:
         g.panel.stat.new('CPUS available')
@@ -19,6 +22,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.master.cpusAvailable.asTarget()
         )
         + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
+        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('CPUs available in the cluster'),
       memoryAvailablePanel:
         g.panel.stat.new('Memory available')
@@ -26,6 +32,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.master.memoryAvailable.asTarget()
         )
         + g.panel.stat.standardOptions.withUnit('bytes')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
+        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Memory available in the cluster'),
       gpusAvailablePanel:
         g.panel.stat.new('GPUs available')
@@ -33,6 +42,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.master.gpusAvailable.asTarget()
         )
         + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
+        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('GPUs available in the cluster'),
 
       diskAvailablePanel:
@@ -41,6 +53,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.master.diskAvailable.asTarget()
         )
         + g.panel.stat.standardOptions.withUnit('bytes')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
+        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Disk available in the cluster'),
 
       memoryUtilizationPanel:
@@ -76,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Messages',
           targets=[
-            signals.master.messages.asTarget(),
+            signals.master.messages.asTarget() { interval: '2m' },
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Messages in the cluster'),
@@ -103,7 +118,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Allocation runs',
           targets=[
-            signals.master.allocationRuns.asTarget(),
+            signals.master.allocationRuns.asTarget() { interval: '2m' },
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Allocation runs in the cluster'),

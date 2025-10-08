@@ -4,7 +4,7 @@ local g = import './g.libsonnet';
   local link = g.dashboard.link,
   new(this):
     {
-      overview:
+      apacheMesosOverview:
         link.link.new('Apache Mesos overview', '/d/' + this.grafana.dashboards['apache-mesos-overview.json'].uid)
         + link.link.options.withKeepTime(true),
     }

@@ -9,11 +9,11 @@ local g = import './g.libsonnet';
         g.panel.row.new('Master overview')
         + g.panel.row.withCollapsed(false)
         + g.panel.row.withPanels([
-          panels.masterUptimePanel + g.panel.timeSeries.gridPos.withW(4),
-          panels.cpusAvailablePanel + g.panel.timeSeries.gridPos.withW(5),
-          panels.memoryAvailablePanel + g.panel.timeSeries.gridPos.withW(5),
-          panels.gpusAvailablePanel + g.panel.timeSeries.gridPos.withW(5),
-          panels.diskAvailablePanel + g.panel.timeSeries.gridPos.withW(5),
+          panels.masterUptimePanel + g.panel.timeSeries.gridPos.withW(4) + g.panel.timeSeries.gridPos.withH(6),
+          panels.cpusAvailablePanel + g.panel.timeSeries.gridPos.withW(5) + g.panel.timeSeries.gridPos.withH(6),
+          panels.memoryAvailablePanel + g.panel.timeSeries.gridPos.withW(5) + g.panel.timeSeries.gridPos.withH(6),
+          panels.gpusAvailablePanel + g.panel.timeSeries.gridPos.withW(5) + g.panel.timeSeries.gridPos.withH(6),
+          panels.diskAvailablePanel + g.panel.timeSeries.gridPos.withW(5) + g.panel.timeSeries.gridPos.withH(6),
           panels.memoryUtilizationPanel + g.panel.timeSeries.gridPos.withW(12),
           panels.diskUtilizationPanel + g.panel.timeSeries.gridPos.withW(12),
           panels.eventsInQueuePanel + g.panel.timeSeries.gridPos.withW(12),

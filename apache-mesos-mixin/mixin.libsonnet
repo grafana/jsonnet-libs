@@ -13,6 +13,7 @@ local mixin = mixinlib.new()
 local k8s_patch = {
   mesos_cluster+: {
     label: 'Mesos cluster',
+    allValue: '.*',
   },
   cluster+: {
     allValue: '.*',

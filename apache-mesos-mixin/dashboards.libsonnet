@@ -30,7 +30,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           vars.multiInstance,
           uid + '_overview',
           tags,
-          links { mesosOverview+:: {} },
+          links { apacheMesosOverview+:: {} },
           annotations,
           timezone,
           refresh,
