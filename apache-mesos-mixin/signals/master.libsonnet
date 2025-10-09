@@ -1,10 +1,11 @@
 function(this)
+  local legendCustomTemplate = '{{mesos_cluster}}';
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)) + ' - {{mesos_cluster}}',
+    legendCustomTemplate: legendCustomTemplate,
     aggLevel: 'none',
     aggFunction: 'avg',
     alertsInterval: '2m',
@@ -22,7 +23,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_uptime_seconds{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -36,7 +36,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_cpus{%(queriesSelector)s, type="total"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -49,7 +48,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_mem{%(queriesSelector)s, type="total"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -63,7 +61,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_gpus{%(queriesSelector)s, type="total"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -77,21 +74,19 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_disk{%(queriesSelector)s, type="total"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
 
       memoryUtilization: {
         name: 'Memory utilization',
-        nameShort: 'Memory %',
+        nameShort: 'Memory utilization',
         type: 'raw',
         description: 'Memory utilization in the cluster',
         unit: 'percent',
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_mem{%(queriesSelector)s, type="percent"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -105,7 +100,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_disk{%(queriesSelector)s, type="percent"})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -119,7 +113,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster, type) (mesos_master_event_queue_length{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}} - {{type}}',
+            legendCustomTemplate: legendCustomTemplate + ' - {{type}}',
           },
         },
       },
@@ -133,7 +127,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster, type) (increase(mesos_master_messages{%(queriesSelector)s}[$__interval:] offset $__interval)) > 0',
-            legendCustomTemplate: '{{mesos_cluster}} - {{type}}',
+            legendCustomTemplate: legendCustomTemplate + ' - {{type}}',
           },
         },
       },
@@ -147,7 +141,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_registrar_state_store_ms{%(queriesSelector)s, type="mean"})',
-            legendCustomTemplate: '{{mesos_cluster}} - store',
+            legendCustomTemplate: legendCustomTemplate + ' - store',
           },
         },
       },
@@ -161,7 +155,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_registrar_state_fetch_ms{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}} - fetch',
+            legendCustomTemplate: legendCustomTemplate + ' - fetch',
           },
         },
       },
@@ -175,7 +169,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_registrar_log_recovered{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -189,7 +182,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (increase(mesos_master_allocation_run_ms_count{%(queriesSelector)s}[$__interval] offset $__interval))',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -203,7 +195,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_allocation_run_ms{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -217,7 +208,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
@@ -231,7 +221,6 @@ function(this)
         sources: {
           prometheus: {
             expr: 'max by(mesos_cluster) (mesos_master_event_queue_dispatches{%(queriesSelector)s})',
-            legendCustomTemplate: '{{mesos_cluster}}',
           },
         },
       },
