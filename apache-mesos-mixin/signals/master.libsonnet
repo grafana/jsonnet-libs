@@ -93,7 +93,7 @@ function(this)
 
       diskUtilization: {
         name: 'Disk utilization',
-        nameShort: 'Disk %',
+        nameShort: 'Disk utilization',
         type: 'raw',
         description: 'Disk utilization in the cluster',
         unit: 'percent',
