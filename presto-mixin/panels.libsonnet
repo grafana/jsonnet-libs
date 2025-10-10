@@ -202,7 +202,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       coordinatorGarbageCollections:
         commonlib.panels.generic.timeSeries.base.new('Garbage collection count / $__interval', targets=[
-          signals.coordinator.jvmGarbageCollectorCount.asTarget() { interval: '2m'},
+          signals.coordinator.jvmGarbageCollectorCount.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -319,14 +319,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       workerJVMGarbageCollectorCount:
         commonlib.panels.generic.timeSeries.base.new('Garbage collection count / $__interval', targets=[
-          signals.worker.garbageCollectionCount.asTarget() { interval: '2m'},
+          signals.worker.garbageCollectionCount.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The recent increase in the number of garbage collection events for the JVM.')
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       workerJVMGarbageCollectionDuration:
         commonlib.panels.generic.timeSeries.base.new('Garbage collection duration', targets=[
-          signals.worker.garbageCollectionDuration.asTarget() { interval: '2m'},
+          signals.worker.garbageCollectionDuration.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The average duration for each garbage collection operation in the JVM.')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),

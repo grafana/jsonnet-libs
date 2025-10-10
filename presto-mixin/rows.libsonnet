@@ -28,11 +28,11 @@ local g = import './g.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          this.grafana.panels.coordinatorNonheapMemoryUsage { gridPos+: { w: 6, } },
+          this.grafana.panels.coordinatorNonheapMemoryUsage { gridPos+: { w: 6 } },
           this.grafana.panels.coordinatorHeapMemoryUsage { gridPos+: { w: 6 } },
           this.grafana.panels.coordinatorErrorFailures { gridPos+: { w: 12 } },
           this.grafana.panels.coordinatorNormalQueries { gridPos+: { w: 12 } },
-          this.grafana.panels.coordinatorAbnormalQueries { gridPos+: { w: 12  } },
+          this.grafana.panels.coordinatorAbnormalQueries { gridPos+: { w: 12 } },
           this.grafana.panels.coordinatorNormalQueryRate { gridPos+: { w: 12 } },
           this.grafana.panels.coordinatorAbnormalQueryRate { gridPos+: { w: 12 } },
           this.grafana.panels.coordinatorQueryExecutionTime { gridPos+: { w: 24 } },
