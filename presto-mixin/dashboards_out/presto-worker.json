@@ -1,94 +1,97 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Presto logs",
+            "type": "link",
+            "url": "/d/presto-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "presto-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Presto dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto coordinator",
+            "type": "link",
+            "url": "/d/presto_coordinator"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto overview",
+            "type": "link",
+            "url": "/d/presto_overview"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
             },
-            "description": "An average gauge of the JVM's non-heap memory usage across coordinators.",
+            "id": 1,
+            "panels": [ ],
+            "title": "Worker",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Non-heap memory usage",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
+                           "color": "light-green",
+                           "value": 0
                         },
                         {
                            "color": "#EAB839",
                            "value": 0.69999999999999996
                         },
                         {
-                           "color": "red",
+                           "color": "light-red",
                            "value": 0.80000000000000004
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 8,
-               "w": 3,
+               "h": 4,
+               "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-62263",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} / clamp_min((jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} + jvm_nonheap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}),1))",
+                  "expr": "avg (jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Non-heap memory usage"
                }
             ],
             "title": "Non-heap memory usage",
@@ -96,67 +99,50 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "An average gauge of the JVM's heap memory usage across workers.",
+            "description": "Heap memory usage",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
+                           "color": "light-green",
+                           "value": 0
                         },
                         {
                            "color": "#EAB839",
                            "value": 0.69999999999999996
                         },
                         {
-                           "color": "red",
+                           "color": "light-red",
                            "value": 0.80000000000000004
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 8,
-               "w": 3,
-               "x": 3,
-               "y": 0
+               "h": 4,
+               "w": 12,
+               "x": 12,
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-62263",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} / clamp_min((jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} + jvm_heap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}),1))",
+                  "expr": "avg (jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Heap memory usage"
                }
             ],
             "title": "Heap memory usage",
@@ -164,89 +150,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of tasks that are being queued by the task executor.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#C8F2C2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                  "unit": "ops"
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 0
+               "w": 12,
+               "x": 0,
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskExecutor_ProcessorExecutor_QueuedTaskCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskExecutor_ProcessorExecutor_QueuedTaskCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queued tasks"
                }
             ],
             "title": "Queued tasks",
@@ -254,332 +202,190 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate at which tasks have failed and completed",
+            "description": "The rate at which tasks have failed and completed.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "ops"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "A"
-                     },
-                     "properties": [
-                        {
-                           "id": "color",
-                           "value": {
-                              "fixedColor": "red",
-                              "mode": "fixed"
-                           }
-                        },
-                        {
-                           "id": "custom.axisPlacement",
-                           "value": "left"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "B"
-                     },
-                     "properties": [
-                        {
-                           "id": "color",
-                           "value": {
-                              "fixedColor": "green",
-                              "mode": "fixed"
-                           }
-                        },
-                        {
-                           "id": "custom.axisPlacement",
-                           "value": "right"
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_TaskManager_FailedTasks_TotalCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}[$__rate_interval])",
+                  "expr": "rate(presto_TaskExecutor_ProcessorExecutor_FailedTaskCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - failed"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - failed",
+                  "refId": "Failed tasks"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_TaskExecutor_ProcessorExecutor_CompletedTaskCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}[$__rate_interval])",
+                  "expr": "rate(presto_TaskExecutor_ProcessorExecutor_CompletedTaskCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - completed"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - completed",
+                  "refId": "Completed tasks"
                }
             ],
-            "title": "Failed & Completed Tasks",
+            "title": "Failed & completed tasks",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The rate of rows (or records) produced by an operation.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "rowsps"
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 17
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskManager_OutputPositions_OneMinute_Rate{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskManager_OutputPositions_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Output positions"
                }
             ],
-            "title": "Output positions - one minute rate",
+            "title": "Output positions",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The pool size of the task notification executor and process executor.",
+            "description": "The pool size of the task notification executor.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 17
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskManager_TaskNotificationExecutor_PoolSize{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskExecutor_ProcessorExecutor_PoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - task notification"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Executor pool size"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskExecutor_ProcessorExecutor_CorePoolSize{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskExecutor_ProcessorExecutor_CorePoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - process executor core"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Process executor core pool size"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskExecutor_ProcessorExecutor_PoolSize{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskExecutor_ProcessorExecutor_PoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - process executor"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Process executor pool size"
                }
             ],
             "title": "Executor pool size",
@@ -587,97 +393,62 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The amount of Presto memory available.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 25
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, presto_cluster) (presto_MemoryPool_general_FreeBytes{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"})",
+                  "expr": "presto_MemoryPool_general_FreeBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - free"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - free",
+                  "refId": "Memory pool free bytes"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (instance, presto_cluster) (presto_MemoryPool_reserved_FreeBytes{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"})",
+                  "expr": "presto_MemoryPool_reserved_FreeBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - reserved"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - reserved free",
+                  "refId": "Memory pool reserved free bytes"
                }
             ],
             "title": "Memory pool",
@@ -685,203 +456,128 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate at which volumes of data are being processed",
+            "description": "The rate at which volumes of data are being processed.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 25
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskManager_InputDataSize_OneMinute_Rate{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskManager_InputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - input"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Data processing input"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_TaskManager_OutputDataSize_OneMinute_Rate{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_TaskManager_OutputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - output"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Data processing output"
                }
             ],
-            "title": "Data processing throughput - one minute rate",
+            "title": "Data processing throughput",
             "type": "timeseries"
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 24
+               "y": 33
             },
             "id": 10,
-            "targets": [ ],
-            "title": "JVM metrics",
+            "panels": [ ],
+            "title": "JVM",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The recent increase in the number of garbage collection events for the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 34
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\", name=\"G1 Young Generation\"}[$__interval:])",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Garbage collection count"
                }
             ],
             "title": "Garbage collection count / $__interval",
@@ -889,88 +585,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The average duration for each garbage collection operation in the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 34
             },
             "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\", name=\"G1 Young Generation\"}",
+                  "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "JVM GC duration"
                }
             ],
             "title": "Garbage collection duration",
@@ -978,308 +638,212 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The heap and non-heap memory used by the JVM.",
+            "description": "The heap and non-heap memory committed by the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 33
+               "y": 42
             },
             "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - non heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - heap",
+                  "refId": "JVM heap memory committed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - non heap",
+                  "refId": "JVM non-heap memory committed"
                }
             ],
-            "title": "Memory used",
+            "title": "Memory committed",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The heap and non-heap memory committed.",
+            "description": "The heap and non-heap memory used by the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 33
+               "y": 42
             },
             "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - heap",
+                  "refId": "JVM heap memory usage"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - non heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - non heap",
+                  "refId": "JVM non-heap memory usage"
                }
             ],
-            "title": "Memory committed",
+            "title": "Memory used",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "presto-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount,job)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~\"$job\"}, cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": ".*",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Presto cluster",
-               "multi": false,
+               "multi": true,
                "name": "presto_cluster",
-               "options": [ ],
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~\"$job\"},presto_cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~\"$job\", presto_cluster=~\"$presto_cluster\"},instance)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
                "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -1287,33 +851,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Presto worker",
-      "uid": "presto-worker",
-      "version": 0
+      "uid": "presto_worker"
    }
