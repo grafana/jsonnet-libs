@@ -8,21 +8,21 @@ groups:
           expr: |-
             ((java_lang_memory_heapmemoryusage_used{}
             or
-            sum without (id) (jvm_memory_bytes_used{area="heap", })
-            or
             sum without (id) (jvm_memory_used_bytes{area="heap", })
             or
-            sum without (pool) (process_runtime_jvm_memory_usage_bytes{type="heap", })
+            sum without (id) (jvm_memory_used{area="heap", })
             or
-            sum without (pool) (process_runtime_jvm_memory_usage{type="heap", }))/(java_lang_memory_heapmemoryusage_max{} != -1
+            sum without (jvm_memory_pool_name) (jvm_memory_used_bytes{jvm_memory_type="heap", })
             or
-            sum without (id) (jvm_memory_bytes_max{area="heap", } != -1)
+            sum without (pool) (process_runtime_jvm_memory_usage_bytes{type="heap", }))/(java_lang_memory_heapmemoryusage_max{} != -1
             or
             sum without (id) (jvm_memory_max_bytes{area="heap", } != -1)
             or
-            sum without (pool) (process_runtime_jvm_memory_limit_bytes{type="heap", } != -1)
+            sum without (id) (jvm_memory_max{area="heap", } != -1)
             or
-            sum without (pool) (process_runtime_jvm_memory_limit{type="heap", } != -1))) * 100 > 80
+            sum without (jvm_memory_pool_name) (jvm_memory_limit_bytes{jvm_memory_type="heap", } != -1)
+            or
+            sum without (pool) (process_runtime_jvm_memory_limit_bytes{type="heap", } != -1))) * 100 > 80
           for: 5m
           keep_firing_for: 5m
           labels:
