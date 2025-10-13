@@ -1,170 +1,150 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
       "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
       "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Apache Tomcat logs",
+            "type": "link",
+            "url": "/d/apachetomcat-logs"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache Tomcat overview",
+            "type": "link",
+            "url": "/d/apachetomcat_overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-tomcat-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Apache Tomcat dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of different types of sessions created for a Tomcat host",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineStyle": {
-                        "fill": "solid"
-                     },
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 10,
-               "w": 12,
+               "h": 1,
+               "w": 0,
                "x": 0,
                "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Hosts",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of different types of sessions created for a Tomcat host.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_sessioncounter_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - total sessions"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total sessions",
+                  "refId": "Total sessions"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - rejected"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - rejected sessions",
+                  "refId": "Rejected sessions"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_expiredsessions_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - expired"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - expired sessions",
+                  "refId": "Expired sessions"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_sessioncounter_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{host}}{{context}} - sessions"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{context}} - sessions",
+                  "refId": "Session rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_rejectedsessions_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{host}}{{context}}  - rejected"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{context}} - rejected",
+                  "refId": "Rejected rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_expiredsessions_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{host}}{{context}}  - expired"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{context}} - expired",
+                  "refId": "Expired rate"
                }
             ],
             "title": "Sessions",
@@ -172,528 +152,296 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The average time taken to process recent sessions for a Tomcat host",
+            "description": "The average time taken to process recent sessions for a Tomcat host.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 10,
-               "w": 12,
-               "x": 12,
-               "y": 0
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 1
             },
             "id": 3,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_processingtime_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - total"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total",
+                  "refId": "Total session processing time"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_processingtime_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~\"$job\", instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{host}}{{context}}"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{context}}",
+                  "refId": "Session processing time"
                }
             ],
             "title": "Session processing time",
             "type": "timeseries"
          },
          {
-            "collapsed": false,
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "gridPos": {
-               "h": 1,
-               "w": 24,
-               "x": 0,
-               "y": 10
-            },
-            "id": 4,
-            "targets": [ ],
-            "title": "Servlet",
-            "type": "row"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The total requests and errors for a Tomcat servlet",
+            "description": "The total requests and errors for a Tomcat servlet.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "r/s"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 10,
-               "w": 12,
-               "x": 0,
-               "y": 11
-            },
-            "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "unit": "reqps"
                }
             },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_servlet_requestcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - total requests"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total requests",
+                  "refId": "Total servlet requests"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_servlet_errorcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - total errors"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total errors",
+                  "refId": "Total servlet errors"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_servlet_requestcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{module}}{{servlet}} - requests"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{servlet}} - requests",
+                  "refId": "Servlet request rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_servlet_errorcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{module}}{{servlet}} - errors"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{context}} - errors",
+                  "refId": "Servlet error rate"
                }
             ],
-            "title": "Servlet requests",
+            "title": "Servlet",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The average time taken to process recent requests in a Tomcat servlet",
+            "description": "The average time taken to process recent servlet requests for a Tomcat host.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 10,
-               "w": 12,
-               "x": 12,
-               "y": 11
-            },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
                }
             },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_servlet_processingtime_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - total"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - total",
+                  "refId": "Total servlet processing time"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_servlet_processingtime_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=~\"$job\", instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{module}}{{servlet}}"
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{host}}{{servlet}}",
+                  "refId": "Servlet processing time"
                }
             ],
             "title": "Servlet processing time",
             "type": "timeseries"
          }
       ],
-      "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "refresh": "30s",
+      "schemaVersion": 39,
       "tags": [
          "apache-tomcat-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
+               "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(tomcat_bytesreceived_total, job)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".*",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(tomcat_bytesreceived_total{job=~\"$job\"}, cluster)",
+               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Instance",
-               "multi": false,
+               "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(tomcat_bytesreceived_total{job=~\"$job\"}, instance)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Host",
-               "multi": true,
-               "name": "host",
-               "options": [ ],
-               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\"}, host)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Context",
-               "multi": true,
-               "name": "context",
-               "options": [ ],
-               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\", host=~\"$host\"}, context)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Servlet",
-               "multi": true,
-               "name": "servlet",
-               "options": [ ],
-               "query": "label_values(tomcat_servlet_requestcount_total{job=~\"$job\", module=~\"$host$context\"}, servlet)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
-      },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
       },
       "timezone": "default",
       "title": "Apache Tomcat hosts",
-      "uid": "apache-tomcat-hosts",
-      "version": 0
+      "uid": "apachetomcat_hosts"
    }
