@@ -57,14 +57,14 @@ local g = import './g.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          this.grafana.panels.workerNonHeapMemoryUsage { gridPos+: { w: 12, h: 4 } },
-          this.grafana.panels.workerHeapMemoryUsage { gridPos+: { w: 12, h: 4 } },
-          this.grafana.panels.workerQueuedTasks { gridPos+: { w: 12 } },
+          this.grafana.panels.workerNonHeapMemoryUsage { gridPos+: { w: 3 } },
+          this.grafana.panels.workerHeapMemoryUsage { gridPos+: { w: 3 } },
+          this.grafana.panels.workerQueuedTasks { gridPos+: { w: 6 } },
           this.grafana.panels.workerFailedCompletedTasks { gridPos+: { w: 12 } },
           this.grafana.panels.workerOutputPositions { gridPos+: { w: 12 } },
           this.grafana.panels.workerExecutorPoolSize { gridPos+: { w: 12 } },
           this.grafana.panels.workerMemoryPool { gridPos+: { w: 12 } },
-          this.grafana.panels.workerDataProcesssingThroughput { gridPos+: { w: 12 } },
+          this.grafana.panels.workerDataProcessingThroughput { gridPos+: { w: 12 } },
         ],
       ),
     workerJVM:

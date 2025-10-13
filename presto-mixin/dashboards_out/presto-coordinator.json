@@ -10,16 +10,6 @@
             "url": "/d/presto-logs"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "presto-mixin"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Presto overview",
             "type": "link",
@@ -90,7 +80,7 @@
                   "expr": "avg (jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Non-heap memory usage"
                }
             ],
@@ -141,7 +131,7 @@
                   "expr": "avg (jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Heap memory usage"
                }
             ],
@@ -193,7 +183,7 @@
                   "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - internal",
+                  "legendFormat": "{{instance}} - internal",
                   "refId": "Error failures internal"
                }
             ],
@@ -245,7 +235,7 @@
                   "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - completed",
+                  "legendFormat": "{{instance}} - completed",
                   "refId": "Query completed"
                },
                {
@@ -256,7 +246,7 @@
                   "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - running",
+                  "legendFormat": "{{instance}} - running",
                   "refId": "Query running"
                },
                {
@@ -267,7 +257,7 @@
                   "expr": "presto_QueryManager_StartedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - started",
+                  "legendFormat": "{{instance}} - started",
                   "refId": "Query started"
                }
             ],
@@ -319,7 +309,7 @@
                   "expr": "presto_QueryManager_FailedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - failed",
+                  "legendFormat": "{{instance}} - failed",
                   "refId": "Abnormal query failed"
                },
                {
@@ -330,7 +320,7 @@
                   "expr": "presto_QueryManager_AbandonedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - abandoned",
+                  "legendFormat": "{{instance}} - abandoned",
                   "refId": "Abnormal query abandoned"
                },
                {
@@ -341,7 +331,7 @@
                   "expr": "presto_QueryManager_CanceledQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - canceled",
+                  "legendFormat": "{{instance}} - canceled",
                   "refId": "Abnormal query canceled"
                }
             ],
@@ -393,7 +383,7 @@
                   "expr": "presto_QueryManager_CompletedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - completed",
+                  "legendFormat": "{{instance}} - completed",
                   "refId": "Normal query completed rate"
                },
                {
@@ -404,7 +394,7 @@
                   "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - running",
+                  "legendFormat": "{{instance}} - running",
                   "refId": "Normal query running rate"
                },
                {
@@ -415,7 +405,7 @@
                   "expr": "presto_QueryManager_StartedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - started",
+                  "legendFormat": "{{instance}} - started",
                   "refId": "Normal query started rate"
                }
             ],
@@ -468,7 +458,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{presto_cluster}} - failed",
+                  "legendFormat": "{{instance}} - failed",
                   "refId": "Abnormal query completed rate"
                },
                {
@@ -480,7 +470,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{presto_cluster}} - abandoned",
+                  "legendFormat": "{{instance}} - abandoned",
                   "refId": "Abnormal query abandoned rate"
                },
                {
@@ -492,7 +482,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{presto_cluster}} - canceled",
+                  "legendFormat": "{{instance}} - canceled",
                   "refId": "Abnormal query canceled rate"
                }
             ],
@@ -544,7 +534,7 @@
                   "expr": "presto_QueryManager_ExecutionTime_OneMinute_P50{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - p50",
+                  "legendFormat": "{{instance}} - p50",
                   "refId": "Query execution time (p50)"
                },
                {
@@ -555,7 +545,7 @@
                   "expr": "presto_QueryManager_ExecutionTime_OneMinute_P75{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - p75",
+                  "legendFormat": "{{instance}} - p75",
                   "refId": "Query execution time (p75)"
                },
                {
@@ -566,7 +556,7 @@
                   "expr": "presto_QueryManager_ExecutionTime_OneMinute_P95{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - p95",
+                  "legendFormat": "{{instance}} - p95",
                   "refId": "Query execution time (p95)"
                },
                {
@@ -577,7 +567,7 @@
                   "expr": "presto_QueryManager_ExecutionTime_OneMinute_P99{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - p99",
+                  "legendFormat": "{{instance}} - p99",
                   "refId": "Query execution time (p99)"
                }
             ],
@@ -629,7 +619,7 @@
                   "expr": "presto_QueryManager_ConsumedCpuTimeSecs_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "CPU time consumed"
                }
             ],
@@ -681,7 +671,7 @@
                   "expr": "presto_QueryManager_CpuInputByteRate_OneMinute_Total{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "CPU input throughput"
                }
             ],
@@ -747,7 +737,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Garbage collector count"
                }
             ],
@@ -799,7 +789,7 @@
                   "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{instance}}",
                   "refId": "Garbage collection duration"
                }
             ],
@@ -851,7 +841,7 @@
                   "expr": "jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - heap",
+                  "legendFormat": "{{instance}} - heap",
                   "refId": "Heap memory committed"
                },
                {
@@ -862,7 +852,7 @@
                   "expr": "jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - non heap",
+                  "legendFormat": "{{instance}} - non heap",
                   "refId": "Non-heap memory committed"
                }
             ],
@@ -914,7 +904,7 @@
                   "expr": "jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - heap",
+                  "legendFormat": "{{instance}} - heap",
                   "refId": "Heap memory usage"
                },
                {
@@ -925,7 +915,7 @@
                   "expr": "jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - non heap",
+                  "legendFormat": "{{instance}} - non heap",
                   "refId": "Non-heap memory usage"
                }
             ],

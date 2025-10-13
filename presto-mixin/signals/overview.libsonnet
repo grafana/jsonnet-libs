@@ -1,10 +1,10 @@
 function(this) {
-  local legendCustomTemplate = '{{presto_cluster}}',
+  local legendCustomTemplate = std.join(' ', std.map(function(label) '{{' + label + '}}', this.overviewLegendLabels)),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
-  legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.groupLabels)),
+  legendCustomTemplate: legendCustomTemplate,
   aggLevel: 'none',
   aggFunction: 'avg',
   alertsInterval: '5m',
@@ -78,7 +78,6 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_QueryManager_CompletedQueries_OneMinute_Count{%(queriesSelector)s}',
-          legendCustomTemplate: legendCustomTemplate + ' - completed',
         },
       },
     },
@@ -93,7 +92,6 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_QueryManager_UserErrorFailures_OneMinute_Count{%(queriesSelector)s}',
-          legendCustomTemplate: legendCustomTemplate + ' - user',
         },
       },
     },
@@ -146,6 +144,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'sum by (presto_cluster) (presto_ClusterMemoryPool_general_FreeDistributedBytes{%(queriesSelector)s})',
+          legendCustomTemplate: legendCustomTemplate + ' - general',
         },
       },
     },
@@ -159,6 +158,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'sum by (presto_cluster) (presto_ClusterMemoryPool_reserved_FreeDistributedBytes{%(queriesSelector)s})',
+          legendCustomTemplate: legendCustomTemplate + ' - reserved',
         },
       },
     },

@@ -1,10 +1,10 @@
 function(this) {
-  local legendCustomTemplate = '{{presto_cluster}}',
+  local legendCustomTemplate = std.join(' ', std.map(function(label) '{{' + label + '}}', this.coordinatorLegendLabels)),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
-  legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.groupLabels)),
+  legendCustomTemplate: legendCustomTemplate,
   aggLevel: 'none',
   aggFunction: 'avg',
   discoveryMetric: {
@@ -24,7 +24,6 @@ function(this) {
         },
       },
     },
-
 
     heapMemoryUsage: {
       name: 'Heap memory usage',

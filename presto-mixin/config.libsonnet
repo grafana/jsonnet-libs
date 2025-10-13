@@ -2,6 +2,9 @@
   local this = self,
   filteringSelector: 'job=~"integrations/presto"',
   groupLabels: ['job', 'cluster', 'presto_cluster'],
+  overviewLegendLabels: ['presto_cluster'],
+  coordinatorLegendLabels: ['instance'],
+  workerLegendLabels: ['instance'],
   instanceLabels: ['instance'],
   uid: 'presto',
 
@@ -32,6 +35,5 @@
     overview: (import './signals/overview.libsonnet')(this),
     coordinator: (import './signals/coordinator.libsonnet')(this),
     worker: (import './signals/worker.libsonnet')(this),
-
   },
 }

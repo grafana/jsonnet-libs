@@ -143,10 +143,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new('Error failures - one minute count', targets=[signals.coordinator.errorFailuresInternal.asTarget()])
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
-      // coordinatorQueries:
-      //     commonlib.panels.generic.timeSeries.base.new('Queries - one minute count', targets=[signals.coordinator.normalQueries.asTarget()])
-      //     + g.panel.timeSeries.standardOptions.withUnit('none'),
-
       coordinatorNormalQueries:
         commonlib.panels.generic.timeSeries.base.new('Normal query - one minute count', targets=[
           signals.coordinator.queryCompleted.asTarget(),
@@ -273,6 +269,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.queuedTasks.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of tasks that are being queued by the task executor.')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       workerFailedCompletedTasks:
@@ -281,14 +279,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.completedTasks.asTarget() { interval: '1m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The rate at which tasks have failed and completed.')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       workerOutputPositions:
-        commonlib.panels.generic.timeSeries.base.new('Output positions', targets=[
+        commonlib.panels.generic.timeSeries.base.new('Output positions - one minute rate', targets=[
           signals.worker.outputPositions.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The rate of rows (or records) produced by an operation.')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       workerExecutorPoolSize:
         commonlib.panels.generic.timeSeries.base.new('Executor pool size', targets=[
@@ -297,7 +299,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.processExecutorPoolSize.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The pool size of the task notification executor.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       workerMemoryPool:
         commonlib.panels.generic.timeSeries.base.new('Memory pool', targets=[
@@ -305,14 +309,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.memoryPoolReservedFreeBytes.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The amount of Presto memory available.')
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      workerDataProcesssingThroughput:
-        commonlib.panels.generic.timeSeries.base.new('Data processing throughput', targets=[
+      workerDataProcessingThroughput:
+        commonlib.panels.generic.timeSeries.base.new('Data processing throughput - one minute rate', targets=[
           signals.worker.dataProcessingInput.asTarget(),
           signals.worker.dataProcessingOutput.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The rate at which volumes of data are being processed.')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       // Worker JVM
@@ -338,6 +346,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.jvmNonHeapMemoryUsage.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The heap and non-heap memory used by the JVM.')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
 
       workerJVMMemoryCommitted:
@@ -346,6 +356,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.worker.jvmNonHeapMemoryCommitted.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The heap and non-heap memory committed by the JVM.')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
 
     },

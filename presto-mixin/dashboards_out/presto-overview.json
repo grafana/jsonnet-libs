@@ -10,16 +10,6 @@
             "url": "/d/presto-logs"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "presto-mixin"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Presto coordinator",
             "type": "link",
@@ -231,7 +221,7 @@
                   "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - completed",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "Completed queries - one minute count"
                }
             ],
@@ -310,7 +300,7 @@
                   "expr": "presto_QueryManager_UserErrorFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{presto_cluster}} - user",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "User error failures - one minute count"
                }
             ],
@@ -362,7 +352,7 @@
                   "expr": "presto_QueryManager_QueuedQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "Queued queries"
                }
             ],
@@ -414,7 +404,7 @@
                   "expr": "presto_ClusterMemoryPool_general_BlockedNodes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "Blocked nodes"
                }
             ],
@@ -466,7 +456,7 @@
                   "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "Internal error failures - one minute count"
                }
             ],
@@ -518,7 +508,7 @@
                   "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_reserved_FreeDistributedBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}} - reserved",
                   "refId": "Cluster memory distributed bytes reserved"
                },
                {
@@ -529,7 +519,7 @@
                   "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_general_FreeDistributedBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}} - general",
                   "refId": "Cluster memory distributed bytes free"
                }
             ],
@@ -581,7 +571,7 @@
                   "expr": "presto_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{job}} {{cluster}} {{presto_cluster}}",
+                  "legendFormat": "{{presto_cluster}}",
                   "refId": "Insufficient resource failures - one minute rate"
                }
             ],

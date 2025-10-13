@@ -10,16 +10,6 @@
             "url": "/d/presto-logs"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "presto-mixin"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Presto coordinator",
             "type": "link",
@@ -74,8 +64,8 @@
                }
             },
             "gridPos": {
-               "h": 4,
-               "w": 12,
+               "h": 8,
+               "w": 3,
                "x": 0,
                "y": 1
             },
@@ -125,9 +115,9 @@
                }
             },
             "gridPos": {
-               "h": 4,
-               "w": 12,
-               "x": 12,
+               "h": 8,
+               "w": 3,
+               "x": 3,
                "y": 1
             },
             "id": 3,
@@ -168,15 +158,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 9
+               "w": 6,
+               "x": 6,
+               "y": 1
             },
             "id": 4,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -222,13 +214,15 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 9
+               "y": 1
             },
             "id": 5,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -287,13 +281,15 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 17
+               "y": 9
             },
             "id": 6,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -314,7 +310,7 @@
                   "refId": "Output positions"
                }
             ],
-            "title": "Output positions",
+            "title": "Output positions - one minute rate",
             "type": "timeseries"
          },
          {
@@ -339,13 +335,15 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 17
+               "y": 9
             },
             "id": 7,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -362,7 +360,7 @@
                   "expr": "presto_TaskExecutor_ProcessorExecutor_PoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
+                  "legendFormat": "{{instance}} - task notification",
                   "refId": "Executor pool size"
                },
                {
@@ -373,7 +371,7 @@
                   "expr": "presto_TaskExecutor_ProcessorExecutor_CorePoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
+                  "legendFormat": "{{instance}} - process executor core",
                   "refId": "Process executor core pool size"
                },
                {
@@ -384,7 +382,7 @@
                   "expr": "presto_TaskExecutor_ProcessorExecutor_PoolSize{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
+                  "legendFormat": "{{instance}} - process executor",
                   "refId": "Process executor pool size"
                }
             ],
@@ -413,13 +411,15 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -476,13 +476,15 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 17
             },
             "id": 9,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -499,7 +501,7 @@
                   "expr": "presto_TaskManager_InputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
+                  "legendFormat": "{{instance}} - input",
                   "refId": "Data processing input"
                },
                {
@@ -510,11 +512,11 @@
                   "expr": "presto_TaskManager_OutputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
+                  "legendFormat": "{{instance}} - output",
                   "refId": "Data processing output"
                }
             ],
-            "title": "Data processing throughput",
+            "title": "Data processing throughput - one minute rate",
             "type": "timeseries"
          },
          {
@@ -523,7 +525,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 33
+               "y": 25
             },
             "id": 10,
             "panels": [ ],
@@ -552,7 +554,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 34
+               "y": 26
             },
             "id": 11,
             "options": {
@@ -572,7 +574,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -605,7 +607,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 34
+               "y": 26
             },
             "id": 12,
             "options": {
@@ -625,7 +627,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -658,13 +660,15 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 42
+               "y": 34
             },
             "id": 13,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -721,13 +725,15 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 42
+               "y": 34
             },
             "id": 14,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",

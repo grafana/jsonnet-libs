@@ -1,10 +1,10 @@
 function(this) {
-  local legendCustomTemplate = '{{instance}}',
+  local legendCustomTemplate = std.join(' ', std.map(function(label) '{{' + label + '}}', this.workerLegendLabels)),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
-  legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
+  legendCustomTemplate: legendCustomTemplate,
   aggLevel: 'none',
   alertsInterval: '5m',
   discoveryMetric: {
@@ -98,6 +98,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_TaskExecutor_ProcessorExecutor_PoolSize{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate + ' - task notification',
         },
       },
     },
@@ -111,6 +112,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_TaskExecutor_ProcessorExecutor_CorePoolSize{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate + ' - process executor core',
         },
       },
     },
@@ -124,6 +126,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_TaskExecutor_ProcessorExecutor_PoolSize{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate + ' - process executor',
         },
       },
     },
@@ -166,6 +169,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_TaskManager_InputDataSize_OneMinute_Rate{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate + ' - input',
         },
       },
     },
@@ -179,6 +183,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'presto_TaskManager_OutputDataSize_OneMinute_Rate{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate + ' - output',
         },
       },
     },
@@ -191,7 +196,7 @@ function(this) {
       unit: 'ops',
       sources: {
         prometheus: {
-          expr: 'jvm_gc_collection_count{%(queriesSelector)s}',
+          expr: 'jvm_gc_collection_count{%(queriesSelector)s, name="G1 Young Generation"}',
           rangeFunction: 'increase',
         },
       },
@@ -205,7 +210,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'jvm_gc_duration{%(queriesSelector)s}',
+          expr: 'jvm_gc_duration{%(queriesSelector)s, name="G1 Young Generation"}',
           rangeFunction: 'increase',
         },
       },
