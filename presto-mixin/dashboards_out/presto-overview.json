@@ -10,6 +10,16 @@
             "url": "/d/presto-logs"
          },
          {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "presto-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
             "keepTime": true,
             "title": "Presto coordinator",
             "type": "link",
