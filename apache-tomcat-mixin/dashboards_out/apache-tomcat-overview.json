@@ -190,7 +190,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -202,7 +202,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -257,7 +257,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -269,7 +269,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -324,7 +324,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -336,7 +336,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -348,7 +348,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -360,7 +360,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -415,7 +415,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -427,7 +427,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -481,7 +481,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(tomcat_threadpool_connectioncount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance)",
+                  "expr": "sum(tomcat_threadpool_connectioncount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - total connections",
@@ -492,7 +492,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(tomcat_threadpool_pollerthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance)",
+                  "expr": "sum(tomcat_threadpool_pollerthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - poller total",
@@ -503,7 +503,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(tomcat_threadpool_keepalivecount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance)",
+                  "expr": "sum(tomcat_threadpool_keepalivecount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - idle total",
@@ -514,7 +514,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(tomcat_threadpool_currentthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance)",
+                  "expr": "sum(tomcat_threadpool_currentthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - active total",
@@ -525,7 +525,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "tomcat_threadpool_connectioncount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "tomcat_threadpool_connectioncount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - connections",
@@ -536,7 +536,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "tomcat_threadpool_pollerthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "tomcat_threadpool_pollerthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - poller",
@@ -547,7 +547,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "tomcat_threadpool_keepalivecount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "tomcat_threadpool_keepalivecount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - idle",
@@ -558,7 +558,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "tomcat_threadpool_currentthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "tomcat_threadpool_currentthreadcount{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - active",
@@ -635,6 +635,28 @@
                "query": "loki",
                "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "multi": true,
+               "name": "protocol",
+               "query": "label_values(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, protocol)",
+               "refresh": 2,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "multi": true,
+               "name": "port",
+               "query": "label_values(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, port)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },

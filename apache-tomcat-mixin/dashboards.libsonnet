@@ -26,7 +26,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             ),
           ),
         ) + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+                        g.dashboard.variable.query.new('protocol',
+            query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, protocol)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='protocol', metric='tomcat_bytesreceived_total{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
+
+            g.dashboard.variable.query.new('port',query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, port)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='port', metric='tomcat_bytesreceived_total{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
+          ],
           uid + '_overview',
           tags,
           links { apacheTomcatOverview:: {} },
@@ -48,7 +57,22 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             ),
           ),
         ) + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+            g.dashboard.variable.query.new('host')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='host', metric='tomcat_session_sessioncounter_total{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
+
+            g.dashboard.variable.query.new('context')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='context', metric='tomcat_session_sessioncounter_total{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
+
+            g.dashboard.variable.query.new('servlet')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='servlet', metric='tomcat_servlet_requestcount_total{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
+          ],
           uid + '_hosts',
           tags,
           links { apacheTomcatHosts:: {} },
@@ -72,7 +96,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           dashboards+:
             {
               logs+:
-                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { apacheTomcatLogs:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
             },
           panels+:
             {

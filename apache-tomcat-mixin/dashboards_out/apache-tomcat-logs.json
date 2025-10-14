@@ -13,12 +13,6 @@
          },
          {
             "keepTime": true,
-            "title": "Apache Tomcat logs",
-            "type": "link",
-            "url": "/d/apachetomcat-logs"
-         },
-         {
-            "keepTime": true,
             "title": "Apache Tomcat overview",
             "type": "link",
             "url": "/d/apachetomcat_overview"

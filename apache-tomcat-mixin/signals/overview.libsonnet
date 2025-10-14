@@ -47,7 +47,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_bytessent_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_bytessent_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total',
         },
       },
@@ -61,7 +61,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'tomcat_bytessent_total{%(queriesSelector)s}',
+          expr: 'tomcat_bytessent_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}}',
         },
       },
@@ -75,7 +75,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_bytesreceived_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_bytesreceived_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total',
         },
       },
@@ -89,7 +89,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'tomcat_bytesreceived_total{%(queriesSelector)s}',
+          expr: 'tomcat_bytesreceived_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}}',
         },
       },
@@ -104,7 +104,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_requestcount_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_requestcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total requests',
         },
       },
@@ -118,7 +118,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_errorcount_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_errorcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total errors',
         },
       },
@@ -132,7 +132,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'tomcat_requestcount_total{%(queriesSelector)s}',
+          expr: 'tomcat_requestcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - requests',
         },
       },
@@ -146,7 +146,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'tomcat_errorcount_total{%(queriesSelector)s}',
+          expr: 'tomcat_errorcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - errors',
         },
       },
@@ -160,7 +160,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+          expr: 'sum(increase(tomcat_processingtime_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total',
         },
       },
@@ -174,7 +174,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'increase(tomcat_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)',
+          expr: 'increase(tomcat_processingtime_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}}',
         },
       },
@@ -188,7 +188,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'sum(tomcat_threadpool_connectioncount{%(queriesSelector)s}) by (job, instance)',
+          expr: 'sum(tomcat_threadpool_connectioncount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total connections',
         },
       },
@@ -202,7 +202,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'sum(tomcat_threadpool_pollerthreadcount{%(queriesSelector)s}) by (job, instance)',
+          expr: 'sum(tomcat_threadpool_pollerthreadcount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - poller total',
         },
       },
@@ -216,7 +216,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'sum(tomcat_threadpool_keepalivecount{%(queriesSelector)s}) by (job, instance)',
+          expr: 'sum(tomcat_threadpool_keepalivecount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - idle total',
         },
       },
@@ -230,7 +230,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'sum(tomcat_threadpool_currentthreadcount{%(queriesSelector)s}) by (job, instance)',
+          expr: 'sum(tomcat_threadpool_currentthreadcount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - active total',
         },
       },
@@ -244,7 +244,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'tomcat_threadpool_connectioncount{%(queriesSelector)s}',
+          expr: 'tomcat_threadpool_connectioncount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - connections',
         },
       },
@@ -258,7 +258,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'tomcat_threadpool_pollerthreadcount{%(queriesSelector)s}',
+          expr: 'tomcat_threadpool_pollerthreadcount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - poller',
         },
       },
@@ -272,7 +272,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'tomcat_threadpool_keepalivecount{%(queriesSelector)s}',
+          expr: 'tomcat_threadpool_keepalivecount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - idle',
         },
       },
@@ -286,7 +286,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'tomcat_threadpool_currentthreadcount{%(queriesSelector)s}',
+          expr: 'tomcat_threadpool_currentthreadcount{%(queriesSelector)s, protocol=~"$protocol", port=~"$port"}',
           legendCustomTemplate: legendCustomTemplate + ' - {{protocol}} - {{port}} - active',
         },
       },

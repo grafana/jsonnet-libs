@@ -10,11 +10,8 @@ local mixin =
     enableLokiLogs: config.enableLokiLogs,
   });
 
-local k8s_patch = {
+local labels_patch = {
   cluster+: {
-    allValue: '.*',
-  },
-  host+: {
     allValue: '.*',
   },
 };
@@ -24,7 +21,7 @@ local k8s_patch = {
     local tags = config.dashboardTags,
     [fname]:
       local dashboard = util.decorate_dashboard(mixin.grafana.dashboards[fname], tags=tags);
-      dashboard + util.patch_variables(dashboard, k8s_patch)
+      dashboard + util.patch_variables(dashboard, labels_patch)
 
     for fname in std.objectFields(mixin.grafana.dashboards)
   },

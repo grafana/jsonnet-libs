@@ -19,7 +19,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (job, instance)',
+          expr: 'sum(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total sessions',
         },
       },
@@ -33,7 +33,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_session_rejectedsessions_total{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (job, instance)',
+          expr: 'sum(increase(tomcat_session_rejectedsessions_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - rejected sessions',
         },
       },
@@ -47,7 +47,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_session_expiredsessions_total{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (job, instance)',
+          expr: 'sum(increase(tomcat_session_expiredsessions_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - expired sessions',
         },
       },
@@ -61,7 +61,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'tomcat_session_sessioncounter_total{%(queriesSelector)s}',
+          expr: 'tomcat_session_sessioncounter_total{%(queriesSelector)s, host=~"$host", context=~"$context"}',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{context}} - sessions',
         },
@@ -76,7 +76,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'tomcat_session_rejectedsessions_total{%(queriesSelector)s}',
+          expr: 'tomcat_session_rejectedsessions_total{%(queriesSelector)s, host=~"$host", context=~"$context"}',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{context}} - rejected',
         },
@@ -91,7 +91,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'tomcat_session_expiredsessions_total{%(queriesSelector)s}',
+          expr: 'tomcat_session_expiredsessions_total{%(queriesSelector)s, host=~"$host", context=~"$context"}',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{context}} - expired',
         },
@@ -106,7 +106,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_session_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+          expr: 'sum(increase(tomcat_session_processingtime_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total',
         },
       },
@@ -120,7 +120,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'increase(tomcat_session_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)',
+          expr: 'increase(tomcat_session_processingtime_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{%(queriesSelector)s, host=~"$host", context=~"$context"}[$__interval:] offset -$__interval), 1)',
           legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{context}}',
         },
       },
@@ -134,7 +134,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_servlet_requestcount_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_servlet_requestcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total requests',
         },
       },
@@ -149,7 +149,7 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'sum(rate(tomcat_servlet_errorcount_total{%(queriesSelector)s}[$__rate_interval])) by (job, instance)',
+          expr: 'sum(rate(tomcat_servlet_errorcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__rate_interval])) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total errors',
         },
       },
@@ -163,8 +163,8 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'tomcat_servlet_requestcount_total{%(queriesSelector)s}',
-          legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{servlet}} - requests',
+          expr: 'tomcat_servlet_requestcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}',
+          legendCustomTemplate: legendCustomTemplate + ' - {{module}}{{servlet}} - requests',
         },
       },
     },
@@ -177,8 +177,8 @@ function(this) {
       unit: 'r/s',
       sources: {
         prometheus: {
-          expr: 'tomcat_servlet_errorcount_total{%(queriesSelector)s}',
-          legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{context}} - errors',
+          expr: 'tomcat_servlet_errorcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}',
+          legendCustomTemplate: legendCustomTemplate + ' - {{module}}{{servlet}} - errors',
         },
       },
     },
@@ -191,7 +191,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'sum(increase(tomcat_servlet_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+          expr: 'sum(increase(tomcat_servlet_processingtime_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
           legendCustomTemplate: legendCustomTemplate + ' - total',
         },
       },
@@ -205,8 +205,8 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'increase(tomcat_servlet_processingtime_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)',
-          legendCustomTemplate: legendCustomTemplate + ' - {{host}}{{servlet}}',
+          expr: 'increase(tomcat_servlet_processingtime_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{%(queriesSelector)s, module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)',
+          legendCustomTemplate: legendCustomTemplate + ' - {{module}}{{servlet}}',
         },
       },
     },
