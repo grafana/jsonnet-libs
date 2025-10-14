@@ -14,6 +14,9 @@ local k8s_patch = {
   cluster+: {
     allValue: '.*',
   },
+  host+: {
+    allValue: '.*',
+  },
 };
 
 {

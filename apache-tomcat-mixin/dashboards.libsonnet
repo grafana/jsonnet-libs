@@ -43,6 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             g.util.grid.wrapPanels(
               [
                 this.grafana.rows.hosts,
+                this.grafana.rows.hostServlets,
               ],
             ),
           ),

@@ -61,7 +61,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 1
             },
@@ -88,6 +88,7 @@
                   "expr": "sum(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total sessions",
                   "refId": "Total sessions"
                },
@@ -99,6 +100,7 @@
                   "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - rejected sessions",
                   "refId": "Rejected sessions"
                },
@@ -110,6 +112,7 @@
                   "expr": "sum(increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - expired sessions",
                   "refId": "Expired sessions"
                },
@@ -121,6 +124,7 @@
                   "expr": "increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{context}} - sessions",
                   "refId": "Session rate"
                },
@@ -132,6 +136,7 @@
                   "expr": "increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{context}} - rejected",
                   "refId": "Rejected rate"
                },
@@ -143,6 +148,7 @@
                   "expr": "increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{context}} - expired",
                   "refId": "Expired rate"
                }
@@ -170,8 +176,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 1
             },
             "id": 3,
@@ -197,6 +203,7 @@
                   "expr": "sum(increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total",
                   "refId": "Total session processing time"
                },
@@ -208,12 +215,26 @@
                   "expr": "increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{context}}",
                   "refId": "Session processing time"
                }
             ],
             "title": "Session processing time",
             "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "panels": [ ],
+            "title": "Servlet",
+            "type": "row"
          },
          {
             "datasource": {
@@ -235,11 +256,11 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 1
+               "w": 12,
+               "x": 0,
+               "y": 10
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "asTable": true,
@@ -262,6 +283,7 @@
                   "expr": "sum(rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total requests",
                   "refId": "Total servlet requests"
                },
@@ -273,6 +295,7 @@
                   "expr": "sum(rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total errors",
                   "refId": "Total servlet errors"
                },
@@ -284,6 +307,7 @@
                   "expr": "rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{servlet}} - requests",
                   "refId": "Servlet request rate"
                },
@@ -295,6 +319,7 @@
                   "expr": "rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{context}} - errors",
                   "refId": "Servlet error rate"
                }
@@ -322,11 +347,11 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 0,
-               "y": 9
+               "w": 12,
+               "x": 12,
+               "y": 10
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "asTable": true,
@@ -349,6 +374,7 @@
                   "expr": "sum(increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total",
                   "refId": "Total servlet processing time"
                },
@@ -360,6 +386,7 @@
                   "expr": "increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{host}}{{servlet}}",
                   "refId": "Servlet processing time"
                }

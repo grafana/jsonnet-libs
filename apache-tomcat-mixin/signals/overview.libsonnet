@@ -34,6 +34,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'jvm_process_cpu_load{%(queriesSelector)s}',
+          legendCustomTemplate: legendCustomTemplate,
         },
       },
     },

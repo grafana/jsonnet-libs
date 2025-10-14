@@ -56,12 +56,13 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "unit": "bytes"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 1
             },
@@ -107,13 +108,14 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "unit": "percent"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 1
             },
             "id": 3,
@@ -137,7 +139,7 @@
                   "expr": "jvm_process_cpu_load{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}: CPU usage",
+                  "legendFormat": "{{ instance }}",
                   "refId": "CPU usage"
                }
             ],
@@ -158,20 +160,23 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "unit": "Bps"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 1
+               "w": 12,
+               "x": 0,
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -188,6 +193,7 @@
                   "expr": "sum(rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total",
                   "refId": "Traffic sent total"
                },
@@ -199,6 +205,7 @@
                   "expr": "rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}}",
                   "refId": "Traffic sent rate"
                }
@@ -220,20 +227,23 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "unit": "Bps"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 0,
+               "w": 12,
+               "x": 12,
                "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -250,6 +260,7 @@
                   "expr": "sum(rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total",
                   "refId": "Traffic received total"
                },
@@ -261,6 +272,7 @@
                   "expr": "rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}}",
                   "refId": "Traffic received rate"
                }
@@ -282,20 +294,23 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "unit": "r/s"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 9
+               "w": 12,
+               "x": 0,
+               "y": 17
             },
             "id": 6,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -312,6 +327,7 @@
                   "expr": "sum(rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total requests",
                   "refId": "Requests total"
                },
@@ -323,6 +339,7 @@
                   "expr": "rate(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - requests",
                   "refId": "Requests rate"
                },
@@ -334,6 +351,7 @@
                   "expr": "sum(rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total errors",
                   "refId": "Requests errors"
                },
@@ -345,6 +363,7 @@
                   "expr": "rate(tomcat_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - {{protocol}} - {{port}} - errors",
                   "refId": "Requests errors rate"
                }
@@ -372,15 +391,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 9
+               "w": 12,
+               "x": 12,
+               "y": 17
             },
             "id": 7,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -397,8 +418,21 @@
                   "expr": "sum(increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ instance }} - total",
                   "refId": "Processing time total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(tomcat_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ instance }} - {{protocol}} - {{port}}",
+                  "refId": "Processing time rate"
                }
             ],
             "title": "Processing time",
@@ -423,15 +457,17 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 24,
                "x": 0,
-               "y": 17
+               "y": 25
             },
             "id": 8,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
