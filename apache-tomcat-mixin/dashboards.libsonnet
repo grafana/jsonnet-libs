@@ -27,12 +27,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           ),
         ) + root.applyCommon(
           vars.multiInstance + [
-                        g.dashboard.variable.query.new('protocol',
-            query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, protocol)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            g.dashboard.variable.query.new('protocol',
+                                           query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, protocol)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
             + g.dashboard.variable.query.queryTypes.withLabelValues(label='protocol', metric='tomcat_bytesreceived_total{%(queriesSelector)s}' % vars)
             + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
 
-            g.dashboard.variable.query.new('port',query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, port)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            g.dashboard.variable.query.new('port', query='label_values(tomcat_bytesreceived_total{%(queriesSelector)s}, port)' % vars) + g.dashboard.variable.custom.selectionOptions.withMulti(true)
             + g.dashboard.variable.query.queryTypes.withLabelValues(label='port', metric='tomcat_bytesreceived_total{%(queriesSelector)s}' % vars)
             + g.dashboard.variable.query.withDatasourceFromVariable(variable=vars.datasources.prometheus),
           ],
