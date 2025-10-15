@@ -36,6 +36,9 @@
 
     // If true, the entries will be sorted by title
     nginx_directory_sorted: false,
+
+    // If false, links won't start with a /, making them relative links.
+    nginx_directory_absolute_links: true,
   },
 
   _images+:: {
