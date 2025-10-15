@@ -206,9 +206,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     |||
                     % [
                       this.signals.interface.networkInErrorsPerSec.asRuleExpression(),
-                      this.signals.interface.alertsErrorsPerSecThresholdWarning,
+                      this.config.alertsErrorsPerSecThresholdWarning,
                       this.signals.interface.networkOutErrorsPerSec.asRuleExpression(),
-                      this.signals.interface.alertsErrorsPerSecThresholdWarning,
+                      this.config.alertsErrorsPerSecThresholdWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -265,7 +265,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'SNMPExporterSlowScrape',
-              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > %s' % [this.config.filteringSelector, this.config.alertsSlowScrapeThresholdInfo]
+              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > %s' % [this.config.filteringSelector, this.config.alertsSlowScrapeThresholdInfo],
               labels: {
                 severity: 'info',
               },
@@ -273,7 +273,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'SNMP exporter scrape is slow.',
                 description: |||
                   SNMP exporter scrape of {{ $labels.%s }} is taking more than %s seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
-                ||| % [instanceLabel, this.config.alertsSlowScrapeThresholdInfo]
+                ||| % [instanceLabel, this.config.alertsSlowScrapeThresholdInfo],
               },
               'for': '10m',
               keep_firing_for: '5m',
