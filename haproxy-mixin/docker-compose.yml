@@ -40,7 +40,7 @@ services:
     volumes:
       - './development/prometheus.yml:/etc/prometheus/prometheus.yml'
   haproxy:
-    image: 'haproxy:2.9.15@sha256:81506628494800519f82caf4128cb693df21ee5f38fca467224fcff508d537de'
+    image: 'haproxy:3.2.6@sha256:f64568fbe41eb6376dd3180ff4b8444ac4306b01b7374d9b0294ae15acb384b9'
     ports:
       - '${HAPROXY_PORT:-8080:80}'
     volumes:
