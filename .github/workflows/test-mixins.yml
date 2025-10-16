@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6
         with:
           go-version: 1.23
       - name: Tools cache
@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
     services:
       grafana:
-        image: grafana/grafana:11.6.6@sha256:f3b7b0bf02f79eca049a9463424f19fc600f70cabbc0d0e4946f810c5d165830
+        image: grafana/grafana:12.2.0@sha256:74144189b38447facf737dfd0f3906e42e0776212bf575dc3334c3609183adf7
         ports:
           - 3000:3000
         env:
@@ -96,7 +96,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6
         with:
           go-version: 1.23
       - name: Restore Tools cache
