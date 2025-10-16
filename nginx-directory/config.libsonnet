@@ -39,6 +39,9 @@
 
     // If false, links won't start with a /, making them relative links.
     nginx_directory_absolute_links: true,
+
+    // Allow for extra CSS to be injected.
+    extra_css: '',
   },
 
   _images+:: {
