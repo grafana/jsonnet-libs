@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
     services:
       grafana:
-        image: grafana/grafana:11.4.0
+        image: grafana/grafana:11.6.6@sha256:f3b7b0bf02f79eca049a9463424f19fc600f70cabbc0d0e4946f810c5d165830
         ports:
           - 3000:3000
         env:
