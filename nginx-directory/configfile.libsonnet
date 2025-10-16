@@ -11,7 +11,7 @@ function(services) {
         return 302 %(url)s;
       ||| % service
       else |||
-        proxy_pass      %(url)s$2$is_args$args;
+        proxy_pass      %(url)s%(args)s;
         proxy_set_header    Host $host;
         proxy_set_header    X-Real-IP $remote_addr;
         proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -19,7 +19,9 @@ function(services) {
         proxy_set_header    X-Forwarded-Host $http_host;
         proxy_read_timeout  %(read_timeout)s;
         proxy_send_timeout  %(send_timeout)s;
-      ||| % (service)
+      ||| % (service {
+               args: if self.normalized then '$2$is_args$args' else '$request_uri',
+             })
     )
     + (
       if service.allowWebsockets
