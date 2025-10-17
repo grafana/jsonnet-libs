@@ -1,26 +1,39 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    prestoOverviewSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
-    prestoSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
-    prestoAlertSelector: if self.enableMultiCluster then 'job=~"${job:regex}", cluster=~"${cluster:regex}"' else 'job=~"${job:regex}"',
-    prestoOverviewLegendSelector: if self.enableMultiCluster then '{{cluster}} - {{presto_cluster}}' else '{{presto_cluster}}',
-    prestoLegendSelector: if self.enableMultiCluster then '{{cluster}} - {{instance}}' else '{{instance}}',
-    filterSelector: 'job=~"integrations/presto"',
+  local this = self,
+  filteringSelector: 'job=~"integrations/presto"',
+  groupLabels: ['job', 'cluster', 'presto_cluster'],
+  overviewLegendLabels: ['presto_cluster'],
+  coordinatorLegendLabels: ['instance'],
+  workerLegendLabels: ['instance'],
+  instanceLabels: ['instance'],
+  uid: 'presto',
 
-    dashboardTags: ['presto-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
+  dashboardNamePrefix: 'Presto',
+  dashboardTags: ['presto-mixin'],
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
 
-    // alerts thresholds
-    alertsHighInsufficientResourceErrors: 0,  // count
-    alertsHighTaskFailuresWarning: 0,  // count
-    alertsHighTaskFailuresCritical: 30,  // percent
-    alertsHighQueuedTaskCount: 5,  // count
-    alertsHighBlockedNodesCount: 0,  // count
-    alertsHighFailedQueryCountWarning: 0,  // count
-    alertsHighFailedQueryCountCritical: 30,  // percent
-    enableLokiLogs: true,
+  // Data source configuration
+  metricsSource: 'prometheus',
+  enableLokiLogs: true,
+  logLabels: this.groupLabels + this.instanceLabels,
+  extraLogLabels: [],
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
+  // Alerts configuration
+  alertsHighInsufficientResourceErrors: 0,  // count
+  alertsHighTaskFailuresWarning: 0,  // count
+  alertsHighTaskFailuresCritical: 30,  // percent
+  alertsHighQueuedTaskCount: 5,  // count
+  alertsHighBlockedNodesCount: 0,  // count
+  alertsHighFailedQueryCountWarning: 0,  // count
+  alertsHighFailedQueryCountCritical: 30,  // percent
+
+  signals+: {
+    overview: (import './signals/overview.libsonnet')(this),
+    coordinator: (import './signals/coordinator.libsonnet')(this),
+    worker: (import './signals/worker.libsonnet')(this),
   },
 }
