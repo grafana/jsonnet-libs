@@ -1,5 +1,5 @@
 {
-  prometheusAlerts+:: {
+  new(this): {
     groups+: [
       {
         name: 'ApacheTomcatAlerts',
@@ -7,8 +7,8 @@
           {
             alert: 'ApacheTomcatAlertsHighCpuUsage',
             expr: |||
-              sum by (%(agg)s) (jvm_process_cpu_load{%(filteringSelector)s}) > %(ApacheTomcatAlertsCriticalCpuUsage)s
-            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
+              sum by (%(agg)s) (jvm_process_cpu_load{%(filteringSelector)s}) > %(alertsCriticalCpuUsage)s
+            ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -18,15 +18,15 @@
               description:
                 (
                   'The CPU usage has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(ApacheTomcatAlertsCriticalCpuUsage)s percent.'
-                ) % $._config,
+                  'which is above the threshold of %(alertsCriticalCpuUsage)s percent.'
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheTomcatAlertsHighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes{%(filteringSelector)s}) by (%(agg)s) / sum(jvm_physical_memory_bytes{%(filteringSelector)s}) by (%(agg)s) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
-            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
+              sum(jvm_memory_usage_used_bytes{%(filteringSelector)s}) by (%(agg)s) / sum(jvm_physical_memory_bytes{%(filteringSelector)s}) by (%(agg)s) * 100 > %(alertsCriticalMemoryUsage)s
+            ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -36,15 +36,15 @@
               description:
                 (
                   'The memory usage has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(ApacheTomcatAlertsCriticalMemoryUsage)s percent.'
-                ) % $._config,
+                  'which is above the threshold of %(alertsCriticalMemoryUsage)s percent.'
+                ) % this.config,
             },
           },
           {
-            alert: 'ApacheTomcatAlertsHighRequestErrorPercent',
+            alert: 'ApacheTomcatAlertsRequestErrors',
             expr: |||
-              sum by (%(agg)s) (increase(tomcat_errorcount_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m]) * 100) > %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s
-            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
+              sum by (%(agg)s) (increase(tomcat_errorcount_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m]) * 100) > %(alertsCriticalRequestErrorPercentage)s
+            ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -54,15 +54,15 @@
               description:
                 (
                   'The percentage of request errors has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s percent.'
-                ) % $._config,
+                  'which is above the threshold of %(alertsCriticalRequestErrorPercentage)s percent.'
+                ) % this.config,
             },
           },
           {
-            alert: 'ApacheTomcatAlertsModeratelyHighProcessingTime',
+            alert: 'ApacheTomcatAlertsHighProcessingTime',
             expr: |||
-              sum by (%(agg)s) (increase(tomcat_processingtime_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m])) > %(ApacheTomcatAlertsWarningProcessingTime)s
-            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
+              sum by (%(agg)s) (increase(tomcat_processingtime_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m])) > %(alertsWarningProcessingTime)s
+            ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -72,8 +72,8 @@
               description:
                 (
                   'The processing time has been at {{ printf "%%.0f" $value }}ms over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(ApacheTomcatAlertsWarningProcessingTime)sms.'
-                ) % $._config,
+                  'which is above the threshold of %(alertsWarningProcessingTime)sms.'
+                ) % this.config,
             },
           },
         ],
