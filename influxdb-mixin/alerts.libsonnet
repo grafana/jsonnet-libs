@@ -1,14 +1,14 @@
 {
-  prometheusAlerts+:: {
+  new(this): {
     groups+: [
       {
         name: 'influxdb',
         rules: [
           {
-            alert: 'InfluxDBWarningTaskSchedulerHighFailureRate',
+            alert: 'InfluxDBWarningTaskHighFailureRate',
             expr: |||
-              100 * rate(task_scheduler_total_execute_failure[5m])/clamp_min(rate(task_scheduler_total_execution_calls[5m]), 1) >= %(alertsWarningTaskSchedulerHighFailureRate)s
-            ||| % $._config,
+              100 * rate(task_scheduler_total_execute_failure{%(filteringSelector)s}[5m])/clamp_min(rate(task_scheduler_total_execution_calls{%(filteringSelector)s}[5m]), 1) >= %(alertsWarningTaskSchedulerHighFailureRate)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -19,14 +19,14 @@
                 (
                   'Task scheduler task executions for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} are failing at a rate of {{ printf "%%.0f" $value }} percent, ' +
                   'which is above the threshold of %(alertsWarningTaskSchedulerHighFailureRate)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'InfluxDBCriticalTaskSchedulerHighFailureRate',
+            alert: 'InfluxDBCriticalTaskHighFailureRate',
             expr: |||
-              100 * rate(task_scheduler_total_execute_failure[5m])/clamp_min(rate(task_scheduler_total_execution_calls[5m]), 1) >= %(alertsCriticalTaskSchedulerHighFailureRate)s
-            ||| % $._config,
+              100 * rate(task_scheduler_total_execute_failure{%(filteringSelector)s}[5m])/clamp_min(rate(task_scheduler_total_execution_calls{%(filteringSelector)s}[5m]), 1) >= %(alertsCriticalTaskSchedulerHighFailureRate)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -37,14 +37,14 @@
                 (
                   'Task scheduler task executions for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} are failing at a rate of {{ printf "%%.0f" $value }} percent, ' +
                   'which is above the threshold of %(alertsCriticalTaskSchedulerHighFailureRate)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'InfluxDBHighBusyWorkerPercentage',
             expr: |||
-              task_executor_workers_busy >= %(alertsWarningHighBusyWorkerPercentage)s
-            ||| % $._config,
+              task_executor_workers_busy{%(filteringSelector)s} >= %(alertsWarningHighBusyWorkerPercentage)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -55,14 +55,14 @@
                 (
                   'The busy worker percentage for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.0f" $value }} percent, ' +
                   'which is above the threshold of %(alertsWarningHighBusyWorkerPercentage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'InfluxDBHighHeapMemoryUsage',
             expr: |||
-              100 * go_memstats_heap_alloc_bytes/clamp_min((go_memstats_heap_idle_bytes + go_memstats_heap_alloc_bytes), 1) >= %(alertsWarningHighHeapMemoryUsage)s
-            ||| % $._config,
+              100 * go_memstats_heap_alloc_bytes{%(filteringSelector)s}/clamp_min((go_memstats_heap_idle_bytes{%(filteringSelector)s} + go_memstats_heap_alloc_bytes{%(filteringSelector)s}), 1) >= %(alertsWarningHighHeapMemoryUsage)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -73,14 +73,14 @@
                 (
                   'The heap memory usage for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.0f" $value }} percent, ' +
                   'which is above the threshold of %(alertsWarningHighHeapMemoryUsage)s percent.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'InfluxDBHighAverageAPIRequestLatency',
             expr: |||
-              sum without(handler, method, path, response_code, status, user_agent) (increase(http_api_request_duration_seconds_sum[5m])/clamp_min(increase(http_api_requests_total[5m]), 1)) >= %(alertsWarningHighAverageAPIRequestLatency)s
-            ||| % $._config,
+              sum without(handler, method, path, response_code, status, user_agent) (increase(http_api_request_duration_seconds_sum{%(filteringSelector)s}[5m])/clamp_min(increase(http_api_requests_total{%(filteringSelector)s}[5m]), 1)) >= %(alertsWarningHighAverageAPIRequestLatency)s
+            ||| % this.config,
             'for': '1m',
             labels: {
               severity: 'critical',
@@ -90,14 +90,14 @@
               description:
                 (
                   'The average API request latency for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.2f" $value }} seconds, which is above the threshold of %(alertsWarningHighAverageAPIRequestLatency)s seconds.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'InfluxDBSlowAverageIQLExecutionTime',
             expr: |||
-              sum without(result) (increase(influxql_service_executing_duration_seconds_sum[5m])/clamp_min(increase(influxql_service_requests_total[5m]), 1)) >= %(alertsWarningSlowAverageIQLExecutionTime)s
-            ||| % $._config,
+              sum without(result) (increase(influxql_service_executing_duration_seconds_sum{%(filteringSelector)s}[5m])/clamp_min(increase(influxql_service_requests_total{%(filteringSelector)s}[5m]), 1)) >= %(alertsWarningSlowAverageIQLExecutionTime)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -108,7 +108,7 @@
                 (
                   'The average InfluxQL query execution time for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.2f" $value }} seconds, ' +
                   'which is above the threshold of %(alertsWarningSlowAverageIQLExecutionTime)s seconds.'
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
