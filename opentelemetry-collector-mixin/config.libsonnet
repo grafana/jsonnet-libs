@@ -1,14 +1,30 @@
 {
   _config+:: {
+
     // Selector to apply to all dashboard variables, panel queries, alerts and recording rules.
     // Can be used to filter metrics to specific OpenTelemetry Collector instances.
     // Example: 'job="integrations/otel-collector"'
     filteringSelector: '',
 
+    // The label used to differentiate between different Kubernetes clusters.
+    clusterLabel: 'cluster',
+    namespaceLabel: 'namespace',
+    jobLabel: 'job',
+
+    // Configuration for which group labels are enabled.
+    labels: {
+      cluster: false,
+      namespace: false,
+      job: true,
+    },
+
     // Labels that represent a group of instances.
     // Used in dashboard variables and alert aggregations.
-    // Examples: ['job'] or ['environment', 'job', 'cluster']
-    groupLabels: ['job'],
+    groupLabels: [
+        label
+        for label in std.objectFields($._config.labels)
+        if $._config.labels[label]
+    ],
 
     // Labels that represent a single instance.
     // Used in dashboard variables and legend formats.
@@ -26,10 +42,12 @@
       refresh: '60s',
 
       // Timezone for Grafana dashboards:: UTC, browser, ...
-      grafanaTimezone: 'UTC',
+      grafanaTimezone: 'browser',
 
       // Tags for Grafana dashboards
       dashboardTags: ['otelcol'],
+
+      dashboardNamePrefix: 'OpenTelemetry Collector / ',
     },
 
     // Default datasource name
