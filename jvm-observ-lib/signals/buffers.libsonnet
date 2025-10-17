@@ -8,10 +8,12 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_buffer_memory_used_bytes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java
+      java_micrometer: 'jvm_buffer_memory_used',  // can be seen when otel micrometer bridge is used
+      java_micrometer_with_suffixes: 'jvm_buffer_memory_used_bytes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java
+      otel_old: 'process_runtime_jvm_buffer_usage',
+      otel_old_with_suffixes: 'process_runtime_jvm_buffer_usage_bytes',
+      otel_with_suffixes: 'jvm_buffer_memory_used_bytes',
       prometheus: 'jvm_buffer_pool_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-buffer-pool-metrics
-      otel: 'process_runtime_jvm_buffer_usage',
-      otel_with_suffixes: 'process_runtime_jvm_buffer_usage_bytes',
       prometheus_old: 'jvm_buffer_pool_used_bytes',
     },
     signals: {
@@ -23,16 +25,22 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_memory_used{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_buffer_pool_used_bytes{pool="direct", %(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'process_runtime_jvm_buffer_usage{pool="direct", %(queriesSelector)s}',
           },
-          otel_with_suffixes: {
+          otel_old_with_suffixes: {
             expr: 'process_runtime_jvm_buffer_usage_bytes{pool="direct", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'jvm_buffer_memory_used_bytes{jvm_buffer_pool_name="direct", %(queriesSelector)s}',
           },
           prometheus_old: {
             expr: 'jvm_buffer_pool_used_bytes{pool="direct", %(queriesSelector)s}',
@@ -47,16 +55,22 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_total_capacity{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_buffer_pool_capacity_bytes{pool="direct", %(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'process_runtime_jvm_buffer_limit{pool="direct", %(queriesSelector)s}',
           },
-          otel_with_suffixes: {
+          otel_old_with_suffixes: {
             expr: 'process_runtime_jvm_buffer_limit_bytes{pool="direct", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'jvm_buffer_memory_limit_bytes{jvm_buffer_pool_name="direct", %(queriesSelector)s}',
           },
           prometheus_old: {
             expr: 'jvm_buffer_pool_capacity_bytes{pool="direct", %(queriesSelector)s}',
@@ -71,16 +85,22 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_memory_used{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_buffer_pool_used_bytes{pool="mapped", %(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'process_runtime_jvm_buffer_usage{pool="mapped", %(queriesSelector)s}',
           },
-          otel_with_suffixes: {
+          otel_old_with_suffixes: {
             expr: 'process_runtime_jvm_buffer_usage_bytes{pool="mapped", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'jvm_buffer_memory_used_bytes{jvm_buffer_pool_name="mapped", %(queriesSelector)s}',
           },
           prometheus_old: {
             expr: 'jvm_buffer_pool_used_bytes{pool="mapped", %(queriesSelector)s}',
@@ -95,16 +115,22 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_buffer_total_capacity{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_buffer_pool_capacity_bytes{pool="mapped", %(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'process_runtime_jvm_buffer_limit{pool="mapped", %(queriesSelector)s}',
           },
-          otel_with_suffixes: {
+          otel_old_with_suffixes: {
             expr: 'process_runtime_jvm_buffer_limit_bytes{pool="mapped", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'jvm_buffer_memory_limit_bytes{jvm_buffer_pool_name="mapped", %(queriesSelector)s}',
           },
           prometheus_old: {
             expr: 'jvm_buffer_pool_capacity_bytes{pool="mapped", %(queriesSelector)s}',

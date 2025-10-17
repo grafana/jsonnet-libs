@@ -51,7 +51,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "((avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
+                  "expr": "((avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_used_bytes{jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_limit_bytes{jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory used(heap)",
@@ -100,7 +100,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "((avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
+                  "expr": "((avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_used_bytes{jvm_memory_type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_limit_bytes{jvm_memory_type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory used(nonheap)",
@@ -151,7 +151,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_thread_daemon) (jvm_thread_count{job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Threads",
@@ -202,7 +202,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_classloading_loadedclasscount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded_classes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_classes_loaded_total{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_classes_loaded{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  java_lang_classloading_loadedclasscount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_class_count{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded_total{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_classes_loaded_total{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Classes loaded",
@@ -284,7 +284,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "\n  java_lang_runtime_uptime{job=~\"$job\",instance=~\"$instance\"}\n/1000\nor\nprocess_uptime_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nprocess_uptime{job=~\"$job\",instance=~\"$instance\"}\nor\nruntime_uptime_milliseconds_total{job=~\"$job\",instance=~\"$instance\"}\nor\ntime()-process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "\n  java_lang_runtime_uptime{job=~\"$job\",instance=~\"$instance\"}\n/1000\nor\nprocess_uptime_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nruntime_uptime_milliseconds_total{job=~\"$job\",instance=~\"$instance\"}\nor\ntime()-process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Uptime",
@@ -344,7 +344,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  java_lang_runtime_starttime{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\nor\navg by (job,instance) (\n  process_start_time{job=~\"$job\",instance=~\"$instance\"} * 1000\n)",
+                  "expr": "avg by (job,instance) (\n  java_lang_runtime_starttime{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Process start time",
@@ -545,7 +545,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "\n  avg by (job,instance) (\n  rate(java_lang_operatingsystem_processcputime{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n/1000000000 * 100\nor\navg by (job,instance) (\n  process_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_cpu_utilization{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  rate(process_cpu_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 100\n)",
+                  "expr": "\n  avg by (job,instance) (\n  rate(java_lang_operatingsystem_processcputime{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n/1000000000 * 100\nor\navg by (job,instance) (\n  process_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  rate(process_cpu_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 100\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU usage (process)",
@@ -556,7 +556,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "\n  avg by (job,instance) (\n  java_lang_operatingsystem_cpuload{job=~\"$job\",instance=~\"$instance\"}\n)\n* 100\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  system_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)",
+                  "expr": "\n  avg by (job,instance) (\n  java_lang_operatingsystem_cpuload{job=~\"$job\",instance=~\"$instance\"}\n)\n* 100\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  system_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU usage (system)",
@@ -870,7 +870,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_used_bytes{jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory used(heap)",
@@ -881,7 +881,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_limit_bytes{jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory max(heap)",
@@ -892,7 +892,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_committed_bytes{jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory committed(heap)",
@@ -1013,7 +1013,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_used_bytes{jvm_memory_type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory used(nonheap)",
@@ -1024,7 +1024,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_limit_bytes{jvm_memory_type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory max(nonheap)",
@@ -1035,7 +1035,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_memory_pool_name) (jvm_memory_committed_bytes{jvm_memory_type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: JVM memory committed(nonheap)",
@@ -1167,7 +1167,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{jvm_memory_type=\"heap\", jvm_memory_pool_name=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Eden Space (used)",
@@ -1178,7 +1178,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "\n  avg by (job) (\n  jvm_memory_max_bytes{id=~\"(G1 )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\navg by (job) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "\n  avg by (job) (\n  jvm_memory_limit_bytes{jvm_memory_pool_name=~\"(G1 |PS )?Eden Space\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_max{id=~\"(G1 )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Eden Space (max)",
@@ -1189,7 +1189,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{jvm_memory_pool_name=~\"(G1 |PS )?Eden Space\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_committed{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Eden Space (committed)",
@@ -1308,7 +1308,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{jvm_memory_type=\"heap\", jvm_memory_pool_name=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Survival space (used)",
@@ -1319,7 +1319,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_max_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_limit_bytes{jvm_memory_pool_name=~\"(G1 |PS )?Survivor Space\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_max{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Survival space (max)",
@@ -1330,7 +1330,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{jvm_memory_pool_name=~\"(G1 |PS )?Survivor Space\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_committed{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Survival space (committed)",
@@ -1449,7 +1449,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{jvm_memory_type=\"heap\", jvm_memory_pool_name=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Tenured space (used)",
@@ -1460,7 +1460,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "\n  avg by (job) (\n  jvm_memory_max_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_pool_bytes_max{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1",
+                  "expr": "\n  avg by (job) (\n  jvm_memory_limit_bytes{jvm_memory_pool_name=~\"G1 Old Gen|Tenured Gen\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_max{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Tenured space (max)",
@@ -1471,7 +1471,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{jvm_memory_pool_name=~\"G1 Old Gen|Tenured Gen\", jvm_memory_type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_committed{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Tenured space (committed)",
@@ -1535,10 +1535,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,gc) (\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nlabel_replace(\n  avg by (job,action,cause) (\n  rate(jvm_gc_pause_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  avg by (job,gc,action) (\n  rate(process_runtime_jvm_gc_duration_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  avg by (job,gc,action) (\n  rate(process_runtime_jvm_gc_duration_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "expr": "avg by (job,gc) (\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\navg by (job,jvm_gc_action,jvm_gc_name) (\n  rate(jvm_gc_duration_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nlabel_replace(\n  avg by (job,action,cause) (\n  rate(jvm_gc_pause_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  avg by (job,gc,action) (\n  rate(process_runtime_jvm_gc_duration_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{gc}}",
+                  "legendFormat": "{{jvm_gc_name}}",
                   "refId": "Garbage collections"
                }
             ],
@@ -1623,10 +1623,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job, gc) (\n  rate(jvm_gc_collection_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\nor\nlabel_replace(\n  avg by (job, action, cause) (\n  rate(jvm_gc_pause_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_pause_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "expr": "avg by (job, gc) (\n  rate(jvm_gc_collection_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\nor\nlabel_replace(\n  avg by (job, action, cause) (\n  rate(jvm_gc_pause_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_pause_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ job }}: {{ action }} ({{ cause }}) (avg)",
+                  "legendFormat": "{{job}}: {{ action }} ({{ cause }}) (avg)",
                   "refId": "GC time (avg)"
                },
                {
@@ -1634,10 +1634,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  avg by (action,cause, job) (rate(jvm_gc_pause_seconds_max{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "expr": "label_replace(\n  avg by (action,cause, job) (rate(jvm_gc_pause_max{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ job }}: {{ action }} ({{ cause }}) (max)",
+                  "legendFormat": "{{job}}: {{ action }} ({{ cause }}) (max)",
                   "refId": "GC time (max)"
                },
                {
@@ -1645,10 +1645,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,action,gc))\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_seconds_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,action,gc))\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "expr": "histogram_quantile(0.95, sum(rate(jvm_gc_duration_seconds_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,jvm_gc_action,jvm_gc_name))\n\nor\nlabel_replace(\n  histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_seconds_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,action,gc))\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ job }}: {{ action }} ({{ gc }}) (p95)",
+                  "legendFormat": "{{job}}: {{ action }} ({{ gc }}) (p95)",
                   "refId": "GC time (p95)"
                }
             ],
@@ -1764,7 +1764,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_allocated_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\navg by (job) (\n  rate(jvm_memory_pool_allocated_bytes_total{pool=~\"(G1 |PS )?Eden Space\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_allocated{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\navg by (job) (\n  rate(jvm_memory_pool_allocated_bytes_total{pool=~\"(G1 |PS )?Eden Space\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Allocated (bytes)",
@@ -1775,10 +1775,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk(10,\n  avg by (job, arena, thread_name) (rate(process_runtime_jvm_memory_allocation_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n)\n",
+                  "expr": "topk(10,\n  avg by (job, arena, thread_name) (rate(process_runtime_jvm_memory_allocation_bytes_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n)\n",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ job }}: Allocated ({{ thread_name }}, {{ arena }})",
+                  "legendFormat": "{{job}}: Allocated ({{ thread_name }}, {{ arena }})",
                   "refId": "Allocated"
                },
                {
@@ -1786,7 +1786,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_promoted_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_promoted{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Promoted",
@@ -1927,7 +1927,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (jvm_thread_daemon) (jvm_thread_count{job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Threads",
@@ -1938,7 +1938,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_threading_daemonthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_daemon_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_daemon{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_threads_count{daemon=\"true\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  java_lang_threading_daemonthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_thread_count{jvm_thread_daemon=\"true\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_daemon{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_threads_count{daemon=\"true\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Threads (daemon)",
@@ -1949,7 +1949,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  java_lang_threading_peakthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_peak_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_peak{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  java_lang_threading_peakthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_peak{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Threads (peak)",
@@ -2024,7 +2024,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (state, job) (jvm_threads_states_threads{job=~\"$job\",instance=~\"$instance\"})\nor\nsum by (state, job) (jvm_threads_state{job=~\"$job\",instance=~\"$instance\"})",
+                  "expr": "sum by (jvm_thread_state, jvm_thread_daemon, job) (jvm_thread_count{job=~\"$job\",instance=~\"$instance\"})\nor\nsum by (state, job) (jvm_threads_states{job=~\"$job\",instance=~\"$instance\"})\nor\nsum by (state, job) (jvm_threads_state{job=~\"$job\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ state }}",
@@ -2143,7 +2143,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{jvm_buffer_pool_name=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_memory_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Direct buffer used bytes",
@@ -2154,7 +2154,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_limit_bytes{jvm_buffer_pool_name=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Direct buffer capacity",
@@ -2261,7 +2261,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{jvm_buffer_pool_name=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_memory_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Mapped buffer used",
@@ -2272,7 +2272,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_limit_bytes{jvm_buffer_pool_name=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Mapped buffer capacity",
@@ -2307,7 +2307,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({__name__=~\"jvm_memory_used_bytes|jvm_memory_bytes_max|process_runtime_jvm_memory_usage|process_runtime_jvm_memory_usage_bytes|java_lang_memory_heapmemoryusage_used\"}, job)",
+               "query": "label_values({__name__=~\"jvm_memory_used|jvm_memory_used_bytes|process_runtime_jvm_memory_usage_bytes|jvm_memory_used_bytes|java_lang_memory_heapmemoryusage_used\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -2322,7 +2322,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({__name__=~\"jvm_memory_used_bytes|jvm_memory_bytes_max|process_runtime_jvm_memory_usage|process_runtime_jvm_memory_usage_bytes|java_lang_memory_heapmemoryusage_used\",job=~\"$job\"}, instance)",
+               "query": "label_values({__name__=~\"jvm_memory_used|jvm_memory_used_bytes|process_runtime_jvm_memory_usage_bytes|jvm_memory_used_bytes|java_lang_memory_heapmemoryusage_used\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
