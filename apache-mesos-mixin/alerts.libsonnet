@@ -1,5 +1,5 @@
 {
-  prometheusAlerts+:: {
+  new(this): {
     groups+: [
       {
         name: 'apache-mesos',
@@ -8,7 +8,7 @@
             alert: 'ApacheMesosHighMemoryUsage',
             expr: |||
               min without(instance, job, type) (mesos_master_mem{type="percent"}) > %(alertsWarningMemoryUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -19,14 +19,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent memory usage on {{$labels.mesos_cluster}}, ' +
                   'which is above the threshold of %(alertsWarningMemoryUsage)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheMesosHighDiskUsage',
             expr: |||
               min without(instance, job, type) (mesos_master_disk{type="percent"}) > %(alertsCriticalDiskUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -37,14 +37,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent disk usage on {{$labels.mesos_cluster}}, ' +
                   'which is above the threshold of %(alertsCriticalDiskUsage)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheMesosUnreachableTasks',
             expr: |||
               max without(instance, job, state) (mesos_master_task_states_current{state="unreachable"}) > %(alertsWarningUnreachableTask)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -55,14 +55,14 @@
                 (
                   '{{ printf "%%.0f" $value }} unreachable tasks on {{$labels.mesos_cluster}}, ' +
                   'which is above the threshold of %(alertsWarningUnreachableTask)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheMesosNoLeaderElected',
             expr: |||
               max without(instance, job) (mesos_master_elected) == 0
-            ||| % $._config,
+            ||| % this.config,
             'for': '1m',
             labels: {
               severity: 'critical',
@@ -72,14 +72,14 @@
               description:
                 (
                   'There is no cluster coordinator on {{$labels.mesos_cluster}}.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'ApacheMesosInactiveAgents',
             expr: |||
               max without(instance, job, state) (mesos_master_slaves_state{state=~"connected_inactive|disconnected_inactive"}) > 1
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -89,7 +89,7 @@
               description:
                 (
                   '{{ printf "%%.0f" $value }} inactive agent clients over the last 5m which is above the threshold of 1.'
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
