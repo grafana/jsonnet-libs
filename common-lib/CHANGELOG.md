@@ -1,3 +1,6 @@
+# 0.4.1
+- [Utils] Add optional separator='/' attribute to labelsToPanelLegend.
+
 # 0.4.0
 - [Signal] Add defaultSignalSource param to set default signal source.
 
