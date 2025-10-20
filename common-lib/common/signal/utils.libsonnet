@@ -4,7 +4,7 @@
     // additional templates to wrap base expression
     functionTemplates::
       (
-        if aggLevel != 'none' && (type == 'counter' || type == 'gauge' || type == 'histogram' || type == 'info')
+        if aggLevel != 'none' && (type == 'counter' || type == 'gauge' || type == 'info')
         then
           [
             ['%(aggFunction)s by (%(agg)s) (', ')'],
