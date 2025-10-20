@@ -32,6 +32,9 @@ local link_data = import 'link_data.libsonnet';
       // For example proxy-pass of /grafana path will be passed as '%(path)s/grafana' to the upstream.
       normalized: true,
 
+      description: '',
+      description_html: if this._config.description != '' then '<p class="description">%s</p>' % this._config.description else '',
+
       // backwards compatible, service level config allows for more granular configuration
       read_timeout: this._config.nginx_proxy_read_timeout,
       send_timeout: this._config.nginx_proxy_send_timeout,
