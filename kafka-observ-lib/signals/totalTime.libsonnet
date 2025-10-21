@@ -24,8 +24,7 @@ function(this)
         In most cases, a high value can imply slow local storage or the storage is a bottleneck. One should also investigate LogFlushRateAndTimeMs to know how long page flushes are taking, which will also indicate a slow disk. In the case of FetchFollower requests, time spent in LocalTimeMs can be the result of a ZooKeeper write to change the ISR.
       |||,
 
-      local commonRemoteDesription = |||
-        A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. 
+      local commonRemoteDescription = |||
       |||,
 
       local commonResponseQueueDescription = |||
@@ -74,7 +73,7 @@ function(this)
       fetchRemoteTime: {
         name: 'Fetch-consumer remote time',
         description: "Time spent waiting for follower response (only when 'require acks' is set)."
-                     + '\n' + commonRemoteDesription,
+                     + '\n' + commonRemoteDescription,
         type: 'gauge',
         unit: 'ms',
 
@@ -163,7 +162,7 @@ function(this)
       fetchFollowerRemoteTime: {
         name: 'Fetch-follower remote time',
         description: "Time spent waiting for follower response (only when 'require acks' is set)."
-                     + '\n' + commonRemoteDesription,
+                     + '\n' + commonRemoteDescription,
         type: 'gauge',
         unit: 'ms',
         sources: {
@@ -251,7 +250,7 @@ function(this)
       producerRemoteTime: {
         name: 'Produce follower remote time',
         description: "Time spent waiting for follower response (only when 'require acks' is set)."
-                     + '\n' + commonRemoteDesription,
+                     + '\n' + commonRemoteDescription,
         type: 'gauge',
         unit: 'ms',
         sources: {
