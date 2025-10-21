@@ -34,6 +34,9 @@
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
   alertMemoryUsageThresholdCritical: 90,
   alertsCPUThresholdWarning: 90,
+  alertsPacketsDroppedPerSecThresholdWarning: 0,
+  alertsErrorsPerSecThresholdWarning: 0,
+  alertsSlowScrapeThresholdInfo: 50,
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),

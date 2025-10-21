@@ -36,6 +36,16 @@
 
     // If true, the entries will be sorted by title
     nginx_directory_sorted: false,
+
+    // If false, links won't start with a /, making them relative links.
+    nginx_directory_absolute_links: true,
+
+    // Allow for extra CSS to be injected.
+    extra_css: '',
+
+    // Description shown below the title
+    description: '',
+    description_html: if self.description != '' then '<p class="description">%s</p>' % self.description else '',
   },
 
   _images+:: {
