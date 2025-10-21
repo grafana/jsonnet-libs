@@ -12,11 +12,9 @@
          },
          {
             "keepTime": true,
-            "tags": [
-               "/d/apachecassandra-logs"
-            ],
             "title": "Apache Cassandra logs",
-            "type": "dashboards"
+            "type": "link",
+            "url": "/d/apachecassandra-logs"
          },
          {
             "title": "Apache Cassandra overview",

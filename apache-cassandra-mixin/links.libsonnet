@@ -18,7 +18,7 @@ local g = import './g.libsonnet';
 
              + if this.config.enableLokiLogs then {
                apacheCassandraLogs:
-                 link.dashboards.new('Apache Cassandra logs', '/d/' + this.grafana.dashboards['apache-cassandra-logs.json'].uid)
+                 link.link.new('Apache Cassandra logs', '/d/' + this.grafana.dashboards['apache-cassandra-logs.json'].uid)
                  + link.link.options.withKeepTime(true),
              }
              else {},
