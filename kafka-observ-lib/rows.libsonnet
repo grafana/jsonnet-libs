@@ -19,7 +19,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.replicaManager.underReplicatedPartitionsStat { gridPos+: { w: 3, h: 4 } },
           panels.replicaManager.underMinISRPartitionsStat { gridPos+: { w: 3, h: 4 } },
           // status rows
-          panels.cluster.clusterRoles { gridPos+: { w: 24, h: 7 } },
+          panels.cluster.clusterRoles { gridPos+: { w: 24, h: 10 } },
         ]
       ),
     throughput:
