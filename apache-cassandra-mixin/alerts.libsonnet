@@ -1,5 +1,5 @@
 {
-  prometheusAlerts+:: {
+  new(this): {
     groups+: [
       {
         name: 'ApacheCassandraAlerts',
@@ -7,8 +7,8 @@
           {
             alert: 'HighReadLatency',
             expr: |||
-              sum(cassandra_table_readlatency_seconds_sum) by (instance) / sum(cassandra_table_readlatency_seconds_count) by (instance) * 1000 > %(alertsCriticalReadLatency5m)s
-            ||| % $._config,
+              sum(cassandra_table_readlatency_seconds_sum{%(filteringSelector)s}) by (instance) / sum(cassandra_table_readlatency_seconds_count{%(filteringSelector)s}) by (instance) * 1000 > %(alertsCriticalReadLatency5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -19,14 +19,14 @@
                 (
                   'An average of {{ printf "%%.0f" $value }}ms of read latency has occurred over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalReadLatency5m)sms. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'HighWriteLatency',
             expr: |||
-              sum(cassandra_keyspace_writelatency_seconds_sum) by (instance) / sum(cassandra_keyspace_writelatency_seconds_count) by (instance) * 1000 > %(alertsCriticalWriteLatency5m)s
-            ||| % $._config,
+              sum(cassandra_keyspace_writelatency_seconds_sum{%(filteringSelector)s}) by (instance) / sum(cassandra_keyspace_writelatency_seconds_count{%(filteringSelector)s}) by (instance) * 1000 > %(alertsCriticalWriteLatency5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -37,14 +37,14 @@
                 (
                   'An average of {{ printf "%%.0f" $value }}ms of write latency has occurred over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalWriteLatency5m)sms. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'HighPendingCompactionTasks',
             expr: |||
-              cassandra_compaction_pendingtasks > %(alertsWarningPendingCompactionTasks15m)s
-            ||| % $._config,
+              cassandra_compaction_pendingtasks{%(filteringSelector)s} > %(alertsWarningPendingCompactionTasks15m)s
+            ||| % this.config,
             'for': '15m',
             labels: {
               severity: 'warning',
@@ -55,14 +55,14 @@
                 (
                   '{{ printf "%%.0f" $value }} compaction tasks have been pending over the last 15 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningPendingCompactionTasks15m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'BlockedCompactionTasksFound',
             expr: |||
-              cassandra_threadpools_currentlyblockedtasks_count{threadpools="CompactionExecutor", path="internal"} > %(alertsCriticalBlockedCompactionTasks5m)s
-            ||| % $._config,
+              cassandra_threadpools_currentlyblockedtasks_count{threadpools="CompactionExecutor", path="internal", %(filteringSelector)s} > %(alertsCriticalBlockedCompactionTasks5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -73,14 +73,14 @@
                 (
                   '{{ printf "%%.0f" $value }} compaction tasks have been blocked over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalBlockedCompactionTasks5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'HintsStoredOnNode',
             expr: |||
-              increase(cassandra_storage_totalhints_count[5m]) > %(alertsWarningHintsStored1m)s
-            ||| % $._config,
+              increase(cassandra_storage_totalhints_count{%(filteringSelector)s}[5m]) > %(alertsWarningHintsStored1m)s
+            ||| % this.config,
             'for': '1m',
             labels: {
               severity: 'warning',
@@ -91,32 +91,23 @@
                 (
                   '{{ printf "%%.0f" $value }} hints have been written to the node over the last minute on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningHintsStored1m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'UnavailableWriteRequestsFound',
             expr: |||
-              sum(cassandra_clientrequest_unavailables_count{clientrequest="Write"}) by (cassandra_cluster) > %(alertsCriticalUnavailableWriteRequests5m)s
-            ||| % $._config,
+              sum  without (cassandra_cluster) (cassandra_clientrequest_unavailables_count{clientrequest="Write", %(filteringSelector)s}) > %(alertsCriticalUnavailableWriteRequests5m)s
+            ||| % this.config,
             'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'Unavailable exceptions have been encountered while performing writes in this cluster.',
-              description:
-                (
-                  '{{ printf "%%.0f" $value }} unavailable write requests have been found over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsCriticalUnavailableWriteRequests5m)s. '
-                ) % $._config,
-            },
+            labels: { severity: 'critical' },
+            annotations: { summary: 'Unavailable exceptions have been encountered while performing writes in this cluster.', description: ('{{ printf "%%.0f" $value }} unavailable write requests have been found over the last 5 minutes on {{$labels.instance}}, ' + 'which is above the threshold of %(alertsCriticalUnavailableWriteRequests5m)s. ') % this.config },
           },
           {
             alert: 'HighCpuUsage',
             expr: |||
-              jvm_process_cpu_load{job=~"integrations/apache-cassandra"} * 100 > %(alertsCriticalHighCpuUsage5m)s
-            ||| % $._config,
+              jvm_process_cpu_load{%(filteringSelector)s} * 100 > %(alertsCriticalHighCpuUsage5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -127,14 +118,14 @@
                 (
                   'Cpu usage is at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalHighCpuUsage5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'HighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes{job=~"integrations/apache-cassandra", area="Heap"}) / sum(jvm_physical_memory_size{job=~"integrations/apache-cassandra"}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
-            ||| % $._config,
+              sum without (area) (jvm_memory_usage_used_bytes{%(filteringSelector)s, area="Heap"}) / sum without (area) (jvm_physical_memory_size{%(filteringSelector)s}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -145,7 +136,7 @@
                 (
                   'Memory usage is at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalHighMemoryUsage5m)s }}. '
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
