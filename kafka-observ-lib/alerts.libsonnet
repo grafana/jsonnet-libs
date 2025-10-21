@@ -104,6 +104,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 this.signals.brokerReplicaManager.offlinePartitions.asRuleExpression(),
               ],
               'for': '5m',
+              keep_firing_for: '5m',
               labels: {
                 severity: 'critical',
               },
@@ -122,6 +123,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 this.signals.brokerReplicaManager.underReplicatedPartitions.asRuleExpression(),
               ],
               'for': '5m',
+              keep_firing_for: '5m',
               labels: {
                 severity: 'critical',
               },
@@ -132,6 +134,86 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                                instanceLabel,
                                groupLabel,
                              ],
+              },
+            },
+            {
+              alert: 'KafkaUnderMinISRPartitionCount',
+              expr: |||
+                sum by (%s) (%s) > 0
+              ||| % [
+                std.join(',', this.config.groupLabels),
+                this.signals.brokerReplicaManager.underMinISRPartitions.asRuleExpression(),
+              ],
+              'for': '2m',
+              keep_firing_for: '5m',
+              labels: {
+                severity: 'critical',
+              },
+              annotations: {
+                summary: 'Kafka partitions below minimum ISR - writes unavailable.',
+                description: |||
+                  Kafka cluster {{ $labels.%s }} has {{ printf "%%.0f" $value }} partitions with fewer in-sync replicas than min.insync.replicas configuration.
+
+                  CRITICAL IMPACT: These partitions are UNAVAILABLE FOR WRITES when producers use acks=all, directly impacting application availability.
+
+                  This configuration prevents data loss by refusing writes when not enough replicas are in-sync, but at the cost of availability.
+
+                  Common causes:
+                  - Broker failures reducing available replicas below threshold
+                  - Network issues preventing replicas from staying in-sync
+                  - Brokers overwhelmed and unable to keep up with replication
+                  - Recent partition reassignment or broker maintenance
+
+                  Immediate actions:
+                  1. Identify affected partitions and their current ISR status
+                  2. Check broker health and availability
+                  3. Review network connectivity between brokers
+                  4. Investigate broker resource utilization (CPU, disk I/O, memory)
+                  5. Restart failed brokers or resolve broker issues
+                  6. Monitor ISR recovery as brokers catch up
+
+                  Producers will receive NOT_ENOUGH_REPLICAS errors until ISR count recovers above min.insync.replicas threshold.
+                ||| % groupLabel,
+              },
+            },
+            {
+              alert: 'KafkaPreferredReplicaImbalance',
+              expr: |||
+                sum by (%s) (%s) > 0
+              ||| % [
+                std.join(',', this.config.groupLabels),
+                this.signals.brokerReplicaManager.preferredReplicaImbalance.asRuleExpression(),
+              ],
+              'for': '30m',
+              keep_firing_for: '5m',
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Kafka has preferred replica imbalance.',
+                description: |||
+                  Kafka cluster {{ $labels.%s }} has {{ $value }} partitions where the leader is not the preferred replica.
+
+                  Impact:
+                  Uneven load distribution across brokers can result in some brokers handling significantly more client requests (produce/consume) than others, leading to hotspots, degraded performance, and potential resource exhaustion on overloaded brokers. This prevents optimal cluster utilization and can impact latency and throughput.
+
+                  Common causes:
+                  - Broker restarts or failures causing leadership to shift to non-preferred replicas
+                  - Manual partition reassignments or replica movements
+                  - Recent broker additions to the cluster
+                  - Failed automatic preferred replica election
+                  - Auto leader rebalancing disabled (auto.leader.rebalance.enable=false)
+
+                  Actions:
+                  1. Verify auto.leader.rebalance.enable is set to true in broker configuration
+                  2. Check leader.imbalance.check.interval.seconds (default 300s) configuration
+                  3. Manually trigger preferred replica election using kafka-preferred-replica-election tool
+                  4. Monitor broker resource utilization (CPU, network) for imbalance
+                  5. Review broker logs for leadership election errors
+                  6. Verify all brokers are healthy and reachable
+
+                  If the imbalance persists for extended periods, consider running manual preferred replica election to redistribute leadership and restore balanced load across the cluster.
+                ||| % groupLabel,
               },
             },
             {
@@ -151,6 +233,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               alert: 'KafkaUncleanLeaderElection',
               expr: '(%s) != 0' % this.signals.brokerReplicaManager.uncleanLeaderElection.asRuleExpression(),
               'for': '5m',
+              keep_firing_for: '5m',
               labels: {
                 severity: 'critical',
               },
