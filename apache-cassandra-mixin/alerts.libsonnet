@@ -124,7 +124,7 @@
           {
             alert: 'HighMemoryUsage',
             expr: |||
-              sum without (area) (jvm_memory_usage_used_bytes{%(filteringSelector)s, area="Heap"}) / sum without (area) (jvm_physical_memory_size{%(filteringSelector)s}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
+              sum by (instance) (jvm_memory_usage_used_bytes{%(filteringSelector)s, area="Heap"}) / sum by (instance) (jvm_physical_memory_size{%(filteringSelector)s}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
