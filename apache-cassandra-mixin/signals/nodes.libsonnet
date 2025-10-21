@@ -87,7 +87,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'cassandra_cache_hitrate{%(queriesSelector)s}',
+            expr: 'cassandra_cache_hitrate{%(queriesSelector)s, cache="KeyCache"} * 100',
           },
         },
       },
@@ -127,7 +127,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'cassandra_threadpools_currentlyblockedtasks_count{%(queriesSelector)s}',
+            expr: 'cassandra_threadpools_currentlyblockedtasks_count{%(queriesSelector)s, threadpools="CompactionExecutor", path="internal"}',
           },
         },
       },
@@ -176,12 +176,12 @@ function(this)
       readAverageLatency: {
         name: 'Read average latency',
         nameShort: 'Read average latency',
-        type: 'gauge',
+        type: 'raw',
         description: 'The average read latency on this node',
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'avg(cassandra_keyspace_readlatency_seconds_average{%(queriesSelector)s} >= 0)',
+            expr: 'sum(cassandra_keyspace_readlatency_seconds_average{%(queriesSelector)s} >= 0) by (instance)',
           },
         },
       },
@@ -189,12 +189,12 @@ function(this)
       writeLatencyP95: {
         name: 'Write latency p95',
         nameShort: 'Write latency p95',
-        type: 'gauge',
+        type: 'raw',
         description: 'The 95th percentile of write latency on this node',
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'avg(cassandra_keyspace_writelatency_seconds{%(queriesSelector)s, quantile="0.95"} >= 0)',
+            expr: 'sum(cassandra_keyspace_writelatency_seconds{%(queriesSelector)s, quantile="0.95"} >= 0) by (instance)',
             legendCustomTemplate: legendCustomTemplate + ' - p95',
           },
         },
@@ -203,12 +203,12 @@ function(this)
       writeLatencyP99: {
         name: 'Write latency p99',
         nameShort: 'Write latency p99',
-        type: 'gauge',
+        type: 'raw',
         description: 'The 99th percentile of write latency on this node',
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'avg(cassandra_keyspace_writelatency_seconds{%(queriesSelector)s, quantile="0.99"} >= 0)',
+            expr: 'sum(cassandra_keyspace_writelatency_seconds{%(queriesSelector)s, quantile="0.99"} >= 0) by (instance)',
             legendCustomTemplate: legendCustomTemplate + ' - p99',
           },
         },
@@ -217,7 +217,7 @@ function(this)
       readLatencyP95: {
         name: 'Read latency p95',
         nameShort: 'Read latency p95',
-        type: 'gauge',
+        type: 'raw',
         description: 'The 95th percentile of read latency on this node',
         unit: 's',
         sources: {
@@ -231,7 +231,7 @@ function(this)
       readLatencyP99: {
         name: 'Read latency p99',
         nameShort: 'Read latency p99',
-        type: 'gauge',
+        type: 'raw',
         description: 'The 99th percentile of read latency on this node',
         unit: 's',
         sources: {

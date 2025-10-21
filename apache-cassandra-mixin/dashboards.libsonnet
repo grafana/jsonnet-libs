@@ -79,7 +79,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period,
         ),
     } + if this.config.enableLokiLogs then {
-      'apache-cassandra-logs-overview.json':
+      'apache-cassandra-logs.json':
         logslib.new(
           prefix + ' logs',
           datasourceName=this.grafana.variables.datasources.loki.name,
@@ -93,7 +93,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           dashboards+:
             {
               logs+:
-                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { apacheCassandraLogs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
             },
           panels+:
             {

@@ -1,9 +1,10 @@
 {
   local this = self,
-  enableMultiCluster: false,
+  enableDatacenterLabel: false,
+  enableRackLabel: false,
   filteringSelector: 'job="integrations/apache-cassandra"',
 
-  groupLabels: ['job', 'cassandra_cluster'],
+  groupLabels: ['job', 'cassandra_cluster'] + (if this.enableDatacenterLabel then ['datacenter'] else []) + (if this.enableRackLabel then ['rack'] else []),
   instanceLabels: ['instance'],
   uid: 'apache-cassandra',
   dashboardNamePrefix: 'Apache Cassandra',
@@ -23,9 +24,7 @@
   alertsCriticalHighMemoryUsage5m: 80,  //percent: calculated as ratio then multiplied by query
 
   enableLokiLogs: true,
-  extraLogLabels: ['cassandra_cluster', 'rack', 'datacenter'],
-  enableDatacenterLabel: false,
-  enableRackLabel: false,
+  extraLogLabels: [],
   showLogsVolume: true,
 
   // metrics source for signals

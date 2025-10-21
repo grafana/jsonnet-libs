@@ -8,14 +8,14 @@ local g = import './g.libsonnet';
         g.panel.row.new('Overview')
         + g.panel.row.withCollapsed(false)
         + g.panel.row.withPanels([
-          panels.overviewNumberClustersPanel { gridPos+: { w: 8 } },
-          panels.overviewNumberOfNodesPanel { gridPos+: { w: 8 } },
-          panels.overviewNumberOfDownNodesPanel { gridPos+: { w: 8 } },
+          panels.overviewNumberClustersPanel { gridPos+: { w: 6 } },
+          panels.overviewNumberOfNodesPanel { gridPos+: { w: 6 } },
+          panels.overviewNumberOfDownNodesPanel { gridPos+: { w: 6 } },
+          panels.overviewTotalDiskUsagePanel { gridPos+: { w: 6 } },
           panels.overviewConnectionTimeoutsPanel { gridPos+: { w: 12 } },
           panels.overviewAverageKeyCacheHitRatioPanel { gridPos+: { w: 12 } },
           panels.overviewTasksPanel { gridPos+: { w: 12 } },
-          panels.overviewTotalDiskUsagePanel { gridPos+: { w: 6 } },
-          panels.overviewDiskUsagePanel { gridPos+: { w: 6 } },
+          panels.overviewDiskUsagePanel { gridPos+: { w: 12 } },
           panels.overviewWritesPanel { gridPos+: { w: 12 } },
           panels.overviewReadsPanel { gridPos+: { w: 12 } },
           panels.overviewWriteAverageLatencyPanel { gridPos+: { w: 12 } },
