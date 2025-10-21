@@ -96,7 +96,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               },
             },
             {
-              alert: 'KafkaOfflinePartitonCount',
+              alert: 'KafkaOfflinePartitionCount',
               expr: |||
                 sum by (%s) (%s) > 0
               ||| % [
