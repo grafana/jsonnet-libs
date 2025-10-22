@@ -10,6 +10,11 @@ local g = import './g.libsonnet';
       overview: g.panel.row.new('Overview')
                 + g.panel.row.withCollapsed(value=false)
                 + g.panel.row.withPanels([
+                  panels.overviewNumberOfClustersPanel { gridPos+: { w: 6, h: 6 } },
+                  panels.overviewNumberOfNodesPanel { gridPos+: { w: 6, h: 6 } },
+                  panels.overviewCPUUsageStatPanel { gridPos+: { w: 6, h: 6 } },
+                  panels.overviewMemoryUtilizationStatPanel { gridPos+: { w: 6, h: 6 } },
+                  panels.overviewInstancesTablePanel { gridPos+: { w: 24 } },
                   panels.overviewMemoryUsagePanel { gridPos+: { w: 12 } },
                   panels.overviewCPUUsagePanel { gridPos+: { w: 12 } },
                   panels.overviewTrafficSentPanel { gridPos+: { w: 12 } },

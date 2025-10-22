@@ -47,6 +47,454 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
+            "description": "The number of Apache Tomcat clusters.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count(count by (cassandra_cluster) (jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Clusters",
+                  "refId": "Number of clusters"
+               }
+            ],
+            "title": "Number of clusters",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of Apache Tomcat nodes.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 6,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count(count by (instance) (jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Nodes",
+                  "refId": "Number of nodes"
+               }
+            ],
+            "title": "Number of nodes",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The CPU usage of the JVM of the instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 12,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "jvm_process_cpu_load{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "CPU usage"
+               }
+            ],
+            "title": "CPU usage",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The memory utilization of the JVM of the instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance) / clamp_min(jvm_physical_memory_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, 1) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Memory utilization",
+                  "refId": "Memory utilization"
+               }
+            ],
+            "title": "Memory utilization",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Overview of Apache Tomcat instances with key metrics.",
+            "fieldConfig": {
+               "defaults": {
+                  "noValue": "NA"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 150
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "custom.noValue",
+                           "value": "NA"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 120
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 150
+                        },
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
+            },
+            "id": 6,
+            "options": {
+               "enablePagination": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "jvm_process_cpu_load{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 100",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "cpu_usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job, instance) / clamp_min(jvm_physical_memory_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, 1) * 100",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Memory utilization",
+                  "refId": "memory_utilization"
+               }
+            ],
+            "title": "Instances",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "instance",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "instance",
+                           "job 1",
+                           "cluster",
+                           "Value #cpu_usage",
+                           "Value #memory_utilization"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "includeByName": {
+                        "Value #cpu_usage": { },
+                        "Value #memory_utilization": { },
+                        "cluster": { },
+                        "instance": { },
+                        "job 1": { }
+                     },
+                     "indexByName": {
+                        "Value #cpu_usage": 3,
+                        "Value #memory_utilization": 4,
+                        "cluster": 2,
+                        "instance": 0,
+                        "job 1": 1
+                     },
+                     "renameByName": {
+                        "Value #cpu_usage": "CPU usage",
+                        "Value #memory_utilization": "Memory utilization",
+                        "cluster": "Cluster",
+                        "instance": "Instance",
+                        "job 1": "Job"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
             "description": "The memory usage of the JVM of the instance.",
             "fieldConfig": {
                "defaults": {
@@ -57,16 +505,48 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "min": 0,
                   "unit": "bytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 1
+               "y": 17
             },
-            "id": 2,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -102,13 +582,19 @@
             "description": "The CPU usage of the JVM process.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
                }
             },
@@ -116,9 +602,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 1
+               "y": 17
             },
-            "id": 3,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -136,7 +622,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_process_cpu_load{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_process_cpu_load{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -161,16 +647,18 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "Bps"
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 9
+               "y": 25
             },
-            "id": 4,
+            "id": 9,
             "options": {
                "legend": {
                   "asTable": true,
@@ -228,16 +716,18 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "Bps"
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "bps"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 9
+               "y": 25
             },
-            "id": 5,
+            "id": 10,
             "options": {
                "legend": {
                   "asTable": true,
@@ -302,9 +792,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 17
+               "y": 33
             },
-            "id": 6,
+            "id": 11,
             "options": {
                "legend": {
                   "asTable": true,
@@ -393,9 +883,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 17
+               "y": 33
             },
-            "id": 7,
+            "id": 12,
             "options": {
                "legend": {
                   "asTable": true,
@@ -459,9 +949,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 25
+               "y": 41
             },
-            "id": 8,
+            "id": 13,
             "options": {
                "legend": {
                   "asTable": true,

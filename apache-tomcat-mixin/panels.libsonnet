@@ -8,50 +8,169 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Overview Panels
 
-      overviewMemoryUsagePanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Memory usage',
-          targets=[signals.overview.memoryUsage.asTarget()]
+      overviewNumberOfClustersPanel:
+        commonlib.panels.generic.stat.info.new(
+          'Number of clusters',
+          targets=[signals.overview.numberOfClusters.asTarget()]
         )
-        + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.panelOptions.withDescription('The memory usage of the JVM of the instance.'),
+        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.panelOptions.withDescription('The number of Apache Tomcat clusters.'),
 
-      overviewCPUUsagePanel:
-        commonlib.panels.generic.timeSeries.base.new(
+      overviewNumberOfNodesPanel:
+        commonlib.panels.generic.stat.info.new(
+          'Number of nodes',
+          targets=[signals.overview.numberOfNodes.asTarget()]
+        )
+        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.panelOptions.withDescription('The number of Apache Tomcat nodes.'),
+
+      overviewCPUUsageStatPanel:
+        commonlib.panels.cpu.stat.usage.new(
           'CPU usage',
           targets=[signals.overview.cpuUsage.asTarget()]
         )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.stat.panelOptions.withDescription('The CPU usage of the JVM of the instance.'),
+
+      overviewMemoryUtilizationStatPanel:
+        commonlib.panels.memory.stat.usage.new(
+          'Memory utilization',
+          targets=[signals.overview.memoryUtilization.asTarget()]
+        )
+        + g.panel.stat.panelOptions.withDescription('The memory utilization of the JVM of the instance.'),
+
+      overviewInstancesTablePanel:
+        commonlib.panels.generic.table.base.new(
+          'Instances',
+          targets=[
+            signals.overview.cpuUsage.asTableTarget()
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('cpu_usage'),
+            signals.overview.memoryUtilization.asTableTarget()
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('memory_utilization'),
+          ],
+        )
+        {
+          options+: {
+            enablePagination: true,
+          },
+        }
+        + g.panel.table.panelOptions.withDescription('Overview of Apache Tomcat instances with key metrics.')
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'instance',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'instance',
+                  'job 1',
+                  'cluster',
+                  'Value #cpu_usage',
+                  'Value #memory_utilization',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              includeByName: {
+                instance: {},
+                'job 1': {},
+                cluster: {},
+                'Value #cpu_usage': {},
+                'Value #memory_utilization': {},
+              },
+              indexByName: {
+                instance: 0,
+                'job 1': 1,
+                cluster: 2,
+                'Value #cpu_usage': 3,
+                'Value #memory_utilization': 4,
+              },
+              renameByName: {
+                instance: 'Instance',
+                'job 1': 'Job',
+                cluster: 'Cluster',
+                'Value #cpu_usage': 'CPU usage',
+                'Value #memory_utilization': 'Memory utilization',
+              },
+            },
+          },
+        ])
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Instance')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.filterable', true),
+
+          g.panel.table.fieldOverride.byName.new('Cluster')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 150)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.filterable', true)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.noValue', 'NA'),
+
+
+          g.panel.table.fieldOverride.byName.new('CPU usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 120)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.cpu.timeSeries.utilization.stylize()
+          ),
+
+          g.panel.table.fieldOverride.byName.new('Memory utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 150)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.memory.timeSeries.usagePercent.stylize()
+          ),
+        ]),
+      overviewMemoryUsagePanel:
+        commonlib.panels.memory.timeSeries.usageBytes.new(
+          'Memory usage',
+          targets=[signals.overview.memoryUsage.asTarget()]
+        )
+        + g.panel.timeSeries.panelOptions.withDescription('The memory usage of the JVM of the instance.'),
+
+      overviewCPUUsagePanel:
+        commonlib.panels.cpu.timeSeries.utilization.new(
+          'CPU usage',
+          targets=[signals.overview.cpuUsage.asTarget()]
+        )
         + g.panel.timeSeries.panelOptions.withDescription('The CPU usage of the JVM process.'),
 
       overviewTrafficSentPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.network.timeSeries.traffic.new(
           'Traffic sent',
           targets=[
             signals.overview.trafficSentTotal.asTarget() { interval: '2m' },
             signals.overview.trafficSentRate.asTarget() { interval: '2m' },
           ]
         )
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.panelOptions.withDescription('The traffic sent for a Tomcat connector.')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       overviewTrafficReceivedPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.network.timeSeries.traffic.new(
           'Traffic received',
           targets=[
             signals.overview.trafficReceivedTotal.asTarget() { interval: '2m' },
             signals.overview.trafficReceivedRate.asTarget() { interval: '2m' },
           ]
         )
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.panelOptions.withDescription('The traffic received for a Tomcat connector.')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       overviewRequestsPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.requests.timeSeries.base.new(
           'Requests',
           targets=[
             signals.overview.requestsTotal.asTarget() { interval: '2m' },

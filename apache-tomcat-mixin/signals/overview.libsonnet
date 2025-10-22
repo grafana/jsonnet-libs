@@ -11,6 +11,45 @@ function(this) {
   },
 
   signals: {
+    numberOfClusters: {
+      name: 'Number of clusters',
+      nameShort: 'Clusters',
+      type: 'raw',
+      description: 'The number of Apache Tomcat clusters.',
+      unit: 'none',
+      sources: {
+        prometheus: {
+          expr: 'count(count by (cassandra_cluster) (jvm_memory_usage_used_bytes{%(queriesSelector)s}))',
+        },
+      },
+    },
+
+    numberOfNodes: {
+      name: 'Number of nodes',
+      nameShort: 'Nodes',
+      type: 'raw',
+      description: 'The number of Apache Tomcat nodes.',
+      unit: 'none',
+      sources: {
+        prometheus: {
+          expr: 'count(count by (instance) (jvm_memory_usage_used_bytes{%(queriesSelector)s}))',
+        },
+      },
+    },
+
+    memoryUtilization: {
+      name: 'Memory utilization',
+      nameShort: 'Memory utilization',
+      type: 'raw',
+      description: 'The total memory utilization of the JVM of the instance.',
+      unit: 'percent',
+      sources: {
+        prometheus: {
+          expr: 'sum(jvm_memory_usage_used_bytes{%(queriesSelector)s}) by (job, instance) / clamp_min(jvm_physical_memory_bytes{%(queriesSelector)s}, 1) * 100',
+        },
+      },
+    },
+
     memoryUsage: {
       name: 'Memory usage',
       nameShort: 'Memory usage',
@@ -33,7 +72,7 @@ function(this) {
       unit: 'percent',
       sources: {
         prometheus: {
-          expr: 'jvm_process_cpu_load{%(queriesSelector)s}',
+          expr: 'jvm_process_cpu_load{%(queriesSelector)s} * 100',
           legendCustomTemplate: legendCustomTemplate,
         },
       },
