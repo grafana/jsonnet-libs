@@ -1,0 +1,11 @@
+exclusions:
+    panel-title-description-rule:
+        reason: Removed panel title for visual appearance for top stats panels
+    target-instance-rule:
+        reason: Temporal instance filtering is accomplished by the namespace
+    template-instance-rule:
+        reason: Temporal instance filtering is accomplished by the namespace
+    target-job-rule:
+        reason: Hosted exporter jobs
+    template-job-rule:
+        reason: Hosted exporter jobs
