@@ -38,6 +38,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.stat.panelOptions.withDescription('The memory utilization of the JVM of the instance.'),
 
+      overviewNetworkSentStatPanel:
+        commonlib.panels.generic.stat.info.new(
+          'Traffic sent',
+          targets=[signals.overview.trafficSentRate.asTarget() { interval: '2m' }]
+        )
+        + g.panel.stat.standardOptions.withUnit('B/s')
+        + g.panel.stat.panelOptions.withDescription('The traffic sent for a Tomcat connector.'),
+
+      overviewNetworkReceivedStatPanel:
+        commonlib.panels.generic.stat.info.new(
+          'Traffic received',
+          targets=[signals.overview.trafficReceivedRate.asTarget() { interval: '2m' }]
+        )
+        + g.panel.stat.standardOptions.withUnit('B/s')
+        + g.panel.stat.panelOptions.withDescription('The network received for a Tomcat connector'),
+
       overviewInstancesTablePanel:
         commonlib.panels.generic.table.base.new(
           'Instances',
