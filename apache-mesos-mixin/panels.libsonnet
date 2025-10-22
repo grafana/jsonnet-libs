@@ -17,7 +17,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Master uptime in seconds'),
       cpusAvailablePanel:
-        g.panel.stat.new('CPUS available')
+        g.panel.stat.new('CPUs available')
         + g.panel.stat.queryOptions.withTargets(
           signals.master.cpusAvailable.asTarget()
         )
