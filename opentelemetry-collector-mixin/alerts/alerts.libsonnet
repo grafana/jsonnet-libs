@@ -14,6 +14,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Receiver is dropping spans.',
               description: 'The {{ $labels.receiver }} receiver is dropping spans at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#receive-failures',
             },
@@ -28,6 +29,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Receiver is dropping metrics.',
               description: 'The {{ $labels.receiver }} receiver is dropping metrics at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#receive-failures',
             },
@@ -42,6 +44,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Receiver is dropping logs.',
               description: 'The {{ $labels.receiver }} is dropping logs at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#receive-failures',
             },
@@ -56,6 +59,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Exporter is dropping spans.',
               description: 'The {{ $labels.exporter }} exporter is dropping spans at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#send-failures',
             },
@@ -70,6 +74,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Exporter is dropping metrics.',
               description: 'The {{ $labels.exporter }} exporter is dropping metrics at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#send-failures',
             },
@@ -84,6 +89,7 @@
               severity: 'critical',
             },
             annotations: {
+              summary: 'Exporter is dropping logs.',
               description: 'The {{ $labels.exporter }} is dropping logs at a rate of {{ humanize $value }} per second.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#send-failures',
             },
@@ -98,6 +104,7 @@
               severity: 'warning',
             },
             annotations: {
+              summary: 'Exporter queue is filling up.',
               description: 'The {{ $labels.exporter }} queue has reached a size of {{ $value }}.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#queue-length',
             },
@@ -112,6 +119,7 @@
               severity: 'warning',
             },
             annotations: {
+              summary: 'Exporter send queue failed to accept spans.',
               description: 'The {{ $labels.exporter }} sending queue failed to accept {{ $value }} spans.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#queue-length',
             },
@@ -126,6 +134,7 @@
               severity: 'warning',
             },
             annotations: {
+              summary: 'Exporter send queue failed to accept metric points.',
               description: 'The {{ $labels.exporter }} sending queue failed to accept {{ $value }} metric points.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#queue-length',
             },
@@ -140,6 +149,7 @@
               severity: 'warning',
             },
             annotations: {
+              summary: 'Exporter send queue failed to accept log records.',
               description: 'The {{ $labels.exporter }} sending queue failed to accept {{ $value }} log records.',
               runbook_url: 'https://opentelemetry.io/docs/collector/internal-telemetry/#queue-length',
             },

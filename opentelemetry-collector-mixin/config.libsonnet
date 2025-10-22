@@ -51,6 +51,6 @@
     },
 
     // Default datasource name
-    datasourceName: 'default',
+    datasourceName: 'datasource',
   },
 }
