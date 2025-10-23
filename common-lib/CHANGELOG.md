@@ -1,3 +1,6 @@
+# 0.4.3
+- [Signal] fix: No longer aggregates histogram signals after histogram_quantile() as it is pointless aggregation. Aggregation before applying histogram_quantile() is kept and works as expected.
+
 # 0.4.2
 - [Panels] Add table rows styles in requests panels.
 
