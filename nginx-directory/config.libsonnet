@@ -42,6 +42,10 @@
 
     // Allow for extra CSS to be injected.
     extra_css: '',
+
+    // Description shown below the title
+    description: '',
+    description_html: if self.description != '' then '<p class="description">%s</p>' % self.description else '',
   },
 
   _images+:: {
