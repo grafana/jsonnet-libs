@@ -1,4 +1,4 @@
-# 0.4.3
+# 0.4.1
 
 - [Signal] fix: No longer aggregates histogram signals after histogram_quantile() as it is pointless aggregation. Aggregation before applying histogram_quantile() is kept and works as expected.
 
