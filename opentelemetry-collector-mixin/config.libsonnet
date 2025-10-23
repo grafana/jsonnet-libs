@@ -21,9 +21,9 @@
     // Labels that represent a group of instances.
     // Used in dashboard variables and alert aggregations.
     groupLabels: [
-        label
-        for label in std.objectFields($._config.labels)
-        if $._config.labels[label]
+      label
+      for label in std.objectFields($._config.labels)
+      if $._config.labels[label]
     ],
 
     // Labels that represent a single instance.
