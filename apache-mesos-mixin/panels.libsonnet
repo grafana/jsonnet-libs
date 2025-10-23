@@ -7,14 +7,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local signals = this.signals,
 
       masterUptimePanel:
-        commonlib.panels.generic.stat.base.new('Master uptime', targets=[signals.master.masterUptime.asTarget()])
+        commonlib.panels.generic.stat.info.new('Master uptime', targets=[signals.master.masterUptime.asTarget()])
         + g.panel.stat.standardOptions.withUnit('s')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Master uptime in seconds'),
       cpusAvailablePanel:
-        commonlib.panels.generic.stat.base.new('CPUS available', targets=[signals.master.cpusAvailable.asTarget()])
+        commonlib.panels.generic.stat.info.new('CPUS available', targets=[signals.master.cpusAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('none')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
@@ -23,12 +23,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       memoryAvailablePanel:
         commonlib.panels.memory.stat.total.new('Memory available', targets=[signals.master.memoryAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('bytes')
-        + g.panel.stat.standardOptions.color.withMode('fixed')
-        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Memory available in the cluster'),
-      gpusAvailablegPanel:
-        commonlib.panels.generic.stat.base.new('GPUs available', targets=[signals.master.gpusAvailable.asTarget()])
+      gpusAvailablePanel:
+        commonlib.panels.generic.stat.info.new('GPUs available', targets=[signals.master.gpusAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('none')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
@@ -38,6 +36,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskAvailablePanel:
         commonlib.panels.disk.stat.total.new('Disk available', targets=[signals.master.diskAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('bytes')
+        + g.panel.stat.standardOptions.color.withMode('fixed')
+        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.panelOptions.withDescription('Disk available in the cluster'),
 
       memoryUtilizationPanel:

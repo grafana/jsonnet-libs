@@ -46,7 +46,13 @@
             },
             "id": 2,
             "options": {
-               "graphMode": "none"
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -88,7 +94,13 @@
             },
             "id": 3,
             "options": {
-               "graphMode": "none"
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -116,7 +128,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-green",
+                     "fixedColor": "text",
                      "mode": "fixed"
                   },
                   "unit": "bytes"
@@ -178,7 +190,13 @@
             },
             "id": 5,
             "options": {
-               "graphMode": "none"
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -206,7 +224,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "light-green",
                      "mode": "fixed"
                   },
                   "unit": "bytes"
