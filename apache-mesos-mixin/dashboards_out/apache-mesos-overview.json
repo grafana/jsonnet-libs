@@ -25,8 +25,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Master uptime in seconds",
             "fieldConfig": {
@@ -48,7 +48,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -67,8 +67,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "CPUs available in the cluster",
             "fieldConfig": {
@@ -90,7 +90,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -109,8 +109,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Memory available in the cluster",
             "fieldConfig": {
@@ -130,9 +130,15 @@
             },
             "id": 4,
             "options": {
-               "graphMode": "none"
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -151,8 +157,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "GPUs available in the cluster",
             "fieldConfig": {
@@ -174,7 +180,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -193,14 +199,14 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Disk available in the cluster",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-green",
+                     "fixedColor": "text",
                      "mode": "fixed"
                   },
                   "unit": "bytes"
@@ -214,9 +220,15 @@
             },
             "id": 6,
             "options": {
-               "graphMode": "none"
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -505,10 +517,18 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Registrar log recovered in the cluster",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               }
+            },
             "gridPos": {
                "h": 8,
                "w": 6,
@@ -516,7 +536,16 @@
                "y": 25
             },
             "id": 12,
-            "pluginVersion": "v11.4.0",
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {

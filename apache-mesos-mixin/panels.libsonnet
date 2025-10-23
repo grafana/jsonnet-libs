@@ -7,40 +7,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local signals = this.signals,
 
       masterUptimePanel:
-        g.panel.stat.new('Master uptime')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.masterUptime.asTarget()
-        )
+        commonlib.panels.generic.stat.base.new('Master uptime', targets=[signals.master.masterUptime.asTarget()])
         + g.panel.stat.standardOptions.withUnit('s')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Master uptime in seconds'),
       cpusAvailablePanel:
-        g.panel.stat.new('CPUS available')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.cpusAvailable.asTarget()
-        )
+        commonlib.panels.generic.stat.base.new('CPUS available', targets=[signals.master.cpusAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('none')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('CPUs available in the cluster'),
       memoryAvailablePanel:
-        g.panel.stat.new('Memory available')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.memoryAvailable.asTarget()
-        )
+        commonlib.panels.memory.stat.total.new('Memory available', targets=[signals.master.memoryAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('bytes')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Memory available in the cluster'),
-      gpusAvailablePanel:
-        g.panel.stat.new('GPUs available')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.gpusAvailable.asTarget()
-        )
+      gpusAvailablegPanel:
+        commonlib.panels.generic.stat.base.new('GPUs available', targets=[signals.master.gpusAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('none')
         + g.panel.stat.standardOptions.color.withMode('fixed')
         + g.panel.stat.standardOptions.color.withFixedColor('light-green')
@@ -48,14 +36,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.stat.panelOptions.withDescription('GPUs available in the cluster'),
 
       diskAvailablePanel:
-        g.panel.stat.new('Disk available')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.diskAvailable.asTarget()
-        )
+        commonlib.panels.disk.stat.total.new('Disk available', targets=[signals.master.diskAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('bytes')
-        + g.panel.stat.standardOptions.color.withMode('fixed')
-        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
-        + g.panel.stat.options.withGraphMode('none')
         + g.panel.stat.panelOptions.withDescription('Disk available in the cluster'),
 
       memoryUtilizationPanel:
@@ -108,10 +90,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('Registrar state store and fetch in the cluster'),
 
       registrarLogRecoveredPanel:
-        g.panel.stat.new('Registrar log recovered')
-        + g.panel.stat.queryOptions.withTargets(
-          signals.master.registrarLogRecovered.asTarget()
-        )
+        commonlib.panels.generic.stat.info.new('Registrar log recovered', targets=[signals.master.registrarLogRecovered.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Registrar log recovered in the cluster'),
 
       allocationRunsPanel:
