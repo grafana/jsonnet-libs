@@ -56,7 +56,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       overviewInstancesTablePanel:
         commonlib.panels.generic.table.base.new(
-          'Overview instances',
+          'Instances',
           targets=[
             signals.overview.cpuUsage.asTableTarget()
             + g.query.prometheus.withInstant(true)
@@ -78,7 +78,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         }
         + g.panel.table.panelOptions.withDescription('Overview of Apache Tomcat instances with key metrics.')
-        // + g.panel.table.standardOptions.withNoValue('NA')
         + g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
