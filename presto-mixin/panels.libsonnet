@@ -12,26 +12,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       -------------------------
       */
       overviewActiveResourceManagers:
-        g.panel.stat.new('Active resource managers')
-        + g.panel.stat.queryOptions.withTargets([signals.overview.activeResourceManagers.asTarget()])
+        commonlib.panels.generic.stat.info.new('Active resource managers', targets=[signals.overview.activeResourceManagers.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Active resource managers')
         + g.panel.stat.standardOptions.withUnit('none'),
 
       overviewActiveCoordinators:
-        g.panel.stat.new('Active coordinators')
-        + g.panel.stat.queryOptions.withTargets([signals.overview.activeCoordinators.asTarget()])
+        commonlib.panels.generic.stat.info.new('Active coordinators', targets=[signals.overview.activeCoordinators.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Active coordinators')
         + g.panel.stat.standardOptions.withUnit('none'),
 
       overviewActiveWorkers:
-        g.panel.stat.new('Active workers')
-        + g.panel.stat.queryOptions.withTargets([signals.overview.activeWorkers.asTarget()])
+        commonlib.panels.generic.stat.info.new('Active workers', targets=[signals.overview.activeWorkers.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Active workers')
         + g.panel.stat.standardOptions.withUnit('none'),
 
       overviewInactiveWorkers:
-        g.panel.stat.new('Inactive workers')
-        + g.panel.stat.queryOptions.withTargets([signals.overview.inactiveWorkers.asTarget()])
+        commonlib.panels.generic.stat.info.new('Inactive workers', targets=[signals.overview.inactiveWorkers.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Inactive workers')
         + g.panel.stat.standardOptions.withUnit('none'),
 
@@ -185,13 +181,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       coordinatorCPUTimeConsumed:
-        commonlib.panels.generic.timeSeries.base.new('CPU time consumed - one minute count', targets=[
+        commonlib.panels.cpu.timeSeries.base.new('CPU time consumed - one minute count', targets=[
           signals.coordinator.cpuTimeConsumed.asTarget(),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       coordinatorCPUInputThroughput:
-        commonlib.panels.generic.timeSeries.base.new('CPU input throughput - one minute count', targets=[
+        commonlib.panels.cpu.timeSeries.base.new('CPU input throughput - one minute count', targets=[
           signals.coordinator.cpuInputThroughput.asTarget(),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('Bps'),

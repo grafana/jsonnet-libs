@@ -48,12 +48,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Active resource managers",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
                   "unit": "none"
                }
             },
@@ -64,7 +68,16 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.4.0",
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -83,12 +96,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Active coordinators",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
                   "unit": "none"
                }
             },
@@ -99,7 +116,16 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.4.0",
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -118,12 +144,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Active workers",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
                   "unit": "none"
                }
             },
@@ -134,7 +164,16 @@
                "y": 1
             },
             "id": 4,
-            "pluginVersion": "v11.4.0",
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -153,12 +192,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Inactive workers",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
                   "unit": "none"
                }
             },
@@ -169,7 +212,16 @@
                "y": 1
             },
             "id": 5,
-            "pluginVersion": "v11.4.0",
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
