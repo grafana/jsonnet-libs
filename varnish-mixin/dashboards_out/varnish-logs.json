@@ -4,26 +4,10 @@
       },
       "links": [
          {
-            "keepTime": true,
-            "title": "InfluxDB cluster overview",
+            "targetBlank": true,
+            "title": "Varnish overview",
             "type": "link",
-            "url": "/d/influxdb_cluster_overview"
-         },
-         {
-            "keepTime": true,
-            "title": "InfluxDB instance overview",
-            "type": "link",
-            "url": "/d/influxdb_instance_overview"
-         },
-         {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "influxdb-mixin"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
+            "url": "/d/varnish_overview"
          }
       ],
       "panels": [
@@ -173,7 +157,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -215,7 +199,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -225,7 +209,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "influxdb-mixin"
+         "varnish-mixin"
       ],
       "templating": {
          "list": [
@@ -246,7 +230,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/influxdb\"}, job)",
+               "query": "label_values({job=\"integrations/varnish-cache\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -258,10 +242,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "InfluxDB cluster",
+               "label": "Cluster",
                "multi": true,
-               "name": "influxdb_cluster",
-               "query": "label_values({job=\"integrations/influxdb\",job=~\"$job\"}, influxdb_cluster)",
+               "name": "cluster",
+               "query": "label_values({job=\"integrations/varnish-cache\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -295,10 +279,10 @@
          ]
       },
       "time": {
-         "from": "now-30m",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "default",
-      "title": "InfluxDB logs",
-      "uid": "influxdb-logs"
+      "title": "Varnish logs",
+      "uid": "varnish-logs"
    }
