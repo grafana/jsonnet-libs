@@ -243,14 +243,14 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The traffic sent for a Tomcat connector.",
+            "description": "The network sent for an Apache Tomcat instance.",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "B/s"
+                  "unit": "Bps"
                }
             },
             "gridPos": {
@@ -284,7 +284,7 @@
                   "refId": "Traffic sent rate"
                }
             ],
-            "title": "Traffic sent",
+            "title": "Network sent",
             "type": "stat"
          },
          {
@@ -292,14 +292,14 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The network received for a Tomcat connector",
+            "description": "The network received for an Apache Tomcat instance.",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "B/s"
+                  "unit": "Bps"
                }
             },
             "gridPos": {
@@ -333,7 +333,7 @@
                   "refId": "Traffic received rate"
                }
             ],
-            "title": "Traffic received",
+            "title": "Network received",
             "type": "stat"
          },
          {
@@ -343,9 +343,6 @@
             },
             "description": "Overview of Apache Tomcat instances with key metrics.",
             "fieldConfig": {
-               "defaults": {
-                  "noValue": "NA"
-               },
                "overrides": [
                   {
                      "matcher": {
@@ -366,10 +363,6 @@
                      },
                      "properties": [
                         {
-                           "id": "custom.width",
-                           "value": 150
-                        },
-                        {
                            "id": "custom.displayMode",
                            "value": "basic"
                         },
@@ -389,10 +382,6 @@
                         "options": "CPU usage"
                      },
                      "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 120
-                        },
                         {
                            "id": "custom.displayMode",
                            "value": "basic"
@@ -444,13 +433,97 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Memory utilization"
+                        "options": "Traffic sent rate"
                      },
                      "properties": [
                         {
-                           "id": "custom.width",
-                           "value": 150
+                           "id": "custom.displayMode",
+                           "value": "basic"
                         },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "opacity"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "noValue",
+                           "value": "No traffic"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Traffic received rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.displayMode",
+                           "value": "basic"
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "opacity"
+                        },
+                        {
+                           "id": "custom.lineInterpolation",
+                           "value": "smooth"
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.showPoints",
+                           "value": "never"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "noValue",
+                           "value": "No traffic"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
                         {
                            "id": "custom.displayMode",
                            "value": "basic"
@@ -534,9 +607,33 @@
                   "instant": true,
                   "legendFormat": "{{instance}}: Memory utilization",
                   "refId": "memory_utilization"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(tomcat_bytessent_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "2m",
+                  "legendFormat": "{{ instance }} - {{protocol}} - {{port}}",
+                  "refId": "traffic_sent_rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(tomcat_bytesreceived_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", protocol=~\"$protocol\", port=~\"$port\"}[$__rate_interval])",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "2m",
+                  "legendFormat": "{{ instance }} - {{protocol}} - {{port}}",
+                  "refId": "traffic_received_rate"
                }
             ],
-            "title": "Instances",
+            "title": "Overview instances",
             "transformations": [
                {
                   "id": "joinByField",
@@ -554,7 +651,9 @@
                            "job 1",
                            "cluster",
                            "Value #cpu_usage",
-                           "Value #memory_utilization"
+                           "Value #memory_utilization",
+                           "Value #traffic_sent_rate",
+                           "Value #traffic_received_rate"
                         ]
                      }
                   }
@@ -565,6 +664,8 @@
                      "includeByName": {
                         "Value #cpu_usage": { },
                         "Value #memory_utilization": { },
+                        "Value #traffic_received_rate": { },
+                        "Value #traffic_sent_rate": { },
                         "cluster": { },
                         "instance": { },
                         "job 1": { }
@@ -572,6 +673,8 @@
                      "indexByName": {
                         "Value #cpu_usage": 3,
                         "Value #memory_utilization": 4,
+                        "Value #traffic_received_rate": 6,
+                        "Value #traffic_sent_rate": 5,
                         "cluster": 2,
                         "instance": 0,
                         "job 1": 1
@@ -579,6 +682,8 @@
                      "renameByName": {
                         "Value #cpu_usage": "CPU usage",
                         "Value #memory_utilization": "Memory utilization",
+                        "Value #traffic_received_rate": "Traffic received rate",
+                        "Value #traffic_sent_rate": "Traffic sent rate",
                         "cluster": "Cluster",
                         "instance": "Instance",
                         "job 1": "Job"

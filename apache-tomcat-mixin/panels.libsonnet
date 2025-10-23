@@ -40,23 +40,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       overviewNetworkSentStatPanel:
         commonlib.panels.generic.stat.info.new(
-          'Traffic sent',
+          'Network sent',
           targets=[signals.overview.trafficSentRate.asTarget() { interval: '2m' }]
         )
-        + g.panel.stat.standardOptions.withUnit('B/s')
-        + g.panel.stat.panelOptions.withDescription('The traffic sent for a Tomcat connector.'),
+        + g.panel.stat.standardOptions.withUnit('Bps')
+        + g.panel.stat.panelOptions.withDescription('The network sent for an Apache Tomcat instance.'),
 
       overviewNetworkReceivedStatPanel:
         commonlib.panels.generic.stat.info.new(
-          'Traffic received',
+          'Network received',
           targets=[signals.overview.trafficReceivedRate.asTarget() { interval: '2m' }]
         )
-        + g.panel.stat.standardOptions.withUnit('B/s')
-        + g.panel.stat.panelOptions.withDescription('The network received for a Tomcat connector'),
+        + g.panel.stat.standardOptions.withUnit('Bps')
+        + g.panel.stat.panelOptions.withDescription('The network received for an Apache Tomcat instance.'),
 
       overviewInstancesTablePanel:
         commonlib.panels.generic.table.base.new(
-          'Instances',
+          'Overview instances',
           targets=[
             signals.overview.cpuUsage.asTableTarget()
             + g.query.prometheus.withInstant(true)
@@ -64,6 +64,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.memoryUtilization.asTableTarget()
             + g.query.prometheus.withInstant(true)
             + g.query.prometheus.withRefId('memory_utilization'),
+            signals.overview.trafficSentRate.asTableTarget() { interval: '2m' }
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('traffic_sent_rate'),
+            signals.overview.trafficReceivedRate.asTableTarget() { interval: '2m' }
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('traffic_received_rate'),
           ],
         )
         {
@@ -72,7 +78,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         }
         + g.panel.table.panelOptions.withDescription('Overview of Apache Tomcat instances with key metrics.')
-        + g.panel.table.standardOptions.withNoValue('NA')
+        // + g.panel.table.standardOptions.withNoValue('NA')
         + g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
@@ -91,6 +97,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                   'cluster',
                   'Value #cpu_usage',
                   'Value #memory_utilization',
+                  'Value #traffic_sent_rate',
+                  'Value #traffic_received_rate',
                 ],
               },
             },
@@ -104,6 +112,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 cluster: {},
                 'Value #cpu_usage': {},
                 'Value #memory_utilization': {},
+                'Value #traffic_sent_rate': {},
+                'Value #traffic_received_rate': {},
               },
               indexByName: {
                 instance: 0,
@@ -111,6 +121,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 cluster: 2,
                 'Value #cpu_usage': 3,
                 'Value #memory_utilization': 4,
+                'Value #traffic_sent_rate': 5,
+                'Value #traffic_received_rate': 6,
               },
               renameByName: {
                 instance: 'Instance',
@@ -118,6 +130,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 cluster: 'Cluster',
                 'Value #cpu_usage': 'CPU usage',
                 'Value #memory_utilization': 'Memory utilization',
+                'Value #traffic_sent_rate': 'Traffic sent rate',
+                'Value #traffic_received_rate': 'Traffic received rate',
               },
             },
           },
@@ -126,27 +140,37 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           g.panel.table.fieldOverride.byName.new('Instance')
           + g.panel.table.fieldOverride.byName.withProperty('custom.filterable', true),
 
+
           g.panel.table.fieldOverride.byName.new('Cluster')
-          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 150)
           + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + g.panel.table.fieldOverride.byName.withProperty('custom.filterable', true)
           + g.panel.table.fieldOverride.byName.withProperty('custom.noValue', 'NA'),
 
-
           g.panel.table.fieldOverride.byName.new('CPU usage')
-          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 120)
           + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.cpu.timeSeries.utilization.stylize()
           ),
 
+          g.panel.table.fieldOverride.byName.new('Traffic sent rate')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.network.timeSeries.traffic.stylize()
+          ),
+
+          g.panel.table.fieldOverride.byName.new('Traffic received rate')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.network.timeSeries.traffic.stylize()
+          ),
+
           g.panel.table.fieldOverride.byName.new('Memory utilization')
-          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 150)
           + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.memory.timeSeries.usagePercent.stylize()
           ),
         ]),
+
       overviewMemoryUsagePanel:
         commonlib.panels.memory.timeSeries.usageBytes.new(
           'Memory usage',
