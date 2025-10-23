@@ -1,14 +1,16 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    local config = this.config,
+
+    groups: [
       {
         name: 'varnish-cache',
         rules: [
           {
             alert: 'VarnishCacheLowCacheHitRate',
             expr: |||
-              increase(varnish_main_cache_hit[10m]) / (clamp_min((increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m])), 1)) * 100 < %(alertsWarningCacheHitRate)s and (increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m]) > 0)
-            ||| % $._config,
+              increase(varnish_main_cache_hit{%(filteringSelector)s}[10m]) / (clamp_min((increase(varnish_main_cache_hit{%(filteringSelector)s}[10m]) + increase(varnish_main_cache_miss{%(filteringSelector)s}[10m])), 1)) * 100 < %(alertsWarningCacheHitRate)s and (increase(varnish_main_cache_hit{%(filteringSelector)s}[10m]) + increase(varnish_main_cache_miss{%(filteringSelector)s}[10m]) > 0)
+            ||| % config,
             'for': '10m',
             labels: {
               severity: 'warning',
@@ -19,14 +21,14 @@
                 (
                   'The Cache hit rate is {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is below the threshold of %(alertsWarningCacheHitRate)s percent.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'VarnishCacheHighMemoryUsage',
             expr: |||
-              (varnish_sma_g_bytes{type="s0"} / (varnish_sma_g_bytes{type="s0"} + varnish_sma_g_space{type="s0"})) * 100 > %(alertsWarningHighMemoryUsage)s
-            ||| % $._config,
+              (varnish_sma_g_bytes{%(filteringSelector)s,type="s0"} / (varnish_sma_g_bytes{%(filteringSelector)s,type="s0"} + varnish_sma_g_space{%(filteringSelector)s,type="s0"})) * 100 > %(alertsWarningHighMemoryUsage)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -37,14 +39,14 @@
                 (
                   'Current Memory Usage is {{ printf "%%.0f" $value }} percent on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningHighMemoryUsage)s percent.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'VarnishCacheHighCacheEvictionRate',
             expr: |||
-              increase(varnish_main_n_lru_nuked[5m]) > %(alertsCriticalCacheEviction)s
-            ||| % $._config,
+              increase(varnish_main_n_lru_nuked{%(filteringSelector)s}[5m]) > %(alertsCriticalCacheEviction)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -55,14 +57,14 @@
                 (
                   'The Cache has evicted {{ printf "%%.0f" $value }} objects over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalCacheEviction)s.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'VarnishCacheHighSaturation',
             expr: |||
-              varnish_main_thread_queue_len > %(alertsWarningHighSaturation)s
-            ||| % $._config,
+              varnish_main_thread_queue_len{%(filteringSelector)s} > %(alertsWarningHighSaturation)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -73,14 +75,14 @@
                 (
                   'The thread queue length is {{ printf "%%.0f" $value }} over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningHighSaturation)s.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'VarnishCacheSessionsDropping',
             expr: |||
-              increase(varnish_main_sessions{type="dropped"}[5m]) > %(alertsCriticalSessionsDropped)s
-            ||| % $._config,
+              increase(varnish_main_sessions{%(filteringSelector)s,type="dropped"}[5m]) > %(alertsCriticalSessionsDropped)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -91,14 +93,14 @@
                 (
                   'The amount of sessions dropped is {{ printf "%%.0f" $value }} over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalSessionsDropped)s.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'VarnishCacheBackendUnhealthy',
             expr: |||
-              increase(varnish_main_backend_unhealthy[5m]) > %(alertsCriticalBackendUnhealthy)s
-            ||| % $._config,
+              increase(varnish_main_backend_unhealthy{%(filteringSelector)s}[5m]) > %(alertsCriticalBackendUnhealthy)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -109,7 +111,7 @@
                 (
                   'The amount of unhealthy backend statuses detected is {{ printf "%%.0f" $value }} over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalBackendUnhealthy)s.'
-                ) % $._config,
+                ) % config,
             },
           },
         ],
