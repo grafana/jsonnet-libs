@@ -25,8 +25,6 @@ local g = import './g.libsonnet';
           panels.allocationLatencyPanel + g.panel.timeSeries.gridPos.withW(6),
           panels.eventQueueDispatchesPanel + g.panel.timeSeries.gridPos.withW(6),
         ]),
-
-
       agentOverview:
         g.panel.row.new('Agent overview')
         + g.panel.row.withCollapsed(false)
@@ -34,7 +32,5 @@ local g = import './g.libsonnet';
           panels.agentMemoryUtilizationPanel + g.panel.timeSeries.gridPos.withW(12),
           panels.agentDiskUtilizationPanel + g.panel.timeSeries.gridPos.withW(12),
         ]),
-
-
     },
 }
