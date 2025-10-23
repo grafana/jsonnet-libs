@@ -2,14 +2,15 @@ local mixinlib = import './main.libsonnet';
 local config = (import './config.libsonnet');
 local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
-local mixin = mixinlib.new()
-              + mixinlib.withConfigMixin(
-                {
-                  filteringSelecter: config.filteringSelector,
-                  uid: config.uid,
-                  enableLokiLogs: true,
-                }
-              );
+local mixin =
+  mixinlib.new() +
+  mixinlib.withConfigMixin(
+    {
+      filteringSelecter: config.filteringSelector,
+      uid: config.uid,
+      enableLokiLogs: true,
+    }
+  );
 local k8s_patch = {
   mesos_cluster+: {
     label: 'Mesos cluster',
