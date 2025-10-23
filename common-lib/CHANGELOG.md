@@ -4,6 +4,9 @@
 # 0.4.2
 - [Panels] Add table rows styles in requests panels.
 
+# 0.4.1
+- [Utils] Add optional separator='/' attribute to labelsToPanelLegend.
+- 
 # 0.4.0
 - [Signal] Add defaultSignalSource param to set default signal source.
 
