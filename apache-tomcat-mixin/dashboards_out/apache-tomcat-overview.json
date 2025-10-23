@@ -80,7 +80,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by (cassandra_cluster) (jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
+                  "expr": "count(count by (cluster) (jvm_memory_usage_used_bytes{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Clusters",
@@ -633,7 +633,7 @@
                   "refId": "traffic_received_rate"
                }
             ],
-            "title": "Overview instances",
+            "title": "Instances",
             "transformations": [
                {
                   "id": "joinByField",

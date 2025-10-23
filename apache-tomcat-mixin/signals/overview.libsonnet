@@ -19,7 +19,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'count(count by (cassandra_cluster) (jvm_memory_usage_used_bytes{%(queriesSelector)s}))',
+          expr: 'count(count by (cluster) (jvm_memory_usage_used_bytes{%(queriesSelector)s}))',
         },
       },
     },
