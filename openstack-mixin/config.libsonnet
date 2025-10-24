@@ -3,7 +3,7 @@
   groupLabels: ['job'],
   // instance of openstack cluster
   instanceLabels: ['instance'],
-
+  nodeLabel: 'hostname',
   uid: 'openstack',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-30m',
@@ -23,7 +23,10 @@
   alertsWarningCinderHighBackupMemoryUsage: 80,  // %
   alertsWarningCinderHighVolumeMemoryUsage: 80,  // %
   alertsWarningCinderHighPoolCapacityUsage: 80,  // %
-
+  // alert when this percent of VMs not running on the single host,
+  // while there is at least this total number of instances overall.
+  alertsCriticalVMsNotRunningPercent: 75,  // %
+  alertsCriticalVMsNotRunningInstanceMin: 10,
 
   // regex to match network names where we should track IP address utilization:
   alertsIPutilizationNetworksMatcher: '.+',
