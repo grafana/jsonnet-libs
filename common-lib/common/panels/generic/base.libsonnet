@@ -1,10 +1,11 @@
 local g = import '../../g.libsonnet';
-
+local tokens = import '../../tokens/main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
+local standardOptions = timeSeries.standardOptions;
 
 // This is the base of ALL panels in the common lib
 {
@@ -22,6 +23,19 @@ local options = timeSeries.options;
          ) else {})
     + self.stylize(),
 
-  stylize(): {},
+  stylize():
+    standardOptions.color.withMode(tokens.base.colors.mode.default)
+    + standardOptions.color.withFixedColor(tokens.base.colors.palette.default)
+      // remove 0-80(green), >80 red threshold by default.
+      {
+      fieldConfig+: {
+        defaults+: {
+          thresholds: {
+            mode: 'absolute',
+            steps: [],
+          },
+        },
+      },
+    },
 
 }

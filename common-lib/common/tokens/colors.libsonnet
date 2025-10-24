@@ -1,6 +1,7 @@
 {
   palette: {
     // Palette
+    default: self.blue,
     blue: '#5794f2',  //blue in grafana aliases
     'light-purple': '#ca95e5',  //light-purple in grafana aliases
     'light-red': '#ff7383',  //light-red in grafana aliases
@@ -15,7 +16,7 @@
     rate: self['light-purple'],
     duration: self.blue,
     errors: self['light-red'],
-    text: 'text',
+    text: 'text',  //special color that changes to opposite depending on light/dark theme
     // alerts and thresholds
     ok: self.green,
     critical: self['light-red'],
