@@ -6,7 +6,7 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 
-// This is base of ALL panels in the common lib
+// This is the base of ALL panels in the common lib
 {
   new(targets, description=''):
     // hidden field to hold styles modifiers
