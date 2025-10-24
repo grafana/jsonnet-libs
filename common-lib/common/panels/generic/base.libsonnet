@@ -22,6 +22,12 @@ local options = timeSeries.options;
          ) else {})
     + self.stylize(),
 
-  stylize(): {},
+  stylize():
+    // remove 0-80(green), >80 red threshold by default.
+    { fieldConfig+: {
+      defaults+: {
+        thresholds: {},
+      },
+    } },
 
 }
