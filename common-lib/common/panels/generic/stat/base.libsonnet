@@ -11,5 +11,5 @@ base {
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
     + stat.standardOptions.color.withMode(tokens.base.colors.mode.single)
-    + stat.standardOptions.color.withFixedColor(tokens.base.colors.mode.coldhot),
+    + stat.standardOptions.color.withFixedColor(tokens.base.colors.palette.text),
 }
