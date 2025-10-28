@@ -1499,7 +1499,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "${tempo_datasource}"
+        "uid": "${traceDatasource}"
       },
       "description": "This panel shows detailed trace information for GenAI requests, including trace IDs, service names, operation names, and durations. Click on trace IDs to view detailed trace analysis and understand request flow through your system.",
       "fieldConfig": {
@@ -1625,18 +1625,29 @@
         {
           "datasource": {
             "type": "tempo",
-            "uid": "${tempo_datasource}"
+            "uid": "${traceDatasource}"
           },
           "filters": [
             {
-              "id": "f4d3d834",
+              "id": "2855f0af",
               "operator": "=",
               "scope": "span"
+            },
+            {
+              "id": "service-name",
+              "isCustomValue": false,
+              "operator": "=",
+              "scope": "resource",
+              "tag": "service.name",
+              "value": [
+                "$service_name"
+              ],
+              "valueType": "string"
             }
           ],
           "limit": 20,
           "metricsQueryType": "range",
-          "query": "{span.service.name=~\"$service_name\"} ",
+          "query": "{resource.service.name=\"$service_name\"}",
           "queryType": "traceql",
           "refId": "A",
           "serviceMapUseNativeHistograms": false,
@@ -1676,7 +1687,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "grafanacloud-traces"
+        "uid": "${traceDatasource}"
       },
       "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information, timing, and request flow through your GenAI services.",
       "fieldConfig": {
@@ -1709,7 +1720,7 @@
         {
           "datasource": {
             "type": "tempo",
-            "uid": "grafanacloud-traces"
+            "uid": "${traceDatasource}"
           },
           "limit": 20,
           "metricsQueryType": "range",
@@ -1751,7 +1762,7 @@
           "value": "grafanacloud-traces"
         },
         "label": "Trace data source",
-        "name": "tempo_datasource",
+        "name": "traceDatasource",
         "options": [],
         "query": "tempo",
         "refresh": 1,
@@ -1807,5 +1818,5 @@
   "timezone": "browser",
   "title": "Cloudflare Workers",
   "uid": "is55kkp",
-  "version": 3
+  "version": 11
 }
