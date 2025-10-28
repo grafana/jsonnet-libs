@@ -1020,7 +1020,7 @@
         "type": "loki",
         "uid": "${logsDatasource}"
       },
-      "description": "Browser distribution of requests",
+      "description": "Distribution of requests by browser",
       "fieldConfig": {
         "defaults": {
           "color": {
