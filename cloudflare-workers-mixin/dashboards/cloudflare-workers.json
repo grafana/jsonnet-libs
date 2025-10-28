@@ -15,7 +15,7 @@
       }
     ]
   },
-  "description": "This dashboard monitors Cloudflare Workers applications through log-based analytics, tracking request patterns, geographic distribution, client demographics, and edge network performance across 44 visualization panels.",
+  "description": "This dashboard monitors Cloudflare Workers applications through log-based analytics, tracking request patterns, geographic distribution, client demographics, and edge network performance.",
   "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -40,7 +40,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "![](https://images.seeklogo.com/logo-png/44/2/cloudflare-workers-logo-png_seeklogo-444232.png)",
+        "content": "![](https://storage.googleapis.com/grafanalabs-integration-logos/cloudflare-workers.png)",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0-18686767985",
@@ -1191,33 +1191,7 @@
           },
           "mappings": [],
           "unit": "short"
-        },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "POST"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        }
       },
       "gridPos": {
         "h": 6,
@@ -1501,7 +1475,7 @@
         "type": "tempo",
         "uid": "${traceDatasource}"
       },
-      "description": "This panel shows detailed trace information for GenAI requests, including trace IDs, service names, operation names, and durations. Click on trace IDs to view detailed trace analysis and understand request flow through your system.",
+      "description": "This panel shows detailed trace information for requests, including trace IDs, service names, operation names, and durations. Click on trace IDs to view detailed trace analysis and understand request flow through your system.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1521,7 +1495,7 @@
           "links": [
             {
               "title": "Traces Link",
-              "url": "/d/is55kkp/new-dashboard?orgId=1&var-traceId=${__data.fields[\"traceID\"]}"
+              "url": "/d/is55kkp/cloudflare-workers?orgId=1&var-traceId=${__data.fields[\"traceID\"]}"
             }
           ],
           "mappings": [],
@@ -1689,7 +1663,7 @@
         "type": "tempo",
         "uid": "${traceDatasource}"
       },
-      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information, timing, and request flow through your GenAI services.",
+      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information, timing, and request flow through your services.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
