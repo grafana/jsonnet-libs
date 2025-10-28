@@ -943,7 +943,7 @@
         "type": "loki",
         "uid": "${logsDatasource}"
       },
-      "description": "Requests by OS",
+      "description": "Requests by Operating System",
       "fieldConfig": {
         "defaults": {
           "color": {
