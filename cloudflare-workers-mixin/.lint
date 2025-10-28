@@ -1,0 +1,5 @@
+exclusions:
+    panel-title-description-rule:
+        reason: Removed panel title for visual appearance for top stats panels
+    template-datasource-rule:
+        reason: Better for CLoudflare users to use trace and logs datasource
