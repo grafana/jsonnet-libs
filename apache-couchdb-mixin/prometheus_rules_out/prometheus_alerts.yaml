@@ -73,7 +73,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: CouchDBReplicatorConnectionOwnersCrashing
+        - alert: CouchDBReplicatorOwnersCrashing
           annotations:
             description: '{{ printf "%.0f" $value }} replicator connection owner processes have crashed over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 0. '
             summary: There are replicator connection owner process crashes for a node.
@@ -82,7 +82,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: CouchDBReplicatorConnectionWorkersCrashing
+        - alert: CouchDBReplicatorWorkersCrashing
           annotations:
             description: '{{ printf "%.0f" $value }} replicator connection worker processes have crashed over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 0. '
             summary: There are replicator connection worker process crashes for a node.
