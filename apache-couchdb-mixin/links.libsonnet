@@ -9,7 +9,7 @@ local g = import './g.libsonnet';
         + link.link.options.withKeepTime(true),
 
       couchdbNodes:
-        link.link.new(this.config.dashboardNamePrefix + ' nodes', this.grafana.dashboards['couchdb-nodes.json'].uid)
+        link.link.new(this.config.dashboardNamePrefix + ' nodes', '/d/' + this.grafana.dashboards['couchdb-nodes.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:

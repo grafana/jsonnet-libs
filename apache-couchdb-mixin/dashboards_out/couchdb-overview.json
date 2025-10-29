@@ -13,7 +13,7 @@
             "keepTime": true,
             "title": "Apache CouchDB nodes",
             "type": "link",
-            "url": "couchdb_nodes"
+            "url": "/d/couchdb_nodes"
          },
          {
             "asDropdown": true,
