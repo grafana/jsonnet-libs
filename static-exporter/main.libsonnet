@@ -1,10 +1,76 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
-  new(name, image='httpd:2.4-alpine')::
+  new(name, image=null, shell_exporter=false, port=null)::
+    local _image =
+      if image == null
+      then (
+        if shell_exporter
+        then 'gcr.io/distroless/static-debian12:debug'
+        else 'httpd:2.4-alpine'
+      )
+      else image
+    ;
+    local _port = if port == null
+    then (
+      if shell_exporter
+      then 8080
+      else 80
+    )
+    else port;
+
     {
       name:: name,
-      data:: { metrics: '' },
+      data:: {
+        metrics: '',
+        [if shell_exporter then 'handler']: |||
+          METRICS_FILE="/data/metrics"
+
+          handle_request() {
+              local request_line
+              read -r request_line
+
+              # Parse HTTP method and path
+              local method=$(echo "$request_line" | cut -d' ' -f1)
+              local path=$(echo "$request_line" | cut -d' ' -f2)
+
+              # Read and discard headers
+              while IFS= read -r line && [ "$line" != $'\r' ]; do
+                  :
+              done
+
+              if [[ "$path" == "/metrics" ]]; then
+                  # Serve Prometheus metrics
+                  echo "HTTP/1.1 200 OK"
+                  echo "Connection: close"
+                  echo "Content-Type: text/plain; version=0.0.4; charset=utf-8"
+                  echo "Content-Length: $(wc -c < "$METRICS_FILE")"
+                  echo ""
+                  cat "$METRICS_FILE"
+              elif [[ "$path" == "/health" ]]; then
+                  # Health check endpoint
+                  echo "HTTP/1.1 200 OK"
+                  echo "Connection: close"
+                  echo "Content-Type: text/plain"
+                  echo "Content-Length: 3"
+                  echo ""
+                  echo "OK"
+              else
+                  # 404 for other paths
+                  echo "HTTP/1.1 404 Not Found"
+                  echo "Connection: close"
+                  echo "Content-Type: text/plain"
+                  echo "Content-Length: 10"
+                  echo ""
+                  echo "Not Found"
+              fi
+          }
+
+          handle_request
+        |||,
+
+
+      },
 
       local configMap = k.core.v1.configMap,
       configmap:
@@ -12,20 +78,47 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
       local container = k.core.v1.container,
       container::
-        container.new('static-exporter', image)
+        container.new('static-exporter', _image)
         + container.withPorts([
-          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
+          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=_port),
         ])
         + k.util.resourcesRequests('10m', '10Mi')
+        + (
+          if shell_exporter
+          then
+            container.withCommand([
+              'sh',
+              '-eu',
+              '-c',
+              |||
+                # handler is created in a new file
+                mkdir -p "%(bin_dir)s"
+                echo '#!'$(which sh) > "%(bin_dir)s/handler"
+                cat /data/handler >> "%(bin_dir)s/handler"
+                chmod +x %(bin_dir)s/handler
+
+                # run nc, which forks each handler in a process
+                exec nc -p %(port)d -l -k -e "%(bin_dir)s/handler" 0.0.0.0
+              ||| % {
+                port: _port,
+                bin_dir: '/home/nonroot/bin',
+              },
+            ]) +
+            container.securityContext.withRunAsUser(65532) +
+            container.securityContext.withRunAsGroup(65532) +
+            container.readinessProbe.httpGet.withPath('/health') +
+            container.readinessProbe.httpGet.withPort('http-metrics')
+          else {}
+        )
       ,
 
       local deployment = k.apps.v1.deployment,
       local volumeMount = k.core.v1.volumeMount,
       deployment:
         deployment.new(name, replicas=1, containers=[self.container])
-        + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
+        + k.util.configMapVolumeMount(self.configmap, if shell_exporter then '/data' else '/usr/local/apache2/htdocs'),
     }
-    + self.withHttpConfig()
+    + (if shell_exporter then {} else self.withHttpConfig())
   ,
 
   withData(data):: { data: data },
