@@ -10,7 +10,7 @@
   labelsToPromQLSelectorAdvanced(labels): std.join(',', ['%s=~"${%s:regex}"' % [label, label] for label in labels]),
   labelsToLogQLSelectorAdvanced: self.labelsToPromQLSelectorAdvanced,
 
-  labelsToPanelLegend(labels): std.join('/', ['{{%s}}' % [label] for label in labels]),
+  labelsToPanelLegend(labels, separator='/'): std.join(separator, ['{{%s}}' % [label] for label in labels]),
 
   toSentenceCase(string)::
     std.asciiUpper(string[0]) + std.slice(string, 1, std.length(string), 1),
