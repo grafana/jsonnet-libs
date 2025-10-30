@@ -1575,7 +1575,7 @@
         ]
       },
       "gridPos": {
-        "h": 18,
+        "h": 19,
         "w": 12,
         "x": 0,
         "y": 46
@@ -1637,7 +1637,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 12,
         "x": 12,
         "y": 46
@@ -1649,7 +1649,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "> To View Traces:\n>  1. Click the **Trace ID** on the left table .\n>  2. Click **Traces link**.\n>  1. Refresh the dashboard.",
+        "content": "> To View Traces:\n>  1. Click the **Trace ID** on the left table .\n>  2. Click **Traces link**.\n>  1. Refresh the dashboard. \n\n> If no Trace ID is selected, the panel below may show an error",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0-18686767985",
@@ -1661,7 +1661,7 @@
         "type": "tempo",
         "uid": "${traceDatasource}"
       },
-      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information. If no Trace ID is selected, the panel below may show an error",
+      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1670,7 +1670,7 @@
         "h": 15,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 50
       },
       "id": 6,
       "options": {
@@ -1776,6 +1776,5 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Cloudflare Workers",
-  "uid": "is55kkp",
-  "version": 30
+  "uid": "is55kkp"
 }
