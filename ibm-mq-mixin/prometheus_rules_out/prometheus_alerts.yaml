@@ -3,7 +3,7 @@ groups:
       rules:
         - alert: IBMMQExpiredMessages
           annotations:
-            description: The number of expired messages in the {{$labels.qmgr}} is {{$labels.value}} which is above the threshold of 2.
+            description: The number of expired messages in the {{$labels.qmgr}} is {{$value}} which is above the threshold of 2.
             summary: There are expired messages, which imply that application resilience is failing.
           expr: |
             sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_expired_message_count) > 2
@@ -12,7 +12,7 @@ groups:
             severity: critical
         - alert: IBMMQStaleMessages
           annotations:
-            description: A stale message with an age of {{$labels.value}} has been sitting in the {{$labels.queue}} which is above the threshold of 300s.
+            description: A stale message with an age of {{$value}} has been sitting in the {{$labels.queue}} which is above the threshold of 300 seconds.
             summary: Stale messages have been detected.
           expr: |
             sum without (description,instance,job,platform) (ibmmq_queue_oldest_message_age) >= 300
@@ -21,16 +21,16 @@ groups:
             severity: warning
         - alert: IBMMQLowDiskSpace
           annotations:
-            description: The amount of disk space available for {{$labels.qmgr}} is at {{$labels.value}}% which is below the threshold of 5%.
+            description: The amount of disk space available for {{$labels.qmgr}} is at {{$value}}% which is below the threshold of 5%.
             summary: There is limited disk available for a queue manager.
           expr: |
             sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_queue_manager_file_system_free_space_percentage) <= 5
           for: 5m
           labels:
             severity: critical
-        - alert: IBMMQHighQueueManagerCpuUsage
+        - alert: IBMMQHighQMgrCpuUsage
           annotations:
-            description: The amount of CPU usage for the queue manager {{$labels.qmgr}} is at {{$labels.value}}% which is above the threshold of 85%.
+            description: The amount of CPU usage for the queue manager {{$labels.qmgr}} is at {{$value}}% which is above the threshold of 85%.
             summary: There is a high CPU usage estimate for a queue manager.
           expr: |
             sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_user_cpu_time_estimate_for_queue_manager_percentage) >= 85

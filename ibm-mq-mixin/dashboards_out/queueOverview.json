@@ -1,0 +1,470 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "IBM MQ cluster overview",
+            "type": "link",
+            "url": "/d/ibm-mq-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue manager overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-manager-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ topics overview",
+            "type": "link",
+            "url": "/d/ibm-mq-topics-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The average amount of time a message spends in the queue.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 1
+                  },
+                  "id": 2,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_queue_average_queue_time_seconds{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}}",
+                        "refId": "Average queue time seconds"
+                     }
+                  ],
+                  "title": "Average queue time",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of expired messages in the queue.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 1
+                  },
+                  "id": 3,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_expired_messages{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}}",
+                        "refId": "Expired messages"
+                     }
+                  ],
+                  "title": "Expired messages",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of active messages in the queue.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 24,
+                     "x": 0,
+                     "y": 9
+                  },
+                  "id": 4,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_queue_depth{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}}",
+                        "refId": "Queue depth"
+                     }
+                  ],
+                  "title": "Depth",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The throughput of operations on the queue.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "decbytes"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 9,
+                     "x": 0,
+                     "y": 17
+                  },
+                  "id": 5,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqget_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQGET",
+                        "refId": "MQGET bytes"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqput_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQPUT",
+                        "refId": "MQPUT bytes"
+                     }
+                  ],
+                  "title": "Operation throughput",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of operations on the queue.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "operations"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 15,
+                     "x": 9,
+                     "y": 17
+                  },
+                  "id": 6,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqset_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQSET",
+                        "refId": "MQSET count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqinq_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQINQ",
+                        "refId": "MQINQ count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqget_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQGET",
+                        "refId": "MQGET count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqopen_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQOPEN",
+                        "refId": "MQOPEN count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqclose_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQCLOSE",
+                        "refId": "MQCLOSE count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqput_mqput1_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQPUT/MQPUT1",
+                        "refId": "MQPUT/MQPUT1 count"
+                     }
+                  ],
+                  "title": "Operations",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Queue metrics",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "ibm-mq-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ibmmq_qmgr_commit_count{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Qmgr",
+               "multi": true,
+               "name": "qmgr",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, qmgr)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Queue",
+               "name": "queue",
+               "query": "label_values(ibmmq_queue_depth{,queue!~\"SYSTEM.*|AMQ.*\"}, queue)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "IBM MQ - queue overview",
+      "uid": "ibm-mq-queue-overview"
+   }
