@@ -1716,10 +1716,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "text": "grafanacloud-cloudflareworkers-logs",
-          "value": "grafanacloud-logs"
-        },
         "label": "Logs data source",
         "name": "logsDatasource",
         "options": [],
@@ -1729,10 +1725,6 @@
         "type": "datasource"
       },
       {
-        "current": {
-          "text": "grafanacloud-cloudflareworkers-traces",
-          "value": "grafanacloud-traces"
-        },
         "label": "Trace data source",
         "name": "traceDatasource",
         "options": [],
