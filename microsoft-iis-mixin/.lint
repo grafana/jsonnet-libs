@@ -1,4 +1,6 @@
 exclusions:
+  panel-datasource-rule:
+    reason: "Modern mixins use signal-based architecture where datasource references are handled by the framework"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -16,6 +18,7 @@ exclusions:
       - panel: "Worker process startup failures"
       - panel: "Worker process shutdown failures"
       - panel: "Worker process ping failures"
+      - panel: "Worker output cache hit ratio"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:

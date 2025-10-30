@@ -1,7 +1,7 @@
 groups:
-    - name: microsoft-iis
+    - name: microsoft-iis-alerts
       rules:
-        - alert: MicrosoftIISHighNumberOfRejectedAsyncIORequests
+        - alert: IISHighRejectedAsyncIORequests
           annotations:
             description: |
                 The number of rejected async IO requests is {{ printf "%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.site }} which is above the threshold of 20.
@@ -11,7 +11,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: MicrosoftIISHighNumberOf5xxRequestErrors
+        - alert: IISHigh5xxRequestErrors
           annotations:
             description: |
                 The number of 5xx request errors is {{ printf "%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.app }} which is above the threshold of 5.
@@ -21,7 +21,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: MicrosoftIISLowSuccessRateForWebsocketConnections
+        - alert: IISLowWebsocketConnectionSuccess
           annotations:
             description: |
                 The success rate for websocket connections is {{ printf "%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.app }} which is above the threshold of 80.
@@ -31,7 +31,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: MicrosoftIISThreadpoolUtilizationNearingMax
+        - alert: IISThreadpoolUtilizationHigh
           annotations:
             description: |
                 The threadpool utilization is at {{ printf "%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.app }} which is above the threshold of 90.
@@ -41,7 +41,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: MicrosoftIISHighNumberOfWorkerProcessFailures
+        - alert: IISHighWorkerProcessFailures
           annotations:
             description: |
                 The number of worker process failures is at {{ printf "%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.app }} which is above the threshold of 10.
