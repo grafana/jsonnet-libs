@@ -97,7 +97,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
                 cat /data/handler >> "%(bin_dir)s/handler"
                 chmod +x %(bin_dir)s/handler
 
-                # run nc, which forks each handler in a process
+                # run nc, which forks each handler in its own process
                 exec nc -p %(port)d -l -k -e "%(bin_dir)s/handler" 0.0.0.0
               ||| % {
                 port: _port,
