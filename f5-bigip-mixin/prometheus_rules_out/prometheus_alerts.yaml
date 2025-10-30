@@ -1,5 +1,5 @@
 groups:
-    - name: bigip-alerts
+    - name: f5-bigip-alerts
       rules:
         - alert: BigIPLowNodeAvailabilityStatus
           annotations:
