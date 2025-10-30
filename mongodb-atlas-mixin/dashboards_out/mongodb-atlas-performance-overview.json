@@ -1,987 +1,1785 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "Overview of MongoDB Atlas performance metrics.",
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "mongodb-atlas-mixin"
-            ],
-            "targetBlank": false,
-            "title": "MongoDB Atlas dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "MongoDB Atlas cluster overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas elections overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas sharding overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-sharding-overview"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
             },
-            "description": "The amount of RAM and virtual memory being used by the database process.",
+            "id": 1,
+            "panels": [ ],
+            "title": "Connections",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The current number of active connections.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "mbytes"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 10
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_mem_resident{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}",
+                  "expr": "mongodb_connections_current{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - RAM"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "mongodb_mem_virtual{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - virtual"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Current connections"
                }
             ],
-            "title": "Memory",
+            "title": "Current connections",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The amount of time spent servicing CPU interrupts.",
+            "description": "The current number of connections with operations in progress.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "ms"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 10
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(hardware_system_cpu_irq_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "mongodb_connections_active{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Active connections"
                }
             ],
-            "title": "Hardware CPU interrupt service time / $__interval",
+            "title": "Active connections",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 9
             },
-            "description": "The amount of free and used disk space on this node's hardware.",
+            "id": 4,
+            "panels": [ ],
+            "title": "Database lock deadlocks - cluster",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of database exclusive lock deadlocks.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "decbytes"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 10
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
-            },
-            "id": 4,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - free"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - used"
-               }
-            ],
-            "title": "Disk space",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The disk space utilization for this node's hardware.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "max": 1,
-                  "min": 0,
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 8
+               "y": 10
             },
             "id": 5,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "(hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}), 1)",
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_deadlockCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - exclusive",
+                  "refId": "Database exclusive lock deadlocks"
                }
             ],
-            "title": "Disk space utilization",
+            "title": "Database exclusive lock deadlocks / $__interval",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The rate of distinct requests the node has received.",
+            "description": "The number of database intent-exclusive lock deadlocks.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 16
-            },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
+                     "fillOpacity": 10
+                  }
                }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(mongodb_network_numRequests{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
-               }
-            ],
-            "title": "Network requests",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The rate of slow DNS and SSL operations received by this node.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 10
+            },
+            "id": 6,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_deadlockCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - intent exclusive",
+                  "refId": "Database intent exclusive lock deadlocks"
+               }
+            ],
+            "title": "Database intent-exclusive lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of database shared lock deadlocks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 18
             },
             "id": 7,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_network_numSlowDNSOperations{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_deadlockCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - DNS"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(mongodb_network_numSlowSSLOperations{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - SSL"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - shared",
+                  "refId": "Database shared lock deadlocks"
                }
             ],
-            "title": "Slow network requests",
+            "title": "Database shared lock deadlocks / $__interval",
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The rate of bytes sent and received by the node over a network connection.",
+            "description": "The number of database intent-shared lock deadlocks.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "Bps"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 10
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 24
+               "w": 12,
+               "x": 12,
+               "y": 18
             },
             "id": 8,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_deadlockCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - received"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(mongodb_network_bytesOut{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - sent"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - intent shared",
+                  "refId": "Database intent shared lock deadlocks"
                }
             ],
-            "title": "Network throughput",
+            "title": "Database intent-shared lock deadlocks / $__interval",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The rate of read and write I/O's processed by this node.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "iops"
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 8,
-               "w": 24,
+               "h": 1,
+               "w": 0,
                "x": 0,
-               "y": 32
+               "y": 26
             },
             "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(hardware_disk_metrics_read_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - reads"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "rate(hardware_disk_metrics_write_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - writes"
-               }
-            ],
-            "title": "Hardware I/O",
-            "type": "timeseries"
+            "panels": [ ],
+            "title": "Database lock deadlocks - instance",
+            "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The amount of time the node has spent waiting for read and write I/O's to process.",
+            "description": "The number of database exclusive lock deadlocks per instance.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "ms"
-               },
-               "overrides": [ ]
+                  }
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
+               "w": 12,
                "x": 0,
-               "y": 40
+               "y": 27
             },
             "id": 10,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(hardware_disk_metrics_read_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "rate(mongodb_locks_Database_deadlockCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - read"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(hardware_disk_metrics_write_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:])",
-                  "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - write"
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock deadlocks by instance"
                }
             ],
-            "title": "Hardware I/O wait time / $__interval",
+            "title": "Database exclusive lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of database intent-exclusive lock deadlocks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 27
+            },
+            "id": 11,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_deadlockCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock deadlocks by instance"
+               }
+            ],
+            "title": "Database intent-exclusive lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of database shared lock deadlocks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 35
+            },
+            "id": 12,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_deadlockCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock deadlocks by instance"
+               }
+            ],
+            "title": "Database shared lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of database intent-shared lock deadlocks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 35
+            },
+            "id": 13,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_deadlockCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock deadlocks by instance"
+               }
+            ],
+            "title": "Database intent-shared lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 43
+            },
+            "id": 14,
+            "panels": [ ],
+            "title": "Database lock wait counts - cluster",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 44
+            },
+            "id": 15,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - exclusive",
+                  "refId": "Database exclusive lock wait count"
+               }
+            ],
+            "title": "Database exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database intent-exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 44
+            },
+            "id": 16,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - intent exclusive",
+                  "refId": "Database intent exclusive lock wait count"
+               }
+            ],
+            "title": "Database intent-exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 52
+            },
+            "id": 17,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - shared",
+                  "refId": "Database shared lock wait count"
+               }
+            ],
+            "title": "Database shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database intent-shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 52
+            },
+            "id": 18,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cl_name) (\n  rate(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cl_name}} - intent shared",
+                  "refId": "Database intent shared lock wait count"
+               }
+            ],
+            "title": "Database intent-shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 60
+            },
+            "id": 19,
+            "panels": [ ],
+            "title": "Database lock wait counts - instance",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database exclusive locks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 61
+            },
+            "id": 20,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock wait count by instance"
+               }
+            ],
+            "title": "Database exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database intent-exclusive locks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 61
+            },
+            "id": 21,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock wait count by instance"
+               }
+            ],
+            "title": "Database intent-exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database shared locks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 69
+            },
+            "id": 22,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock wait count by instance"
+               }
+            ],
+            "title": "Database shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for database intent-shared locks per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 69
+            },
+            "id": 23,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock wait count by instance"
+               }
+            ],
+            "title": "Database intent-shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 77
+            },
+            "id": 24,
+            "panels": [ ],
+            "title": "Database lock acquisition time",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring database exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 78
+            },
+            "id": 25,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_timeAcquiringMicros_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock acquisition time"
+               }
+            ],
+            "title": "Database exclusive lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring database intent-exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 78
+            },
+            "id": 26,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_timeAcquiringMicros_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock acquisition time"
+               }
+            ],
+            "title": "Database intent-exclusive lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring database shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 86
+            },
+            "id": 27,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_timeAcquiringMicros_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock acquisition time"
+               }
+            ],
+            "title": "Database shared lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring database intent-shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 86
+            },
+            "id": 28,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Database_timeAcquiringMicros_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock acquisition time"
+               }
+            ],
+            "title": "Database intent-shared lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 94
+            },
+            "id": 29,
+            "panels": [ ],
+            "title": "Collection lock deadlocks",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of collection exclusive lock deadlocks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 95
+            },
+            "id": 30,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_deadlockCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock deadlocks"
+               }
+            ],
+            "title": "Collection exclusive lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of collection intent-exclusive lock deadlocks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 95
+            },
+            "id": 31,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_deadlockCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock deadlocks"
+               }
+            ],
+            "title": "Collection intent-exclusive lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of collection shared lock deadlocks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 103
+            },
+            "id": 32,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_deadlockCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock deadlocks"
+               }
+            ],
+            "title": "Collection shared lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of collection intent-shared lock deadlocks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 103
+            },
+            "id": 33,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_deadlockCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock deadlocks"
+               }
+            ],
+            "title": "Collection intent-shared lock deadlocks / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 111
+            },
+            "id": 34,
+            "panels": [ ],
+            "title": "Collection lock wait counts",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for collection exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 112
+            },
+            "id": 35,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_acquireWaitCount_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock wait count"
+               }
+            ],
+            "title": "Collection exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for collection intent-exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 112
+            },
+            "id": 36,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_acquireWaitCount_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock wait count"
+               }
+            ],
+            "title": "Collection intent-exclusive lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for collection shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 120
+            },
+            "id": 37,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_acquireWaitCount_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock wait count"
+               }
+            ],
+            "title": "Collection shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of times lock acquisitions encounter waits for collection intent-shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 120
+            },
+            "id": 38,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_acquireWaitCount_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock wait count"
+               }
+            ],
+            "title": "Collection intent-shared lock wait count / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 128
+            },
+            "id": 39,
+            "panels": [ ],
+            "title": "Collection lock acquisition time",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring collection exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 129
+            },
+            "id": 40,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_timeAcquiringMicros_W{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock acquisition time"
+               }
+            ],
+            "title": "Collection exclusive lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring collection intent-exclusive locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 129
+            },
+            "id": 41,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_timeAcquiringMicros_w{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock acquisition time"
+               }
+            ],
+            "title": "Collection intent-exclusive lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring collection shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 137
+            },
+            "id": 42,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_timeAcquiringMicros_R{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock acquisition time"
+               }
+            ],
+            "title": "Collection shared lock acquisition time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The time spent acquiring collection intent-shared locks.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 10,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 137
+            },
+            "id": 43,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_locks_Collection_timeAcquiringMicros_r{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock acquisition time"
+               }
+            ],
+            "title": "Collection intent-shared lock acquisition time / $__interval",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "mongodb-atlas-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": null,
-               "current": { },
+               "allValue": ".+",
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn,job)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\", cl_name=~\"$cl_name\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Atlas cluster",
+               "label": "Cl_name",
                "multi": true,
                "name": "cl_name",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"},cl_name)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\"}, cl_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Replica set",
-               "multi": true,
-               "name": "rs",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{cl_name=~\"$cl_name\"},rs_nm)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Node",
+               "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{rs_nm=~\"$rs\"},instance)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\", cl_name=~\"$cl_name\",job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             }
          ]
       },
@@ -989,33 +1787,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "MongoDB Atlas performance overview",
-      "uid": "mongodb-atlas-performance-overview",
-      "version": 0
+      "uid": "mongodb-atlas-performance-overview"
    }
