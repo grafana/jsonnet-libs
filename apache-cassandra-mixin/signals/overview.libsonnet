@@ -1,5 +1,6 @@
 function(this) {
   local legendCustomTemplate = '{{ cassandra_cluster }}',
+  local aggregationLabels = '(' + std.join(',', this.groupLabels + this.instanceLabels) + ')',
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -31,7 +32,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'max(cassandra_up_endpoint_count{%(queriesSelector)s})',
+          expr: 'sum(count by ' + aggregationLabels + ' (cassandra_up_endpoint_count{%(queriesSelector)s}))',
         },
       },
     },
@@ -44,7 +45,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'max(cassandra_down_endpoint_count{%(queriesSelector)s})',
+          expr: 'sum(max by ' + aggregationLabels + ' (cassandra_down_endpoint_count{%(queriesSelector)s}))',
         },
       },
     },
@@ -57,7 +58,8 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_connection_timeouts_count{%(queriesSelector)s}[$__interval:])) by (cassandra_cluster, instance)',
+          expr: 'sum(increase(cassandra_connection_timeouts_count{%(queriesSelector)s}[$__interval:])) by ' + aggregationLabels,
+          legendCustomTemplate: '{{ cassandra_cluster }} - {{ instance }}',
         },
       },
     },
@@ -83,7 +85,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_largemessagedroppedtasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_largemessagedroppedtasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - large dropped',
         },
       },
@@ -97,7 +99,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_largemessageactivetasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_largemessageactivetasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - large active',
         },
       },
@@ -111,7 +113,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_largemessagependingtasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_largemessagependingtasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - large pending',
         },
       },
@@ -125,7 +127,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_smallmessagedroppedtasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_smallmessagedroppedtasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - small dropped',
         },
       },
@@ -139,7 +141,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_smallmessageactivetasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_smallmessageactivetasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - small active',
         },
       },
@@ -153,7 +155,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_connection_smallmessagependingtasks{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_connection_smallmessagependingtasks{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{instance }} - small pending',
         },
       },
@@ -181,7 +183,7 @@ function(this) {
       unit: 'bytes',
       sources: {
         prometheus: {
-          expr: 'sum(cassandra_storage_load_count{%(queriesSelector)s}) by (cassandra_cluster, instance)',
+          expr: 'sum(cassandra_storage_load_count{%(queriesSelector)s}) by ' + aggregationLabels,
           legendCustomTemplate: '{{ instance }}',
         },
       },
@@ -339,10 +341,10 @@ function(this) {
       nameShort: 'Write requests',
       type: 'raw',
       description: 'The number of write requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_latency_seconds_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_latency_seconds_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },
@@ -352,10 +354,10 @@ function(this) {
       nameShort: 'Write requests unavailable',
       type: 'raw',
       description: 'The number of write requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_unavailables_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_unavailables_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },
@@ -365,10 +367,10 @@ function(this) {
       nameShort: 'Write requests timed out',
       type: 'raw',
       description: 'The number of write requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_timeouts_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_timeouts_count{%(queriesSelector)s, clientrequest="Write"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },
@@ -378,10 +380,10 @@ function(this) {
       nameShort: 'Read requests',
       type: 'raw',
       description: 'The number of read requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_latency_seconds_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_latency_seconds_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },
@@ -391,10 +393,10 @@ function(this) {
       nameShort: 'Read requests timed out',
       type: 'raw',
       description: 'The number of read requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_timeouts_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_timeouts_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },
@@ -404,10 +406,10 @@ function(this) {
       nameShort: 'Read requests unavailable',
       type: 'raw',
       description: 'The number of read requests being reported',
-      unit: 'none',
+      unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'sum(increase(cassandra_clientrequest_unavailables_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
+          expr: 'sum(rate(cassandra_clientrequest_unavailables_count{%(queriesSelector)s, clientrequest="Read"}[$__rate_interval])) by (cassandra_cluster)',
         },
       },
     },

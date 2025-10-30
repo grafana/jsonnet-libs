@@ -8,25 +8,25 @@
          {
             "title": "Apache Cassandra keyspaces",
             "type": "link",
-            "url": "/d/apachecassandra_keyspaces"
+            "url": "/d/cassandra_keyspaces"
          },
          {
             "keepTime": true,
             "title": "Apache Cassandra logs",
             "type": "link",
-            "url": "/d/apachecassandra-logs"
+            "url": "/d/cassandra-logs"
          },
          {
             "title": "Apache Cassandra nodes",
             "type": "link",
-            "url": "/d/apachecassandra_nodes"
+            "url": "/d/cassandra_nodes"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-cassandra-mixin"
+               "cassandra-mixin"
             ],
             "title": "All Apache Cassandra dashboards",
             "type": "dashboards"
@@ -62,7 +62,7 @@
                }
             },
             "gridPos": {
-               "h": 8,
+               "h": 6,
                "w": 6,
                "x": 0,
                "y": 1
@@ -104,7 +104,7 @@
                }
             },
             "gridPos": {
-               "h": 8,
+               "h": 6,
                "w": 6,
                "x": 6,
                "y": 1
@@ -120,7 +120,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max(cassandra_up_endpoint_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum(count by (job,cassandra_cluster,instance) (cassandra_up_endpoint_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -146,7 +146,7 @@
                }
             },
             "gridPos": {
-               "h": 8,
+               "h": 6,
                "w": 6,
                "x": 12,
                "y": 1
@@ -162,7 +162,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max(cassandra_down_endpoint_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum(max by (job,cassandra_cluster,instance) (cassandra_down_endpoint_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -188,7 +188,7 @@
                }
             },
             "gridPos": {
-               "h": 8,
+               "h": 6,
                "w": 6,
                "x": 18,
                "y": 1
@@ -219,7 +219,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of timeouts experienced from each node.",
+            "description": "The number of local writes aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -256,271 +256,6 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_connection_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}[$__interval:])) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{ cassandra_cluster }}",
-                  "refId": "Connection timeouts"
-               }
-            ],
-            "title": "Connection timeouts",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The average key cache hit ratio being reported.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "percent"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 9
-            },
-            "id": 7,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", cache=\"KeyCache\"} * 100) by (cassandra_cluster)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ cassandra_cluster }}",
-                  "refId": "Average key cache hit ratio"
-               }
-            ],
-            "title": "Average key cache hit ratio",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of tasks that a connection has either completed, dropped, or is pending.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 15,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 17
-            },
-            "id": 8,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_largemessagedroppedtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - large dropped",
-                  "refId": "Large dropped tasks"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_largemessageactivetasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - large active",
-                  "refId": "Large active tasks"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_largemessagependingtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - large pending",
-                  "refId": "Large pending tasks"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_smallmessagedroppedtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - small dropped",
-                  "refId": "Small dropped tasks"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_smallmessageactivetasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - small active",
-                  "refId": "Small active tasks"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_connection_smallmessagependingtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance }} - small pending",
-                  "refId": "Small pending tasks"
-               }
-            ],
-            "title": "Tasks",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of bytes used by each node of the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 17
-            },
-            "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(cassandra_storage_load_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (cassandra_cluster, instance)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ instance }}",
-                  "refId": "Disk usage"
-               }
-            ],
-            "title": "Disk usage",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of local writes aggregated across all nodes.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 5,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 25
-            },
-            "id": 10,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
                   "expr": "sum by (cassandra_cluster) (increase(cassandra_keyspace_writelatency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
@@ -540,7 +275,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 5,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -553,9 +288,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 9
             },
-            "id": 11,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -605,9 +340,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 33
+               "y": 17
             },
-            "id": 12,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -657,9 +392,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 33
+               "y": 17
             },
-            "id": 13,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -693,13 +428,18 @@
                "uid": "-- Mixed --"
             },
             "description": "Local write latency heatmap for this cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "s"
+               }
+            },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 41
+               "y": 25
             },
-            "id": 14,
+            "id": 10,
             "options": {
                "calculate": true,
                "color": {
@@ -729,13 +469,18 @@
                "uid": "-- Mixed --"
             },
             "description": "Local read latency heatmap for this cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "s"
+               }
+            },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 41
+               "y": 25
             },
-            "id": 15,
+            "id": 11,
             "options": {
                "calculate": true,
                "color": {
@@ -781,9 +526,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 49
+               "y": 33
             },
-            "id": 16,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -845,9 +590,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 49
+               "y": 33
             },
-            "id": 17,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -885,6 +630,271 @@
                }
             ],
             "title": "Read latency quartiles",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of timeouts experienced from each node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 41
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(increase(cassandra_connection_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}[$__interval:])) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ cassandra_cluster }} - {{ instance }}",
+                  "refId": "Connection timeouts"
+               }
+            ],
+            "title": "Connection timeouts",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The average key cache hit ratio being reported.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 41
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", cache=\"KeyCache\"} * 100) by (cassandra_cluster)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ cassandra_cluster }}",
+                  "refId": "Average key cache hit ratio"
+               }
+            ],
+            "title": "Average key cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of tasks that a connection has either completed, dropped, or is pending.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 49
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_largemessagedroppedtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - large dropped",
+                  "refId": "Large dropped tasks"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_largemessageactivetasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - large active",
+                  "refId": "Large active tasks"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_largemessagependingtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - large pending",
+                  "refId": "Large pending tasks"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_smallmessagedroppedtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - small dropped",
+                  "refId": "Small dropped tasks"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_smallmessageactivetasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - small active",
+                  "refId": "Small active tasks"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_connection_smallmessagependingtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance }} - small pending",
+                  "refId": "Small pending tasks"
+               }
+            ],
+            "title": "Tasks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of bytes used by each node of the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 49
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(cassandra_storage_load_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (job,cassandra_cluster,instance)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "Disk usage"
+               }
+            ],
+            "title": "Disk usage",
             "type": "timeseries"
          },
          {
@@ -942,7 +952,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_latency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_latency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -994,7 +1004,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -1046,7 +1056,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_unavailables_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_unavailables_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Write\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -1098,7 +1108,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_latency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_latency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -1150,7 +1160,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_timeouts_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -1202,7 +1212,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(cassandra_clientrequest_unavailables_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
+                  "expr": "sum(rate(cassandra_clientrequest_unavailables_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", clientrequest=\"Read\"}[$__rate_interval])) by (cassandra_cluster)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ cassandra_cluster }}",
@@ -1216,7 +1226,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "apache-cassandra-mixin"
+         "cassandra-mixin"
       ],
       "templating": {
          "list": [
@@ -1288,5 +1298,5 @@
       },
       "timezone": "default",
       "title": "Apache Cassandra overview",
-      "uid": "apachecassandra_overview"
+      "uid": "cassandra_overview"
    }

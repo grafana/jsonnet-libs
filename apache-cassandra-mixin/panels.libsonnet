@@ -88,7 +88,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of tasks that a connection has either completed, dropped, or is pending.')
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15)
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
@@ -117,8 +116,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.overview.writes.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of local writes aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       overviewReadsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -126,8 +124,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.overview.reads.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of local reads aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       overviewWriteLatencyHeatmapPanel:
         g.panel.heatmap.new(
@@ -136,6 +133,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.heatmap.queryOptions.withTargets([
           signals.overview.writeLatencyHeatmap.asTarget(),
         ])
+        + g.panel.heatmap.standardOptions.withUnit('s')
         + g.panel.heatmap.panelOptions.withDescription('Local write latency heatmap for this cluster.')
         + g.panel.heatmap.options.withCalculate(true)
         + g.panel.heatmap.options.color.withScheme('Oranges'),
@@ -147,6 +145,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.heatmap.queryOptions.withTargets([
           signals.overview.readLatencyHeatmap.asTarget(),
         ])
+        + g.panel.heatmap.standardOptions.withUnit('s')
         + g.panel.heatmap.panelOptions.withDescription('Local read latency heatmap for this cluster.')
         + g.panel.heatmap.options.withCalculate(true)
         + g.panel.heatmap.options.color.withScheme('Oranges'),
@@ -308,8 +307,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.writes.asTarget() { interval: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of local writes across all keyspaces for this node.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       nodesReadsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -317,8 +315,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.reads.asTarget() { interval: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of local reads across all keyspaces for this node.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       nodesWriteAverageLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -326,8 +323,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.writeAverageLatency.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average write latency for the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15),
+        + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       nodesReadAverageLatencyPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -335,8 +331,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.readAverageLatency.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average read latency for the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15),
+        + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       nodesWriteLatencyQuartilesPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -396,8 +391,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.keyspaces.keyspacesTotalDiskSpaceUsed.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Total amount of disk space used by keyspaces.')
-        + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20),
+        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
 
       keyspacesPendingCompactionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -405,8 +399,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.keyspaces.keyspacesPendingCompactions.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of compaction operations a keyspace is pending to perform.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(20),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
       keyspacesMaxPartitionSizePanel:
         commonlib.panels.generic.timeSeries.base.new(

@@ -8,24 +8,24 @@
          {
             "title": "Apache Cassandra keyspaces",
             "type": "link",
-            "url": "/d/apachecassandra_keyspaces"
+            "url": "/d/cassandra_keyspaces"
          },
          {
             "title": "Apache Cassandra nodes",
             "type": "link",
-            "url": "/d/apachecassandra_nodes"
+            "url": "/d/cassandra_nodes"
          },
          {
             "title": "Apache Cassandra overview",
             "type": "link",
-            "url": "/d/apachecassandra_overview"
+            "url": "/d/cassandra_overview"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-cassandra-mixin"
+               "cassandra-mixin"
             ],
             "title": "All Apache Cassandra dashboards",
             "type": "dashboards"
@@ -230,7 +230,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "apache-cassandra-mixin"
+         "cassandra-mixin"
       ],
       "templating": {
          "list": [
@@ -305,5 +305,5 @@
       },
       "timezone": "default",
       "title": "Apache Cassandra logs",
-      "uid": "apachecassandra-logs"
+      "uid": "cassandra-logs"
    }

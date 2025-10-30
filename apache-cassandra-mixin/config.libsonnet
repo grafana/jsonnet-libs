@@ -6,7 +6,7 @@
 
   groupLabels: ['job', 'cassandra_cluster'] + (if this.enableDatacenterLabel then ['datacenter'] else []) + (if this.enableRackLabel then ['rack'] else []),
   instanceLabels: ['instance'],
-  uid: 'apache-cassandra',
+  uid: 'cassandra',
   dashboardNamePrefix: 'Apache Cassandra',
   dashboardTags: [self.uid + '-mixin'],
   dashboardPeriod: 'now-30m',

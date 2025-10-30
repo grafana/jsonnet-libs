@@ -8,25 +8,25 @@
          {
             "title": "Apache Cassandra keyspaces",
             "type": "link",
-            "url": "/d/apachecassandra_keyspaces"
+            "url": "/d/cassandra_keyspaces"
          },
          {
             "keepTime": true,
             "title": "Apache Cassandra logs",
             "type": "link",
-            "url": "/d/apachecassandra-logs"
+            "url": "/d/cassandra-logs"
          },
          {
             "title": "Apache Cassandra overview",
             "type": "link",
-            "url": "/d/apachecassandra_overview"
+            "url": "/d/cassandra_overview"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-cassandra-mixin"
+               "cassandra-mixin"
             ],
             "title": "All Apache Cassandra dashboards",
             "type": "dashboards"
@@ -51,7 +51,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of bytes being used by this node.",
+            "description": "The JVM CPU usage of this node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -61,12 +61,12 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "bytes"
+                  "unit": "percentunit"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 1
             },
@@ -88,14 +88,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "cassandra_storage_load_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_process_cpu_load{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
-                  "refId": "Storage load count"
+                  "refId": "CPU usage"
                }
             ],
-            "title": "Disk usage",
+            "title": "CPU usage",
             "type": "timeseries"
          },
          {
@@ -118,8 +118,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 1
             },
             "id": 3,
@@ -156,7 +156,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The JVM CPU usage of this node.",
+            "description": "The number of bytes being used by this node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -166,14 +166,14 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "percentunit"
+                  "unit": "bytes"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
-               "x": 16,
-               "y": 1
+               "x": 0,
+               "y": 9
             },
             "id": 4,
             "options": {
@@ -193,14 +193,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_process_cpu_load{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "cassandra_storage_load_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
-                  "refId": "CPU usage"
+                  "refId": "Storage load count"
                }
             ],
-            "title": "CPU usage",
+            "title": "Disk usage",
             "type": "timeseries"
          },
          {
@@ -223,8 +223,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
+               "w": 8,
+               "x": 8,
                "y": 9
             },
             "id": 5,
@@ -275,8 +275,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 8,
+               "x": 16,
                "y": 9
             },
             "id": 6,
@@ -526,7 +526,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 15,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -579,7 +579,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 15,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -632,7 +632,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 15,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -684,7 +684,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 15,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -747,7 +747,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 41
             },
@@ -811,8 +811,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 41
             },
             "id": 16,
@@ -875,9 +875,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 41
+               "w": 24,
+               "x": 0,
+               "y": 49
             },
             "id": 17,
             "options": {
@@ -923,7 +923,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "apache-cassandra-mixin"
+         "cassandra-mixin"
       ],
       "templating": {
          "list": [
@@ -995,5 +995,5 @@
       },
       "timezone": "default",
       "title": "Apache Cassandra nodes",
-      "uid": "apachecassandra_nodes"
+      "uid": "cassandra_nodes"
    }
