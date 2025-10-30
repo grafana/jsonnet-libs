@@ -46,7 +46,7 @@ local static_exporter = import 'github.com/grafana/jsonnet-libs/static-expoter/m
 
 ## Using shell based implementation
 
-The original implementation using the Apache web server contains quite a few dependencies that might be tricky to keep updated. An optional [busybox] based implementation can be used by supplying the `shell_exporter` flag:following
+The original implementation using the Apache web server contains quite a few dependencies that might be tricky to keep updated. An optional [busybox] based implementation can be used by supplying the `shell_exporter` flag:
 
 ```jsonnet
     static_exporter.new('team-holiday-exporter', shell_exporter=true)
