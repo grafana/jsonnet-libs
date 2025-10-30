@@ -1,0 +1,117 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Apache Airflow overview",
+            "type": "link",
+            "url": "/d/apacheairflow_overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "apache-airflow-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Apache Airflow logs",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Logs for each individual task run on the DAGs.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "enableLogDetails": true,
+               "showCommonLabels": false,
+               "showTime": false,
+               "wrapLogMessage": false
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", filename=~\".*/airflow/logs/dag_id.*\"} |= ``"
+               }
+            ],
+            "title": "Task logs",
+            "type": "logs"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Logs for the scheduler in the Apache Airflow system.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
+            },
+            "id": 3,
+            "options": {
+               "enableLogDetails": true,
+               "showCommonLabels": false,
+               "showTime": false,
+               "wrapLogMessage": false
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "{job=~\"$job\", instance=~\"$instance\", filename=~\".*/airflow/logs/scheduler/.*\"} |= ``"
+               }
+            ],
+            "title": "Scheduler logs",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "apache-airflow-mixin"
+      ],
+      "templating": {
+         "list": [ ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Apache Airflow logs",
+      "uid": "apacheairflow_logs"
+   }

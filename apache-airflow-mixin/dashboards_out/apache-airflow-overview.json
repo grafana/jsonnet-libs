@@ -1,62 +1,51 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
-      "links": [ ],
+      "description": "Dashboard providing an overview of Apache Airflow DAGs, tasks, and scheduler performance.",
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Apache Airflow logs",
+            "type": "link",
+            "url": "/d/apacheairflow_logs"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "apache-airflow-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Apache Airflow overview",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of errors from trying to parse DAG files in an Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -69,37 +58,27 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_dag_processing_import_errors{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_dag_processing_import_errors{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "DAG file parsing errors"
                }
             ],
             "title": "DAG file parsing errors",
@@ -107,49 +86,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of Service Level Agreement misses for any DAG runs in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -162,38 +107,28 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_sla_missed{job=~\"$job\", instance=~\"$instance\"}[$__interval:])",
+                  "expr": "rate(airflow_sla_missed{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "SLA misses"
                }
             ],
             "title": "SLA misses",
@@ -201,49 +136,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The overall task instances failures for an Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -256,38 +157,28 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 0
+               "y": 1
             },
             "id": 4,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_ti_failures{job=~\"$job\", instance=~\"$instance\"}[$__interval:])",
+                  "expr": "rate(airflow_ti_failures{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Task failures"
                }
             ],
             "title": "Task failures",
@@ -295,48 +186,14 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The average time taken for recent successful DAG runs by DAG ID in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -349,38 +206,36 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_duration_success_sum{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_success_count{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
+                  "expr": "increase(airflow_dagrun_duration_success_sum{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_success_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{dag_id}}"
+                  "legendFormat": "{{dag_id}}",
+                  "refId": "Average successful DAG run duration"
                }
             ],
             "title": "DAG success duration",
@@ -388,48 +243,14 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The average time taken for recent failed DAG runs by DAG ID in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -442,38 +263,36 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
             "id": 6,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_duration_failed_sum{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_failed_count{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
+                  "expr": "increase(airflow_dagrun_duration_failed_sum{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])/clamp_min(increase(airflow_dagrun_duration_failed_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{dag_id}}"
+                  "legendFormat": "{{dag_id}}",
+                  "refId": "Average failed DAG run duration"
                }
             ],
             "title": "DAG failed duration",
@@ -481,7 +300,8 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The average time taken for recent task runs by Task ID in the Apache Airflow system.",
             "fieldConfig": {
@@ -489,10 +309,8 @@
                   "color": {
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -501,105 +319,82 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 8,
                "x": 0,
-               "y": 16
+               "y": 17
             },
             "id": 7,
             "options": {
                "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
-               "showUnfilled": true,
-               "text": { }
+               "showUnfilled": true
             },
-            "pluginVersion": "9.2.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_dag_task_duration_sum{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:]) / clamp_min(increase(airflow_dag_task_duration_count{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:]),1) != 0",
+                  "expr": "increase(airflow_dag_task_duration_sum{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:])/clamp_min(increase(airflow_dag_task_duration_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:]),1)",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{dag_id}} - {{task_id}}"
+                  "legendFormat": "{{dag_id}} - {{task_id}}",
+                  "refId": "Average task duration"
                }
             ],
             "title": "Task duration",
-            "transformations": [ ],
             "type": "bargauge"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of task counts by DAG ID in the Apache Airflow system.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     }
-                  },
-                  "mappings": [ ]
-               },
-               "overrides": [ ]
-            },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 16
+               "w": 8,
+               "x": 8,
+               "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
-               "pieType": "pie",
                "reduceOptions": {
                   "calcs": [
                      "sum"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "asc"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, instance, dag_id, state) (increase(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])) != 0",
+                  "expr": "sum by(job, instance, dag_id, state) (\n  rate(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__rate_interval])\n)",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{dag_id}} - {{state}}"
+                  "legendFormat": "{{dag_id}} - {{state}}",
+                  "refId": "Task finish total"
                }
             ],
             "title": "Task count summary",
@@ -607,49 +402,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of task counts by Task ID in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -658,140 +419,64 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 24
+               "w": 8,
+               "x": 16,
+               "y": 17
             },
             "id": 9,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
-            "pluginVersion": "9.2.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__interval:])",
+                  "expr": "rate(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{dag_id}} - {{task_id}} - {{state}}"
+                  "legendFormat": "{{dag_id}} - {{task_id}} - {{state}}",
+                  "refId": "Task finish total"
                }
             ],
             "title": "Task counts",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "Logs for each individual task run on the DAGs.",
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 32
-            },
-            "id": 10,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": false,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", filename=~\".*/airflow/logs/dag_id.*\"} |= ``",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "Task logs",
-            "type": "logs"
-         },
-         {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 40
+               "y": 25
             },
-            "id": 11,
-            "targets": [ ],
+            "id": 10,
+            "panels": [ ],
             "title": "Scheduler details",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The amount of average delay between recent scheduled DAG runtime and the actual DAG runtime by DAG ID in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -804,38 +489,36 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 41
+               "y": 26
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_schedule_delay_sum{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]) / clamp_min(increase(airflow_dagrun_schedule_delay_count{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
+                  "expr": "increase(airflow_dagrun_schedule_delay_sum{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:])/clamp_min(increase(airflow_dagrun_schedule_delay_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:]),1)",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{dag_id}}"
+                  "legendFormat": "{{instance}} - {{dag_id}}",
+                  "refId": "Average DAG schedule delay"
                }
             ],
             "title": "DAG schedule delay",
@@ -843,49 +526,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of current tasks that the scheduler is handling in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -898,46 +547,43 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 41
+               "y": 26
             },
-            "id": 13,
+            "id": 12,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_scheduler_tasks_executable{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_scheduler_tasks_executable{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - executable"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - executable",
+                  "refId": "Scheduler executable tasks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_scheduler_tasks_starving{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_scheduler_tasks_starving{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - starving"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - starving",
+                  "refId": "Scheduler starving tasks"
                }
             ],
             "title": "Scheduler tasks",
@@ -945,49 +591,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of current tasks that the executors are handling in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1000,55 +612,54 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 49
+               "y": 34
             },
-            "id": 14,
+            "id": 13,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_executor_running_tasks{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_executor_running_tasks{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - running"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - running",
+                  "refId": "Executor running tasks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_executor_queued_tasks{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_executor_queued_tasks{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - queued"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - queued",
+                  "refId": "Executor queued tasks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_executor_open_slots{job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "airflow_executor_open_slots{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - open"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - open",
+                  "refId": "Executor open slots"
                }
             ],
             "title": "Executor tasks",
@@ -1056,49 +667,15 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The number of current task slots that the pools are handling in the Apache Airflow system.",
+            "description": "The number of task slots available in the pools of the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "decimals": 0,
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1111,312 +688,178 @@
                      ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 49
+               "y": 34
             },
-            "id": 15,
+            "id": 14,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-               },
                "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "mode": "multi"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_pool_running_slots{job=~\"$job\", instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_running_slots{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{pool_name}} - running"
+                  "instant": false,
+                  "legendFormat": "{{pool_name}} - running",
+                  "refId": "Pool running slots"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_pool_queued_slots{job=~\"$job\", instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_queued_slots{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{pool_name}} - queued"
+                  "instant": false,
+                  "legendFormat": "{{pool_name}} - queued",
+                  "refId": "Pool queued slots"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_pool_starving_tasks{job=~\"$job\", instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_starving_tasks{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{pool_name}} - starving"
+                  "instant": false,
+                  "legendFormat": "{{pool_name}} - starving",
+                  "refId": "Pool starving tasks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "airflow_pool_open_slots{job=~\"$job\", instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_open_slots{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - {{pool_name}} - open"
+                  "instant": false,
+                  "legendFormat": "{{pool_name}} - open",
+                  "refId": "Pool open slots"
                }
             ],
             "title": "Pool task slots",
             "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "Shows the scheduler logs by DAG file.",
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 57
-            },
-            "id": 16,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": false,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{job=~\"$job\", instance=~\"$instance\", dag_file=~\"$dag_file\", filename=~\".*/airflow/logs/scheduler/latest/.*\"} |= ``",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "Scheduler logs",
-            "type": "logs"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "apache-airflow-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
-               "regex": "",
-               "type": "datasource"
-            },
-            {
-               "current": { },
-               "hide": 0,
-               "label": "Loki data source",
-               "name": "loki_datasource",
-               "options": [ ],
-               "query": "loki",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(airflow_scheduler_tasks_executable,job)",
+               "query": "label_values(airflow_dagbag_size{job=~\"$job\", instance=~\"$instance\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(airflow_scheduler_tasks_executable{job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(airflow_scheduler_tasks_executable{job=~\"$job\"}, instance)",
+               "query": "label_values(airflow_dagbag_size{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
                "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "DAG",
+               "label": "DAG ID",
                "multi": true,
                "name": "dag_id",
-               "options": [ ],
-               "query": "label_values(airflow_task_start_total{job=~\"$job\", instance=~\"$instance\"}, dag_id)",
+               "query": "label_values(airflow_dagrun_duration_success_sum{job=~\"$job\", instance=~\"$instance\"}, dag_id)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Task",
+               "label": "Task ID",
                "multi": true,
                "name": "task_id",
-               "options": [ ],
-               "query": "label_values(airflow_task_start_total{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\"}, task_id)",
+               "query": "label_values(airflow_ti_failures{job=~\"$job\", instance=~\"$instance\"}, task_id)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Task state",
+               "label": "State",
                "multi": true,
                "name": "state",
-               "options": [ ],
-               "query": "label_values(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}, state)",
+               "query": "label_values(airflow_task_finish_total{job=~\"$job\", instance=~\"$instance\"}, state)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Pool",
+               "label": "Pool name",
                "multi": true,
                "name": "pool_name",
-               "options": [ ],
-               "query": "label_values(airflow_pool_open_slots{job=~\"$job\", instance=~\"$instance\"}, pool_name)",
+               "query": "label_values(airflow_pool_running_slots{job=~\"$job\", instance=~\"$instance\"}, pool_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${loki_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "DAG file",
-               "multi": true,
-               "name": "dag_file",
-               "options": [ ],
-               "query": "label_values(dag_file)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             }
          ]
       },
@@ -1424,33 +867,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache Airflow overview",
-      "uid": "apache-airflow-overview",
-      "version": 0
+      "uid": "apacheairflow_overview"
    }
