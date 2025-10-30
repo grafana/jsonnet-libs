@@ -1,117 +1,78 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
       "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
       "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Wildfly logs",
+            "type": "link",
+            "url": "/d/wildfly-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "wildfly-mixin"
+               "wildfly"
             ],
-            "targetBlank": false,
-            "title": "Wildfly Dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "Wildfly Datasource",
+            "type": "link",
+            "url": "/d/wildfly-datasource"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Requests",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Requests rate over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_request_count_total{server=~\"$server\",job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_request_count_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}"
+                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
+                  "refId": "Requests Rate"
                }
             ],
             "title": "Requests",
@@ -119,47 +80,16 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Rate of requests that result in 500 over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -172,128 +102,80 @@
                      ]
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_error_count_total{server=~\"$server\",job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_error_count_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}"
+                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
+                  "refId": "Request Errors Rate"
                }
             ],
             "title": "Request errors",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "panels": [ ],
+            "title": "Network",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Throughput rate of data received over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "spanNulls": false
                   },
                   "unit": "binBps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 10
             },
-            "id": 4,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 5,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_bytes_received_total_bytes{server=~\"$server\",job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_bytes_received_total_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}"
+                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
+                  "refId": "Network Received Throughput"
                }
             ],
             "title": "Network received throughput",
@@ -301,47 +183,16 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Throughput rate of data sent over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -354,138 +205,58 @@
                      ]
                   },
                   "unit": "binBps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 10
             },
-            "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 6,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_bytes_sent_total_bytes{server=~\"$server\",job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_bytes_sent_total_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}"
+                  "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
+                  "refId": "Network Sent Throughput"
                }
             ],
             "title": "Network sent throughput",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "Recent logs from server log file",
-            "gridPos": {
-               "h": 9,
-               "w": 24,
-               "x": 0,
-               "y": 16
-            },
-            "id": 6,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": false,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "pluginVersion": "9.1.7",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{job=~\"$job\", instance=~\"$instance\"} |= `` | (filename=~\"/opt/wildfly/.*/server.log\" or log_type=\"wildfly\")",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "Server logs",
-            "type": "logs"
-         },
-         {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 25
+               "y": 18
             },
             "id": 7,
-            "targets": [ ],
+            "panels": [ ],
             "title": "Sessions",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Number of active sessions to deployment over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -497,37 +268,28 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 26
+               "y": 19
             },
             "id": 8,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "wildfly_undertow_active_sessions{deployment=~\"$deployment\",job=~\"$job\", instance=~\"$instance\"}",
+                  "expr": "wildfly_undertow_active_sessions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{deployment}}"
+                  "legendFormat": "{{deployment}}",
+                  "refId": "Active Sessions"
                }
             ],
             "title": "Active sessions",
@@ -535,48 +297,17 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Number of sessions that have expired for a deployment over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
                   "decimals": 0,
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -588,38 +319,29 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 34
+               "y": 27
             },
             "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_expired_sessions_total{deployment=~\"$deployment\",job=~\"$job\", instance=~\"$instance\"}[$__interval])",
+                  "expr": "increase(wildfly_undertow_expired_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{deployment}}"
+                  "legendFormat": "{{deployment}}",
+                  "refId": "Expired Sessions"
                }
             ],
             "title": "Expired sessions",
@@ -627,48 +349,17 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Number of sessions that have been rejected from a deployment over time",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "spanNulls": false
                   },
                   "decimals": 0,
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -680,218 +371,131 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 34
+               "y": 27
             },
             "id": 10,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_rejected_sessions_total{deployment=~\"$deployment\", job=~\"$job\", instance=~\"$instance\"}[$__interval])",
+                  "expr": "increase(wildfly_undertow_rejected_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval])",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{deployment}}"
+                  "legendFormat": "{{deployment}}",
+                  "refId": "Rejected Sessions"
                }
             ],
             "title": "Rejected sessions",
             "type": "timeseries"
          }
       ],
-      "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "refresh": "30s",
+      "schemaVersion": 39,
       "tags": [
-         "wildfly-mixin"
+         "wildfly"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
-               "regex": "",
-               "type": "datasource"
-            },
-            {
-               "current": { },
-               "hide": 0,
-               "label": "Loki Datasource",
-               "name": "loki_datasource",
-               "options": [ ],
-               "query": "loki",
-               "refresh": 1,
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
                "query": "label_values(wildfly_batch_jberet_active_count{}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".*",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
                "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Instance",
-               "multi": false,
+               "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\"}, instance)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
-               "label": "Server",
-               "multi": false,
+               "multi": true,
                "name": "server",
-               "options": [ ],
-               "query": "label_values(wildfly_undertow_request_count_total{job=~\"$job\"}, server)",
+               "query": "label_values(wildfly_undertow_request_count_total{job=~\"$job\",cluster=~\"$cluster\"}, server)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
-               "label": "Deployment",
-               "multi": false,
+               "multi": true,
                "name": "deployment",
-               "options": [ ],
-               "query": "label_values(wildfly_undertow_active_sessions{job=~\"$job\"}, deployment)",
+               "query": "label_values(wildfly_undertow_active_sessions{job=~\"$job\",cluster=~\"$cluster\"}, deployment)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "Wildfly overview",
-      "uid": "wildfly-overview",
-      "version": 0
+      "title": "Wildfly Overview",
+      "uid": "wildfly-overview"
    }
