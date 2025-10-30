@@ -1,34 +1,50 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "Dashboard providing an overview of SAP HANA system performance and health.",
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "SAP HANA logs",
+            "type": "link",
+            "url": "/d/saphana_logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "sap-hana-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other SAP HANA dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "SAP HANA instance overview",
+            "type": "link",
+            "url": "/d/saphana_instance_overview"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "System replication",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "State of the replicas in the SAP HANA system",
             "fieldConfig": {
@@ -74,7 +90,6 @@
                      }
                   ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -94,40 +109,36 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
-               "w": 9,
+               "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "colorMode": "value",
                "graphMode": "none",
-               "justifyMode": "center",
-               "orientation": "auto",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
+                  ]
+               }
             },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "hanadb_sr_replication{job=~\"$job\", sid=~\"$sid\"}",
+                  "expr": "hanadb_sr_replication{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{secondary_site_name}}"
+                  "instant": false,
+                  "legendFormat": "{{secondary_site_name}}",
+                  "refId": "System replication status"
                }
             ],
             "title": "Replica status",
@@ -135,47 +146,13 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Average system replication log shipping delay in the SAP HANA system ",
+            "description": "Average system replication log shipping delay in the SAP HANA system",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -188,88 +165,60 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
-               "w": 15,
-               "x": 9,
-               "y": 0
+               "w": 16,
+               "x": 8,
+               "y": 1
             },
             "id": 3,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "avg by (job, sid, secondary_site_name) (hanadb_sr_ship_delay{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "avg by (job, sid, secondary_site_name) (hanadb_sr_ship_delay{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{secondary_site_name}}"
+                  "instant": false,
+                  "legendFormat": "{{secondary_site_name}}",
+                  "refId": "System replication ship delay"
                }
             ],
             "title": "Average replication ship delay",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 7
+            },
+            "id": 4,
+            "panels": [ ],
+            "title": "System resources",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "CPU usage percentage of the SAP HANA system",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineStyle": {
-                        "fill": "solid"
-                     },
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -282,37 +231,33 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 8
             },
-            "id": 4,
+            "id": 5,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by (job, sid, host, core) (hanadb_cpu_busy_percent{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "sum by (job, sid, host, core) (hanadb_cpu_busy_percent{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - core {{core}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - core {{core}}",
+                  "refId": "CPU busy percent by host"
                }
             ],
             "title": "CPU usage",
@@ -320,47 +265,13 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Disk utilization percentage of the SAP HANA system",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -373,37 +284,33 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 8
             },
-            "id": 5,
+            "id": 6,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_disk_total_used_size_mb{job=~\"$job\", sid=~\"$sid\"}) / sum by (job, sid, host) (hanadb_disk_total_size_mb{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_disk_total_used_size_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_disk_total_size_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Disk usage percent"
                }
             ],
             "title": "Disk usage",
@@ -411,47 +318,13 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Physical memory utilization percentage of the SAP HANA system",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -464,46 +337,44 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 12
+               "y": 14
             },
-            "id": 6,
+            "id": 7,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_resident_mb{job=~\"$job\", sid=~\"$sid\"}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_resident_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - resident"
+                  "instant": false,
+                  "legendFormat": "{{host}} - resident",
+                  "refId": "Physical memory usage percent"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\"}) / clamp_min(sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\"} + hanadb_host_memory_swap_free_mb{job=~\"$job\", sid=~\"$sid\"}), 1)",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / (sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) + sum by (job, sid, host) (hanadb_host_memory_swap_free_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - swap"
+                  "instant": false,
+                  "legendFormat": "{{host}} - swap",
+                  "refId": "Swap memory usage percent"
                }
             ],
             "title": "Physical memory usage",
@@ -511,47 +382,13 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Total amount of used memory by processes in the SAP HANA system",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -564,37 +401,33 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 12
+               "y": 14
             },
-            "id": 7,
+            "id": 8,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_used_total_mb{job=~\"$job\", sid=~\"$sid\"}) / sum by (job, sid, host) (hanadb_host_memory_alloc_limit_mb{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_used_total_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_host_memory_alloc_limit_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "SAP HANA memory usage percent"
                }
             ],
             "title": "SAP HANA memory usage",
@@ -602,99 +435,158 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Network I/O throughput in the SAP HANA system",
+            "description": "Memory allocation limit as a percentage of total physical memory",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
+                           "color": "red",
                            "value": null
                         },
                         {
-                           "color": "red",
-                           "value": 80
+                           "color": "green",
+                           "value": 90
                         }
                      ]
                   },
-                  "unit": "KBs"
-               },
-               "overrides": [ ]
+                  "unit": "percent"
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 20
             },
-            "id": 8,
+            "id": 9,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by (job, sid, host) (hanadb_network_receive_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_alloc_limit_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - receive"
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Memory allocation limit percent"
+               }
+            ],
+            "title": "Memory allocation limit",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Memory used by SAP HANA schemas",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "decmbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 20
+            },
+            "id": 10,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, database_name, schema_name) (hanadb_schema_used_memory_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}}",
+                  "refId": "Schema used memory"
+               }
+            ],
+            "title": "Schema memory usage",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "Network I/O",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Network receive and transmit rate in KB/s",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "KBs"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 27
+            },
+            "id": 12,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host) (hanadb_network_receive_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - receive",
+                  "refId": "Network receive rate"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by (job, sid, host) (hanadb_network_transmission_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "sum by (job, sid, host) (hanadb_network_transmission_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - transmit"
+                  "instant": false,
+                  "legendFormat": "{{host}} - transmit",
+                  "refId": "Network transmission rate"
                }
             ],
             "title": "Network I/O throughput",
@@ -702,90 +594,105 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Disk throughput for the SAP HANA system",
+            "description": "Network receive and transmit rate by interface in KB/s",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "KBs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 27
             },
-            "id": 9,
+            "id": 13,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by (job, sid, host) (hanadb_disk_io_throughput_kb_second{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "sum by (job, sid, host, interface) (hanadb_network_receive_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{interface}} - receive",
+                  "refId": "Network receive rate by interface"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, interface) (hanadb_network_transmission_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{interface}} - transmit",
+                  "refId": "Network transmission rate by interface"
+               }
+            ],
+            "title": "Network I/O throughput by interface",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 33
+            },
+            "id": 14,
+            "panels": [ ],
+            "title": "Disk I/O",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Disk I/O throughput in KB/s",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "KBs"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 34
+            },
+            "id": 15,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host) (hanadb_disk_io_throughput_kb_second{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Disk I/O throughput"
                }
             ],
             "title": "Disk I/O throughput",
@@ -793,511 +700,481 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Average elapsed time per execution across the SAP HANA system",
+            "description": "Disk I/O throughput by disk device in KB/s",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "ms"
-               },
-               "overrides": [ ]
+                  "unit": "KBs"
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
-               "x": 0,
-               "y": 24
+               "x": 12,
+               "y": 34
             },
-            "id": 10,
+            "id": 16,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "avg by (job, sid, host, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "sum by (job, sid, host, disk) (hanadb_disk_io_throughput_kb_second{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - service: {{service}} - type: {{sql_type}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{disk}}",
+                  "refId": "Disk I/O throughput by disk"
                }
             ],
-            "title": "Average query execution time",
+            "title": "Disk I/O throughput by disk",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Number of connections in active states across the SAP HANA system",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "blue",
-                     "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 12,
-               "y": 24
-            },
-            "id": 11,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "center",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by (job, sid, host) (hanadb_connections_total_count{job=~\"$job\", sid=~\"$sid\", connection_status=~\"RUNNING|QUEUING\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
-               }
-            ],
-            "title": "Active connections",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Number of connections in the idle state across the SAP HANA system",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "blue",
-                     "mode": "fixed"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 18,
-               "y": 24
-            },
-            "id": 12,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "center",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by (job, sid, host) (hanadb_connections_total_count{job=~\"$job\", sid=~\"$sid\", connection_status=~\"IDLE\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
-               }
-            ],
-            "title": "Idle connections",
-            "type": "stat"
-         },
-         {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 30
+               "y": 40
             },
-            "id": 13,
-            "targets": [ ],
-            "title": "Alerts",
+            "id": 17,
+            "panels": [ ],
+            "title": "SQL performance",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Count of the SAP HANA current alerts in the SAP HANA system",
+            "description": "Average SQL service elapsed time per execution",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "yellow",
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green"
-                        },
-                        {
                            "color": "green",
-                           "value": 0
+                           "value": null
                         },
                         {
-                           "color": "#EAB839",
-                           "value": 1
+                           "color": "red",
+                           "value": 1000
                         }
                      ]
-                  }
-               },
-               "overrides": [ ]
+                  },
+                  "unit": "ms"
+               }
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
+               "w": 12,
                "x": 0,
-               "y": 31
+               "y": 41
             },
-            "id": 14,
+            "id": 18,
             "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "center",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
             },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum by (job, sid, host) (hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\"})",
+                  "expr": "avg by (job, sid, host, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - service: {{service}} - type: {{sql_type}}",
+                  "refId": "SQL service elapsed time per execution"
                }
             ],
-            "title": "Alerts",
+            "title": "Average SQL execution time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "SQL service lock time per execution",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 41
+            },
+            "id": 19,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, service, sql_type) (hanadb_sql_service_lock_per_exec_ms{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{service}} - {{sql_type}}",
+                  "refId": "SQL service lock time per execution"
+               }
+            ],
+            "title": "SQL lock time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Top SQL time consumers",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 47
+            },
+            "id": 20,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, sql_hash) (hanadb_sql_top_time_consumers_mu{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - hash: {{sql_hash}}",
+                  "refId": "SQL top time consumers"
+               }
+            ],
+            "title": "SQL top time consumers",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 53
+            },
+            "id": 21,
+            "panels": [ ],
+            "title": "Connections",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Total count of database connections",
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 54
+            },
+            "id": 22,
+            "options": {
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host) (hanadb_connections_total_count{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Total connections count"
+               }
+            ],
+            "title": "Total connections",
             "type": "stat"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Table of the recent SAP HANA current alerts in the SAP HANA system",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "filterable": false,
-                     "inspect": false
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
+            "description": "Database connections by type and status",
             "gridPos": {
                "h": 6,
-               "w": 18,
-               "x": 6,
-               "y": 31
+               "w": 16,
+               "x": 8,
+               "y": 54
             },
-            "id": 15,
+            "id": 23,
             "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "enablePagination": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "frameIndex": 4,
-               "showHeader": true
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
             },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\"}",
+                  "expr": "sum by (job, sid, host, connection_type, connection_status) (hanadb_connections_total_count{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{connection_type}} - {{connection_status}}",
+                  "refId": "Total connections count by type"
+               }
+            ],
+            "title": "Connections by type",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 60
+            },
+            "id": 24,
+            "panels": [ ],
+            "title": "Storage",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Top table column store memory consumption",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "decmbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 61
+            },
+            "id": 25,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, database_name, schema_name, table_name) (hanadb_table_cs_top_mem_total_mb{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}} - {{table_name}}",
+                  "refId": "Table column store top memory"
+               }
+            ],
+            "title": "Top table memory",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 67
+            },
+            "id": 26,
+            "panels": [ ],
+            "title": "System alerts",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Count of current system alerts",
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 68
+            },
+            "id": 27,
+            "options": {
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job, sid, host) (hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Current alerts rating"
+               }
+            ],
+            "title": "Current alerts",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Detailed current system alerts",
+            "gridPos": {
+               "h": 6,
+               "w": 16,
+               "x": 8,
+               "y": 68
+            },
+            "id": 28,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": true,
+                  "legendFormat": "{{alert_details}} {{alert_useraction}}",
+                  "refId": "Current alerts rating detail"
                }
             ],
-            "title": "Recent alerts",
-            "transformations": [
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": {
-                        "Time": false,
-                        "Value": true,
-                        "__name__": true,
-                        "alert_details": false,
-                        "alert_timestamp": true,
-                        "database_name": true,
-                        "host": true,
-                        "insnr": true,
-                        "instance": true,
-                        "job": true,
-                        "port": true,
-                        "sid": true
-                     },
-                     "indexByName": {
-                        "Time": 2,
-                        "Value": 12,
-                        "__name__": 4,
-                        "alert_details": 0,
-                        "alert_timestamp": 3,
-                        "alert_useraction": 1,
-                        "database_name": 5,
-                        "host": 6,
-                        "insnr": 7,
-                        "instance": 8,
-                        "job": 9,
-                        "port": 10,
-                        "sid": 11
-                     },
-                     "renameByName": {
-                        "alert_details": "Details",
-                        "alert_timestamp": "",
-                        "alert_useraction": "Action",
-                        "database_name": ""
-                     }
-                  }
-               },
-               {
-                  "id": "groupBy",
-                  "options": {
-                     "fields": {
-                        "Action": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "Details": {
-                           "aggregations": [ ],
-                           "operation": "groupby"
-                        },
-                        "Time": {
-                           "aggregations": [
-                              "lastNotNull"
-                           ],
-                           "operation": "aggregate"
-                        }
-                     }
-                  }
-               },
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": { },
-                     "indexByName": { },
-                     "renameByName": {
-                        "Action": "",
-                        "Time (lastNotNull)": "Time (last fired)"
-                     }
-                  }
-               }
-            ],
+            "title": "Alerts detail",
             "type": "table"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "sap-hana-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
+               "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(hanadb_cpu_busy_percent,job)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(hanadb_cpu_busy_percent{job=~\"$job\", sid=~\"$sid\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
-               "label": "SAP HANA system",
-               "multi": false,
+               "includeAll": true,
+               "label": "Sid",
+               "multi": true,
                "name": "sid",
-               "options": [ ],
-               "query": "label_values(hanadb_cpu_busy_percent,sid)",
-               "refresh": 1,
+               "query": "label_values(hanadb_cpu_busy_percent{job=~\"$job\", sid=~\"$sid\",job=~\"$job\"}, sid)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "SID",
+               "multi": true,
+               "name": "sid",
+               "query": "label_values(hanadb_cpu_busy_percent{job=~\"$job\"}, sid)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },
@@ -1305,33 +1182,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "SAP HANA system overview",
-      "uid": "sap-hana-system-overview",
-      "version": 0
+      "uid": "saphana_system_overview"
    }

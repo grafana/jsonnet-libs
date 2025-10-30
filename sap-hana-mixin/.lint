@@ -12,3 +12,5 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "SAP HANA uses the label 'host' to identify separate instances"
+  panel-datasource-rule:
+    reason: "Modern mixins use signal-based architecture where datasource references are handled by the framework"
