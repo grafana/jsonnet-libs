@@ -1,7 +1,7 @@
 groups:
-    - name: DiscourseAlerts
+    - name: discourse-alerts
       rules:
-        - alert: DiscourseRequestsHigh5xxErrors
+        - alert: DiscourseHigh5xxErrors
           annotations:
             description: '{{ printf "%.2f" $value }}% of all requests are resulting in 500 status codes, which is above the threshold 10%, indicating a potentially larger issue for {{$labels.instance}}'
             summary: More than 10% of all requests result in a 5XX.
@@ -10,7 +10,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: DiscourseRequestsHigh4xxErrors
+        - alert: DiscourseHigh4xxErrors
           annotations:
             description: '{{ printf "%.2f" $value }}% of all requests are resulting in 400 status code, which is above the threshold 30%, indicating a potentially larger issue for {{$labels.instance}}'
             summary: More than 30% of all requests result in a 4XX.
