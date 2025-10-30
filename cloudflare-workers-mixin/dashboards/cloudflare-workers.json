@@ -1661,7 +1661,7 @@
         "type": "tempo",
         "uid": "${traceDatasource}"
       },
-      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information, timing, and request flow through your services.",
+      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information. If no Trace ID is selected, the panel below may show an error",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1761,10 +1761,6 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "83d4d86f85b17b85086fac00e0cd90ec",
-          "value": "83d4d86f85b17b85086fac00e0cd90ec"
-        },
         "label": "Trace ID",
         "name": "traceId",
         "options": [],
