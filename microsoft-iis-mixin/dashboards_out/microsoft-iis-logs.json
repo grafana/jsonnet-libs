@@ -1,0 +1,240 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Microsoft IIS applications",
+            "type": "link",
+            "url": "/d/microsoftiis_applications"
+         },
+         {
+            "keepTime": true,
+            "title": "Microsoft IIS overview",
+            "type": "link",
+            "url": "/d/microsoftiis_overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "microsoft-iis-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "loki",
+               "uid": "${loki_datasource}"
+            },
+            "description": "Logs volume grouped by \"level\" label.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 50,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)merg|(F|f)atal|(A|a)lert|(C|c)rit.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)(rr.*|RR.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(W|w)(arn.*|ARN.*|rn|RN)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(N|n)(otice|ote)|(I|i)(nf.*|NF.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "dbg.*|DBG.*|(D|d)(EBUG|ebug)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(T|t)(race|RACE)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "maxDataPoints": 100,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "legendFormat": "{{ level }}"
+               }
+            ],
+            "title": "Logs volume",
+            "transformations": [
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value",
+                     "renamePattern": "logs"
+                  }
+               }
+            ],
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 18,
+               "w": 24,
+               "x": 0,
+               "y": 18
+            },
+            "id": 2,
+            "options": {
+               "dedupStrategy": "exact",
+               "enableLogDetails": true,
+               "prettifyLogMessage": true,
+               "showTime": true,
+               "wrapLogMessage": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n[ ]\n"
+               }
+            ],
+            "title": "Logs",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "microsoft-iis-mixin"
+      ],
+      "templating": {
+         "list": [ ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Microsoft IIS logs",
+      "uid": "microsoftiis_logs"
+   }
