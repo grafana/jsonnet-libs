@@ -64,9 +64,11 @@
           {
             alert: 'OpenStackPlacementHighMemoryUsageWarning',
             expr: |||
-              100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
+              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
-              (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
+              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}
+              *
+              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
               > %(alertsWarningPlacementHighMemoryUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -75,19 +77,21 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'OpenStack is using a significant percentage of its allocated memory.',
+              summary: 'OpenStack node is using a significant percentage of its allocated memory.',
               description: |||
-                OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated memory,
+                OpenStack node {{ $labels.%(nodeLabel)s }} is using {{ printf "%%.0f" $value }} percent of its allocated memory,
                 which is above the threshold of %(alertsWarningPlacementHighMemoryUsage)s percent.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              ||| % this.config { nodeLabel: this.config.nodeLabel },
             },
           },
           {
-            alert: 'OpenStackNovaAgentDown',
+            alert: 'OpenStackPlacementHighMemoryUsageCritical',
             expr: |||
-              100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
+              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
-              (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
+              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}
+              *
+              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
               > %(alertsCriticalPlacementHighMemoryUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -96,19 +100,21 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'OpenStack is using a large percentage of its allocated memory, consider allocating more resources.',
+              summary: 'OpenStack node is using a large percentage of its allocated memory, consider allocating more resources.',
               description: |||
-                OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated memory,
+                OpenStack node {{ $labels.%(nodeLabel)s }} is using {{ printf "%%.0f" $value }} percent of its allocated memory,
                 which is above the threshold of %(alertsCriticalPlacementHighMemoryUsage)s percent.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              ||| % this.config { nodeLabel: this.config.nodeLabel },
             },
           },
           {
             alert: 'OpenStackPlacementHighVCPUUsageWarning',
             expr: |||
-              100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
+              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
-              (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
+              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}
+              *
+              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
               > %(alertsWarningPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -117,20 +123,22 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'OpenStack is using a significant percentage of its allocated vCPU.',
+              summary: 'OpenStack node is using a significant percentage of its allocated vCPU.',
               description: |||
-                OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
+                OpenStack node {{ $labels.%(nodeLabel)s }} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
                 which is above the threshold of %(alertsWarningPlacementHighVCPUUsage)s percent.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              ||| % this.config { nodeLabel: this.config.nodeLabel },
             },
           },
           {
             alert: 'OpenStackPlacementHighVCPUUsageCritical',
 
             expr: |||
-              100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
+              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
-              (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
+              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}
+              *
+              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
               > %(alertsCriticalPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -139,11 +147,11 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'OpenStack is using a large percentage of its allocated vCPU, consider allocating more resources.',
+              summary: 'OpenStack node is using a large percentage of its allocated vCPU, consider allocating more resources.',
               description: |||
-                OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
+                OpenStack node {{ $labels.%(nodeLabel)s }} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
                 which is above the threshold of %(alertsCriticalPlacementHighVCPUUsage)s percent.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              ||| % this.config { nodeLabel: this.config.nodeLabel },
             },
           },
           {
@@ -262,6 +270,26 @@
               description: |||
                 Virtual machines on OpenStack {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated virtual CPUs,
                 which is above the threshold of %(alertsWarningNovaHighVMVCPUUsage)s percent.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+            },
+          },
+          {
+            alert: 'OpenStackNovaTooManyVMsNotRunning',
+            expr: |||
+              count by (%(agg)s, hypervisor_hostname, availability_zone) (openstack_nova_server_status{%(filteringSelector)s, status=~"SHUTOFF|ERROR", hypervisor_hostname!=""})/
+              (count by (%(agg)s, hypervisor_hostname, availability_zone) (openstack_nova_server_status{%(filteringSelector)s}) > %(alertsCriticalVMsNotRunningInstanceMin)s) * 100 > %(alertsCriticalVMsNotRunningPercent)s
+            ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
+            'for': '15m',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Too many VMs are in SHUTOFF or ERROR states on the single hypervisor.',
+              description: |||
+                There are too many VMs in `SHUTOFF` or `ERROR` states on the hypervisor {{ $labels.hypervisor_hostname }}: {{ printf "%%.0f" $value }} percent,
+                which is above the threshold of %(alertsCriticalVMsNotRunningPercent)s percent.
+
+                Please check if the hypervisor was rebooted and if instances need to be started manually.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },

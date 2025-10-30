@@ -40,28 +40,32 @@ groups:
         - alert: OpenStackPlacementHighMemoryUsageWarning
           annotations:
             description: |
-                OpenStack {{$labels.instance}} is using {{ printf "%.0f" $value }} percent of its allocated memory,
+                OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated memory,
                 which is above the threshold of 80 percent.
-            summary: OpenStack is using a significant percentage of its allocated memory.
+            summary: OpenStack node is using a significant percentage of its allocated memory.
           expr: |
-            100 * sum by (job,instance) (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="MEMORY_MB"})
+            (100 * (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="MEMORY_MB"})
             /
-            (sum by (job,instance) (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="MEMORY_MB"}) > 0)
+            (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="MEMORY_MB"}
+            *
+            openstack_placement_resource_allocation_ratio{job=~"integrations/openstack", resourcetype="MEMORY_MB"}) > 0)
             > 80
           for: 5m
           keep_firing_for: 5m
           labels:
             severity: warning
-        - alert: OpenStackNovaAgentDown
+        - alert: OpenStackPlacementHighMemoryUsageCritical
           annotations:
             description: |
-                OpenStack {{$labels.instance}} is using {{ printf "%.0f" $value }} percent of its allocated memory,
+                OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated memory,
                 which is above the threshold of 90 percent.
-            summary: OpenStack is using a large percentage of its allocated memory, consider allocating more resources.
+            summary: OpenStack node is using a large percentage of its allocated memory, consider allocating more resources.
           expr: |
-            100 * sum by (job,instance) (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="MEMORY_MB"})
+            (100 * (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="MEMORY_MB"})
             /
-            (sum by (job,instance) (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="MEMORY_MB"}) > 0)
+            (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="MEMORY_MB"}
+            *
+            openstack_placement_resource_allocation_ratio{job=~"integrations/openstack", resourcetype="MEMORY_MB"}) > 0)
             > 90
           for: 5m
           keep_firing_for: 5m
@@ -70,13 +74,15 @@ groups:
         - alert: OpenStackPlacementHighVCPUUsageWarning
           annotations:
             description: |
-                OpenStack {{$labels.instance}} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
+                OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
                 which is above the threshold of 80 percent.
-            summary: OpenStack is using a significant percentage of its allocated vCPU.
+            summary: OpenStack node is using a significant percentage of its allocated vCPU.
           expr: |
-            100 * sum by (job,instance) (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="VCPU"})
+            (100 * (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="VCPU"})
             /
-            (sum by (job,instance) (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="VCPU"}) > 0)
+            (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="VCPU"}
+            *
+            openstack_placement_resource_allocation_ratio{job=~"integrations/openstack", resourcetype="VCPU"}) > 0)
             > 80
           for: 5m
           keep_firing_for: 5m
@@ -85,13 +91,15 @@ groups:
         - alert: OpenStackPlacementHighVCPUUsageCritical
           annotations:
             description: |
-                OpenStack {{$labels.instance}} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
+                OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
                 which is above the threshold of 90 percent.
-            summary: OpenStack is using a large percentage of its allocated vCPU, consider allocating more resources.
+            summary: OpenStack node is using a large percentage of its allocated vCPU, consider allocating more resources.
           expr: |
-            100 * sum by (job,instance) (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="VCPU"})
+            (100 * (openstack_placement_resource_usage{job=~"integrations/openstack", resourcetype="VCPU"})
             /
-            (sum by (job,instance) (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="VCPU"}) > 0)
+            (openstack_placement_resource_total{job=~"integrations/openstack", resourcetype="VCPU"}
+            *
+            openstack_placement_resource_allocation_ratio{job=~"integrations/openstack", resourcetype="VCPU"}) > 0)
             > 90
           for: 5m
           keep_firing_for: 5m
@@ -163,6 +171,20 @@ groups:
           for: 5m
           labels:
             severity: warning
+        - alert: OpenStackNovaTooManyVMsNotRunning
+          annotations:
+            description: |
+                There are too many VMs in `SHUTOFF` or `ERROR` states on the hypervisor {{ $labels.hypervisor_hostname }}: {{ printf "%.0f" $value }} percent,
+                which is above the threshold of 75 percent.
+
+                Please check if the hypervisor was rebooted and if instances need to be started manually.
+            summary: Too many VMs are in SHUTOFF or ERROR states on the single hypervisor.
+          expr: |
+            count by (job,instance, hypervisor_hostname, availability_zone) (openstack_nova_server_status{job=~"integrations/openstack", status=~"SHUTOFF|ERROR", hypervisor_hostname!=""})/
+            (count by (job,instance, hypervisor_hostname, availability_zone) (openstack_nova_server_status{job=~"integrations/openstack"}) > 10) * 100 > 75
+          for: 15m
+          labels:
+            severity: critical
     - name: openstack-neutron-alertsopenstack
       rules:
         - alert: OpenStackNeutronIsDown
