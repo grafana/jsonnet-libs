@@ -1,0 +1,673 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "Overview of F5 BIG-IP cluster health and top metrics.",
+      "links": [
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP logs",
+            "type": "link",
+            "url": "/d/f5-bigip-logs"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP node overview",
+            "type": "link",
+            "url": "/d/f5-bigip-node-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "f5-bigip-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP pool overview",
+            "type": "link",
+            "url": "/d/f5-bigip-pool-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP virtual server overview",
+            "type": "link",
+            "url": "/d/f5-bigip-virtual-server-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The percentage of nodes available.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 95
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 96
+                        },
+                        {
+                           "color": "green",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by(partition, instance, job) (bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})  / clamp_min(count by(partition, instance, job) (bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}),1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Node availability percentage"
+               }
+            ],
+            "title": "Node availability",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The percentage of pools available.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 95
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 96
+                        },
+                        {
+                           "color": "green",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 8,
+               "y": 1
+            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by(partition, instance, job) (bigip_pool_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}) / clamp_min(count by(partition, instance, job)  (bigip_pool_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}),1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Pool availability percentage"
+               }
+            ],
+            "title": "Pool availability",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The percentage of virtual servers available.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 95
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 96
+                        },
+                        {
+                           "color": "green",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "id": 4,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by(partition, instance, job) (bigip_vs_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}) / clamp_min(count by(partition, instance, job) (bigip_vs_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}),1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Virtual server availability percentage"
+               }
+            ],
+            "title": "Virtual server availability",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Nodes with the highest number of active serverside connections.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 0,
+               "y": 6
+            },
+            "id": 5,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, bigip_node_serverside_cur_conns{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Top active serverside nodes"
+               }
+            ],
+            "title": "Top active serverside nodes",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Nodes with the highest outbound traffic.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 12,
+               "y": 6
+            },
+            "id": 6,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, increase(bigip_node_serverside_bytes_out{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Top outbound traffic nodes"
+               }
+            ],
+            "title": "Top outbound traffic nodes / $__interval",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Pools with the highest number of active members.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 0,
+               "y": 11
+            },
+            "id": 7,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, bigip_pool_active_member_cnt{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pool}} - {{instance}}",
+                  "refId": "Top active members in pools"
+               }
+            ],
+            "title": "Top active members in pools",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Pools with the highest number of requests.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 8,
+               "y": 11
+            },
+            "id": 8,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, increase(bigip_pool_tot_requests{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{pool}} - {{instance}}",
+                  "refId": "Top requested pools"
+               }
+            ],
+            "title": "Top requested pools / $__interval",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Pools with the highest connection queue depth.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 8,
+               "x": 16,
+               "y": 11
+            },
+            "id": 9,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, bigip_pool_connq_depth{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pool}} - {{instance}}",
+                  "refId": "Top queue depth"
+               }
+            ],
+            "title": "Top queue depth pools",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Virtual servers with the highest number of current clientside connections.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 0,
+               "y": 16
+            },
+            "id": 10,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, bigip_vs_clientside_cur_conns{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Top utilized virtual servers"
+               }
+            ],
+            "title": "Top utilized virtual servers",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Virtual servers with the highest mean connection duration.",
+            "fieldConfig": {
+               "defaults": {
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "id": 11,
+            "options": {
+               "displayMode": "gradient",
+               "orientation": "horizontal",
+               "showUnfilled": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk($k, bigip_vs_cs_mean_conn_dur{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Top latency virtual servers"
+               }
+            ],
+            "title": "Top latency virtual servers",
+            "type": "bargauge"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "f5-bigip-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "5",
+                  "value": "5"
+               },
+               "label": "Top node count",
+               "name": "k",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "5",
+                     "value": "5"
+                  },
+                  {
+                     "selected": false,
+                     "text": "10",
+                     "value": "10"
+                  },
+                  {
+                     "selected": false,
+                     "text": "20",
+                     "value": "20"
+                  },
+                  {
+                     "selected": false,
+                     "text": "50",
+                     "value": "50"
+                  }
+               ],
+               "query": "5 : 5,10 : 10,20 : 20,50 : 50",
+               "type": "custom"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "BIG-IP partition",
+               "multi": true,
+               "name": "bigip_partition",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\", partition=~\"$bigip_partition\"}, partition)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "F5 BIG-IP cluster overview",
+      "uid": "f5-bigip-cluster-overview"
+   }

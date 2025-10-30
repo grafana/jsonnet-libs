@@ -1,0 +1,657 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "Detailed view of F5 BIG-IP virtual server metrics and status.",
+      "links": [
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP cluster overview",
+            "type": "link",
+            "url": "/d/f5-bigip-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP logs",
+            "type": "link",
+            "url": "/d/f5-bigip-logs"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP node overview",
+            "type": "link",
+            "url": "/d/f5-bigip-node-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "f5-bigip-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "F5 BIG-IP pool overview",
+            "type": "link",
+            "url": "/d/f5-bigip-pool-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Status",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The availability status of the virtual server.",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Unavailable"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Available"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ]
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "__name__"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "partition"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Instance"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "virtual_server"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Virtual Server"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  bigip_vs_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Virtual server availability status"
+               }
+            ],
+            "title": "Availability status",
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 10
+            },
+            "id": 3,
+            "panels": [ ],
+            "title": "Clientside Metrics",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of current clientside connections on the virtual server.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 11
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  bigip_vs_clientside_cur_conns{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Clientside current connections"
+               }
+            ],
+            "title": "Clientside current connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of requests made to the virtual server.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 11
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  rate(bigip_vs_tot_requests{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Total requests"
+               }
+            ],
+            "title": "Requests / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of bytes received on the clientside.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 19
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  rate(bigip_vs_clientside_bytes_in{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Clientside bytes in"
+               }
+            ],
+            "title": "Clientside bytes in / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of bytes sent on the clientside.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 19
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  rate(bigip_vs_clientside_bytes_out{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Clientside bytes out"
+               }
+            ],
+            "title": "Clientside bytes out / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The mean connection duration on the virtual server.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 27
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  bigip_vs_cs_mean_conn_dur{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Mean connection duration"
+               }
+            ],
+            "title": "Mean connection duration",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 35
+            },
+            "id": 9,
+            "panels": [ ],
+            "title": "Ephemeral Metrics",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of current ephemeral connections on the virtual server.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 36
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  bigip_vs_ephemeral_cur_conns{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Ephemeral current connections"
+               }
+            ],
+            "title": "Ephemeral current connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of ephemeral bytes received.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 36
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  rate(bigip_vs_ephemeral_bytes_in{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Ephemeral bytes in"
+               }
+            ],
+            "title": "Ephemeral bytes in / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of ephemeral bytes sent.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 44
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  rate(bigip_vs_ephemeral_bytes_out{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\", partition=~\"$bigip_partition\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{virtual_server}} - {{instance}}",
+                  "refId": "Ephemeral bytes out"
+               }
+            ],
+            "title": "Ephemeral bytes out / $__interval",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "f5-bigip-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "BIG-IP virtual server",
+               "multi": true,
+               "name": "bigip_virtual_server",
+               "query": "label_values(bigip_vs_status_availability_state{job=~\"$job\", instance=~\"$instance\"}, virtual_server)",
+               "refresh": 2,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "BIG-IP partition",
+               "multi": true,
+               "name": "bigip_partition",
+               "query": "label_values(bigip_vs_status_availability_state{job=~\"$job\", instance=~\"$instance\", virtual_server=~\"$bigip_virtual_server\"}, partition)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "F5 BIG-IP virtual server overview",
+      "uid": "f5-bigip-virtual-server-overview"
+   }
