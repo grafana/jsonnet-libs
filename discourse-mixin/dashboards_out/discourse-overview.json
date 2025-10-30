@@ -1,27 +1,15 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "editable": false,
-      "gnetId": null,
+      "description": "Overview of Discourse application performance and traffic.",
       "graphTooltip": 1,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "discourse-mixin"
-            ],
-            "targetBlank": false,
-            "title": "Other discourse dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "Discourse jobs",
+            "type": "link",
+            "url": "/d/discourse-jobs"
          }
       ],
       "panels": [
@@ -29,71 +17,25 @@
             "collapsed": false,
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
                "y": 0
             },
-            "id": 2,
+            "id": 1,
+            "panels": [ ],
             "title": "Overview",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Rate of HTTP traffic over time for the entire application. Grouped by response code.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -101,28 +43,19 @@
                "x": 0,
                "y": 1
             },
-            "id": 3,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(rate(discourse_http_requests{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])) by (status)",
+                  "expr": "sum by (job,status) (\n  rate(discourse_http_requests{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{status}}"
+                  "instant": false,
+                  "legendFormat": "{{status}}",
+                  "refId": "HTTP requests"
                }
             ],
             "title": "Traffic by Response Code",
@@ -130,61 +63,14 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Active web requests for the entire application",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -192,28 +78,19 @@
                "x": 12,
                "y": 1
             },
-            "id": 4,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "discourse_active_app_reqs{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "discourse_active_app_reqs{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Active requests"
                }
             ],
             "title": "Active Requests",
@@ -221,61 +98,14 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Queued web requests for the entire application.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -283,28 +113,19 @@
                "x": 0,
                "y": 7
             },
-            "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 4,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "discourse_queued_app_reqs{instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "discourse_queued_app_reqs{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Queued requests"
                }
             ],
             "title": "Queued Requests",
@@ -312,44 +133,12 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Rate of pageviews for the entire application. Grouped by type and service.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
                   "mappings": [
                      {
                         "options": {
@@ -361,22 +150,8 @@
                         "type": "special"
                      }
                   ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "views/sec"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -384,28 +159,19 @@
                "x": 12,
                "y": 7
             },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 5,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(discourse_page_views{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(discourse_page_views{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Page views"
                }
             ],
             "title": "Page Views",
@@ -415,100 +181,45 @@
             "collapsed": false,
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 12
+               "y": 13
             },
-            "id": 7,
+            "id": 6,
+            "panels": [ ],
             "title": "Latency",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The median amount of time for “latest” page requests for the selected site.",
+            "description": "The median amount of time for \"latest\" page requests for the selected site.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 13
+               "y": 14
             },
-            "id": 8,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 7,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(discourse_http_duration_seconds{quantile=\"0.5\",action=\"latest\",instance=~\"$instance\",job=~\"$job\"}) by (controller)",
+                  "expr": "sum by (job,controller) (\n  discourse_http_duration_seconds{quantile=\"0.5\",action=\"latest\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{controller}}"
+                  "instant": false,
+                  "legendFormat": "{{controller}}",
+                  "refId": "Latest median request time"
                }
             ],
             "title": "Latest Median Request Time",
@@ -516,90 +227,34 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The median amount of time for “topics show” requests for the selected site.",
+            "description": "The median amount of time for \"topics show\" requests for the selected site.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 13
+               "y": 14
             },
-            "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 8,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(discourse_http_duration_seconds{quantile=\"0.5\",controller=\"topics\",instance=~\"$instance\",job=~\"$job\"}) by (controller)",
+                  "expr": "sum by (job,controller) (\n  discourse_http_duration_seconds{quantile=\"0.5\",controller=\"topics\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{controller}}"
+                  "instant": false,
+                  "legendFormat": "{{controller}}",
+                  "refId": "Topic median request time"
                }
             ],
             "title": "Topic Show Median Request Time",
@@ -607,90 +262,34 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The 99th percentile amount of time for “latest” page requests for the selected site.",
+            "description": "The 99th percentile amount of time for \"latest\" page requests for the selected site.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 20
             },
-            "id": 10,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 9,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(discourse_http_duration_seconds{quantile=\"0.99\",action=\"latest\",instance=~\"$instance\",job=~\"$job\"}) by (controller)",
+                  "expr": "sum by (job,controller) (\n  discourse_http_duration_seconds{quantile=\"0.99\",action=\"latest\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{controller}}"
+                  "instant": false,
+                  "legendFormat": "{{controller}}",
+                  "refId": "Latest 99th percentile request time"
                }
             ],
             "title": "Latest 99th percentile Request Time",
@@ -698,90 +297,34 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The 99th percentile amount of time for “topics show” requests for the selected site.",
+            "description": "The 99th percentile amount of time for \"topics show\" requests for the selected site.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 20
             },
-            "id": 11,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 10,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "discourse_http_duration_seconds{quantile=\"0.99\",controller=\"topics\",instance=~\"$instance\",job=~\"$job\"}",
+                  "expr": "sum by (job,controller) (\n  discourse_http_duration_seconds{quantile=\"0.99\",controller=\"topics\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{controller}}"
+                  "instant": false,
+                  "legendFormat": "{{controller}}",
+                  "refId": "Topic 99th percentile request time"
                }
             ],
             "title": "Topic Show 99th percentile Request Time",
@@ -789,67 +332,48 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "discourse-mixin"
       ],
       "templating": {
          "list": [
             {
-               "hide": 0,
                "label": "Data source",
-               "name": "prometheus_datasource",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": {
-                  "text": "",
-                  "value": ""
-               },
-               "datasource": "$prometheus_datasource",
-               "hide": 0,
-               "includeAll": true,
-               "label": "instance",
-               "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(discourse_page_views{}, instance)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(discourse_page_views{}, job)",
+               "query": "label_values(discourse_page_views{job=~\"$job\", instance=~\"$instance\"}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(discourse_page_views{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             }
          ]
       },
@@ -857,33 +381,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "Discourse Overview",
-      "uid": "discourse-overview",
-      "version": 0
+      "title": "Discourse overview",
+      "uid": "discourse-overview"
    }

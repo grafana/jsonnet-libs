@@ -1,33 +1,35 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "editable": false,
-      "gnetId": null,
+      "description": "Discourse job processing, workers, and memory usage.",
       "graphTooltip": 1,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "discourse-mixin"
-            ],
-            "targetBlank": false,
-            "title": "Other Discourse dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "Discourse overview",
+            "type": "link",
+            "url": "/d/discourse-overview"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Job Statistics",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Current number of Sidekiq Workers.",
             "fieldConfig": {
@@ -46,60 +48,37 @@
                         "type": "special"
                      }
                   ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 5,
                "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "links": [ ],
-            "maxDataPoints": 100,
             "options": {
-               "colorMode": "none",
                "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "textMode": "auto"
             },
-            "pluginVersion": "9.1.8",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "count(discourse_rss{type=\"sidekiq\",instance=~\"$instance\",job=~\"$job\"})",
+                  "expr": "count(discourse_rss{type=\"sidekiq\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
+                  "instant": false,
                   "legendFormat": "",
-                  "range": true,
-                  "refId": "A",
-                  "step": 40,
-                  "target": ""
+                  "refId": "Sidekiq worker count"
                }
             ],
             "title": "Sidekiq Workers",
@@ -107,7 +86,8 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Current number of Web Workers.",
             "fieldConfig": {
@@ -126,60 +106,37 @@
                         "type": "special"
                      }
                   ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 5,
                "w": 8,
                "x": 8,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "links": [ ],
-            "maxDataPoints": 100,
             "options": {
-               "colorMode": "none",
                "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "textMode": "auto"
             },
-            "pluginVersion": "9.1.8",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "count(discourse_rss{type='web',instance=~\"$instance\",job=~\"$job\"})",
+                  "expr": "count(discourse_rss{type=\"web\",job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
+                  "instant": false,
                   "legendFormat": "",
-                  "range": true,
-                  "refId": "A",
-                  "step": 40,
-                  "target": ""
+                  "refId": "Web worker count"
                }
             ],
             "title": "Web Workers",
@@ -187,7 +144,8 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Current number of jobs in Sidekiq queue.",
             "fieldConfig": {
@@ -206,149 +164,80 @@
                         "type": "special"
                      }
                   ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 5,
                "w": 8,
                "x": 16,
-               "y": 0
+               "y": 1
             },
             "id": 4,
-            "links": [ ],
-            "maxDataPoints": 100,
             "options": {
-               "colorMode": "none",
                "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "textMode": "auto"
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "max(discourse_sidekiq_jobs_enqueued{instance=~\"$instance\",job=~\"$job\"})",
+                  "expr": "max by (job) (\n  discourse_sidekiq_jobs_enqueued{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "",
-                  "range": true,
-                  "refId": "A",
-                  "step": 40,
-                  "target": ""
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Sidekiq jobs enqueued"
                }
             ],
             "title": "Sidekiq Queued",
             "type": "stat"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of scheduled jobs ran over an interval.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 6,
-               "w": 12,
+               "h": 1,
+               "w": 0,
                "x": 0,
                "y": 6
             },
             "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
+            "panels": [ ],
+            "title": "Job Counts",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
+            "description": "The number of scheduled jobs ran over an interval.",
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 7
+            },
+            "id": 6,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(discourse_scheduled_job_count{instance=~\"$instance\", job=~\"$job\"}[$__rate_interval])",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_scheduled_job_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{job_name}}"
+                  "instant": false,
+                  "legendFormat": "{{job_name}}",
+                  "refId": "Scheduled job count"
                }
             ],
             "title": "Scheduled Jobs",
@@ -356,182 +245,90 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The amount of sidekiq jobs ran over an interval.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 7
             },
-            "id": 6,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 7,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(discourse_sidekiq_job_count{instance=~\"$instance\", job=~\"$job\"}[$__rate_interval])",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_sidekiq_job_count{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{job_name}}"
+                  "instant": false,
+                  "legendFormat": "{{job_name}}",
+                  "refId": "Sidekiq job count"
                }
             ],
             "title": "Sidekiq Jobs",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 13
+            },
+            "id": 8,
+            "panels": [ ],
+            "title": "Job Duration",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Time spent in scheduled jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 12
+               "y": 14
             },
-            "id": 7,
-            "links": [ ],
+            "id": 9,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.1.8",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(rate(discourse_scheduled_job_duration_seconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])) by (job_name)",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_scheduled_job_duration_seconds{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{job_name}}"
+                  "instant": false,
+                  "legendFormat": "{{job_name}}",
+                  "refId": "Scheduled job duration"
                }
             ],
             "title": "Scheduled Job Duration",
@@ -539,183 +336,95 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Time spent in Sidekiq jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 12
+               "y": 14
             },
-            "id": 8,
-            "links": [ ],
+            "id": 10,
             "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.1.8",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(rate(discourse_sidekiq_job_duration_seconds{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])) by (job_name)",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_sidekiq_job_duration_seconds{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{job_name}}"
+                  "instant": false,
+                  "legendFormat": "{{job_name}}",
+                  "refId": "Sidekiq job duration"
                }
             ],
             "title": "Sidekiq Job Duration",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 20
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "Memory",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Total RSS Memory used by process. Broken up by pid.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 21
             },
-            "id": 9,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 12,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(discourse_rss{instance=~\"$instance\",job=~\"$job\"}) by (pid)",
+                  "expr": "sum by (job,pid) (\n  discourse_rss{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "pid: {{pid}}"
+                  "instant": false,
+                  "legendFormat": "pid: {{pid}}",
+                  "refId": "RSS memory"
                }
             ],
             "title": "Used RSS Memory",
@@ -723,90 +432,34 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Current heap size of V8 engine. Broken up by process type",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 21
             },
-            "id": 10,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
+            "id": 13,
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum(discourse_v8_used_heap_size{instance=~\"$instance\",job=~\"$job\"}) by (type)",
+                  "expr": "sum by (job,type) (\n  discourse_v8_used_heap_size{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{type}}"
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "V8 heap size"
                }
             ],
             "title": "V8 Heap Size",
@@ -814,67 +467,48 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "discourse-mixin"
       ],
       "templating": {
          "list": [
             {
-               "hide": 0,
                "label": "Data source",
-               "name": "prometheus_datasource",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": {
-                  "text": "",
-                  "value": ""
-               },
-               "datasource": "$prometheus_datasource",
-               "hide": 0,
-               "includeAll": true,
-               "label": "instance",
-               "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(discourse_page_views, instance)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(discourse_page_views{}, job)",
+               "query": "label_values(discourse_page_views{job=~\"$job\", instance=~\"$instance\"}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(discourse_page_views{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             }
          ]
       },
@@ -882,33 +516,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "Discourse Jobs Processing",
-      "uid": "discourse-jobs",
-      "version": 0
+      "title": "Discourse jobs processing",
+      "uid": "discourse-jobs"
    }
