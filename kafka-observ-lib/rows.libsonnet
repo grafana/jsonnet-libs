@@ -10,7 +10,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.cluster.activeControllers { gridPos+: { w: 3, h: 4 } },
           panels.cluster.brokersCount { gridPos+: { w: 3, h: 4 } },
           panels.replicaManager.uncleanLeaderElectionStat { gridPos+: { w: 3, h: 4 } },
-          panels.replicaManager.preferredReplicaInbalanceStat { gridPos+: { w: 3, h: 4 } },
+          panels.replicaManager.preferredReplicaImbalanceStat { gridPos+: { w: 3, h: 4 } },
           panels.cluster.clusterBytesBothPerSec { gridPos+: { w: 6, h: 8 } },
           panels.cluster.clusterMessagesPerSec { gridPos+: { w: 6, h: 8 } },
           //next row
@@ -19,7 +19,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.replicaManager.underReplicatedPartitionsStat { gridPos+: { w: 3, h: 4 } },
           panels.replicaManager.underMinISRPartitionsStat { gridPos+: { w: 3, h: 4 } },
           // status rows
-          panels.cluster.clusterRoles { gridPos+: { w: 24, h: 7 } },
+          panels.cluster.clusterRoles { gridPos+: { w: 24, h: 10 } },
         ]
       ),
     throughput:
