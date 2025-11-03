@@ -110,7 +110,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum(count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Total number of events",
@@ -190,7 +190,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(rate({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum(rate({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Request rate",
@@ -215,7 +215,6 @@
             "mode": "continuous-BlPu"
           },
           "mappings": [],
-          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -262,7 +261,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "count(count by(geo_country_code) (count_over_time({service_name=~\"$service_name\"} [$__auto])))",
+          "expr": "count(count by(geo_country_code) (count_over_time({service_name=~\"$service_name\"} [$__auto]))) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Unique countries",
@@ -334,7 +333,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"info\" [$__auto]))",
+          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"info\" [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "INFO logs",
@@ -360,7 +359,6 @@
             "mode": "shades"
           },
           "mappings": [],
-          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -407,7 +405,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"warn\" [$__auto]))",
+          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"warn\" [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "WARN logs",
@@ -433,7 +431,6 @@
             "mode": "shades"
           },
           "mappings": [],
-          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -480,7 +477,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"error\" [$__auto]))",
+          "expr": "sum(count_over_time({service_name=~\"$service_name\"} | detected_level=\"error\" [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Error logs",
@@ -581,7 +578,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(url_path) (rate({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(url_path) (rate({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{url_path}}",
@@ -663,7 +660,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(url_path) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(url_path) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{url_path}}",
@@ -764,7 +761,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(http_request_method) (rate({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(http_request_method) (rate({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{http_request_method}}",
@@ -925,7 +922,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(geo_country_code) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(geo_country_code) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{geo_country_code}}",
@@ -943,7 +940,7 @@
         "type": "loki",
         "uid": "${logsDatasource}"
       },
-      "description": "Requests by Operating System",
+      "description": "Requests by OS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1002,7 +999,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(user_agent_os_name) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(user_agent_os_name) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{user_agent_device_vendor}}",
@@ -1020,7 +1017,7 @@
         "type": "loki",
         "uid": "${logsDatasource}"
       },
-      "description": "Distribution of requests by browser",
+      "description": "Browser distribution of requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1081,7 +1078,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(user_agent_browser_name) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(user_agent_browser_name) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{user_agent_browser_name}}",
@@ -1158,7 +1155,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(cloudflare_colo) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(cloudflare_colo) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{cloudflare_colo}}",
@@ -1191,7 +1188,8 @@
           },
           "mappings": [],
           "unit": "short"
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -1234,7 +1232,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(http_request_method) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by(http_request_method) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{http_request_method}}",
@@ -1398,7 +1396,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (detected_level) (count_over_time({service_name=~\"$service_name\"} [$__auto]))",
+          "expr": "sum by (detected_level) (count_over_time({service_name=~\"$service_name\"} [$__auto])) or vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{detected_level}}",
@@ -1577,7 +1575,7 @@
         ]
       },
       "gridPos": {
-        "h": 18,
+        "h": 19,
         "w": 12,
         "x": 0,
         "y": 46
@@ -1639,7 +1637,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 12,
         "x": 12,
         "y": 46
@@ -1651,7 +1649,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "> To View Traces:\n>  1. Click the **Trace ID** on the left table .\n>  2. Click **Traces link**.\n>  1. Refresh the dashboard.",
+        "content": "> To View Traces:\n>  1. Click the **Trace ID** on the left table .\n>  2. Click **Traces link**.\n>  1. Refresh the dashboard. \n\n> If no Trace ID is selected, the panel below may show an error",
         "mode": "markdown"
       },
       "pluginVersion": "12.3.0-18686767985",
@@ -1663,7 +1661,7 @@
         "type": "tempo",
         "uid": "${traceDatasource}"
       },
-      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information, timing, and request flow through your services.",
+      "description": "This panel displays the selected trace visualization. Use the trace ID variable or click on traces in the table above to view detailed span information.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1672,7 +1670,7 @@
         "h": 15,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 50
       },
       "id": 6,
       "options": {
@@ -1718,10 +1716,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "text": "grafanacloud-cloudflareworkers-logs",
-          "value": "grafanacloud-logs"
-        },
         "label": "Logs data source",
         "name": "logsDatasource",
         "options": [],
@@ -1731,10 +1725,6 @@
         "type": "datasource"
       },
       {
-        "current": {
-          "text": "grafanacloud-cloudflareworkers-traces",
-          "value": "grafanacloud-traces"
-        },
         "label": "Trace data source",
         "name": "traceDatasource",
         "options": [],
@@ -1744,11 +1734,10 @@
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
           "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "value": "$__all"
         },
         "datasource": {
           "type": "loki",
@@ -1772,10 +1761,6 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "83d4d86f85b17b85086fac00e0cd90ec",
-          "value": "83d4d86f85b17b85086fac00e0cd90ec"
-        },
         "label": "Trace ID",
         "name": "traceId",
         "options": [],
@@ -1785,12 +1770,11 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Cloudflare Workers",
-  "uid": "is55kkp",
-  "version": 11
+  "uid": "is55kkp"
 }
