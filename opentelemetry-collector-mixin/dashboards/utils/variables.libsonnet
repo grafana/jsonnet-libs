@@ -8,7 +8,7 @@ commonlib.variables.new(
   varMetric='otelcol_process_uptime',
   enableLokiLogs=false,
   customAllValue='.*',
-  prometheusDatasourceName='datasource',
+  prometheusDatasourceName=cfg._config.datasourceName,
   prometheusDatasourceLabel='Data source',
   adHocEnabled=false,
 )
