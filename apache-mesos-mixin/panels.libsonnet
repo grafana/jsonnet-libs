@@ -36,12 +36,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       diskAvailablePanel:
         commonlib.panels.disk.stat.total.new('Disk available', targets=[signals.master.diskAvailable.asTarget()])
         + g.panel.stat.standardOptions.withUnit('bytes')
-        + g.panel.stat.standardOptions.color.withMode('fixed')
-        + g.panel.stat.standardOptions.color.withFixedColor('light-green')
         + g.panel.stat.panelOptions.withDescription('Disk available in the cluster'),
 
       memoryUtilizationPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Memory utilization',
           targets=[
             signals.master.memoryUtilization.asTarget(),
@@ -51,7 +49,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('Memory utilization in the cluster'),
 
       diskUtilizationPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.disk.timeSeries.usagePercent.new(
           'Disk utilization',
           targets=[
             signals.master.diskUtilization.asTarget(),
@@ -133,7 +131,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Agent panels
       agentMemoryUtilizationPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Agent memory utilization',
           targets=[
             signals.agent.memoryUtilization.asTarget(),
@@ -143,7 +141,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('Memory utilization in the cluster'),
 
       agentDiskUtilizationPanel:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.disk.timeSeries.usagePercent.new(
           'Agent disk utilization',
           targets=[
             signals.agent.diskUtilization.asTarget(),
@@ -151,6 +149,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
         + g.panel.timeSeries.panelOptions.withDescription('The percentage of allocated disk storage in use by the agent.'),
-
     },
 }

@@ -224,7 +224,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-green",
+                     "fixedColor": "text",
                      "mode": "fixed"
                   },
                   "unit": "bytes"
@@ -271,13 +271,19 @@
             "description": "Memory utilization in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
                }
             },
@@ -323,13 +329,19 @@
             "description": "Disk utilization in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
                   "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
                }
             },
@@ -808,13 +820,19 @@
             "description": "Memory utilization in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
                }
             },
@@ -860,13 +878,19 @@
             "description": "The percentage of allocated disk storage in use by the agent.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
                   "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
                }
             },
