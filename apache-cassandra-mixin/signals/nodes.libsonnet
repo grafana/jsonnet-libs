@@ -73,7 +73,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'jvm_gc_collection_count{%(queriesSelector)s, name=~"G1 Young Generation"}',
+            expr: 'jvm_gc_collection_count{%(queriesSelector)s, name="G1 Young Generation"}',
             rangeFunction: 'increase',
           },
         },
