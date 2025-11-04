@@ -133,7 +133,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.heatmap.queryOptions.withTargets([
           signals.overview.writeLatencyHeatmap.asTarget(),
         ])
-        + g.panel.heatmap.standardOptions.withUnit('s')
+        + g.panel.heatmap.options.yAxis.withUnit('s')
         + g.panel.heatmap.panelOptions.withDescription('Local write latency heatmap for this cluster.')
         + g.panel.heatmap.options.withCalculate(true)
         + g.panel.heatmap.options.color.withScheme('Oranges'),
@@ -145,7 +145,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.heatmap.queryOptions.withTargets([
           signals.overview.readLatencyHeatmap.asTarget(),
         ])
-        + g.panel.heatmap.standardOptions.withUnit('s')
+        + g.panel.heatmap.options.yAxis.withUnit('s')
         + g.panel.heatmap.panelOptions.withDescription('Local read latency heatmap for this cluster.')
         + g.panel.heatmap.options.withCalculate(true)
         + g.panel.heatmap.options.color.withScheme('Oranges'),
