@@ -9,12 +9,15 @@ local cfg = import '../config.libsonnet';
   grafanaDashboards+:: {
     'collector.json':
       g.dashboard.new(
-        'OpenTelemetry collector health',
+        cfg._config.grafana.dashboardNamePrefix + 'Operational',
       )
       + g.dashboard.withDescription('A dashboard for monitoring the health of OpenTelemetry Collector instances using their internal metrics.')
       + g.dashboard.graphTooltip.withSharedCrosshair()
-      + g.dashboard.withVariables(variables.multiInstance)
+      + g.dashboard.withEditable(false)
       + g.dashboard.withUid(cfg._config.grafanaDashboardIDs['collector.json'])
+      + g.dashboard.withTimezone(cfg._config.grafana.grafanaTimezone)
+      + g.dashboard.withTags(cfg._config.grafana.dashboardTags)
+      + g.dashboard.withVariables(variables.multiInstance)
       + g.dashboard.withPanels(
         g.util.grid.wrapPanels([
           // Overview row

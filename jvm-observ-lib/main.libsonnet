@@ -15,16 +15,18 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           filteringSelector: this.config.filteringSelector,
           groupLabels: this.config.groupLabels,
           instanceLabels: this.config.instanceLabels,
-          uid: this.config.uid,
+          uid: this.config.uid - '-jvm',
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
           metricsSource:
             []
             + (if std.member(this.config.metricsSource, 'otel') then ['java_otel'] else [])
-            + (if std.member(this.config.metricsSource, 'otel_with_suffixes') then ['java_otel_with_suffixes'] else [])
+            + (if std.member(this.config.metricsSource, 'otel_old') then ['java_otel'] else [])
+            + (if std.member(this.config.metricsSource, 'otel_old_with_suffixes') then ['java_otel_with_suffixes'] else [])
             + (if std.member(this.config.metricsSource, 'prometheus') then ['prometheus'] else [])
             + (if std.member(this.config.metricsSource, 'jmx_exporter') then ['jmx_exporter'] else [])
             + (if std.member(this.config.metricsSource, 'prometheus_old') then ['prometheus'] else [])
+            + (if std.member(this.config.metricsSource, 'java_micrometer_with_suffixes') then ['java_micrometer_with_suffixes'] else [])
             + (if std.member(this.config.metricsSource, 'java_micrometer') then ['java_micrometer'] else []),
         }
       ),

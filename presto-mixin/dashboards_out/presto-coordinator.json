@@ -1,94 +1,97 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Presto logs",
+            "type": "link",
+            "url": "/d/presto-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "presto-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Presto dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto overview",
+            "type": "link",
+            "url": "/d/presto_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto worker",
+            "type": "link",
+            "url": "/d/presto_worker"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
             },
-            "description": "An average gauge of the JVM's non-heap memory usage across coordinators.",
+            "id": 1,
+            "panels": [ ],
+            "title": "Coordinator",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Non-heap memory usage",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
+                           "color": "light-green",
+                           "value": 0
                         },
                         {
                            "color": "#EAB839",
                            "value": 0.69999999999999996
                         },
                         {
-                           "color": "red",
+                           "color": "light-red",
                            "value": 0.80000000000000004
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 6,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-62263",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} / clamp_min((jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} + jvm_nonheap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}),1))",
+                  "expr": "avg (jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Non-heap memory usage"
                }
             ],
             "title": "Non-heap memory usage",
@@ -96,67 +99,50 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "An average gauge of the JVM's heap memory usage across coordinators.",
+            "description": "Heap memory usage",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
+                           "color": "light-green",
+                           "value": 0
                         },
                         {
                            "color": "#EAB839",
                            "value": 0.69999999999999996
                         },
                         {
-                           "color": "red",
+                           "color": "light-red",
                            "value": 0.80000000000000004
                         }
                      ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 6,
                "x": 6,
-               "y": 0
+               "y": 1
             },
             "id": 3,
-            "options": {
-               "minVizHeight": 75,
-               "minVizWidth": 75,
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showThresholdLabels": false,
-               "showThresholdMarkers": true
-            },
-            "pluginVersion": "10.2.0-62263",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} / clamp_min((jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"} + jvm_heap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}),1))",
+                  "expr": "avg (jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Heap memory usage"
                }
             ],
             "title": "Heap memory usage",
@@ -164,97 +150,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of internal and user error failures occurring on the instance.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - internal"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "presto_QueryManager_UserErrorFailures_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - user"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - internal",
+                  "refId": "Error failures internal"
                }
             ],
             "title": "Error failures - one minute count",
@@ -262,63 +202,24 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "A count of completed, running, and started queries.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#C8F2C2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "left",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 12,
                "x": 0,
                "y": 9
@@ -327,42 +228,47 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - completed"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - completed",
+                  "refId": "Query completed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_RunningQueries{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - running"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - running",
+                  "refId": "Query running"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - started"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - started",
+                  "refId": "Query started"
                }
             ],
             "title": "Normal query - one minute count",
@@ -370,63 +276,24 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "A count of failed, abandoned, and canceled queries.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#C8F2C2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "left",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 12,
                "x": 12,
                "y": 9
@@ -435,42 +302,47 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_FailedQueries_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_FailedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - failed"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - failed",
+                  "refId": "Abnormal query failed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_AbandonedQueries_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_AbandonedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - abandoned"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - abandoned",
+                  "refId": "Abnormal query abandoned"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CanceledQueries_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_CanceledQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - canceled"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - canceled",
+                  "refId": "Abnormal query canceled"
                }
             ],
             "title": "Abnormal query - one minute count",
@@ -478,107 +350,73 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate of normally operating queries such as the completed, running, and started queries.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#C8F2C2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "left",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 17
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Rate{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - completed"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - completed",
+                  "refId": "Normal query completed rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_RunningQueries{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - running"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - running",
+                  "refId": "Normal query running rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Rate{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - started"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - started",
+                  "refId": "Normal query started rate"
                }
             ],
             "title": "Normal query - one minute rate",
@@ -586,107 +424,76 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate of abnormal queries such as the failed, abandoned, and canceled queries.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#C8F2C2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "left",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_FailedQueries_TotalCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_FailedQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - failed"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - failed",
+                  "refId": "Abnormal query completed rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_AbandonedQueries_TotalCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_AbandonedQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - abandoned"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - abandoned",
+                  "refId": "Abnormal query abandoned rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_CanceledQueries_TotalCount{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_CanceledQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - canceled"
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - canceled",
+                  "refId": "Abnormal query canceled rate"
                }
             ],
             "title": "Abnormal query - one minute rate",
@@ -694,115 +501,84 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The time it took to run queries over the past one minute period.\n",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 27
+               "y": 25
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P75{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P50{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - p75"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - p50",
+                  "refId": "Query execution time (p50)"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P95{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P75{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - p95"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - p75",
+                  "refId": "Query execution time (p75)"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P99{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P95{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - p99"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - p95",
+                  "refId": "Query execution time (p95)"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P50{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P99{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - p50"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - p99",
+                  "refId": "Query execution time (p99)"
                }
             ],
             "title": "Query execution time - one minute count",
@@ -810,177 +586,103 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "CPU time consumed by Presto's QueryManager for executing queries over one-minute intervals, measured in CPU seconds used.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "stepBefore",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": "s"
-               },
-               "overrides": [ ]
+                  "unit": "ms"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 35
+               "y": 33
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ConsumedCpuTimeSecs_OneMinute_Count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_ConsumedCpuTimeSecs_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} "
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU time consumed"
                }
             ],
-            "title": "CPU time consumed - one minute rate",
+            "title": "CPU time consumed - one minute count",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate at which input data is being read and processed by the CPU.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 35
+               "y": 33
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CpuInputByteRate_OneMinute_Total{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "presto_QueryManager_CpuInputByteRate_OneMinute_Total{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} "
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU input throughput"
                }
             ],
             "title": "CPU input throughput - one minute count",
@@ -988,105 +690,65 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 43
+               "y": 41
             },
             "id": 12,
-            "targets": [ ],
-            "title": "JVM metrics",
+            "panels": [ ],
+            "title": "JVM",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The recent increase in the number of garbage collection events for the JVM.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 44
+               "y": 42
             },
             "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\", name=\"G1 Young Generation\"}[$__interval:])",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} "
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Garbage collector count"
                }
             ],
             "title": "Garbage collection count / $__interval",
@@ -1094,88 +756,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The average duration for each garbage collection operation in the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 44
+               "y": 42
             },
             "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\", name=\"G1 Young Generation\"}",
+                  "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Garbage collection duration"
                }
             ],
             "title": "Garbage collection duration",
@@ -1183,308 +808,212 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The heap and non-heap memory used by the JVM.",
+            "description": "The heap and non-heap memory committed by the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 52
+               "y": 50
             },
             "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - non heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - heap",
+                  "refId": "Heap memory committed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_used{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - non heap",
+                  "refId": "Non-heap memory committed"
                }
             ],
-            "title": "Memory used",
+            "title": "Memory committed",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The heap and non-heap memory committed.",
+            "description": "The heap and non-heap memory used by the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisBorderShow": false,
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 15,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 52
+               "y": 50
             },
             "id": 16,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - heap",
+                  "refId": "Heap memory usage"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_committed{job=~\"$job\", instance=~\"$instance\", presto_cluster=~\"$presto_cluster\"}",
+                  "expr": "jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - non heap"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - non heap",
+                  "refId": "Non-heap memory usage"
                }
             ],
-            "title": "Memory committed",
+            "title": "Memory used",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "presto-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(presto_HeartbeatDetector_ActiveCount,job)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(presto_HeartbeatDetector_ActiveCount{job=~\"$job\"}, cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\"}, cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": ".*",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Presto cluster",
-               "multi": false,
+               "multi": true,
                "name": "presto_cluster",
-               "options": [ ],
-               "query": "label_values(presto_HeartbeatDetector_ActiveCount{job=~\"$job\"},presto_cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(presto_HeartbeatDetector_ActiveCount{job=~\"$job\", presto_cluster=~\"$presto_cluster\"},instance)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
                "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -1492,33 +1021,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Presto coordinator",
-      "uid": "presto-coordinator",
-      "version": 0
+      "uid": "presto_coordinator"
    }

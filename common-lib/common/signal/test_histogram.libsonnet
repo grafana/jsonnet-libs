@@ -34,7 +34,7 @@ local m1 = signal.init(
       },
       testExpression: {
         actual: raw.expr,
-        expect: 'avg by (job) (\n  histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job))\n)',
+        expect: 'histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job))',
       },
     }),
   },
@@ -92,11 +92,11 @@ local m1 = signal.init(
     testResult: test.suite({
       testDefaultQuantile: {
         actual: customHistogram.asTarget().expr,
-        expect: 'avg by (job,handler) (\n  histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,handler))\n)',
+        expect: 'histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,handler))',
       },
       testCustomQuantile: {
         actual: customHistogram.withQuantile(quantile=0.50).asTarget().expr,
-        expect: 'avg by (job,handler) (\n  histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,handler))\n)',
+        expect: 'histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,handler))',
       },
     }),
   },
