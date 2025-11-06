@@ -62,7 +62,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighMemoryUsageWarning',
+            alert: 'OpenStackPlacementHighMemoryUsage',
             expr: |||
               (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
@@ -85,7 +85,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighMemoryUsageCritical',
+            alert: 'OpenStackPlacementHighMemoryUsage',
             expr: |||
               (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
@@ -108,7 +108,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighVCPUUsageWarning',
+            alert: 'OpenStackPlacementHighVCPUUsage',
             expr: |||
               (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
@@ -131,8 +131,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighVCPUUsageCritical',
-
+            alert: 'OpenStackPlacementHighVCPUUsage',
             expr: |||
               (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
@@ -155,7 +154,7 @@
             },
           },
           {
-            alert: 'OpenStackNeutronHighIPsUsageWarning',
+            alert: 'OpenStackNeutronHighIPsUsage',
             expr: |||
               100 * 
               sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 
@@ -179,7 +178,7 @@
             },
           },
           {
-            alert: 'OpenStackNeutronHighIPsUsageCritical',
+            alert: 'OpenStackNeutronHighIPsUsage',
             expr: |||
               100 * 
               sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 

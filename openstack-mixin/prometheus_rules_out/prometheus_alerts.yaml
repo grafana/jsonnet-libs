@@ -37,7 +37,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: OpenStackPlacementHighMemoryUsageWarning
+        - alert: OpenStackPlacementHighMemoryUsage
           annotations:
             description: |
                 OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated memory,
@@ -54,7 +54,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: warning
-        - alert: OpenStackPlacementHighMemoryUsageCritical
+        - alert: OpenStackPlacementHighMemoryUsage
           annotations:
             description: |
                 OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated memory,
@@ -71,7 +71,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: critical
-        - alert: OpenStackPlacementHighVCPUUsageWarning
+        - alert: OpenStackPlacementHighVCPUUsage
           annotations:
             description: |
                 OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
@@ -88,7 +88,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: warning
-        - alert: OpenStackPlacementHighVCPUUsageCritical
+        - alert: OpenStackPlacementHighVCPUUsage
           annotations:
             description: |
                 OpenStack node {{ $labels.hostname }} is using {{ printf "%.0f" $value }} percent of its allocated vCPU,
@@ -105,7 +105,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: critical
-        - alert: OpenStackNeutronHighIPsUsageWarning
+        - alert: OpenStackNeutronHighIPsUsage
           annotations:
             description: |
                 Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.instance}},
@@ -117,7 +117,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: warning
-        - alert: OpenStackNeutronHighIPsUsageCritical
+        - alert: OpenStackNeutronHighIPsUsage
           annotations:
             description: |
                 Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.instance}},
