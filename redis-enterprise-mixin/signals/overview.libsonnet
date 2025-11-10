@@ -15,7 +15,7 @@ function(this) {
     nodeUp: {
       name: 'Node up',
       nameShort: 'Node up',
-      type: 'raw',
+      type: 'gauge',
       description: 'Up/down status for each node in the cluster',
       unit: 'none',
       sources: {
@@ -29,7 +29,7 @@ function(this) {
     databaseUp: {
       name: 'Database up',
       nameShort: 'Database up',
-      type: 'raw',
+      type: 'gauge',
       description: 'Up/down status for each database in the cluster',
       unit: 'none',
       sources: {
@@ -43,7 +43,7 @@ function(this) {
     shardUp: {
       name: 'Shard up',
       nameShort: 'Shard up',
-      type: 'raw',
+      type: 'gauge',
       description: 'Up/down status for each shard in the cluster',
       unit: 'none',
       sources: {
@@ -128,7 +128,7 @@ function(this) {
     clusterEvictedObjects: {
       name: 'Cluster evicted objects',
       nameShort: 'Evicted objects',
-      type: 'raw',
+      type: 'gauge',
       description: 'Sum of key evictions in the cluster by database',
       unit: 'ops',
       sources: {
@@ -142,7 +142,7 @@ function(this) {
     clusterExpiredObjects: {
       name: 'Cluster expired objects',
       nameShort: 'Expired objects',
-      type: 'raw',
+      type: 'gauge',
       description: 'Sum of key expirations in the cluster by database',
       unit: 'ops',
       sources: {
@@ -157,12 +157,12 @@ function(this) {
     nodeRequests: {
       name: 'Node requests',
       nameShort: 'Requests',
-      type: 'raw',
+      type: 'counter',
       description: 'Endpoint request rate for each node in the cluster',
       unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'rate(node_total_req{%(queriesSelector)s}[$__rate_interval])',
+          expr: 'node_total_req{%(queriesSelector)s}',
           legendCustomTemplate: '{{ redis_cluster }} - node: {{ node }}',
         },
       },
@@ -171,7 +171,7 @@ function(this) {
     nodeAverageLatency: {
       name: 'Node average latency',
       nameShort: 'Avg latency',
-      type: 'raw',
+      type: 'gauge',
       description: 'Average latency for each node in the cluster',
       unit: 's',
       sources: {
@@ -199,7 +199,7 @@ function(this) {
     nodeCPUSystem: {
       name: 'Node CPU system',
       nameShort: 'CPU system',
-      type: 'raw',
+      type: 'gauge',
       description: 'System CPU utilization for each node in the cluster',
       unit: 'percent',
       sources: {
@@ -213,7 +213,7 @@ function(this) {
     nodeCPUUser: {
       name: 'Node CPU user',
       nameShort: 'CPU user',
-      type: 'raw',
+      type: 'gauge',
       description: 'User CPU utilization for each node in the cluster',
       unit: 'percent',
       sources: {

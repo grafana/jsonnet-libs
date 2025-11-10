@@ -16,7 +16,7 @@ function(this) {
     databaseUp: {
       name: 'Database up',
       nameShort: 'Up',
-      type: 'raw',
+      type: 'gauge',
       description: 'Displays up/down status for the selected database',
       unit: 'none',
       sources: {
@@ -29,7 +29,7 @@ function(this) {
     shardUp: {
       name: 'Shard up',
       nameShort: 'Shard up',
-      type: 'raw',
+      type: 'gauge',
       description: 'Displays up/down status for each shard related to the database',
       unit: 'none',
       sources: {
@@ -71,7 +71,7 @@ function(this) {
     databaseWriteRequests: {
       name: 'Database write requests',
       nameShort: 'Write requests',
-      type: 'raw',
+      type: 'gauge',
       description: 'Rate of write requests',
       unit: 'none',
       sources: {

@@ -95,7 +95,7 @@ function(this) {
     nodeCPUSystem: {
       name: 'Node CPU system',
       nameShort: 'CPU system',
-      type: 'raw',
+      type: 'gauge',
       description: 'System CPU utilization for the selected node',
       unit: 'percent',
       sources: {
@@ -109,7 +109,7 @@ function(this) {
     nodeCPUUser: {
       name: 'Node CPU user',
       nameShort: 'CPU user',
-      type: 'raw',
+      type: 'gauge',
       description: 'User CPU utilization for the selected node',
       unit: 'percent',
       sources: {
