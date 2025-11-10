@@ -92,7 +92,7 @@
             },
           },
           {
-            alert: 'RedisEnterpriseDatabaseHighMemoryUtilization',
+            alert: 'RedisEnterpriseHighMemUtilization',
             expr: |||
               sum(bdb_used_memory{%(filteringSelector)s}) by (bdb, redis_cluster) / sum(bdb_memory_limit{%(filteringSelector)s}) by (bdb, redis_cluster) * 100 > %(alertsDatabaseHighMemoryUtilization)s
             ||| % this.config,

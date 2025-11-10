@@ -46,7 +46,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: RedisEnterpriseDatabaseHighMemoryUtilization
+        - alert: RedisEnterpriseHighMemUtilization
           annotations:
             description: The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utilization of ${{ printf "%.0f" $value }}, which exceeds the threshold 80%.
             summary: Node memory utilization is above the configured threshold.

@@ -33,7 +33,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'bdb_up{%(queriesSelector)s}', // intentionall no filtering on the node
+          expr: 'bdb_up{%(queriesSelector)s}',  // intentionall no filtering on the node
           legendCustomTemplate: 'db: {{ bdb }}',
         },
       },
