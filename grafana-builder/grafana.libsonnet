@@ -581,14 +581,6 @@ local utils = import 'mixin-utils/utils.libsonnet';
   // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
   latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
     nullPointMode: 'null as zero',
-    fieldConfig+: {
-      defaults+: {
-        custom+: {
-          fillOpacity: 10,
-        },
-        unit: 'ms',
-      },
-    },
     targets: [
       {
         expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
