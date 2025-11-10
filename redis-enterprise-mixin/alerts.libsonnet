@@ -1,14 +1,14 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    groups: [
       {
         name: 'RedisEnterpriseAlerts',
         rules: [
           {
             alert: 'RedisEnterpriseClusterOutOfMemory',
             expr: |||
-              sum(redis_used_memory) by (redis_cluster, node) / sum(node_available_memory) by (redis_cluster, node) * 100 > %(alertsClusterOutOfMemoryThreshold)s
-            ||| % $._config,
+              sum(redis_used_memory{%(filteringSelector)s}) by (redis_cluster, node) / sum(node_available_memory{%(filteringSelector)s}) by (redis_cluster, node) * 100 > %(alertsClusterOutOfMemoryThreshold)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -19,14 +19,14 @@
                 (
                   'Memory usage is at {{ printf "%%.0f" $value }} percent on the cluster {{$labels.redis_cluster}}, ' +
                   "which is above the configured threshold of %(alertsClusterOutOfMemoryThreshold)s%% of the cluster's available memory"
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseNodeNotResponding',
             expr: |||
-              node_up == 0
-            ||| % $._config,
+              node_up{%(filteringSelector)s} == 0
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -36,14 +36,14 @@
               description:
                 (
                   'The node {{$labels.node}} in {{$labels.redis_cluster}} is offline or unreachable.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseDatabaseNotResponding',
             expr: |||
-              bdb_up == 0
-            ||| % $._config,
+              bdb_up{%(filteringSelector)s} == 0
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -53,14 +53,14 @@
               description:
                 (
                   'The database {{$labels.bdb}} in {{$labels.redis_cluster}} is offline or unreachable.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseShardNotResponding',
             expr: |||
-              redis_up == 0
-            ||| % $._config,
+              redis_up{%(filteringSelector)s} == 0
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -70,14 +70,14 @@
               description:
                 (
                   'The shard {{$labels.redis}} on database {{$labels.bdb}} running on node {{$labels.node}} in the cluster {{$labels.redis_cluster}} is offline or unreachable.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseNodeHighCPUUtilization',
             expr: |||
-              (sum(node_cpu_user) by (node, redis_cluster, job) + sum(node_cpu_system) by (node, redis_cluster, job)) * 100 > %(alertsNodeCPUHighUtilizationThreshold)s
-            ||| % $._config,
+              (sum(node_cpu_user{%(filteringSelector)s}) by (node, redis_cluster, job) + sum(node_cpu_system{%(filteringSelector)s}) by (node, redis_cluster, job)) * 100 > %(alertsNodeCPUHighUtilizationThreshold)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -88,14 +88,14 @@
                 (
                   'The node {{$labels.node}} in cluster {{$labels.redis_cluster}} has a CPU percentage of ${{ printf "%%.0f" $value }}, which exceeds ' +
                   'the threshold %(alertsNodeCPUHighUtilizationThreshold)s%%.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseDatabaseHighMemoryUtilization',
             expr: |||
-              sum(bdb_used_memory) by (bdb, redis_cluster) / sum(bdb_memory_limit) by (bdb, redis_cluster) * 100 > %(alertsDatabaseHighMemoryUtiliation)s
-            ||| % $._config,
+              sum(bdb_used_memory{%(filteringSelector)s}) by (bdb, redis_cluster) / sum(bdb_memory_limit{%(filteringSelector)s}) by (bdb, redis_cluster) * 100 > %(alertsDatabaseHighMemoryUtilization)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -104,16 +104,16 @@
               summary: 'Node memory utilization is above the configured threshold.',
               description:
                 (
-                  'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utiliztaion of ${{ printf "%%.0f" $value }}, which exceeds ' +
-                  'the threshold %(alertsDatabaseHighMemoryUtiliation)s%%.'
-                ) % $._config,
+                  'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utilization of ${{ printf "%%.0f" $value }}, which exceeds ' +
+                  'the threshold %(alertsDatabaseHighMemoryUtilization)s%%.'
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseAverageLatencyIncreasing',
             expr: |||
-              bdb_avg_latency / 1000 > %(alertsDatabaseHighLatencyMs)s
-            ||| % $._config,
+              bdb_avg_latency{%(filteringSelector)s} / 1000 > %(alertsDatabaseHighLatencyMs)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -124,14 +124,14 @@
                 (
                   'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has high latency of ${{ printf "%%.0f" $value }}, which exceeds ' +
                   'the threshold of %(alertsDatabaseHighLatencyMs)s ms.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'RedisEnterpriseKeyEvictionsIncreasing',
             expr: |||
-              bdb_evicted_objects >= %(alertsEvictedObjectsThreshold)s
-            ||| % $._config,
+              bdb_evicted_objects{%(filteringSelector)s} >= %(alertsEvictedObjectsThreshold)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -142,7 +142,7 @@
                 (
                   'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} is evicting ${{ printf "%%.0f" $value }} objects, which exceeds ' +
                   'the threshold of %(alertsEvictedObjectsThreshold)s evicted objects.'
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
