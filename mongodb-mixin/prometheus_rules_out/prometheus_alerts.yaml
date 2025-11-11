@@ -42,7 +42,7 @@ groups:
             severity: warning
         - alert: MongodbCursorsTimeouts
           annotations:
-            description: Too many cursors are timing out on {{ $labels.%(instanceLabel)s }}.
+            description: Too many cursors are timing out on {{ $labels.service_name }}.
             summary: MongoDB cursors timeouts are exceeding the threshold.
           expr: increase(mongodb_mongod_metrics_cursor_timed_out_total{}[1m]) > 100
           for: 2m

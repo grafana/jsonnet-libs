@@ -76,7 +76,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           {
             alert: 'MongodbCursorsTimeouts',
             annotations: {
-              description: 'Too many cursors are timing out on {{ $labels.%(instanceLabel)s }}.',
+              description: 'Too many cursors are timing out on {{ $labels.%(instanceLabel)s }}.' % config,
               summary: 'MongoDB cursors timeouts are exceeding the threshold.',
             },
             expr: 'increase(mongodb_mongod_metrics_cursor_timed_out_total{%(filteringSelector)s}[1m]) > 100' % config,
