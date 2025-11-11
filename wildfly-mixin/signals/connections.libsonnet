@@ -13,8 +13,8 @@ function(this)
     },
     signals: {
       connectionsActive: {
-        name: 'Active Connections',
-        nameShort: 'Active Connections',
+        name: 'Active connections',
+        nameShort: 'Active connections',
         type: 'gauge',
         description: 'Connections to the datasource over time',
         sources: {
@@ -25,8 +25,8 @@ function(this)
         },
       },
       connectionsIdle: {
-        name: 'Idle Connections',
-        nameShort: 'Idle Connections',
+        name: 'Idle connections',
+        nameShort: 'Idle connections',
         type: 'gauge',
         description: 'Idle connections to the datasource over time',
         sources: {

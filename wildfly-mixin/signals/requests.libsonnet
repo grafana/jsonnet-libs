@@ -13,7 +13,7 @@ function(this)
     },
     signals: {
       requestsRate: {
-        name: 'Requests Rate',
+        name: 'Requests rate',
         nameShort: 'Requests',
         type: 'counter',
         description: 'Requests rate over time',

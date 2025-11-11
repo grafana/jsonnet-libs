@@ -13,8 +13,8 @@ function(this)
     },
     signals: {
       activeSessions: {
-        name: 'Active Sessions',
-        nameShort: 'Active Sessions',
+        name: 'Active sessions',
+        nameShort: 'Active sessions',
         type: 'gauge',
         description: 'Number of active sessions to deployment over time',
         sources: {
@@ -25,25 +25,27 @@ function(this)
         },
       },
       expiredSessions: {
-        name: 'Expired Sessions',
-        nameShort: 'Expired Sessions',
-        type: 'raw',
+        name: 'Expired sessions',
+        nameShort: 'Expired sessions',
+        type: 'counter',
         description: 'Number of sessions that have expired for a deployment over time',
         sources: {
           prometheus: {
-            expr: 'increase(wildfly_undertow_expired_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}[$__interval])',
+            expr: 'wildfly_undertow_expired_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{deployment}}',
           },
         },
       },
       rejectedSessions: {
-        name: 'Rejected Sessions',
-        nameShort: 'Rejected Sessions',
-        type: 'raw',
+        name: 'Rejected sessions',
+        nameShort: 'Rejected sessions',
+        type: 'counter',
         description: 'Number of sessions that have been rejected from a deployment over time',
         sources: {
           prometheus: {
-            expr: 'increase(wildfly_undertow_rejected_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}[$__interval])',
+            expr: 'wildfly_undertow_rejected_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{deployment}}',
           },
         },

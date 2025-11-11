@@ -5,11 +5,11 @@ local g = import './g.libsonnet';
   new(this):
     {
       wildflyOverview:
-        link.link.new('Wildfly Overview', '/d/' + this.grafana.dashboards['wildfly-overview.json'].uid)
+        link.link.new('Wildfly overview', '/d/' + this.grafana.dashboards['wildfly-overview.json'].uid)
         + link.link.options.withKeepTime(true),
 
       wildflyDatasource:
-        link.link.new('Wildfly Datasource', '/d/' + this.grafana.dashboards['wildfly-datasource.json'].uid)
+        link.link.new('Wildfly datasource', '/d/' + this.grafana.dashboards['wildfly-datasource.json'].uid)
         + link.link.options.withKeepTime(true),
 
       otherDashboards:
