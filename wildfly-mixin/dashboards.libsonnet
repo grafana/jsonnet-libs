@@ -17,7 +17,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     {
 
       'wildfly-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
@@ -46,7 +46,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period,
         ),
       'wildfly-datasource.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' Datasource')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' datasource')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
@@ -73,7 +73,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     } + if this.config.enableLokiLogs then {
       'wildfly-logs.json':
         logslib.new(
-          this.config.dashboardNamePrefix + ' Logs',
+          this.config.dashboardNamePrefix + ' logs',
           datasourceName=this.grafana.variables.datasources.loki.name,
           datasourceRegex=this.grafana.variables.datasources.loki.regex,
           filterSelector=this.config.filteringSelector,

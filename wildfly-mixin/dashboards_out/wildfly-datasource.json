@@ -23,7 +23,7 @@
          },
          {
             "keepTime": true,
-            "title": "Wildfly Overview",
+            "title": "Wildfly overview",
             "type": "link",
             "url": "/d/wildfly-overview"
          }
@@ -194,13 +194,13 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_transactions_number_of_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval])",
+                  "expr": "increase(wildfly_transactions_number_of_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
-                  "refId": "Created Transactions"
+                  "refId": "Created transactions"
                }
             ],
             "title": "Created transactions",
@@ -250,7 +250,7 @@
                   "instant": false,
                   "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
-                  "refId": "In-flight Transactions"
+                  "refId": "In-flight transactions"
                }
             ],
             "title": "In-flight transactions",
@@ -295,13 +295,13 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_transactions_number_of_aborted_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval])",
+                  "expr": "increase(wildfly_transactions_number_of_aborted_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
-                  "refId": "Aborted Transactions"
+                  "refId": "Aborted transactions"
                }
             ],
             "title": "Aborted transactions",
@@ -393,6 +393,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Wildfly Datasource",
+      "title": "Wildfly datasource",
       "uid": "wildfly-datasource"
    }

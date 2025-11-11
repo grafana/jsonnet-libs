@@ -13,20 +13,21 @@ function(this)
     },
     signals: {
       transactionsCreated: {
-        name: 'Created Transactions',
-        nameShort: 'Created Transactions',
-        type: 'raw',
+        name: 'Created transactions',
+        nameShort: 'Created transactions',
+        type: 'counter',
         description: 'Number of transactions that were created over time',
         sources: {
           prometheus: {
-            expr: 'increase(wildfly_transactions_number_of_transactions_total{%(queriesSelector)s}[$__interval])',
+            expr: 'wildfly_transactions_number_of_transactions_total{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{instance}}',
           },
         },
       },
       transactionsInFlight: {
-        name: 'In-flight Transactions',
-        nameShort: 'In-flight Transactions',
+        name: 'In-flight transactions',
+        nameShort: 'In-flight transactions',
         type: 'gauge',
         description: 'Number of transactions that are in-flight over time',
         sources: {
@@ -37,13 +38,14 @@ function(this)
         },
       },
       transactionsAborted: {
-        name: 'Aborted Transactions',
-        nameShort: 'Aborted Transactions',
-        type: 'raw',
+        name: 'Aborted transactions',
+        nameShort: 'Aborted transactions',
+        type: 'counter',
         description: 'Number of transactions that have been aborted over time',
         sources: {
           prometheus: {
-            expr: 'increase(wildfly_transactions_number_of_aborted_transactions_total{%(queriesSelector)s}[$__interval])',
+            expr: 'wildfly_transactions_number_of_aborted_transactions_total{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{instance}}',
           },
         },

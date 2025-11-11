@@ -17,13 +17,13 @@
          },
          {
             "keepTime": true,
-            "title": "Wildfly Datasource",
+            "title": "Wildfly datasource",
             "type": "link",
             "url": "/d/wildfly-datasource"
          },
          {
             "keepTime": true,
-            "title": "Wildfly Overview",
+            "title": "Wildfly overview",
             "type": "link",
             "url": "/d/wildfly-overview"
          }
@@ -331,6 +331,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Wildfly Logs",
+      "title": "Wildfly logs",
       "uid": "wildfly-logs"
    }

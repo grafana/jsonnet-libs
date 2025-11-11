@@ -23,7 +23,7 @@
          },
          {
             "keepTime": true,
-            "title": "Wildfly Datasource",
+            "title": "Wildfly datasource",
             "type": "link",
             "url": "/d/wildfly-datasource"
          }
@@ -72,7 +72,7 @@
                   "instant": false,
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
-                  "refId": "Requests Rate"
+                  "refId": "Requests rate"
                }
             ],
             "title": "Requests",
@@ -175,7 +175,7 @@
                   "instant": false,
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
-                  "refId": "Network Received Throughput"
+                  "refId": "Network received throughput"
                }
             ],
             "title": "Network received throughput",
@@ -226,7 +226,7 @@
                   "instant": false,
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
-                  "refId": "Network Sent Throughput"
+                  "refId": "Network sent throughput"
                }
             ],
             "title": "Network sent throughput",
@@ -289,7 +289,7 @@
                   "instant": false,
                   "intervalFactor": 2,
                   "legendFormat": "{{deployment}}",
-                  "refId": "Active Sessions"
+                  "refId": "Active sessions"
                }
             ],
             "title": "Active sessions",
@@ -335,13 +335,13 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_expired_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval])",
+                  "expr": "increase(wildfly_undertow_expired_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
                   "legendFormat": "{{deployment}}",
-                  "refId": "Expired Sessions"
+                  "refId": "Expired sessions"
                }
             ],
             "title": "Expired sessions",
@@ -387,13 +387,13 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_rejected_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval])",
+                  "expr": "increase(wildfly_undertow_rejected_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 2,
                   "legendFormat": "{{deployment}}",
-                  "refId": "Rejected Sessions"
+                  "refId": "Rejected sessions"
                }
             ],
             "title": "Rejected sessions",
@@ -496,6 +496,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Wildfly Overview",
+      "title": "Wildfly overview",
       "uid": "wildfly-overview"
    }

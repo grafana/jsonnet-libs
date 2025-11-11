@@ -13,8 +13,8 @@ function(this)
     },
     signals: {
       networkReceivedThroughput: {
-        name: 'Network Received Throughput',
-        nameShort: 'Network Received',
+        name: 'Network received throughput',
+        nameShort: 'Network received',
         type: 'counter',
         description: 'Throughput rate of data received over time',
         unit: 'binBps',
@@ -26,8 +26,8 @@ function(this)
         },
       },
       networkSentThroughput: {
-        name: 'Network Sent Throughput',
-        nameShort: 'Network Sent',
+        name: 'Network sent throughput',
+        nameShort: 'Network sent',
         type: 'counter',
         description: 'Throughput rate of data sent over time',
         unit: 'binBps',
