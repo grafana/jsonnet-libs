@@ -11,6 +11,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Traffic by response code',
         targets=[signals.overview.httpRequests.asTarget()]
       )
+      + g.panel.timeSeries.options.legend.withAsTable(true)
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Rate of HTTP traffic over time for the entire application. Grouped by response code.')
       + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
@@ -49,28 +51,34 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     latest99thPercentileRequestTime:
-      commonlib.panels.network.timeSeries.base.new('Latest 99th percentile request time', targets=[signals.overview.latest99thPercentileRequestTime.asTarget()])
-      + g.panel.timeSeries.panelOptions.withDescription('The 99th percentile amount of time for "latest" page requests for the selected site.')
-      + g.panel.timeSeries.standardOptions.withUnit('s'),
+      g.panel.histogram.new('Latest request time')
+      + g.panel.histogram.queryOptions.withTargets([signals.overview.latest99thPercentileRequestTime.asTarget()])
+      + g.panel.histogram.panelOptions.withDescription('The 99th percentile amount of time for "latest" page requests for the selected site.')
+      + g.panel.histogram.standardOptions.withUnit('s'),
 
     topic99thPercentileRequestTime:
-      commonlib.panels.network.timeSeries.base.new('Topic show 99th percentile request time', targets=[signals.overview.topic99thPercentileRequestTime.asTarget()])
-      + g.panel.timeSeries.panelOptions.withDescription('The 99th percentile amount of time for "topics show" requests for the selected site.')
-      + g.panel.timeSeries.standardOptions.withUnit('s'),
+      g.panel.histogram.new('Topic show request time')
+      + g.panel.histogram.queryOptions.withTargets([signals.overview.topic99thPercentileRequestTime.asTarget()])
+      + g.panel.histogram.panelOptions.withDescription('The amount of time for "topics show" requests for the selected site.')
+      + g.panel.histogram.standardOptions.withUnit('s'),
 
     // Jobs dashboard panels
     sidekiqJobDuration:
-      commonlib.panels.generic.stat.base.new('Sidekiq job duration', targets=[signals.jobs.sidekiqJobDuration.asTarget()])
-      + g.panel.stat.panelOptions.withDescription('Time spent in Sidekiq jobs broken out by job name.')
-      + g.panel.stat.standardOptions.withUnit('s'),
+      commonlib.panels.generic.timeSeries.base.new('Sidekiq job duration', targets=[signals.jobs.sidekiqJobDuration.asTarget()])
+      + g.panel.timeSeries.options.legend.withAsTable(true)
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.panelOptions.withDescription('Time spent in Sidekiq jobs broken out by job name.')
+      + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     scheduledJobDuration:
-      commonlib.panels.generic.stat.base.new('Scheduled job duration', targets=[signals.jobs.scheduledJobDuration.asTarget()])
-      + g.panel.stat.panelOptions.withDescription('Time spent in scheduled jobs broken out by job name.')
-      + g.panel.stat.standardOptions.withUnit('s'),
+      commonlib.panels.generic.timeSeries.base.new('Scheduled job duration', targets=[signals.jobs.scheduledJobDuration.asTarget()])
+      + g.panel.timeSeries.options.legend.withAsTable(true)
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.panelOptions.withDescription('Time spent in scheduled jobs broken out by job name.')
+      + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     sidekiqJobCount:
-      commonlib.panels.generic.stat.info.new('Sidekiq jobs', targets=[signals.jobs.sidekiqJobCount.asTarget()])
+      commonlib.panels.generic.timeSeries.base.new('Sidekiq jobs', targets=[signals.jobs.sidekiqJobCount.asTarget()])
       + g.panel.stat.panelOptions.withDescription('The amount of sidekiq jobs ran over an interval.')
       + g.panel.stat.standardOptions.withUnit('none'),
 

@@ -276,9 +276,12 @@
             "description": "The amount of sidekiq jobs ran over an interval.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
                }
@@ -291,12 +294,13 @@
             },
             "id": 7,
             "options": {
-               "colorMode": "fixed",
-               "graphMode": "none",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -314,7 +318,7 @@
                }
             ],
             "title": "Sidekiq jobs",
-            "type": "stat"
+            "type": "timeseries"
          },
          {
             "collapsed": false,
@@ -337,9 +341,12 @@
             "description": "Time spent in scheduled jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "s"
                }
@@ -351,6 +358,18 @@
                "y": 14
             },
             "id": 9,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -366,7 +385,7 @@
                }
             ],
             "title": "Scheduled job duration",
-            "type": "stat"
+            "type": "timeseries"
          },
          {
             "datasource": {
@@ -376,9 +395,12 @@
             "description": "Time spent in Sidekiq jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "s"
                }
@@ -390,6 +412,18 @@
                "y": 14
             },
             "id": 10,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -405,7 +439,7 @@
                }
             ],
             "title": "Sidekiq job duration",
-            "type": "stat"
+            "type": "timeseries"
          },
          {
             "collapsed": false,

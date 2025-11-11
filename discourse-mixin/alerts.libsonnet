@@ -7,7 +7,7 @@
           {
             alert: 'DiscourseHigh5xxErrors',
             expr: |||
-              100 * rate(discourse_http_requests{status="500"}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsCritical5xxResponses)s
+              100 * rate(discourse_http_requests{status=~"5..", %(filteringSelector)s}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsCritical5xxResponses)s
             ||| % this.config,
             'for': '5m',
             labels: {
