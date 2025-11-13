@@ -370,7 +370,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "The 99th percentile amount of time for \"latest\" page requests for the selected site.",
+            "description": "The percentiles for the amount of time for \"latest\" page requests for the selected site.",
             "fieldConfig": {
                "defaults": {
                   "unit": "s"
@@ -390,14 +390,14 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",quantile=\"0.99\",action=\"latest\"}\n)",
+                  "expr": "sum by (job) (\n  sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",action=\"latest\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
-                  "refId": "Latest 99th percentile request time"
+                  "refId": "Request time percentiles"
                }
             ],
-            "title": "Latest request time",
+            "title": "Latest request time percentiles",
             "type": "histogram"
          },
          {
@@ -405,7 +405,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "The amount of time for \"topics show\" requests for the selected site.",
+            "description": "The percentiles for the amount of time for \"topics show\" requests for the selected site.",
             "fieldConfig": {
                "defaults": {
                   "unit": "s"
@@ -425,14 +425,14 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",quantile=\"0.99\",controller=\"topics\"}\n)",
+                  "expr": "sum by (job) (\n  sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",controller=\"topics\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
-                  "refId": "Topic 99th percentile request time"
+                  "refId": "Topic request time percentiles"
                }
             ],
-            "title": "Topic show request time",
+            "title": "Topic show request time percentiles",
             "type": "histogram"
          }
       ],
