@@ -390,7 +390,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",action=\"latest\"})\n)",
+                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",action=\"latest\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -425,7 +425,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",controller=\"topics\"})\n)",
+                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",controller=\"topics\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",

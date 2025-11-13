@@ -50,7 +50,7 @@ function(this)
 
       latestRequestTimePercentiles: {
         name: 'Request time percentiles',
-        type: 'gauge',
+        type: 'raw',
         unit: 's',
         description: 'The 99th percentile amount of time for "latest" page requests.',
         sources: {
@@ -62,7 +62,7 @@ function(this)
 
       topicRequestTimePercentiles: {
         name: 'Topic request time percentiles',
-        type: 'gauge',
+        type: 'raw',
         unit: 's',
         description: 'The percentiles for the amount of time for "topics show" requests for the selected site.',
         sources: {
