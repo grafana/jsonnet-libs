@@ -48,26 +48,26 @@ function(this)
         },
       },
 
-      latest99thPercentileRequestTime: {
-        name: 'Latest 99th percentile request time',
+      latestRequestTimePercentiles: {
+        name: 'Request time percentiles',
         type: 'gauge',
         unit: 's',
         description: 'The 99th percentile amount of time for "latest" page requests.',
         sources: {
           prometheus: {
-            expr: 'discourse_http_duration_seconds{%(queriesSelector)s,quantile="0.99",action="latest"}',
+            expr: 'sum by (instance, job, quantile) (discourse_http_duration_seconds{%(queriesSelector)s,action="latest"})',
           },
         },
       },
 
-      topic99thPercentileRequestTime: {
-        name: 'Topic 99th percentile request time',
+      topicRequestTimePercentiles: {
+        name: 'Topic request time percentiles',
         type: 'gauge',
         unit: 's',
-        description: 'The 99th percentile amount of time for "topics show" requests.',
+        description: 'The percentiles for the amount of time for "topics show" requests for the selected site.',
         sources: {
           prometheus: {
-            expr: 'discourse_http_duration_seconds{%(queriesSelector)s,quantile="0.99",controller="topics"}',
+            expr: 'sum by (instance, job, quantile) (discourse_http_duration_seconds{%(queriesSelector)s,controller="topics"})',
           },
         },
       },

@@ -50,16 +50,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.panelOptions.withDescription('The median amount of time for "topics show" requests for the selected site.')
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
-    latest99thPercentileRequestTime:
-      g.panel.histogram.new('Latest request time')
-      + g.panel.histogram.queryOptions.withTargets([signals.overview.latest99thPercentileRequestTime.asTarget()])
-      + g.panel.histogram.panelOptions.withDescription('The 99th percentile amount of time for "latest" page requests for the selected site.')
+    latestRequestTimePercentiles:
+      g.panel.histogram.new('Latest request time percentiles')
+      + g.panel.histogram.queryOptions.withTargets([signals.overview.latestRequestTimePercentiles.asTarget()])
+      + g.panel.histogram.panelOptions.withDescription('The percentiles for the amount of time for "latest" page requests for the selected site.')
       + g.panel.histogram.standardOptions.withUnit('s'),
 
-    topic99thPercentileRequestTime:
-      g.panel.histogram.new('Topic show request time')
-      + g.panel.histogram.queryOptions.withTargets([signals.overview.topic99thPercentileRequestTime.asTarget()])
-      + g.panel.histogram.panelOptions.withDescription('The amount of time for "topics show" requests for the selected site.')
+    topicRequestTimePercentiles:
+      g.panel.histogram.new('Topic show request time percentiles')
+      + g.panel.histogram.queryOptions.withTargets([signals.overview.topicRequestTimePercentiles.asTarget()])
+      + g.panel.histogram.panelOptions.withDescription('The percentiles for the amount of time for "topics show" requests for the selected site.')
       + g.panel.histogram.standardOptions.withUnit('s'),
 
     // Jobs dashboard panels

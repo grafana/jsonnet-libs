@@ -21,8 +21,8 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels([
         panels.latestMedianRequestTime { gridPos: { h: 6, w: 12 } },
         panels.topicMedianRequestTime { gridPos: { h: 6, w: 12 } },
-        panels.latest99thPercentileRequestTime { gridPos: { h: 6, w: 12 } },
-        panels.topic99thPercentileRequestTime { gridPos: { h: 6, w: 12 } },
+        panels.latestRequestTimePercentiles { gridPos: { h: 6, w: 12 } },
+        panels.topicRequestTimePercentiles { gridPos: { h: 6, w: 12 } },
       ]),
 
     // discourse-jobs rows
