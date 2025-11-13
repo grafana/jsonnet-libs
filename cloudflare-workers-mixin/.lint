@@ -1,0 +1,17 @@
+exclusions:
+    panel-title-description-rule:
+        reason: Removed panel title for better visual appearance for top stats panels
+        entries:
+        - id: 9
+        - id: 10
+        - id: 16
+        - id: 11
+        - id: 13
+        - id: 12
+        - id: 5
+    template-datasource-rule:
+        reason: Cloudflare Workers observability uses traces and logs rather than Tempo and Loki datasources. Variable naming aligns with the Cloudflare UI to make dashboards clearer and more intuitive for users unfamiliar with Prometheus-style conventions.
+    target-logql-auto-rule:
+        reason: panel 'traces table' is using logql query check
+        entries:
+        - id: 5

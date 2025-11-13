@@ -1,23 +1,38 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    influxdbSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
-    multiclusterSelector: 'job=~"$job"',
-    filterSelector: 'job=~"integrations/influxdb"',
+  local this = self,
+  filteringSelector: 'job="integrations/influxdb"',
+  groupLabels: ['job', 'influxdb_cluster'],
+  instanceLabels: ['instance'],
+  dashboardTags: ['influxdb-mixin'],
+  uid: 'influxdb',
+  dashboardNamePrefix: 'InfluxDB',
 
-    dashboardTags: ['influxdb-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
+  // additional params
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
 
-    // alerts thresholds
-    alertsWarningTaskSchedulerHighFailureRate: 25,  // %
-    alertsCriticalTaskSchedulerHighFailureRate: 50,  // %
-    alertsWarningHighBusyWorkerPercentage: 80,  // %
-    alertsWarningHighHeapMemoryUsage: 80,  // %
-    alertsWarningHighAverageAPIRequestLatency: 0.3,  // count
-    alertsWarningSlowAverageIQLExecutionTime: 0.1,  // count
+  // logs lib related
+  enableLokiLogs: true,
+  logLabels: ['job', 'instance', 'influxdb_cluster', 'level'],
+  extraLogLabels: [],  // Required by logs-lib
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
 
-    enableLokiLogs: true,
+  // alert thresholds
+  alertsWarningTaskSchedulerHighFailureRate: 25,  // %
+  alertsCriticalTaskSchedulerHighFailureRate: 50,  // %
+  alertsWarningHighBusyWorkerPercentage: 80,  // %
+  alertsWarningHighHeapMemoryUsage: 80,  // %
+  alertsWarningHighAverageAPIRequestLatency: 0.3,  // count
+  alertsWarningSlowAverageIQLExecutionTime: 0.1,  // count
+
+  // metrics source for signals library
+  metricsSource: 'prometheus',
+
+  legendCustomTemplate: std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
+  signals+: {
+    overview: (import './signals/overview.libsonnet')(this),
+    instance: (import './signals/instance.libsonnet')(this),
   },
 }

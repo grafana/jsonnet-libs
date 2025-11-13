@@ -8,10 +8,12 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
+      java_micrometer: 'jvm_threads_live',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
+      java_micrometer_with_suffixes: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
       prometheus: 'jvm_threads_current',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
-      otel: 'process_runtime_jvm_threads_count',
-      otel_with_suffixes: self.otel,
+      otel_old: 'process_runtime_jvm_threads_count',
+      otel_old_with_suffixes: self.otel_old,
+      otel_with_suffixes: 'jvm_thread_count',
       prometheus_old: 'jvm_threads_current',
       jmx_exporter: 'java_lang_threading_threadcount',
     },
@@ -23,15 +25,21 @@ function(this)
         unit: 'short',
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_live{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_live_threads{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_threads_current{%(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'sum without (daemon) (process_runtime_jvm_threads_count{%(queriesSelector)s})',
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
+          otel_with_suffixes: {
+            expr: 'sum without (jvm_thread_daemon) (jvm_thread_count{%(queriesSelector)s})',
+          },
           prometheus_old: self.prometheus,
           jmx_exporter: {
             expr: 'java_lang_threading_threadcount{%(queriesSelector)s}',
@@ -45,15 +53,21 @@ function(this)
         unit: 'short',
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_daemon{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_daemon_threads{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'jvm_threads_daemon{%(queriesSelector)s}',
           },
-          otel: {
+          otel_old: {
             expr: 'process_runtime_jvm_threads_count{daemon="true", %(queriesSelector)s}',
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
+          otel_with_suffixes: {
+            expr: 'jvm_thread_count{jvm_thread_daemon="true", %(queriesSelector)s}',
+          },
           prometheus_old: self.prometheus,
           jmx_exporter: {
             expr: 'java_lang_threading_daemonthreadcount{%(queriesSelector)s}',
@@ -70,6 +84,9 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'jvm_threads_peak{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_threads_peak_threads{%(queriesSelector)s}',
           },
           prometheus: {
@@ -102,6 +119,10 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'sum by (state, %(agg)s) (jvm_threads_states{%(queriesSelector)s})',
+            legendCustomTemplate: '{{ state }}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum by (state, %(agg)s) (jvm_threads_states_threads{%(queriesSelector)s})',
             legendCustomTemplate: '{{ state }}',
           },
@@ -111,7 +132,11 @@ function(this)
             legendCustomTemplate: '{{ state }}',
           },
           prometheus_old: self.prometheus,
-          //   otel: {
+          otel_with_suffixes: {
+            expr: 'sum by (jvm_thread_state, jvm_thread_daemon, %(agg)s) (jvm_thread_count{%(queriesSelector)s})',
+            legendCustomTemplate: '{{ jvm_thread_state }}(daemon={{jvm_thread_daemon}})',
+          },
+          //   otel_old: {
           //     expr: '?{%(queriesSelector)s}',
           //   },
         },
