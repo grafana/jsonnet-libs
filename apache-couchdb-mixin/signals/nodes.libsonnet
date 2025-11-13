@@ -33,9 +33,11 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'couchdb_open_os_files_total{%(queriesSelector)s}',
+          expr: 'couchdb_open_os_files{%(queriesSelector)s}',
         },
-
+        prometheusWithTotal: {
+          expr: 'couchdb_open_os_files_total{%(queriesSelector)s}'
+        }
       },
     },
 
@@ -47,7 +49,10 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'couchdb_open_databases_total{%(queriesSelector)s}',
+          expr: 'couchdb_open_databases{%(queriesSelector)s}',
+        },
+        prometheusWithTotal: {
+          expr: 'couchdb_open_databases_total{%(queriesSelector)s}'
         },
       },
     },
@@ -134,62 +139,19 @@ function(this) {
       },
     },
 
-    requestLatencyp50: {
-      name: 'Request latency p50',
-      nameShort: 'Request latency p50',
-      type: 'gauge',
-      description: 'The 50th percentile of request latency for a node.',
+    averageRequestLatency: {
+      name: 'Average request latency',
+      nameShort: 'Average request latency',
+      type: 'raw',
+      description: 'The average request latency for a node.',
       unit: 's',
       sources: {
         prometheus: {
-          expr: 'couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.5"}',
-          legendCustomTemplate: legendCustomTemplate + ' - p50',
+          expr: 'sum by(job, instance, cluster, quantile) (couchdb_request_time_seconds{%(queriesSelector)s})',
+          legendCustomTemplate: legendCustomTemplate + ' - {{quantile}}',
         },
       },
     },
-
-    requestLatencyp75: {
-      name: 'Request latency p75',
-      nameShort: 'Request latency p75',
-      type: 'gauge',
-      description: 'The 75th percentile of request latency for a node.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.75"}',
-          legendCustomTemplate: legendCustomTemplate + ' - p75',
-        },
-      },
-    },
-
-    requestLatencyp95: {
-      name: 'Request latency p95',
-      nameShort: 'Request latency p95',
-      type: 'gauge',
-      description: 'The 95th percentile of request latency for a node.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.95"}',
-          legendCustomTemplate: legendCustomTemplate + ' - p95',
-        },
-      },
-    },
-
-    requestLatencyp99: {
-      name: 'Request latency p99',
-      nameShort: 'Request latency p99',
-      type: 'gauge',
-      description: 'The 99th percentile of request latency for a node.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.99"}',
-          legendCustomTemplate: legendCustomTemplate + ' - p99',
-        },
-      },
-    },
-
 
     bulkRequests: {
       name: 'Bulk requests',

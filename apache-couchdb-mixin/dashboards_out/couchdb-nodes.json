@@ -166,7 +166,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "couchdb_open_os_files_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "couchdb_open_os_files_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}\nor\ncouchdb_open_os_files{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -218,7 +218,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "couchdb_open_databases_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "couchdb_open_databases_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}\nor\ncouchdb_open_databases{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -567,14 +567,12 @@
             "description": "The average request latency for a node.",
             "fieldConfig": {
                "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
+                  "color": {
+                     "mode": "thresholds"
                   },
-                  "unit": "s"
+                  "custom": {
+                     "axisLabel": "s"
+                  }
                }
             },
             "gridPos": {
@@ -586,63 +584,25 @@
             "id": 12,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
+                  "placement": "right"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", quantile=\"0.5\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance}} - p50",
-                  "refId": "Request latency p50"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", quantile=\"0.75\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance}} - p75",
-                  "refId": "Request latency p75"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", quantile=\"0.95\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance}} - p95",
-                  "refId": "Request latency p95"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", quantile=\"0.99\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance}} - p99",
-                  "refId": "Request latency p99"
+                  "expr": "sum by(job, instance, cluster, quantile) (couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "format": "timeseries",
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{quantile}}",
+                  "refId": "Average request latency"
                }
             ],
-            "title": "Average request latency",
-            "type": "timeseries"
+            "title": "Request latency quantiles",
+            "type": "histogram"
          },
          {
             "datasource": {
@@ -671,8 +631,10 @@
             "id": 13,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -715,6 +677,12 @@
                "y": 32
             },
             "id": 14,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "placement": "right"
+               }
+            },
             "pluginVersion": "v11.4.0",
             "targets": [
                {
@@ -774,7 +742,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The total number of good response statuses on a node.",
+            "description": "The total number of good response (HTTP 2xx-3xx) statuses on a node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -796,8 +764,10 @@
             "id": 15,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -827,7 +797,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The total number of error response statuses on a node.",
+            "description": "The total number of error response (HTTP 4xx-5xx) statuses on a node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -849,8 +819,10 @@
             "id": 16,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -915,8 +887,10 @@
             "id": 18,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",

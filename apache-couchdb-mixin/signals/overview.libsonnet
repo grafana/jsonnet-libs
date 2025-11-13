@@ -59,6 +59,9 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
+          expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_open_os_files{%(queriesSelector)s})',
+        },
+        prometheusWithTotal: {
           expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_open_os_files_total{%(queriesSelector)s})',
         },
       },
@@ -72,6 +75,9 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
+          expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_open_databases{%(queriesSelector)s})',
+        },
+        prometheusWithTotal: {
           expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_open_databases_total{%(queriesSelector)s})',
         },
       },
@@ -156,58 +162,16 @@ function(this) {
       },
     },
 
-    averageRequestLatencyp50: {
-      name: 'Average request latency p50',
-      nameShort: 'Average request latency p50',
+    requestLatency: {
+      name: 'Request latency',
+      nameShort: 'Request latency',
       type: 'raw',
-      description: 'The average request latency p50 aggregated across all nodes.',
+      description: 'The request latency aggregated across all nodes.',
       unit: 's',
       sources: {
         prometheus: {
-          expr: 'avg by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.5"})',
-          legendCustomTemplate: legendCustomTemplate + ' - p50',
-        },
-      },
-    },
-
-    averageRequestLatencyp75: {
-      name: 'Average request latency p75',
-      nameShort: 'Average request latency p75',
-      type: 'raw',
-      description: 'The average request latency p75 aggregated across all nodes.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'avg by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.75"})',
-          legendCustomTemplate: legendCustomTemplate + ' - p75',
-        },
-      },
-    },
-
-    averageRequestLatencyp95: {
-      name: 'Average request latency p95',
-      nameShort: 'Average request latency p95',
-      type: 'raw',
-      description: 'The average request latency p95 aggregated across all nodes.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'avg by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.95"})',
-          legendCustomTemplate: legendCustomTemplate + ' - p95',
-        },
-      },
-    },
-
-    averageRequestLatencyp99: {
-      name: 'Average request latency p99',
-      nameShort: 'Average request latency p99',
-      type: 'raw',
-      description: 'The average request latency p99 aggregated across all nodes.',
-      unit: 's',
-      sources: {
-        prometheus: {
-          expr: 'avg by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s, quantile="0.99"})',
-          legendCustomTemplate: legendCustomTemplate + ' - p99',
+          expr: 'sum by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s})',
+          legendCustomTemplate: legendCustomTemplate + ' - {{quantile}}',
         },
       },
     },
@@ -288,7 +252,7 @@ function(this) {
       name: 'Good response statuses',
       nameShort: 'Good response statuses',
       type: 'raw',
-      description: 'The total number of good response statuses aggregated across all nodes.',
+      description: 'The total number of good response (HTTP 2xx-3xx) statuses aggregated across all nodes.',
       unit: 'requests',
       sources: {
         prometheus: {
@@ -301,7 +265,7 @@ function(this) {
       name: 'Error response statuses',
       nameShort: 'Error response statuses',
       type: 'raw',
-      description: 'The total number of error response statuses aggregated across all nodes.',
+      description: 'The total number of error response (HTTP 4xx-5xx) statuses aggregated across all nodes.',
       unit: 'requests',
       sources: {
         prometheus: {

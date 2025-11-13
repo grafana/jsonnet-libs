@@ -95,20 +95,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.overview.requestMethods.asTarget() { interval: '2m' }],
         )
         + g.panel.timeSeries.panelOptions.withDescription('The request rate split by HTTP Method aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
+        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      overviewAverageRequestLatencyPanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Average request latency',
-          targets=[
-            signals.overview.averageRequestLatencyp50.asTarget(),
-            signals.overview.averageRequestLatencyp75.asTarget(),
-            signals.overview.averageRequestLatencyp95.asTarget(),
-            signals.overview.averageRequestLatencyp99.asTarget(),
-          ],
-        )
-        + g.panel.timeSeries.panelOptions.withDescription('The average request latency aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
+      overviewRequestLatencyPanel:
+        g.panel.histogram.new(title='Request latency quantiles')
+        + g.panel.histogram.queryOptions.withTargets([
+          signals.overview.requestLatency.asTarget()
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withFormat('timeseries'),
+          ])
+        + g.panel.histogram.panelOptions.withDescription('The request latency aggregated across all nodes.')
+        + g.panel.histogram.standardOptions.color.withMode('thresholds')
+        + g.panel.histogram.options.legend.withAsTable(true)
+        + g.panel.histogram.options.legend.withPlacement('right')
+        + g.panel.histogram.fieldConfig.defaults.custom.withAxisLabel('s'),
 
       overviewBulkRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -132,16 +134,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Good response statuses',
           targets=[signals.overview.goodResponseStatuses.asTarget() { interval: '2m' }],
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The total number of good response statuses aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('rps'),
+        + g.panel.timeSeries.panelOptions.withDescription('The total number of good response (HTTP 2xx-3xx) statuses aggregated across all nodes.')
+        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       overviewErrorResponseStatusesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Error response statuses',
           targets=[signals.overview.errorResponseStatuses.asTarget()],
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The total number of error response statuses aggregated across all nodes.')
-        + g.panel.timeSeries.standardOptions.withUnit('rps'),
+        + g.panel.timeSeries.panelOptions.withDescription('The total number of error response statuses (HTTP 4xx-5xx) aggregated across all nodes.')
+        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
 
       overviewReplicatorChangesManagerDeathsPanel:
@@ -274,20 +276,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.requestMethods.asTarget() { interval: '2m' }],
         )
         + g.panel.timeSeries.panelOptions.withDescription('The request rate split by HTTP Method for a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
+        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       nodeAverageRequestLatencyPanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Average request latency',
-          targets=[
-            signals.nodes.requestLatencyp50.asTarget(),
-            signals.nodes.requestLatencyp75.asTarget(),
-            signals.nodes.requestLatencyp95.asTarget(),
-            signals.nodes.requestLatencyp99.asTarget(),
-          ],
-        )
-        + g.panel.timeSeries.panelOptions.withDescription('The average request latency for a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
+        g.panel.histogram.new(title='Request latency quantiles')
+        + g.panel.histogram.queryOptions.withTargets([
+          signals.nodes.averageRequestLatency.asTarget()
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withFormat('timeseries'),
+        ])
+        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
+        + g.panel.histogram.standardOptions.color.withMode('thresholds')
+        + g.panel.histogram.options.legend.withPlacement('right')
+        + g.panel.histogram.panelOptions.withDescription('The average request latency for a node.')
+        + g.panel.histogram.fieldConfig.defaults.custom.withAxisLabel('s'),
 
       nodeBulkRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -306,36 +310,29 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.nodes.responseStatus5xx.asTarget() { interval: '2m' },
         ])
         + g.panel.pieChart.panelOptions.withDescription('The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) for a node.')
-        + g.panel.pieChart.standardOptions.withUnit('none'),
-
-      nodeRequestLatencyPanel:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Request latency',
-          targets=[
-            signals.nodes.requestLatencyp50.asTarget(),
-            signals.nodes.requestLatencyp75.asTarget(),
-            signals.nodes.requestLatencyp95.asTarget(),
-            signals.nodes.requestLatencyp99.asTarget(),
-          ],
-        )
-        + g.panel.timeSeries.panelOptions.withDescription('The request latency for a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
+        + g.panel.pieChart.standardOptions.withUnit('none')
+        + g.panel.pieChart.options.legend.withAsTable(true)
+        + g.panel.pieChart.options.legend.withPlacement('right'),
 
       nodeGoodResponseStatusesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Good response statuses',
           targets=[signals.nodes.goodResponseStatuses.asTarget() { interval: '2m' }],
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The total number of good response statuses on a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
+        + g.panel.timeSeries.panelOptions.withDescription('The total number of good response (HTTP 2xx-3xx) statuses on a node.')
+        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       nodeErrorResponseStatusesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Error response statuses',
           targets=[signals.nodes.errorResponseStatuses.asTarget() { interval: '2m' }],
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The total number of error response statuses on a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
+        + g.panel.timeSeries.panelOptions.withDescription('The total number of error response (HTTP 4xx-5xx) statuses on a node.')
+        + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
 
       nodeLogTypesPanel:
@@ -344,6 +341,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodes.logTypes.asTarget() { interval: '2m' }],
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of logged messages for a node.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
     },
 }

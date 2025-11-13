@@ -26,7 +26,7 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels(
         [
           this.grafana.panels.overviewRequestMethodsPanel { gridPos+: { w: 12 } },
-          this.grafana.panels.overviewAverageRequestLatencyPanel { gridPos+: { w: 12 } },
+          this.grafana.panels.overviewRequestLatencyPanel { gridPos+: { w: 12 } },
           this.grafana.panels.overviewBulkRequestsPanel { gridPos+: { w: 12 } },
           this.grafana.panels.overviewResponseStatusOverviewPanel { gridPos+: { w: 12 } },
           this.grafana.panels.overviewGoodResponseStatusesPanel { gridPos+: { w: 12 } },
