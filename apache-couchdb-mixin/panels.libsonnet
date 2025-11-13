@@ -110,7 +110,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.histogram.standardOptions.color.withMode('thresholds')
         + g.panel.histogram.options.legend.withAsTable(true)
         + g.panel.histogram.options.legend.withPlacement('right')
-        + g.panel.histogram.fieldConfig.defaults.custom.withAxisLabel('s'),
+        + g.panel.histogram.standardOptions.withUnit('s'),
 
       overviewBulkRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -291,7 +291,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.histogram.standardOptions.color.withMode('thresholds')
         + g.panel.histogram.options.legend.withPlacement('right')
         + g.panel.histogram.panelOptions.withDescription('The average request latency for a node.')
-        + g.panel.histogram.fieldConfig.defaults.custom.withAxisLabel('s'),
+        + g.panel.histogram.standardOptions.withUnit('s'),
 
       nodeBulkRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(

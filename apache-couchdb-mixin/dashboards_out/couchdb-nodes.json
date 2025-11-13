@@ -570,9 +570,7 @@
                   "color": {
                      "mode": "thresholds"
                   },
-                  "custom": {
-                     "axisLabel": "s"
-                  }
+                  "unit": "s"
                }
             },
             "gridPos": {
