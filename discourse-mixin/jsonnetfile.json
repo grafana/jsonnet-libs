@@ -1,33 +1,33 @@
 {
   "version": 1,
   "dependencies": [
-      {
-          "source": {
-              "git": {
-                  "remote": "https://github.com/grafana/grafonnet-lib.git",
-                  "subdir": "grafonnet"
-              }
-          },
-          "version": "master"
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-latest"
+        }
       },
-      {
-          "source": {
-              "git": {
-                  "remote": "https://github.com/grafana/jsonnet-libs.git",
-                  "subdir": "common-lib"
-              }
-          },
-          "version": "master"
+      "version": "main"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "common-lib"
+        }
       },
-      {
-          "source": {
-              "git": {
-                  "remote": "https://github.com/grafana/jsonnet-libs.git",
-                  "subdir": "grafana-cloud-integration-utils"
-              }
-          },
-          "version": "master"
-      }
+      "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "grafana-cloud-integration-utils"
+        }
+      },
+      "version": "master"
+    }
   ],
   "legacyImports": true
 }
