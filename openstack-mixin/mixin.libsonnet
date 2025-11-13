@@ -4,7 +4,7 @@ local openstack =
   openstacklib.new()
   + openstacklib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/openstack"',
+      filteringSelector: 'job="integrations/openstack"',
       uid: 'openstack',
       groupLabels: ['job'],
       enableLokiLogs: true,
