@@ -105,7 +105,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.requestLatency.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('timeseries'),
-          ])
+        ])
         + g.panel.histogram.panelOptions.withDescription('The request latency aggregated across all nodes.')
         + g.panel.histogram.standardOptions.color.withMode('thresholds')
         + g.panel.histogram.options.legend.withAsTable(true)

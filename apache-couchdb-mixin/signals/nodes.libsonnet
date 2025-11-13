@@ -36,8 +36,8 @@ function(this) {
           expr: 'couchdb_open_os_files{%(queriesSelector)s}',
         },
         prometheusWithTotal: {
-          expr: 'couchdb_open_os_files_total{%(queriesSelector)s}'
-        }
+          expr: 'couchdb_open_os_files_total{%(queriesSelector)s}',
+        },
       },
     },
 
@@ -52,7 +52,7 @@ function(this) {
           expr: 'couchdb_open_databases{%(queriesSelector)s}',
         },
         prometheusWithTotal: {
-          expr: 'couchdb_open_databases_total{%(queriesSelector)s}'
+          expr: 'couchdb_open_databases_total{%(queriesSelector)s}',
         },
       },
     },
