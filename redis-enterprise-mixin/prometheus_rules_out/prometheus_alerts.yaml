@@ -60,7 +60,7 @@ groups:
             description: The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has high latency of ${{ printf "%.0f" $value }}, which exceeds the threshold of 1000 ms.
             summary: Operation latency is above the configured threshold.
           expr: |
-            bdb_avg_latency{job="integrations/redis-enterprise"} / 1000 > 1000
+            bdb_avg_latency{job="integrations/redis-enterprise"} * 1000 > 1000
           for: 5m
           labels:
             severity: warning

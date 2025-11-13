@@ -8,7 +8,7 @@ local g = import './g.libsonnet';
                redisEnterpriseNodes:
                  link.link.new('Redis Enterprise nodes', '/d/' + this.grafana.dashboards['redis-enterprise-node-overview.json'].uid),
                redisEnterpriseDatabases:
-                 link.link.new('Redis Enterprise databases', '/d/' + this.grafana.dashboards['redis-enterprise-database-overview.jsonn'].uid),
+                 link.link.new('Redis Enterprise databases', '/d/' + this.grafana.dashboards['redis-enterprise-database-overview.json'].uid),
                dashboards:
                  link.dashboards.new('All Redis Enterprise dashboards', this.config.dashboardTags)
                  + link.dashboards.options.withKeepTime(true)

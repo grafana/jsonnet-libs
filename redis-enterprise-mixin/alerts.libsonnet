@@ -112,7 +112,7 @@
           {
             alert: 'RedisEnterpriseAverageLatencyIncreasing',
             expr: |||
-              bdb_avg_latency{%(filteringSelector)s} / 1000 > %(alertsDatabaseHighLatencyMs)s
+              bdb_avg_latency{%(filteringSelector)s} * 1000 > %(alertsDatabaseHighLatencyMs)s
             ||| % this.config,
             'for': '5m',
             labels: {

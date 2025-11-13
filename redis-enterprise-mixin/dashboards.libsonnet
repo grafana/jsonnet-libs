@@ -81,7 +81,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           refresh,
           period,
         ),
-      'redis-enterprise-database-overview.jsonn':
+      'redis-enterprise-database-overview.json':
         g.dashboard.new(prefix + ' databases')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
