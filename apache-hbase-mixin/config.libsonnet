@@ -11,7 +11,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: ['prometheus', 'prometheusv2'],
+  metricsSource: ['prometheus'],
 
   // Logging configuration
   enableLokiLogs: true,
