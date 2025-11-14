@@ -23,7 +23,7 @@
           {
             alert: 'MicrosoftIIS5xxRequestErrors',
             expr: |||
-              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5.*"}[5m])) > %(alertsCriticalHigh5xxRequests)s
+              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5.."}[5m])) > %(alertsCriticalHigh5xxRequests)s
             ||| % this.config,
             'for': '5m',
             labels: {
