@@ -392,7 +392,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The current number of worker processes for an IIS application pool.",
+            "description": "The current number of worker processes processing requests for an IIS application.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -669,7 +669,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The current file cache hit ratio for an IIS worker process.",
+            "description": "The current file cache hit ratio for an IIS application.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -723,7 +723,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The current URI cache hit ratio for an IIS worker process.",
+            "description": "The current URI cache hit ratio for an IIS application.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -777,7 +777,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The current metadata cache hit ratio for an IIS worker process.",
+            "description": "The current metadata cache hit ratio for an IIS site.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
