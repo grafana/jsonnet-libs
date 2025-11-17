@@ -3,12 +3,14 @@
          "list": [ ]
       },
       "description": "",
+      "editable": false,
+      "id": null,
       "links": [
          {
             "keepTime": true,
-            "title": "Squid overview",
+            "title": "Squid logs",
             "type": "link",
-            "url": "/d/squid-overview"
+            "url": "/d/squid-logs"
          }
       ],
       "panels": [
@@ -48,11 +50,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_client_http_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_client_http_requests_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client HTTP requests"
                }
@@ -83,11 +87,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_client_http_errors_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_client_http_errors_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client HTTP errors"
                }
@@ -118,11 +124,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(rate(squid_client_http_hits_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(squid_client_http_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100",
+                  "expr": "(rate(squid_client_http_hits_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(squid_client_http_requests_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client cache hit ratio"
                }
@@ -153,11 +161,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_client_http_kbytes_out_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_client_http_kbytes_out_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client HTTP sent throughput"
                }
@@ -188,11 +198,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_client_http_kbytes_in_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_client_http_kbytes_in_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client HTTP received throughput"
                }
@@ -223,11 +235,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_client_http_hit_kbytes_out_bytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_client_http_hit_kbytes_out_bytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}}",
                   "refId": "Client cache hit throughput"
                }
@@ -258,9 +272,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_HTTP_Requests_All_50{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_HTTP_Requests_All_50{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "50%",
@@ -269,9 +283,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_HTTP_Requests_All_75{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_HTTP_Requests_All_75{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "75%",
@@ -280,9 +294,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_HTTP_Requests_All_95{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_HTTP_Requests_All_95{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "95%",
@@ -315,33 +329,36 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Hits_50{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Hits_50{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "50%",
                   "refId": "Cache hits service time p50"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Hits_75{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Hits_75{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "75%",
                   "refId": "Cache hits service time p75"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Hits_95{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Hits_95{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "95%",
                   "refId": "Cache hits service time p95"
                }
@@ -372,33 +389,36 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Misses_50{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Nisses_50{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "50%",
                   "refId": "Cache misses service time p50"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Misses_75{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Misses_75{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "75%",
                   "refId": "Cache misses service time p75"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_Cache_Misses_95{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_Cache_Misses_95{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "95%",
                   "refId": "Cache misses service time p95"
                }
@@ -447,33 +467,39 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_ftp_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_ftp_requests_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "FTP",
                   "refId": "Server FTP requests"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_http_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_http_requests_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "HTTP",
                   "refId": "Server HTTP requests"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_other_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_other_requests_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "other",
                   "refId": "Server other requests"
                }
@@ -509,9 +535,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_ftp_errors_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_ftp_errors_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "FTP",
@@ -520,9 +546,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_http_errors_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_http_errors_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "HTTP",
@@ -531,9 +557,9 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_other_errors_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_other_errors_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "other",
@@ -571,33 +597,39 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_ftp_kbytes_out_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_ftp_kbytes_out_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "FTP",
                   "refId": "Server FTP sent throughput"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_http_kbytes_out_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_http_kbytes_out_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "HTTP",
                   "refId": "Server HTTP sent throughput"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_other_kbytes_out_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_other_kbytes_out_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "other",
                   "refId": "Server other sent throughput"
                }
@@ -633,22 +665,26 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_swap_ins_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_swap_ins_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}} - read",
                   "refId": "Server object swap ins"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_swap_outs_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_swap_outs_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{instance}} - saved",
                   "refId": "Server object swap outs"
                }
@@ -684,33 +720,36 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_DNS_Lookups_50{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_DNS_Lookups_50{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "50%",
                   "refId": "DNS lookup service time p50"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_DNS_Lookups_75{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_DNS_Lookups_75{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "75%",
                   "refId": "DNS lookup service time p75"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "squid_DNS_Lookups_95{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "squid_DNS_Lookups_95{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "95%",
                   "refId": "DNS lookup service time p95"
                }
@@ -746,119 +785,48 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_ftp_kbytes_in_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_ftp_kbytes_in_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "FTP",
                   "refId": "Server FTP received throughput"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_http_kbytes_in_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_http_kbytes_in_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "HTTP",
                   "refId": "Server HTTP received throughput"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  rate(squid_server_other_kbytes_in_kbytes_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "rate(squid_server_other_kbytes_in_kbytes_total{job=\"integrations/squid\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "other",
                   "refId": "Server other received throughput"
                }
             ],
             "title": "Server received throughput",
             "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 40
-            },
-            "id": 18,
-            "panels": [ ],
-            "title": "Logs",
-            "type": "row"
-         },
-         {
-            "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
-            },
-            "description": "The log file that contains the debug and error messages that Squid generates.",
-            "gridPos": {
-               "h": 6,
-               "w": 24,
-               "x": 0,
-               "y": 41
-            },
-            "id": 19,
-            "options": {
-               "enableLogDetails": true,
-               "showCommonLabels": false,
-               "showTime": false,
-               "wrapLogMessage": false
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "loki",
-                     "uid": "${loki_datasource}"
-                  },
-                  "expr": "{job=~\"$job\", instance=~\"$instance\"} |= `` | (filename=\"/var/log/squid/cache.log\" or log_type=\"cache\")"
-               }
-            ],
-            "title": "Cache logs",
-            "type": "logs"
-         },
-         {
-            "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
-            },
-            "description": "The log file that contains a record of all HTTP requests and responses processed by the Squid proxy server.",
-            "gridPos": {
-               "h": 6,
-               "w": 24,
-               "x": 0,
-               "y": 47
-            },
-            "id": 20,
-            "options": {
-               "enableLogDetails": true,
-               "showCommonLabels": false,
-               "showTime": false,
-               "wrapLogMessage": false
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "loki",
-                     "uid": "${loki_datasource}"
-                  },
-                  "expr": "{job=~\"$job\", instance=~\"$instance\"} |= `` | (filename=\"/var/log/squid/access.log\" or log_type=\"access\")"
-               }
-            ],
-            "title": "Access logs",
-            "type": "logs"
          }
       ],
-      "refresh": "1m",
+      "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
          "squid"
@@ -869,7 +837,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
@@ -882,7 +850,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(squid_server_http_requests_total{job=~\"$job\", instance=~\"$instance\"}, job)",
+               "query": "label_values(squid_client_http_requests_total{job=\"integrations/squid\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -897,7 +865,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(squid_server_http_requests_total{job=~\"$job\", instance=~\"$instance\",job=~\"$job\"}, instance)",
+               "query": "label_values(squid_client_http_requests_total{job=\"integrations/squid\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -907,13 +875,13 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
       "timezone": "default",

@@ -1,13 +1,17 @@
 local g = import './g.libsonnet';
-local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
+  local link = g.dashboard.link,
   new(this):
     {
-      overview: {
-        asString(): '/d/' + this.config.uid + '-overview',
-        asDashboardLink(): g.dashboard.link.link.new('Squid overview', self.asString())
-                           + g.dashboard.link.link.options.withKeepTime(true),
-      },
-    },
+      squidOverview:
+        link.link.new('Squid overview', '/d/' + this.grafana.dashboards['squid-overview.json'].uid)
+        + link.link.options.withKeepTime(true),
+    } + if this.config.enableLokiLogs then
+      {
+        logs:
+          link.link.new('Squid logs', '/d/' + this.grafana.dashboards['squid-logs.json'].uid)
+          + link.link.options.withKeepTime(true),
+      }
+    else {},
 }
