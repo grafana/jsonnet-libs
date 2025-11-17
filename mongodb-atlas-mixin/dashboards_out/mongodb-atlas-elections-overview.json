@@ -1,125 +1,110 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "Overview of MongoDB Atlas election metrics.",
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "mongodb-atlas-mixin"
-            ],
-            "targetBlank": false,
-            "title": "MongoDB Atlas dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "MongoDB Atlas cluster overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas performance overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-performance-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas sharding overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-sharding-overview"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Elections",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of elections called and elections won by the node when the primary stepped down.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_stepUpCmd_called{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_stepUpCmd_called{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - called"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - called",
+                  "refId": "Step-up elections called"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_stepUpCmd_successful{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_stepUpCmd_successful{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - successful"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - successful",
+                  "refId": "Step-up elections successful"
                }
             ],
             "title": "Step-up elections / $__interval",
@@ -127,98 +112,66 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of elections called and elections won by the node when it had a higher priority than the primary node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_priorityTakeover_called{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_priorityTakeover_called{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - called"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - called",
+                  "refId": "Priority takeover elections called"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_priorityTakeover_successful{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_priorityTakeover_successful{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - successful"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - successful",
+                  "refId": "Priority takeover elections successful"
                }
             ],
             "title": "Priority elections / $__interval",
@@ -226,98 +179,66 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of elections called and elections won by the node when it was more current than the primary node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_catchUpTakeover_called{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_catchUpTakeover_called{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - called"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - called",
+                  "refId": "Catch-up takeover elections called"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_catchUpTakeover_successful{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_catchUpTakeover_successful{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - successful"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - successful",
+                  "refId": "Catch-up takeover elections successful"
                }
             ],
             "title": "Takeover elections / $__interval",
@@ -325,212 +246,132 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of elections called and elections won by the node when the time it took to reach the primary node exceeded the election timeout limit.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_electionTimeout_called{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_electionTimeout_called{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - called"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - called",
+                  "refId": "Election timeout elections called"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_electionTimeout_successful{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_electionTimeout_successful{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - successful"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - successful",
+                  "refId": "Election timeout elections successful"
                }
             ],
             "title": "Timeout elections / $__interval",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
+            "collapsed": false,
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 16
+               "y": 17
             },
             "id": 6,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "panels": [ ],
             "title": "Catch-ups",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times the node had to catch up to the highest known oplog entry.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 17
+               "y": 18
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_numCatchUps{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_numCatchUps{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Number of catch-ups"
                }
             ],
             "title": "Catch-ups / $__interval",
@@ -538,88 +379,52 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times the node skipped the catch up process when it was the newly elected primary.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 17
+               "y": 18
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_numCatchUpsSkipped{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_numCatchUpsSkipped{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Number of catch-ups skipped"
                }
             ],
             "title": "Catch-ups skipped / $__interval",
@@ -627,87 +432,52 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times the node succeeded in catching up when it was the newly elected primary.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 26
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Number of catch-ups succeeded"
                }
             ],
             "title": "Catch-ups succeeded / $__interval",
@@ -715,87 +485,52 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times the node failed in catching up when it was the newly elected primary.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 26
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Number of catch-ups failed with error"
                }
             ],
             "title": "Catch-ups failed / $__interval",
@@ -803,87 +538,52 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times the node timed out during the catch-up process when it was the newly elected primary.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 33
+               "y": 34
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Number of catch-up timeouts"
                }
             ],
             "title": "Catch-up timeouts / $__interval",
@@ -891,86 +591,51 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The average number of operations done during the catch-up process when this node is the newly elected primary.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 33
+               "y": 34
             },
             "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_electionMetrics_averageCatchUpOps{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}",
+                  "expr": "mongodb_electionMetrics_averageCatchUpOps{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Average catch-up operations"
                }
             ],
             "title": "Average catch-up operations",
@@ -978,112 +643,76 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "mongodb-atlas-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": null,
-               "current": { },
+               "allValue": ".+",
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn,job)",
+               "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Atlas cluster",
                "multi": true,
                "name": "cl_name",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"},cl_name)",
+               "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\",job=~\"$job\"}, cl_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
                "includeAll": true,
                "label": "Replica set",
                "multi": true,
-               "name": "rs",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{cl_name=~\"$cl_name\"},rs_nm)",
+               "name": "rs_nm",
+               "query": "label_values(mongodb_network_bytesIn, rs_nm)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Node",
-               "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{rs_nm=~\"$rs\"},instance)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             }
          ]
       },
@@ -1091,33 +720,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "MongoDB Atlas election overview",
-      "uid": "mongodb-atlas-elections-overview",
-      "version": 0
+      "title": "MongoDB Atlas elections overview",
+      "uid": "mongodb-atlas-elections-overview"
    }

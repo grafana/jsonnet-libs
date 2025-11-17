@@ -11,18 +11,18 @@ The MongoDB Atlas mixin contains the following dashboards:
 
 and the following alerts:
 
-- MongoDBAtlasHighNumberOfSlowNetworkRequests
+- MongoDBAtlasCollExclusiveDeadlocks
+- MongoDBAtlasCollIntentExclDeadlocks
+- MongoDBAtlasCollSharedDeadlocks
+- MongoDBAtlasCollIntentSharedDeadlocks
+- MongoDBAtlasDBExclusiveDeadlocks
+- MongoDBAtlasDBIntentExclDeadlocks
+- MongoDBAtlasDBSharedDeadlocks
+- MongoDBAtlasDBIntentSharedDeadlocks
+- MongoDBAtlasSlowNetworkRequests
 - MongoDBAtlasDiskSpaceLow
 - MongoDBAtlasSlowHardwareIO
-- MongoDBAtlasHighNumberOfTimeoutElections
-- MongoDBAtlasHighNumberOfCollectionExclusiveDeadlocks
-- MongoDBAtlasHighNumberOfCollectionIntentExclusiveDeadlocks
-- MongoDBAtlasHighNumberOfCollectionSharedDeadlocks
-- MongoDBAtlasHighNumberOfCollectionIntentSharedDeadlocks
-- MongoDBAtlasHighNumberOfDatabaseExclusiveDeadlocks
-- MongoDBAtlasHighNumberOfDatabaseIntentExclusiveDeadlocks
-- MongoDBAtlasHighNumberOfDatabaseSharedDeadlocks
-- MongoDBAtlasHighNumberOfDatabaseIntentSharedDeadlocks
+- MongoDBAtlasElectionTimeouts
 
 **Please note:**
 - Some metrics may be reset if the MongoDB Atlas cluster is ever reset.
@@ -78,18 +78,18 @@ This mixin includes the MongoDB Atlas sharding overview dashboard, however the m
 
 ## Alerts overview
 
-- MongoDBAtlasHighNumberOfSlowNetworkRequests: There is a high number of slow network requests.
+- MongoDBAtlasCollExclusiveDeadlocks: There is a high number of collection exclusive deadlocks occurring.
+- MongoDBAtlasCollIntentExclDeadlocks: There is a high number of collection intent-exclusive deadlocks occurring.
+- MongoDBAtlasCollSharedDeadlocks: There is a high number of collection shared deadlocks occurring.
+- MongoDBAtlasCollIntentSharedDeadlocks: There is a high number of collection intent-shared deadlocks occurring.
+- MongoDBAtlasDBExclusiveDeadlocks: There is a high number of database exclusive deadlocks occurring.
+- MongoDBAtlasDBIntentExclDeadlocks: There is a high number of database intent-exclusive deadlocks occurring.
+- MongoDBAtlasDBSharedDeadlocks: There is a high number of database shared deadlocks occurring.
+- MongoDBAtlasDBIntentSharedDeadlocks: There is a high number of database intent-shared deadlocks occurring.
+- MongoDBAtlasSlowNetworkRequests: There is a high number of slow network requests.
 - MongoDBAtlasDiskSpaceLow: Hardware is running out of disk space.
 - MongoDBAtlasSlowHardwareIO: Read and write I/Os are taking too long to complete.
-- MongoDBAtlasHighNumberOfTimeoutElections: There is a high number of elections being called due to the primary node timing out.
-- MongoDBAtlasHighNumberOfCollectionExclusiveDeadlocks: There is a high number of collection exclusive-lock deadlocks.
-- MongoDBAtlasHighNumberOfCollectionIntentExclusiveDeadlocks: There is a high number of collection intent-exclusive-lock deadlocks.
-- MongoDBAtlasHighNumberOfCollectionSharedDeadlocks: There is a high number of collection shared-lock deadlocks.
-- MongoDBAtlasHighNumberOfCollectionIntentSharedDeadlocks: There is a high number of collection intent-shared-lock deadlocks.
-- MongoDBAtlasHighNumberOfDatabaseExclusiveDeadlocks: There is a high number of database exclusive-lock deadlocks.
-- MongoDBAtlasHighNumberOfDatabaseIntentExclusiveDeadlocks: There is a high number of database intent-exclusive-lock deadlocks.
-- MongoDBAtlasHighNumberOfDatabaseSharedDeadlocks: There is a high number of database shared-lock deadlocks.
-- MongoDBAtlasHighNumberOfDatabaseIntentSharedDeadlocks: There is a high number of database intent-shared-lock deadlocks.
+- MongoDBAtlasElectionTimeouts: There is a high number of elections being called due to the primary node timing out.
 
 Default thresholds can be configured in `config.libsonnet`.
 ```js
