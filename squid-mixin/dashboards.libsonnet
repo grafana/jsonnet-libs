@@ -1,5 +1,6 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
+local logslib = import 'logs-lib/logs/main.libsonnet';
 
 {
   local root = self,
@@ -7,55 +8,71 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     local prefix = this.config.dashboardNamePrefix;
     local links = this.grafana.links;
     local tags = this.config.dashboardTags;
-    local uid = this.config.uid;
-    local vars = commonlib.variables.new(
-      filteringSelector=this.config.filteringSelector,
-      groupLabels=this.config.groupLabels,
-      instanceLabels=this.config.instanceLabels,
-      varMetric='squid_server_http_requests_total',
-      customAllValue='.+',
-      enableLokiLogs=this.config.enableLokiLogs,
-    );
-    local annotations = {};
+    local uid = g.util.string.slugify(this.config.uid);
+    local vars = this.grafana.variables;
+    local annotations = this.grafana.annotations;
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-
+    local extraLogLabels = this.config.extraLogLabels;
     {
       'squid-overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withDescription('')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
-            g.util.grid.wrapPanels(
-              [
+            g.util.grid.wrapPanels([
                 this.grafana.rows.clientRow,
                 this.grafana.rows.serverRow,
-              ]
-              +
-              if this.config.enableLokiLogs then
-                [this.grafana.rows.logsRow]
-              else
-                []
-            )
+            ])
           )
         )
         + root.applyCommon(
           vars.multiInstance,
           uid + '-overview',
           tags,
-          links,
+          links {squidOverview+:: {} },
           annotations,
           timezone,
           refresh,
           period
         ),
-    },
+    } + if this.config.enableLokiLogs then {
+      'squid-logs.json':
+        logslib.new(
+          this.config.dashboardNamePrefix + ' logs',
+          datasourceName=this.grafana.variables.datasources.loki.name,
+          datasourceRegex=this.grafana.variables.datasources.loki.regex,
+          filterSelector=this.config.filteringSelector,
+          labels=this.config.groupLabels + this.config.extraLogLabels,
+          formatParser=null,
+          showLogsVolume=this.config.showLogsVolume,
+        )
+        {
+          dashboards+:
+            {
+              logs+:
+                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+            },
+          panels+:
+            {
+              logs+:
+                g.panel.logs.options.withEnableLogDetails(true)
+                + g.panel.logs.options.withShowTime(false)
+                + g.panel.logs.options.withWrapLogMessage(false),
+            },
+          variables+: {
+            toArray+: [
+              this.grafana.variables.datasources.prometheus { hide: 2 },
+            ],
+          },
+        }.dashboards.logs,
+    } else {},
 
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
-    + g.dashboard.withLinks([links[key].asDashboardLink() for key in std.objectFields(links)])
+    + g.dashboard.withLinks(std.objectValues(links))
     + g.dashboard.withTimezone(timezone)
     + g.dashboard.withRefresh(refresh)
     + g.dashboard.time.withFrom(period)

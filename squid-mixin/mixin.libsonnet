@@ -1,15 +1,25 @@
-local lib = import './main.libsonnet';
+local mixinlib = import './main.libsonnet';
+local config = (import './config.libsonnet');
+local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
-local squid =
-  lib.new()
-  + lib.withConfigMixin({
-    // Override defaults if needed
-  });
+
+local mixin = mixinlib.new()
+              + mixinlib.withConfigMixin(
+                {
+                  filteringSelector: config.filteringSelector,
+                  uid: config.uid,
+                  enableLokiLogs: true,
+                }
+              );
 
 {
-  grafanaDashboards+:: squid.grafana.dashboards,
-  prometheusAlerts+:: squid.prometheus.alerts,
-  prometheusRules+:: {
-    groups+: [],
+  grafanaDashboards+:: {
+    [fname]:
+      local dashboard = util.decorate_dashboard(mixin.grafana.dashboards[fname], tags=config.dashboardTags);
+      dashboard
+
+    for fname in std.objectFields(mixin.grafana.dashboards)
   },
+  prometheusAlerts+:: mixin.prometheus.alerts,
+  prometheusRules+:: mixin.prometheus.recordingRules,
 }

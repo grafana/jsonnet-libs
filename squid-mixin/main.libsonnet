@@ -8,6 +8,10 @@ local rows = import './rows.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
+  withConfigMixin(config): {
+    config+: config,
+  },
+
   new(): {
     local this = self,
     config: config,
@@ -22,18 +26,24 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
+      variables: commonlib.variables.new(
+        filteringSelector=this.config.filteringSelector,
+        groupLabels=this.config.groupLabels,
+        instanceLabels=this.config.instanceLabels,
+        varMetric='squid_client_http_requests_total',
+        customAllValue='.+',
+        enableLokiLogs=this.config.enableLokiLogs,
+      ),
+      annotations: {},
       links: links.new(this),
       panels: panels.new(this),
-      rows: rows.new(this),
       dashboards: dashboards.new(this),
+      rows: rows.new(this),
     },
 
     prometheus: {
       alerts: alerts.new(this),
+      recordingRules: {},
     },
-  },
-
-  withConfigMixin(config): {
-    config+: config,
   },
 }
