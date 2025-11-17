@@ -1,4 +1,4 @@
-// for Transaction related signals
+// Signals for Wildfly datasource dashboard
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -9,9 +9,35 @@ function(this)
     aggFunction: 'avg',
     alertsInterval: '5m',
     discoveryMetric: {
-      prometheus: 'wildfly_transactions_number_of_transactions_total',
+      prometheus: 'wildfly_datasources_pool_in_use_count',
     },
     signals: {
+      // Connections signals
+      connectionsActive: {
+        name: 'Active connections',
+        nameShort: 'Active connections',
+        type: 'gauge',
+        description: 'Connections to the datasource over time',
+        sources: {
+          prometheus: {
+            expr: 'wildfly_datasources_pool_in_use_count{%(queriesSelector)s,data_source=~"$datasource"}',
+            legendCustomTemplate: '{{data_source}}',
+          },
+        },
+      },
+      connectionsIdle: {
+        name: 'Idle connections',
+        nameShort: 'Idle connections',
+        type: 'gauge',
+        description: 'Idle connections to the datasource over time',
+        sources: {
+          prometheus: {
+            expr: 'wildfly_datasources_pool_idle_count{%(queriesSelector)s,data_source=~"$datasource"}',
+            legendCustomTemplate: '{{data_source}}',
+          },
+        },
+      },
+      // Transactions signals
       transactionsCreated: {
         name: 'Created transactions',
         nameShort: 'Created transactions',
