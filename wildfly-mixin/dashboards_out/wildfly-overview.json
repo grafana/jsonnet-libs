@@ -67,9 +67,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_request_count_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
                   "refId": "Requests rate"
@@ -118,12 +119,13 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_error_count_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_error_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
-                  "refId": "Request Errors Rate"
+                  "refId": "Request errors rate"
                }
             ],
             "title": "Request errors",
@@ -170,9 +172,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_bytes_received_total_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_bytes_received_total_bytes{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
                   "refId": "Network received throughput"
@@ -221,9 +224,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(wildfly_undertow_bytes_sent_total_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
+                  "expr": "rate(wildfly_undertow_bytes_sent_total_bytes{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",server=~\"$server\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{server}} - {{http_listener}}{{https_listener}}",
                   "refId": "Network sent throughput"
@@ -284,7 +288,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "wildfly_undertow_active_sessions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}",
+                  "expr": "wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -335,10 +339,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_expired_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(wildfly_undertow_expired_sessions_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{deployment}}",
                   "refId": "Expired sessions"
@@ -387,10 +391,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_undertow_rejected_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(wildfly_undertow_rejected_sessions_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",deployment=~\"$deployment\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{deployment}}",
                   "refId": "Rejected sessions"
@@ -424,7 +428,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(wildfly_batch_jberet_active_count{}, job)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -439,7 +443,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\"}, cluster)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -454,7 +458,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -474,7 +478,7 @@
                },
                "multi": true,
                "name": "server",
-               "query": "label_values(wildfly_undertow_request_count_total{job=~\"$job\",cluster=~\"$cluster\"}, server)",
+               "query": "label_values(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, server)",
                "refresh": 2,
                "type": "query"
             },
@@ -485,7 +489,7 @@
                },
                "multi": true,
                "name": "deployment",
-               "query": "label_values(wildfly_undertow_active_sessions{job=~\"$job\",cluster=~\"$cluster\"}, deployment)",
+               "query": "label_values(wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, deployment)",
                "refresh": 2,
                "type": "query"
             }

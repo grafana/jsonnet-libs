@@ -1,13 +1,13 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/wildfly"
+  filteringSelector: 'job="integrations/wildfly"',  // set to apply static filters to all queries and alerts, i.e. job="integrations/wildfly"
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
 
-  dashboardTags: [self.uid],
   uid: 'wildfly',
+  dashboardTags: [self.uid],
   dashboardNamePrefix: 'Wildfly',
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
@@ -26,10 +26,7 @@
 
   // Signals configuration
   signals+: {
-    requests: (import './signals/requests.libsonnet')(this),
-    network: (import './signals/network.libsonnet')(this),
-    connections: (import './signals/connections.libsonnet')(this),
-    sessions: (import './signals/sessions.libsonnet')(this),
-    transactions: (import './signals/transactions.libsonnet')(this),
+    overview: (import './signals/overview.libsonnet')(this),
+    datasource: (import './signals/datasource.libsonnet')(this),
   },
 }
