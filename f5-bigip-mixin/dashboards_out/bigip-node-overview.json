@@ -1,282 +1,167 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
-         "list": [ ]
+         "list": [
+            { }
+         ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "f5-bigip-mixin"
-            ],
-            "targetBlank": false,
-            "title": "Other BIG-IP dashboards",
-            "type": "dashboards",
-            "url": ""
+            "f5BigipClusterOverview": {
+               "includeVars": true,
+               "keepTime": true,
+               "title": "F5 BIG-IP cluster overview",
+               "type": "link",
+               "url": "/d/f5bigip_cluster_overview"
+            },
+            "f5BigipLogs": {
+               "includeVars": true,
+               "keepTime": true,
+               "title": "F5 BIG-IP logs",
+               "type": "link",
+               "url": "/d/f5bigip-logs"
+            },
+            "f5BigipPoolOverview": {
+               "includeVars": true,
+               "keepTime": true,
+               "title": "F5 BIG-IP pool overview",
+               "type": "link",
+               "url": "/d/f5bigip_pool_overview"
+            },
+            "f5BigipVirtualServerOverview": {
+               "includeVars": true,
+               "keepTime": true,
+               "title": "F5 BIG-IP virtual server overview",
+               "type": "link",
+               "url": "/d/f5bigip_virtual_server_overview"
+            },
+            "otherDashboards": {
+               "asDropdown": true,
+               "includeVars": true,
+               "keepTime": true,
+               "tags": [
+                  "f5-bigip-mixin"
+               ],
+               "title": "All dashboards",
+               "type": "dashboards"
+            }
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Node overview",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The availability status of the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "fixed"
-                  },
-                  "custom": {
-                     "align": "left",
-                     "cellOptions": {
-                        "type": "color-text"
-                     },
-                     "inspect": false
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "0": {
-                              "color": "red",
-                              "index": 1,
-                              "text": "Unavailable"
-                           },
-                           "1": {
-                              "color": "green",
-                              "index": 0,
-                              "text": "Available"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
                   "unit": "none"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Time"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "job"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "__name__"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "partition"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "instance"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Instance"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "node"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Node"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Value"
-                     },
-                     "properties": [
-                        {
-                           "id": "displayName",
-                           "value": "Status"
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
-               "h": 5,
-               "w": 8,
+               "h": 8,
+               "w": 24,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
-            "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "fields": [ ],
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true
-            },
-            "pluginVersion": "10.2.0-60139",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "table",
                   "instant": true,
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Availability status"
                }
             ],
             "title": "Availability status",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "__name__": true,
+                        "job": true,
+                        "partition": true
+                     },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Status",
+                        "instance": "Instance",
+                        "node": "Node"
+                     }
+                  }
+               }
+            ],
             "type": "table"
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of requests made to the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
-               "w": 8,
-               "x": 8,
-               "y": 0
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
             },
             "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_node_tot_requests{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:])",
+                  "expr": "increase(bigip_node_tot_requests{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Requests"
                }
             ],
             "title": "Requests / $__interval",
@@ -284,87 +169,51 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The current number of active sessions to the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
-               "w": 8,
-               "x": 16,
-               "y": 0
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_node_cur_sessions{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_node_cur_sessions{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Active sessions"
                }
             ],
             "title": "Active sessions",
@@ -372,100 +221,62 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The current active server-side connections to the node in comparison to the maximum connection capacity.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 24,
                "x": 0,
-               "y": 5
+               "y": 17
             },
             "id": 5,
             "options": {
                "legend": {
-                  "calcs": [
-                     "min",
-                     "mean",
-                     "max"
-                  ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_node_serverside_cur_conns{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_node_serverside_cur_conns{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}} - current"
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Server-side current connections"
                },
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_node_serverside_max_conns{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_node_serverside_max_conns{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}} - max"
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Server-side maximum connections"
                }
             ],
             "title": "Connections",
@@ -473,87 +284,51 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The rate of data received from the pool by the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 10
+               "y": 25
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(bigip_node_serverside_bytes_in{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__rate_interval])",
+                  "expr": "rate(bigip_node_serverside_bytes_in{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Traffic inbound"
                }
             ],
             "title": "Traffic inbound",
@@ -561,87 +336,51 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The rate of data sent from the pool by the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 10
+               "y": 25
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(bigip_node_serverside_bytes_out{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__rate_interval])",
+                  "expr": "rate(bigip_node_serverside_bytes_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Traffic outbound"
                }
             ],
             "title": "Traffic outbound",
@@ -649,88 +388,52 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of packets received by the node from the pool.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 15
+               "y": 33
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_node_serverside_pkts_in{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:])",
+                  "expr": "increase(bigip_node_serverside_pkts_in{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Packets inbound"
                }
             ],
             "title": "Packets inbound / $__interval",
@@ -738,88 +441,52 @@
          },
          {
             "datasource": {
-               "uid": "${datasource}"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of packets sent by the node from the pool.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 15
+               "y": 33
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${datasource}"
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_node_serverside_pkts_out{job=~\"$job\", instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:])",
+                  "expr": "increase(bigip_node_serverside_pkts_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{node}} - {{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{node}} - {{instance}}",
+                  "refId": "Packets outbound"
                }
             ],
             "title": "Packets outbound / $__interval",
@@ -827,112 +494,84 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "f5-bigip-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "datasource",
-               "options": [ ],
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${datasource}"
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(bigip_node_status_availability_state,job)",
+               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\"}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${datasource}"
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\"}, instance)",
+               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\"}, instance)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${datasource}"
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "BIG-IP node",
                "multi": true,
                "name": "bigip_node",
-               "options": [ ],
-               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\"},node)",
+               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\"}, node)",
                "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${datasource}"
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "BIG-IP partition",
                "multi": true,
                "name": "bigip_partition",
-               "options": [ ],
-               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\", instance=~\"$instance\"},partition)",
+               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\", node=~\"$bigip_node\"}, partition)",
                "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             }
          ]
       },
@@ -940,33 +579,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
-      "title": "BIG-IP node overview",
-      "uid": "bigip-node-overview",
-      "version": 0
+      "title": "F5 BIG-IP node overview",
+      "uid": "f5bigip_node_overview"
    }
