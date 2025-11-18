@@ -1,6 +1,6 @@
 function(this) {
   local legendCustomTemplate = std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
-  local groupLabelAggTerm = std.join(', ', this.groupLabels),
+  local groupLabelAggTerm = std.join(', ', this.groupLabels + this.instanceLabels),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -175,7 +175,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}[$__interval:] offset -$__interval))',
+          expr: 'sum by('+ groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}[$__interval:] offset -$__interval))',
           legendCustomTemplate: legendCustomTemplate + ' - 2xx',
         },
       },
@@ -189,7 +189,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}[$__interval:] offset -$__interval))',
+          expr: 'sum by('+ groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}[$__interval:] offset -$__interval))',
           legendCustomTemplate: legendCustomTemplate + ' - 3xx',
         },
       },
@@ -205,7 +205,7 @@ function(this) {
       aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}[$__interval:] offset -$__interval))',
+          expr: 'sum by('+ groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}[$__interval:] offset -$__interval))',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - 4xx',
         },
@@ -222,7 +222,7 @@ function(this) {
       aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}[$__interval:] offset -$__interval))',
+          expr: 'sum by('+ groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}[$__interval:] offset -$__interval))',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - 5xx',
         },

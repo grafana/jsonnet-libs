@@ -140,7 +140,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       overviewErrorResponseStatusesPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Error response statuses',
-          targets=[signals.overview.errorResponseStatuses.asTarget()],
+          targets=[signals.overview.errorResponseStatuses.asTarget() { interval: '2m' }],
         )
         + g.panel.timeSeries.panelOptions.withDescription('The total number of error response statuses (HTTP 4xx-5xx) aggregated across all nodes.')
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
@@ -149,7 +149,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       overviewReplicatorChangesManagerDeathsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Replicator changes manager deaths',
-          targets=[signals.replicator.changesManagerDeaths.asTarget()],
+          targets=[signals.replicator.changesManagerDeaths.asTarget() { interval: '2m' }],
         )
         + g.panel.timeSeries.panelOptions.withDescription('Number of replicator changes manager processor deaths across all nodes.'),
 
@@ -287,7 +287,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('timeseries'),
         ])
-        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${' + this.grafana.variables.datasources.prometheus.name + '}')
         + g.panel.histogram.standardOptions.color.withMode('thresholds')
         + g.panel.histogram.options.legend.withPlacement('right')
         + g.panel.histogram.panelOptions.withDescription('The average request latency for a node.')

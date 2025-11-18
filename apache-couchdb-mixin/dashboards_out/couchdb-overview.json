@@ -889,6 +889,7 @@
                   "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ couchdb_cluster }} - {{code}}",
                   "refId": "Error response statuses"
                }
@@ -953,6 +954,7 @@
                   "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "legendFormat": "{{ couchdb_cluster}}",
                   "refId": "Changes manager deaths"
                }
