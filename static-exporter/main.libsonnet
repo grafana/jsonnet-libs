@@ -1,29 +1,39 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
-  new(name, image=null, shell_exporter=false, port=null)::
-    local _image =
-      if image == null
-      then (
-        if shell_exporter
-        then 'gcr.io/distroless/static-debian12:debug'
-        else 'httpd:2.4-alpine'
-      )
-      else image
-    ;
-    local _port = if port == null
-    then (
-      if shell_exporter
-      then 8080
-      else 80
-    )
-    else port;
+  new(name, image='httpd:2.4-alpine')::
+    {
+      name:: name,
+      data:: { metrics: '' },
 
+      local configMap = k.core.v1.configMap,
+      configmap:
+        configMap.new(name, self.data),
+
+      local container = k.core.v1.container,
+      container::
+        container.new('static-exporter', image)
+        + container.withPorts([
+          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
+        ])
+        + k.util.resourcesRequests('10m', '10Mi')
+      ,
+
+      local deployment = k.apps.v1.deployment,
+      local volumeMount = k.core.v1.volumeMount,
+      deployment:
+        deployment.new(name, replicas=1, containers=[self.container])
+        + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
+    }
+    + self.withHttpConfig()
+  ,
+
+  newShellExporter(name, image='gcr.io/distroless/static-debian12:debug', port=8080)::
     {
       name:: name,
       data:: {
         metrics: '',
-        [if shell_exporter then 'handler']: |||
+        handler: |||
           METRICS_FILE="/data/metrics"
 
           handle_request() {
@@ -68,8 +78,6 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
           handle_request
         |||,
-
-
       },
 
       local configMap = k.core.v1.configMap,
@@ -78,48 +86,41 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
       local container = k.core.v1.container,
       container::
-        container.new('static-exporter', _image)
+        container.new('static-exporter', image)
         + container.withPorts([
-          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=_port),
+          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=port),
         ])
         + k.util.resourcesRequests('10m', '10Mi')
-        + (
-          if shell_exporter
-          then
-            container.withCommand([
-              'sh',
-              '-eu',
-              '-c',
-              |||
-                # handler is created in a new file
-                mkdir -p "%(bin_dir)s"
-                echo '#!'$(which sh) > "%(bin_dir)s/handler"
-                cat /data/handler >> "%(bin_dir)s/handler"
-                chmod +x %(bin_dir)s/handler
+        + container.withCommand([
+          'sh',
+          '-eu',
+          '-c',
+          |||
+            # handler is created in a new file
+            mkdir -p "%(bin_dir)s"
+            echo '#!'$(which sh) > "%(bin_dir)s/handler"
+            cat /data/handler >> "%(bin_dir)s/handler"
+            chmod +x %(bin_dir)s/handler
 
-                # run nc, which forks each handler in its own process
-                exec nc -p %(port)d -l -k -e "%(bin_dir)s/handler" 0.0.0.0
-              ||| % {
-                port: _port,
-                bin_dir: '/home/nonroot/bin',
-              },
-            ]) +
-            container.securityContext.withRunAsUser(65532) +
-            container.securityContext.withRunAsGroup(65532) +
-            container.readinessProbe.httpGet.withPath('/health') +
-            container.readinessProbe.httpGet.withPort('http-metrics')
-          else {}
-        )
+            # run nc, which forks each handler in its own process
+            exec nc -p %(port)d -l -k -e "%(bin_dir)s/handler" 0.0.0.0
+          ||| % {
+            port: port,
+            bin_dir: '/home/nonroot/bin',
+          },
+        ]) +
+        container.securityContext.withRunAsUser(65532) +
+        container.securityContext.withRunAsGroup(65532) +
+        container.readinessProbe.httpGet.withPath('/health') +
+        container.readinessProbe.httpGet.withPort('http-metrics')
       ,
 
       local deployment = k.apps.v1.deployment,
       local volumeMount = k.core.v1.volumeMount,
       deployment:
-        deployment.new(name, replicas=1, containers=[self.container])
-        + k.util.configMapVolumeMount(self.configmap, if shell_exporter then '/data' else '/usr/local/apache2/htdocs'),
-    }
-    + (if shell_exporter then {} else self.withHttpConfig())
-  ,
+        deployment.new(name, replicas=1, containers=[self.container]),
+    },
+
 
   withData(data):: { data: data },
 
