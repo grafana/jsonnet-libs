@@ -15,7 +15,7 @@ groups:
             description: '{{ printf "%.0f" $value }} 4xx responses have been detected over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 5.'
             summary: There are a high number of 4xx responses for incoming requests to a node.
           expr: |
-            sum by(job, instance) (increase(couchdb_httpd_status_codes{job="integrations/apache-couchdb",code=~"4.*"}[5m])) > 5
+            sum by(job, instance) (increase(couchdb_httpd_status_codes{job="integrations/apache-couchdb",code=~"4.."}[5m])) > 5
           for: 5m
           labels:
             severity: warning
@@ -24,7 +24,7 @@ groups:
             description: '{{ printf "%.0f" $value }} 5xx responses have been detected over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 0.'
             summary: There are a high number of 5xx responses for incoming requests to a node.
           expr: |
-            sum by(job, instance) (increase(couchdb_httpd_status_codes{job="integrations/apache-couchdb",code=~"5.*"}[5m])) > 0
+            sum by(job, instance) (increase(couchdb_httpd_status_codes{job="integrations/apache-couchdb",code=~"5.."}[5m])) > 0
           for: 5m
           labels:
             severity: critical
