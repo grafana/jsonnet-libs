@@ -25,7 +25,7 @@
           {
             alert: 'CouchDBHigh4xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"4.*"}[5m])) > %(alertsWarning4xxResponseCodes5m)s
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"4.."}[5m])) > %(alertsWarning4xxResponseCodes5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'CouchDBHigh5xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"5.*"}[5m])) > %(alertsCritical5xxResponseCodes5m)s
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"5.."}[5m])) > %(alertsCritical5xxResponseCodes5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
