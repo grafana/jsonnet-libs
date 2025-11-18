@@ -15,6 +15,9 @@ local optional_labels = {
   cl_name+: {
     label: 'Atlas cluster',
   },
+  instance+: {
+    label: 'Node',
+  },
 };
 
 // populate monitoring-mixin:

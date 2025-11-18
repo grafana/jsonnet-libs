@@ -23,6 +23,16 @@
             "url": "/d/mongodb-atlas-operations-overview"
          },
          {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "mongodb-atlas-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
             "keepTime": true,
             "title": "MongoDB Atlas sharding overview",
             "type": "link",
@@ -70,8 +80,10 @@
             "id": 2,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -181,7 +193,7 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 30,
+                     "fillOpacity": 1,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -199,8 +211,10 @@
             "id": 5,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -369,6 +383,8 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "reqps"
                }
             },
@@ -381,8 +397,10 @@
             "id": 9,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -430,10 +448,7 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
+                     "showPoints": "never"
                   },
                   "unit": "Bps"
                }
@@ -447,8 +462,10 @@
             "id": 10,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -505,17 +522,30 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 30,
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
+                     "showPoints": "never"
                   },
                   "unit": "iops"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -526,8 +556,10 @@
             "id": 12,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -575,10 +607,7 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
+                     "showPoints": "never"
                   },
                   "unit": "ms"
                }
@@ -592,8 +621,10 @@
             "id": 13,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -682,7 +713,7 @@
                   "uid": "${datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "Node",
                "multi": true,
                "name": "instance",
                "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",

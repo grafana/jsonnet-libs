@@ -94,24 +94,14 @@ local g = import './g.libsonnet';
     // Operations overview dashboard rows
     //
 
-    operationsCountersClusterRow:
-      g.panel.row.new('Operation counters - cluster')
+    operationsRow:
+      g.panel.row.new('Operations')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.insertOperations { gridPos+: { w: 12 } },
         panels.queryOperations { gridPos+: { w: 12 } },
+        panels.insertOperations { gridPos+: { w: 12 } },
         panels.updateOperations { gridPos+: { w: 12 } },
         panels.deleteOperations { gridPos+: { w: 12 } },
-      ]),
-
-    operationsCountersInstanceRow:
-      g.panel.row.new('Operation counters - instance')
-      + g.panel.row.withCollapsed(false)
-      + g.panel.row.withPanels([
-        panels.insertOperationsByInstance { gridPos+: { w: 12 } },
-        panels.queryOperationsByInstance { gridPos+: { w: 12 } },
-        panels.updateOperationsByInstance { gridPos+: { w: 12 } },
-        panels.deleteOperationsByInstance { gridPos+: { w: 12 } },
       ]),
 
     operationsConnectionsRow:
@@ -140,36 +130,6 @@ local g = import './g.libsonnet';
         panels.collectionDeadlocksOperations { gridPos+: { w: 8 } },
         panels.collectionWaitCountOperations { gridPos+: { w: 8 } },
         panels.collectionWaitTimeOperations { gridPos+: { w: 8 } },
-      ]),
-
-    operationsLatenciesClusterRow:
-      g.panel.row.new('Operation latencies - cluster')
-      + g.panel.row.withCollapsed(false)
-      + g.panel.row.withPanels([
-        panels.readOperationCount { gridPos+: { w: 12 } },
-        panels.writeOperationCount { gridPos+: { w: 12 } },
-        panels.readOperationLatency { gridPos+: { w: 12 } },
-        panels.writeOperationLatency { gridPos+: { w: 12 } },
-      ]),
-
-    operationsLatenciesInstanceRow:
-      g.panel.row.new('Operation latencies - instance')
-      + g.panel.row.withCollapsed(false)
-      + g.panel.row.withPanels([
-        panels.readOperationCountByInstance { gridPos+: { w: 12 } },
-        panels.writeOperationCountByInstance { gridPos+: { w: 12 } },
-        panels.readOperationLatencyByInstance { gridPos+: { w: 12 } },
-        panels.writeOperationLatencyByInstance { gridPos+: { w: 12 } },
-      ]),
-
-    operationsAvgLatenciesRow:
-      g.panel.row.new('Average latencies')
-      + g.panel.row.withCollapsed(false)
-      + g.panel.row.withPanels([
-        panels.avgReadLatency { gridPos+: { w: 12 } },
-        panels.avgWriteLatency { gridPos+: { w: 12 } },
-        panels.avgReadLatencyByInstance { gridPos+: { w: 12 } },
-        panels.avgWriteLatencyByInstance { gridPos+: { w: 12 } },
       ]),
 
     //

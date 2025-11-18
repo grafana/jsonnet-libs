@@ -17,6 +17,16 @@
             "url": "/d/mongodb-atlas-operations-overview"
          },
          {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "mongodb-atlas-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
             "keepTime": true,
             "title": "MongoDB Atlas performance overview",
             "type": "link",
@@ -631,7 +641,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "mongodb_electionMetrics_averageCatchUpOps{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
+                  "expr": "sum by (job,cl_name,instance) (\n  mongodb_electionMetrics_averageCatchUpOps{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -693,7 +703,7 @@
                   "uid": "${datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "Node",
                "multi": true,
                "name": "instance",
                "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",

@@ -17,7 +17,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm"}',  // representative metric for a table
+            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="shardsvr"}',  // representative metric for a table
             legendCustomTemplate: '',
           },
         },
@@ -31,7 +31,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm"}',  // representative metric for a table
+            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="configsvr"}',  // representative metric for a table
             legendCustomTemplate: '',
           },
         },
@@ -45,7 +45,7 @@ function(this)
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm"}',  // representative metric for a table
+            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="mongos"}',  // representative metric for a table
             legendCustomTemplate: '',
           },
         },
@@ -124,7 +124,7 @@ function(this)
         unit: 'percentunit',
         sources: {
           prometheus: {
-            expr: '(sum without (disk_name) (hardware_disk_metrics_disk_space_used_bytes{%(queriesSelector)s})) / clamp_min((sum without (disk_name) (hardware_disk_metrics_disk_space_used_bytes{%(queriesSelector)s})) + (sum without (disk_name) (hardware_disk_metrics_disk_space_free_bytes{%(queriesSelector)s})), 1)',
+            expr: '(sum (hardware_disk_metrics_disk_space_used_bytes{%(queriesSelector)s}) by (cl_name)) / clamp_min((sum (hardware_disk_metrics_disk_space_used_bytes{%(queriesSelector)s}) by (cl_name)) + (sum (hardware_disk_metrics_disk_space_free_bytes{%(queriesSelector)s}) by (cl_name)), 1)',
             legendCustomTemplate: '{{cl_name}}',
           },
         },
@@ -212,12 +212,12 @@ function(this)
 
       networkSlowSSL: {
         name: 'Slow SSL operations',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of slow SSL operations (>1s).',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_numSlowSSLOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
+            expr: 'sum(rate(mongodb_network_numSlowSSLOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__rate_interval])) by (cl_name)',
             legendCustomTemplate: '{{cl_name}} - SSL',
           },
         },
@@ -231,7 +231,7 @@ function(this)
         unit: 'conns',
         sources: {
           prometheus: {
-            expr: 'sum(rate(mongodb_connections_totalCreated{%(queriesSelector)s}[$__rate_interval])) by (cl_name)',
+            expr: 'sum(increase(mongodb_connections_totalCreated{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
             legendCustomTemplate: '{{cl_name}}',
           },
         },

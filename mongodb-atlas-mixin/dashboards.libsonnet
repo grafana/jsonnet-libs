@@ -84,7 +84,7 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.operationsCountersInstanceRow,
+                this.grafana.rows.operationsRow,
                 this.grafana.rows.operationsConnectionsRow,
                 this.grafana.rows.operationsReadWriteRow,
                 this.grafana.rows.operationsLocksRow,

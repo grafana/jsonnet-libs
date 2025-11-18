@@ -193,7 +193,8 @@ function(this)
       averageCatchUpOps: {
         name: 'Average catch-up operations',
         type: 'gauge',
-        aggLevel: 'none',
+        aggLevel: 'instance',
+        aggFunction: 'sum',
         description: 'Average catch-up operations.',
         unit: 'none',
         sources: {

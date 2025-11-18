@@ -23,6 +23,16 @@
             "url": "/d/mongodb-atlas-operations-overview"
          },
          {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "mongodb-atlas-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
             "keepTime": true,
             "title": "MongoDB Atlas performance overview",
             "type": "link",
@@ -1080,7 +1090,7 @@
                   "uid": "${datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
+               "label": "Node",
                "multi": true,
                "name": "instance",
                "query": "label_values(mongodb_network_bytesIn{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
