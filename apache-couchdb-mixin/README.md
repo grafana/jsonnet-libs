@@ -18,7 +18,7 @@ and the following alerts:
 - CouchDBReplicatorJobsCrashing
 - CouchDBReplicatorChangesQueuesDying
 - CouchDBReplicatorConnectionOwnersCrashing
-- CouchDBReplicatorConnectionWorkersCrashing
+- CouchDBReplicatorWorkersCrashing
 
 ## Apache CouchDB Overview
 
@@ -68,8 +68,8 @@ scrape_configs:
 - CouchDBManyReplicatorJobsPending: There is a high number of replicator jobs pending for a node.
 - CouchDBReplicatorJobsCrashing: There are replicator jobs crashing for a node.
 - CouchDBReplicatorChangesQueuesDying: There are replicator changes queue process deaths for a node.
-- CouchDBReplicatorConnectionOwnersCrashing: There are replicator connection owner process crashes for a node.
-- CouchDBReplicatorConnectionWorkersCrashing: There are replicator connection worker process crashes for a node.
+- CouchDBReplicatorOwnersCrashing: There are replicator connection owner process crashes for a node.
+- CouchDBReplicatorWorkersCrashing: There are replicator connection worker process crashes for a node.
 
 ## Install tools
 

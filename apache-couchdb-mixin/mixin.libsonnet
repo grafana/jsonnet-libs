@@ -16,7 +16,7 @@ local optional_labels = {
   cluster+: {
     allValue: '.*',
   },
-  couchb_cluster+: {
+  couchdb_cluster+: {
     label: 'CouchDB cluster',
     allValue: '.*',
   },

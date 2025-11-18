@@ -20,7 +20,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_couch_replicator_changes_manager_deaths_total{%(queriesSelector)s})',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_couch_replicator_changes_manager_deaths_total{%(queriesSelector)s}[$__interval:] offset -$__interval))',
         },
       },
     },

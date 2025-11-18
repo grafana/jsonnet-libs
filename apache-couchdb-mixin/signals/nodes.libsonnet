@@ -1,5 +1,6 @@
 function(this) {
   local legendCustomTemplate = std.join(' ', std.map(function(label) '{{' + label + '}}', this.instanceLabels)),
+  local groupLabelAggTerm = std.join(', ', this.groupLabels),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -147,7 +148,7 @@ function(this) {
       unit: 's',
       sources: {
         prometheus: {
-          expr: 'sum by(job, instance, cluster, quantile) (couchdb_request_time_seconds{%(queriesSelector)s})',
+          expr: 'sum by(' + groupLabelAggTerm + ', quantile) (couchdb_request_time_seconds{%(queriesSelector)s})',
           legendCustomTemplate: legendCustomTemplate + ' - {{quantile}}',
         },
       },
@@ -169,15 +170,12 @@ function(this) {
     responseStatus2xx: {
       name: 'Response status 2XX',
       nameShort: 'Response status 2XX',
-      type: 'gauge',
+      type: 'raw',
       description: 'The number of response status 2XX on a node.',
       unit: 'requests',
-      aggLevel: 'instance',
-      aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}',
-          rangeFunction: 'increase',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}[$__interval:] offset -$__interval))',
           legendCustomTemplate: legendCustomTemplate + ' - 2xx',
         },
       },
@@ -186,16 +184,13 @@ function(this) {
     responseStatus3xx: {
       name: 'Response status 3XX',
       nameShort: 'Response status 3XX',
-      type: 'gauge',
+      type: 'raw',
       description: 'The number of response status 3XX on a node.',
       unit: 'requests',
-      aggLevel: 'instance',
-      aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}[$__interval:] offset -$__interval))',
           legendCustomTemplate: legendCustomTemplate + ' - 3xx',
-          rangeFunction: 'increase',
         },
       },
     },
@@ -203,14 +198,14 @@ function(this) {
     responseStatus4xx: {
       name: 'Response status 4XX',
       nameShort: 'Response status 4XX',
-      type: 'gauge',
+      type: 'raw',
       description: 'The number of response status 4XX on a node.',
       unit: 'requests',
       aggLevel: 'instance',
       aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}[$__interval:] offset -$__interval))',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - 4xx',
         },
@@ -220,14 +215,14 @@ function(this) {
     responseStatus5xx: {
       name: 'Response status 5XX',
       nameShort: 'Response status 5XX',
-      type: 'gauge',
+      type: 'raw',
       description: 'The number of response status 5XX on a node.',
       unit: 'requests',
       aggLevel: 'instance',
       aggFunction: 'sum',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}[$__interval:] offset -$__interval))',
           rangeFunction: 'increase',
           legendCustomTemplate: legendCustomTemplate + ' - 5xx',
         },

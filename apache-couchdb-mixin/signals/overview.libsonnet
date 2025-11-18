@@ -33,7 +33,7 @@ function(this) {
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'count(count by(' + groupLabelAggTerm + ', instance) (couchdb_request_time_seconds_count{%(queriesSelector)s}))',
+          expr: 'sum(count by(' + groupLabelAggTerm + ', instance) (couchdb_request_time_seconds_count{%(queriesSelector)s}))',
         },
       },
     },
@@ -256,7 +256,8 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[23].*"}[$__interval:] offset $__interval))',
+          expr: 'sum by(' + groupLabelAggTerm + ', code) (rate(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[23].*"}[$__rate_interval]))',
+          legendCustomTemplate: legendCustomTemplate + ' - {{code}}',
         },
       },
     },
@@ -269,7 +270,8 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[45].*"})',
+          expr: 'sum by(' + groupLabelAggTerm + ', code) (rate(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[45].*"}[$__rate_interval]))',
+          legendCustomTemplate: legendCustomTemplate + ' - {{code}}',
         },
       },
     },

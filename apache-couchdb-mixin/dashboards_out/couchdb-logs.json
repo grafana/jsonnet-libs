@@ -258,7 +258,7 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Couchdb_cluster",
+               "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
                "query": "label_values({job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",

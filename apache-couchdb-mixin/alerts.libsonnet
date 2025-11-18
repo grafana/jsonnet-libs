@@ -7,7 +7,7 @@
           {
             alert: 'CouchDBUnhealthyCluster',
             expr: |||
-              min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable) < %(alertsCriticalClusterIsUnstable5m)s
+              min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{%(filteringSelector)s}) < %(alertsCriticalClusterIsUnstable5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'CouchDBHigh4xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"4.."}[5m])) > %(alertsWarning4xxResponseCodes5m)s
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"4.*"}[5m])) > %(alertsWarning4xxResponseCodes5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'CouchDBHigh5xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"5.."}[5m])) > %(alertsCritical5xxResponseCodes5m)s
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s,code=~"5.*"}[5m])) > %(alertsCritical5xxResponseCodes5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -61,7 +61,7 @@
           {
             alert: 'CouchDBModerateRequestLatency',
             expr: |||
-              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsWarningRequestLatency5m)s
+              sum by(job, instance) (rate(couchdb_request_time_seconds_sum{%(filteringSelector)s}[5m]) / rate(couchdb_request_time_seconds_count{%(filteringSelector)s}[5m])) * 1000 > %(alertsWarningRequestLatency5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -79,7 +79,7 @@
           {
             alert: 'CouchDBHighRequestLatency',
             expr: |||
-              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsCriticalRequestLatency5m)s
+              sum by(job, instance) (rate(couchdb_request_time_seconds_sum{%(filteringSelector)s}[5m]) / rate(couchdb_request_time_seconds_count{%(filteringSelector)s}[5m])) * 1000 > %(alertsCriticalRequestLatency5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -97,7 +97,7 @@
           {
             alert: 'CouchDBManyReplicatorJobsPending',
             expr: |||
-              sum by(job, instance) (couchdb_couch_replicator_jobs_pending) > %(alertsWarningPendingReplicatorJobs5m)s
+              sum by(job, instance) (couchdb_couch_replicator_jobs_pending{%(filteringSelector)s}) > %(alertsWarningPendingReplicatorJobs5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -115,7 +115,7 @@
           {
             alert: 'CouchDBReplicatorJobsCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_jobs_crashes_total[5m])) > %(alertsCriticalCrashingReplicatorJobs5m)s
+              sum by(job, instance) (increase(couchdb_couch_replicator_jobs_crashes_total{%(filteringSelector)s}[5m])) > %(alertsCriticalCrashingReplicatorJobs5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -133,7 +133,7 @@
           {
             alert: 'CouchDBReplicatorChangesQueuesDying',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_changes_queue_deaths_total[5m])) > %(alertsWarningDyingReplicatorChangesQueues5m)s
+              sum by(job, instance) (increase(couchdb_couch_replicator_changes_queue_deaths_total{%(filteringSelector)s}[5m])) > %(alertsWarningDyingReplicatorChangesQueues5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -151,7 +151,7 @@
           {
             alert: 'CouchDBReplicatorOwnersCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_connection_owner_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionOwners5m)s
+              sum by(job, instance) (increase(couchdb_couch_replicator_connection_owner_crashes_total{%(filteringSelector)s}[5m])) > %(alertsWarningCrashingReplicatorConnectionOwners5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -169,7 +169,7 @@
           {
             alert: 'CouchDBReplicatorWorkersCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_connection_worker_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionWorkers5m)s
+              sum by(job, instance) (increase(couchdb_couch_replicator_connection_worker_crashes_total{%(filteringSelector)s}[5m])) > %(alertsWarningCrashingReplicatorConnectionWorkers5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
