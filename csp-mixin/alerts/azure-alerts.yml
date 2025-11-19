@@ -199,3 +199,50 @@ groups:
           summary: 'Azure VNet Peering Connection Issues.'
           description: 'The success rate of Virtual Network {{ $labels.resourceName }} peering connections has fallen below the defined threshold, indicating possible connectivity failures. Investigate potential misconfigurations, network latency, or service disruptions affecting peering communication.'
           dashboard_url: '/a/grafana-csp-app/azure/dashboards/vnet'
+
+  - name: azure.flexibleserverspostgresql
+    rules:
+      - alert: AzureFlexibleServerHighCpuUtilization
+        expr: |
+          azure_microsoft_dbforpostgresql_flexibleservers_cpu_percent_average_percent{resourceName!=""} > 90
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Azure PostgreSQL Flexible Servers'
+          serviceId: 'microsoft.dbforpostgresql/flexibleservers'
+          namespace: cloud-provider-azure
+        annotations:
+          summary: 'Flexible Server CPU utilization is too high.'
+          description: 'The Flexible Server {{ $labels.resourceName }} is under heavy load and may become unresponsive.'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers'
+
+      - alert: AzureFlexibleServerHighMemoryUsage
+        expr: |
+          azure_microsoft_dbforpostgresql_flexibleservers_memory_percent_average_percent{resourceName!=""} > 90
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Azure PostgreSQL Flexible Servers'
+          serviceId: 'microsoft.dbforpostgresql/flexibleservers'
+          namespace: cloud-provider-azure
+        annotations:
+          summary: 'Flexible Server Memory usage is too high.'
+          description: 'The Flexible Server {{ $labels.resourceName }} is experiencing high memory usage, which may lead to performance degradation.'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers'
+
+      - alert: AzureFlexibleServerHighStorageUsage
+        expr: |
+          azure_microsoft_dbforpostgresql_flexibleservers_storage_percent_maximum_percent{resourceName!=""} > 90
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Azure PostgreSQL Flexible Servers'
+          serviceId: 'microsoft.dbforpostgresql/flexibleservers'
+          namespace: cloud-provider-azure
+        annotations:
+          summary: 'Flexible Server Storage usage is too high.'
+          description: 'The Flexible Server {{ $labels.resourceName }} is running low on storage space, which may impact database operations.'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers'
