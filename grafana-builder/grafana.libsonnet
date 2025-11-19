@@ -508,35 +508,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
       native: template % { metricQuery: nativeClassicQuery.native, label: statusLabelName },
       classic: template % { metricQuery: nativeClassicQuery.classic, label: statusLabelName },
     },
-    fieldConfig+: {
-      defaults+: {
-        custom+: {
-          lineWidth: 0,
-          fillOpacity: 100,  // Get solid fill.
-          stacking: {
-            mode: 'normal',
-            group: 'A',
-          },
-        },
-        unit: 'reqps',
-        min: 0,
-      },
-      overrides+: [{
-        matcher: {
-          id: 'byName',
-          options: status,
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              mode: 'fixed',
-              fixedColor: $.httpStatusColors[status],
-            },
-          },
-        ],
-      } for status in std.objectFieldsAll($.httpStatusColors)],
-    },
+    aliasColors: $.httpStatusColors,
     targets: [
       {
         expr: utils.showClassicHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
