@@ -200,7 +200,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}[$__interval:] offset $__interval))',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"2.*"}[$__interval:] offset $__interval)) != 0',
           legendCustomTemplate: legendCustomTemplate + ' - 2xx',
         },
       },
@@ -214,7 +214,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}[$__interval:] offset $__interval))',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"3.*"}[$__interval:] offset $__interval)) != 0',
           legendCustomTemplate: legendCustomTemplate + ' - 3xx',
         },
       },
@@ -228,7 +228,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}[$__interval:] offset $__interval))',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"4.*"}[$__interval:] offset $__interval)) != 0',
           legendCustomTemplate: legendCustomTemplate + ' - 4xx',
         },
       },
@@ -242,7 +242,7 @@ function(this) {
       unit: 'requests',
       sources: {
         prometheus: {
-          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}[$__interval:] offset $__interval))',
+          expr: 'sum by(' + groupLabelAggTerm + ') (increase(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"5.*"}[$__interval:] offset $__interval)) != 0',
           legendCustomTemplate: legendCustomTemplate + ' - 5xx',
         },
       },

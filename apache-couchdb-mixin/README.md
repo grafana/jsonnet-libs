@@ -58,6 +58,35 @@ scrape_configs:
           __path__: /var/log/couchdb/couchdb.log
 ```
 
+## CouchDB Version Compatibility
+
+This mixin supports **Apache CouchDB 3.3.1 and later** and handles differences in metric naming conventions between versions.
+
+### Metric Naming Changes
+
+Between CouchDB 3.3.0 and 3.5.0, there was a change in how some metrics are named. Specifically, some metrics that previously had a `_total` suffix no longer include it in newer versions:
+
+- **CouchDB 3.3.0 and earlier**: `couchdb_open_os_files_total`
+- **CouchDB 3.5.0 and later**: `couchdb_open_os_files`
+
+### How the Mixin Handles This
+
+By default, the mixin is configured to work with both naming conventions automatically through the `metricsSource` configuration in `config.libsonnet`. This ensures dashboards and alerts work correctly regardless of which CouchDB version you're running.
+
+If you need to customize this behavior, you can modify the `metricsSource` in your `config.libsonnet`:
+
+```jsonnet
+{
+  _config+:: {
+    // For CouchDB 3.5.0+ only (no _total suffix)
+    metricsSource: ['prometheus'],
+
+    // OR for backwards compatibility with both versions
+    metricsSource: ['prometheus', 'prometheusWithTotal'],
+  },
+}
+```
+
 ## Alerts Overview
 
 - CouchDBUnhealthyCluster: At least one of the nodes in a cluster is reporting the cluster as being unstable.
