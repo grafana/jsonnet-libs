@@ -3,8 +3,8 @@
 
   // Basic filtering
   filteringSelector: 'job="integrations/squid"',
-  groupLabels: ['job'],
-  logLabels: ['job', 'instance'],
+  groupLabels: ['job', 'cluster'],
+  logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
 
   // Dashboard settings
@@ -28,6 +28,6 @@
 
   // Signal definitions
   signals: {
-    client: (import './signals/client.libsonnet')(this),
+    overview: (import './signals/overview.libsonnet')(this),
   },
 }
