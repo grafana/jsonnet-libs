@@ -159,7 +159,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/squid\",job=~\"$job\",level=~\"$level\",severity=~\"$severity\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",level=~\"$level\",severity=~\"$severity\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -201,7 +201,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/squid\",job=~\"$job\",level=~\"$level\",severity=~\"$severity\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",level=~\"$level\",severity=~\"$severity\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -244,10 +244,25 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=\"integrations/squid\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/squid\",job=~\"$job\"}, level)",
+               "query": "label_values({job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -262,7 +277,7 @@
                "label": "Severity",
                "multi": true,
                "name": "severity",
-               "query": "label_values({job=\"integrations/squid\",job=~\"$job\",level=~\"$level\"}, severity)",
+               "query": "label_values({job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",level=~\"$level\"}, severity)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
