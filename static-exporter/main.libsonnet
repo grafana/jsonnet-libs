@@ -118,7 +118,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       local deployment = k.apps.v1.deployment,
       local volumeMount = k.core.v1.volumeMount,
       deployment:
-        deployment.new(name, replicas=1, containers=[self.container]),
+        deployment.new(name, replicas=1, containers=[self.container])
+        + k.util.configMapVolumeMount(self.configmap, '/data'),
     },
 
 
