@@ -478,7 +478,7 @@
                },
                "multi": true,
                "name": "server",
-               "query": "label_values(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, server)",
+               "query": "label_values(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, server)",
                "refresh": 2,
                "type": "query"
             },
@@ -489,7 +489,7 @@
                },
                "multi": true,
                "name": "deployment",
-               "query": "label_values(wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, deployment)",
+               "query": "label_values(wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, deployment)",
                "refresh": 2,
                "type": "query"
             }
