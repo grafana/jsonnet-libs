@@ -1,7 +1,6 @@
 {
   local this = self,
-  enableMultiCluster: false,
-  filteringSelector: 'job="integrations/wildfly"',  // set to apply static filters to all queries and alerts, i.e. job="integrations/wildfly"
+  filteringSelector: 'job="integrations/wildfly"',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
@@ -26,7 +25,9 @@
 
   // Signals configuration
   signals+: {
-    overview: (import './signals/overview.libsonnet')(this),
+    overviewServer: (import './signals/overview-server.libsonnet')(this),
+    overviewDeployment: (import './signals/overview-deployment.libsonnet')(this),
     datasource: (import './signals/datasource.libsonnet')(this),
+    datasourceTransaction: (import './signals/datasource-transaction.libsonnet')(this),
   },
 }

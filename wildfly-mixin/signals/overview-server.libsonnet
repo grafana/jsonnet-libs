@@ -3,7 +3,7 @@ function(this)
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,
+    instanceLabels: this.instanceLabels + ['server'],
     enableLokiLogs: this.enableLokiLogs,
     aggLevel: 'none',
     aggFunction: 'avg',
@@ -21,7 +21,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'wildfly_undertow_request_count_total{%(queriesSelector)s,server=~"$server"}',
+            expr: 'wildfly_undertow_request_count_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{server}} - {{http_listener}}{{https_listener}}',
           },
         },
@@ -34,7 +34,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'wildfly_undertow_error_count_total{%(queriesSelector)s,server=~"$server"}',
+            expr: 'wildfly_undertow_error_count_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{server}} - {{http_listener}}{{https_listener}}',
           },
         },
@@ -48,7 +48,7 @@ function(this)
         unit: 'binBps',
         sources: {
           prometheus: {
-            expr: 'wildfly_undertow_bytes_received_total_bytes{%(queriesSelector)s,server=~"$server"}',
+            expr: 'wildfly_undertow_bytes_received_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '{{server}} - {{http_listener}}{{https_listener}}',
           },
         },
@@ -61,47 +61,8 @@ function(this)
         unit: 'binBps',
         sources: {
           prometheus: {
-            expr: 'wildfly_undertow_bytes_sent_total_bytes{%(queriesSelector)s,server=~"$server"}',
+            expr: 'wildfly_undertow_bytes_sent_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '{{server}} - {{http_listener}}{{https_listener}}',
-          },
-        },
-      },
-      // Sessions signals
-      activeSessions: {
-        name: 'Active sessions',
-        nameShort: 'Active sessions',
-        type: 'gauge',
-        description: 'Number of active sessions to deployment over time',
-        sources: {
-          prometheus: {
-            expr: 'wildfly_undertow_active_sessions{%(queriesSelector)s,deployment=~"$deployment"}',
-            legendCustomTemplate: '{{deployment}}',
-          },
-        },
-      },
-      expiredSessions: {
-        name: 'Expired sessions',
-        nameShort: 'Expired sessions',
-        type: 'counter',
-        description: 'Number of sessions that have expired for a deployment over time',
-        sources: {
-          prometheus: {
-            expr: 'wildfly_undertow_expired_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}',
-            rangeFunction: 'increase',
-            legendCustomTemplate: '{{deployment}}',
-          },
-        },
-      },
-      rejectedSessions: {
-        name: 'Rejected sessions',
-        nameShort: 'Rejected sessions',
-        type: 'counter',
-        description: 'Number of sessions that have been rejected from a deployment over time',
-        sources: {
-          prometheus: {
-            expr: 'wildfly_undertow_rejected_sessions_total{%(queriesSelector)s,deployment=~"$deployment"}',
-            rangeFunction: 'increase',
-            legendCustomTemplate: '{{deployment}}',
           },
         },
       },
