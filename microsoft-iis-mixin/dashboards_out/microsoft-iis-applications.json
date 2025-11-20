@@ -49,12 +49,20 @@
             "description": "The HTTP request rate for an IIS application.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "light-purple",
+                     "mode": "fixed"
+                  },
                   "custom": {
-                     "fillOpacity": 30,
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "reqps"
                }
@@ -66,6 +74,7 @@
                "y": 1
             },
             "id": 2,
+            "maxDataPoints": 100,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -102,8 +111,13 @@
             "description": "Requests that have resulted in errors for an IIS application.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "light-red",
+                     "mode": "fixed"
+                  },
                   "custom": {
-                     "fillOpacity": 30,
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -112,6 +126,7 @@
                         "mode": "normal"
                      }
                   },
+                  "noValue": "No errors",
                   "unit": "reqps"
                }
             },
@@ -122,6 +137,7 @@
                "y": 1
             },
             "id": 3,
+            "maxDataPoints": 100,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -177,7 +193,10 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "pps"
                }
             },
             "gridPos": {

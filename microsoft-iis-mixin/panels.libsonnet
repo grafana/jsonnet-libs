@@ -8,7 +8,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Overview - Requests
     requests:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.requests.timeSeries.base.new(
         'Requests',
         targets=[signals.overview.requests.asTarget()]
       )
@@ -18,7 +18,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withAsTable(true),
 
     requestErrors:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.requests.timeSeries.errors.new(
         'Request errors',
         targets=[
           signals.overview.lockedErrors.asTarget(),
@@ -45,7 +45,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.tooltip.withMode('none'),
 
     rejectedAsyncIORequests:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.base.new(
         'Rejected async I/O requests',
         targets=[
           signals.overview.rejectedAsyncIORequests.asTarget()
@@ -58,7 +58,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     trafficSent:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.traffic.new(
         'Traffic sent',
         targets=[signals.overview.bytesSent.asTarget()]
       )
@@ -67,7 +67,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     trafficReceived:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.traffic.new(
         'Traffic received',
         targets=[signals.overview.bytesReceived.asTarget()]
       )
@@ -102,7 +102,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     currentConnections:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.base.new(
         'Current connections',
         targets=[
           signals.overview.currentConnections.asTarget()
@@ -113,7 +113,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     attemptedConnections:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.base.new(
         'Attempted connections',
         targets=[
           signals.overview.connectionAttempts.asTarget()
@@ -176,7 +176,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Application Panels
     workerRequests:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.requests.timeSeries.rate.new(
         'Requests',
         targets=[
           signals.applications.workerRequests.withExprWrappersMixin(['sum by(app, job, instance) (', ')'])
@@ -188,7 +188,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     workerRequestErrors:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.requests.timeSeries.errors.new(
         'Request errors',
         targets=[
           signals.applications.workerRequestErrors.withExprWrappersMixin(['sum by(app, instance, job, status_code) (', ')'])
@@ -201,7 +201,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('right'),
 
     websocketConnectionAttempts:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.network.timeSeries.base.new(
         'Websocket connection attempts',
         targets=[
           signals.applications.websocketConnectionAttempts.withExprWrappersMixin(['sum by(app, instance, job) (', ')'])

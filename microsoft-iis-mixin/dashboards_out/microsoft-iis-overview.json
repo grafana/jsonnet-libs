@@ -103,13 +103,22 @@
             "description": "Requests that have resulted in errors for an IIS site.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "light-red",
+                     "mode": "fixed"
+                  },
                   "custom": {
-                     "fillOpacity": 30,
+                     "drawStyle": "bars",
+                     "fillOpacity": 100,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
+                  "noValue": "No errors",
                   "unit": "errors/sec"
                }
             },
@@ -120,6 +129,7 @@
                "y": 1
             },
             "id": 3,
+            "maxDataPoints": 100,
             "options": {
                "legend": {
                   "asTable": true,
@@ -243,7 +253,9 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
                   "min": 0,
+                  "noValue": "No packets",
                   "unit": "requests"
                }
             },
@@ -311,6 +323,8 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "Bps"
                }
             },
@@ -364,7 +378,9 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
                   "min": 0,
+                  "noValue": "No traffic",
                   "unit": "Bps"
                }
             },
@@ -539,7 +555,10 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "pps"
                }
             },
             "gridPos": {
@@ -592,7 +611,10 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "pps"
                }
             },
             "gridPos": {
