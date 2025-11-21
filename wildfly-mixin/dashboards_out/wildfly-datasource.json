@@ -12,16 +12,6 @@
             "url": "/d/wildfly-logs"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "wildfly"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Wildfly overview",
             "type": "link",
@@ -51,6 +41,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -101,6 +94,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -164,6 +160,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -215,6 +214,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -265,6 +267,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {

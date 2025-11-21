@@ -12,16 +12,6 @@
             "url": "/d/wildfly-logs"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "wildfly"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Wildfly datasource",
             "type": "link",
@@ -50,6 +40,11 @@
             "description": "Requests rate over time",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "reqps"
                }
             },
@@ -88,6 +83,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -153,6 +151,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "unit": "binBps"
@@ -193,6 +194,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -258,6 +262,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "thresholds": {
@@ -308,6 +315,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "decimals": 0,
@@ -360,6 +370,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "spanNulls": false
                   },
                   "decimals": 0,
@@ -478,7 +491,7 @@
                },
                "multi": true,
                "name": "server",
-               "query": "label_values(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, server)",
+               "query": "label_values(wildfly_undertow_request_count_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, server)",
                "refresh": 2,
                "type": "query"
             },
@@ -489,7 +502,7 @@
                },
                "multi": true,
                "name": "deployment",
-               "query": "label_values(wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, deployment)",
+               "query": "label_values(wildfly_undertow_active_sessions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, deployment)",
                "refresh": 2,
                "type": "query"
             }
