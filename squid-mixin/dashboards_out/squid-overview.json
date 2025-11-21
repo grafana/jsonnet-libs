@@ -29,8 +29,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The request rate of client.",
             "fieldConfig": {
@@ -71,8 +71,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of client HTTP errors.",
             "fieldConfig": {
@@ -113,8 +113,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The client cache hit ratio.",
             "fieldConfig": {
@@ -155,8 +155,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The throughput of client HTTP data sent.",
             "fieldConfig": {
@@ -197,8 +197,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The throughput of client HTTP data received.",
             "fieldConfig": {
@@ -239,8 +239,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The throughput of client cache hit.",
             "fieldConfig": {
@@ -281,8 +281,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "HTTP request service time percentiles.",
             "fieldConfig": {
@@ -343,8 +343,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Cache hits service time percentiles.",
             "fieldConfig": {
@@ -408,8 +408,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Cache misses service time percentiles.",
             "fieldConfig": {
@@ -486,8 +486,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of HTTP, FTP, and other server requests.",
             "fieldConfig": {
@@ -557,8 +557,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of HTTP, FTP, and other server request errors.",
             "fieldConfig": {
@@ -628,8 +628,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of HTTP, FTP, and other server sent throughput.",
             "fieldConfig": {
@@ -699,8 +699,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of objects read from disk and the number of objects saved to disk.",
             "fieldConfig": {
@@ -757,8 +757,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "DNS lookup service time percentiles",
             "fieldConfig": {
@@ -825,8 +825,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of HTTP, FTP, and other server throughput.",
             "fieldConfig": {

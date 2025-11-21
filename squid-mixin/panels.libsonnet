@@ -10,6 +10,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientRequests:
         g.panel.timeSeries.new('Client requests')
         + g.panel.timeSeries.panelOptions.withDescription('The request rate of client.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientHTTPRequests.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -23,6 +24,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientRequestErrors:
         g.panel.timeSeries.new('Client request errors')
         + g.panel.timeSeries.panelOptions.withDescription('The number of client HTTP errors.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientHTTPErrors.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -36,6 +38,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientCacheHitRatio:
         g.panel.timeSeries.new('Client cache hit ratio')
         + g.panel.timeSeries.panelOptions.withDescription('The client cache hit ratio.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientCacheHitRatio.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -49,6 +52,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientRequestSentThroughput:
         g.panel.timeSeries.new('Client request sent throughput')
         + g.panel.timeSeries.panelOptions.withDescription('The throughput of client HTTP data sent.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientHTTPSentThroughput.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -62,6 +66,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientHTTPReceivedThroughput:
         g.panel.timeSeries.new('Client HTTP received throughput')
         + g.panel.timeSeries.panelOptions.withDescription('The throughput of client HTTP data received.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientHTTPReceivedThroughput.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -75,6 +80,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clientCacheHitThroughput:
         g.panel.timeSeries.new('Client cache hit throughput')
         + g.panel.timeSeries.panelOptions.withDescription('The throughput of client cache hit.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.clientCacheHitThroughput.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -88,6 +94,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       httpRequestServiceTime:
         g.panel.timeSeries.new('HTTP request service time')
         + g.panel.timeSeries.panelOptions.withDescription('HTTP request service time percentiles.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.httpRequestsAll50.asTarget(),
           signals.overview.httpRequestsAll75.asTarget(),
@@ -101,6 +108,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       cacheHitServiceTime:
         g.panel.timeSeries.new('Cache hit service time')
         + g.panel.timeSeries.panelOptions.withDescription('Cache hits service time percentiles.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.cacheHits50.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -117,6 +125,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       cacheMissesServiceTime:
         g.panel.timeSeries.new('Cache misses service time')
         + g.panel.timeSeries.panelOptions.withDescription('Cache misses service time percentiles.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.cacheMisses50.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -134,6 +143,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       serverRequests:
         g.panel.timeSeries.new('Server requests')
         + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server requests.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.serverFTPRequests.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -154,6 +164,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       serverRequestErrors:
         g.panel.timeSeries.new('Server request errors')
         + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server request errors.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.serverFTPErrors.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -174,6 +185,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       serverRequestSentThroughput:
         g.panel.timeSeries.new('Server request sent throughput')
         + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server sent throughput.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.serverFTPSentThroughput.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -194,6 +206,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       serverObjectSwap:
         g.panel.timeSeries.new('Server object swap')
         + g.panel.timeSeries.panelOptions.withDescription('The number of objects read from disk and the number of objects saved to disk.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.swapIns.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -211,6 +224,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       dnsLookupServiceTime:
         g.panel.timeSeries.new('DNS lookup service time')
         + g.panel.timeSeries.panelOptions.withDescription('DNS lookup service time percentiles')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.dnsLookups50.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -228,6 +242,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       serverReceivedThroughput:
         g.panel.timeSeries.new('Server received throughput')
         + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server throughput.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.overview.serverFTPReceivedThroughput.asTarget()
           + g.query.prometheus.withInterval('2m')

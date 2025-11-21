@@ -15,7 +15,7 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
   metricsSource: 'prometheus',
-  
+
   // Logs configuration
   enableLokiLogs: true,
   extraLogLabels: ['level', 'severity'],

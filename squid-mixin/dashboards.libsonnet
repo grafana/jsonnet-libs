@@ -22,8 +22,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
-                this.grafana.rows.clientRow,
-                this.grafana.rows.serverRow,
+              this.grafana.rows.clientRow,
+              this.grafana.rows.serverRow,
             ])
           )
         )
@@ -31,7 +31,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           vars.multiInstance,
           uid + '-overview',
           tags,
-          links {squidOverview+:: {} },
+          links { squidOverview+:: {} },
           annotations,
           timezone,
           refresh,
