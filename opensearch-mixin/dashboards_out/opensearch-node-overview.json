@@ -69,6 +69,10 @@
             },
             "id": 2,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -122,6 +126,10 @@
             },
             "id": 3,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -195,6 +203,10 @@
             },
             "id": 4,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -247,7 +259,8 @@
                      "stacking": {
                         "mode": "normal"
                      }
-                  }
+                  },
+                  "unit": "connections"
                }
             },
             "gridPos": {
@@ -258,6 +271,10 @@
             },
             "id": 5,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -311,6 +328,10 @@
             },
             "id": 6,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -364,6 +385,10 @@
             },
             "id": 7,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
@@ -411,6 +436,16 @@
                "y": 9
             },
             "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -466,6 +501,16 @@
                "y": 9
             },
             "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -636,6 +681,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -650,6 +696,16 @@
                "y": 27
             },
             "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -690,6 +746,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -704,6 +761,16 @@
                "y": 27
             },
             "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -744,6 +811,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -758,6 +826,16 @@
                "y": 27
             },
             "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -786,6 +864,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -800,6 +879,16 @@
                "y": 27
             },
             "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -828,6 +917,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -842,6 +932,16 @@
                "y": 35
             },
             "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -870,6 +970,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -884,6 +985,16 @@
                "y": 35
             },
             "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -913,6 +1024,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -927,6 +1039,16 @@
                "y": 35
             },
             "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -956,6 +1078,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -970,6 +1093,16 @@
                "y": 35
             },
             "id": 20,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1011,6 +1144,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1025,6 +1159,16 @@
                "y": 44
             },
             "id": 22,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1053,6 +1197,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 5,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1067,6 +1212,16 @@
                "y": 44
             },
             "id": 23,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {

@@ -47,34 +47,14 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "unit": "reqps"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -84,8 +64,13 @@
             },
             "id": 2,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -139,34 +124,14 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "unit": "s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -176,8 +141,13 @@
             },
             "id": 3,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -234,34 +204,14 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "unit": "percent"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -271,8 +221,13 @@
             },
             "id": 4,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -314,6 +269,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -331,29 +288,7 @@
                      ]
                   },
                   "unit": "evictions"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -363,8 +298,13 @@
             },
             "id": 5,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -434,34 +374,14 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "unit": "documents/s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -470,6 +390,16 @@
                "y": 10
             },
             "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -497,6 +427,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -523,6 +455,16 @@
                "y": 10
             },
             "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -551,6 +493,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -568,29 +512,7 @@
                      ]
                   },
                   "unit": "failures"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -599,6 +521,16 @@
                "y": 10
             },
             "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -627,6 +559,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -644,29 +578,7 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -675,6 +587,16 @@
                "y": 10
             },
             "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -704,6 +626,8 @@
                "defaults": {
                   "custom": {
                      "drawStyle": "points",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -721,29 +645,7 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -753,8 +655,13 @@
             },
             "id": 11,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -811,6 +718,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -828,29 +737,7 @@
                      ]
                   },
                   "unit": "s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -859,6 +746,16 @@
                "y": 18
             },
             "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -887,6 +784,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -904,29 +803,7 @@
                      ]
                   },
                   "unit": "operations"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -935,6 +812,16 @@
                "y": 18
             },
             "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -962,6 +849,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -979,29 +868,7 @@
                      ]
                   },
                   "unit": "documents/s"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1010,6 +877,16 @@
                "y": 18
             },
             "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1050,6 +927,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1067,29 +946,7 @@
                      ]
                   },
                   "unit": "documents"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1098,6 +955,16 @@
                "y": 27
             },
             "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1125,6 +992,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1142,29 +1011,7 @@
                      ]
                   },
                   "unit": "segments"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1173,6 +1020,16 @@
                "y": 27
             },
             "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1201,6 +1058,8 @@
                "defaults": {
                   "custom": {
                      "drawStyle": "points",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1218,29 +1077,7 @@
                      ]
                   },
                   "unit": "merges"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1249,6 +1086,16 @@
                "y": 27
             },
             "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1276,6 +1123,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1293,29 +1142,7 @@
                      ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1325,8 +1152,13 @@
             },
             "id": 19,
             "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
                "tooltip": {
-                  "mode": "multi"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
             "pluginVersion": "v11.0.0",
@@ -1368,6 +1200,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1385,29 +1219,7 @@
                      ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1416,6 +1228,16 @@
                "y": 35
             },
             "id": 20,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1443,6 +1265,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1460,29 +1284,7 @@
                      ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1491,6 +1293,16 @@
                "y": 35
             },
             "id": 21,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1519,6 +1331,8 @@
                "defaults": {
                   "custom": {
                      "drawStyle": "points",
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1536,29 +1350,7 @@
                      ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1567,6 +1359,16 @@
                "y": 35
             },
             "id": 22,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1594,6 +1396,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1611,29 +1415,7 @@
                      ]
                   },
                   "unit": "shards"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byValue",
-                        "options": {
-                           "op": "gte",
-                           "reducer": "allIsZero",
-                           "value": 0
-                        }
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hideFrom",
-                           "value": {
-                              "legend": true,
-                              "tooltip": true,
-                              "viz": false
-                           }
-                        }
-                     ]
-                  }
-               ]
+               }
             },
             "gridPos": {
                "h": 8,
@@ -1642,6 +1424,16 @@
                "y": 35
             },
             "id": 23,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {

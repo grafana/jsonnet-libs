@@ -47,6 +47,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -132,6 +133,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
@@ -194,6 +196,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
@@ -256,6 +259,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
@@ -318,6 +322,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
@@ -913,6 +918,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -927,6 +934,16 @@
                "y": 34
             },
             "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -954,6 +971,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -968,6 +987,16 @@
                "y": 42
             },
             "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -995,6 +1024,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1009,6 +1040,16 @@
                "y": 42
             },
             "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1036,6 +1077,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1050,6 +1093,16 @@
                "y": 42
             },
             "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1089,6 +1142,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1103,6 +1158,16 @@
                "y": 51
             },
             "id": 21,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1129,6 +1194,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1143,6 +1210,16 @@
                "y": 51
             },
             "id": 22,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1170,6 +1247,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1184,6 +1263,16 @@
                "y": 51
             },
             "id": 23,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1223,6 +1312,13 @@
             "description": "Top nodes by rate of ingest across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "Bps"
                }
             },
@@ -1233,6 +1329,16 @@
                "y": 60
             },
             "id": 25,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1260,6 +1366,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1274,6 +1382,16 @@
                "y": 60
             },
             "id": 26,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1302,6 +1420,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1316,6 +1436,16 @@
                "y": 60
             },
             "id": 27,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1357,6 +1487,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1371,6 +1503,16 @@
                "y": 69
             },
             "id": 29,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1398,6 +1540,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1412,6 +1556,16 @@
                "y": 69
             },
             "id": 30,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -1440,6 +1594,8 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -1454,6 +1610,16 @@
                "y": 69
             },
             "id": 31,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
