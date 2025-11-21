@@ -12,11 +12,17 @@ local mixin = mixinlib.new()
                 }
               );
 
+local label_patch = {
+  cluster+: {
+    allValue: '.*',
+  },
+};
+
 {
   grafanaDashboards+:: {
     [fname]:
       local dashboard = util.decorate_dashboard(mixin.grafana.dashboards[fname], tags=config.dashboardTags);
-      dashboard
+      dashboard + util.patch_variables(dashboard, label_patch)
 
     for fname in std.objectFields(mixin.grafana.dashboards)
   },

@@ -15,6 +15,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       clientRequestErrors:
@@ -25,6 +28,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('errors/s'),
 
       clientCacheHitRatio:
@@ -35,6 +41,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       clientRequestSentThroughput:
@@ -45,6 +54,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       clientHTTPReceivedThroughput:
@@ -55,6 +67,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       clientCacheHitThroughput:
@@ -65,6 +80,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       httpRequestServiceTime:
@@ -75,6 +93,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.httpRequestsAll75.asTarget(),
           signals.overview.httpRequestsAll95.asTarget(),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       cacheHitServiceTime:
@@ -88,6 +109,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.cacheHits95.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       cacheMissesServiceTime:
@@ -101,6 +125,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.cacheMisses95.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       // Server panels
@@ -118,6 +145,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -125,10 +155,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.timeSeries.new('Server request errors')
         + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server request errors.')
         + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.serverFTPErrors.asTarget(),
-          signals.overview.serverHTTPErrors.asTarget(),
-          signals.overview.serverOtherErrors.asTarget(),
+          signals.overview.serverFTPErrors.asTarget()
+          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withIntervalFactor(2),
+          signals.overview.serverHTTPErrors.asTarget()
+          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withIntervalFactor(2),
+          signals.overview.serverOtherErrors.asTarget()
+          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('errors/s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -146,6 +185,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('KBs')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -160,6 +202,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('cps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -174,6 +219,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.dnsLookups95.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -191,6 +239,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('KBs')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
     },
