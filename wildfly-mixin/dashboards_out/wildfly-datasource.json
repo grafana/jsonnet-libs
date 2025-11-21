@@ -34,8 +34,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Connections to the datasource over time",
             "fieldConfig": {
@@ -87,8 +87,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Connections to the datasource over time",
             "fieldConfig": {
@@ -153,8 +153,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of transactions that were created over time",
             "fieldConfig": {
@@ -207,8 +207,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of transactions that are in-flight over time",
             "fieldConfig": {
@@ -260,8 +260,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of transactions that have been aborted over time",
             "fieldConfig": {
