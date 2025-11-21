@@ -1,0 +1,806 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "IBM MQ cluster overview",
+            "type": "link",
+            "url": "/d/ibm-mq-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue manager overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-manager-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ topics overview",
+            "type": "link",
+            "url": "/d/ibm-mq-topics-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The unique number of clusters being reported.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "decimals": 0,
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "green"
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 0
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 0,
+                     "y": 1
+                  },
+                  "id": 2,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "count(count(ibmmq_qmgr_commit_count{}) by (mq_cluster))",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{job}} - {{mq_cluster}}"
+                     }
+                  ],
+                  "title": "Clusters",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The unique number of queue managers in the cluster being reported.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "decimals": 0,
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "green"
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 0
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 4,
+                     "y": 1
+                  },
+                  "id": 3,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "count(count(ibmmq_qmgr_commit_count{}) by (qmgr, mq_cluster))",
+                        "intervalFactor": 2,
+                        "legendFormat": ""
+                     }
+                  ],
+                  "title": "Queue managers",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The unique number of topics in the cluster.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "decimals": 0,
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "green"
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 0
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 8,
+                     "y": 1
+                  },
+                  "id": 4,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "count(count(ibmmq_topic_messages_received{}) by (topic, qmgr))",
+                        "intervalFactor": 2,
+                        "legendFormat": ""
+                     }
+                  ],
+                  "title": "Topics",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The unique number of queues in the cluster.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "decimals": 0,
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "green"
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 0
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 12,
+                     "y": 1
+                  },
+                  "id": 5,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "count(count(ibmmq_queue_depth{}) by (queue, mq_cluster, qmgr))",
+                        "intervalFactor": 2,
+                        "legendFormat": ""
+                     }
+                  ],
+                  "title": "Queues",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of queue operations of the cluster. ",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "operations"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "MQINQ"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hideFrom",
+                                 "value": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "MQGET"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hideFrom",
+                                 "value": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "MQOPEN"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hideFrom",
+                                 "value": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "MQPUT/MQPUT1"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hideFrom",
+                                 "value": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 15,
+                     "w": 8,
+                     "x": 16,
+                     "y": 1
+                  },
+                  "id": 6,
+                  "options": {
+                     "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqinq_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQINQ",
+                        "refId": "MQINQ count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqget_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQGET",
+                        "refId": "MQGET count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqopen_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQOPEN",
+                        "refId": "MQOPEN count"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_queue_mqput_mqput1_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{queue}} - MQPUT/MQPUT1",
+                        "refId": "MQPUT/MQPUT1 count"
+                     }
+                  ],
+                  "title": "Queue operations",
+                  "type": "piechart"
+               }
+            ],
+            "title": "Cluster overview",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 16
+            },
+            "id": 7,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The status of the cluster.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "fixed"
+                        },
+                        "mappings": [
+                           {
+                              "options": {
+                                 "0": {
+                                    "color": "green",
+                                    "index": 0,
+                                    "text": "Not suspended"
+                                 },
+                                 "1": {
+                                    "color": "red",
+                                    "index": 1,
+                                    "text": "Suspended"
+                                 }
+                              },
+                              "type": "value"
+                           }
+                        ]
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Status"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              },
+                              {
+                                 "id": "custom.align",
+                                 "value": "center"
+                              },
+                              {
+                                 "id": "custom.cellOptions",
+                                 "value": {
+                                    "type": "color-text"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 16,
+                     "x": 0,
+                     "y": 17
+                  },
+                  "id": 8,
+                  "options": {
+                     "footer": {
+                        "enablePagination": false
+                     },
+                     "showHeader": true
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job) (\n  ibmmq_cluster_suspend{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{mq_cluster}}",
+                        "refId": "Cluster suspend status"
+                     }
+                  ],
+                  "title": "Cluster status",
+                  "transformations": [
+                     {
+                        "id": "joinByLabels",
+                        "options": {
+                           "join": [
+                              "cluster",
+                              "mq_cluster",
+                              "qmgr"
+                           ],
+                           "value": "__name__"
+                        }
+                     },
+                     {
+                        "id": "organize",
+                        "options": {
+                           "renameByName": {
+                              "ibmmq_cluster_suspend{job=\"integrations/ibmmq\", mq_cluster=\"cluster0\"}": "Status",
+                              "job": "Job",
+                              "mq_cluster": "Cluster"
+                           }
+                        }
+                     }
+                  ],
+                  "type": "table"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The status of the queue manager (-1=N/A, 0=Stopped, 1=Starting, 2=Running, 3=Quiescing, 4=Stopping, 5=Standby).",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "fixed"
+                        },
+                        "mappings": [
+                           {
+                              "options": {
+                                 "-1": {
+                                    "color": "text",
+                                    "index": 0,
+                                    "text": "N/A"
+                                 },
+                                 "0": {
+                                    "color": "red",
+                                    "index": 1,
+                                    "text": "Stopped"
+                                 },
+                                 "1": {
+                                    "color": "yellow",
+                                    "index": 2,
+                                    "text": "Starting"
+                                 },
+                                 "2": {
+                                    "color": "green",
+                                    "index": 3,
+                                    "text": "Running"
+                                 },
+                                 "3": {
+                                    "color": "yellow",
+                                    "index": 4,
+                                    "text": "Quiescing"
+                                 },
+                                 "4": {
+                                    "color": "yellow",
+                                    "index": 5,
+                                    "text": "Stopping"
+                                 },
+                                 "5": {
+                                    "color": "blue",
+                                    "index": 6,
+                                    "text": "Standby"
+                                 }
+                              },
+                              "type": "value"
+                           }
+                        ]
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Status"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              },
+                              {
+                                 "id": "custom.align",
+                                 "value": "center"
+                              },
+                              {
+                                 "id": "custom.cellOptions",
+                                 "value": {
+                                    "type": "color-text"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 16,
+                     "x": 0,
+                     "y": 21
+                  },
+                  "id": 9,
+                  "options": {
+                     "footer": {
+                        "enablePagination": false
+                     },
+                     "showHeader": true
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_status{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Queue manager status"
+                     }
+                  ],
+                  "title": "Queue manager status",
+                  "transformations": [
+                     {
+                        "id": "joinByLabels",
+                        "options": {
+                           "join": [
+                              "cluster",
+                              "mq_cluster",
+                              "qmgr"
+                           ],
+                           "value": "__name__"
+                        }
+                     },
+                     {
+                        "id": "organize",
+                        "options": {
+                           "renameByName": {
+                              "ibmmq_qmgr_status{job=\"integrations/ibmmq\", mq_cluster=\"cluster0\", qmgr=\"qm0\"}": "Status",
+                              "job": "Job",
+                              "mq_cluster": "Cluster",
+                              "qmgr": "Queue manager"
+                           }
+                        }
+                     }
+                  ],
+                  "type": "table"
+               }
+            ],
+            "title": "Status",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 25
+            },
+            "id": 10,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The time taken for messages to be transmitted over sender channels.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "decimals": 2,
+                        "unit": "µs"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 24,
+                     "x": 0,
+                     "y": 26
+                  },
+                  "id": 11,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_channel_xmitq_time_short{type=\"SENDER\",job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{channel}} - short",
+                        "refId": "Transmission queue time short"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_channel_xmitq_time_long{type=~\"SENDER\",job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{channel}} - long",
+                        "refId": "Transmission queue time long"
+                     }
+                  ],
+                  "title": "Transmission queue time",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Channels",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "ibm-mq-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ibmmq_qmgr_commit_count{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Qmgr",
+               "multi": true,
+               "name": "qmgr",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, qmgr)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "IBM MQ - cluster overview",
+      "uid": "ibm-mq-cluster-overview"
+   }

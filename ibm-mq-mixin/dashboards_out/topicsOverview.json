@@ -1,0 +1,502 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "IBM MQ cluster overview",
+            "type": "link",
+            "url": "/d/ibm-mq-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue manager overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-manager-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ topics overview",
+            "type": "link",
+            "url": "/d/ibm-mq-topics-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "Received messages per topic.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 16,
+                     "x": 0,
+                     "y": 1
+                  },
+                  "id": 2,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_topic_messages_received{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{topic}}",
+                        "refId": "Topic messages received"
+                     }
+                  ],
+                  "title": "Topic messages received",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The time since the topic last received a message.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 8,
+                     "x": 16,
+                     "y": 1
+                  },
+                  "id": 3,
+                  "options": {
+                     "displayMode": "basic",
+                     "orientation": "horizontal",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "showUnfilled": true,
+                     "valueMode": "color"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_topic_time_since_msg_received{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{topic}}",
+                        "refId": "Time since message received"
+                     }
+                  ],
+                  "title": "Time since last message",
+                  "type": "bargauge"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of subscribers per topic.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 12,
+                     "x": 0,
+                     "y": 7
+                  },
+                  "id": 4,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_topic_subscriber_count{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{topic}}",
+                        "refId": "Topic subscriber count"
+                     }
+                  ],
+                  "title": "Topic subscribers",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of publishers per topic.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 12,
+                     "x": 12,
+                     "y": 7
+                  },
+                  "id": 5,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_topic_publisher_count{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{topic}}",
+                        "refId": "Topic publisher count"
+                     }
+                  ],
+                  "title": "Topic publishers",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Topics",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 13
+            },
+            "id": 6,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of messages a subscription receives.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 6,
+                     "w": 24,
+                     "x": 0,
+                     "y": 14
+                  },
+                  "id": 7,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_subscription_messsages_received{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{subscription}}",
+                        "refId": "Subscription messages received"
+                     }
+                  ],
+                  "title": "Subscription messages received",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The time since a message was published to the subscription.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "unit": "s"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Time since message published"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "s"
+                              },
+                              {
+                                 "id": "custom.align",
+                                 "value": "center"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 10,
+                     "w": 24,
+                     "x": 0,
+                     "y": 24
+                  },
+                  "id": 8,
+                  "options": {
+                     "footer": {
+                        "enablePagination": false
+                     },
+                     "showHeader": true
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_subscription_time_since_message_published{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{subscription}}",
+                        "refId": "Time since message published"
+                     }
+                  ],
+                  "title": "Subscription status",
+                  "transformations": [
+                     {
+                        "id": "joinByLabels",
+                        "options": {
+                           "value": "__name__"
+                        }
+                     },
+                     {
+                        "id": "organize",
+                        "options": {
+                           "renameByName": {
+                              "ibmmq_subscription_time_since_message_published{job=\"integrations/ibmmq\", mq_cluster=\"cluster0\", qmgr=\"qm0\", subscription=\"sub0\"}": "Time since message published",
+                              "job": "Job",
+                              "mq_cluster": "Cluster",
+                              "qmgr": "Queue manager",
+                              "subscription": "Subscription"
+                           }
+                        }
+                     }
+                  ],
+                  "type": "table"
+               }
+            ],
+            "title": "Subscriptions",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "ibm-mq-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ibmmq_qmgr_commit_count{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Qmgr",
+               "multi": true,
+               "name": "qmgr",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, qmgr)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Topic",
+               "name": "topic",
+               "query": "label_values(ibmmq_topic_subscriber_count{,topic!~\"SYSTEM.*|\\\\$SYS.*|\"}, topic)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Subscription",
+               "name": "subscription",
+               "query": "label_values(ibmmq_subscription_messsages_received{,subscription!~\"SYSTEM.*|\"}, subscription)",
+               "refresh": 2,
+               "regex": "",
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "IBM MQ - topics overview",
+      "uid": "ibm-mq-topics-overview"
+   }

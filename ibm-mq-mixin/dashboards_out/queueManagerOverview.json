@@ -1,0 +1,1026 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "IBM MQ cluster overview",
+            "type": "link",
+            "url": "/d/ibm-mq-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue manager overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-manager-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ queue overview",
+            "type": "link",
+            "url": "/d/ibm-mq-queue-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "IBM MQ topics overview",
+            "type": "link",
+            "url": "/d/ibm-mq-topics-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of active listeners for the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "red"
+                              },
+                              {
+                                 "color": "green",
+                                 "value": 1
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 0,
+                     "y": 1
+                  },
+                  "id": 2,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_active_listeners{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Active listeners"
+                     }
+                  ],
+                  "title": "Active listeners",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The number of active connections for the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "red"
+                              },
+                              {
+                                 "color": "green",
+                                 "value": 1
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 4,
+                     "y": 1
+                  },
+                  "id": 3,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_connection_count{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Connection count"
+                     }
+                  ],
+                  "title": "Active connections",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The unique number of queues being managed by the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "thresholds": {
+                           "steps": [
+                              {
+                                 "color": "red"
+                              },
+                              {
+                                 "color": "green",
+                                 "value": 1
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 4,
+                     "x": 8,
+                     "y": 1
+                  },
+                  "id": 4,
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "count(count(ibmmq_queue_depth{}) by (queue, mq_cluster, qmgr))",
+                        "intervalFactor": 2,
+                        "legendFormat": ""
+                     }
+                  ],
+                  "title": "Queues",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The estimated memory usage of the queue managers.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "max": 1,
+                        "min": 0,
+                        "unit": "percentunit"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 12,
+                     "x": 12,
+                     "y": 1
+                  },
+                  "id": 5,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}/ibmmq_qmgr_ram_total_bytes{job=~\"$job\",qmgr=~\"$qmgr\"})",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Memory utilization"
+                     }
+                  ],
+                  "title": "Estimated memory utilization",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 8
+            },
+            "id": 6,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The status of the queue manager (-1=N/A, 0=Stopped, 1=Starting, 2=Running, 3=Quiescing, 4=Stopping, 5=Standby).",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "fixed"
+                        },
+                        "mappings": [
+                           {
+                              "options": {
+                                 "-1": {
+                                    "color": "text",
+                                    "index": 0,
+                                    "text": "N/A"
+                                 },
+                                 "0": {
+                                    "color": "red",
+                                    "index": 1,
+                                    "text": "Stopped"
+                                 },
+                                 "1": {
+                                    "color": "yellow",
+                                    "index": 2,
+                                    "text": "Starting"
+                                 },
+                                 "2": {
+                                    "color": "green",
+                                    "index": 3,
+                                    "text": "Running"
+                                 },
+                                 "3": {
+                                    "color": "yellow",
+                                    "index": 4,
+                                    "text": "Quiescing"
+                                 },
+                                 "4": {
+                                    "color": "yellow",
+                                    "index": 5,
+                                    "text": "Stopping"
+                                 },
+                                 "5": {
+                                    "color": "blue",
+                                    "index": 6,
+                                    "text": "Standby"
+                                 }
+                              },
+                              "type": "value"
+                           }
+                        ]
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Status"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "short"
+                              },
+                              {
+                                 "id": "custom.align",
+                                 "value": "center"
+                              },
+                              {
+                                 "id": "custom.cellOptions",
+                                 "value": {
+                                    "type": "color-text"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 8,
+                     "x": 0,
+                     "y": 9
+                  },
+                  "id": 7,
+                  "options": {
+                     "footer": {
+                        "enablePagination": false
+                     },
+                     "showHeader": true
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_status{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Queue manager status"
+                     }
+                  ],
+                  "title": "Queue manager status",
+                  "transformations": [
+                     {
+                        "id": "joinByLabels",
+                        "options": {
+                           "join": [
+                              "cluster",
+                              "mq_cluster",
+                              "qmgr"
+                           ],
+                           "value": "__name__"
+                        }
+                     },
+                     {
+                        "id": "organize",
+                        "options": {
+                           "renameByName": {
+                              "ibmmq_qmgr_status{job=\"integrations/ibmmq\", mq_cluster=\"cluster0\", qmgr=\"qm0\"}": "Status",
+                              "job": "Job",
+                              "mq_cluster": "Cluster",
+                              "qmgr": "Queue manager"
+                           }
+                        }
+                     }
+                  ],
+                  "type": "table"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The CPU usage of the queue managers.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 8,
+                     "x": 8,
+                     "y": 9
+                  },
+                  "id": 8,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_user_cpu_time_percentage{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}} - user",
+                        "refId": "User CPU time percentage"
+                     },
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_system_cpu_time_percentage{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}} - system",
+                        "refId": "System CPU time percentage"
+                     }
+                  ],
+                  "title": "CPU usage",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The disk allocated to the queue manager that is being used.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "decbytes"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 7,
+                     "w": 8,
+                     "x": 16,
+                     "y": 9
+                  },
+                  "id": 9,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_queue_manager_file_system_in_use_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Queue manager file system in use bytes"
+                     }
+                  ],
+                  "title": "Disk usage",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Status",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 16
+            },
+            "id": 10,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The percentage of free disk space available for the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "max": 100,
+                        "min": 0,
+                        "unit": "percent"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 17
+                  },
+                  "id": 11,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_queue_manager_file_system_free_space_percentage{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Queue manager file system free space percentage"
+                     }
+                  ],
+                  "title": "Free disk space",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of commits by the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 17
+                  },
+                  "id": 12,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_qmgr_commit_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Commit count"
+                     }
+                  ],
+                  "title": "Commit rate",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of data being pushed from the queue manager to subscribers.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "decbytes"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 0,
+                     "y": 25
+                  },
+                  "id": 13,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_qmgr_published_to_subscribers_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Published to subscribers bytes"
+                     }
+                  ],
+                  "title": "Published bytes",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of messages being published by the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 8,
+                     "y": 25
+                  },
+                  "id": 14,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_qmgr_published_to_subscribers_message_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Published to subscribers message count"
+                     }
+                  ],
+                  "title": "Published messages",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The rate of expired messages for the queue manager.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "short"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 8,
+                     "x": 16,
+                     "y": 25
+                  },
+                  "id": 15,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  rate(ibmmq_qmgr_expired_message_count{job=~\"$job\",qmgr=~\"$qmgr\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Expired message count"
+                     }
+                  ],
+                  "title": "Expired messages",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Performance",
+            "type": "row"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 33
+            },
+            "id": 16,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The recent latency of log writes.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 34
+                  },
+                  "id": 17,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_log_write_latency_seconds{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Log write latency seconds"
+                     }
+                  ],
+                  "title": "Log write latency",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "description": "The amount of data on the filesystem occupied by queue manager logs.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 10
+                        },
+                        "unit": "decbytes"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 34
+                  },
+                  "id": 18,
+                  "options": {
+                     "legend": {
+                        "calcs": [
+                           "last",
+                           "mean",
+                           "max"
+                        ],
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,qmgr) (\n  ibmmq_qmgr_log_in_use_bytes{job=~\"$job\",qmgr=~\"$qmgr\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 2,
+                        "legendFormat": "{{qmgr}}",
+                        "refId": "Log in use bytes"
+                     }
+                  ],
+                  "title": "Log usage",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Logs",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "ibm-mq-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ibmmq_qmgr_commit_count{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Qmgr",
+               "multi": true,
+               "name": "qmgr",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, qmgr)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "IBM MQ - queue manager overview",
+      "uid": "ibm-mq-queue-manager-overview"
+   }
