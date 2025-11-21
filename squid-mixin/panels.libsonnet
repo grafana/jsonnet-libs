@@ -8,255 +8,165 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Client panels
       clientRequests:
-        g.panel.timeSeries.new('Client requests')
-        + g.panel.timeSeries.panelOptions.withDescription('The request rate of client.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientHTTPRequests.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client requests',
+          targets=[signals.overview.clientHTTPRequests.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The request rate of client.'
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       clientRequestErrors:
-        g.panel.timeSeries.new('Client request errors')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of client HTTP errors.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientHTTPErrors.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client request errors',
+          targets=[signals.overview.clientHTTPErrors.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The number of client HTTP errors.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('errors/s'),
 
       clientCacheHitRatio:
-        g.panel.timeSeries.new('Client cache hit ratio')
-        + g.panel.timeSeries.panelOptions.withDescription('The client cache hit ratio.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientCacheHitRatio.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client cache hit ratio',
+          targets=[signals.overview.clientCacheHitRatio.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The client cache hit ratio.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       clientRequestSentThroughput:
-        g.panel.timeSeries.new('Client request sent throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('The throughput of client HTTP data sent.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientHTTPSentThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client request sent throughput',
+          targets=[signals.overview.clientHTTPSentThroughput.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The throughput of client HTTP data sent.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       clientHTTPReceivedThroughput:
-        g.panel.timeSeries.new('Client HTTP received throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('The throughput of client HTTP data received.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientHTTPReceivedThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client HTTP received throughput',
+          targets=[signals.overview.clientHTTPReceivedThroughput.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The throughput of client HTTP data received.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       clientCacheHitThroughput:
-        g.panel.timeSeries.new('Client cache hit throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('The throughput of client cache hit.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.clientCacheHitThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client cache hit throughput',
+          targets=[signals.overview.clientCacheHitThroughput.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='The throughput of client cache hit.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('KBs'),
 
       httpRequestServiceTime:
-        g.panel.timeSeries.new('HTTP request service time')
-        + g.panel.timeSeries.panelOptions.withDescription('HTTP request service time percentiles.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.httpRequestsAll50.asTarget(),
-          signals.overview.httpRequestsAll75.asTarget(),
-          signals.overview.httpRequestsAll95.asTarget(),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP request service time',
+          targets=[
+            signals.overview.httpRequestsAll50.asTarget(),
+            signals.overview.httpRequestsAll75.asTarget(),
+            signals.overview.httpRequestsAll95.asTarget(),
+          ],
+          description='HTTP request service time percentiles.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       cacheHitServiceTime:
-        g.panel.timeSeries.new('Cache hit service time')
-        + g.panel.timeSeries.panelOptions.withDescription('Cache hits service time percentiles.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.cacheHits50.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.cacheHits75.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.cacheHits95.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Cache hit service time',
+          targets=[
+            signals.overview.cacheHits50.asTarget() { intervalFactor: 2 },
+            signals.overview.cacheHits75.asTarget() { intervalFactor: 2 },
+            signals.overview.cacheHits95.asTarget() { intervalFactor: 2 },
+          ],
+          description='Cache hits service time percentiles.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       cacheMissesServiceTime:
-        g.panel.timeSeries.new('Cache misses service time')
-        + g.panel.timeSeries.panelOptions.withDescription('Cache misses service time percentiles.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.cacheMisses50.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.cacheMisses75.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.cacheMisses95.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Cache misses service time',
+          targets=[
+            signals.overview.cacheMisses50.asTarget() { intervalFactor: 2 },
+            signals.overview.cacheMisses75.asTarget() { intervalFactor: 2 },
+            signals.overview.cacheMisses95.asTarget() { intervalFactor: 2 },
+          ],
+          description='Cache misses service time percentiles.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       // Server panels
       serverRequests:
-        g.panel.timeSeries.new('Server requests')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server requests.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.serverFTPRequests.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverHTTPRequests.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverOtherRequests.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Server requests',
+          targets=[
+            signals.overview.serverFTPRequests.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverHTTPRequests.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverOtherRequests.asTarget() { interval: '2m', intervalFactor: 2 },
+          ],
+          description='The number of HTTP, FTP, and other server requests.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
       serverRequestErrors:
-        g.panel.timeSeries.new('Server request errors')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server request errors.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.serverFTPErrors.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverHTTPErrors.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverOtherErrors.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Server request errors',
+          targets=[
+            signals.overview.serverFTPErrors.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverHTTPErrors.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverOtherErrors.asTarget() { interval: '2m', intervalFactor: 2 },
+          ],
+          description='The number of HTTP, FTP, and other server request errors.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('errors/s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
       serverRequestSentThroughput:
-        g.panel.timeSeries.new('Server request sent throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server sent throughput.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.serverFTPSentThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverHTTPSentThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverOtherSentThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Server request sent throughput',
+          targets=[
+            signals.overview.serverFTPSentThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverHTTPSentThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverOtherSentThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+          ],
+          description='The number of HTTP, FTP, and other server sent throughput.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('KBs')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
       serverObjectSwap:
-        g.panel.timeSeries.new('Server object swap')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of objects read from disk and the number of objects saved to disk.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.swapIns.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.swapOuts.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Server object swap',
+          targets=[
+            signals.overview.swapIns.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.swapOuts.asTarget() { interval: '2m', intervalFactor: 2 },
+          ],
+          description='The number of objects read from disk and the number of objects saved to disk.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('cps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
       dnsLookupServiceTime:
-        g.panel.timeSeries.new('DNS lookup service time')
-        + g.panel.timeSeries.panelOptions.withDescription('DNS lookup service time percentiles')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.dnsLookups50.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.dnsLookups75.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.dnsLookups95.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
-        + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
+        commonlib.panels.generic.timeSeries.base.new(
+          'DNS lookup service time',
+          targets=[
+            signals.overview.dnsLookups50.asTarget() { intervalFactor: 2 },
+            signals.overview.dnsLookups75.asTarget() { intervalFactor: 2 },
+            signals.overview.dnsLookups95.asTarget() { intervalFactor: 2 },
+          ],
+          description='DNS lookup service time percentiles'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('s'),
+      // NOTE: Removed stacking.withMode('normal') - percentiles should not be stacked!
 
       serverReceivedThroughput:
-        g.panel.timeSeries.new('Server received throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('The number of HTTP, FTP, and other server throughput.')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overview.serverFTPReceivedThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverHTTPReceivedThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-          signals.overview.serverOtherReceivedThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Server received throughput',
+          targets=[
+            signals.overview.serverFTPReceivedThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverHTTPReceivedThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+            signals.overview.serverOtherReceivedThroughput.asTarget() { interval: '2m', intervalFactor: 2 },
+          ],
+          description='The number of HTTP, FTP, and other server throughput.'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('KBs')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
     },
