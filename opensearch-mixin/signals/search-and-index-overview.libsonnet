@@ -64,9 +64,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by (job,opensearch_cluster,index) (\n'
-              + '  increase(opensearch_index_search_query_time_seconds{%(queriesSelector)s}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_search_query_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_search_query_time_seconds{%(queriesSelector)s}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_search_query_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}} - query',
           },
         },
@@ -79,9 +79,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by (job,opensearch_cluster,index) (\n'
-              + '  increase(opensearch_index_search_fetch_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_search_fetch_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_search_fetch_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_search_fetch_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}} - fetch',
           },
         },
@@ -94,9 +94,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by (job,opensearch_cluster,index) (\n'
-              + '  increase(opensearch_index_search_scroll_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_search_scroll_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_search_scroll_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_search_scroll_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}} - scroll',
           },
         },
@@ -109,10 +109,10 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by(job,opensearch_cluster,index) (\n'
-              + '  100 * (opensearch_index_requestcache_hit_count{%(queriesSelector)s, context="total"}) / \n'
-              + '  clamp_min(opensearch_index_requestcache_hit_count{%(queriesSelector)s, context="total"} + \n'
-              + '  opensearch_index_requestcache_miss_count{%(queriesSelector)s, context="total"}, 1)\n'
-              + ')',
+                  + '  100 * (opensearch_index_requestcache_hit_count{%(queriesSelector)s, context="total"}) / \n'
+                  + '  clamp_min(opensearch_index_requestcache_hit_count{%(queriesSelector)s, context="total"} + \n'
+                  + '  opensearch_index_requestcache_miss_count{%(queriesSelector)s, context="total"}, 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}} - request',
           },
         },
@@ -125,10 +125,10 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by(job,opensearch_cluster,index) (\n'
-              + '  100 * (opensearch_index_querycache_hit_count{%(queriesSelector)s, context="total"}) / \n'
-              + '  clamp_min(opensearch_index_querycache_hit_count{%(queriesSelector)s, context="total"} + \n'
-              + '  opensearch_index_querycache_miss_number{%(queriesSelector)s, context="total"}, 1)\n'
-              + ')',
+                  + '  100 * (opensearch_index_querycache_hit_count{%(queriesSelector)s, context="total"}) / \n'
+                  + '  clamp_min(opensearch_index_querycache_hit_count{%(queriesSelector)s, context="total"} + \n'
+                  + '  opensearch_index_querycache_miss_number{%(queriesSelector)s, context="total"}, 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}} - query',
           },
         },
@@ -228,9 +228,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by(' + this.groupAggList + ') (\n'
-              + '  increase(opensearch_index_indexing_index_time_seconds{%(queriesSelector)s, context=~"total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_indexing_index_count{%(queriesSelector)s, context=~"total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_indexing_index_time_seconds{%(queriesSelector)s, context=~"total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_indexing_index_count{%(queriesSelector)s, context=~"total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
           },
         },
       },
@@ -285,9 +285,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by(' + this.groupAggList + ',index) (\n'
-              + '  increase(opensearch_index_flush_total_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_flush_total_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_flush_total_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_flush_total_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}}',
           },
         },
@@ -308,7 +308,7 @@ function(this)
           },
         },
       },
-            
+
       merge_stopped_time: {
         name: 'Merge stopped time increase',
         description: 'Merge stopped time increase (boolean >0).',
@@ -379,9 +379,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'avg by(job,opensearch_cluster,index) (\n'
-              + '  increase(opensearch_index_refresh_total_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_refresh_total_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + ')',
+                  + '  increase(opensearch_index_refresh_total_time_seconds{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_refresh_total_count{%(queriesSelector)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + ')',
             legendCustomTemplate: '{{index}}',
           },
         },

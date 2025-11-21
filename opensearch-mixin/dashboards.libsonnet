@@ -44,10 +44,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
-            this.grafana.rows.nodeHealthRow,
-            this.grafana.rows.nodeRolesRow,
-            this.grafana.rows.nodeJVMRow,
-            this.grafana.rows.threadPoolsRow,
+              this.grafana.rows.nodeHealthRow,
+              this.grafana.rows.nodeRolesRow,
+              this.grafana.rows.nodeJVMRow,
+              this.grafana.rows.threadPoolsRow,
             ])
           )
         ) + root.applyCommon(
