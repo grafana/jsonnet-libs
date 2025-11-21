@@ -7,19 +7,21 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Opensearch Cluster Overview",
+            "title": "Opensearch cluster overview",
             "type": "link",
             "url": "/d/opensearch-cluster-overview"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "opensearch"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
+            "title": "Opensearch node overview",
+            "type": "link",
+            "url": "/d/opensearch-node-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Opensearch search and index overview",
+            "type": "link",
+            "url": "/d/opensearch-search-and-index-overview"
          }
       ],
       "panels": [
@@ -169,7 +171,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\",severity=~\"$severity\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\",severity=~\"$severity\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -211,7 +213,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\",severity=~\"$severity\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\",severity=~\"$severity\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -226,63 +228,111 @@
       "templating": {
          "list": [
             {
-               "label": "Prometheus data source",
-               "name": "prometheus_datasource",
-               "query": "prometheus",
-               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
                },
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\"}, job)",
+               "query": "label_values({job=\"integrations/opensearch\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=\"integrations/opensearch\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
                },
                "includeAll": true,
                "label": "Opensearch_cluster",
                "multi": true,
                "name": "opensearch_cluster",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\"}, opensearch_cluster)",
+               "query": "label_values({job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Node",
+               "label": "Level",
                "multi": true,
-               "name": "node",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}, node)",
+               "name": "level",
+               "query": "label_values({job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Severity",
+               "multi": true,
+               "name": "severity",
+               "query": "label_values({job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\"}, severity)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+               },
+               "label": "Regex search",
+               "name": "regex_search",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "",
+                     "value": ""
+                  }
+               ],
+               "query": "",
+               "type": "textbox"
             },
             {
                "hide": 2,
-               "label": "Loki data source",
-               "name": "loki_datasource",
-               "query": "loki",
-               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             }
          ]
@@ -292,6 +342,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "OpenSearch Logs",
+      "title": "OpenSearch logs",
       "uid": "opensearch-logs"
    }

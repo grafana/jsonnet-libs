@@ -16,12 +16,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     {
 
       'opensearch-cluster-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' Cluster Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' cluster overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
               this.grafana.rows.clusterOverviewRow,
-              this.grafana.rows.rolesRow,
+              this.grafana.rows.clusterRolesRow,
               this.grafana.rows.resourceUsageRow,
               this.grafana.rows.storageAndTasksRow,
               this.grafana.rows.searchPerformanceRow,
@@ -40,18 +40,24 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period,
         ),
       'opensearch-node-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' Node Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' node overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
-            this.grafana.rows.nodeRolesRow,
             this.grafana.rows.nodeHealthRow,
+            this.grafana.rows.nodeRolesRow,
             this.grafana.rows.nodeJVMRow,
             this.grafana.rows.threadPoolsRow,
             ])
           )
         ) + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+            g.dashboard.variable.query.new('node')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='node', metric='opensearch_os_cpu_percent{%(queriesSelector)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus),
+
+          ],
           uid + '-node-overview',
           tags,
           links { opensearchNodeOverview+:: {} },
@@ -61,17 +67,22 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period,
         ),
       'opensearch-search-and-index-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' Search and Index Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' search and index overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
-              this.grafana.rows.searchAndIndexSearchPerformanceRow,
+              this.grafana.rows.searchAndIndexRequestPerformanceRow,
               this.grafana.rows.searchAndIndexIndexingPerformanceRow,
               this.grafana.rows.searchAndIndexCapacityRow,
             ])
           )
         ) + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+            g.dashboard.variable.query.new('index')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(true)
+            + g.dashboard.variable.query.queryTypes.withLabelValues(label='index', metric='opensearch_index_search_fetch_count{%(queriesSelectorGroupOnly)s}' % vars)
+            + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus),
+          ],
           uid + '-search-and-index-overview',
           tags,
           links { opensearchSearchAndIndexOverview+:: {} },
@@ -84,7 +95,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     } + if this.config.enableLokiLogs then {
       'opensearch-logs.json':
         logslib.new(
-          this.config.dashboardNamePrefix + ' Logs',
+          this.config.dashboardNamePrefix + ' logs',
           datasourceName=this.grafana.variables.datasources.loki.name,
           datasourceRegex=this.grafana.variables.datasources.loki.regex,
           filterSelector=this.config.filteringSelector,
@@ -96,7 +107,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           dashboards+:
             {
               logs+:
-                root.applyCommon(vars.multiInstance, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
             },
           panels+:
             {

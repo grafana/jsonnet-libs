@@ -3,7 +3,7 @@ local g = import './g.libsonnet';
 {
   new(this): {
     clusterOverviewRow:
-      g.panel.row.new('Cluster Overview')
+      g.panel.row.new('Cluster overview')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.clusterStatusPanel { gridPos+: { w: 5, h: 6 } },
@@ -13,16 +13,16 @@ local g = import './g.libsonnet';
         this.grafana.panels.activeShardsPercentagePanel { gridPos+: { w: 4, h: 6 } },
       ]),
 
-    rolesRow:
-      g.panel.row.new('Node Roles')
+    clusterRolesRow:
+      g.panel.row.new('Node roles')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.osRoles { gridPos+: { w: 24 } },
-        this.grafana.panels.osRolesTimeline { gridPos+: { w: 24 } },
+        this.grafana.panels.clusterOSRoles { gridPos+: { w: 24 } },
+        this.grafana.panels.clusterOSRolesTimeline { gridPos+: { w: 24 } },
       ]),
 
     resourceUsageRow:
-      g.panel.row.new('Resource Usage')
+      g.panel.row.new('Resource usage')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.topNodesByCPUUsagePanel { gridPos+: { w: 8 } },
@@ -31,7 +31,7 @@ local g = import './g.libsonnet';
       ]),
 
     storageAndTasksRow:
-      g.panel.row.new('Storage and Tasks')
+      g.panel.row.new('Storage and tasks')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.topNodesByDiskUsagePanel { gridPos+: { w: 8 } },
@@ -42,7 +42,7 @@ local g = import './g.libsonnet';
       ]),
 
     searchPerformanceRow:
-      g.panel.row.new('Search Performance')
+      g.panel.row.new('Search performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.topIndicesByRequestRatePanel { gridPos+: { w: 8 } },
@@ -51,7 +51,7 @@ local g = import './g.libsonnet';
       ]),
 
     ingestPerformanceRow:
-      g.panel.row.new('Ingest Performance')
+      g.panel.row.new('Ingest performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.topNodesByIngestRatePanel { gridPos+: { w: 8 } },
@@ -60,7 +60,7 @@ local g = import './g.libsonnet';
       ]),
 
     indexingPerformanceRow:
-      g.panel.row.new('Indexing Performance')
+      g.panel.row.new('Indexing performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.topIndicesByIndexRatePanel { gridPos+: { w: 8 } },
@@ -73,8 +73,7 @@ local g = import './g.libsonnet';
       g.panel.row.new('Node Roles')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.osRolesTimeline { gridPos+: { w: 24 } },
-        this.grafana.panels.osRoles { gridPos+: { w: 24 } },
+        this.grafana.panels.nodeOSRolesTimeline { gridPos+: { w: 24 } },
       ]),
 
     nodeHealthRow:
@@ -115,8 +114,8 @@ local g = import './g.libsonnet';
 
 
     // Search and Index Overview Dashboard Rows
-    searchAndIndexSearchPerformanceRow:
-      g.panel.row.new('Search Performance')
+    searchAndIndexRequestPerformanceRow:
+      g.panel.row.new('Request performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.searchRequestRatePanel { gridPos+: { w: 6 } },
@@ -126,7 +125,7 @@ local g = import './g.libsonnet';
       ]),
 
     searchAndIndexIndexingPerformanceRow:
-      g.panel.row.new('Indexing Performance')
+      g.panel.row.new('Indexing performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.indexingRatePanel { gridPos+: { w: 6 } },
@@ -140,7 +139,7 @@ local g = import './g.libsonnet';
       ]),
 
     searchAndIndexCapacityRow:
-      g.panel.row.new('Index Capacity')
+      g.panel.row.new('Index capacity')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         this.grafana.panels.documentsIndexedPanel { gridPos+: { w: 6 } },
