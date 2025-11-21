@@ -14,6 +14,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withInterval('2m')
           + g.query.prometheus.withIntervalFactor(2),
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       requestErrorsPanel:
@@ -25,6 +28,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withIntervalFactor(2),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
@@ -40,6 +46,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withIntervalFactor(2),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('binBps')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkSentThroughputPanel:
@@ -51,6 +60,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withIntervalFactor(2),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('binBps')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
@@ -68,6 +80,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       sessionsExpiredPanel:
@@ -83,6 +98,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       sessionsRejectedPanel:
@@ -98,6 +116,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       connectionsActivePanel:
@@ -111,6 +132,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       connectionsIdlePanel:
@@ -124,6 +148,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsCreatedPanel:
@@ -138,6 +165,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsInFlightPanel:
@@ -151,6 +181,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsAbortedPanel:
@@ -165,6 +198,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }

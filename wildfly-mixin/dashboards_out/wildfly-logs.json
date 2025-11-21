@@ -6,16 +6,6 @@
       "id": null,
       "links": [
          {
-            "asDropdown": true,
-            "includeVars": true,
-            "keepTime": true,
-            "tags": [
-               "wildfly"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
-         },
-         {
             "keepTime": true,
             "title": "Wildfly datasource",
             "type": "link",
