@@ -8,7 +8,7 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels([
         this.grafana.panels.clusterStatusPanel { gridPos+: { w: 5, h: 6 } },
         this.grafana.panels.nodeCountPanel { gridPos+: { w: 5, h: 6 } },
-        this.grafana.panels.dataNodeCountPanel { gridPos+: { w: 5, h: 6  } },
+        this.grafana.panels.dataNodeCountPanel { gridPos+: { w: 5, h: 6 } },
         this.grafana.panels.shardCountPanel { gridPos+: { w: 5, h: 6 } },
         this.grafana.panels.activeShardsPercentagePanel { gridPos+: { w: 4, h: 6 } },
       ]),

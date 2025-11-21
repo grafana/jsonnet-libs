@@ -22,7 +22,7 @@
   // Agg Lists
   groupAggList: std.join(',', this.groupLabels),
   groupAggListWithInstance: std.join(',', this.groupLabels + this.instanceLabels),
-  
+
   // Alerts configuration
   alertsWarningShardReallocations: 0,  // count
   alertsWarningShardUnassigned: 0,  // count
@@ -34,7 +34,7 @@
   alertsCriticalMemoryUsage: 85,  // %
   alertsWarningRequestLatency: 0.5,  // seconds
   alertsWarningIndexLatency: 0.5,  // seconds
-  
+
   // Signals configuration
   signals+: {
     clusterOverview: (import './signals/cluster-overview.libsonnet')(this),

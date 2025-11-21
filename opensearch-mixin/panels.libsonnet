@@ -5,7 +5,7 @@ local var = g.dashboard.variable;
   new(this)::
     {
       local signals = this.signals,
-      
+
       clusterOSRoles:
         g.panel.table.new('Roles')
         + g.panel.table.panelOptions.withDescription('OpenSearch node roles.')
@@ -14,20 +14,32 @@ local var = g.dashboard.variable;
           + g.query.prometheus.withInstant(true),
         ])
         + g.panel.table.queryOptions.withTransformations([
-          {id: 'labelsToFields', options: {mode: 'columns', valueLabel: 'role'}},
-          {id: 'merge', options: {}},
+          { id: 'labelsToFields', options: { mode: 'columns', valueLabel: 'role' } },
+          { id: 'merge', options: {} },
           {
             id: 'organize',
             options: {
-              excludeByName: {Time: true},
+              excludeByName: { Time: true },
               indexByName: {
-                Time: 0, node: 3, nodeid: 3, master: 104, data: 105,
-                ingest: 106, remote_cluster_client: 107, cluster_manager: 108,
-              } + {[k]: 3 for k in this.config.groupLabels + this.config.instanceLabels},
+                Time: 0,
+                node: 3,
+                nodeid: 3,
+                master: 104,
+                data: 105,
+                ingest: 106,
+                remote_cluster_client: 107,
+                cluster_manager: 108,
+              } + { [k]: 3 for k in this.config.groupLabels + this.config.instanceLabels },
               renameByName: {
-                Time: '', cluster: 'Cluster', cluster_manager: 'Cluster manager',
-                data: 'Data', ingest: 'Ingest', master: 'Master',
-                node: 'Node', nodeid: 'Nodeid', remote_cluster_client: 'Remote cluster client',
+                Time: '',
+                cluster: 'Cluster',
+                cluster_manager: 'Cluster manager',
+                data: 'Data',
+                ingest: 'Ingest',
+                master: 'Master',
+                node: 'Node',
+                nodeid: 'Nodeid',
+                remote_cluster_client: 'Remote cluster client',
               },
             },
           },
@@ -35,17 +47,17 @@ local var = g.dashboard.variable;
         + g.panel.table.standardOptions.withMappings([
           g.panel.table.standardOptions.mapping.ValueMap.withType()
           + g.panel.table.standardOptions.mapping.ValueMap.withOptions({
-            '0': {color: 'super-light-orange', index: 5, text: 'False'},
-            '1': {color: 'light-green', index: 3, text: 'True'},
-            Data: {color: 'light-purple', index: 0, text: 'data'},
-            Ingest: {color: 'light-blue', index: 2, text: 'ingest'},
-            Master: {color: 'light-green', index: 1, text: 'master'},
-            'Remote cluster client': {color: 'light-orange', index: 4, text: 'remote_cluster_client'},
+            '0': { color: 'super-light-orange', index: 5, text: 'False' },
+            '1': { color: 'light-green', index: 3, text: 'True' },
+            Data: { color: 'light-purple', index: 0, text: 'data' },
+            Ingest: { color: 'light-blue', index: 2, text: 'ingest' },
+            Master: { color: 'light-green', index: 1, text: 'master' },
+            'Remote cluster client': { color: 'light-orange', index: 4, text: 'remote_cluster_client' },
           }),
         ])
         + g.panel.table.standardOptions.withOverrides([
           g.panel.table.fieldOverride.byRegexp.new('/Data|Master|Ingest|Remote.+|Cluster.+/')
-          + g.panel.table.fieldOverride.byRegexp.withProperty('custom.cellOptions', {type: 'color-text'}),
+          + g.panel.table.fieldOverride.byRegexp.withProperty('custom.cellOptions', { type: 'color-text' }),
         ]),
 
       clusterOSRolesTimeline:
@@ -65,11 +77,11 @@ local var = g.dashboard.variable;
           {
             type: 'value',
             options: {
-              '2': {color: 'light-purple', index: 0, text: 'data'},
-              '3': {color: 'light-green', index: 1, text: 'master'},
-              '4': {color: 'light-blue', index: 2, text: 'ingest'},
-              '5': {color: 'light-yellow', index: 3, text: 'cluster_manager'},
-              '6': {color: 'super-light-red', index: 4, text: 'remote_cluster_client'},
+              '2': { color: 'light-purple', index: 0, text: 'data' },
+              '3': { color: 'light-green', index: 1, text: 'master' },
+              '4': { color: 'light-blue', index: 2, text: 'ingest' },
+              '5': { color: 'light-yellow', index: 3, text: 'cluster_manager' },
+              '6': { color: 'super-light-red', index: 4, text: 'remote_cluster_client' },
             },
           },
         ]),
@@ -86,9 +98,9 @@ local var = g.dashboard.variable;
         + g.panel.stat.standardOptions.withMappings([
           g.panel.stat.standardOptions.mapping.ValueMap.withType()
           + g.panel.stat.standardOptions.mapping.ValueMap.withOptions({
-            '0': {index: 0, text: 'Green'},
-            '1': {index: 1, text: 'Yellow'},
-            '2': {index: 2, text: 'Red'},
+            '0': { index: 0, text: 'Green' },
+            '1': { index: 1, text: 'Yellow' },
+            '2': { index: 2, text: 'Red' },
           }),
         ])
         + g.panel.stat.standardOptions.thresholds.withSteps([
@@ -102,7 +114,7 @@ local var = g.dashboard.variable;
           + g.panel.stat.standardOptions.threshold.step.withValue(2),
         ])
         + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
-       // + g.panel.stat.standardOptions.graphMode.withMode('none'),
+        // + g.panel.stat.standardOptions.graphMode.withMode('none'),
         + g.panel.stat.options.withGraphMode('none'),
 
 
@@ -185,7 +197,7 @@ local var = g.dashboard.variable;
         + g.panel.stat.standardOptions.withUnit('percent')
         + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
         + g.panel.stat.options.withGraphMode('none'),
-      
+
       topNodesByCPUUsagePanel:
         g.panel.barGauge.new('Top nodes by CPU usage')
         + g.panel.barGauge.panelOptions.withDescription('Top nodes by OS CPU usage across the OpenSearch cluster.')
@@ -231,7 +243,7 @@ local var = g.dashboard.variable;
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.cluster_shards_number_by_type.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
-          ])
+        ])
         + g.panel.barGauge.standardOptions.color.withMode('thresholds')
         + g.panel.barGauge.standardOptions.thresholds.withSteps([
           g.panel.barGauge.standardOptions.threshold.step.withColor('green')
@@ -418,7 +430,7 @@ local var = g.dashboard.variable;
       // Node CPU usage
       nodeCpuUsage:
         g.panel.timeSeries.new('Node CPU usage')
-        + g.panel.timeSeries.panelOptions.withDescription('CPU usage percentage of the node\'s Operating System.')
+        + g.panel.timeSeries.panelOptions.withDescription("CPU usage percentage of the node's Operating System.")
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.os_cpu_percent.asTarget()])
         + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
         + g.panel.timeSeries.standardOptions.withMax(100)
@@ -457,7 +469,7 @@ local var = g.dashboard.variable;
           signals.nodeOverview.fs_read_bps.asTarget()
           + g.query.prometheus.withInterval('2m'),
           signals.nodeOverview.fs_write_bps.asTarget()
-          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withInterval('2m'),
         ])
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15)
@@ -526,7 +538,7 @@ local var = g.dashboard.variable;
       // Node network traffic
       nodeNetworkTraffic:
         g.panel.timeSeries.new('Node network traffic')
-        + g.panel.timeSeries.panelOptions.withDescription('Network traffic on the node\'s operating system.')
+        + g.panel.timeSeries.panelOptions.withDescription("Network traffic on the node's operating system.")
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.transport_rx_bps.asTarget()
           + g.query.prometheus.withInterval('2m'),
@@ -575,11 +587,11 @@ local var = g.dashboard.variable;
           {
             type: 'value',
             options: {
-              '2': {color: 'light-purple', index: 0, text: 'data'},
-              '3': {color: 'light-green', index: 1, text: 'master'},
-              '4': {color: 'light-blue', index: 2, text: 'ingest'},
-              '5': {color: 'light-yellow', index: 3, text: 'cluster_manager'},
-              '6': {color: 'super-light-red', index: 4, text: 'remote_cluster_client'},
+              '2': { color: 'light-purple', index: 0, text: 'data' },
+              '3': { color: 'light-green', index: 1, text: 'master' },
+              '4': { color: 'light-blue', index: 2, text: 'ingest' },
+              '5': { color: 'light-yellow', index: 3, text: 'cluster_manager' },
+              '6': { color: 'super-light-red', index: 4, text: 'remote_cluster_client' },
             },
           },
         ]),
@@ -731,7 +743,6 @@ local var = g.dashboard.variable;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never'),
 
 
-
       // Search and Index Overview Panels - Refactored to use modern patterns and signals
       // Search Performance Panels
       searchRequestRatePanel:
@@ -751,8 +762,8 @@ local var = g.dashboard.variable;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
         + g.panel.timeSeries.standardOptions.withOverrides([
           {
-            matcher: {id: 'byValue', options: {reducer: 'allIsZero', op: 'gte', value: 0}},
-            properties: [{id: 'custom.hideFrom', value: {tooltip: true, viz: false, legend: true}}],
+            matcher: { id: 'byValue', options: { reducer: 'allIsZero', op: 'gte', value: 0 } },
+            properties: [{ id: 'custom.hideFrom', value: { tooltip: true, viz: false, legend: true } }],
           },
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
@@ -777,8 +788,8 @@ local var = g.dashboard.variable;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
         + g.panel.timeSeries.standardOptions.withOverrides([
           {
-            matcher: {id: 'byValue', options: {op: 'gte', reducer: 'allIsZero', value: 0}},
-            properties: [{id: 'custom.hideFrom', value: {legend: true, tooltip: true, viz: false}}],
+            matcher: { id: 'byValue', options: { op: 'gte', reducer: 'allIsZero', value: 0 } },
+            properties: [{ id: 'custom.hideFrom', value: { legend: true, tooltip: true, viz: false } }],
           },
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
@@ -798,8 +809,8 @@ local var = g.dashboard.variable;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
         + g.panel.timeSeries.standardOptions.withOverrides([
           {
-            matcher: {id: 'byValue', options: {op: 'gte', reducer: 'allIsZero', value: 0}},
-            properties: [{id: 'custom.hideFrom', value: {legend: true, tooltip: true, viz: false}}],
+            matcher: { id: 'byValue', options: { op: 'gte', reducer: 'allIsZero', value: 0 } },
+            properties: [{ id: 'custom.hideFrom', value: { legend: true, tooltip: true, viz: false } }],
           },
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
@@ -830,8 +841,8 @@ local var = g.dashboard.variable;
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
           {
-            matcher: {id: 'byValue', options: {op: 'gte', reducer: 'allIsZero', value: 0}},
-            properties: [{id: 'custom.hideFrom', value: {legend: true, tooltip: true, viz: false}}],
+            matcher: { id: 'byValue', options: { op: 'gte', reducer: 'allIsZero', value: 0 } },
+            properties: [{ id: 'custom.hideFrom', value: { legend: true, tooltip: true, viz: false } }],
           },
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
@@ -850,8 +861,8 @@ local var = g.dashboard.variable;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
         + g.panel.timeSeries.standardOptions.withOverrides([
           {
-            matcher: {id: 'byValue', options: {op: 'gte', reducer: 'allIsZero', value: 0}},
-            properties: [{id: 'custom.hideFrom', value: {legend: true, tooltip: true, viz: false}}],
+            matcher: { id: 'byValue', options: { op: 'gte', reducer: 'allIsZero', value: 0 } },
+            properties: [{ id: 'custom.hideFrom', value: { legend: true, tooltip: true, viz: false } }],
           },
         ]),
 
@@ -893,8 +904,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       // Index Operations Panels
@@ -917,8 +928,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       mergeTimePanel:
@@ -947,8 +958,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
@@ -971,8 +982,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       // Index Statistics Panels
@@ -994,8 +1005,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       docsDeletedPanel:
@@ -1016,8 +1027,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       documentsIndexedPanel:
@@ -1038,8 +1049,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       // Index Structure Panels
@@ -1061,8 +1072,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       mergeCountPanel:
@@ -1084,8 +1095,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       // Cache and Memory Panels
@@ -1109,8 +1120,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ])
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
@@ -1132,8 +1143,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       segmentSizePanel:
@@ -1154,8 +1165,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       mergeSizePanel:
@@ -1177,8 +1188,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
 
       searchAndIndexShardCountPanel:
@@ -1199,8 +1210,8 @@ local var = g.dashboard.variable;
           + g.panel.timeSeries.standardOptions.threshold.step.withValue(80),
         ])
         + g.panel.timeSeries.standardOptions.withOverrides([
-          g.panel.timeSeries.fieldOverride.byValue.new({op: 'gte', reducer: 'allIsZero', value: 0})
-          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', {legend: true, tooltip: true, viz: false}),
+          g.panel.timeSeries.fieldOverride.byValue.new({ op: 'gte', reducer: 'allIsZero', value: 0 })
+          + g.panel.timeSeries.fieldOverride.byValue.withProperty('custom.hideFrom', { legend: true, tooltip: true, viz: false }),
         ]),
     },
 }

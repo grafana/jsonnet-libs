@@ -267,11 +267,11 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, sort_desc((100 * (\n'
-              + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_total_bytes{%(queriesSelectorGroupOnly)s}) - \n'
-              + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_free_bytes{%(queriesSelectorGroupOnly)s})\n'
-              + ') / \n'
-              + 'sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_total_bytes{%(queriesSelectorGroupOnly)s})\n'
-              + ')))',
+                  + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_total_bytes{%(queriesSelectorGroupOnly)s}) - \n'
+                  + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_free_bytes{%(queriesSelectorGroupOnly)s})\n'
+                  + ') / \n'
+                  + 'sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_total_bytes{%(queriesSelectorGroupOnly)s})\n'
+                  + ')))',
             legendCustomTemplate: '{{node}}',
           },
         },
@@ -299,10 +299,10 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
-              + '  opensearch_index_search_fetch_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_search_query_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_search_scroll_current_number{%(queriesSelectorGroupOnly)s, context="total"}\n'
-              + ')))',
+                  + '  opensearch_index_search_fetch_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_search_query_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_search_scroll_current_number{%(queriesSelectorGroupOnly)s, context="total"}\n'
+                  + ')))',
             legendCustomTemplate: '{{index}}',
           },
         },
@@ -315,14 +315,14 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, sort_desc(sum by(index, ' + this.groupAggList + ') ((\n'
-              + '  increase(opensearch_index_search_fetch_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
-              + '  increase(opensearch_index_search_query_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
-              + '  increase(opensearch_index_search_scroll_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval)\n'
-              + ') / clamp_min(\n'
-              + '  increase(opensearch_index_search_fetch_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
-              + '  increase(opensearch_index_search_query_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
-              + '  increase(opensearch_index_search_scroll_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval), 1\n'
-              + '))))',
+                  + '  increase(opensearch_index_search_fetch_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
+                  + '  increase(opensearch_index_search_query_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
+                  + '  increase(opensearch_index_search_scroll_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval)\n'
+                  + ') / clamp_min(\n'
+                  + '  increase(opensearch_index_search_fetch_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
+                  + '  increase(opensearch_index_search_query_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
+                  + '  increase(opensearch_index_search_scroll_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval), 1\n'
+                  + '))))',
             legendCustomTemplate: '{{index}}',
           },
         },
@@ -335,13 +335,13 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
-              + '  100 * (opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_querycache_hit_count{%(queriesSelectorGroupOnly)s, context="total"}) / \n'
-              + '  clamp_min((opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_querycache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_requestcache_miss_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
-              + '  opensearch_index_querycache_miss_number{%(queriesSelectorGroupOnly)s, context="total"}), 1\n'
-              + '))))',
+                  + '  100 * (opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_querycache_hit_count{%(queriesSelectorGroupOnly)s, context="total"}) / \n'
+                  + '  clamp_min((opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_querycache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_requestcache_miss_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
+                  + '  opensearch_index_querycache_miss_number{%(queriesSelectorGroupOnly)s, context="total"}), 1\n'
+                  + '))))',
             legendCustomTemplate: '{{index}}',
           },
         },
@@ -370,9 +370,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, sum by(' + this.groupAggListWithInstance + ') (\n'
-              + '  increase(opensearch_ingest_total_time_seconds{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_ingest_total_count{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval), 1)\n'
-              + '))',
+                  + '  increase(opensearch_ingest_total_time_seconds{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_ingest_total_count{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval), 1)\n'
+                  + '))',
             legendCustomTemplate: '{{node}}',
           },
         },
@@ -419,9 +419,9 @@ function(this)
         sources: {
           prometheus: {
             expr: 'topk(10, avg by(index, ' + this.groupAggList + ') (\n'
-              + '  increase(opensearch_index_indexing_index_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) / \n'
-              + '  clamp_min(increase(opensearch_index_indexing_index_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval), 1)\n'
-              + '))',
+                  + '  increase(opensearch_index_indexing_index_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) / \n'
+                  + '  clamp_min(increase(opensearch_index_indexing_index_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval), 1)\n'
+                  + '))',
             legendCustomTemplate: '{{index}}',
           },
         },
