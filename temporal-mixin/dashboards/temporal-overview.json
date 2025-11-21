@@ -6701,13 +6701,18 @@
         "type": "query"
       },
       {
+        "allValue": ".*",
         "current": {
           "text": "All",
           "value": [
             "$__all"
           ]
         },
-        "definition": "label_values(region)",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(temporal_cloud_v1_frontend_service_request_count,region)",
         "includeAll": true,
         "label": "Temporal region",
         "multi": true,
@@ -6715,7 +6720,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(region)",
+          "query": "label_values(temporal_cloud_v1_frontend_service_request_count,region)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
