@@ -1,33 +1,28 @@
 {
   local this = self,
-  filteringSelector: if self.enableMultiCluster then 'cluster!="",opensearch_cluster!=""' else 'opensearch_cluster!=""',
-  groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'opensearch_cluster'] else ['job', 'opensearch_cluster'],
-  logLabels: ['job', 'cluster', 'node'],
-  instanceLabels: ['node'],
+  filteringSelector: 'job="integrations/opensearch"',
+  groupLabels: ['job', 'cluster', 'opensearch_cluster'],
+  logLabels: ['job', 'cluster', 'opensearch_cluster'],
+  instanceLabels: ['instance'],
 
-  dashboardTags: [self.uid],
   uid: 'opensearch',
+  dashboardTags: [self.uid],
   dashboardNamePrefix: 'OpenSearch',
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
   metricsSource: 'prometheus',  // metrics source for signals
 
-  // Agg Lists
-  groupAggList: std.join(',', this.groupLabels),
-  groupAggListWithInstance: std.join(',', this.groupLabels + this.instanceLabels),
-  
-  // Multi-cluster support
-  enableMultiCluster: false,
-  opensearchSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
-
   // Logging configuration
   enableLokiLogs: true,
   extraLogLabels: ['level', 'severity'],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
-  logExpression: '{job=~"$job", cluster=~"$cluster", instance=~"$instance", exception_class=~".+"} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}" | drop time_extracted, severity_extracted, exception_class_extracted, correlation_id_extracted',
 
+  // Agg Lists
+  groupAggList: std.join(',', this.groupLabels),
+  groupAggListWithInstance: std.join(',', this.groupLabels + this.instanceLabels),
+  
   // Alerts configuration
   alertsWarningShardReallocations: 0,  // count
   alertsWarningShardUnassigned: 0,  // count
@@ -42,11 +37,8 @@
   
   // Signals configuration
   signals+: {
-    cluster: (import './signals/cluster.libsonnet')(this),
-    node: (import './signals/node.libsonnet')(this),
-    topk: (import './signals/topk.libsonnet')(this),
-    roles: (import './signals/roles.libsonnet')(this),
-    search: (import './signals/search.libsonnet')(this),
-    indexing: (import './signals/indexing.libsonnet')(this),
+    clusterOverview: (import './signals/cluster-overview.libsonnet')(this),
+    nodeOverview: (import './signals/node-overview.libsonnet')(this),
+    searchAndIndexOverview: (import './signals/search-and-index-overview.libsonnet')(this),
   },
 }

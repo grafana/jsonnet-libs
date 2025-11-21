@@ -7,25 +7,21 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Opensearch Logs",
+            "title": "Opensearch logs",
             "type": "link",
             "url": "/d/opensearch-logs"
          },
          {
             "keepTime": true,
-            "title": "Opensearch Cluster Overview",
+            "title": "Opensearch cluster overview",
             "type": "link",
             "url": "/d/opensearch-cluster-overview"
          },
          {
-            "asDropdown": true,
-            "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "opensearch"
-            ],
-            "title": "All dashboards",
-            "type": "dashboards"
+            "title": "Opensearch node overview",
+            "type": "link",
+            "url": "/d/opensearch-node-overview"
          }
       ],
       "panels": [
@@ -39,7 +35,7 @@
             },
             "id": 1,
             "panels": [ ],
-            "title": "Search Performance",
+            "title": "Request performance",
             "type": "row"
          },
          {
@@ -50,6 +46,11 @@
             "description": "Rate of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "reqps"
                },
                "overrides": [
@@ -87,14 +88,14 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_search_query_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_query_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -106,7 +107,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_search_fetch_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_fetch_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -118,7 +119,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_search_scroll_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_scroll_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -137,6 +138,11 @@
             "description": "Latency of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "s"
                },
                "overrides": [
@@ -174,17 +180,17 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (increase(opensearch_index_search_query_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\"}[$__interval:]) / clamp_min(increase(opensearch_index_search_query_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]), 1))",
+                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_query_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_query_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - query",
                   "refId": "Search query latency (avg)"
@@ -194,10 +200,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (increase(opensearch_index_search_fetch_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]) / clamp_min(increase(opensearch_index_search_fetch_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]), 1))",
+                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_fetch_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_fetch_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - fetch",
                   "refId": "Search fetch latency (avg)"
@@ -207,10 +213,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (increase(opensearch_index_search_scroll_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]) / clamp_min(increase(opensearch_index_search_scroll_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]), 1))",
+                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_scroll_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_scroll_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - scroll",
                   "refId": "Search scroll latency (avg)"
@@ -227,6 +233,11 @@
             "description": "Ratio of query cache and request cache hits and misses.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -264,14 +275,14 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (100 * (opensearch_index_requestcache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}) / clamp_min(opensearch_index_requestcache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"} + opensearch_index_requestcache_miss_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}, 1))",
+                  "expr": "avg by(job,opensearch_cluster,index) (\n  100 * (opensearch_index_requestcache_hit_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}) / \n  clamp_min(opensearch_index_requestcache_hit_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"} + \n  opensearch_index_requestcache_miss_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}, 1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -283,7 +294,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (100 * (opensearch_index_querycache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}) / clamp_min(opensearch_index_querycache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"} + opensearch_index_querycache_miss_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}, 1))",
+                  "expr": "avg by(job,opensearch_cluster,index) (\n  100 * (opensearch_index_querycache_hit_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}) / \n  clamp_min(opensearch_index_querycache_hit_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"} + \n  opensearch_index_querycache_miss_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}, 1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -302,6 +313,11 @@
             "description": "Total evictions count by cache type for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -351,17 +367,17 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_querycache_evictions_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_querycache_evictions_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - query cache",
                   "refId": "Query cache evictions"
@@ -371,10 +387,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_requestcache_evictions_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_requestcache_evictions_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - request cache",
                   "refId": "Request cache evictions"
@@ -384,10 +400,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_fielddata_evictions_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_fielddata_evictions_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - field data",
                   "refId": "Fielddata evictions"
@@ -406,7 +422,7 @@
             },
             "id": 6,
             "panels": [ ],
-            "title": "Indexing Performance",
+            "title": "Indexing performance",
             "type": "row"
          },
          {
@@ -417,6 +433,11 @@
             "description": "Rate of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "documents/s"
                },
                "overrides": [
@@ -449,14 +470,14 @@
                "y": 10
             },
             "id": 7,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_indexing_index_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\",context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_index_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\",context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -475,6 +496,11 @@
             "description": "Document indexing latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -497,18 +523,19 @@
                "y": 10
             },
             "id": 8,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster) (increase(opensearch_index_indexing_index_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", context=~\"total\"}[$__interval:]) / clamp_min(increase(opensearch_index_indexing_index_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", context=~\"total\"}[$__interval:]),1))",
+                  "expr": "avg by(job,cluster,opensearch_cluster) (\n  increase(opensearch_index_indexing_index_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_indexing_index_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
-                  "legendFormat": "{{node}}: Indexing latency (avg)",
+                  "interval": "2m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{index}}: Indexing latency (avg)",
                   "refId": "Indexing latency (avg)"
                }
             ],
@@ -523,6 +550,11 @@
             "description": "Number of indexing failures for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -567,17 +599,17 @@
                "y": 10
             },
             "id": 9,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_indexing_index_failed_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\",context=\"total\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_indexing_index_failed_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\",context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Indexing failed (avg)"
@@ -594,6 +626,11 @@
             "description": "Index flush latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -638,16 +675,17 @@
                "y": 10
             },
             "id": 10,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (increase(opensearch_index_flush_total_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]) / clamp_min(increase(opensearch_index_flush_total_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]),1))",
+                  "expr": "avg by(job,cluster,opensearch_cluster,index) (\n  increase(opensearch_index_flush_total_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_flush_total_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Flush latency (avg)"
@@ -665,7 +703,10 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "drawStyle": "points"
+                     "drawStyle": "points",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "thresholds": {
                      "steps": [
@@ -716,16 +757,17 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (increase(opensearch_index_merges_total_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:])) > 0",
+                  "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - total",
                   "refId": "Merge time increase"
@@ -735,9 +777,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (increase(opensearch_index_merges_total_stopped_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:])) > 0",
+                  "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_stopped_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - stopped",
                   "refId": "Merge stopped time increase"
@@ -747,9 +790,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (increase(opensearch_index_merges_total_throttled_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:])) > 0",
+                  "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_throttled_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}} - throttled",
                   "refId": "Merge throttled time increase"
@@ -766,6 +810,11 @@
             "description": "Index refresh latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -810,16 +859,17 @@
                "y": 18
             },
             "id": 12,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (increase(opensearch_index_refresh_total_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]) / clamp_min(increase(opensearch_index_refresh_total_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}[$__interval:]),1))",
+                  "expr": "avg by(job,opensearch_cluster,index) (\n  increase(opensearch_index_refresh_total_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_refresh_total_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Refresh latency (avg)"
@@ -836,6 +886,11 @@
             "description": "Current number of translog operations for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -880,14 +935,14 @@
                "y": 18
             },
             "id": 13,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_translog_operations_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_translog_operations_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -906,6 +961,11 @@
             "description": "Rate of documents deleted for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -950,14 +1010,14 @@
                "y": 18
             },
             "id": 14,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_indexing_delete_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_delete_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -978,7 +1038,7 @@
             },
             "id": 15,
             "panels": [ ],
-            "title": "Index Capacity",
+            "title": "Index capacity",
             "type": "row"
          },
          {
@@ -989,6 +1049,11 @@
             "description": "Number of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1033,14 +1098,14 @@
                "y": 27
             },
             "id": 16,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_indexing_index_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_index_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1059,6 +1124,11 @@
             "description": "Current number of segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1103,14 +1173,14 @@
                "y": 27
             },
             "id": 17,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_segments_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_segments_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1130,7 +1200,10 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "drawStyle": "points"
+                     "drawStyle": "points",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "thresholds": {
                      "steps": [
@@ -1176,18 +1249,18 @@
                "y": 27
             },
             "id": 18,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster) (increase(opensearch_index_merges_total_docs_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", context=\"total\"}[$__interval:])) > 0",
+                  "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_docs_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}: Merge docs increase",
+                  "legendFormat": "{{index}}: Merge docs increase",
                   "refId": "Merge docs increase"
                }
             ],
@@ -1202,6 +1275,11 @@
             "description": "Size of query cache and request cache.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1251,14 +1329,14 @@
                   "mode": "multi"
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster) (\n  opensearch_index_querycache_memory_size_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_index_querycache_memory_size_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1270,7 +1348,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster) (\n  opensearch_index_requestcache_memory_size_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_index_requestcache_memory_size_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1289,6 +1367,11 @@
             "description": "Size of the store in bytes for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1333,14 +1416,14 @@
                "y": 35
             },
             "id": 20,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_store_size_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_store_size_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1359,6 +1442,11 @@
             "description": "Memory used by segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1403,14 +1491,14 @@
                "y": 35
             },
             "id": 21,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,opensearch_cluster,index) (\n  opensearch_index_segments_memory_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_segments_memory_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1430,7 +1518,10 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "drawStyle": "points"
+                     "drawStyle": "points",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "thresholds": {
                      "steps": [
@@ -1476,14 +1567,14 @@
                "y": 35
             },
             "id": 22,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster,index) (opensearch_index_merges_current_size_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",index=~\"$index\", context=\"total\"}) > 0",
+                  "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_merges_current_size_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1502,6 +1593,11 @@
             "description": "The number of index shards for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "thresholds": {
                      "steps": [
                         {
@@ -1546,14 +1642,14 @@
                "y": 35
             },
             "id": 23,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (index) (avg by(job,opensearch_cluster) (opensearch_index_shards_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\",node=~\"$node\", type=~\"active|active_primary\"}))",
+                  "expr": "sum by (index) (\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_shards_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", type=~\"active|active_primary\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1589,7 +1685,22 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\"}, job)",
+               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1604,7 +1715,7 @@
                "label": "Opensearch_cluster",
                "multi": true,
                "name": "opensearch_cluster",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\"}, opensearch_cluster)",
+               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1616,10 +1727,10 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Node",
+               "label": "Instance",
                "multi": true,
-               "name": "node",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}, node)",
+               "name": "instance",
+               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1631,6 +1742,17 @@
                "query": "loki",
                "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
                "type": "datasource"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "multi": true,
+               "name": "index",
+               "query": "label_values(opensearch_index_search_fetch_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, index)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },
@@ -1639,6 +1761,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "OpenSearch Search and Index Overview",
+      "title": "OpenSearch search and index overview",
       "uid": "opensearch-search-and-index-overview"
    }

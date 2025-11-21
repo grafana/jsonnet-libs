@@ -15,6 +15,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(): {
     local this = self,
     config: config,
+    
     signals:
       {
         [sig]: commonlib.signals.unmarshallJsonMulti(
