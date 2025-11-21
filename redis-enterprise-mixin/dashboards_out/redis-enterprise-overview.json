@@ -1,43 +1,57 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "redis-enterprise-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Redis Enterprise dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All Redis Enterprise dashboards",
+            "type": "dashboards"
+         },
+         {
+            "title": "Redis Enterprise databases",
+            "type": "link",
+            "url": "/d/redisenterprise_databases"
+         },
+         {
+            "keepTime": true,
+            "title": "Redis Enterprise logs",
+            "type": "link",
+            "url": "/d/redisenterprise-logs"
+         },
+         {
+            "title": "Redis Enterprise nodes",
+            "type": "link",
+            "url": "/d/redisenterprise_nodes"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Up/down status for each node in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "displayName": "${__series.name}",
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
@@ -52,40 +66,37 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "displayMode": "basic",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "showUnfilled": true
             },
-            "pluginVersion": "9.4.7",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_up{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}",
+                  "expr": "node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - {{ node }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - {{ node }}",
+                  "refId": "Node up"
                }
             ],
             "title": "Nodes up",
@@ -93,16 +104,12 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Up/down status for each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "displayName": "${__series.name}",
-                  "mappings": [ ],
                   "max": 1,
                   "min": 0,
                   "thresholds": {
@@ -118,40 +125,37 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
                "displayMode": "basic",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "showUnfilled": true
             },
-            "pluginVersion": "9.4.7",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bdb_up{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}",
+                  "expr": "bdb_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - bdb={{bdb}}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - bdb={{ bdb }}",
+                  "refId": "Database up"
                }
             ],
             "title": "Databases up",
@@ -159,16 +163,12 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Up/down status for each shard in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "displayName": "${__series.name}",
-                  "mappings": [ ],
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
@@ -183,40 +183,37 @@
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 0
+               "y": 1
             },
             "id": 4,
             "options": {
                "displayMode": "basic",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "showUnfilled": true
             },
-            "pluginVersion": "9.4.7",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "redis_up{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}",
+                  "expr": "redis_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - redis: {{ redis }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - redis: {{ redis }}",
+                  "refId": "Shard up"
                }
             ],
             "title": "Shards up",
@@ -224,89 +221,53 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total requests handled by endpoints aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "decimals": 1,
+                  "noValue": "No packets",
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 6
+               "y": 7
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(node_total_req{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster, job)",
+                  "expr": "sum(node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, job)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }}",
+                  "refId": "Cluster total requests"
                }
             ],
             "title": "Cluster total requests",
@@ -314,90 +275,83 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total memory used by each across each database in the cluster",
+            "description": "Total memory used by each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "min": 0,
                   "unit": "bytes"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 6
+               "y": 7
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_used_memory{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, bdb, redis_cluster)",
+                  "expr": "sum(bdb_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, bdb, redis_cluster)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Cluster total memory used"
                }
             ],
             "title": "Cluster total memory used",
@@ -405,90 +359,53 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total connections to each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 6
+               "y": 7
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_conns{redis_cluster=~\"$redis_cluster\",  job=~\"$job\"}) by (bdb, redis_cluster, job)",
+                  "expr": "sum(bdb_conns{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (bdb, redis_cluster, job)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Cluster total connections"
                }
             ],
             "title": "Cluster total connections",
@@ -496,89 +413,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total cluster key count for each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 12
+               "y": 13
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_no_of_keys{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster, bdb, job)",
+                  "expr": "sum(bdb_no_of_keys{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, bdb, job)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Cluster total keys"
                }
             ],
             "title": "Cluster total keys",
@@ -586,90 +465,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Ratio of database cache key hits against hits and misses.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 12
+               "y": 13
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bdb_read_hits{redis_cluster=~\"$redis_cluster\", job=~\"$job\"} / (clamp_min(bdb_read_hits{redis_cluster=~\"$redis_cluster\", job=~\"$job\"} + bdb_read_misses{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}, 1)) * 100",
+                  "expr": "bdb_read_hits{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} / (clamp_min(bdb_read_hits{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} + bdb_read_misses{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}, 1)) * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Cluster cache hit ratio"
                }
             ],
             "title": "Cluster cache hit ratio",
@@ -677,99 +517,62 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Sum of key evictions and expirations in the cluster by database.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 12
+               "y": 13
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bdb_evicted_objects{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}",
+                  "expr": "bdb_evicted_objects{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} - evicted"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} - evicted",
+                  "refId": "Cluster evicted objects"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bdb_expired_objects{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}",
+                  "expr": "bdb_expired_objects{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} - expired"
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} - expired",
+                  "refId": "Cluster expired objects"
                }
             ],
             "title": "Cluster evictions vs expired objects",
@@ -777,106 +580,66 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 18
+               "y": 19
             },
             "id": 11,
-            "targets": [ ],
+            "panels": [ ],
             "title": "Nodes KPIs",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Endpoint request rate for each node in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 0,
-               "y": 19
+               "y": 20
             },
             "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(node_total_req{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}[$__rate_interval])",
+                  "expr": "rate(node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - node: {{ node }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - node: {{ node }}",
+                  "refId": "Node requests"
                }
             ],
             "title": "Node requests",
@@ -884,90 +647,53 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average latency for each node in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 6,
-               "y": 19
+               "y": 20
             },
             "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_avg_latency{redis_cluster=~\"$redis_cluster\", job=~\"$job\" }",
+                  "expr": "node_avg_latency{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - node: {{ node }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - node: {{ node }}",
+                  "refId": "Node average latency"
                }
             ],
             "title": "Node average latency",
@@ -975,90 +701,57 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Memory utilization % for each node in the cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "palette-classic"
+                     "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 12,
-               "y": 19
+               "y": 20
             },
             "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum(redis_used_memory{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster,node, job), 1)) * 100",
+                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - node: {{ node }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - node: {{ node }}",
+                  "refId": "Node memory utilization"
                }
             ],
             "title": "Node memory utilization",
@@ -1066,99 +759,62 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "CPU utilization for each node in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 18,
-               "y": 19
+               "y": 20
             },
             "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_cpu_system{redis_cluster=~\"$redis_cluster\", job=~\"$job\"} * 100",
+                  "expr": "node_cpu_system{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "node: {{ node }} - system"
+                  "instant": false,
+                  "legendFormat": "node: {{ node }} - system",
+                  "refId": "Node CPU system"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_cpu_user{redis_cluster=~\"$redis_cluster\", job=~\"$job\"} * 100",
+                  "expr": "node_cpu_user{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "node: {{ node }} - user"
+                  "instant": false,
+                  "legendFormat": "node: {{ node }} - user",
+                  "refId": "Node CPU user"
                }
             ],
             "title": "Node CPU utilization",
@@ -1166,106 +822,64 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 25
+               "y": 26
             },
             "id": 16,
-            "targets": [ ],
+            "panels": [ ],
             "title": "Database KPIs",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of request handled by each database in the cluster.",
+            "description": "Rate of requests handled by each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 0,
-               "y": 26
+               "y": 27
             },
             "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_instantaneous_ops_per_sec{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster, bdb, job)",
+                  "expr": "sum(bdb_instantaneous_ops_per_sec{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, bdb, job)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Database operations"
                }
             ],
             "title": "Database operations",
@@ -1273,90 +887,53 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average latency for each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 6,
-               "y": 26
+               "y": 27
             },
             "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_avg_latency{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (redis_cluster, job, bdb)",
+                  "expr": "sum(bdb_avg_latency{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, job, bdb)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Database average latency"
                }
             ],
             "title": "Database average latency",
@@ -1364,90 +941,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Calculated memory utilization % for each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 12,
-               "y": 26
+               "y": 27
             },
             "id": 19,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_used_memory{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, redis_cluster, bdb) / clamp_min(sum(bdb_memory_limit{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, redis_cluster, bdb), 1) * 100 ",
+                  "expr": "sum(bdb_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, redis_cluster, bdb) / clamp_min(sum(bdb_memory_limit{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, redis_cluster, bdb), 1) * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Database memory utilization"
                }
             ],
             "title": "Database memory utilization",
@@ -1455,90 +993,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Calculated cache hit rate for each database in the cluster",
+            "description": "Calculated cache hit rate for each database in the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 6,
                "x": 18,
-               "y": 26
+               "y": 27
             },
             "id": 20,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(bdb_read_hits{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, redis_cluster, bdb) / clamp_min(sum(bdb_read_hits{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, redis_cluster, bdb) + sum(bdb_read_misses{redis_cluster=~\"$redis_cluster\", job=~\"$job\"}) by (job, redis_cluster, bdb),1) * 100",
+                  "expr": "sum(bdb_read_hits{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, redis_cluster, bdb) / clamp_min(sum(bdb_read_hits{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, redis_cluster, bdb) + sum(bdb_read_misses{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (job, redis_cluster, bdb), 1) * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }} "
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }} - db: {{ bdb }}",
+                  "refId": "Database cache hit ratio"
                }
             ],
             "title": "Database cache hit ratio",
@@ -1546,68 +1045,71 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "redis-enterprise-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(node_up, job)",
+               "query": "label_values(node_up{job=\"integrations/redis-enterprise\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
-               "label": "Redis Cluster",
+               "label": "Redis cluster",
                "multi": true,
                "name": "redis_cluster",
-               "options": [ ],
-               "query": "label_values(node_up, redis_cluster)\n",
-               "refresh": 1,
+               "query": "label_values(node_up{job=\"integrations/redis-enterprise\",job=~\"$job\"}, redis_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -1615,33 +1117,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Redis Enterprise overview",
-      "uid": "redis-enterprise-overview",
-      "version": 0
+      "uid": "redisenterprise_overview"
    }
