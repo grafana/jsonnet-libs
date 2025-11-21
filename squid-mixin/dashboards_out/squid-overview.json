@@ -35,6 +35,11 @@
             "description": "The request rate of client.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "reqps"
                }
             },
@@ -72,6 +77,11 @@
             "description": "The number of client HTTP errors.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "errors/s"
                }
             },
@@ -109,6 +119,11 @@
             "description": "The client cache hit ratio.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "percent"
                }
             },
@@ -146,6 +161,11 @@
             "description": "The throughput of client HTTP data sent.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "KBs"
                }
             },
@@ -183,6 +203,11 @@
             "description": "The throughput of client HTTP data received.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "KBs"
                }
             },
@@ -220,6 +245,11 @@
             "description": "The throughput of client cache hit.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "KBs"
                }
             },
@@ -257,6 +287,11 @@
             "description": "HTTP request service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "s"
                }
             },
@@ -314,6 +349,11 @@
             "description": "Cache hits service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "s"
                }
             },
@@ -374,6 +414,11 @@
             "description": "Cache misses service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
                   "unit": "s"
                }
             },
@@ -448,6 +493,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -516,6 +564,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -540,6 +591,8 @@
                   "expr": "rate(squid_server_ftp_errors_total{job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "FTP",
                   "refId": "Server FTP errors"
                },
@@ -551,6 +604,8 @@
                   "expr": "rate(squid_server_http_errors_total{job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "HTTP",
                   "refId": "Server HTTP errors"
                },
@@ -562,6 +617,8 @@
                   "expr": "rate(squid_server_other_errors_total{job=\"integrations/squid\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "other",
                   "refId": "Server other errors"
                }
@@ -578,6 +635,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -646,6 +706,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -701,6 +764,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -766,6 +832,9 @@
             "fieldConfig": {
                "defaults": {
                   "custom": {
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
                      "stacking": {
                         "mode": "normal"
                      }
@@ -856,7 +925,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
