@@ -9,6 +9,7 @@ local var = g.dashboard.variable;
       clusterOSRoles:
         g.panel.table.new('Roles')
         + g.panel.table.panelOptions.withDescription('OpenSearch node roles.')
+        + g.panel.table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.table.queryOptions.withTargets([
           signals.clusterOverview.node_role_last_seen.asTarget()
           + g.query.prometheus.withInstant(true),
@@ -63,9 +64,11 @@ local var = g.dashboard.variable;
       clusterOSRolesTimeline:
         g.panel.statusHistory.new('Roles timeline')
         + g.panel.statusHistory.panelOptions.withDescription('OpenSearch node roles over time.')
+        + g.panel.statusHistory.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.statusHistory.options.withShowValue('never')
         + g.panel.statusHistory.options.withLegend(false)
         + g.panel.statusHistory.queryOptions.withMaxDataPoints(100)
+        + g.panel.statusHistory.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.statusHistory.queryOptions.withTargets([
           signals.clusterOverview.node_role_data.asTarget(),
           signals.clusterOverview.node_role_master.asTarget(),
@@ -90,6 +93,7 @@ local var = g.dashboard.variable;
       clusterStatusPanel:
         g.panel.stat.new('Cluster status')
         + g.panel.stat.panelOptions.withDescription('The overall health and availability of the OpenSearch cluster.')
+        + g.panel.stat.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.stat.queryOptions.withTargets([
           signals.clusterOverview.cluster_status.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -121,6 +125,7 @@ local var = g.dashboard.variable;
       nodeCountPanel:
         g.panel.stat.new('Node count')
         + g.panel.stat.panelOptions.withDescription('The number of running nodes across the OpenSearch cluster.')
+        + g.panel.stat.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.stat.queryOptions.withTargets([
           signals.clusterOverview.cluster_nodes_number.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -141,6 +146,7 @@ local var = g.dashboard.variable;
       dataNodeCountPanel:
         g.panel.stat.new('Data node count')
         + g.panel.stat.panelOptions.withDescription('The number of data nodes in the OpenSearch cluster.')
+        + g.panel.stat.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.stat.queryOptions.withTargets([
           signals.clusterOverview.cluster_datanodes_number.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -160,6 +166,7 @@ local var = g.dashboard.variable;
       shardCountPanel:
         g.panel.stat.new('Shard count')
         + g.panel.stat.panelOptions.withDescription('The number of shards in the OpenSearch cluster across all indices.')
+        + g.panel.stat.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.stat.queryOptions.withTargets([
           signals.clusterOverview.cluster_shards_number_total.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -179,6 +186,7 @@ local var = g.dashboard.variable;
       activeShardsPercentagePanel:
         g.panel.stat.new('Active shards %')
         + g.panel.stat.panelOptions.withDescription('Percent of active shards across the OpenSearch cluster.')
+        + g.panel.stat.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.stat.queryOptions.withTargets([
           signals.clusterOverview.cluster_shards_active_percent.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -201,6 +209,7 @@ local var = g.dashboard.variable;
       topNodesByCPUUsagePanel:
         g.panel.barGauge.new('Top nodes by CPU usage')
         + g.panel.barGauge.panelOptions.withDescription('Top nodes by OS CPU usage across the OpenSearch cluster.')
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.os_cpu_percent_topk.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -221,6 +230,7 @@ local var = g.dashboard.variable;
       breakersTrippedPanel:
         g.panel.barGauge.new('Breakers tripped')
         + g.panel.barGauge.panelOptions.withDescription('The total count of circuit breakers tripped across the OpenSearch cluster.')
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.circuitbreaker_tripped_count_sum.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -240,6 +250,7 @@ local var = g.dashboard.variable;
       shardStatusPanel:
         g.panel.barGauge.new('Shard status')
         + g.panel.barGauge.panelOptions.withDescription('Shard status counts across the OpenSearch cluster.')
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.cluster_shards_number_by_type.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -258,6 +269,7 @@ local var = g.dashboard.variable;
       topNodesByDiskUsagePanel:
         g.panel.barGauge.new('Top nodes by disk usage')
         + g.panel.barGauge.panelOptions.withDescription('Top nodes by disk usage across the OpenSearch cluster.')
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.fs_path_used_percent_topk.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -278,6 +290,7 @@ local var = g.dashboard.variable;
       totalDocumentsPanel:
         g.panel.timeSeries.new('Total documents')
         + g.panel.timeSeries.panelOptions.withDescription('The total count of documents indexed across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.indices_indexing_index_count_avg.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -290,6 +303,7 @@ local var = g.dashboard.variable;
       pendingTasksPanel:
         g.panel.timeSeries.new('Pending tasks')
         + g.panel.timeSeries.panelOptions.withDescription('The number of tasks waiting to be executed across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.cluster_pending_tasks_number.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -302,6 +316,7 @@ local var = g.dashboard.variable;
       storeSizePanel:
         g.panel.timeSeries.new('Store size')
         + g.panel.timeSeries.panelOptions.withDescription('The total size of the store across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.indices_store_size_bytes_avg.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -314,6 +329,7 @@ local var = g.dashboard.variable;
       maxTaskWaitTimePanel:
         g.panel.timeSeries.new('Max task wait time')
         + g.panel.timeSeries.panelOptions.withDescription('The max wait time for tasks to be executed across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.clusterOverview.cluster_task_max_wait_seconds.asTarget()])
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
@@ -323,6 +339,7 @@ local var = g.dashboard.variable;
       topIndicesByRequestRatePanel:
         g.panel.timeSeries.new('Top indices by request rate')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by combined fetch, query, and scroll request rate across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.clusterOverview.search_current_inflight_topk.asTarget()])
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
@@ -332,6 +349,7 @@ local var = g.dashboard.variable;
       topIndicesByRequestLatencyPanel:
         g.panel.timeSeries.new('Top indices by request latency')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by combined fetch, query, and scroll latency across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.search_avg_latency_topk.asTarget()
           + g.query.prometheus.withInterval('2m'),
@@ -344,6 +362,7 @@ local var = g.dashboard.variable;
       topIndicesByCombinedCacheHitRatioPanel:
         g.panel.timeSeries.new('Top indices by combined cache hit ratio')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by cache hit ratio for the combined request and query cache across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.request_query_cache_hit_rate_topk.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -356,6 +375,7 @@ local var = g.dashboard.variable;
       topNodesByIngestRatePanel:
         g.panel.timeSeries.new('Top nodes by ingest rate')
         + g.panel.timeSeries.panelOptions.withDescription('Top nodes by rate of ingest across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.ingest_throughput_topk.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -365,6 +385,7 @@ local var = g.dashboard.variable;
       topNodesByIngestLatencyPanel:
         g.panel.timeSeries.new('Top nodes by ingest latency')
         + g.panel.timeSeries.panelOptions.withDescription('Top nodes by ingestion latency across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.ingest_latency_topk.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -378,6 +399,7 @@ local var = g.dashboard.variable;
       topNodesByIngestErrorsPanel:
         g.panel.timeSeries.new('Top nodes by ingest errors')
         + g.panel.timeSeries.panelOptions.withDescription('Top nodes by ingestion failures across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.ingest_failures_topk.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -391,6 +413,7 @@ local var = g.dashboard.variable;
       topIndicesByIndexRatePanel:
         g.panel.timeSeries.new('Top indices by index rate')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by rate of document indexing across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.indexing_current_topk.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -403,6 +426,7 @@ local var = g.dashboard.variable;
       topIndicesByIndexLatencyPanel:
         g.panel.timeSeries.new('Top indices by index latency')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by indexing latency across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.indexing_latency_topk.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -416,6 +440,7 @@ local var = g.dashboard.variable;
       topIndicesByIndexFailuresPanel:
         g.panel.timeSeries.new('Top indices by index failures')
         + g.panel.timeSeries.panelOptions.withDescription('Top indices by index document failures across the OpenSearch cluster.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.clusterOverview.indexing_failed_topk.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -431,6 +456,7 @@ local var = g.dashboard.variable;
       nodeCpuUsage:
         g.panel.timeSeries.new('Node CPU usage')
         + g.panel.timeSeries.panelOptions.withDescription("CPU usage percentage of the node's Operating System.")
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.os_cpu_percent.asTarget()])
         + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
         + g.panel.timeSeries.standardOptions.withMax(100)
@@ -448,6 +474,7 @@ local var = g.dashboard.variable;
       nodeMemoryUsage:
         g.panel.timeSeries.new('Node memory usage')
         + g.panel.timeSeries.panelOptions.withDescription('Memory usage percentage of the node for the operating system and OpenSearch')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.os_mem_used_percent.asTarget()])
         + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
         + g.panel.timeSeries.standardOptions.withMax(100)
@@ -465,6 +492,7 @@ local var = g.dashboard.variable;
       nodeIO:
         g.panel.timeSeries.new('Node I/O')
         + g.panel.timeSeries.panelOptions.withDescription('Node file system read and write data.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.fs_read_bps.asTarget()
           + g.query.prometheus.withInterval('2m'),
@@ -491,6 +519,7 @@ local var = g.dashboard.variable;
       nodeOpenConnections:
         g.panel.timeSeries.new('Node open connections')
         + g.panel.timeSeries.panelOptions.withDescription('Number of open connections for the selected node.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.transport_open_connections.asTarget()])
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(15)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('opacity')
@@ -505,6 +534,7 @@ local var = g.dashboard.variable;
       nodeDiskUsage:
         g.panel.timeSeries.new('Node disk usage')
         + g.panel.timeSeries.panelOptions.withDescription('Disk usage percentage of the selected node.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.fs_used_percent.asTarget()])
         + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
         + g.panel.timeSeries.standardOptions.withMin(0)
@@ -522,6 +552,7 @@ local var = g.dashboard.variable;
       nodeMemorySwap:
         g.panel.timeSeries.new('Node memory swap')
         + g.panel.timeSeries.panelOptions.withDescription('Percentage of swap space used by OpenSearch and the operating system on the selected node.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([signals.nodeOverview.os_swap_used_percent.asTarget()])
         + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
         + g.panel.timeSeries.standardOptions.withMin(0)
@@ -539,6 +570,7 @@ local var = g.dashboard.variable;
       nodeNetworkTraffic:
         g.panel.timeSeries.new('Node network traffic')
         + g.panel.timeSeries.panelOptions.withDescription("Network traffic on the node's operating system.")
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.transport_rx_bps.asTarget()
           + g.query.prometheus.withInterval('2m'),
@@ -556,6 +588,7 @@ local var = g.dashboard.variable;
       circuitBreakers:
         g.panel.timeSeries.new('Circuit breakers')
         + g.panel.timeSeries.panelOptions.withDescription('Circuit breakers tripped on the selected node by type')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.circuitbreaker_tripped_sum_by_name.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -576,6 +609,7 @@ local var = g.dashboard.variable;
         + g.panel.statusHistory.options.withShowValue('never')
         + g.panel.statusHistory.options.withLegend(false)
         + g.panel.statusHistory.queryOptions.withMaxDataPoints(100)
+        + g.panel.statusHistory.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.statusHistory.queryOptions.withTargets([
           signals.nodeOverview.node_role_data.asTarget(),
           signals.nodeOverview.node_role_master.asTarget(),
@@ -600,6 +634,7 @@ local var = g.dashboard.variable;
       jvmHeapUsedVsCommitted:
         g.panel.timeSeries.new('JVM heap used vs committed')
         + g.panel.timeSeries.panelOptions.withDescription('JVM heap memory usage vs committed.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_heap_used_bytes.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -616,6 +651,7 @@ local var = g.dashboard.variable;
       jvmNonheapUsedVsCommitted:
         g.panel.timeSeries.new('JVM non-heap used vs committed')
         + g.panel.timeSeries.panelOptions.withDescription('JVM non-heap memory usage vs committed.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_nonheap_used_bytes.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -632,6 +668,7 @@ local var = g.dashboard.variable;
       jvmThreads:
         g.panel.timeSeries.new('JVM threads')
         + g.panel.timeSeries.panelOptions.withDescription('JVM thread count.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_threads.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -646,6 +683,7 @@ local var = g.dashboard.variable;
       jvmBufferPools:
         g.panel.timeSeries.new('JVM buffer pools')
         + g.panel.timeSeries.panelOptions.withDescription('JVM buffer pool usage.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_bufferpool_number.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -660,6 +698,7 @@ local var = g.dashboard.variable;
       jvmUptime:
         g.panel.timeSeries.new('JVM uptime')
         + g.panel.timeSeries.panelOptions.withDescription('JVM uptime in seconds.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_uptime.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -674,6 +713,7 @@ local var = g.dashboard.variable;
       jvmGarbageCollections:
         g.panel.timeSeries.new('JVM garbage collections')
         + g.panel.timeSeries.panelOptions.withDescription('JVM garbage collection count.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_gc_collections.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -689,6 +729,7 @@ local var = g.dashboard.variable;
       jvmGarbageCollectionTime:
         g.panel.timeSeries.new('JVM garbage collection time')
         + g.panel.timeSeries.panelOptions.withDescription('JVM garbage collection time in milliseconds.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_gc_time.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -704,6 +745,7 @@ local var = g.dashboard.variable;
       jvmBufferPoolUsage:
         g.panel.timeSeries.new('JVM buffer pool usage')
         + g.panel.timeSeries.panelOptions.withDescription('JVM buffer pool usage by pool.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.jvm_bufferpool_used_percent.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -718,6 +760,7 @@ local var = g.dashboard.variable;
       threadPoolThreads:
         g.panel.timeSeries.new('Thread pool threads')
         + g.panel.timeSeries.panelOptions.withDescription('Thread pool thread count.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.threadpool_threads.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -732,6 +775,7 @@ local var = g.dashboard.variable;
       threadPoolTasks:
         g.panel.timeSeries.new('Thread pool tasks')
         + g.panel.timeSeries.panelOptions.withDescription('Thread pool task count.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.nodeOverview.threadpool_tasks.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -748,6 +792,7 @@ local var = g.dashboard.variable;
       searchRequestRatePanel:
         g.panel.timeSeries.new('Request rate')
         + g.panel.timeSeries.panelOptions.withDescription('Rate of fetch, scroll, and query requests by selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.search_query_current_avg.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -771,6 +816,7 @@ local var = g.dashboard.variable;
       searchRequestLatencyPanel:
         g.panel.timeSeries.new('Request latency')
         + g.panel.timeSeries.panelOptions.withDescription('Latency of fetch, scroll, and query requests by selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.search_query_latency_avg.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -797,6 +843,7 @@ local var = g.dashboard.variable;
       searchCacheHitRatioPanel:
         g.panel.timeSeries.new('Cache hit ratio')
         + g.panel.timeSeries.panelOptions.withDescription('Ratio of query cache and request cache hits and misses.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.request_cache_hit_rate.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -818,6 +865,7 @@ local var = g.dashboard.variable;
       searchCacheEvictionsPanel:
         g.panel.timeSeries.new('Evictions')
         + g.panel.timeSeries.panelOptions.withDescription('Total evictions count by cache type for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.query_cache_evictions.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -851,6 +899,7 @@ local var = g.dashboard.variable;
       indexingRatePanel:
         g.panel.timeSeries.new('Index rate')
         + g.panel.timeSeries.panelOptions.withDescription('Rate of indexed documents for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.indexing_current.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -869,6 +918,7 @@ local var = g.dashboard.variable;
       indexingLatencyPanel:
         g.panel.timeSeries.new('Index latency')
         + g.panel.timeSeries.panelOptions.withDescription('Document indexing latency for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.indexing_latency.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -888,6 +938,7 @@ local var = g.dashboard.variable;
       indexingFailuresPanel:
         g.panel.timeSeries.new('Index failures')
         + g.panel.timeSeries.panelOptions.withDescription('Number of indexing failures for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.indexing_failed.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -912,6 +963,7 @@ local var = g.dashboard.variable;
       flushLatencyPanel:
         g.panel.timeSeries.new('Flush latency')
         + g.panel.timeSeries.panelOptions.withDescription('Index flush latency for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.flush_latency.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -935,6 +987,7 @@ local var = g.dashboard.variable;
       mergeTimePanel:
         g.panel.timeSeries.new('Merge time')
         + g.panel.timeSeries.panelOptions.withDescription('Index merge time for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.merge_time.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -966,6 +1019,7 @@ local var = g.dashboard.variable;
       refreshLatencyPanel:
         g.panel.timeSeries.new('Refresh latency')
         + g.panel.timeSeries.panelOptions.withDescription('Index refresh latency for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.refresh_latency.asTarget()
           + g.query.prometheus.withInterval('2m')
@@ -990,6 +1044,7 @@ local var = g.dashboard.variable;
       translogOperationsPanel:
         g.panel.timeSeries.new('Translog operations')
         + g.panel.timeSeries.panelOptions.withDescription('Current number of translog operations for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.translog_ops.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1012,6 +1067,7 @@ local var = g.dashboard.variable;
       docsDeletedPanel:
         g.panel.timeSeries.new('Docs deleted')
         + g.panel.timeSeries.panelOptions.withDescription('Rate of documents deleted for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.indexing_delete_current.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1034,6 +1090,7 @@ local var = g.dashboard.variable;
       documentsIndexedPanel:
         g.panel.timeSeries.new('Documents indexed')
         + g.panel.timeSeries.panelOptions.withDescription('Number of indexed documents for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.indexing_count.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1057,6 +1114,7 @@ local var = g.dashboard.variable;
       segmentCountPanel:
         g.panel.timeSeries.new('Segment count')
         + g.panel.timeSeries.panelOptions.withDescription('Current number of segments for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.segments_number.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1079,6 +1137,7 @@ local var = g.dashboard.variable;
       mergeCountPanel:
         g.panel.timeSeries.new('Merge count')
         + g.panel.timeSeries.panelOptions.withDescription('Number of merge operations for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.merge_docs.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1103,6 +1162,7 @@ local var = g.dashboard.variable;
       cacheSizePanel:
         g.panel.timeSeries.new('Cache size')
         + g.panel.timeSeries.panelOptions.withDescription('Size of query cache and request cache.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.query_cache_memory.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1128,6 +1188,7 @@ local var = g.dashboard.variable;
       searchAndIndexStoreSizePanel:
         g.panel.timeSeries.new('Store size')
         + g.panel.timeSeries.panelOptions.withDescription('Size of the store in bytes for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.store_size_bytes.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1150,6 +1211,7 @@ local var = g.dashboard.variable;
       segmentSizePanel:
         g.panel.timeSeries.new('Segment size')
         + g.panel.timeSeries.panelOptions.withDescription('Memory used by segments for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.segments_memory_bytes.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1172,6 +1234,7 @@ local var = g.dashboard.variable;
       mergeSizePanel:
         g.panel.timeSeries.new('Merge size')
         + g.panel.timeSeries.panelOptions.withDescription('Size of merge operations in bytes for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.merge_current_size.asTarget()
           + g.query.prometheus.withIntervalFactor(2),
@@ -1195,6 +1258,7 @@ local var = g.dashboard.variable;
       searchAndIndexShardCountPanel:
         g.panel.timeSeries.new('Shard count')
         + g.panel.timeSeries.panelOptions.withDescription('The number of index shards for the selected index.')
+        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.timeSeries.queryOptions.withTargets([
           signals.searchAndIndexOverview.shards_per_index.asTarget()
           + g.query.prometheus.withIntervalFactor(2),

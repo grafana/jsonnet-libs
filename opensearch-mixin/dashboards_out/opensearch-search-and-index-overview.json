@@ -40,8 +40,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Rate of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
@@ -132,8 +132,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Latency of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
@@ -227,8 +227,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Ratio of query cache and request cache hits and misses.",
             "fieldConfig": {
@@ -307,8 +307,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Total evictions count by cache type for the selected index.",
             "fieldConfig": {
@@ -427,8 +427,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Rate of indexed documents for the selected index.",
             "fieldConfig": {
@@ -490,8 +490,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Document indexing latency for the selected index.",
             "fieldConfig": {
@@ -544,8 +544,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of indexing failures for the selected index.",
             "fieldConfig": {
@@ -620,8 +620,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Index flush latency for the selected index.",
             "fieldConfig": {
@@ -696,8 +696,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Index merge time for the selected index.",
             "fieldConfig": {
@@ -804,8 +804,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Index refresh latency for the selected index.",
             "fieldConfig": {
@@ -880,8 +880,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Current number of translog operations for the selected index.",
             "fieldConfig": {
@@ -955,8 +955,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Rate of documents deleted for the selected index.",
             "fieldConfig": {
@@ -1043,8 +1043,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of indexed documents for the selected index.",
             "fieldConfig": {
@@ -1118,8 +1118,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Current number of segments for the selected index.",
             "fieldConfig": {
@@ -1193,8 +1193,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Number of merge operations for the selected index.",
             "fieldConfig": {
@@ -1269,8 +1269,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Size of query cache and request cache.",
             "fieldConfig": {
@@ -1361,8 +1361,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Size of the store in bytes for the selected index.",
             "fieldConfig": {
@@ -1436,8 +1436,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Memory used by segments for the selected index.",
             "fieldConfig": {
@@ -1511,8 +1511,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Size of merge operations in bytes for the selected index.",
             "fieldConfig": {
@@ -1587,8 +1587,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The number of index shards for the selected index.",
             "fieldConfig": {
