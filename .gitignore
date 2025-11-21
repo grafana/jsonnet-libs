@@ -2,4 +2,3 @@
 vendor
 jsonnetfile.lock.json
 *.zip
-.worktrees
