@@ -7,32 +7,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local signals = this.signals,
 
       requestsPanel:
-        g.panel.timeSeries.new('Requests')
-        + g.panel.timeSeries.panelOptions.withDescription('Requests rate over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewServer.requestsRate.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
+        commonlib.panels.generic.timeSeries.base.new(
+          'Requests',
+          targets=[signals.overviewServer.requestsRate.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Requests rate over time'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       requestErrorsPanel:
-        g.panel.timeSeries.new('Request errors')
-        + g.panel.timeSeries.panelOptions.withDescription('Rate of requests that result in 500 over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewServer.requestErrorsRate.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Request errors',
+          targets=[signals.overviewServer.requestErrorsRate.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Rate of requests that result in 500 over time'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
@@ -40,33 +28,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkReceivedThroughputPanel:
-        g.panel.timeSeries.new('Network received throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('Throughput rate of data received over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewServer.networkReceivedThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Network received throughput',
+          targets=[signals.overviewServer.networkReceivedThroughput.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Throughput rate of data received over time'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('binBps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkSentThroughputPanel:
-        g.panel.timeSeries.new('Network sent throughput')
-        + g.panel.timeSeries.panelOptions.withDescription('Throughput rate of data sent over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewServer.networkSentThroughput.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Network sent throughput',
+          targets=[signals.overviewServer.networkSentThroughput.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Throughput rate of data sent over time'
+        )
         + g.panel.timeSeries.standardOptions.withUnit('binBps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
@@ -74,145 +50,101 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       sessionsActivePanel:
-        g.panel.timeSeries.new('Active sessions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of active sessions to deployment over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewDeployment.activeSessions.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Active sessions',
+          targets=[signals.overviewDeployment.activeSessions.asTarget() { intervalFactor: 2 }],
+          description='Number of active sessions to deployment over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       sessionsExpiredPanel:
-        g.panel.timeSeries.new('Expired sessions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of sessions that have expired for a deployment over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewDeployment.expiredSessions.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Expired sessions',
+          targets=[signals.overviewDeployment.expiredSessions.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Number of sessions that have expired for a deployment over time'
+        )
         + g.panel.timeSeries.standardOptions.withDecimals(0)
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       sessionsRejectedPanel:
-        g.panel.timeSeries.new('Rejected sessions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of sessions that have been rejected from a deployment over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.overviewDeployment.rejectedSessions.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Rejected sessions',
+          targets=[signals.overviewDeployment.rejectedSessions.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Number of sessions that have been rejected from a deployment over time'
+        )
         + g.panel.timeSeries.standardOptions.withDecimals(0)
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       connectionsActivePanel:
-        g.panel.timeSeries.new('Active connections')
-        + g.panel.timeSeries.panelOptions.withDescription('Connections to the datasource over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.datasource.connectionsActive.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Active connections',
+          targets=[signals.datasource.connectionsActive.asTarget() { intervalFactor: 2 }],
+          description='Connections to the datasource over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       connectionsIdlePanel:
-        g.panel.timeSeries.new('Idle connections')
-        + g.panel.timeSeries.panelOptions.withDescription('Connections to the datasource over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.datasource.connectionsIdle.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Idle connections',
+          targets=[signals.datasource.connectionsIdle.asTarget() { intervalFactor: 2 }],
+          description='Connections to the datasource over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsCreatedPanel:
-        g.panel.timeSeries.new('Created transactions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of transactions that were created over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.datasourceTransaction.transactionsCreated.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Created transactions',
+          targets=[signals.datasourceTransaction.transactionsCreated.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Number of transactions that were created over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsInFlightPanel:
-        g.panel.timeSeries.new('In-flight transactions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of transactions that are in-flight over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.datasourceTransaction.transactionsInFlight.asTarget()
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'In-flight transactions',
+          targets=[signals.datasourceTransaction.transactionsInFlight.asTarget() { intervalFactor: 2 }],
+          description='Number of transactions that are in-flight over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionsAbortedPanel:
-        g.panel.timeSeries.new('Aborted transactions')
-        + g.panel.timeSeries.panelOptions.withDescription('Number of transactions that have been aborted over time')
-        + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.timeSeries.queryOptions.withTargets([
-          signals.datasourceTransaction.transactionsAborted.asTarget()
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2),
-        ])
+        commonlib.panels.generic.timeSeries.base.new(
+          'Aborted transactions',
+          targets=[signals.datasourceTransaction.transactionsAborted.asTarget() { interval: '2m', intervalFactor: 2 }],
+          description='Number of transactions that have been aborted over time'
+        )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
           { color: 'red', value: 80 },
         ])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withLineWidth(2)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('never')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }
