@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local tokens = import '../../../tokens/main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local fieldConfig = g.panel.timeSeries.fieldConfig;
@@ -15,8 +16,8 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
       }
     )
     + fieldConfig.defaults.custom.withFillOpacity(0)
-    + timeSeries.standardOptions.color.withMode('fixed')
-    + timeSeries.standardOptions.color.withFixedColor('light-orange'),
+    + timeSeries.standardOptions.color.withMode(tokens.base.colors.mode.single)
+    + timeSeries.standardOptions.color.withFixedColor(tokens.base.colors.palette.threshold),
   stylizeByRegexp(regexp):
     timeSeries.standardOptions.withOverridesMixin(
       fieldOverride.byRegexp.new(regexp)
