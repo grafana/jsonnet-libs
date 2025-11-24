@@ -228,3 +228,13 @@ test.new(std.thisFile)
     },
   )
 )
++ test.case.new(
+  name='simple templating',
+  test=test.expect.eq(
+    actual=utils.ncHistogramApplyTemplate('label_replace(%s, "x", "$1", "y", "(.*)")', { classic: 'classic_query', native: 'native_query' }),
+    expected={
+      classic: 'label_replace(classic_query, "x", "$1", "y", "(.*)")',
+      native: 'label_replace(native_query, "x", "$1", "y", "(.*)")',
+    }
+  )
+)
