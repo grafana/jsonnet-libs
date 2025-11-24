@@ -170,6 +170,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
       },
     },
 
+  // ncHistogramApplyTemplate (native classic histogram template applier)
+  // Takes a template like 'label_replace(%s, "x", "$1", "y", ".*")'
+  // with a single substitution and applies to both the classic and native
+  // histogram query.
+  ncHistogramApplyTemplate(template, query):: {
+    assert $.isNativeClassicQuery(query),
+    native: template % query.native,
+    classic: template % query.classic,
+  },
+
   // ncHistogramComment (native classic histogram comment) helps attach
   // comments to the query and also keep multiline strings where applicable.
   ncHistogramComment(query, comment):: {
