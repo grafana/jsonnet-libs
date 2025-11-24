@@ -14,12 +14,9 @@ and the following alerts:
 - OpenSearchRedCluster
 - OpenSearchUnstableShardReallocation
 - OpenSearchUnstableShardUnassigned
-- OpenSearchModerateNodeDiskUsage
-- OpenSearchHighNodeDiskUsage
-- OpenSearchModerateNodeCPUUsage
-- OpenSearchHighNodeCPUUsage
-- OpenSearchModerateNodeMemoryUsage
-- OpenSearchHighNodeMemoryUsage
+- OpenSearchHighNodeDiskUsage (warning and critical)
+- OpenSearchHighNodeCpuUsage (warning and critical)
+- OpenSearchHighNodeMemoryUsage (warning and critical)
 - OpenSearchModerateRequestLatency
 - OpenSearchModerateIndexLatency
 
@@ -85,21 +82,19 @@ The OpenSearch search and index overview dashboard provides details on request p
 
 ## Alerts Overview
 
-
 | Alert                               | Summary                                                                         |
 |-------------------------------------|---------------------------------------------------------------------------------|
 | OpenSearchYellowCluster             | At least one of the clusters is reporting a yellow status.                      |
 | OpenSearchRedCluster                | At least one of the clusters is reporting a red status.                         |
 | OpenSearchUnstableShardReallocation | A node has gone offline or has been disconnected triggering shard reallocation. |
 | OpenSearchUnstableShardUnassigned   | There are shards that have been detected as unassigned.                         |
-| OpenSearchModerateNodeDiskUsage     | The node disk usage has exceeded the warning threshold.                         |
-| OpenSearchHighNodeDiskUsage         | The node disk usage has exceeded the critical threshold.                        |
-| OpenSearchModerateNodeCpuUsage      | The node CPU usage has exceeded the warning threshold.                          |
-| OpenSearchHighNodeCpuUsage          | The node CPU usage has exceeded the critical threshold.                         |
-| OpenSearchModerateNodeMemoryUsage   | The node memory usage has exceeded the warning threshold.                       |
-| OpenSearchHighNodeMemoryUsage       | The node memory usage has exceeded the critical threshold.                      |
+| OpenSearchHighNodeDiskUsage         | The node disk usage has exceeded the configured threshold (warning or critical). |
+| OpenSearchHighNodeCpuUsage          | The node CPU usage has exceeded the configured threshold (warning or critical).  |
+| OpenSearchHighNodeMemoryUsage       | The node memory usage has exceeded the configured threshold (warning or critical). |
 | OpenSearchModerateRequestLatency    | The request latency has exceeded the warning threshold.                         |
 | OpenSearchModerateIndexLatency      | The index latency has exceeded the warning threshold.                           |
+
+Node resource alerts (disk, CPU, memory) use the same alert name for both warning and critical severity levels. This follows the Alertmanager inhibition pattern, allowing warning alerts to be automatically suppressed when critical alerts fire.
 
 Default thresholds can be configured in `config.libsonnet`
 
