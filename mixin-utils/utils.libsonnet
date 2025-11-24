@@ -100,24 +100,27 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // classic histograms.
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
-  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false)::
+  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false, sum_by=[])::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%s) ' % std.join(', ', sum_by) else '';
     local multiplierStr = if multiplier == '' then '' else '%s * ' % multiplier;
     {
       classic: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).classic,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).classic,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
       native: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).native,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).native,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
     },
 
