@@ -117,6 +117,16 @@ test.new(std.thisFile)
   )
 )
 + test.case.new(
+  name='rate of average with sum_by labels',
+  test=test.expect.eq(
+    actual=utils.ncHistogramAverageRate('request_duration_seconds', 'cluster="cluster1", job="job1"', sum_by=['namespace']),
+    expected={
+      classic: 'sum by (namespace) (rate(request_duration_seconds_sum{cluster="cluster1", job="job1"}[$__rate_interval])) /\nsum by (namespace) (rate(request_duration_seconds_count{cluster="cluster1", job="job1"}[$__rate_interval]))\n',
+      native: 'sum by (namespace) (histogram_sum(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))) /\nsum by (namespace) (histogram_count(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))\n',
+    },
+  )
+)
++ test.case.new(
   name='rate of average in recording rule with different interval, multiplier',
   test=test.expect.eq(
     actual=utils.ncHistogramAverageRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '5m', '42', true),
