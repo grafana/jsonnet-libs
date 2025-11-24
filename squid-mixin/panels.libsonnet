@@ -13,7 +13,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.overview.clientHTTPRequests.asTarget() { interval: '2m', intervalFactor: 2 }],
           description='The request rate of client.'
         )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
       clientRequestErrors:

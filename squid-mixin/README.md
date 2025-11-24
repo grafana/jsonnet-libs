@@ -24,9 +24,7 @@ Squid logs are enabled by default in the `config.libsonnet` and can be removed b
 
 ```
 {
-  _config+:: {
-    enableLokiLogs: false,
-  },
+  enableLokiLogs: false,
 }
 ```
 
@@ -64,10 +62,8 @@ Default thresholds can be configured in `config.libsonnet`
 
 ```js
 {
-  _config+:: {
-    alertsCriticalHighPercentageRequestErrors: 5,
-    alertsWarningLowCacheHitRatio: 85,
-  },
+  alertsCriticalHighPercentageRequestErrors: 5,
+  alertsWarningLowCacheHitRatio: 85,
 }
 ```
 
