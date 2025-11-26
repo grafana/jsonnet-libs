@@ -116,7 +116,7 @@
           "refId": "A"
         }
       ],
-      "title": "ReplSet Members",
+      "title": "Replica set members",
       "type": "stat"
     },
     {
@@ -177,7 +177,7 @@
           "refId": "A"
         }
       ],
-      "title": "ReplSet Last Election",
+      "title": "Replica set last election",
       "type": "stat"
     },
     {
@@ -238,7 +238,7 @@
           "refId": "A"
         }
       ],
-      "title": "Avg ReplSet Lag",
+      "title": "Average replica set lag",
       "type": "stat"
     },
     {
@@ -304,7 +304,7 @@
           "refId": "A"
         }
       ],
-      "title": "MongoDB Versions",
+      "title": "MongoDB versions",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -330,7 +330,7 @@
         "y": 3
       },
       "type": "state-timeline",
-      "title": "ReplSet States",
+      "title": "Replica set states",
       "transformations": [
         {
           "id": "labelsToFields",
@@ -384,12 +384,12 @@
                   "text": "STARTUP"
                 },
                 "1": {
-                  "color": "green",
+                  "color": "semi-dark-blue",
                   "index": 0,
                   "text": "PRIMARY"
                 },
                 "2": {
-                  "color": "yellow",
+                  "color": "light-blue",
                   "index": 1,
                   "text": "SECONDARY"
                 },
@@ -409,7 +409,7 @@
                   "text": "UNKNOWN"
                 },
                 "7": {
-                  "color": "red",
+                  "color": "dark-blue",
                   "index": 6,
                   "text": "ARBITER"
                 },
@@ -914,7 +914,7 @@
           "refId": "A"
         }
       ],
-      "title": "Max Heartbeat Time",
+      "title": "Max heartbeat time",
       "type": "timeseries"
     },
     {
@@ -1008,7 +1008,7 @@
           "refId": "A"
         }
       ],
-      "title": "Max Member Ping Time - $service_name",
+      "title": "Max member ping time - $service_name",
       "type": "timeseries"
     },
     {
@@ -1034,7 +1034,7 @@
           "refId": "A"
         }
       ],
-      "title": "Oplog Details",
+      "title": "Oplog details",
       "type": "row"
     },
     {
@@ -1128,7 +1128,7 @@
           "refId": "A"
         }
       ],
-      "title": "Oplog Buffered Operations",
+      "title": "Oplog buffered operations",
       "type": "timeseries"
     },
     {
@@ -1222,7 +1222,7 @@
           "refId": "A"
         }
       ],
-      "title": "Oplog Getmore Time",
+      "title": "Oplog getmore time",
       "type": "timeseries"
     },
     {
@@ -1313,7 +1313,7 @@
           "expr": "time()-avg by (service_name) (mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "Now to End",
+          "legendFormat": "Now to end",
           "refId": "A"
         },
         {
@@ -1324,11 +1324,11 @@
           "expr": "avg by (service_name) (mongodb_mongod_replset_oplog_head_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}-mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "Oplog Range",
+          "legendFormat": "Oplog range",
           "refId": "B"
         }
       ],
-      "title": "Oplog Recovery Window - $service_name",
+      "title": "Oplog recovery window - $service_name",
       "type": "timeseries"
     },
     {
@@ -1419,7 +1419,7 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Document Preload",
+          "legendFormat": "Document preload",
           "refId": "A"
         },
         {
@@ -1430,7 +1430,7 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Index Preload",
+          "legendFormat": "Index preload",
           "refId": "B"
         },
         {
@@ -1441,11 +1441,11 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_batches_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Batch Apply",
+          "legendFormat": "Batch apply",
           "refId": "C"
         }
       ],
-      "title": "Oplog Processing Time - $service_name",
+      "title": "Oplog processing time - $service_name",
       "type": "timeseries"
     },
     {
@@ -1536,7 +1536,7 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Document Preload",
+          "legendFormat": "Document preload",
           "refId": "A"
         },
         {
@@ -1547,7 +1547,7 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Index Preload",
+          "legendFormat": "Index preload",
           "refId": "B"
         },
         {
@@ -1558,11 +1558,11 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_ops_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Batch Apply",
+          "legendFormat": "Batch apply",
           "refId": "C"
         }
       ],
-      "title": "Oplog Operations - $service_name",
+      "title": "Oplog operations - $service_name",
       "type": "timeseries"
     }
   ],
@@ -1715,7 +1715,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "MongoDB ReplicaSet",
+  "title": "MongoDB replica set",
   "uid": "U5CBoam7z",
   "version": 3,
   "weekStart": ""
