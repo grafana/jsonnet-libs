@@ -100,7 +100,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (master_authentication_successes{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(master_authentication_successes{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: legendCustomTemplate + ' - masters success',
           },
         },
@@ -113,7 +113,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (master_authentication_failures{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(master_authentication_failures{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: legendCustomTemplate + ' - masters failure',
           },
         },
@@ -126,7 +126,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (region_server_authentication_successes{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(region_server_authentication_successes{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: legendCustomTemplate + ' - rs success',
           },
         },
@@ -139,7 +139,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (region_server_authentication_failures{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(region_server_authentication_failures{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: legendCustomTemplate + ' - rs failure',
           },
         },

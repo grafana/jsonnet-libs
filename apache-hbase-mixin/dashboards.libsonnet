@@ -75,7 +75,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             dashboards+:
               {
                 logs+:
-                  root.applyCommon(super.logs.templating.list, uid=uid + '_logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {

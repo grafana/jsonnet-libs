@@ -25,6 +25,20 @@ function(this)
         sources: {
           prometheus: {
             expr: 'server_region_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      regionCountAggregated: {
+        name: 'Region count aggregated',
+        type: 'gauge',
+        description: 'The total number of regions across all RegionServers.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'sum by(' + groupAggList + ') (server_region_count{%(queriesSelector)s})',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -37,6 +51,20 @@ function(this)
         sources: {
           prometheus: {
             expr: 'server_store_file_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      storeFileCountAggregated: {
+        name: 'Store file count aggregated',
+        type: 'gauge',
+        description: 'The total number of store files across all RegionServers.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'sum by(' + groupAggList + ') (server_store_file_count{%(queriesSelector)s})',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -49,6 +77,20 @@ function(this)
         sources: {
           prometheus: {
             expr: 'server_store_file_size{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      storeFileSizeAggregated: {
+        name: 'Store file size aggregated',
+        type: 'gauge',
+        description: 'The total size of store files across all RegionServers.',
+        unit: 'decbytes',
+        sources: {
+          prometheus: {
+            expr: 'sum by(' + groupAggList + ') (server_store_file_size{%(queriesSelector)s})',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -62,6 +104,20 @@ function(this)
         sources: {
           prometheus: {
             expr: 'region_server_num_open_connections{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance}}',
+          },
+        },
+      },
+
+      rpcConnectionsAggregated: {
+        name: 'RPC connections aggregated',
+        type: 'gauge',
+        description: 'The total number of open connections across all RegionServers.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'sum by(' + groupAggList + ') (region_server_num_open_connections{%(queriesSelector)s})',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -69,12 +125,13 @@ function(this)
       // Request metrics
       totalRequestRate: {
         name: 'Total requests',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of requests received by the RegionServer.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'server_total_request_count{%(queriesSelector)s}',
+            expr: 'rate(server_total_request_count{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -86,7 +143,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_read_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_read_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'read',
           },
         },
@@ -99,7 +156,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_write_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_write_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'write',
           },
         },
@@ -112,7 +169,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_cp_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_cp_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'copy',
           },
         },
@@ -125,7 +182,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_filtered_read_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_filtered_read_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'filtered read',
           },
         },
@@ -138,7 +195,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_rpc_get_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_rpc_get_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'rpc get',
           },
         },
@@ -151,7 +208,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_rpc_scan_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_rpc_scan_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'rpc scan',
           },
         },
@@ -164,7 +221,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_rpc_full_scan_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_rpc_full_scan_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'rpc full scan',
           },
         },
@@ -177,7 +234,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_rpc_mutate_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_rpc_mutate_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'rpc mutate',
           },
         },
@@ -190,7 +247,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'sum by(' + groupAggList + ') (server_rpc_multi_request_count{%(queriesSelector)s})',
+            expr: 'sum by(' + groupAggList + ') (rate(server_rpc_multi_request_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: 'rpc multi',
           },
         },
@@ -305,7 +362,7 @@ function(this)
       slowDeleteRate: {
         name: 'Slow deletes',
         type: 'raw',
-        description: 'The slow delete operations.',
+        description: 'The rate of slow delete operations.',
         unit: 'ops',
         sources: {
           prometheus: {
@@ -365,32 +422,6 @@ function(this)
           prometheus: {
             expr: 'jvm_metrics_mem_heap_used_m{%(queriesSelector)s, processname="RegionServer"} / clamp_min(jvm_metrics_mem_heap_committed_m{%(queriesSelector)s, processname="RegionServer"}, 1)',
             legendCustomTemplate: '{{instance}}',
-          },
-        },
-      },
-
-      regionServerAuthenticationSuccess: {
-        name: 'RegionServer authentication successes',
-        type: 'raw',
-        description: 'The rate of successful authentications to the RegionServer.',
-        unit: 'reqps',
-        sources: {
-          prometheus: {
-            expr: 'sum by(' + groupAggList + ') (rate(region_server_authentication_successes{%(queriesSelector)s}[$__rate_interval]))',
-            legendCustomTemplate: 'success',
-          },
-        },
-      },
-
-      regionServerAuthenticationFailure: {
-        name: 'RegionServer authentication failures',
-        type: 'raw',
-        description: 'The rate of failed authentications to the RegionServer.',
-        unit: 'reqps',
-        sources: {
-          prometheus: {
-            expr: 'sum by(' + groupAggList + ') (rate(region_server_authentication_failures{%(queriesSelector)s}[$__rate_interval]))',
-            legendCustomTemplate: 'failure',
           },
         },
       },

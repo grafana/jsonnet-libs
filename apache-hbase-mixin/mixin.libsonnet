@@ -11,7 +11,7 @@ local hbase = hbaselib.new()
                 },
               );
 
-local optional_lablels = {
+local optional_labels = {
   cluster+: {
     allValue: '.*',
   },
@@ -24,7 +24,7 @@ local optional_lablels = {
   grafanaDashboards+:: {
     [fname]:
       local dashboard = hbase.grafana.dashboards[fname];
-      dashboard + util.patch_variables(dashboard, optional_lablels)
+      dashboard + util.patch_variables(dashboard, optional_labels)
     for fname in std.objectFields(hbase.grafana.dashboards)
   },
   prometheusAlerts+:: hbase.prometheus.alerts,

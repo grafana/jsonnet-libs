@@ -41,7 +41,7 @@
           {
             alert: 'HBaseOldRegionsInTransition',
             expr: |||
-              100 * assignment_manager_rit_count_over_threshold / clamp_min(assignment_manager_rit_count, 1) > %(alertsOldRegionsInTransition)s
+              100 * assignment_manager_rit_count_over_threshold / clamp_min(assignment_manager_rit_count{%(filteringSelector)s}, 1) > %(alertsOldRegionsInTransition)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -58,7 +58,7 @@
           {
             alert: 'HBaseHighMasterAuthFailRate',
             expr: |||
-              100 * rate(master_authentication_failures[5m]) / (clamp_min(rate(master_authentication_successes[5m]), 1) + clamp_min(rate(master_authentication_failures[5m]), 1)) > %(alertsHighMasterAuthFailRate)s
+              100 * rate(master_authentication_failures[5m]) / (clamp_min(rate(master_authentication_successes{%(filteringSelector)s}[5m]), 1) + clamp_min(rate(master_authentication_failures{%(filteringSelector)s}[5m]), 1)) > %(alertsHighMasterAuthFailRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -75,7 +75,7 @@
           {
             alert: 'HBaseHighRSAuthFailRate',
             expr: |||
-              100 * rate(region_server_authentication_failures[5m]) / (clamp_min(rate(region_server_authentication_successes[5m]), 1) + clamp_min(rate(region_server_authentication_failures[5m]), 1)) > %(alertsHighRSAuthFailRate)s
+              100 * rate(region_server_authentication_failures[5m]) / (clamp_min(rate(region_server_authentication_successes{%(filteringSelector)s}[5m]), 1) + clamp_min(rate(region_server_authentication_failures{%(filteringSelector)s}[5m]), 1)) > %(alertsHighRSAuthFailRate)s
             ||| % this.config,
             'for': '5m',
             labels: {

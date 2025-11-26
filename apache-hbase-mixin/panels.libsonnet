@@ -151,7 +151,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             g.panel.table.standardOptions.withLinks([
               {
                 title: '',
-                url: '/d/apachehbase-regionserver-overview?from=${__from}&to=${__to}&var-instance=${__data.fields["RegionServer"]}',
+                url: '/d/'+ this.grafana.dashboards['apache-hbase-regionserver-overview.json'].uid + '?from=${__from}&to=${__to}&var-instance=${__data.fields["RegionServer"]}',
               },
             ])
           ),
@@ -290,7 +290,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       regionsPanel:
         commonlib.panels.generic.stat.info.new(
           'Regions',
-          targets=[signals.regionserver.regionCount.asTarget()],
+          targets=[signals.regionserver.regionCountAggregated.asTarget()],
           description='The number of regions hosted by the RegionServer.'
         )
         + g.panel.stat.standardOptions.withUnit('short'),
@@ -298,7 +298,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       storeFilesPanel:
         commonlib.panels.generic.stat.info.new(
           'Store files',
-          targets=[signals.regionserver.storeFileCount.asTarget()],
+          targets=[signals.regionserver.storeFileCountAggregated.asTarget()],
           description='The number of store files on disk currently managed by the RegionServer.'
         )
         + g.panel.stat.standardOptions.withUnit('short'),
@@ -306,7 +306,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       storeFileSizePanel:
         commonlib.panels.generic.stat.info.new(
           'Store file size',
-          targets=[signals.regionserver.storeFileSize.asTarget()],
+          targets=[signals.regionserver.storeFileSizeAggregated.asTarget()],
           description='The total size of the store files on disk managed by the RegionServer.'
         )
         + g.panel.stat.standardOptions.withUnit('decbytes'),
@@ -315,7 +315,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       rpcConnectionsPanel:
         commonlib.panels.generic.stat.info.new(
           'RPC connections',
-          targets=[signals.regionserver.rpcConnections.asTarget()],
+          targets=[signals.regionserver.rpcConnectionsAggregated.asTarget()],
           description='The number of open connections to the RegionServer.'
         )
         + g.panel.stat.standardOptions.withUnit('short'),
@@ -453,8 +453,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Authentications',
           targets=[
-            signals.regionserver.regionServerAuthenticationSuccess.asTarget(),
-            signals.regionserver.regionServerAuthenticationFailure.asTarget(),
+            signals.cluster.regionServerAuthenticationSuccess.asTarget(),
+            signals.cluster.regionServerAuthenticationFailure.asTarget(),
           ],
           description='The rate of successful and unsuccessful authentications.'
         )

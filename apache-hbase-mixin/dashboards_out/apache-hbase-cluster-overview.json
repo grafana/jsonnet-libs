@@ -7,7 +7,7 @@
             "keepTime": true,
             "title": "Apache HBase logs",
             "type": "link",
-            "url": "/d/apachehbase_logs"
+            "url": "/d/apachehbase-logs"
          },
          {
             "asDropdown": true,
@@ -611,7 +611,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_authentication_successes{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_successes{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters success",
@@ -622,7 +622,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_authentication_failures{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_failures{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters failure",
@@ -633,7 +633,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_authentication_successes{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_successes{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs success",
@@ -644,7 +644,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_authentication_failures{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_failures{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs failure",

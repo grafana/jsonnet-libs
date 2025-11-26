@@ -330,5 +330,5 @@
       },
       "timezone": "default",
       "title": "Apache HBase logs",
-      "uid": "apachehbase_logs"
+      "uid": "apachehbase-logs"
    }
