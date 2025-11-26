@@ -151,7 +151,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             g.panel.table.standardOptions.withLinks([
               {
                 title: '',
-                url: '/d/'+ this.grafana.dashboards['apache-hbase-regionserver-overview.json'].uid + '?from=${__from}&to=${__to}&var-instance=${__data.fields["RegionServer"]}',
+                url: '/d/' + this.grafana.dashboards['apache-hbase-regionserver-overview.json'].uid + '?from=${__from}&to=${__to}&var-instance=${__data.fields["RegionServer"]}',
               },
             ])
           ),
