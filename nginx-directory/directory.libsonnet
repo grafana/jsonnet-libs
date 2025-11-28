@@ -28,6 +28,9 @@ local link_data = import 'link_data.libsonnet';
       // subfilter_content_types configures the content types handled by the subfilter (nginx sub_filter_types directive).
       subfilter_content_types: ['text/css', 'application/xml', 'application/json', 'application/javascript'],
       custom: [],
+      // If not normalized, nginx will not strip the path from the proxied request.
+      // For example proxy-pass of /grafana path will be passed as '%(path)s/grafana' to the upstream.
+      normalized: true,
 
       // backwards compatible, service level config allows for more granular configuration
       read_timeout: this._config.nginx_proxy_read_timeout,
@@ -46,7 +49,7 @@ local link_data = import 'link_data.libsonnet';
   nginx_html_config_map:
     configMap.new('nginx-config-html') +
     configMap.withData({
-      'index.html': (importstr 'files/index.html') % (this._config + link_data(services, this._config.nginx_directory_sorted)),
+      'index.html': (importstr 'files/index.html') % (this._config + link_data(services, this._config.nginx_directory_sorted, this._config.nginx_directory_absolute_links)),
     }),
 
   local container = k.core.v1.container,

@@ -117,6 +117,16 @@ test.new(std.thisFile)
   )
 )
 + test.case.new(
+  name='rate of average with sum_by labels',
+  test=test.expect.eq(
+    actual=utils.ncHistogramAverageRate('request_duration_seconds', 'cluster="cluster1", job="job1"', sum_by=['namespace']),
+    expected={
+      classic: 'sum by (namespace) (rate(request_duration_seconds_sum{cluster="cluster1", job="job1"}[$__rate_interval])) /\nsum by (namespace) (rate(request_duration_seconds_count{cluster="cluster1", job="job1"}[$__rate_interval]))\n',
+      native: 'sum by (namespace) (histogram_sum(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))) /\nsum by (namespace) (histogram_count(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))\n',
+    },
+  )
+)
++ test.case.new(
   name='rate of average in recording rule with different interval, multiplier',
   test=test.expect.eq(
     actual=utils.ncHistogramAverageRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '5m', '42', true),
@@ -216,5 +226,15 @@ test.new(std.thisFile)
       classic: 'comment\nclassic_query\n',
       native: 'comment\nnative_query\n',
     },
+  )
+)
++ test.case.new(
+  name='simple templating',
+  test=test.expect.eq(
+    actual=utils.ncHistogramApplyTemplate('label_replace(%s, "x", "$1", "y", "(.*)")', { classic: 'classic_query', native: 'native_query' }),
+    expected={
+      classic: 'label_replace(classic_query, "x", "$1", "y", "(.*)")',
+      native: 'label_replace(native_query, "x", "$1", "y", "(.*)")',
+    }
   )
 )

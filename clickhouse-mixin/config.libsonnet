@@ -1,20 +1,35 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    clickhouseSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
+  local this = self,
+  filteringSelector: 'job="integrations/clickhouse"',
+  groupLabels: ['job', 'cluster'],
+  logLabels: ['job', 'cluster', 'instance'],
+  instanceLabels: ['instance'],
 
-    dashboardTags: ['clickhouse-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
-    logLabels: if self.enableMultiCluster then ['job', 'instance', 'cluster', 'level']
-    else ['job', 'instance', 'level'],
+  dashboardTags: [self.uid],
+  uid: 'clickhouse',
+  dashboardNamePrefix: 'Clickhouse',
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
+  metricsSource: 'prometheus',  // metrics source for signals
 
-    // for alerts
-    alertsReplicasMaxQueueSize: '99',
+  // Logging configuration
+  enableLokiLogs: true,
+  extraLogLabels: ['level'],  // Required by logs-lib
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
 
-    filterSelector: 'job=~".*/clickhouse.*"',
+  // Alerts configuration
+  alertsReplicasMaxQueueSize: '99',
 
-    enableLokiLogs: true,
+  // Signals configuration
+  signals+: {
+    replica: (import './signals/replica.libsonnet')(this),
+    zookeeper: (import './signals/zookeeper.libsonnet')(this),
+    queries: (import './signals/queries.libsonnet')(this),
+    memory: (import './signals/memory.libsonnet')(this),
+    connections: (import './signals/connections.libsonnet')(this),
+    network: (import './signals/network.libsonnet')(this),
+    disk: (import './signals/disk.libsonnet')(this),
   },
 }

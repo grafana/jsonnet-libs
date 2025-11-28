@@ -438,7 +438,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(openstack_identity_up{job=~\"integrations/openstack\"}, job)",
+               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -453,7 +453,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(openstack_identity_up{job=~\"integrations/openstack\",job=~\"$job\"}, instance)",
+               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

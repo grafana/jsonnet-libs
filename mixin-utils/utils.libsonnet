@@ -100,24 +100,27 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // classic histograms.
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
-  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false)::
+  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false, sum_by=[])::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%s) ' % std.join(', ', sum_by) else '';
     local multiplierStr = if multiplier == '' then '' else '%s * ' % multiplier;
     {
       classic: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).classic,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).classic,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
       native: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).native,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).native,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
     },
 
@@ -166,6 +169,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
         sumBy: sumBy,
       },
     },
+
+  // ncHistogramApplyTemplate (native classic histogram template applier)
+  // Takes a template like 'label_replace(%s, "x", "$1", "y", ".*")'
+  // with a single substitution and applies to both the classic and native
+  // histogram query.
+  ncHistogramApplyTemplate(template, query):: {
+    assert $.isNativeClassicQuery(query),
+    native: template % query.native,
+    classic: template % query.classic,
+  },
 
   // ncHistogramComment (native classic histogram comment) helps attach
   // comments to the query and also keep multiline strings where applicable.
@@ -391,6 +404,31 @@ local g = import 'grafana-builder/grafana.libsonnet';
       }
       for group in groups
     ],
+
+  // withLabels adds custom labels to all alert rules in a group or groups
+  // Parameters:
+  //   labels: A map of label names to values to add to each alert
+  //   groups: The alert groups to modify
+  //   filter_func: Optional function that returns true for alerts that should be modified
+  withLabels(labels, groups, filter_func=null)::
+    local defaultFilter = function(rule) true;
+    local filterToUse = if filter_func != null then filter_func else defaultFilter;
+
+    std.map(
+      function(group)
+        group {
+          rules: std.map(
+            function(rule)
+              if std.objectHas(rule, 'alert') && filterToUse(rule)
+              then rule {
+                labels+: labels,
+              }
+              else rule,
+            group.rules
+          ),
+        },
+      groups
+    ),
 
   removeRuleGroup(groupName):: {
     groups: std.filter(function(group) group.name != groupName, super.groups),

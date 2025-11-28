@@ -1,5 +1,5 @@
 groups:
-  - name: gcp
+  - name: gcp.compute
     rules:
       - alert: GcpCEHighCpuUtilization
         expr: |
@@ -31,6 +31,8 @@ groups:
           description: 'Check {{ $labels.instance_id }} VM for I/O bottlenecks and upgrade to SSD if necessary.'
           dashboard_url: '/a/grafana-csp-app/gcp/dashboards/compute-engine'
 
+  - name: gcp.cloudsql
+    rules:
       - alert: GcpCloudSQLHighCpu
         expr: |
           100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
@@ -121,6 +123,8 @@ groups:
           description: 'Check {{ $labels.database_id }} database for network latency between primary and replica; adjust configurations to optimize replication.'
           dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
+  - name: gcp.pubsub
+    rules:
       - alert: GcpPubSubNumUndeliveredMessages
         expr: |
           avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000

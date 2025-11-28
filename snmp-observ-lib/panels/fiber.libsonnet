@@ -10,7 +10,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval)
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
     errors:
-      signals.fiber.fcIfTxWaitCount.withTopK().asTimeSeries('Network FC errors')
+      signals.fiber.fcIfTxWaitCount.withTopK().asTimeSeries('FC errors')
       + g.panel.timeSeries.panelOptions.withDescription(
         |||
           -TxWaitCount: The number of times the FC-port waited due to lack of transmit credits.

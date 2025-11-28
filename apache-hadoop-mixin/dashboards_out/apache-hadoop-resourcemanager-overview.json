@@ -1,131 +1,142 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
       "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
       "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "keepTime": true,
+            "title": "Apache Hadoop DataNode overview",
+            "type": "link",
+            "url": "/d/apachehadoop_datanode_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache Hadoop NameNode overview",
+            "type": "link",
+            "url": "/d/apachehadoop_namenode_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache Hadoop NodeManager overview",
+            "type": "link",
+            "url": "/d/apachehadoop_nodemanager_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Apache Hadoop logs",
+            "type": "link",
+            "url": "/d/apachehadoop-logs"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-hadoop-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Apache Hadoop dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of Node Managers by state in the Hadoop ResourceManager.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
+            "collapsed": false,
             "gridPos": {
-               "h": 9,
-               "w": 24,
+               "h": 1,
+               "w": 0,
                "x": 0,
                "y": 0
             },
+            "id": 1,
+            "panels": [ ],
+            "title": "ResourceManager overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The number of Node Managers by state in the Hadoop ResourceManager.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
             "id": 2,
             "options": {
-               "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
-               "orientation": "horizontal",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true,
-               "valueMode": "color"
+               "orientation": "horizontal"
             },
-            "pluginVersion": "10.0.2-cloud.1.94a6f396",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numactivenms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\",}",
+                  "expr": "hadoop_resourcemanager_numactivenms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "active"
+                  "instant": false,
+                  "legendFormat": "active",
+                  "refId": "Active NodeManagers"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numdecommissionednms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\",}",
+                  "expr": "hadoop_resourcemanager_numdecommissionednms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "decommissioned"
+                  "instant": false,
+                  "legendFormat": "decommissioned",
+                  "refId": "Decommissioned NodeManagers"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numlostnms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\"}",
+                  "expr": "hadoop_resourcemanager_numlostnms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "lost"
+                  "instant": false,
+                  "legendFormat": "lost",
+                  "refId": "Lost NodeManagers"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numunhealthynms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\"}",
+                  "expr": "hadoop_resourcemanager_numunhealthynms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "healthy"
+                  "instant": false,
+                  "legendFormat": "unhealthy",
+                  "refId": "Unhealthy NodeManagers"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numrebootednms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\"}",
+                  "expr": "hadoop_resourcemanager_numrebootednms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "rebooted"
+                  "instant": false,
+                  "legendFormat": "rebooted",
+                  "refId": "Rebooted NodeManagers"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_numshutdownnms{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"ClusterMetrics\"}",
+                  "expr": "hadoop_resourcemanager_numshutdownnms{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"ClusterMetrics\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "shutdown"
+                  "instant": false,
+                  "legendFormat": "shutdown",
+                  "refId": "Shutdown NodeManagers"
                }
             ],
             "title": "Node Managers state",
@@ -133,86 +144,34 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
                "y": 9
             },
             "id": 3,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "panels": [ ],
             "title": "Applications",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of applications by state for the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
@@ -224,69 +183,80 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appsrunning{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appsrunning{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "running"
+                  "instant": false,
+                  "legendFormat": "running",
+                  "refId": "Applications running"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appspending{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appspending{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "pending"
+                  "instant": false,
+                  "legendFormat": "pending",
+                  "refId": "Applications pending"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appskilled{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appskilled{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "killed"
+                  "instant": false,
+                  "legendFormat": "killed",
+                  "refId": "Applications killed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appssubmitted{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appssubmitted{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "submitted"
+                  "instant": false,
+                  "legendFormat": "submitted",
+                  "refId": "Applications submitted"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appscompleted{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appscompleted{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "completed"
+                  "instant": false,
+                  "legendFormat": "completed",
+                  "refId": "Applications completed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_appsfailed{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_appsfailed{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "failed"
+                  "instant": false,
+                  "legendFormat": "failed",
+                  "refId": "Applications failed"
                }
             ],
             "title": "Applications state",
@@ -294,60 +264,24 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The available memory in the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "decmbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
                "y": 18
@@ -356,33 +290,36 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_allocatedmb{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_availablemb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "allocated"
+                  "instant": false,
+                  "legendFormat": "available",
+                  "refId": "Available memory"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_availablemb{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_allocatedmb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "available"
+                  "instant": false,
+                  "legendFormat": "allocated",
+                  "refId": "Allocated memory"
                }
             ],
             "title": "Available memory",
@@ -390,60 +327,24 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The available virtual cores in the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": ""
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
                "y": 18
@@ -452,33 +353,36 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_availablevcores{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_availablevcores{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "available"
+                  "instant": false,
+                  "legendFormat": "available",
+                  "refId": "Available virtual cores"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_allocatedvcores{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\", name=\"QueueMetrics\",q0=\"root\", q1=\"default\"}",
+                  "expr": "hadoop_resourcemanager_allocatedvcores{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"QueueMetrics\", q0=\"root\", q1=\"default\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "allocated"
+                  "instant": false,
+                  "legendFormat": "allocated",
+                  "refId": "Allocated virtual cores"
                }
             ],
             "title": "Available virtual cores",
@@ -486,122 +390,75 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 24
+               "y": 26
             },
             "id": 7,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "panels": [ ],
             "title": "JVM",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The Heap and non-heap memory used for the ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "decmbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 27
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "10.0.2-cloud.1.94a6f396",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_memheapusedm{name=\"JvmMetrics\", job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}",
+                  "expr": "hadoop_resourcemanager_memheapusedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "heap"
+                  "instant": false,
+                  "legendFormat": "heap",
+                  "refId": "Heap memory used"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_memnonheapusedm{name=\"JvmMetrics\", job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}",
+                  "expr": "hadoop_resourcemanager_memnonheapusedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "nonheap"
+                  "instant": false,
+                  "legendFormat": "nonheap",
+                  "refId": "Non-heap memory used"
                }
             ],
             "title": "Memory used",
@@ -609,95 +466,62 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The Heap and non-heap memory committed for the ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "decmbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 27
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_memheapcommittedm{name=\"JvmMetrics\", job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}",
+                  "expr": "hadoop_resourcemanager_memheapcommittedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "heap"
+                  "instant": false,
+                  "legendFormat": "heap",
+                  "refId": "Heap memory committed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_resourcemanager_memnonheapcommittedm{name=\"JvmMetrics\", job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}",
+                  "expr": "hadoop_resourcemanager_memnonheapcommittedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "nonheap"
+                  "instant": false,
+                  "legendFormat": "nonheap",
+                  "refId": "Non-heap memory committed"
                }
             ],
             "title": "Memory committed",
@@ -705,87 +529,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The recent increase in the number of garbage collection events for the ResourceManager JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
-                  },
-                  "unit": ""
-               },
-               "overrides": [ ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 31
+               "y": 35
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_resourcemanager_gccount{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}[$__interval:])",
+                  "expr": "increase(hadoop_resourcemanager_gccount{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}: GC count",
+                  "refId": "Garbage collection count"
                }
             ],
             "title": "Garbage collection count",
@@ -793,281 +581,147 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The average duration for each garbage collection operation in the ResourceManager JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 31
+               "y": 35
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_resourcemanager_gctimemillis{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}[$__interval:]) / clamp_min(increase(hadoop_resourcemanager_gccount{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"}[$__interval:]), 1)",
+                  "expr": "increase(hadoop_resourcemanager_gctimemillis{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval) / clamp_min(increase(hadoop_resourcemanager_gccount{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval), 1)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{hadoop_cluster}} - {{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}: Average GC time",
+                  "refId": "Average garbage collection time"
                }
             ],
             "title": "Average garbage collection time",
             "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "The ResourceManager logs.",
-            "gridPos": {
-               "h": 8,
-               "w": 24,
-               "x": 0,
-               "y": 37
-            },
-            "id": 12,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": false,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{job=~\"$job\", instance=~\"$instance\", hadoop_cluster=~\"$hadoop_cluster\"} |= `` | (filename=~\".*/hadoop/logs/.*-resourcemanager.*.log\" or log_type=\"resourcemanager\")",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "ResourceManager logs",
-            "type": "logs"
          }
       ],
-      "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "refresh": "30s",
+      "schemaVersion": 39,
       "tags": [
          "apache-hadoop-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
-               "regex": "",
-               "type": "datasource"
-            },
-            {
-               "current": { },
-               "hide": 0,
-               "label": "Loki Datasource",
-               "name": "loki_datasource",
-               "options": [ ],
-               "query": "loki",
-               "refresh": 1,
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(hadoop_resourcemanager_activeapplications,job)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\"}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(hadoop_resourcemanager_activeapplications{job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "options": [ ],
-               "query": "label_values(hadoop_resourcemanager_activeapplications{job=~\"$job\"}, instance)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
                "includeAll": true,
                "label": "Hadoop cluster",
                "multi": true,
                "name": "hadoop_cluster",
-               "options": [ ],
-               "query": "label_values(hadoop_resourcemanager_activeapplications{job=~\"$job\"}, hadoop_cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\"}, hadoop_cluster)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
-      },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
       },
       "timezone": "default",
       "title": "Apache Hadoop ResourceManager overview",
-      "uid": "apache-hadoop-resourcemanager-overview",
-      "version": 0
+      "uid": "apachehadoop_resourcemanager_overview"
    }

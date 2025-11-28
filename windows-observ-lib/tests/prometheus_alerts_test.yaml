@@ -6,9 +6,9 @@ evaluation_interval: 15m
 tests:
   - interval: 1m
     input_series:
-      - series: 'windows_os_physical_memory_free_bytes{instance="host1"}'
+      - series: 'windows_memory_physical_free_bytes{instance="host1"}'
         values: '10000000x15'
-      - series: 'windows_cs_physical_memory_bytes{instance="host1"}'
+      - series: 'windows_memory_physical_total_bytes{instance="host1"}'
         values: '1000000000x15'
       - series: 'windows_logical_disk_free_bytes{volume="C:", instance="host1"}'
         values: '10000000x15'

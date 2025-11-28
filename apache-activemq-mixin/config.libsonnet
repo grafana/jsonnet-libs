@@ -1,23 +1,37 @@
 {
-  _config+:: {
-    enableMultiCluster: false,
-    activemqSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
-    activemqAlertsSelector: if self.enableMultiCluster then 'job=~"${job:regex}", cluster=~"${cluster:regex}"' else 'job=~"${job:regex}"',
-    dashboardTags: ['apache-activemq-mixin'],
-    dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
-    grafanaDashboardIDs: {
-      'apache-activemq-logs-overview.json': 'apache-activemq-logs',
-    },
+  local this = self,
+  filteringSelector: 'job=~"integrations/apache-activemq"',
+  groupLabels: ['job', 'cluster', 'activemq_cluster'],
+  instanceLabels: ['instance'],
 
-    // alerts thresholds
-    alertsHighTopicMemoryUsage: 70,  // %
-    alertsHighQueueMemoryUsage: 70,  // %
-    alertsHighStoreMemoryUsage: 70,  // %
-    alertsHighTemporaryMemoryUsage: 70,  // %
+  dashboardTags: [self.uid],
+  legendLabels: ['instance', 'activemq_cluster'],
+  uid: 'apache-activemq',
+  dashboardNamePrefix: 'Apache ActiveMQ',
 
-    enableLokiLogs: true,
-    filterSelector: 'job=~"integrations/apache-activemq"',
+  // additional params
+  dashboardPeriod: 'now-30m',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
+  metricsSource: 'prometheus',
+
+  // logs lib related
+  enableLokiLogs: true,
+  logLabels: self.groupLabels + self.instanceLabels,
+  extraLogLabels: [],  // Required by logs-lib
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
+  // alert thresholds
+  alertsHighTopicMemoryUsage: 70,  // %
+  alertsHighQueueMemoryUsage: 70,  // %
+  alertsHighStoreMemoryUsage: 70,  // %
+  alertsHighTemporaryMemoryUsage: 70,  // %
+
+  signals+: {
+    clusters: (import './signals/clusters.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }}' }),
+    instance: (import './signals/instance.libsonnet')(this { legendCustomTemplate+: '{{ activemq_cluster }} - {{ instance }}' }),
+    queues: (import './signals/queues.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}' }),
+    topics: (import './signals/topics.libsonnet')(this { legendCustomTemplate+: '{{activemq_cluster}} - {{ instance }} - {{ destination }}' }),
   },
 }

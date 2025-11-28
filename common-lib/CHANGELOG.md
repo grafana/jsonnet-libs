@@ -1,5 +1,26 @@
+# 0.4.3
+- [Signal] fix: No longer aggregates histogram signals after histogram_quantile() as it is pointless aggregation. Aggregation before applying histogram_quantile() is kept and works as expected.
+
+# 0.4.2
+- [Panels] Add table rows styles in requests panels.
+
+# 0.4.1
+- [Utils] Add optional separator='/' attribute to labelsToPanelLegend.
+- 
+# 0.4.0
+- [Signal] Add defaultSignalSource param to set default signal source.
+
+# 0.3.5
+- [Variables] Add queriesSelectorGroupOnly, queriesSelectorFilterOnly attributes
+- [Signal] Add %(queriesSelectorGroupOnly)s, %(queriesSequeriesSelectorFilterOnly)s templates
+- [Signal] Fix legend rendering when aggLevel is none
+- [Panel] Fix id conflict if topkPercentage panel is used with signal.asTarget()
+
+# 0.3.4
+- [Signal] Fix interval template for increase/delta functions.
+
 # 0.3.3
-- [Signal] add `withQuantile(quantile=0.95)` to histogram signals.
+- [Signal] Add `withQuantile(quantile=0.95)` to histogram signals.
 
 # 0.3.2
 - [Signal] Fix combining info metrics.

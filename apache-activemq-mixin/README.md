@@ -33,14 +33,16 @@ The Apache ActiveMQ instance overview provides instance level statistics showing
 The Apache ActiveMQ queue overview provides queue level statistics showing number of queues, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
 ![Screenshot of the Apache ActiveMQ queue overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_queue_overview.png)
 
-## Apache ActiveMQ queue overview
+## Apache ActiveMQ topic overview
 
-The Apache ActiveMQ topic overview provides queue level statistics showing number of topics, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
+The Apache ActiveMQ topic overview provides topic level statistics showing number of topics, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
 ![Screenshot of the Apache ActiveMQ topic overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_topic_overview.png)
 
 ## Apache ActiveMQ logs overview
 
-The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity. #![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_logs_overview.png)
+The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity.
+
+![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_logs_overview.png)
 
 ## Alerts Overview
 
@@ -54,19 +56,34 @@ Default thresholds can be configured in `config.libsonnet`.
 ```js
 {
   _config+:: {
-    dashboardTags: ['apache-activemq-mixin'],
-    dashboardPeriod: 'now-1h',
+    enableMultiCluster: false,
+    filteringSelector: 'job=~"integrations/apache-activemq"',
+    groupLabels: ['job', 'cluster', 'activemq_cluster'],
+    instanceLabels: ['instance'],
+    
+    dashboardTags: ['apache-activemq'],
+    legendLabels: ['instance', 'activemq_cluster'],
+    uid: 'apache-activemq',
+    dashboardNamePrefix: 'Apache ActiveMQ',
+
+    // additional params
+    dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
+    metricsSource: 'prometheus',
 
-    // alerts thresholds
+    // logs lib related
+    enableLokiLogs: true,
+    logLabels: ['job', 'cluster', 'instance', 'activemq_cluster'],
+    extraLogLabels: [],  // Required by logs-lib
+    logsVolumeGroupBy: 'level',
+    showLogsVolume: true,
+
+    // alert thresholds
     alertsHighTopicMemoryUsage: 70,  // %
     alertsHighQueueMemoryUsage: 70,  // %
     alertsHighStoreMemoryUsage: 70,  // %
     alertsHighTemporaryMemoryUsage: 70,  // %
-
-    enableLokiLogs: false,
-    filterSelector: 'job=~"integrations/apache-activemq"',
   },
 }
 ```

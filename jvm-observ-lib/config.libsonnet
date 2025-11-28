@@ -6,7 +6,8 @@
   uid: 'jvm',
   dashboardNamePrefix: '',
   dashboardTags: ['java', 'jvm'],
-  metricsSource: ['java_micrometer', 'prometheus', 'prometheus_old', 'otel', 'otel_with_suffixes', 'jmx_exporter'],
+  // generate only popular by default. See others options in README.
+  metricsSource: ['java_micrometer', 'prometheus', 'otel_old_with_suffixes', 'otel_with_suffixes', 'jmx_exporter'],
   signals+:
     {
       memory: (import './signals/memory.libsonnet')(this),
