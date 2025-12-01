@@ -139,7 +139,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -201,7 +201,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -221,14 +221,159 @@
             "type": "bargauge"
          },
          {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Inventory of the Redis Enterprise node(s).",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Node memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Node up"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Node up"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 0,
+                                       "text": "Down"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 1,
+                                       "text": "Up"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "footer": {
+                  "enablePagination": true
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node memory utilization"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node up"
+               }
+            ],
+            "title": "Nodes",
+            "transformations": [
+               {
+                  "id": "timeSeriesTable"
+               },
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Trend #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "__name__": true,
+                        "addr": true,
+                        "cnm_version": true,
+                        "instance": true
+                     },
+                     "indexByName": {
+                        "Node memory utilization": 5,
+                        "cluster": 3,
+                        "job": 1,
+                        "node": 4,
+                        "redis_cluster": 2
+                     },
+                     "renameByName": {
+                        "job": "Job",
+                        "node": "Node",
+                        "redis_cluster": "Redis Cluster"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
             "collapsed": false,
             "gridPos": {
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 7
+               "y": 17
             },
-            "id": 5,
+            "id": 6,
             "panels": [ ],
             "title": "Node metrics",
             "type": "row"
@@ -255,9 +400,9 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 8
+               "y": 18
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -307,9 +452,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 8
+               "y": 18
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -359,9 +504,9 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 8
+               "y": 18
             },
-            "id": 8,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -422,9 +567,9 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 14
+               "y": 24
             },
-            "id": 9,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -474,9 +619,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 14
+               "y": 24
             },
-            "id": 10,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -526,9 +671,9 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 14
+               "y": 24
             },
-            "id": 11,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -580,9 +725,9 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 20
+               "y": 30
             },
-            "id": 12,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -600,7 +745,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_network_ingress{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_ingress_bytes{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -634,9 +779,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 20
+               "y": 30
             },
-            "id": 13,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -654,7 +799,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_network_egress{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_egress_bytes{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -688,9 +833,9 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 20
+               "y": 30
             },
-            "id": 14,
+            "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -792,6 +937,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
+               "label": "Node",
                "multi": true,
                "name": "node",
                "query": "label_values(node_up, node)",

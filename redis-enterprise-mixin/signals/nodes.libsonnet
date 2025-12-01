@@ -180,7 +180,7 @@ function(this) {
       unit: 'binBps',
       sources: {
         prometheus: {
-          expr: 'node_network_ingress{%(queriesSelector)s, ' + nodeFilters + '}',
+          expr: 'node_ingress_bytes{%(queriesSelector)s, ' + nodeFilters + '}',
         },
       },
     },
@@ -193,7 +193,7 @@ function(this) {
       unit: 'binBps',
       sources: {
         prometheus: {
-          expr: 'node_network_egress{%(queriesSelector)s, ' + nodeFilters + '}',
+          expr: 'node_egress_bytes{%(queriesSelector)s, ' + nodeFilters + '}',
         },
       },
     },

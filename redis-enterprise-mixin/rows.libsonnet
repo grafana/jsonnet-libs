@@ -13,32 +13,32 @@ local g = import './g.libsonnet';
           panels.overviewNodesUpPanel { gridPos+: { w: 8, h: 6 } },
           panels.overviewDatabasesUpPanel { gridPos+: { w: 8, h: 6 } },
           panels.overviewShardsUpPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterTotalRequestsPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterTotalMemoryUsedPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterTotalConnectionsPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterTotalKeysPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterCacheHitRatioPanel { gridPos+: { w: 8, h: 6 } },
-          panels.overviewClusterEvictionsVsExpiredObjectsPanel { gridPos+: { w: 8, h: 6 } },
+          panels.overviewClusterTotalMemoryUsedPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewClusterTotalConnectionsPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewClusterTotalRequestsPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewClusterTotalKeysPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewClusterCacheHitRatioPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewClusterEvictionsVsExpiredObjectsPanel { gridPos+: { w: 12, h: 6 } },
         ]),
 
       overviewNodesKPIsRow:
         g.panel.row.new('Nodes KPIs')
         + g.panel.row.withCollapsed(false)
         + g.panel.row.withPanels([
-          panels.overviewNodeRequestsPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewNodeAverageLatencyPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewNodeMemoryUtilizationPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewNodeCPUUtilizationPanel { gridPos+: { w: 6, h: 6 } },
+          panels.overviewNodeRequestsPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewNodeAverageLatencyPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewNodeMemoryUtilizationPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewNodeCPUUtilizationPanel { gridPos+: { w: 12, h: 6 } },
         ]),
 
       overviewDatabaseKPIsRow:
         g.panel.row.new('Database KPIs')
         + g.panel.row.withCollapsed(false)
         + g.panel.row.withPanels([
-          panels.overviewDatabaseOperationsPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewDatabaseAverageLatencyPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewDatabaseMemoryUtilizationPanel { gridPos+: { w: 6, h: 6 } },
-          panels.overviewDatabaseCacheHitRatioPanel { gridPos+: { w: 6, h: 6 } },
+          panels.overviewDatabaseOperationsPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewDatabaseAverageLatencyPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewDatabaseMemoryUtilizationPanel { gridPos+: { w: 12, h: 6 } },
+          panels.overviewDatabaseCacheHitRatioPanel { gridPos+: { w: 12, h: 6 } },
         ]),
 
       // Nodes dashboard rows
@@ -49,6 +49,7 @@ local g = import './g.libsonnet';
           panels.nodesNodeUpPanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesDatabaseUpPanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesShardsUpPanel { gridPos+: { w: 8, h: 6 } },
+          panels.nodesInventoryPanel { gridPos+: { w: 24 } },
         ]),
 
       nodesMetricsRow:

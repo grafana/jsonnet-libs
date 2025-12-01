@@ -16,6 +16,12 @@ local optional_labels = {
     label: 'Redis cluster',
     allValue: '.*',
   },
+  node+: {
+    label: 'Node',
+  },
+  bdb+: {
+    label: 'Database',
+  },
 };
 
 {

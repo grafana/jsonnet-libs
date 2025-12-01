@@ -22,7 +22,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
 
       overviewDatabasesUpPanel:
         g.panel.barGauge.new('Databases up')
@@ -40,7 +40,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
 
       overviewShardsUpPanel:
         g.panel.barGauge.new('Shards up')
@@ -57,7 +57,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
 
       // Overview panels - Cluster metrics
       overviewClusterTotalRequestsPanel:
@@ -73,6 +73,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Cluster total memory used',
           targets=[signals.overview.clusterTotalMemoryUsed.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Total memory used by each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('bytes'),
 
@@ -81,6 +86,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Cluster total connections',
           targets=[signals.overview.clusterTotalConnections.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Total connections to each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -89,6 +98,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Cluster total keys',
           targets=[signals.overview.clusterTotalKeys.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Total cluster key count for each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -97,6 +110,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Cluster cache hit ratio',
           targets=[signals.overview.clusterCacheHitRatio.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Ratio of database cache key hits against hits and misses.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -108,6 +125,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.clusterExpiredObjects.asTarget(),
           ]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Sum of key evictions and expirations in the cluster by database.')
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -117,6 +138,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node requests',
           targets=[signals.overview.nodeRequests.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Endpoint request rate for each node in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('reqps'),
 
@@ -125,6 +150,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node average latency',
           targets=[signals.overview.nodeAverageLatency.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Average latency for each node in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -133,6 +162,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node memory utilization',
           targets=[signals.overview.nodeMemoryUtilization.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Memory utilization % for each node in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -144,6 +177,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.overview.nodeCPUUser.asTarget(),
           ]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('CPU utilization for each node in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -153,6 +190,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Database operations',
           targets=[signals.overview.databaseOperations.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Rate of requests handled by each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -161,6 +202,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Database average latency',
           targets=[signals.overview.databaseAverageLatency.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Average latency for each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -169,6 +214,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Database memory utilization',
           targets=[signals.overview.databaseMemoryUtilization.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Calculated memory utilization % for each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -177,6 +226,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Database cache hit ratio',
           targets=[signals.overview.databaseCacheHitRatio.asTarget()]
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Calculated cache hit rate for each database in the cluster.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -205,7 +258,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
 
       nodesShardsUpPanel:
         g.panel.barGauge.new('Shards up')
@@ -223,7 +276,64 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
+
+      nodesInventoryPanel:
+        signals.nodes.nodeMemoryUtilization.asTable(name='Nodes', format='time_series')
+        + g.panel.table.panelOptions.withDescription('Inventory of the Redis Enterprise node(s).')
+        + signals.nodes.nodeUp.asTableColumn(format='time_series')
+        + g.panel.table.queryOptions.withTransformationsMixin(
+          [
+            g.panel.table.queryOptions.transformation.withId('organize')
+            + g.panel.table.queryOptions.transformation.withOptions(
+              {
+                excludeByName: {
+                  __name__: true,
+                  addr: true,
+                  cnm_version: true,
+                  instance: true,
+                },
+                indexByName: {
+                  job: 1,
+                  redis_cluster: 2,
+                  cluster: 3,
+                  node: 4,
+                  'Node memory utilization': 5,
+                },
+                renameByName: {
+                  job: 'Job',
+                  node: 'Node',
+                  redis_cluster: 'Redis Cluster',
+                },
+              }
+            ),
+          ],
+        )
+        + g.panel.table.standardOptions.withOverridesMixin(
+          [
+            g.panel.table.fieldOverride.byName.new(
+              'Node up'
+            )
+            + g.panel.table.fieldOverride.byName.withProperty('mappings', [
+              {
+                options: {
+                  '0': {
+                    color: 'red',
+                    index: 0,
+                    text: 'Down',
+                  },
+                  '1': {
+                    color: 'green',
+                    index: 1,
+                    text: 'Up',
+                  },
+                },
+                type: 'value',
+              },
+            ]),
+          ]
+        )
+        + g.panel.table.options.footer.withEnablePagination(true),
 
       nodesNodeRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -327,7 +437,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.options.withDisplayMode('basic')
         + g.panel.barGauge.options.withOrientation('horizontal')
         + g.panel.barGauge.options.reduceOptions.withCalcs(['lastNotNull'])
-        + g.panel.barGauge.options.withShowUnfilled(true),
+        + g.panel.barGauge.options.withShowUnfilled(false),
 
       databasesNodesUpPanel:
         commonlib.panels.generic.timeSeries.base.new(

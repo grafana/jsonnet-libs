@@ -140,7 +140,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -1170,6 +1170,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
+               "label": "Node",
                "multi": true,
                "name": "node",
                "query": "label_values(node_up, node)",
@@ -1181,6 +1182,7 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
+               "label": "Database",
                "multi": true,
                "name": "bdb",
                "query": "label_values(bdb_up, bdb)",

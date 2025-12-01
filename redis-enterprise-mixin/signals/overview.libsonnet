@@ -1,6 +1,5 @@
 function(this) {
   local legendCustomTemplate = '{{ redis_cluster }}',
-  local aggregationLabels = '(' + std.join(',', this.groupLabels + this.instanceLabels) + ')',
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -21,7 +20,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'node_up{%(queriesSelector)s}',
-          legendCustomTemplate: '{{ redis_cluster }} - {{ node }}',
+          legendCustomTemplate: 'node: {{ node }}',
         },
       },
     },
@@ -35,7 +34,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bdb_up{%(queriesSelector)s}',
-          legendCustomTemplate: '{{ redis_cluster }} - bdb={{ bdb }}',
+          legendCustomTemplate: 'db: {{ bdb }}',
         },
       },
     },
@@ -49,7 +48,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'redis_up{%(queriesSelector)s}',
-          legendCustomTemplate: '{{ redis_cluster }} - redis: {{ redis }}',
+          legendCustomTemplate: '{{ redis_cluster }} - shard: {{ redis }}',
         },
       },
     },
@@ -205,7 +204,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'node_cpu_system{%(queriesSelector)s} * 100',
-          legendCustomTemplate: 'node: {{ node }} - system',
+          legendCustomTemplate: '{{ redis_cluster }} - node: {{ node }} - system',
         },
       },
     },
@@ -219,7 +218,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'node_cpu_user{%(queriesSelector)s} * 100',
-          legendCustomTemplate: 'node: {{ node }} - user',
+          legendCustomTemplate: '{{ redis_cluster }} - node: {{ node }} - user',
         },
       },
     },

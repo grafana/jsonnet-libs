@@ -83,7 +83,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -95,7 +95,7 @@
                   "expr": "node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ redis_cluster }} - {{ node }}",
+                  "legendFormat": "node: {{ node }}",
                   "refId": "Node up"
                }
             ],
@@ -142,7 +142,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -154,7 +154,7 @@
                   "expr": "bdb_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ redis_cluster }} - bdb={{ bdb }}",
+                  "legendFormat": "db: {{ bdb }}",
                   "refId": "Database up"
                }
             ],
@@ -200,7 +200,7 @@
                      "lastNotNull"
                   ]
                },
-               "showUnfilled": true
+               "showUnfilled": false
             },
             "pluginVersion": "v11.4.0",
             "targets": [
@@ -212,66 +212,12 @@
                   "expr": "redis_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ redis_cluster }} - redis: {{ redis }}",
+                  "legendFormat": "{{ redis_cluster }} - shard: {{ redis }}",
                   "refId": "Shard up"
                }
             ],
             "title": "Shards up",
             "type": "bargauge"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Total requests handled by endpoints aggregated across all nodes.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "decimals": 1,
-                  "noValue": "No packets",
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 0,
-               "y": 7
-            },
-            "id": 5,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, job)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ redis_cluster }}",
-                  "refId": "Cluster total requests"
-               }
-            ],
-            "title": "Cluster total requests",
-            "type": "timeseries"
          },
          {
             "datasource": {
@@ -286,7 +232,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "min": 0,
                   "unit": "bytes"
@@ -325,15 +274,21 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 0,
                "y": 7
             },
-            "id": 6,
+            "id": 5,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "asTable": true,
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -370,7 +325,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "decimals": 1,
                   "noValue": "No packets",
@@ -379,15 +337,17 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 16,
+               "w": 12,
+               "x": 12,
                "y": 7
             },
-            "id": 7,
+            "id": 6,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -416,7 +376,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total cluster key count for each database in the cluster.",
+            "description": "Total requests handled by endpoints aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -426,20 +386,79 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "unit": "none"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
+               "w": 12,
                "x": 0,
+               "y": 13
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, job)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ redis_cluster }}",
+                  "refId": "Cluster total requests"
+               }
+            ],
+            "title": "Cluster total requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total cluster key count for each database in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
                "y": 13
             },
             "id": 8,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -476,22 +495,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 8,
-               "y": 13
+               "w": 12,
+               "x": 0,
+               "y": 19
             },
             "id": 9,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -528,22 +552,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "ops"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 16,
-               "y": 13
+               "w": 12,
+               "x": 12,
+               "y": 19
             },
             "id": 10,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -584,7 +613,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 19
+               "y": 25
             },
             "id": 11,
             "panels": [ ],
@@ -604,7 +633,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "decimals": 1,
                   "noValue": "No packets",
@@ -613,15 +645,17 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
+               "w": 12,
                "x": 0,
-               "y": 20
+               "y": 26
             },
             "id": 12,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -658,7 +692,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "decimals": 1,
                   "noValue": "No packets",
@@ -667,15 +704,17 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 6,
-               "y": 20
+               "w": 12,
+               "x": 12,
+               "y": 26
             },
             "id": 13,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -715,7 +754,10 @@
                      "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "decimals": 1,
                   "max": 100,
@@ -725,15 +767,17 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 12,
-               "y": 20
+               "w": 12,
+               "x": 0,
+               "y": 32
             },
             "id": 14,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -770,22 +814,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 18,
-               "y": 20
+               "w": 12,
+               "x": 12,
+               "y": 32
             },
             "id": 15,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -802,7 +851,7 @@
                   "expr": "node_cpu_system{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "node: {{ node }} - system",
+                  "legendFormat": "{{ redis_cluster }} - node: {{ node }} - system",
                   "refId": "Node CPU system"
                },
                {
@@ -813,7 +862,7 @@
                   "expr": "node_cpu_user{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"} * 100",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "node: {{ node }} - user",
+                  "legendFormat": "{{ redis_cluster }} - node: {{ node }} - user",
                   "refId": "Node CPU user"
                }
             ],
@@ -826,7 +875,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 26
+               "y": 38
             },
             "id": 16,
             "panels": [ ],
@@ -846,22 +895,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "ops"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
+               "w": 12,
                "x": 0,
-               "y": 27
+               "y": 39
             },
             "id": 17,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -898,7 +952,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "decimals": 1,
                   "noValue": "No packets",
@@ -907,15 +964,17 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 6,
-               "y": 27
+               "w": 12,
+               "x": 12,
+               "y": 39
             },
             "id": 18,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -952,22 +1011,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 12,
-               "y": 27
+               "w": 12,
+               "x": 0,
+               "y": 45
             },
             "id": 19,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -1004,22 +1068,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 6,
-               "x": 18,
-               "y": 27
+               "w": 12,
+               "x": 12,
+               "y": 45
             },
             "id": 20,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
