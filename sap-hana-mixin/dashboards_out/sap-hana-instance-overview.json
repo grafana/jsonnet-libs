@@ -1,117 +1,106 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "SAP HANA instance overview",
+      "graphTooltip": 1,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "sap-hana-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other SAP HANA dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "SAP HANA instance overview",
+            "type": "link",
+            "url": "/d/sap-hana-instance-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "SAP HANA logs",
+            "type": "link",
+            "url": "/d/sap-hana-logs"
+         },
+         {
+            "keepTime": true,
+            "title": "SAP HANA system overview",
+            "type": "link",
+            "url": "/d/sap-hana-system-overview"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Resources",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "CPU usage percentage of the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "palette-classic"
+                     "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, core) (hanadb_cpu_busy_percent{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, core) (hanadb_cpu_busy_percent{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - core {{core}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - core {{core}}",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -119,90 +108,57 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Disk utilization percentage of the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "palette-classic"
+                     "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_disk_total_used_size_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}) / sum by (job, sid, host) (hanadb_disk_total_size_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_disk_total_used_size_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_disk_total_size_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Disk usage"
                }
             ],
             "title": "Disk usage",
@@ -210,99 +166,68 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Physical memory utilization percentage of the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "palette-classic"
+                     "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_resident_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_resident_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - resident"
+                  "instant": false,
+                  "legendFormat": "{{host}} - resident",
+                  "refId": "Physical memory usage - resident"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}) / clamp_min(sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"} + hanadb_host_memory_swap_free_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}), 1)",
+                  "expr": "100 * sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}) / clamp_min(sum by (job, sid, host) (hanadb_host_memory_swap_used_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"} + hanadb_host_memory_swap_free_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}), 1)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - swap"
+                  "instant": false,
+                  "legendFormat": "{{host}} - swap",
+                  "refId": "Physical memory usage - swap"
                }
             ],
             "title": "Physical memory usage",
@@ -310,190 +235,161 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total used memory by schema in the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "min": 0,
                   "unit": "decmbytes"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, database_name, schema_name) (hanadb_schema_used_memory_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job,sid,host) (\n  sum by (job, sid, host, database_name, schema_name) (hanadb_schema_used_memory_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}}",
+                  "refId": "Schema memory usage"
                }
             ],
             "title": "Schema memory usage",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "I/O",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Network I/O throughput for the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "KBs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 12
+               "y": 18
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, interface) (hanadb_network_receive_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, interface) (hanadb_network_receive_rate_kb_per_seconds{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{interface}} - receive"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{interface}} - receive",
+                  "refId": "Network receive rate"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, interface) (hanadb_network_transmission_rate_kb_per_seconds{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, interface) (hanadb_network_transmission_rate_kb_per_seconds{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{interface}} - transmit"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{interface}} - transmit",
+                  "refId": "Network transmit rate"
                }
             ],
             "title": "Network I/O throughput",
@@ -501,182 +397,138 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Disk throughput for the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "KBs"
                },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 12,
-               "x": 12,
-               "y": 12
-            },
-            "id": 7,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by (job, sid, host, disk) (hanadb_disk_io_throughput_kb_second{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{disk}}"
-               }
-            ],
-            "title": "Disk I/O throughput",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Number of connections grouped by type and status in the SAP HANA instance",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "blue",
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/time|used|busy|util/"
                      },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
+                     "properties": [
                         {
-                           "color": "green",
-                           "value": null
+                           "id": "custom.axisSoftMax",
+                           "value": 100
                         },
                         {
-                           "color": "red",
-                           "value": 80
+                           "id": "custom.drawStyle",
+                           "value": "points"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
                         }
                      ]
                   }
-               },
-               "overrides": [ ]
+               ]
             },
             "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 0,
+               "h": 8,
+               "w": 12,
+               "x": 12,
                "y": 18
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.5.2-cloud.1.f9fd074b",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, connection_type, connection_status)(hanadb_connections_total_count{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, disk) (hanadb_disk_io_throughput_kb_second{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{connection_type}} - {{connection_status}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{disk}}",
+                  "refId": "Disk I/O throughput"
+               }
+            ],
+            "title": "Disk I/O throughput",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
+            },
+            "id": 9,
+            "panels": [ ],
+            "title": "Performance",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of connections grouped by type and status in the SAP HANA instance",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 27
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job, sid, host, connection_type, connection_status) (hanadb_connections_total_count{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{connection_type}} - {{connection_status}}",
+                  "refId": "Connections"
                }
             ],
             "title": "Connections",
@@ -684,91 +536,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average elapsed time per execution by service and SQL type in the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 8,
                "x": 8,
-               "y": 18
+               "y": 27
             },
-            "id": 9,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
-                  "sort": "none"
+                  "sort": "desc"
                }
             },
-            "pluginVersion": "9.5.0-cloud.5.a016665c",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, sid, host, service, sql_type) ( hanadb_sql_service_elap_per_exec_avg_ms{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "avg by (job,sid,host, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{service}} - {{sql_type}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{service}} - {{sql_type}}",
+                  "refId": "Average query execution time"
                }
             ],
             "title": "Average query execution time",
@@ -776,91 +588,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Average lock wait time per execution by service and SQL type in the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 8,
                "x": 16,
-               "y": 18
+               "y": 27
             },
-            "id": 10,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.5.0-cloud.5.a016665c",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, service, sql_type) (hanadb_sql_service_lock_per_exec_ms{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job,sid,host, service, sql_type) (hanadb_sql_service_lock_per_exec_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{service}} - {{sql_type}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{service}} - {{sql_type}}",
+                  "refId": "Average lock wait execution time"
                }
             ],
             "title": "Average lock wait execution time",
@@ -868,83 +640,55 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 24
+               "y": 35
             },
-            "id": 11,
-            "targets": [ ],
+            "id": 13,
+            "panels": [ ],
             "title": "Alerts",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "Count of the SAP HANA instance’s current alerts",
+            "description": "Count of the SAP HANA instance's current alerts",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "yellow",
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "green",
-                           "value": 0
-                        },
-                        {
-                           "color": "#EAB839",
-                           "value": 1
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "short"
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 7,
                "x": 0,
-               "y": 25
+               "y": 36
             },
-            "id": 12,
+            "id": 14,
             "options": {
                "colorMode": "value",
                "graphMode": "none",
-               "justifyMode": "center",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
                "textMode": "auto"
             },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host) (hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host) (hanadb_alerts_current_rating{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}}"
+                  "instant": false,
+                  "legendFormat": "{{host}}",
+                  "refId": "Alerts"
                }
             ],
             "title": "Alerts",
@@ -952,67 +696,29 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Table of the recent SAP HANA current alerts in the SAP HANA instance",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "inspect": false
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 17,
                "x": 7,
-               "y": 25
+               "y": 36
             },
-            "id": 13,
-            "options": {
-               "cellHeight": "sm",
-               "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true
-            },
-            "pluginVersion": "9.5.2-cloud.2.0cb5a501",
+            "id": 15,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hanadb_alerts_current_rating{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}",
+                  "expr": "hanadb_alerts_current_rating{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}",
                   "format": "table",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{alert_details}} {{alert_useraction}}"
+                  "instant": true,
+                  "legendFormat": "{{host}}",
+                  "refId": "Recent alerts"
                }
             ],
             "title": "Recent alerts",
@@ -1091,107 +797,96 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 31
+               "y": 44
             },
-            "id": 14,
-            "targets": [ ],
+            "id": 16,
+            "panels": [ ],
             "title": "Outliers",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top tables by the sum of memory size in the main, delta, and history parts for the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
+                  "min": 0,
                   "unit": "decmbytes"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 32
+               "y": 45
             },
-            "id": 15,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.5.0-cloud.5.a016665c",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, database_name, table_name, schema_name)(topk(5, hanadb_table_cs_top_mem_total_mb{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"}))",
+                  "expr": "sum by (job,sid,host, database_name, table_name, schema_name) (topk(5, hanadb_table_cs_top_mem_total_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}} - {{table_name}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - {{database_name}} - {{schema_name}} - {{table_name}}",
+                  "refId": "Top tables by memory"
                }
             ],
             "title": "Top tables by memory",
@@ -1199,230 +894,123 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top statements by time consumed over all executions for the SAP HANA instance",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 32
+               "y": 45
             },
-            "id": 16,
+            "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "9.5.0-cloud.5.a016665c",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, sid, host, sql_hash) (hanadb_sql_top_time_consumers_mu{job=~\"$job\", sid=~\"$sid\", host=~\"$host\"})",
+                  "expr": "sum by (job,sid,host, sql_hash) (hanadb_sql_top_time_consumers_mu{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{host}} - hash: {{sql_hash}}"
+                  "instant": false,
+                  "legendFormat": "{{host}} - hash: {{sql_hash}}",
+                  "refId": "Top SQL queries by average time"
                }
             ],
             "title": "Top SQL queries by average time",
             "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${loki_datasource}"
-            },
-            "description": "Recent trace logs as collected from SAP HANA.",
-            "gridPos": {
-               "h": 6,
-               "w": 24,
-               "x": 0,
-               "y": 38
-            },
-            "id": 17,
-            "options": {
-               "dedupStrategy": "none",
-               "enableLogDetails": true,
-               "prettifyLogMessage": false,
-               "showCommonLabels": false,
-               "showLabels": false,
-               "showTime": false,
-               "sortOrder": "Descending",
-               "wrapLogMessage": false
-            },
-            "pluginVersion": "9.5.0-cloud.5.a016665c",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${loki_datasource}"
-                  },
-                  "editorMode": "code",
-                  "expr": "{filename=~\"/opt/hana/shared/.*/HDB.*/.*/trace/.*.trc\"} |=``",
-                  "queryType": "range",
-                  "refId": "A"
-               }
-            ],
-            "title": "Trace logs",
-            "type": "logs"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "sap-hana-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "current": { },
-               "hide": 0,
-               "label": "Loki Datasource",
-               "name": "loki_datasource",
-               "options": [ ],
-               "query": "loki",
-               "refresh": 1,
-               "regex": "",
-               "type": "datasource"
-            },
-            {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
+               "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(hanadb_cpu_busy_percent,job)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(hanadb_cpu_busy_percent{job=\"integrations/sap-hana\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "SAP HANA system",
-               "multi": false,
+               "multi": true,
                "name": "sid",
-               "options": [ ],
-               "query": "label_values(hanadb_cpu_busy_percent,sid)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(hanadb_cpu_busy_percent{job=\"integrations/sap-hana\",job=~\"$job\"}, sid)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "SAP HANA instance",
-               "multi": false,
+               "multi": true,
                "name": "host",
-               "options": [ ],
-               "query": "label_values(hanadb_cpu_busy_percent,host)",
-               "refresh": 1,
+               "query": "label_values(hanadb_cpu_busy_percent{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\"}, host)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -1430,33 +1018,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "SAP HANA instance overview",
-      "uid": "sap-hana-instance-overview",
-      "version": 0
+      "uid": "sap-hana-instance-overview"
    }
