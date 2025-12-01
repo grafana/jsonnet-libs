@@ -8,7 +8,7 @@ local mixin = mixinlib.new()
                 {
                   filteringSelecter: config.filteringSelector,
                   uid: config.uid,
-                  enableLokiLogs: true,
+                  enableLokiLogs: config.enableLokiLogs,
                 }
               );
 
