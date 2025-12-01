@@ -187,6 +187,50 @@ groups:
             service: Azure Virtual network
             serviceId: microsoft.network/virtualnetworks
             severity: critical
+    - name: azure.flexibleserverspostgresql
+      rules:
+        - alert: AzureFlexibleServerHighCpuUtilization
+          annotations:
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers
+            description: The Flexible Server {{ $labels.resourceName }} is under heavy load and may become unresponsive.
+            summary: Flexible Server CPU utilization is too high.
+          expr: |
+            azure_microsoft_dbforpostgresql_flexibleservers_cpu_percent_average_percent{resourceName!=""} > 90
+          for: 5m
+          keep_firing_for: 10m
+          labels:
+            namespace: cloud-provider-azure
+            service: Azure PostgreSQL Flexible Servers
+            serviceId: microsoft.dbforpostgresql/flexibleservers
+            severity: critical
+        - alert: AzureFlexibleServerHighMemoryUsage
+          annotations:
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers
+            description: The Flexible Server {{ $labels.resourceName }} is experiencing high memory usage, which may lead to performance degradation.
+            summary: Flexible Server Memory usage is too high.
+          expr: |
+            azure_microsoft_dbforpostgresql_flexibleservers_memory_percent_average_percent{resourceName!=""} > 90
+          for: 5m
+          keep_firing_for: 10m
+          labels:
+            namespace: cloud-provider-azure
+            service: Azure PostgreSQL Flexible Servers
+            serviceId: microsoft.dbforpostgresql/flexibleservers
+            severity: critical
+        - alert: AzureFlexibleServerHighStorageUsage
+          annotations:
+            dashboard_url: /a/grafana-csp-app/azure/dashboards/postgresql-flexible-servers
+            description: The Flexible Server {{ $labels.resourceName }} is running low on storage space, which may impact database operations.
+            summary: Flexible Server Storage usage is too high.
+          expr: |
+            azure_microsoft_dbforpostgresql_flexibleservers_storage_percent_maximum_percent{resourceName!=""} > 90
+          for: 5m
+          keep_firing_for: 10m
+          labels:
+            namespace: cloud-provider-azure
+            service: Azure PostgreSQL Flexible Servers
+            serviceId: microsoft.dbforpostgresql/flexibleservers
+            severity: critical
     - name: gcp.compute
       rules:
         - alert: GcpCEHighCpuUtilization
