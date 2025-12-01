@@ -23,7 +23,7 @@ function(this)
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'opensearch_index_search_query_current_number{%(queriesSelector)s, context=~"total"}',
+            expr: 'opensearch_index_search_query_current_number{%(queriesSelector)s, context="total"}',
             legendCustomTemplate: '{{index}} - query',
           },
         },
