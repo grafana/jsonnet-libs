@@ -65,7 +65,7 @@ local g = import './g.libsonnet';
           panels.nodesNodeAverageLatencyPanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesNodeEphmeralFreeStoragePanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesNodePersistentFreeStoragePanel { gridPos+: { w: 8, h: 6 } },
-          
+
         ]),
 
       // Database dashboard rows
