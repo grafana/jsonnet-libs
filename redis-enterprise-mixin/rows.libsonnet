@@ -56,15 +56,16 @@ local g = import './g.libsonnet';
         g.panel.row.new('Node metrics')
         + g.panel.row.withCollapsed(false)
         + g.panel.row.withPanels([
-          panels.nodesNodeRequestsPanel { gridPos+: { w: 8, h: 6 } },
+          panels.nodesNodeMemoryUtilizationPanel { gridPos+: { w: 12, h: 6 } },
+          panels.nodesNodeCPUUtilizationPanel { gridPos+: { w: 12, h: 6 } },
+          panels.nodesNodeNetworkIngressPanel { gridPos+: { w: 12, h: 6 } },
+          panels.nodesNodeNetworkEgressPanel { gridPos+: { w: 12, h: 6 } },
+          panels.nodesNodeRequestsPanel { gridPos+: { w: 12, h: 6 } },
+          panels.nodesNodeClientConnectionsPanel { gridPos+: { w: 12, h: 6 } },
           panels.nodesNodeAverageLatencyPanel { gridPos+: { w: 8, h: 6 } },
-          panels.nodesNodeCPUUtilizationPanel { gridPos+: { w: 8, h: 6 } },
-          panels.nodesNodeMemoryUtilizationPanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesNodeEphmeralFreeStoragePanel { gridPos+: { w: 8, h: 6 } },
           panels.nodesNodePersistentFreeStoragePanel { gridPos+: { w: 8, h: 6 } },
-          panels.nodesNodeNetworkIngressPanel { gridPos+: { w: 8, h: 6 } },
-          panels.nodesNodeNetworkEgressPanel { gridPos+: { w: 8, h: 6 } },
-          panels.nodesNodeClientConnectionsPanel { gridPos+: { w: 8, h: 6 } },
+          
         ]),
 
       // Database dashboard rows

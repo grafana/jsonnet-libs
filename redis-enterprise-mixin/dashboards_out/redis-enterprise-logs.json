@@ -14,16 +14,19 @@
             "type": "dashboards"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise databases",
             "type": "link",
             "url": "/d/redisenterprise_databases"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise nodes",
             "type": "link",
             "url": "/d/redisenterprise_nodes"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise overview",
             "type": "link",
             "url": "/d/redisenterprise_overview"

@@ -20,11 +20,13 @@
             "url": "/d/redisenterprise-logs"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise nodes",
             "type": "link",
             "url": "/d/redisenterprise_nodes"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise overview",
             "type": "link",
             "url": "/d/redisenterprise_overview"
@@ -579,7 +581,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "ops"
                }
@@ -593,8 +598,10 @@
             "id": 12,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",

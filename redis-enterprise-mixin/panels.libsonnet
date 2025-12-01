@@ -340,6 +340,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node requests',
           targets=[signals.nodes.nodeRequests.asTarget()]
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Total endpoint request rate for the selected node.')
         + g.panel.timeSeries.standardOptions.withUnit('none'),
 
@@ -348,6 +349,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node average latency',
           targets=[signals.nodes.nodeAverageLatency.asTarget()]
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Average latency for the selected node.')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -356,6 +358,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Node memory utilization',
           targets=[signals.nodes.nodeMemoryUtilization.asTarget()]
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.panelOptions.withDescription('Memory utilization % for the selected node.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -367,6 +370,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.nodes.nodeCPUUser.asTarget(),
           ]
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.panelOptions.withDescription('CPU utilization for the selected node.')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -493,6 +500,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             signals.databases.databaseExpiredObjects.asTarget(),
           ]
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.panelOptions.withDescription('Number of evicted and expired objects from the database.')
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
 

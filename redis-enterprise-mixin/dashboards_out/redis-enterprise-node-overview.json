@@ -14,6 +14,7 @@
             "type": "dashboards"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise databases",
             "type": "link",
             "url": "/d/redisenterprise_databases"
@@ -25,6 +26,7 @@
             "url": "/d/redisenterprise-logs"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise overview",
             "type": "link",
             "url": "/d/redisenterprise_overview"
@@ -383,7 +385,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Total endpoint request rate for the selected node.",
+            "description": "Memory utilization % for the selected node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -391,14 +393,17 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
-                  "unit": "none"
+                  "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 18
             },
@@ -420,66 +425,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
-                  "refId": "Node requests"
+                  "refId": "Node memory utilization"
                }
             ],
-            "title": "Node requests",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Average latency for the selected node.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "s"
-               }
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 8,
-               "y": 18
-            },
-            "id": 8,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "node_avg_latency{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ node }}",
-                  "refId": "Node average latency"
-               }
-            ],
-            "title": "Node average latency",
+            "title": "Node memory utilization",
             "type": "timeseries"
          },
          {
@@ -495,22 +448,27 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "percent"
                }
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 16,
+               "w": 12,
+               "x": 12,
                "y": 18
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -550,162 +508,6 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Memory utilization % for the selected node.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "percent"
-               }
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 0,
-               "y": 24
-            },
-            "id": 10,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ node }}",
-                  "refId": "Node memory utilization"
-               }
-            ],
-            "title": "Node memory utilization",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Ephemeral storage available for the selected node.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 1,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 8,
-               "y": 24
-            },
-            "id": 11,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "node_ephemeral_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ node }}",
-                  "refId": "Node ephemeral free storage"
-               }
-            ],
-            "title": "Node ephemeral free storage",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Persistent storage available for the selected node.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 1,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "bytes"
-               }
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 16,
-               "y": 24
-            },
-            "id": 12,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "node_persistent_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ node }}",
-                  "refId": "Node persistent free storage"
-               }
-            ],
-            "title": "Node persistent free storage",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
             "description": "Network ingress for the selected node.",
             "fieldConfig": {
                "defaults": {
@@ -723,11 +525,11 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
+               "w": 12,
                "x": 0,
-               "y": 30
+               "y": 24
             },
-            "id": 13,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -777,11 +579,11 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 8,
-               "y": 30
+               "w": 12,
+               "x": 12,
+               "y": 24
             },
-            "id": 14,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -814,6 +616,61 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
+            "description": "Total endpoint request rate for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 30
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node requests"
+               }
+            ],
+            "title": "Node requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
             "description": "Number of client connections to the selected node.",
             "fieldConfig": {
                "defaults": {
@@ -831,11 +688,11 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 8,
-               "x": 16,
+               "w": 12,
+               "x": 12,
                "y": 30
             },
-            "id": 15,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -861,6 +718,165 @@
                }
             ],
             "title": "Node client connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average latency for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 36
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "node_avg_latency{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node average latency"
+               }
+            ],
+            "title": "Node average latency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Ephemeral storage available for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 36
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "node_ephemeral_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node ephemeral free storage"
+               }
+            ],
+            "title": "Node ephemeral free storage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Persistent storage available for the selected node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 36
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "node_persistent_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }}",
+                  "refId": "Node persistent free storage"
+               }
+            ],
+            "title": "Node persistent free storage",
             "type": "timeseries"
          }
       ],

@@ -14,6 +14,7 @@
             "type": "dashboards"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise databases",
             "type": "link",
             "url": "/d/redisenterprise_databases"
@@ -25,6 +26,7 @@
             "url": "/d/redisenterprise-logs"
          },
          {
+            "keepTime": true,
             "title": "Redis Enterprise nodes",
             "type": "link",
             "url": "/d/redisenterprise_nodes"
