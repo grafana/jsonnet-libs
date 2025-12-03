@@ -1,0 +1,444 @@
+{
+   "description": "PostgreSQL query performance analysis.\n\nRequires pg_stat_statements extension:\n\n1. Add to postgresql.conf:\n   shared_preload_libraries = 'pg_stat_statements'\n\n2. Restart PostgreSQL\n\n3. Create extension:\n   CREATE EXTENSION pg_stat_statements;\n",
+   "links": [
+      {
+         "asDropdown": false,
+         "includeVars": true,
+         "keepTime": true,
+         "tags": [
+            "postgres",
+            "database"
+         ],
+         "title": "All PostgreSQL dashboards",
+         "type": "dashboards"
+      }
+   ],
+   "panels": [
+      {
+         "collapsed": false,
+         "gridPos": {
+            "h": 1,
+            "w": 0,
+            "x": 0,
+            "y": 0
+         },
+         "panels": [ ],
+         "title": "Query Analysis",
+         "type": "row"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Queries consuming most total execution time. Primary optimization targets.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "ms"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "Top queries by total time"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ms"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 1
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 1000)[$__rate_interval])\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{ query }}",
+               "refId": "Top queries by total time"
+            }
+         ],
+         "title": "Top queries by total time",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Queries with highest average execution time.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "ms"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "Slowest queries by mean time"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ms"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 1
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "max by (job,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{ query }}",
+               "refId": "Slowest queries by mean time"
+            }
+         ],
+         "title": "Slowest queries by mean time",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Most frequently executed queries.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "ops"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "Most frequent queries"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ops"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 9
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))[$__rate_interval])\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{ query }}",
+               "refId": "Most frequent queries"
+            }
+         ],
+         "title": "Most frequent queries",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Queries writing to temp files. Consider increasing work_mem.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "bytes"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "Queries using temp files"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "bytes"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 9
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n[$__rate_interval])\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{ query }}",
+               "refId": "Queries using temp files"
+            }
+         ],
+         "title": "Queries using temp files",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Query performance statistics. Requires pg_stat_statements extension.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "filterable": false
+               }
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Slowest queries by mean time"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ms"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 19
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "max by (job,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "format": "table",
+               "instant": true,
+               "legendFormat": "{{ query }}",
+               "refId": "Slowest queries by mean time"
+            }
+         ],
+         "title": "Query Statistics",
+         "transformations": [
+            {
+               "id": "merge"
+            },
+            {
+               "id": "renameByRegex",
+               "options": {
+                  "regex": "Value #(.*)",
+                  "renamePattern": "$1"
+               }
+            },
+            {
+               "id": "filterFieldsByName",
+               "options": {
+                  "include": {
+                     "pattern": "^(?!Time).*$"
+                  }
+               }
+            },
+            {
+               "id": "organize",
+               "options": {
+                  "indexByName": {
+                     "instance": 1,
+                     "job": 0,
+                     "query": 2,
+                     "queryid": 3
+                  },
+                  "renameByName": {
+                     "Value": "Query Statistics",
+                     "instance": "Instance",
+                     "job": "Job",
+                     "query": "Query",
+                     "queryid": "Queryid"
+                  }
+               }
+            },
+            {
+               "id": "sortBy",
+               "options": {
+                  "fields": { },
+                  "sort": [
+                     {
+                        "desc": true,
+                        "field": "Value"
+                     }
+                  ]
+               }
+            }
+         ],
+         "type": "table"
+      }
+   ],
+   "schemaVersion": 39,
+   "tags": [
+      "postgres",
+      "database",
+      "pg_stat_statements"
+   ],
+   "templating": {
+      "list": [
+         {
+            "label": "Data source",
+            "name": "datasource",
+            "query": "prometheus",
+            "regex": "",
+            "type": "datasource"
+         },
+         {
+            "allValue": ".+",
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "includeAll": true,
+            "label": "Job",
+            "multi": true,
+            "name": "job",
+            "query": "label_values({__name__=~\"pg_stat_statements_calls_total\"}, job)",
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+         },
+         {
+            "allValue": ".+",
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "includeAll": true,
+            "label": "Instance",
+            "multi": true,
+            "name": "instance",
+            "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\"}, instance)",
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+         }
+      ]
+   },
+   "time": {
+      "from": "now-6h",
+      "to": "now"
+   },
+   "timezone": "utc",
+   "title": "PostgreSQL Query Performance",
+   "uid": "postgres-queries"
+}
