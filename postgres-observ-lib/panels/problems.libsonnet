@@ -117,17 +117,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Lock utilization
     lockUtilization:
-      signals.problems.lockUtilization.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.standardOptions.withUnit('percentunit')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
-      + g.panel.stat.standardOptions.thresholds.withSteps([
+      signals.problems.lockUtilization.asGauge()
+      + g.panel.gauge.standardOptions.withUnit('percentunit')
+      + g.panel.gauge.standardOptions.withMin(0)
+      + g.panel.gauge.standardOptions.withMax(1)
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 0.2, color: 'yellow' },
-        { value: 0.5, color: 'red' },
+        { value: 0.05, color: 'yellow' },
+        { value: 0.1, color: 'orange' },
+        { value: 0.2, color: 'red' },
       ])
-      + g.panel.stat.panelOptions.withDescription(
+      + g.panel.gauge.options.withMinVizHeight(200)
+      + g.panel.gauge.options.withMinVizWidth(200)
+      + g.panel.gauge.options.withShowThresholdLabels(false)
+      + g.panel.gauge.panelOptions.withDescription(
         'Lock utilization as percentage of max_locks_per_transaction * max_connections.'
       ),
 

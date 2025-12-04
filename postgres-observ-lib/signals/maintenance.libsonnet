@@ -34,6 +34,7 @@ function(this)
               /
               count by (%(agg)s) (pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Tables needing vacuum',
           },
         },
       },
@@ -56,6 +57,7 @@ function(this)
                 )
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Oldest vacuum',
           },
         },
       },
@@ -76,7 +78,7 @@ function(this)
               )
             |||,
             aggKeepLabels: ['schemaname', 'relname'],
-            legendCustomTemplate: '{{ schemaname }}.{{ relname }}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: {{ schemaname }}.{{ relname }}',
           },
         },
       },
@@ -97,7 +99,7 @@ function(this)
               pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
             |||,
             aggKeepLabels: ['schemaname', 'relname'],
-            legendCustomTemplate: '{{ schemaname }}.{{ relname }}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: {{ schemaname }}.{{ relname }}',
           },
         },
       },
@@ -120,6 +122,7 @@ function(this)
                 + 1
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Seq scan ratio',
           },
         },
       },
@@ -138,6 +141,7 @@ function(this)
                 pg_stat_user_indexes_idx_scan{%(queriesSelector)s} == 0
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Unused indexes',
           },
         },
       },
@@ -151,6 +155,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'sum by (%(agg)s) (pg_database_size_bytes{%(queriesSelector)s})',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Database size',
           },
         },
       },
@@ -164,6 +169,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_wal_size_bytes{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL size',
           },
         },
       },

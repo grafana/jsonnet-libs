@@ -27,6 +27,7 @@ function(this)
               count(pg_stat_activity_max_tx_duration{%(queriesSelector)s, state="active"} > 300) by (%(agg)s)
               or vector(0)
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Long-running queries',
           },
         },
       },
@@ -43,6 +44,7 @@ function(this)
               sum(pg_locks_count{%(queriesSelector)s, mode="ExclusiveLock"}) by (%(agg)s)
               or vector(0)
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Blocked queries',
           },
         },
       },
@@ -56,6 +58,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Idle in transaction',
           },
         },
       },
@@ -69,6 +72,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL archive failures',
           },
         },
       },
@@ -90,6 +94,7 @@ function(this)
                 rate(pg_stat_bgwriter_checkpoints_timed{%(queriesSelector)s}[$__rate_interval])
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Checkpoint warnings',
           },
         },
       },
@@ -103,6 +108,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_bgwriter_buffers_backend{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Backend buffer writes',
           },
         },
       },
@@ -120,6 +126,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_conflicts{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Conflicts',
           },
         },
       },
@@ -143,6 +150,7 @@ function(this)
                 pg_settings_max_connections{%(queriesSelector)s}
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Lock utilization',
           },
         },
       },
@@ -159,6 +167,7 @@ function(this)
               count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
               or vector(0)
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Inactive replication slots',
           },
         },
       },
@@ -172,6 +181,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Exporter errors',
           },
         },
       },

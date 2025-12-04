@@ -81,7 +81,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 1000)[$__rate_interval])\n)",
+               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 1000)[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -146,7 +146,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "expr": "max by (job,cluster,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -211,7 +211,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))[$__rate_interval])\n)",
+               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -276,7 +276,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,instance,queryid,query) (\n  rate(topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n[$__rate_interval])\n)",
+               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -326,7 +326,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "expr": "max by (job,cluster,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n\n)",
                "format": "table",
                "instant": true,
                "legendFormat": "{{ query }}",
@@ -357,13 +357,15 @@
                "id": "organize",
                "options": {
                   "indexByName": {
-                     "instance": 1,
+                     "cluster": 1,
+                     "instance": 2,
                      "job": 0,
-                     "query": 2,
-                     "queryid": 3
+                     "query": 3,
+                     "queryid": 4
                   },
                   "renameByName": {
                      "Value": "Query Statistics",
+                     "cluster": "Cluster",
                      "instance": "Instance",
                      "job": "Job",
                      "query": "Query",
@@ -424,10 +426,25 @@
                "uid": "${datasource}"
             },
             "includeAll": true,
+            "label": "Cluster",
+            "multi": true,
+            "name": "cluster",
+            "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\"}, cluster)",
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+         },
+         {
+            "allValue": ".+",
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "includeAll": true,
             "label": "Instance",
             "multi": true,
             "name": "instance",
-            "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\"}, instance)",
+            "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
             "refresh": 2,
             "sort": 1,
             "type": "query"

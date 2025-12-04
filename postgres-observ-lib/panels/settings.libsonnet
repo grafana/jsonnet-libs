@@ -1,0 +1,154 @@
+// PostgreSQL Settings Panels
+local g = import '../g.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
+
+{
+  new(config):: {
+    // Build the selector from config
+    local baseSelector = 
+      if config.filteringSelector != '' then config.filteringSelector + ','
+      else '',
+    local selector = baseSelector + 'job=~"$job",cluster=~"$cluster",instance=~"$instance"',
+
+    // Settings table - shows all pg_settings_* metrics in a searchable table
+    settingsTable:
+      g.panel.table.new('PostgreSQL Settings')
+      + g.panel.table.panelOptions.withDescription(
+        'PostgreSQL configuration settings. Use the Settings Filter variable above to search by setting name (regex). Default .* shows all settings.'
+      )
+      + g.panel.table.queryOptions.withTargets([
+        {
+          datasource: {
+            type: 'prometheus',
+            uid: '${datasource}',
+          },
+          expr: '{__name__=~"pg_settings_.*${settingsFilter}.*",' + selector + '}',
+          format: 'table',
+          instant: true,
+          refId: 'Settings',
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              Time: true,
+              __name__: false,
+              job: false,
+              cluster: false,
+              instance: false,
+              server: true,
+              server_id: true,
+              environment: true,
+            },
+            indexByName: {
+              __name__: 0,
+              Value: 1,
+              cluster: 2,
+              instance: 3,
+              job: 4,
+            },
+            renameByName: {
+              __name__: 'Setting',
+              job: 'Job',
+              cluster: 'Cluster',
+              instance: 'Instance',
+              Value: 'Value',
+            },
+          },
+        },
+        {
+          id: 'sortBy',
+          options: {
+            fields: {},
+            sort: [
+              {
+                field: 'Setting',
+                desc: false,
+              },
+            ],
+          },
+        },
+      ])
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Setting',
+          },
+          properties: [
+            {
+              id: 'custom.filterable',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Job',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+            {
+              id: 'custom.filterable',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Cluster',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+            {
+              id: 'custom.filterable',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Instance',
+          },
+          properties: [
+            {
+              id: 'custom.filterable',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 200,
+            },
+          ],
+        },
+      ])
+      + g.panel.table.options.withShowHeader(true)
+      + g.panel.table.options.withSortBy([
+        {
+          displayName: 'Setting',
+          desc: false,
+        },
+      ])
+      + g.panel.table.options.footer.withEnablePagination(true),
+  },
+}
+

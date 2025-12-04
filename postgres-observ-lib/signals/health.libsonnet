@@ -24,6 +24,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_up{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: PostgreSQL status',
           },
         },
       },
@@ -37,6 +38,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'time() - pg_postmaster_start_time_seconds{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Uptime',
           },
         },
       },
@@ -54,6 +56,7 @@ function(this)
               / on(%(agg)s)
               pg_settings_max_connections{%(queriesSelector)s}
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Connection utilization',
           },
         },
       },
@@ -75,6 +78,7 @@ function(this)
                 sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
               )
             |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Cache hit ratio',
           },
         },
       },
@@ -89,6 +93,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Replication lag',
           },
         },
       },
@@ -102,6 +107,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Deadlocks',
           },
         },
       },
@@ -115,6 +121,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Node role',
           },
         },
       },
@@ -128,6 +135,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'count by (%(agg)s) (pg_stat_replication_backend_xmin{%(queriesSelector)s})',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Connected replicas',
           },
         },
       },
@@ -142,6 +150,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_slots_pg_wal_lsn_diff{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Replication slot lag',
           },
         },
       },

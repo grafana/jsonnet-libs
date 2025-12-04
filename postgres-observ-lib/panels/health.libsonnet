@@ -42,7 +42,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Connection utilization gauge
     connectionUtilization:
       signals.health.connectionUtilization.asGauge()
-      + g.panel.gauge.options.withShowThresholdLabels(true)
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -51,7 +50,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.7, color: 'yellow' },
         { value: 0.85, color: 'orange' },
         { value: 0.95, color: 'red' },
-      ]),
+      ])
+      + g.panel.gauge.options.withMinVizHeight(200)
+      + g.panel.gauge.options.withMinVizWidth(200)
+      + g.panel.gauge.options.withShowThresholdLabels(false),
 
     // Connection utilization stat
     connectionUtilizationStat:
@@ -70,7 +72,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Cache hit ratio gauge
     cacheHitRatio:
       signals.health.cacheHitRatio.asGauge()
-      + g.panel.gauge.options.withShowThresholdLabels(true)
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -79,7 +80,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.8, color: 'orange' },
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
-      ]),
+      ])
+      + g.panel.gauge.options.withMinVizHeight(200)
+      + g.panel.gauge.options.withMinVizWidth(200)
+      + g.panel.gauge.options.withShowThresholdLabels(false),
 
     // Cache hit ratio stat
     cacheHitRatioStat:

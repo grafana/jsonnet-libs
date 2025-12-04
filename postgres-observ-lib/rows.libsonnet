@@ -30,13 +30,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Line 1: Problem indicators (3 panels x 8 = 24)
-        panels.problems.longRunningQueries { gridPos+: { w: 8, h: 4 } },
-        panels.problems.blockedQueries { gridPos+: { w: 8, h: 4 } },
-        panels.problems.idleInTransaction { gridPos+: { w: 8, h: 4 } },
+        panels.problems.longRunningQueries { gridPos+: { w: 8, h: 6 } },
+        panels.problems.blockedQueries { gridPos+: { w: 8, h: 6 } },
+        panels.problems.idleInTransaction { gridPos+: { w: 8, h: 6 } },
         // Line 2: Problem indicators (3 panels x 8 = 24)
-        panels.problems.walArchiveFailures { gridPos+: { w: 8, h: 4 } },
-        panels.problems.checkpointWarnings { gridPos+: { w: 8, h: 4 } },
-        panels.problems.lockUtilization { gridPos+: { w: 8, h: 4 } },
+        panels.problems.walArchiveFailures { gridPos+: { w: 8, h: 6 } },
+        panels.problems.checkpointWarnings { gridPos+: { w: 8, h: 6 } },
+        panels.problems.lockUtilization { gridPos+: { w: 8, h: 6 } },
         // Line 3: Problem indicators (3 panels x 8 = 24)
         panels.problems.inactiveReplicationSlots { gridPos+: { w: 8, h: 6 } },
         panels.problems.exporterErrors { gridPos+: { w: 8, h: 6 } },
@@ -84,6 +84,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 8 } },
         panels.queries.queriesUsingTempFiles { gridPos+: { w: 12, h: 8 } },
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 10 } },
+      ]),
+
+    // Tier 6: Settings - PostgreSQL configuration parameters
+    settings:
+      g.panel.row.new('PostgreSQL Settings')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        panels.settings.settingsTable { gridPos+: { w: 24, h: 16 } },
       ]),
   },
 }

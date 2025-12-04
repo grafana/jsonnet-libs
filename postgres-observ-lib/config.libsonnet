@@ -4,7 +4,7 @@
   // alertsFilteringSelector: used in alert rules (no Grafana variables available)
   filteringSelector: '',
   alertsFilteringSelector: 'job=~".+", instance=~".+"',
-  groupLabels: ['job'],
+  groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   
   // Dashboard settings

@@ -2,11 +2,19 @@ local g = import './g.libsonnet';
 
 {
   new(this):
+    local settingsFilterVar =
+      g.dashboard.variable.textbox.new('settingsFilter', default='')
+      + g.dashboard.variable.textbox.generalOptions.withLabel('Settings Filter (regex)')
+      + g.dashboard.variable.textbox.generalOptions.withDescription('Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.');
+
     {
       // Main overview dashboard - Single pane of glass
       'postgres-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Overview')
-        + g.dashboard.withVariables(this.signals.health.getVariablesMultiChoice())
+        + g.dashboard.withVariables(
+          this.signals.health.getVariablesMultiChoice()
+          + [settingsFilterVar]
+        )
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-overview')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
@@ -19,6 +27,7 @@ local g = import './g.libsonnet';
             - Problems: Issues needing attention
             - Performance: Throughput and resource trends
             - Maintenance: Vacuum, bloat, and capacity planning
+            - Settings: PostgreSQL configuration parameters
           |||
         )
         + g.dashboard.withPanels(
@@ -28,6 +37,7 @@ local g = import './g.libsonnet';
               this.grafana.rows.problems,
               this.grafana.rows.performance,
               this.grafana.rows.maintenance,
+              this.grafana.rows.settings,
             ])
           ), setPanelIDs=false
         ),
