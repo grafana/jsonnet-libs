@@ -22,6 +22,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       
       // Tier 5: Query Analysis - Root cause (requires pg_stat_statements)
       queries: (import './signals/queries.libsonnet')(this.config),
+
+      // Cluster-level signals - aggregate view across instances
+      cluster: (import './signals/cluster.libsonnet')(this.config),
     },
 
     // Process signals from all tiers

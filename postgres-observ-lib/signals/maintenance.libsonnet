@@ -2,8 +2,6 @@
 // DBA Question: "What maintenance tasks need attention?"
 // Actionable metrics for vacuum, bloat, and index health
 
-local commonlib = import 'common-lib/common/main.libsonnet';
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

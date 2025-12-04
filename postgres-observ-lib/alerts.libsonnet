@@ -1,5 +1,3 @@
-local commonlib = import 'common-lib/common/main.libsonnet';
-
 {
   new(this): {
     // Use alertsFilteringSelector for all alert rules (no Grafana variables)

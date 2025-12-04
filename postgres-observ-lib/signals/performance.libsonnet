@@ -2,8 +2,6 @@
 // DBA Question: "Is performance acceptable? What's the trend?"
 // Time series for monitoring throughput and resource usage
 
-local commonlib = import 'common-lib/common/main.libsonnet';
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

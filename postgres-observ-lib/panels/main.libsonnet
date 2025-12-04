@@ -6,5 +6,6 @@
     maintenance: (import './maintenance.libsonnet').new(signals),
     queries: (import './queries.libsonnet').new(signals),
     settings: (import './settings.libsonnet').new(config),
+    cluster: (import './cluster.libsonnet').new(signals, config),
   },
 }

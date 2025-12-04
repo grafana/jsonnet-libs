@@ -3,8 +3,6 @@
 // Root cause analysis using pg_stat_statements
 // Requires: pg_stat_statements extension
 
-local commonlib = import 'common-lib/common/main.libsonnet';
-
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -20,7 +18,7 @@ function(this)
       topQueriesByTotalTime: {
         name: 'Top queries by total time',
         description: 'Queries consuming the most cumulative execution time. Primary optimization targets.',
-        type: 'counter',
+        type: 'raw',
         unit: 'ms',
         sources: {
           postgres_exporter: {
@@ -35,9 +33,8 @@ function(this)
       slowestQueriesByMeanTime: {
         name: 'Slowest queries by mean time',
         description: 'Queries with highest average execution time.',
-        type: 'gauge',
+        type: 'raw',
         unit: 'ms',
-        aggFunction: 'max',
         sources: {
           postgres_exporter: {
             expr: |||
@@ -55,7 +52,7 @@ function(this)
       mostFrequentQueries: {
         name: 'Most frequent queries',
         description: 'Most frequently executed queries. Even fast queries can impact if called often.',
-        type: 'counter',
+        type: 'raw',
         unit: 'ops',
         sources: {
           postgres_exporter: {
@@ -70,7 +67,7 @@ function(this)
       queriesUsingTempFiles: {
         name: 'Queries using temp files',
         description: 'Queries writing to temp files. Indicates work_mem is too small for these queries.',
-        type: 'counter',
+        type: 'raw',
         unit: 'bytes',
         sources: {
           postgres_exporter: {
@@ -89,7 +86,7 @@ function(this)
       queryCacheHitRatio: {
         name: 'Query cache efficiency',
         description: 'Cache hit ratio per query. Low values indicate queries not benefiting from cache.',
-        type: 'gauge',
+        type: 'raw',
         unit: 'percentunit',
         sources: {
           postgres_exporter: {

@@ -1,8 +1,91 @@
 local g = import './g.libsonnet';
-local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(panels, type):: {
+    // ============================================
+    // CLUSTER DASHBOARD ROWS
+    // ============================================
+
+    // Cluster Health At-a-Glance
+    clusterHealth:
+      g.panel.row.new('Cluster Health')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        // Line 1: Status indicators (6 panels x 4 = 24)
+        panels.cluster.clusterStatus { gridPos+: { w: 4, h: 4 } },
+        panels.cluster.totalInstances { gridPos+: { w: 4, h: 4 } },
+        panels.cluster.upInstances { gridPos+: { w: 4, h: 4 } },
+        panels.cluster.primaryCount { gridPos+: { w: 4, h: 4 } },
+        panels.cluster.replicaCount { gridPos+: { w: 4, h: 4 } },
+        panels.cluster.maxReplicationLag { gridPos+: { w: 4, h: 4 } },
+        // Line 2: Gauges and deadlocks (3 panels)
+        panels.cluster.worstCacheHitRatio { gridPos+: { w: 8, h: 6 } },
+        panels.cluster.worstConnectionUtilization { gridPos+: { w: 8, h: 6 } },
+        panels.cluster.totalDeadlocks { gridPos+: { w: 8, h: 6 } },
+      ]),
+
+    // Cluster Instances Table with Role History
+    clusterInstances:
+      g.panel.row.new('Cluster Instances')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        // Line 1: Instance table + Role history (split 50/50)
+        panels.cluster.instanceTable { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.primaryRoleHistory { gridPos+: { w: 12, h: 8 } },
+        // Line 2: Failover events (full width)
+        panels.cluster.failoverEvents { gridPos+: { w: 24, h: 6 } },
+      ]),
+
+    // Replication Topology
+    clusterReplication:
+      g.panel.row.new('Replication')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        panels.cluster.replicationLagTimeSeries { gridPos+: { w: 8, h: 8 } },
+        panels.cluster.replicationSlotLagTimeSeries { gridPos+: { w: 8, h: 8 } },
+        panels.cluster.walPositionTimeSeries { gridPos+: { w: 8, h: 8 } },
+      ]),
+
+    // Cluster Problems - High visibility row for active issues
+    clusterProblems:
+      g.panel.row.new('Cluster Problems')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        // Problem stats (6 panels x 4 = 24, taller for visibility)
+        panels.cluster.totalLongRunningQueries { gridPos+: { w: 4, h: 6 } },
+        panels.cluster.totalBlockedQueries { gridPos+: { w: 4, h: 6 } },
+        panels.cluster.totalIdleInTransaction { gridPos+: { w: 4, h: 6 } },
+        panels.cluster.totalWalArchiveFailures { gridPos+: { w: 4, h: 6 } },
+        panels.cluster.worstLockUtilization { gridPos+: { w: 4, h: 6 } },
+        panels.cluster.totalExporterErrors { gridPos+: { w: 4, h: 6 } },
+      ]),
+
+    // Read/Write Split
+    clusterReadWrite:
+      g.panel.row.new('Read/Write Split')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        panels.cluster.writeOperations { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.readOperations { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.tpsByInstance { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.readWriteRatio { gridPos+: { w: 12, h: 8 } },
+      ]),
+
+    // Cluster Resources
+    clusterResources:
+      g.panel.row.new('Cluster Resources')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels([
+        panels.cluster.totalConnectionsTimeSeries { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.cacheHitRatioByInstanceTimeSeries { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.totalDatabaseSize { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.walPositionTimeSeries { gridPos+: { w: 12, h: 8 } },
+      ]),
+
+    // ============================================
+    // INSTANCE DASHBOARD ROWS (existing)
+    // ============================================
+
     // Tier 1: Critical Health - Always visible at top
     health:
       g.panel.row.new('Health')

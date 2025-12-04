@@ -81,7 +81,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 1000)[$__rate_interval])\n)",
+               "expr": "topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 1000)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -146,7 +146,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,cluster,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "expr": "topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -211,7 +211,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))[$__rate_interval])\n)",
+               "expr": "topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -276,7 +276,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance,queryid,query) (\n  rate(topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n[$__rate_interval])\n)",
+               "expr": "topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{ query }}",
@@ -326,7 +326,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,cluster,instance,queryid,query) (\n  topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n\n)",
+               "expr": "topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n",
                "format": "table",
                "instant": true,
                "legendFormat": "{{ query }}",
@@ -435,14 +435,14 @@
             "type": "query"
          },
          {
-            "allValue": ".+",
+            "allValue": null,
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "includeAll": true,
+            "includeAll": false,
             "label": "Instance",
-            "multi": true,
+            "multi": false,
             "name": "instance",
             "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
             "refresh": 2,

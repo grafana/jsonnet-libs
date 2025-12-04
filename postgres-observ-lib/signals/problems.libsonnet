@@ -2,8 +2,6 @@
 // DBA Question: "What needs immediate attention?"
 // These signals trigger alerts and indicate current issues
 
-local commonlib = import 'common-lib/common/main.libsonnet';
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

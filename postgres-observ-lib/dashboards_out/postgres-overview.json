@@ -3437,14 +3437,14 @@
             "type": "query"
          },
          {
-            "allValue": ".+",
+            "allValue": null,
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "includeAll": true,
+            "includeAll": false,
             "label": "Instance",
-            "multi": true,
+            "multi": false,
             "name": "instance",
             "query": "label_values({__name__=~\"pg_up\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
             "refresh": 2,
