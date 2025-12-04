@@ -52,9 +52,9 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum(pg_stat_activity_count{%(queriesSelector)s}) by (%(agg)s)
-              / on(%(agg)s)
-              pg_settings_max_connections{%(queriesSelector)s}
+              sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})
+              /
+              max by (%(agg)s) (pg_settings_max_connections{%(queriesSelector)s})
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Connection utilization',
           },
@@ -132,9 +132,10 @@ function(this)
         description: 'Number of replicas connected to this primary.',
         type: 'gauge',
         unit: 'short',
+        aggFunction: 'count',  // Use count aggregation
         sources: {
           postgres_exporter: {
-            expr: 'count by (%(agg)s) (pg_stat_replication_backend_xmin{%(queriesSelector)s})',
+            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}} - {{instance}}: Connected replicas',
           },
         },
@@ -149,7 +150,7 @@ function(this)
         aggFunction: 'max',
         sources: {
           postgres_exporter: {
-            expr: 'pg_replication_slots_pg_wal_lsn_diff{%(queriesSelector)s}',
+            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}} - {{instance}}: Replication slot lag',
           },
         },

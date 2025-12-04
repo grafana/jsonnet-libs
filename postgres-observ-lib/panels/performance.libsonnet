@@ -70,13 +70,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Cache hit ratio over time. Should stay above 95%.'
       ),
 
-    // Checkpoint duration
+    // Buffers allocated rate
     checkpointDuration:
       signals.performance.checkpointDuration.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('ms')
+      + g.panel.timeSeries.standardOptions.withUnit('ops')
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Time spent in checkpoints. Long checkpoints indicate I/O issues.'
+        'Rate of new buffer allocations per second. High values indicate memory pressure.'
       ),
 
     // Rollback ratio
@@ -126,7 +126,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.performance.buffersBackend.asPanelMixin()
       + signals.performance.buffersBackendFsync.asPanelMixin()
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Buffer pool activity. Backend writes should be low (indicates bgwriter cannot keep up).'
+        'Buffer pool activity: allocations, cleaned by bgwriter, and max written stops (I/O pressure indicator).'
       ),
   },
 }

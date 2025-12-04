@@ -21,14 +21,13 @@ function(this)
         description: 'Combined commits and rollbacks per second.',
         type: 'gauge',
         unit: 'ops',
+        // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval])
-                +
-                rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
-              )
+              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval])
+              +
+              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: TPS',
           },
@@ -41,9 +40,10 @@ function(this)
         description: 'Current number of connections to PostgreSQL.',
         type: 'gauge',
         unit: 'short',
+        // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})',
+            expr: 'pg_stat_activity_count{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}} - {{instance}}: Active connections',
           },
         },
@@ -77,22 +77,17 @@ function(this)
         },
       },
 
-      // Checkpoint duration
+      // Buffers allocated
       checkpointDuration: {
-        name: 'Checkpoint duration',
-        description: 'Time spent in checkpoints (write + sync). High values indicate I/O bottleneck.',
-        type: 'gauge',
-        unit: 'ms',
+        name: 'Buffers allocated',
+        description: 'Rate of new buffer allocations per second.',
+        type: 'counter',
+        unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_bgwriter_checkpoint_write_time{%(queriesSelector)s}[$__rate_interval])
-                +
-                rate(pg_stat_bgwriter_checkpoint_sync_time{%(queriesSelector)s}[$__rate_interval])
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Checkpoint duration',
+            // Note: type='counter' automatically applies rate()
+            expr: 'pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Buffers allocated',
           },
         },
       },
@@ -103,15 +98,16 @@ function(this)
         description: 'Percentage of transactions that are rolled back. High values indicate application issues.',
         type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'avg',  // Use avg for ratio, not sum
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
+              sum(rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
               /
               (
-                sum by (%(agg)s) (rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval]))
+                sum(rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval]))
                 +
-                sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
+                sum(rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
               )
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Rollback ratio',
@@ -197,9 +193,9 @@ function(this)
       // Buffer Activity (from upstream postgres_mixin)
       // ============================================
 
-      // Buffers allocated
+      // Buffers allocated (for buffersActivity panel)
       buffersAlloc: {
-        name: 'Buffers allocated',
+        name: 'Buffers alloc',
         description: 'Number of buffers allocated per second.',
         type: 'gauge',
         unit: 'ops',
@@ -211,58 +207,58 @@ function(this)
         },
       },
 
-      // Buffers written by bgwriter during checkpoints
-      buffersCheckpoint: {
-        name: 'Buffers checkpoint',
-        description: 'Number of buffers written during checkpoints per second.',
-        type: 'gauge',
-        unit: 'ops',
-        sources: {
-          postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Checkpoint',
-          },
-        },
-      },
-
       // Buffers written by bgwriter (cleaning)
-      buffersClean: {
-        name: 'Buffers clean',
+      buffersCheckpoint: {
+        name: 'Buffers cleaned',
         description: 'Number of buffers written by background writer per second.',
         type: 'gauge',
         unit: 'ops',
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Clean',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Cleaned',
           },
         },
       },
 
-      // Buffers written by backends (not bgwriter)
+      // Buffers clean total (duplicate metric for compatibility)
+      buffersClean: {
+        name: 'Buffers clean total',
+        description: 'Number of buffers cleaned by bgwriter per second.',
+        type: 'gauge',
+        unit: 'ops',
+        sources: {
+          postgres_exporter: {
+            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Clean total',
+          },
+        },
+      },
+
+      // Max written clean stops
       buffersBackend: {
-        name: 'Buffers backend',
-        description: 'Number of buffers written directly by backends per second. Should be low.',
+        name: 'Max written stops',
+        description: 'Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.',
         type: 'gauge',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_backend_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Backend',
+            expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Max written stops',
           },
         },
       },
 
-      // Backend fsync calls
+      // Stats reset time (placeholder - no backend fsync available)
       buffersBackendFsync: {
-        name: 'Buffers backend fsync',
-        description: 'Number of fsync calls by backends per second. Should be zero.',
+        name: 'Stats age',
+        description: 'Time since bgwriter stats were last reset.',
         type: 'gauge',
-        unit: 'ops',
+        unit: 's',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_backend_fsync_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Backend fsync',
+            expr: 'time() - pg_stat_bgwriter_stats_reset_total{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Stats age',
           },
         },
       },

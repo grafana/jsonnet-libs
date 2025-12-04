@@ -67,29 +67,29 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'WAL archive failures. Non-zero indicates backup problems!'
       ),
 
-    // Checkpoint warnings
+    // Bgwriter max written clean (I/O pressure indicator)
     checkpointWarnings:
       signals.problems.checkpointWarnings.asStat()
       + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.standardOptions.withUnit('percentunit')
+      + g.panel.stat.standardOptions.withUnit('ops')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 0.1, color: 'yellow' },
-        { value: 0.3, color: 'red' },
+        { value: 0.01, color: 'yellow' },
+        { value: 0.1, color: 'red' },
       ])
       + g.panel.stat.panelOptions.withDescription(
-        'Ratio of requested vs timed checkpoints. High = checkpoint_completion_target needs tuning.'
+        'Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.'
       ),
 
-    // Backend writes
+    // Bgwriter buffers cleaned
     backendWrites:
       signals.problems.backendWrites.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ops')
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Buffers written by backends (not bgwriter). Should be near zero.'
+        'Rate of buffers cleaned by the background writer per second.'
       ),
 
     // Combined problems row panel

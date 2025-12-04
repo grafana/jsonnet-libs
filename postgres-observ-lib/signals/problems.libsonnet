@@ -38,10 +38,11 @@ function(this)
         description: 'Number of queries waiting for locks. Should be 0.',
         type: 'gauge',
         unit: 'short',
+        // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
             expr: |||
-              sum(pg_locks_count{%(queriesSelector)s, mode="ExclusiveLock"}) by (%(agg)s)
+              pg_locks_count{%(queriesSelector)s, mode="ExclusiveLock"}
               or vector(0)
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Blocked queries',
@@ -79,36 +80,32 @@ function(this)
 
       // Is checkpoint I/O overloaded?
       checkpointWarnings: {
-        name: 'Checkpoint warnings',
-        description: 'Requested checkpoints vs timed. High requested count indicates checkpoint_completion_target needs tuning.',
-        type: 'gauge',
+        name: 'Bgwriter max written clean',
+        description: 'Times bgwriter stopped cleaning because it wrote too many buffers. Indicates I/O pressure.',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: |||
-              rate(pg_stat_bgwriter_checkpoints_req{%(queriesSelector)s}[$__rate_interval])
-              /
-              (
-                rate(pg_stat_bgwriter_checkpoints_req{%(queriesSelector)s}[$__rate_interval])
-                +
-                rate(pg_stat_bgwriter_checkpoints_timed{%(queriesSelector)s}[$__rate_interval])
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Checkpoint warnings',
+            // Use maxwritten_clean as proxy for checkpoint pressure
+            // This counts times bgwriter had to stop due to writing too many buffers
+            // Note: type='counter' automatically applies rate()
+            expr: 'pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Max written clean',
           },
         },
       },
 
-      // Backend buffer writes (should be low)
+      // Buffers cleaned by bgwriter
       backendWrites: {
-        name: 'Backend buffer writes',
-        description: 'Buffers written by backends (not bgwriter). High values indicate bgwriter cannot keep up.',
+        name: 'Bgwriter buffers cleaned',
+        description: 'Buffers written by the background writer per second.',
         type: 'counter',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_bgwriter_buffers_backend{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Backend buffer writes',
+            // type='counter' automatically applies rate()
+            expr: 'pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}',
+            legendCustomTemplate: '{{cluster}} - {{instance}}: Buffers cleaned',
           },
         },
       },
@@ -140,14 +137,12 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              max by (%(agg)s) (
-                pg_locks_count{%(queriesSelector)s}
-              )
+              sum by (%(agg)s) (pg_locks_count{%(queriesSelector)s})
               /
-              on(%(agg)s) (
-                pg_settings_max_locks_per_transaction{%(queriesSelector)s}
+              (
+                max by (%(agg)s) (pg_settings_max_locks_per_transaction{%(queriesSelector)s})
                 *
-                pg_settings_max_connections{%(queriesSelector)s}
+                max by (%(agg)s) (pg_settings_max_connections{%(queriesSelector)s})
               )
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Lock utilization',
@@ -163,9 +158,12 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
+            // Count replicas not in streaming state as a proxy for inactive slots
+            // Returns 0 if no non-streaming slots exist
             expr: |||
-              count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
-              or vector(0)
+              count by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s, state!="streaming"})
+              or
+              (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Inactive replication slots',
           },

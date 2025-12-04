@@ -21,10 +21,11 @@ function(this)
         description: 'Ratio of tables with dead tuple ratio > 10% to total tables.',
         type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'avg',  // Use avg for ratio, not sum
         sources: {
           postgres_exporter: {
             expr: |||
-              count by (%(agg)s) (
+              count(
                 (
                   pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
                   /
@@ -32,7 +33,7 @@ function(this)
                 ) > 0.1
               )
               /
-              count by (%(agg)s) (pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
+              count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Tables needing vacuum',
           },
@@ -48,14 +49,11 @@ function(this)
         aggFunction: 'max',
         sources: {
           postgres_exporter: {
+            // aggFunction: 'max' handles the outer aggregation
             expr: |||
-              max by (%(agg)s) (
-                max by (%(agg)s) (
-                  (time() - pg_stat_user_tables_last_autovacuum{%(queriesSelector)s})
-                  and
-                  pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
-                )
-              )
+              (time() - pg_stat_user_tables_last_autovacuum{%(queriesSelector)s})
+              and
+              pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Oldest vacuum',
           },
@@ -110,15 +108,16 @@ function(this)
         description: 'Ratio of sequential scans to total scans. High values indicate missing indexes.',
         type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'avg',  // Use avg to not double-sum the ratio
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(agg)s) (pg_stat_user_tables_seq_scan{%(queriesSelector)s})
+              sum(pg_stat_user_tables_seq_scan{%(queriesSelector)s})
               /
               (
-                sum by (%(agg)s) (pg_stat_user_tables_seq_scan{%(queriesSelector)s})
+                sum(pg_stat_user_tables_seq_scan{%(queriesSelector)s})
                 +
-                sum by (%(agg)s) (pg_stat_user_tables_idx_scan{%(queriesSelector)s})
+                sum(pg_stat_user_tables_idx_scan{%(queriesSelector)s})
                 + 1
               )
             |||,
@@ -130,18 +129,57 @@ function(this)
       // Unused indexes (wasted disk space)
       unusedIndexes: {
         name: 'Unused indexes',
-        description: 'Count of indexes with zero scans. Candidates for removal.',
+        description: 'Count of indexes with zero reads. Candidates for removal.',
         type: 'gauge',
         unit: 'short',
-        aggFunction: 'count',
+        aggFunction: 'count',  // Use count aggregation
         sources: {
           postgres_exporter: {
+            // Count indexes with zero buffer hits AND zero disk reads
+            // aggFunction: 'count' handles the aggregation
             expr: |||
-              count by (%(agg)s) (
-                pg_stat_user_indexes_idx_scan{%(queriesSelector)s} == 0
-              )
+              (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
+              and
+              (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
             |||,
             legendCustomTemplate: '{{cluster}} - {{instance}}: Unused indexes',
+          },
+        },
+      },
+
+      // Unused indexes list (for table display)
+      unusedIndexesList: {
+        name: 'Unused indexes list',
+        description: 'List of indexes with zero buffer hits and disk reads.',
+        type: 'gauge',
+        unit: 'short',
+        sources: {
+          postgres_exporter: {
+            // Show indexes with zero buffer hits AND zero disk reads, keeping index details
+            expr: |||
+              (
+                (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
+                and
+                (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
+              ) * 0
+            |||,
+            aggKeepLabels: ['indexrelname', 'relname', 'schemaname'],
+            legendCustomTemplate: '{{ schemaname }}.{{ relname }}.{{ indexrelname }}',
+          },
+        },
+      },
+
+      // Index table size (per table, for context)
+      indexTableSize: {
+        name: 'Table index size',
+        description: 'Total index size per table in bytes.',
+        type: 'gauge',
+        unit: 'bytes',
+        sources: {
+          postgres_exporter: {
+            expr: 'pg_stat_user_tables_index_size_bytes{%(queriesSelector)s}',
+            aggKeepLabels: ['relname', 'schemaname'],
+            legendCustomTemplate: '{{ schemaname }}.{{ relname }}',
           },
         },
       },
@@ -152,24 +190,32 @@ function(this)
         description: 'Total size of all databases.',
         type: 'gauge',
         unit: 'bytes',
+        // aggFunction: 'sum' is default, expression should not have sum
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (pg_database_size_bytes{%(queriesSelector)s})',
+            expr: 'pg_database_size_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}} - {{instance}}: Database size',
           },
         },
       },
 
-      // WAL size
+      // WAL position (total WAL bytes written)
       walSize: {
-        name: 'WAL size',
-        description: 'Current size of Write-Ahead Log.',
+        name: 'WAL position',
+        description: 'Current WAL LSN position in bytes (total WAL written).',
         type: 'gauge',
         unit: 'bytes',
+        aggFunction: 'max',
         sources: {
           postgres_exporter: {
-            expr: 'pg_wal_size_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL size',
+            // Use current WAL LSN position from replication stats (primary only)
+            // Falls back to 0 if no replication is configured
+            // aggFunction: 'max' handles the outer aggregation
+            expr: |||
+              pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}
+              or vector(0)
+            |||,
+            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL position',
           },
         },
       },

@@ -141,9 +141,9 @@
       "severity": "warning"
   - "alert": "PostgreSQLInactiveReplicationSlot"
     "annotations":
-      "description": "PostgreSQL {{ $labels.instance }} has inactive replication slot {{ $labels.slot_name }}. WAL files may accumulate!"
+      "description": "PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!"
       "summary": "PostgreSQL has inactive replication slot"
-    "expr": "pg_replication_slots_active{job=~\".+\", instance=~\".+\"} == 0"
+    "expr": "count(pg_stat_replication_pg_wal_lsn_diff{job=~\".+\", instance=~\".+\", state!=\"streaming\"}) > 0"
     "for": "30m"
     "labels":
       "severity": "critical"

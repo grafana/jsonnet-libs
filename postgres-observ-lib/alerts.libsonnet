@@ -215,12 +215,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
           {
             alert: 'PostgreSQLInactiveReplicationSlot',
-            expr: 'pg_replication_slots_active{%(filteringSelector)s} == 0' % alertConfig,
+            // Count replicas not in streaming state as proxy for inactive slots
+            expr: 'count(pg_stat_replication_pg_wal_lsn_diff{%(filteringSelector)s, state!="streaming"}) > 0' % alertConfig,
             'for': '30m',
             labels: { severity: 'critical' },
             annotations: {
               summary: 'PostgreSQL has inactive replication slot',
-              description: 'PostgreSQL {{ $labels.instance }} has inactive replication slot {{ $labels.slot_name }}. WAL files may accumulate!',
+              description: 'PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!',
             },
           },
           {

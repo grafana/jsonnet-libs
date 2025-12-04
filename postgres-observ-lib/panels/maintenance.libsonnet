@@ -140,7 +140,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Ratio of seq scans to total. High values indicate missing indexes.'
       ),
 
-    // Unused indexes
+    // Unused indexes count
     unusedIndexes:
       signals.maintenance.unusedIndexes.asStat()
       + commonlib.panels.generic.stat.info.stylize()
@@ -152,6 +152,56 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.panelOptions.withDescription(
         'Indexes with zero scans. Candidates for removal.'
       ),
+
+    // Unused indexes table
+    unusedIndexesTable:
+      g.panel.table.new('Unused Indexes')
+      + g.panel.table.panelOptions.withDescription(
+        'Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.'
+      )
+      + g.panel.table.queryOptions.withTargets([
+        {
+          datasource: { type: 'prometheus', uid: '${datasource}' },
+          expr: |||
+            (
+              (pg_statio_user_indexes_idx_blks_hit_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
+              and
+              (pg_statio_user_indexes_idx_blks_read_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
+            )
+          |||,
+          format: 'table',
+          instant: true,
+          refId: 'UnusedIndexes',
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          include: {
+            names: ['cluster', 'instance', 'job', 'schemaname', 'relname', 'indexrelname'],
+          },
+        }),
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          renameByName: {
+            cluster: 'Cluster',
+            instance: 'Instance',
+            job: 'Job',
+            schemaname: 'Schema',
+            relname: 'Table',
+            indexrelname: 'Index',
+          },
+          indexByName: {
+            cluster: 0,
+            instance: 1,
+            job: 2,
+            schemaname: 3,
+            relname: 4,
+            indexrelname: 5,
+          },
+        }),
+        commonlib.panels.generic.table.base.transformations.sortBy('Index', desc=false),
+      ]),
 
     // Database size
     databaseSize:

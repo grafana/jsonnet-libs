@@ -340,7 +340,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum(pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job,cluster,instance)\n/ on(job,cluster,instance)\npg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Connection utilization",
@@ -646,7 +646,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_stat_replication_backend_xmin{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)",
+               "expr": "count by (job,cluster,instance) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Connected replicas",
@@ -727,7 +727,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,cluster,instance) (\n  pg_replication_slots_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+               "expr": "max by (job,cluster,instance) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Replication slot lag",
@@ -802,7 +802,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum(pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job,cluster,instance)\n/ on(job,cluster,instance)\npg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Connection utilization",
@@ -1041,7 +1041,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum(pg_locks_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", mode=\"ExclusiveLock\"}) by (job,cluster,instance)\nor vector(0)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", mode=\"ExclusiveLock\"}\nor vector(0)\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Blocked queries",
@@ -1204,7 +1204,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Ratio of requested vs timed checkpoints. High = checkpoint_completion_target needs tuning.",
+         "description": "Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.",
          "fieldConfig": {
             "defaults": {
                "color": {
@@ -1219,21 +1219,21 @@
                      },
                      {
                         "color": "yellow",
-                        "value": 0.10000000000000001
+                        "value": 0.01
                      },
                      {
                         "color": "red",
-                        "value": 0.29999999999999999
+                        "value": 0.10000000000000001
                      }
                   ]
                },
-               "unit": "percentunit"
+               "unit": "ops"
             },
             "overrides": [
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Checkpoint warnings"
+                     "options": "Bgwriter max written clean"
                   },
                   "properties": [
                      {
@@ -1266,14 +1266,14 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_checkpoints_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n/\n(\n  rate(pg_stat_bgwriter_checkpoints_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n  +\n  rate(pg_stat_bgwriter_checkpoints_timed{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_maxwritten_clean_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Checkpoint warnings",
-               "refId": "Checkpoint warnings"
+               "legendFormat": "{{cluster}} - {{instance}}: Max written clean",
+               "refId": "Bgwriter max written clean"
             }
          ],
-         "title": "Checkpoint warnings",
+         "title": "Bgwriter max written clean",
          "type": "stat"
       },
       {
@@ -1344,7 +1344,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  max by (job,cluster,instance) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)\n/\non(job,cluster,instance) (\n  pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n  *\n  pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  max by (job,cluster,instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  *\n  max by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Lock utilization",
@@ -1416,7 +1416,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_replication_slots_active{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nor vector(0)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", state!=\"streaming\"})\nor\n(0 * group by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Inactive replication slots",
@@ -1653,7 +1653,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n  +\n  rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: TPS",
@@ -1892,7 +1892,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum(pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}) by (job,cluster,instance)\n/ on(job,cluster,instance)\npg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Connection utilization",
@@ -1997,7 +1997,7 @@
             "type": "datasource",
             "uid": "-- Mixed --"
          },
-         "description": "Buffer pool activity. Backend writes should be low (indicates bgwriter cannot keep up).",
+         "description": "Buffer pool activity: allocations, cleaned by bgwriter, and max written stops (I/O pressure indicator).",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -2013,7 +2013,7 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Buffers allocated"
+                     "options": "Buffers alloc"
                   },
                   "properties": [
                      {
@@ -2025,7 +2025,7 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Buffers checkpoint"
+                     "options": "Buffers cleaned"
                   },
                   "properties": [
                      {
@@ -2037,7 +2037,7 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Buffers clean"
+                     "options": "Buffers clean total"
                   },
                   "properties": [
                      {
@@ -2049,7 +2049,7 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Buffers backend"
+                     "options": "Max written stops"
                   },
                   "properties": [
                      {
@@ -2061,12 +2061,12 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Buffers backend fsync"
+                     "options": "Stats age"
                   },
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "ops"
+                        "value": "s"
                      }
                   ]
                }
@@ -2099,18 +2099,7 @@
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Allocated",
-               "refId": "Buffers allocated"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_checkpoint_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Checkpoint",
-               "refId": "Buffers checkpoint"
+               "refId": "Buffers alloc"
             },
             {
                "datasource": {
@@ -2120,30 +2109,41 @@
                "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_clean_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Clean",
-               "refId": "Buffers clean"
+               "legendFormat": "{{cluster}} - {{instance}}: Cleaned",
+               "refId": "Buffers cleaned"
             },
             {
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_backend_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_clean_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Backend",
-               "refId": "Buffers backend"
+               "legendFormat": "{{cluster}} - {{instance}}: Clean total",
+               "refId": "Buffers clean total"
             },
             {
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_backend_fsync_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_maxwritten_clean_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Backend fsync",
-               "refId": "Buffers backend fsync"
+               "legendFormat": "{{cluster}} - {{instance}}: Max written stops",
+               "refId": "Max written stops"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (job,cluster,instance) (\n  time() - pg_stat_bgwriter_stats_reset_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{cluster}} - {{instance}}: Stats age",
+               "refId": "Stats age"
             }
          ],
          "title": "Buffers Activity",
@@ -2284,7 +2284,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Time spent in checkpoints. Long checkpoints indicate I/O issues.",
+         "description": "Rate of new buffer allocations per second. High values indicate memory pressure.",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -2294,18 +2294,18 @@
                   "lineWidth": 2,
                   "showPoints": "never"
                },
-               "unit": "ms"
+               "unit": "ops"
             },
             "overrides": [
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Checkpoint duration"
+                     "options": "Buffers allocated"
                   },
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "ms"
+                        "value": "ops"
                      }
                   ]
                }
@@ -2334,14 +2334,14 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_checkpoint_write_time{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n  +\n  rate(pg_stat_bgwriter_checkpoint_sync_time{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n)",
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_alloc_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: Checkpoint duration",
-               "refId": "Checkpoint duration"
+               "legendFormat": "{{cluster}} - {{instance}}: Buffers allocated",
+               "refId": "Buffers allocated"
             }
          ],
-         "title": "Checkpoint duration",
+         "title": "Buffers allocated",
          "type": "timeseries"
       },
       {
@@ -2427,7 +2427,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (\n  (\n    pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  ) > 0.1\n)\n/\ncount by (job,cluster,instance) (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
+               "expr": "avg by (job,cluster,instance) (\n  count(\n  (\n    pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  ) > 0.1\n)\n/\ncount(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Tables needing vacuum",
@@ -2504,7 +2504,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,cluster,instance) (\n  max by (job,cluster,instance) (\n  max by (job,cluster,instance) (\n    (time() - pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n    and\n    pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > 0\n  )\n)\n\n)",
+               "expr": "max by (job,cluster,instance) (\n  (time() - pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\nand\npg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > 0\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Oldest vacuum",
@@ -2585,7 +2585,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum by (job,cluster,instance) (pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum by (job,cluster,instance) (pg_stat_user_tables_idx_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  + 1\n)\n\n)",
+               "expr": "avg by (job,cluster,instance) (\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum(pg_stat_user_tables_idx_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  + 1\n)\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Seq scan ratio",
@@ -2661,7 +2661,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "count by (job,cluster,instance) (\n  count by (job,cluster,instance) (\n  pg_stat_user_indexes_idx_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0\n)\n\n)",
+               "expr": "count by (job,cluster,instance) (\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nand\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Unused indexes",
@@ -2722,7 +2722,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)",
+               "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Database size",
@@ -2737,7 +2737,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Current size of Write-Ahead Log.",
+         "description": "Current WAL LSN position in bytes (total WAL written).",
          "fieldConfig": {
             "defaults": {
                "color": {
@@ -2750,7 +2750,7 @@
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "WAL size"
+                     "options": "WAL position"
                   },
                   "properties": [
                      {
@@ -2783,14 +2783,14 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  pg_wal_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+               "expr": "max by (job,cluster,instance) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\nor vector(0)\n\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}} - {{instance}}: WAL size",
-               "refId": "WAL size"
+               "legendFormat": "{{cluster}} - {{instance}}: WAL position",
+               "refId": "WAL position"
             }
          ],
-         "title": "WAL size",
+         "title": "WAL position",
          "type": "stat"
       },
       {
@@ -3083,6 +3083,84 @@
       },
       {
          "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.",
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 86
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "(\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n  and\n  (pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n)\n",
+               "format": "table",
+               "instant": true,
+               "refId": "UnusedIndexes"
+            }
+         ],
+         "title": "Unused Indexes",
+         "transformations": [
+            {
+               "id": "filterFieldsByName",
+               "options": {
+                  "include": {
+                     "names": [
+                        "cluster",
+                        "instance",
+                        "job",
+                        "schemaname",
+                        "relname",
+                        "indexrelname"
+                     ]
+                  }
+               }
+            },
+            {
+               "id": "organize",
+               "options": {
+                  "indexByName": {
+                     "cluster": 0,
+                     "indexrelname": 5,
+                     "instance": 1,
+                     "job": 2,
+                     "relname": 4,
+                     "schemaname": 3
+                  },
+                  "renameByName": {
+                     "cluster": "Cluster",
+                     "indexrelname": "Index",
+                     "instance": "Instance",
+                     "job": "Job",
+                     "relname": "Table",
+                     "schemaname": "Schema"
+                  }
+               }
+            },
+            {
+               "id": "sortBy",
+               "options": {
+                  "fields": { },
+                  "sort": [
+                     {
+                        "desc": false,
+                        "field": "Index"
+                     }
+                  ]
+               }
+            }
+         ],
+         "type": "table"
+      },
+      {
+         "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
          },
@@ -3114,10 +3192,10 @@
             ]
          },
          "gridPos": {
-            "h": 6,
-            "w": 24,
-            "x": 0,
-            "y": 84
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 86
          },
          "options": {
             "legend": {
@@ -3136,7 +3214,7 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)",
+               "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
                "format": "time_series",
                "instant": false,
                "legendFormat": "{{cluster}} - {{instance}}: Database size",
@@ -3152,7 +3230,7 @@
             "h": 1,
             "w": 0,
             "x": 0,
-            "y": 92
+            "y": 94
          },
          "panels": [ ],
          "title": "PostgreSQL Settings",
@@ -3240,7 +3318,7 @@
             "h": 16,
             "w": 24,
             "x": 0,
-            "y": 93
+            "y": 95
          },
          "options": {
             "footer": {

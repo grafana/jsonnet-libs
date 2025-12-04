@@ -71,7 +71,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         panels.maintenance.walSize { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.deadTupleRatio { gridPos+: { w: 12, h: 8 } },
         panels.maintenance.tableVacuumStatus { gridPos+: { w: 12, h: 8 } },
-        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 24, h: 6 } },
+        panels.maintenance.unusedIndexesTable { gridPos+: { w: 12, h: 8 } },
+        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 12, h: 8 } },
       ]),
 
     // Tier 5: Query Analysis - Root cause (separate dashboard)
