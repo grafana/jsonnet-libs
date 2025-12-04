@@ -94,6 +94,29 @@ local g = import 'grafana-builder/grafana.libsonnet';
       },
     },
 
+  // The ncHistogramCountIncrease (native classic histogram count rate) function is
+  // used to calculate the histogram increase of count from native histograms or
+  // classic histograms. Metric name should be provided without _count suffix.
+  ncHistogramCountIncrease(metric, selector, rate_interval='$__rate_interval')::
+    local rateOpen = 'increase(';
+    local rateClose = '[%s])' % rate_interval;
+    {
+      classic: '%(rateOpen)s%(metric)s_count{%(selector)s}%(rateClose)s' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
+        selector: selector,
+      },
+      native: 'histogram_count(%(rateOpen)s%(metric)s{%(selector)s}%(rateClose)s)' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
+        selector: selector,
+      },
+    },
+
   // TODO(krajorama) Switch to histogram_avg function for native histograms later.
   // ncHistogramAverageRate (native classic histogram average rate) function is
   // used to calculate the histogram average rate from native histograms or
