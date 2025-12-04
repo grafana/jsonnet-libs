@@ -238,3 +238,23 @@ test.new(std.thisFile)
     }
   )
 )
++ test.case.new(
+  name='histogram count increase',
+  test=test.expect.eq(
+    actual=utils.ncHistogramCountIncrease('request_duration_seconds', 'cluster="cluster1", job="job1"'),
+    expected={
+      classic: 'increase(request_duration_seconds_count{cluster="cluster1", job="job1"}[$__rate_interval])',
+      native: 'histogram_count(increase(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))',
+    }
+  )
+)
++ test.case.new(
+  name='histogram count increase with rate interval',
+  test=test.expect.eq(
+    actual=utils.ncHistogramCountIncrease('request_duration_seconds', 'cluster="cluster1", job="job1"', rate_interval='5m'),
+    expected={
+      classic: 'increase(request_duration_seconds_count{cluster="cluster1", job="job1"}[5m])',
+      native: 'histogram_count(increase(request_duration_seconds{cluster="cluster1", job="job1"}[5m]))',
+    }
+  )
+)
