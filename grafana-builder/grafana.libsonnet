@@ -570,13 +570,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
             local qStr = std.toString(q);
             acc + [
               {
-                expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.' + qStr, metricName, selector, multiplier=multiplier)),
+                expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile(std.format('%.2f', q / 100), metricName, selector, multiplier=multiplier)),
                 format: 'time_series',
                 legendFormat: qStr + 'th percentile',
                 refId: getNextRefId(acc),
               },
               {
-                expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.' + qStr, metricName, selector, multiplier=multiplier)),
+                expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile(std.format('%.2f', q / 100), metricName, selector, multiplier=multiplier)),
                 format: 'time_series',
                 legendFormat: qStr + 'th percentile',
                 refId: getNextRefId(acc) + '_classic',
