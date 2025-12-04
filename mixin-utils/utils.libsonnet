@@ -70,18 +70,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local funcClose = if from_recording then '' else '[%s])' % rate_interval;
     local suffix = if from_recording then ':sum_%s' % func_name else '';
     {
-      classic: '%(funcOpen)s%(metric)s_%(sum_or_count)%(suffix)s{%(selector)s}%(funcClose)s' % {
+      classic: '%(funcOpen)s%(metric)s_%(sum_or_count)s%(suffix)s{%(selector)s}%(funcClose)s' % {
         metric: metric,
-        rateInterval: rate_interval,
         sum_or_count: sum_or_count,
         funcOpen: funcOpen,
         funcClose: funcClose,
         selector: selector,
         suffix: suffix,
       },
-      native: 'histogram_%(sum_or_count)(%(funcOpen)s%(metric)s%(suffix)s{%(selector)s}%(funcClose)s)' % {
+      native: 'histogram_%(sum_or_count)s(%(funcOpen)s%(metric)s%(suffix)s{%(selector)s}%(funcClose)s)' % {
         metric: metric,
-        rateInterval: rate_interval,
         sum_or_count: sum_or_count,
         funcOpen: funcOpen,
         funcClose: funcClose,
