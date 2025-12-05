@@ -14,7 +14,7 @@
             'for': '1m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL is down',
+              summary: 'PostgreSQL is down.',
               description: 'PostgreSQL instance {{ $labels.instance }} is not responding.',
             },
           },
@@ -33,7 +33,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL connection usage is high',
+              summary: 'PostgreSQL connection usage is high.',
               description: 'PostgreSQL {{ $labels.instance }} is at {{ $value | humanizePercentage }} connection capacity.',
             },
           },
@@ -56,7 +56,7 @@
             'for': '15m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL cache hit ratio is low',
+              summary: 'PostgreSQL cache hit ratio is low.',
               description: 'PostgreSQL {{ $labels.instance }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.',
             },
           },
@@ -68,7 +68,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL replication lag is high',
+              summary: 'PostgreSQL replication lag is high.',
               description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary.',
             },
           },
@@ -80,7 +80,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL deadlocks detected',
+              summary: 'PostgreSQL deadlocks detected.',
               description: 'PostgreSQL {{ $labels.instance }} database {{ $labels.datname }} has deadlocks.',
             },
           },
@@ -96,7 +96,7 @@
             'for': '1m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has long-running query',
+              summary: 'PostgreSQL has long-running query.',
               description: 'Query on {{ $labels.instance }} has been running for {{ $value | humanizeDuration }}.',
             },
           },
@@ -110,7 +110,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has blocked queries',
+              summary: 'PostgreSQL has blocked queries.',
               description: 'PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.',
             },
           },
@@ -120,7 +120,7 @@
             'for': '5m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL WAL archiving is failing',
+              summary: 'PostgreSQL WAL archiving is failing.',
               description: 'PostgreSQL {{ $labels.instance }} is failing to archive WAL files. Backups may be incomplete!',
             },
           },
@@ -140,7 +140,7 @@
             'for': '30m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL table needs vacuum',
+              summary: 'PostgreSQL table needs vacuum.',
               description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has {{ $value | humanizePercentage }} dead tuples.',
             },
           },
@@ -156,7 +156,7 @@
             'for': '1h',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL table has not been vacuumed',
+              summary: 'PostgreSQL table has not been vacuumed.',
               description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over 7 days.',
             },
           },
@@ -180,7 +180,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has too many rollbacks',
+              summary: 'PostgreSQL has too many rollbacks.',
               description: 'PostgreSQL {{ $labels.instance }} has rollback ratio of {{ $value | humanizePercentage }}.',
             },
           },
@@ -203,7 +203,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has acquired too many locks',
+              summary: 'PostgreSQL has acquired too many locks.',
               description: 'PostgreSQL {{ $labels.instance }} lock utilization is {{ $value | humanizePercentage }}.',
             },
           },
@@ -214,7 +214,7 @@
             'for': '30m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL has inactive replication slot',
+              summary: 'PostgreSQL has inactive replication slot.',
               description: 'PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!',
             },
           },
@@ -223,7 +223,7 @@
             expr: 'pg_replication_is_replica{%(filteringSelector)s} and changes(pg_replication_is_replica{%(filteringSelector)s}[1m]) > 0' % alertConfig,
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL replication role changed',
+              summary: 'PostgreSQL replication role changed.',
               description: 'PostgreSQL {{ $labels.instance }} replication role has changed. Verify if this is expected failover.',
             },
           },
@@ -233,12 +233,12 @@
             'for': '30m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL exporter has errors',
+              summary: 'PostgreSQL exporter has errors.',
               description: 'PostgreSQL exporter for {{ $labels.instance }} is experiencing scrape errors.',
             },
           },
           {
-            alert: 'PostgreSQLHighQPS',
+            alert: 'PostgreSQLHighQps',
             expr: |||
               sum by (%(instanceLabels)s) (
                 rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m])
@@ -252,7 +252,7 @@
             'for': '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has high QPS',
+              summary: 'PostgreSQL has high QPS.',
               description: 'PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.',
             },
           },
@@ -268,7 +268,7 @@
             'for': '5m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL replication lag exceeds 1 hour',
+              summary: 'PostgreSQL replication lag exceeds 1 hour.',
               description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.',
             },
           },
