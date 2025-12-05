@@ -209,8 +209,8 @@
           },
           {
             alert: 'PostgreSQLInactiveReplicationSlot',
-            // Count replicas not in streaming state as proxy for inactive slots
-            expr: 'count(pg_stat_replication_pg_wal_lsn_diff{%(filteringSelector)s, state!="streaming"}) > 0' % alertConfig,
+            // Check for replicas not in streaming state as proxy for inactive slots
+            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(filteringSelector)s, state!="streaming"} > 0' % alertConfig,
             'for': '30m',
             labels: { severity: 'critical' },
             annotations: {
@@ -253,7 +253,7 @@
             labels: { severity: 'warning' },
             annotations: {
               summary: 'PostgreSQL has high QPS',
-              description: 'PostgreSQL {{ $labels.instance }} has {{ $value }} queries per second.',
+              description: 'PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.',
             },
           },
           {
