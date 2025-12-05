@@ -1,0 +1,25 @@
+exclusions:
+  panel-datasource-rule:
+    reason: "grafonnet created panels use --Mixed-- datasource by default"
+
+  template-instance-rule:
+    reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"
+    entries:
+      - dashboard: "PostgreSQL Cluster Overview"
+      - dashboard: "PostgreSQL Instance Overview"
+      - dashboard: "PostgreSQL Query Performance"
+
+  target-instance-rule:
+    reason: "Cluster level dashboard shows all instances"
+    entries:
+      - dashboard: "PostgreSQL Cluster Overview"
+
+  panel-units-rule:
+    reason: "rows/s is semantically correct; table panels don't require units"
+    entries:
+      - panel: "Write Operations (Primary)"
+      - panel: "Read Operations by Instance"
+      - panel: "Rows Activity"
+      - panel: "Top queries by rows"
+      - panel: "Unused Indexes"
+      - panel: "PostgreSQL Settings"
