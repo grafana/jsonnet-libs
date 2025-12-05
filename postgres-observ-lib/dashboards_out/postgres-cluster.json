@@ -1,2719 +1,2719 @@
 {
-   "description": "PostgreSQL Cluster monitoring dashboard.\n\nProvides a top-level view of the entire cluster:\n- Cluster health at-a-glance\n- Instance list with drill-down\n- Master history / failover tracking\n- Replication topology and lag\n- Read/Write split visibility\n- Cluster-wide problems and resources\n\nClick on an instance row to drill down to the instance-level dashboard.\n",
-   "links": [
-      {
-         "asDropdown": false,
-         "includeVars": true,
-         "keepTime": true,
-         "tags": [
-            "postgres",
-            "database"
-         ],
-         "title": "All PostgreSQL dashboards",
-         "type": "dashboards"
-      }
-   ],
-   "panels": [
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 0
-         },
-         "panels": [ ],
-         "title": "Cluster Health",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Cluster status. Shows DOWN if any instance in the cluster is down.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "mappings": [
-                  {
-                     "options": {
-                        "0": {
-                           "color": "red",
-                           "index": 0,
-                           "text": "DOWN"
-                        },
-                        "1": {
-                           "color": "green",
-                           "index": 1,
-                           "text": "UP"
-                        }
-                     },
-                     "type": "value"
-                  }
-               ],
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "red",
-                        "value": 0
-                     },
-                     {
-                        "color": "green",
-                        "value": 1
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Cluster status"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 0,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "min by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Cluster status",
-               "refId": "Cluster status"
-            }
-         ],
-         "title": "Cluster status",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total number of PostgreSQL instances in the cluster.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "fixed"
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total instances"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 4,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "fixed",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "count by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total instances",
-               "refId": "Total instances"
-            }
-         ],
-         "title": "Total instances",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Number of instances currently up and responding.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Up instances"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 8,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Up instances",
-               "refId": "Up instances"
-            }
-         ],
-         "title": "Up instances",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Number of primary instances. Should be exactly 1 for a healthy cluster.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "red",
-                        "value": 0
-                     },
-                     {
-                        "color": "green",
-                        "value": 1
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 2
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Primary count"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 12,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Primary count",
-               "refId": "Primary count"
-            }
-         ],
-         "title": "Primary count",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Number of replica instances in the cluster.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "yellow",
-                        "value": 0
-                     },
-                     {
-                        "color": "green",
-                        "value": 1
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Replica count"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 16,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 1\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Replica count",
-               "refId": "Replica count"
-            }
-         ],
-         "title": "Replica count",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Maximum replication lag in seconds across all replicas.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 5
-                     },
-                     {
-                        "color": "orange",
-                        "value": 30
-                     },
-                     {
-                        "color": "red",
-                        "value": 60
-                     }
-                  ]
-               },
-               "unit": "s"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Max replication lag"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "s"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 20,
-            "y": 1
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "max by (job,cluster) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Max replication lag",
-               "refId": "Max replication lag"
-            }
-         ],
-         "title": "Max replication lag",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Lowest cache hit ratio across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "max": 1,
-               "min": 0,
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "red",
-                        "value": 0
-                     },
-                     {
-                        "color": "orange",
-                        "value": 0.80000000000000004
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 0.90000000000000002
-                     },
-                     {
-                        "color": "green",
-                        "value": 0.94999999999999996
-                     }
-                  ]
-               },
-               "unit": "percentunit"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Worst cache hit ratio"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 0,
-            "y": 7
-         },
-         "options": {
-            "minVizHeight": 200,
-            "minVizWidth": 200,
-            "showThresholdLabels": false
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "min by (job,cluster) (\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  + 1\n)\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "Worst cache hit ratio",
-               "refId": "Worst cache hit ratio"
-            }
-         ],
-         "title": "Worst cache hit ratio",
-         "type": "gauge"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Highest connection utilization across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "max": 1,
-               "min": 0,
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 0.69999999999999996
-                     },
-                     {
-                        "color": "orange",
-                        "value": 0.84999999999999998
-                     },
-                     {
-                        "color": "red",
-                        "value": 0.94999999999999996
-                     }
-                  ]
-               },
-               "unit": "percentunit"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Worst connection utilization"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 8,
-            "y": 7
-         },
-         "options": {
-            "minVizHeight": 200,
-            "minVizWidth": 200,
-            "showThresholdLabels": false
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "max by (job,cluster) (\n  sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "Worst connection utilization",
-               "refId": "Worst connection utilization"
-            }
-         ],
-         "title": "Worst connection utilization",
-         "type": "gauge"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total deadlocks detected across all instances in the selected time range.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "red",
-                        "value": 1
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total deadlocks"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 16,
-            "y": 7
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "diff"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total deadlocks",
-               "refId": "Total deadlocks"
-            }
-         ],
-         "title": "Total deadlocks",
-         "type": "stat"
-      },
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 13
-         },
-         "panels": [ ],
-         "title": "Cluster Instances",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-         },
-         "description": "All PostgreSQL instances in the cluster. Click a row to view instance details.",
-         "fieldConfig": {
-            "defaults": {
-               "links": [
-                  {
-                     "title": "View Instance Details",
-                     "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}"
-                  }
-               ]
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "custom.width",
-                        "value": 400
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Status"
-                  },
-                  "properties": [
-                     {
-                        "id": "mappings",
-                        "value": [
-                           {
-                              "options": {
-                                 "0": {
-                                    "color": "red",
-                                    "text": "🔴 DOWN"
-                                 },
-                                 "1": {
-                                    "color": "green",
-                                    "text": "🟢 UP"
-                                 }
-                              },
-                              "type": "value"
-                           }
-                        ]
-                     },
-                     {
-                        "id": "custom.cellOptions",
-                        "value": {
-                           "type": "color-text"
-                        }
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 80
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Role"
-                  },
-                  "properties": [
-                     {
-                        "id": "mappings",
-                        "value": [
-                           {
-                              "options": {
-                                 "0": {
-                                    "color": "blue",
-                                    "text": "PRIMARY"
-                                 },
-                                 "1": {
-                                    "color": "purple",
-                                    "text": "REPLICA"
-                                 }
-                              },
-                              "type": "value"
-                           }
-                        ]
-                     },
-                     {
-                        "id": "custom.cellOptions",
-                        "value": {
-                           "type": "color-text"
-                        }
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 100
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Uptime"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "dtdurations"
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 100
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Conn %"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     },
-                     {
-                        "id": "custom.cellOptions",
-                        "value": {
-                           "mode": "lcd",
-                           "type": "gauge"
-                        }
-                     },
-                     {
-                        "id": "thresholds",
-                        "value": {
-                           "mode": "absolute",
-                           "steps": [
-                              {
-                                 "color": "green",
-                                 "value": null
-                              },
-                              {
-                                 "color": "yellow",
-                                 "value": 0.69999999999999996
-                              },
-                              {
-                                 "color": "red",
-                                 "value": 0.84999999999999998
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "id": "min",
-                        "value": 0
-                     },
-                     {
-                        "id": "max",
-                        "value": 1
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 200
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Cache %"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     },
-                     {
-                        "id": "custom.cellOptions",
-                        "value": {
-                           "mode": "lcd",
-                           "type": "gauge"
-                        }
-                     },
-                     {
-                        "id": "thresholds",
-                        "value": {
-                           "mode": "absolute",
-                           "steps": [
-                              {
-                                 "color": "red",
-                                 "value": null
-                              },
-                              {
-                                 "color": "orange",
-                                 "value": 0.80000000000000004
-                              },
-                              {
-                                 "color": "yellow",
-                                 "value": 0.90000000000000002
-                              },
-                              {
-                                 "color": "green",
-                                 "value": 0.94999999999999996
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "id": "min",
-                        "value": 0
-                     },
-                     {
-                        "id": "max",
-                        "value": 1
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 200
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Lag"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "s"
-                     },
-                     {
-                        "id": "custom.cellOptions",
-                        "value": {
-                           "type": "color-text"
-                        }
-                     },
-                     {
-                        "id": "thresholds",
-                        "value": {
-                           "mode": "absolute",
-                           "steps": [
-                              {
-                                 "color": "green",
-                                 "value": null
-                              },
-                              {
-                                 "color": "yellow",
-                                 "value": 5
-                              },
-                              {
-                                 "color": "red",
-                                 "value": 30
-                              }
-                           ]
-                        }
-                     },
-                     {
-                        "id": "custom.width",
-                        "value": 80
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 14
-         },
-         "options": {
-            "footer": {
-               "enablePagination": false
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance status"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance role"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  time() - pg_postmaster_start_time_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance uptime"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  max by (job,cluster,instance, instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance connection utilization"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance cache hit ratio"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "table",
-               "instant": true,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance replication lag"
-            }
-         ],
-         "title": "Cluster Instances",
-         "transformations": [
-            {
-               "id": "merge"
-            },
-            {
-               "id": "organize",
-               "options": {
-                  "excludeByName": {
-                     "Time": true,
-                     "__name__": true,
-                     "cluster": true,
-                     "environment": true,
-                     "job": true,
-                     "server_id": true
-                  },
-                  "indexByName": {
-                     "Value #Instance cache hit ratio": 5,
-                     "Value #Instance connection utilization": 4,
-                     "Value #Instance replication lag": 6,
-                     "Value #Instance role": 1,
-                     "Value #Instance status": 2,
-                     "Value #Instance uptime": 3,
-                     "instance": 0
-                  },
-                  "renameByName": {
-                     "Value #Instance cache hit ratio": "Cache %",
-                     "Value #Instance connection utilization": "Conn %",
-                     "Value #Instance replication lag": "Lag",
-                     "Value #Instance role": "Role",
-                     "Value #Instance status": "Status",
-                     "Value #Instance uptime": "Uptime",
-                     "instance": "Instance"
-                  }
-               }
-            }
-         ],
-         "type": "table"
-      },
-      {
-         "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-         },
-         "description": "Timeline showing the role of each instance. Blue = Primary, Purple = Replica. Role changes indicate failover events.",
-         "fieldConfig": {
-            "defaults": {
-               "mappings": [
-                  {
-                     "options": {
-                        "0": {
-                           "color": "blue",
-                           "index": 0,
-                           "text": "PRIMARY"
-                        },
-                        "1": {
-                           "color": "purple",
-                           "index": 1,
-                           "text": "REPLICA"
-                        }
-                     },
-                     "type": "value"
-                  }
-               ]
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Instance role"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 14
-         },
-         "options": {
-            "alignValue": "center",
-            "legend": {
-               "displayMode": "list",
-               "showLegend": true
-            },
-            "mergeValues": true,
-            "rowHeight": 0.80000000000000004,
-            "showValue": "never"
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}",
-               "refId": "Instance role"
-            }
-         ],
-         "title": "Primary Role History",
-         "type": "state-timeline"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Detects role changes (failovers). Spikes indicate when an instance changed role.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "mode": "thresholds"
-               },
-               "custom": {
-                  "drawStyle": "bars",
-                  "fillOpacity": 80,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "red",
-                        "value": 1
-                     }
-                  ]
-               },
-               "unit": "short"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Role changes"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 24,
-            "x": 0,
-            "y": 20
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[5m])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: Role changes",
-               "refId": "Role changes"
-            }
-         ],
-         "title": "Failover Events",
-         "type": "timeseries"
-      },
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 28
-         },
-         "panels": [ ],
-         "title": "Cluster Problems",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total queries running longer than threshold across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 1
-                     },
-                     {
-                        "color": "red",
-                        "value": 3
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total long-running queries"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 0,
-            "y": 29
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_long_running_transactions{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Long-running queries",
-               "refId": "Total long-running queries"
-            }
-         ],
-         "title": "Total long-running queries",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total queries waiting for locks across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 1
-                     },
-                     {
-                        "color": "red",
-                        "value": 5
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total blocked queries"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 4,
-            "y": 29
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\", mode=\"exclusivelock\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Blocked queries",
-               "refId": "Total blocked queries"
-            }
-         ],
-         "title": "Total blocked queries",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total connections idle in transaction across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 5
-                     },
-                     {
-                        "color": "red",
-                        "value": 20
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total idle in transaction"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 8,
-            "y": 29
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\", state=\"idle in transaction\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Idle in transaction",
-               "refId": "Total idle in transaction"
-            }
-         ],
-         "title": "Total idle in transaction",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total WAL archive failures across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "red",
-                        "value": 1
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total WAL archive failures"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 12,
-            "y": 29
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "diff"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: WAL archive failures",
-               "refId": "Total WAL archive failures"
-            }
-         ],
-         "title": "Total WAL archive failures",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Highest lock utilization across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "mode": "thresholds"
-               },
-               "max": 1,
-               "min": 0,
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 0.050000000000000003
-                     },
-                     {
-                        "color": "orange",
-                        "value": 0.10000000000000001
-                     },
-                     {
-                        "color": "red",
-                        "value": 0.20000000000000001
-                     }
-                  ]
-               },
-               "unit": "percentunit"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Worst lock utilization"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 16,
-            "y": 29
-         },
-         "options": {
-            "minVizHeight": 150,
-            "minVizWidth": 150,
-            "showThresholdLabels": false
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "max by (job,cluster) (\n  sum by (instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "Worst lock utilization",
-               "refId": "Worst lock utilization"
-            }
-         ],
-         "title": "Worst lock utilization",
-         "type": "gauge"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total exporter scrape errors across all instances.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "thresholds"
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "red",
-                        "value": 1
-                     }
-                  ]
-               }
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total exporter errors"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "short"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 6,
-            "w": 4,
-            "x": 20,
-            "y": 29
-         },
-         "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_exporter_last_scrape_error{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Exporter errors",
-               "refId": "Total exporter errors"
-            }
-         ],
-         "title": "Total exporter errors",
-         "type": "stat"
-      },
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 35
-         },
-         "panels": [ ],
-         "title": "Replication",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Replication lag in seconds per replica instance.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never",
-                  "thresholdsStyle": {
-                     "mode": "line"
-                  }
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 5
-                     },
-                     {
-                        "color": "red",
-                        "value": 30
-                     }
-                  ]
-               },
-               "unit": "s"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Replication lag by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "s"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 36
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: Replication lag",
-               "refId": "Replication lag by instance"
-            }
-         ],
-         "title": "Replication Lag by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "WAL bytes pending per replication slot. High values indicate slow replicas.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never",
-                  "thresholdsStyle": {
-                     "mode": "line"
-                  }
-               },
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 10485760
-                     },
-                     {
-                        "color": "red",
-                        "value": 104857600
-                     }
-                  ]
-               },
-               "unit": "bytes"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Replication slot lag by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "bytes"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 8,
-            "y": 36
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance,client_addr,application_name,state) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{client_addr}} ({{state}})",
-               "refId": "Replication slot lag by instance"
-            }
-         ],
-         "title": "Replication Slot Lag",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "scheme",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "bytes"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "WAL position"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "bytes"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 16,
-            "y": 36
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: WAL position",
-               "refId": "WAL position"
-            }
-         ],
-         "title": "WAL Position",
-         "type": "timeseries"
-      },
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 44
-         },
-         "panels": [ ],
-         "title": "Throughput & Read/Write Split",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Transactions per second per instance. Compare workload distribution.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "ops"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "TPS by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "ops"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 45
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: TPS",
-               "refId": "TPS by instance"
-            }
-         ],
-         "title": "TPS by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Queries per second per instance. Requires pg_stat_statements extension.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "ops"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "QPS by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "ops"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 45
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: QPS",
-               "refId": "QPS by instance"
-            }
-         ],
-         "title": "QPS by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-         },
-         "description": "Write operations (INSERT, UPDATE, DELETE) from the primary instance only.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 50,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never",
-                  "stacking": {
-                     "mode": "normal"
-                  }
-               },
-               "unit": "rows/s"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Primary inserts"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Primary updates"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Primary deletes"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 53
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Inserts",
-               "refId": "Primary inserts"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Updates",
-               "refId": "Primary updates"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Deletes",
-               "refId": "Primary deletes"
-            }
-         ],
-         "title": "Write Operations (Primary)",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Rows fetched per second per instance. Shows read distribution across primary and replicas.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "rows/s"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Reads by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 8,
-            "y": 53
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: Fetched",
-               "refId": "Reads by instance"
-            }
-         ],
-         "title": "Read Operations by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-         },
-         "description": "Ratio of read operations to write operations cluster-wide.",
-         "fieldConfig": {
-            "defaults": {
-               "unit": "rows/s"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total reads"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total writes"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "rows/s"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 16,
-            "y": 53
-         },
-         "options": {
-            "displayLabels": [ ],
-            "legend": {
-               "displayMode": "table",
-               "placement": "right",
-               "showLegend": true,
-               "values": [
-                  "value",
-                  "percent"
-               ],
-               "width": 350
-            },
-            "pieType": "donut"
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total reads",
-               "refId": "Total reads"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  (\n    rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  )\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total writes",
-               "refId": "Total writes"
-            }
-         ],
-         "title": "Read/Write Ratio",
-         "type": "piechart"
-      },
-      {
-         "collapsed": false,
-         "gridPos": {
-            "h": 1,
-            "w": 0,
-            "x": 0,
-            "y": 61
-         },
-         "panels": [ ],
-         "title": "Cluster Resources",
-         "type": "row"
-      },
-      {
-         "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-         },
-         "description": "Total connections across all instances vs total max connections.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "short"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Total max connections"
-                  },
-                  "properties": [
-                     {
-                        "id": "custom.lineStyle",
-                        "value": {
-                           "dash": [
-                              10,
-                              10
-                           ],
-                           "fill": "dash"
-                        }
-                     },
-                     {
-                        "id": "custom.fillOpacity",
-                        "value": 0
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 62
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total connections",
-               "refId": "Total connections"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total max connections",
-               "refId": "Total max connections"
-            }
-         ],
-         "title": "Total Connections",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Cache hit ratio per instance over time.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never",
-                  "thresholdsStyle": {
-                     "mode": "line"
-                  }
-               },
-               "max": 1,
-               "min": 0,
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "red",
-                        "value": 0
-                     },
-                     {
-                        "color": "yellow",
-                        "value": 0.90000000000000002
-                     },
-                     {
-                        "color": "green",
-                        "value": 0.94999999999999996
-                     }
-                  ]
-               },
-               "unit": "percentunit"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Cache hit ratio by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "percentunit"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 62
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: Cache hit ratio",
-               "refId": "Cache hit ratio by instance"
-            }
-         ],
-         "title": "Cache Hit Ratio by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Total size of all databases on the primary.",
-         "fieldConfig": {
-            "defaults": {
-               "color": {
-                  "fixedColor": "text",
-                  "mode": "fixed"
-               },
-               "unit": "bytes"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "Total database size"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "bytes"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 70
-         },
-         "options": {
-            "colorMode": "fixed",
-            "graphMode": "area",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ]
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: Total database size",
-               "refId": "Total database size"
-            }
-         ],
-         "title": "Total database size",
-         "type": "stat"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "scheme",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "bytes"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "WAL position"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "bytes"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 70
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{cluster}}: WAL position",
-               "refId": "WAL position"
-            }
-         ],
-         "title": "WAL Position",
-         "type": "timeseries"
-      }
-   ],
-   "schemaVersion": 39,
-   "tags": [
-      "postgres",
-      "database",
-      "cluster"
-   ],
-   "templating": {
-      "list": [
+      "description": "PostgreSQL Cluster monitoring dashboard.\n\nProvides a top-level view of the entire cluster:\n- Cluster health at-a-glance\n- Instance list with drill-down\n- Master history / failover tracking\n- Replication topology and lag\n- Read/Write split visibility\n- Cluster-wide problems and resources\n\nClick on an instance row to drill down to the instance-level dashboard.\n",
+      "links": [
          {
-            "label": "Data source",
-            "name": "datasource",
-            "query": "prometheus",
-            "regex": "",
-            "type": "datasource"
-         },
-         {
-            "allValue": ".+",
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "includeAll": true,
-            "label": "Job",
-            "multi": true,
-            "name": "job",
-            "query": "label_values({__name__=~\"pg_up\"}, job)",
-            "refresh": 2,
-            "sort": 1,
-            "type": "query"
-         },
-         {
-            "allValue": null,
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "includeAll": false,
-            "label": "Cluster",
-            "multi": false,
-            "name": "cluster",
-            "query": "label_values({__name__=~\"pg_up\",job=~\"$job\"}, cluster)",
-            "refresh": 2,
-            "sort": 1,
-            "type": "query"
+            "asDropdown": false,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "postgres",
+               "database"
+            ],
+            "title": "All PostgreSQL dashboards",
+            "type": "dashboards"
          }
-      ]
-   },
-   "time": {
-      "from": "now-6h",
-      "to": "now"
-   },
-   "timezone": "utc",
-   "title": "PostgreSQL Cluster Overview",
-   "uid": "postgres-cluster"
-}
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "Cluster Health",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Cluster status. Shows DOWN if any instance in the cluster is down.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 0,
+                              "text": "DOWN"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 1,
+                              "text": "UP"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "min by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Cluster status",
+                  "refId": "Cluster status"
+               }
+            ],
+            "title": "Cluster status",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of PostgreSQL instances in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total instances"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total instances",
+                  "refId": "Total instances"
+               }
+            ],
+            "title": "Total instances",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of instances currently up and responding.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Up instances"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 8,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Up instances",
+                  "refId": "Up instances"
+               }
+            ],
+            "title": "Up instances",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of primary instances. Should be exactly 1 for a healthy cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 2
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Primary count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 12,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Primary count",
+                  "refId": "Primary count"
+               }
+            ],
+            "title": "Primary count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of replica instances in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "yellow",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Replica count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 16,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 1\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Replica count",
+                  "refId": "Replica count"
+               }
+            ],
+            "title": "Replica count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Maximum replication lag in seconds across all replicas.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 5
+                        },
+                        {
+                           "color": "orange",
+                           "value": 30
+                        },
+                        {
+                           "color": "red",
+                           "value": 60
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Max replication lag"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 20,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,cluster) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Max replication lag",
+                  "refId": "Max replication lag"
+               }
+            ],
+            "title": "Max replication lag",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Lowest cache hit ratio across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "orange",
+                           "value": 0.80000000000000004
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.90000000000000002
+                        },
+                        {
+                           "color": "green",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Worst cache hit ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 7
+            },
+            "options": {
+               "minVizHeight": 200,
+               "minVizWidth": 200,
+               "showThresholdLabels": false
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "min by (job,cluster) (\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  + 1\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Worst cache hit ratio",
+                  "refId": "Worst cache hit ratio"
+               }
+            ],
+            "title": "Worst cache hit ratio",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Highest connection utilization across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.69999999999999996
+                        },
+                        {
+                           "color": "orange",
+                           "value": 0.84999999999999998
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Worst connection utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 7
+            },
+            "options": {
+               "minVizHeight": 200,
+               "minVizWidth": 200,
+               "showThresholdLabels": false
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,cluster) (\n  sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Worst connection utilization",
+                  "refId": "Worst connection utilization"
+               }
+            ],
+            "title": "Worst connection utilization",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total deadlocks detected across all instances in the selected time range.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total deadlocks"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 7
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "diff"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total deadlocks",
+                  "refId": "Total deadlocks"
+               }
+            ],
+            "title": "Total deadlocks",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 13
+            },
+            "panels": [ ],
+            "title": "Cluster Instances",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "All PostgreSQL instances in the cluster. Click a row to view instance details.",
+            "fieldConfig": {
+               "defaults": {
+                  "links": [
+                     {
+                        "title": "View Instance Details",
+                        "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}"
+                     }
+                  ]
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 400
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Status"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "text": "🔴 DOWN"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "text": "🟢 UP"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Role"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "blue",
+                                       "text": "PRIMARY"
+                                    },
+                                    "1": {
+                                       "color": "purple",
+                                       "text": "REPLICA"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Conn %"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "lcd",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "green",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "yellow",
+                                    "value": 0.69999999999999996
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 0.84999999999999998
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "max",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 200
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Cache %"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "lcd",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "red",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "orange",
+                                    "value": 0.80000000000000004
+                                 },
+                                 {
+                                    "color": "yellow",
+                                    "value": 0.90000000000000002
+                                 },
+                                 {
+                                    "color": "green",
+                                    "value": 0.94999999999999996
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "max",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 200
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Lag"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "green",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "yellow",
+                                    "value": 5
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 30
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 14
+            },
+            "options": {
+               "footer": {
+                  "enablePagination": false
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance status"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance role"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  time() - pg_postmaster_start_time_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance uptime"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  max by (job,cluster,instance, instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance connection utilization"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance cache hit ratio"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance replication lag"
+               }
+            ],
+            "title": "Cluster Instances",
+            "transformations": [
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "__name__": true,
+                        "cluster": true,
+                        "environment": true,
+                        "job": true,
+                        "server_id": true
+                     },
+                     "indexByName": {
+                        "Value #Instance cache hit ratio": 5,
+                        "Value #Instance connection utilization": 4,
+                        "Value #Instance replication lag": 6,
+                        "Value #Instance role": 1,
+                        "Value #Instance status": 2,
+                        "Value #Instance uptime": 3,
+                        "instance": 0
+                     },
+                     "renameByName": {
+                        "Value #Instance cache hit ratio": "Cache %",
+                        "Value #Instance connection utilization": "Conn %",
+                        "Value #Instance replication lag": "Lag",
+                        "Value #Instance role": "Role",
+                        "Value #Instance status": "Status",
+                        "Value #Instance uptime": "Uptime",
+                        "instance": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Timeline showing the role of each instance. Blue = Primary, Purple = Replica. Role changes indicate failover events.",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "blue",
+                              "index": 0,
+                              "text": "PRIMARY"
+                           },
+                           "1": {
+                              "color": "purple",
+                              "index": 1,
+                              "text": "REPLICA"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ]
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Instance role"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 14
+            },
+            "options": {
+               "alignValue": "center",
+               "legend": {
+                  "displayMode": "list",
+                  "showLegend": true
+               },
+               "mergeValues": true,
+               "rowHeight": 0.80000000000000004,
+               "showValue": "never"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance role"
+               }
+            ],
+            "title": "Primary Role History",
+            "type": "state-timeline"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Detects role changes (failovers). Spikes indicate when an instance changed role.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 80,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Role changes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 20
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[5m])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Role changes",
+                  "refId": "Role changes"
+               }
+            ],
+            "title": "Failover Events",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 28
+            },
+            "panels": [ ],
+            "title": "Cluster Problems",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total queries running longer than threshold across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 1
+                        },
+                        {
+                           "color": "red",
+                           "value": 3
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total long-running queries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 29
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_long_running_transactions{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Long-running queries",
+                  "refId": "Total long-running queries"
+               }
+            ],
+            "title": "Total long-running queries",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total queries waiting for locks across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 1
+                        },
+                        {
+                           "color": "red",
+                           "value": 5
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total blocked queries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 4,
+               "y": 29
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\", mode=\"exclusivelock\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Blocked queries",
+                  "refId": "Total blocked queries"
+               }
+            ],
+            "title": "Total blocked queries",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total connections idle in transaction across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 5
+                        },
+                        {
+                           "color": "red",
+                           "value": 20
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total idle in transaction"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 8,
+               "y": 29
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\", state=\"idle in transaction\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Idle in transaction",
+                  "refId": "Total idle in transaction"
+               }
+            ],
+            "title": "Total idle in transaction",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total WAL archive failures across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total WAL archive failures"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 12,
+               "y": 29
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "diff"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: WAL archive failures",
+                  "refId": "Total WAL archive failures"
+               }
+            ],
+            "title": "Total WAL archive failures",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Highest lock utilization across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.050000000000000003
+                        },
+                        {
+                           "color": "orange",
+                           "value": 0.10000000000000001
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.20000000000000001
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Worst lock utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 16,
+               "y": 29
+            },
+            "options": {
+               "minVizHeight": 150,
+               "minVizWidth": 150,
+               "showThresholdLabels": false
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,cluster) (\n  sum by (instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Worst lock utilization",
+                  "refId": "Worst lock utilization"
+               }
+            ],
+            "title": "Worst lock utilization",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total exporter scrape errors across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total exporter errors"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 20,
+               "y": 29
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_exporter_last_scrape_error{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Exporter errors",
+                  "refId": "Total exporter errors"
+               }
+            ],
+            "title": "Total exporter errors",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 35
+            },
+            "panels": [ ],
+            "title": "Replication",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Replication lag in seconds per replica instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 5
+                        },
+                        {
+                           "color": "red",
+                           "value": 30
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Replication lag by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Replication lag",
+                  "refId": "Replication lag by instance"
+               }
+            ],
+            "title": "Replication Lag by Instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "WAL bytes pending per replication slot. High values indicate slow replicas.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 10485760
+                        },
+                        {
+                           "color": "red",
+                           "value": 104857600
+                        }
+                     ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Replication slot lag by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance,client_addr,application_name,state) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{client_addr}} ({{state}})",
+                  "refId": "Replication slot lag by instance"
+               }
+            ],
+            "title": "Replication Slot Lag",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "WAL position"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: WAL position",
+                  "refId": "WAL position"
+               }
+            ],
+            "title": "WAL Position",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "panels": [ ],
+            "title": "Throughput & Read/Write Split",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Transactions per second per instance. Compare workload distribution.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TPS by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 45
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: TPS",
+                  "refId": "TPS by instance"
+               }
+            ],
+            "title": "TPS by Instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Queries per second per instance. Requires pg_stat_statements extension.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "QPS by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 45
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: QPS",
+                  "refId": "QPS by instance"
+               }
+            ],
+            "title": "QPS by Instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Write operations (INSERT, UPDATE, DELETE) from the primary instance only.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 50,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "rows/s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Primary inserts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Primary updates"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Primary deletes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 53
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Inserts",
+                  "refId": "Primary inserts"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Updates",
+                  "refId": "Primary updates"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Deletes",
+                  "refId": "Primary deletes"
+               }
+            ],
+            "title": "Write Operations (Primary)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rows fetched per second per instance. Shows read distribution across primary and replicas.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "rows/s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Reads by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 53
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Fetched",
+                  "refId": "Reads by instance"
+               }
+            ],
+            "title": "Read Operations by Instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Ratio of read operations to write operations cluster-wide.",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "rows/s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total reads"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total writes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 53
+            },
+            "options": {
+               "displayLabels": [ ],
+               "legend": {
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true,
+                  "values": [
+                     "value",
+                     "percent"
+                  ],
+                  "width": 350
+               },
+               "pieType": "donut"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total reads",
+                  "refId": "Total reads"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  (\n    rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  )\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total writes",
+                  "refId": "Total writes"
+               }
+            ],
+            "title": "Read/Write Ratio",
+            "type": "piechart"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 61
+            },
+            "panels": [ ],
+            "title": "Cluster Resources",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Total connections across all instances vs total max connections.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Total max connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 62
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total connections",
+                  "refId": "Total connections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total max connections",
+                  "refId": "Total max connections"
+               }
+            ],
+            "title": "Total Connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Cache hit ratio per instance over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.90000000000000002
+                        },
+                        {
+                           "color": "green",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cache hit ratio by instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 62
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Cache hit ratio",
+                  "refId": "Cache hit ratio by instance"
+               }
+            ],
+            "title": "Cache Hit Ratio by Instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total size of all databases on the primary.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total database size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 70
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: Total database size",
+                  "refId": "Total database size"
+               }
+            ],
+            "title": "Total database size",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "WAL position"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 70
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}: WAL position",
+                  "refId": "WAL position"
+               }
+            ],
+            "title": "WAL Position",
+            "type": "timeseries"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "postgres",
+         "database",
+         "cluster"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"pg_up\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": null,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": false,
+               "label": "Cluster",
+               "multi": false,
+               "name": "cluster",
+               "query": "label_values({__name__=~\"pg_up\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "utc",
+      "title": "PostgreSQL Cluster Overview",
+      "uid": "postgres-cluster"
+   }
