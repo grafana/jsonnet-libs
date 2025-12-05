@@ -29,12 +29,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total active connections over time.'
       ),
 
-    // Connection utilization over time
     connectionUtilizationTimeSeries:
       signals.health.connectionUtilization.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
+      + commonlib.panels.generic.timeSeries.percentage.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-      + g.panel.timeSeries.standardOptions.withMin(0)
       + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0.8, color: 'yellow' },
@@ -42,7 +40,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
 
-    // Temp bytes written
     tempBytesWritten:
       signals.performance.tempBytesWritten.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -60,12 +57,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Blocks read from disk (not cache). Spikes indicate cache misses.'
       ),
 
-    // Cache hit ratio over time
     cacheHitRatioTimeSeries:
       signals.health.cacheHitRatio.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
+      + commonlib.panels.generic.timeSeries.percentage.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-      + g.panel.timeSeries.standardOptions.withMin(0)
       + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0, color: 'red' },
@@ -78,7 +73,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Cache hit ratio over time. Should stay above 95%.'
       ),
 
-    // Buffers allocated rate
     checkpointDuration:
       signals.performance.checkpointDuration.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -87,11 +81,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Rate of new buffer allocations per second. High values indicate memory pressure.'
       ),
 
-    // Rollback ratio
     rollbackRatio:
       signals.performance.rollbackRatio.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
+      + commonlib.panels.generic.timeSeries.percentage.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0.05, color: 'yellow' },
         { value: 0.1, color: 'red' },
@@ -101,7 +95,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Percentage of transactions rolled back. High values indicate application issues.'
       ),
 
-    // Rows activity
     rowsActivity:
       g.panel.timeSeries.new('Rows Activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -111,11 +104,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.performance.rowsInserted.asPanelMixin()
       + signals.performance.rowsUpdated.asPanelMixin()
       + signals.performance.rowsDeleted.asPanelMixin()
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
+      + g.panel.timeSeries.options.legend.withSortBy('Last *')
+      + g.panel.timeSeries.options.legend.withSortDesc(true)
       + g.panel.timeSeries.panelOptions.withDescription(
         'Row-level activity showing reads (fetched/returned) and writes (inserted/updated/deleted).'
       ),
 
-    // Buffers activity
     buffersActivity:
       g.panel.timeSeries.new('Buffers Activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -124,9 +121,31 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.performance.buffersCheckpoint.asPanelMixin()
       + signals.performance.buffersClean.asPanelMixin()
       + signals.performance.buffersBackend.asPanelMixin()
-      + signals.performance.buffersBackendFsync.asPanelMixin()
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
+      + g.panel.timeSeries.options.legend.withSortBy('Last *')
+      + g.panel.timeSeries.options.legend.withSortDesc(true)
       + g.panel.timeSeries.panelOptions.withDescription(
         'Buffer pool activity: allocations, cleaned by bgwriter, and max written stops (I/O pressure indicator).'
       ),
+
+    // Read/Write ratio pie chart
+    readWriteRatio:
+      g.panel.pieChart.new('Read/Write Ratio')
+      + g.panel.pieChart.panelOptions.withDescription(
+        'Ratio of read operations (fetched) to write operations (insert+update+delete).'
+      )
+      + signals.performance.rowsFetched.asPanelMixin()
+      + signals.performance.rowsInserted.asPanelMixin()
+      + signals.performance.rowsUpdated.asPanelMixin()
+      + signals.performance.rowsDeleted.asPanelMixin()
+      + g.panel.pieChart.options.withPieType('donut')
+      + g.panel.pieChart.options.withDisplayLabels([])
+      + g.panel.pieChart.options.legend.withShowLegend(true)
+      + g.panel.pieChart.options.legend.withDisplayMode('table')
+      + g.panel.pieChart.options.legend.withPlacement('bottom')
+      + g.panel.pieChart.options.legend.withValues(['value', 'percent'])
+      + g.panel.pieChart.standardOptions.withUnit('rows/s'),
   },
 }

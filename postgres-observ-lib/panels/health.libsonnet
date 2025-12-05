@@ -3,13 +3,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
+    local statWithThresholds =
+      commonlib.panels.generic.stat.base.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.options.withReduceOptions({ calcs: ['lastNotNull'] })
+      + g.panel.stat.standardOptions.color.withMode('thresholds')
+      + g.panel.stat.options.withColorMode('value'),
+
     // PostgreSQL Up/Down status
     up:
       signals.health.up.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('none')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statWithThresholds
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'red' },
         { value: 1, color: 'green' },
@@ -24,14 +28,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    // Server uptime
     uptime:
       signals.health.uptime.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('none')
-      + g.panel.stat.standardOptions.withUnit('dtdurations')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + commonlib.panels.system.stat.uptime.stylize()
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'red' },  // Just restarted
         { value: 300, color: 'yellow' },  // 5 minutes
@@ -54,13 +53,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false),
 
-    // Connection utilization stat
     connectionUtilizationStat:
       signals.health.connectionUtilization.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('percentunit')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 0.7, color: 'yellow' },
@@ -87,10 +83,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Cache hit ratio stat
     cacheHitRatioStat:
       signals.health.cacheHitRatio.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('percentunit')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'red' },
         { value: 0.8, color: 'orange' },
@@ -101,10 +95,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Replication lag
     replicationLag:
       signals.health.replicationLag.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('s')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 5, color: 'yellow' },
@@ -115,20 +107,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Deadlocks
     deadlocks:
       signals.health.deadlocks.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statWithThresholds
       + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ]),
 
-    // Node role (primary/replica)
     nodeRole:
       signals.health.isReplica.asStat()
       + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('none')
       + g.panel.stat.standardOptions.withMappings([
         {
           type: 'value',
@@ -142,10 +130,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Connected replicas count
     connectedReplicas:
       signals.health.connectedReplicas.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('none')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statWithThresholds
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'yellow' },
         { value: 1, color: 'green' },
@@ -154,10 +139,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Replication slot lag
     replicationSlotLag:
       signals.health.replicationSlotLag.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('bytes')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 10485760, color: 'yellow' },  // 10MB

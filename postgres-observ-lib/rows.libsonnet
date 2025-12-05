@@ -124,15 +124,17 @@ local g = import './g.libsonnet';
       g.panel.row.new('Performance Trends')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
-        panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
+        panels.performance.readWriteRatio { gridPos+: { w: 8, h: 8 } },
+        panels.performance.transactionsPerSecond { gridPos+: { w: 8, h: 8 } },
+        panels.performance.queriesPerSecond { gridPos+: { w: 8, h: 8 } },
         panels.performance.rowsActivity { gridPos+: { w: 12, h: 8 } },
+        panels.performance.buffersActivity { gridPos+: { w: 12, h: 8 } },
         panels.performance.connectionUtilizationTimeSeries { gridPos+: { w: 12, h: 8 } },
         panels.performance.cacheHitRatioTimeSeries { gridPos+: { w: 12, h: 8 } },
-        panels.performance.buffersActivity { gridPos+: { w: 12, h: 8 } },
         panels.performance.diskReads { gridPos+: { w: 12, h: 8 } },
         panels.performance.tempBytesWritten { gridPos+: { w: 12, h: 8 } },
         panels.performance.checkpointDuration { gridPos+: { w: 12, h: 8 } },
+        panels.performance.rollbackRatio { gridPos+: { w: 12, h: 8 } },
       ]),
 
     // Tier 4: Maintenance - Actionable tasks
@@ -140,22 +142,22 @@ local g = import './g.libsonnet';
       g.panel.row.new('Maintenance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        // Row 1: Stat cards - Vacuum | Index | Storage
-        panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 4 } },
-        panels.maintenance.oldestVacuum { gridPos+: { w: 4, h: 4 } },
-        panels.maintenance.sequentialScanRatio { gridPos+: { w: 4, h: 4 } },
-        panels.maintenance.unusedIndexes { gridPos+: { w: 4, h: 4 } },
-        panels.maintenance.databaseSize { gridPos+: { w: 4, h: 4 } },
-        panels.maintenance.walSize { gridPos+: { w: 4, h: 4 } },
-        // Row 2: Time series - Vacuum | Storage
-        panels.maintenance.deadTupleRatio { gridPos+: { w: 12, h: 8 } },
-        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 12, h: 8 } },
-        // Row 3: Tables - Vacuum | Index
-        panels.maintenance.tableVacuumStatus { gridPos+: { w: 12, h: 8 } },
-        panels.maintenance.unusedIndexesTable { gridPos+: { w: 12, h: 8 } },
+        // Row 1: Vacuum - Stats | Time series
+        panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.oldestVacuum { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.deadTupleRatio { gridPos+: { w: 16, h: 8 } },
+        // Row 2: Vacuum - Stats | Table
+        panels.maintenance.tableVacuumStatus { gridPos+: { w: 24, h: 8 } },
+        // Row 3: Index - Stats | Table
+        panels.maintenance.sequentialScanRatio { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.unusedIndexes { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.unusedIndexesTable { gridPos+: { w: 16, h: 8 } },
         // Row 4: Analyze - Stat | Table
         panels.maintenance.oldestAnalyze { gridPos+: { w: 4, h: 8 } },
         panels.maintenance.tableAnalyzeStatus { gridPos+: { w: 20, h: 8 } },
+        // Row 5: Storage - Stat | Time series
+        panels.maintenance.databaseSize { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 20, h: 8 } },
       ]),
 
     // Tier 5: Query Analysis - Root cause (separate dashboard)
@@ -163,11 +165,11 @@ local g = import './g.libsonnet';
       g.panel.row.new('Query Analysis')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 8 } },
-        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 12, h: 8 } },
-        panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 8 } },
-        panels.queries.topQueriesByRows { gridPos+: { w: 12, h: 8 } },
-        panels.queries.queryStatsTable { gridPos+: { w: 24, h: 10 } },
+        panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 14 } },
+        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 12, h: 14 } },
+        panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 14 } },
+        panels.queries.topQueriesByRows { gridPos+: { w: 12, h: 14 } },
+        panels.queries.queryStatsTable { gridPos+: { w: 24, h: 12 } },
       ]),
 
     // Tier 6: Settings - PostgreSQL configuration parameters

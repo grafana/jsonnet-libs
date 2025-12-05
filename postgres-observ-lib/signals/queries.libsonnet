@@ -17,7 +17,7 @@ function(this)
         unit: 's',
         sources: {
           postgres_exporter: {
-            expr: 'topk(10, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -33,7 +33,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              topk(10,
+              topk($topk,
                 (
                   pg_stat_statements_seconds_total{%(queriesSelector)s}
                   /
@@ -55,7 +55,7 @@ function(this)
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'topk(10, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -70,7 +70,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'topk(10, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[$__rate_interval]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },

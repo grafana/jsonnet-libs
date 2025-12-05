@@ -3,11 +3,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
-    // Common stat styling for consistent appearance
     local statBase =
-      commonlib.panels.generic.stat.info.stylize()
+      commonlib.panels.generic.stat.base.stylize()
       + g.panel.stat.options.withGraphMode('none')
       + g.panel.stat.options.withTextMode('value')
+      + g.panel.stat.options.withReduceOptions({ calcs: ['lastNotNull'] })
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value'),
 
@@ -63,18 +63,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'WAL archive failures. Non-zero indicates backup problems!'
       ),
 
-    // Bgwriter max written clean (I/O pressure indicator)
+    // I/O pressure indicator (bgwriter max written clean)
     checkpointWarnings:
       signals.problems.checkpointWarnings.asStat()
       + statBase
-      + g.panel.stat.standardOptions.withUnit('ops')
+      + g.panel.stat.panelOptions.withTitle('I/O Pressure')
+      + g.panel.stat.standardOptions.withUnit('cps')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 0.01, color: 'yellow' },
         { value: 0.1, color: 'red' },
       ])
       + g.panel.stat.panelOptions.withDescription(
-        'Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.'
+        'Buffer flush bottlenecks per second. When bgwriter hits its limit, backends must flush buffers themselves, causing latency spikes. Should be 0.'
       ),
 
     // Bgwriter buffers cleaned

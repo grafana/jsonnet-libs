@@ -7,6 +7,12 @@ local g = import './g.libsonnet';
       + g.dashboard.variable.textbox.generalOptions.withLabel('Settings Filter (regex)')
       + g.dashboard.variable.textbox.generalOptions.withDescription('Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.');
 
+    // Variable for topk query limit (10 is first = default)
+    local topkVar =
+      g.dashboard.variable.custom.new('topk', values=['10', '5', '15', '20', '25', '50'])
+      + g.dashboard.variable.custom.generalOptions.withLabel('Top K queries')
+      + g.dashboard.variable.custom.generalOptions.withDescription('Number of top queries to show in each panel.');
+
     // Helper to make a variable single-select (no "All", no multi)
     local makeSingleSelect(v) = v {
       includeAll: false,
@@ -32,11 +38,11 @@ local g = import './g.libsonnet';
       ['instance']
     );
 
-    // Queries dashboard variables: make instance single-select
+    // Queries dashboard variables: make instance single-select, add topk
     local queriesVariables = makeSingleSelectByName(
       this.signals.queries.getVariablesMultiChoice(),
       ['instance']
-    );
+    ) + [topkVar];
 
     {
       // Cluster overview dashboard - Top-level view of the entire cluster

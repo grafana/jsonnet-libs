@@ -242,25 +242,11 @@ function(this)
         name: 'Max written stops',
         description: 'Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.',
         type: 'gauge',
-        unit: 'ops',
+        unit: 'cps',
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[$__rate_interval])',
             legendCustomTemplate: ' Max written stops',
-          },
-        },
-      },
-
-      // Stats reset time (placeholder - no backend fsync available)
-      buffersBackendFsync: {
-        name: 'Stats age',
-        description: 'Time since bgwriter stats were last reset.',
-        type: 'gauge',
-        unit: 's',
-        sources: {
-          postgres_exporter: {
-            expr: 'time() - pg_stat_bgwriter_stats_reset_total{%(queriesSelector)s}',
-            legendCustomTemplate: ' Stats age',
           },
         },
       },

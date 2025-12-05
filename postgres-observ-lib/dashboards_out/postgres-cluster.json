@@ -1890,7 +1890,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "scheme",
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
@@ -2313,13 +2313,12 @@
                "displayLabels": [ ],
                "legend": {
                   "displayMode": "table",
-                  "placement": "right",
+                  "placement": "bottom",
                   "showLegend": true,
                   "values": [
                      "value",
                      "percent"
-                  ],
-                  "width": 350
+                  ]
                },
                "pieType": "donut"
             },
@@ -2606,7 +2605,7 @@
                "defaults": {
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "scheme",
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"

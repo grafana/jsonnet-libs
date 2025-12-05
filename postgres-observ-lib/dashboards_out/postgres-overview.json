@@ -127,7 +127,9 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "decimals": 1,
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -168,12 +170,7 @@
             },
             "options": {
                "colorMode": "value",
-               "graphMode": "none",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
+               "graphMode": "none"
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -1208,7 +1205,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.",
+            "description": "Buffer flush bottlenecks per second. When bgwriter hits its limit, backends must flush buffers themselves, causing latency spikes. Should be 0.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1231,7 +1228,7 @@
                         }
                      ]
                   },
-                  "unit": "ops"
+                  "unit": "cps"
                },
                "overrides": [
                   {
@@ -1278,7 +1275,7 @@
                   "refId": "Bgwriter max written clean"
                }
             ],
-            "title": "Bgwriter max written clean",
+            "title": "I/O Pressure",
             "type": "stat"
          },
          {
@@ -1607,6 +1604,136 @@
          },
          {
             "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Ratio of read operations (fetched) to write operations (insert+update+delete).",
+            "fieldConfig": {
+               "defaults": {
+                  "unit": "rows/s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Rows fetched"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Rows inserted"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Rows updated"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Rows deleted"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rows/s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 37
+            },
+            "options": {
+               "displayLabels": [ ],
+               "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                     "value",
+                     "percent"
+                  ]
+               },
+               "pieType": "donut"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Fetched",
+                  "refId": "Rows fetched"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Inserted",
+                  "refId": "Rows inserted"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Updated",
+                  "refId": "Rows updated"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Deleted",
+                  "refId": "Rows deleted"
+               }
+            ],
+            "title": "Read/Write Ratio",
+            "type": "piechart"
+         },
+         {
+            "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
@@ -1639,8 +1766,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
+               "w": 8,
+               "x": 8,
                "y": 37
             },
             "options": {
@@ -1704,8 +1831,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 8,
+               "x": 16,
                "y": 37
             },
             "options": {
@@ -1823,8 +1950,13 @@
             },
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Last *",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
@@ -1894,178 +2026,6 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Percentage of max_connections in use. Above 80% is warning, above 95% is critical.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "max": 1,
-                  "min": 0,
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "yellow",
-                           "value": 0.80000000000000004
-                        },
-                        {
-                           "color": "red",
-                           "value": 0.94999999999999996
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Connection utilization"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "percentunit"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 45
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Connection utilization",
-                  "refId": "Connection utilization"
-               }
-            ],
-            "title": "Connection utilization",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Cache hit ratio over time. Should stay above 95%.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "max": 1,
-                  "min": 0,
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "orange",
-                           "value": 0.80000000000000004
-                        },
-                        {
-                           "color": "yellow",
-                           "value": 0.90000000000000002
-                        },
-                        {
-                           "color": "green",
-                           "value": 0.94999999999999996
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Cache hit ratio"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "percentunit"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 53
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum by (job,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Cache hit ratio",
-                  "refId": "Cache hit ratio"
-               }
-            ],
-            "title": "Cache hit ratio",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
                "type": "datasource",
                "uid": "-- Mixed --"
             },
@@ -2126,19 +2086,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "ops"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Stats age"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "s"
+                           "value": "cps"
                         }
                      ]
                   }
@@ -2148,12 +2096,17 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 53
+               "y": 45
             },
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Last *",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
@@ -2205,20 +2158,189 @@
                   "instant": false,
                   "legendFormat": " Max written stops",
                   "refId": "Max written stops"
+               }
+            ],
+            "title": "Buffers Activity",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Percentage of max_connections in use. Above 80% is warning, above 95% is critical.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "yellow",
+                           "value": 0.80000000000000004
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
                },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Connection utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 53
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  time() - pg_stat_bgwriter_stats_reset_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": " Stats age",
-                  "refId": "Stats age"
+                  "legendFormat": " Connection utilization",
+                  "refId": "Connection utilization"
                }
             ],
-            "title": "Buffers Activity",
+            "title": "Connection utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Cache hit ratio over time. Should stay above 95%.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "orange",
+                           "value": 0.80000000000000004
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.90000000000000002
+                        },
+                        {
+                           "color": "green",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cache hit ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 53
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum by (job,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Cache hit ratio",
+                  "refId": "Cache hit ratio"
+               }
+            ],
+            "title": "Cache hit ratio",
             "type": "timeseries"
          },
          {
@@ -2417,6 +2539,92 @@
             "type": "timeseries"
          },
          {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Percentage of transactions rolled back. High values indicate application issues.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "yellow",
+                           "value": 0.050000000000000003
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.10000000000000001
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Rollback ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 69
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,cluster,instance) (\n  sum(rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(\n  sum(rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n  +\n  sum(rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Rollback ratio",
+                  "refId": "Rollback ratio"
+               }
+            ],
+            "title": "Rollback ratio",
+            "type": "timeseries"
+         },
+         {
             "collapsed": false,
             "gridPos": {
                "h": 1,
@@ -2478,7 +2686,7 @@
                ]
             },
             "gridPos": {
-               "h": 4,
+               "h": 8,
                "w": 4,
                "x": 0,
                "y": 78
@@ -2519,7 +2727,7 @@
                "defaults": {
                   "color": {
                      "fixedColor": "text",
-                     "mode": "fixed"
+                     "mode": "thresholds"
                   },
                   "thresholds": {
                      "steps": [
@@ -2555,13 +2763,13 @@
                ]
             },
             "gridPos": {
-               "h": 4,
+               "h": 8,
                "w": 4,
                "x": 4,
                "y": 78
             },
             "options": {
-               "colorMode": "fixed",
+               "colorMode": "value",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -2591,294 +2799,15 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Ratio of seq scans to total. High values indicate missing indexes.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "thresholds"
-                  },
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": 0
-                        },
-                        {
-                           "color": "yellow",
-                           "value": 0.20000000000000001
-                        },
-                        {
-                           "color": "orange",
-                           "value": 0.40000000000000002
-                        },
-                        {
-                           "color": "red",
-                           "value": 0.59999999999999998
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Sequential scan ratio"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "percentunit"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 4,
-               "w": 4,
-               "x": 8,
-               "y": 78
-            },
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "avg by (job,cluster,instance) (\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum(pg_stat_user_tables_idx_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  + 1\n)\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Seq scan ratio",
-                  "refId": "Sequential scan ratio"
-               }
-            ],
-            "title": "Sequential scan ratio",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Indexes with zero scans. Candidates for removal.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": 0
-                        },
-                        {
-                           "color": "yellow",
-                           "value": 5
-                        },
-                        {
-                           "color": "orange",
-                           "value": 10
-                        }
-                     ]
-                  }
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Unused indexes"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 4,
-               "w": 4,
-               "x": 12,
-               "y": 78
-            },
-            "options": {
-               "colorMode": "fixed",
-               "graphMode": "none",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "count by (job,cluster,instance) (\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nand\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Unused indexes",
-                  "refId": "Unused indexes"
-               }
-            ],
-            "title": "Unused indexes",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Total size of all databases.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  },
-                  "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Database size"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "bytes"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 4,
-               "w": 4,
-               "x": 16,
-               "y": 78
-            },
-            "options": {
-               "colorMode": "fixed",
-               "graphMode": "area",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Database size",
-                  "refId": "Database size"
-               }
-            ],
-            "title": "Database size",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Current WAL LSN position in bytes (total WAL written). Only available on primary.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  },
-                  "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "WAL position"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "bytes"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 4,
-               "w": 4,
-               "x": 20,
-               "y": 78
-            },
-            "options": {
-               "colorMode": "fixed",
-               "graphMode": "area",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "max(pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "WAL position",
-                  "refId": "WAL position"
-               }
-            ],
-            "title": "WAL position",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
             "description": "Dead tuple ratio per table. > 10% needs VACUUM.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
+                     "mode": "continuous-BlYlRd"
                   },
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
@@ -2886,6 +2815,9 @@
                         "mode": "line"
                      }
                   },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
                   "thresholds": {
                      "steps": [
                         {
@@ -2925,14 +2857,19 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 86
+               "w": 16,
+               "x": 8,
+               "y": 78
             },
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Last *",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
@@ -2954,71 +2891,6 @@
                }
             ],
             "title": "Dead tuple ratio",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Total size of all databases.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Database size"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "bytes"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 86
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Database size",
-                  "refId": "Database size"
-               }
-            ],
-            "title": "Database size",
             "type": "timeseries"
          },
          {
@@ -3148,9 +3020,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 24,
                "x": 0,
-               "y": 94
+               "y": 86
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -3223,14 +3095,171 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Ratio of seq scans to total. High values indicate missing indexes.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.20000000000000001
+                        },
+                        {
+                           "color": "orange",
+                           "value": 0.40000000000000002
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.59999999999999998
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Sequential scan ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 4,
+               "x": 0,
+               "y": 94
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,cluster,instance) (\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\n(\n  sum(pg_stat_user_tables_seq_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  +\n  sum(pg_stat_user_tables_idx_scan{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n  + 1\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Seq scan ratio",
+                  "refId": "Sequential scan ratio"
+               }
+            ],
+            "title": "Sequential scan ratio",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Indexes with zero scans. Candidates for removal.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 5
+                        },
+                        {
+                           "color": "orange",
+                           "value": 10
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Unused indexes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 4,
+               "x": 4,
+               "y": 94
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,cluster,instance) (\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nand\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Unused indexes",
+                  "refId": "Unused indexes"
+               }
+            ],
+            "title": "Unused indexes",
+            "type": "stat"
+         },
+         {
+            "datasource": {
                "type": "datasource",
                "uid": "-- Mixed --"
             },
             "description": "Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.",
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 16,
+               "x": 8,
                "y": 94
             },
             "pluginVersion": "v11.0.0",
@@ -3300,7 +3329,7 @@
                "defaults": {
                   "color": {
                      "fixedColor": "text",
-                     "mode": "fixed"
+                     "mode": "thresholds"
                   },
                   "thresholds": {
                      "steps": [
@@ -3519,12 +3548,138 @@
             "type": "table"
          },
          {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total size of all databases.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Database size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 4,
+               "x": 0,
+               "y": 110
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "area",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Database size",
+                  "refId": "Database size"
+               }
+            ],
+            "title": "Database size",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total size of all databases.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Database size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 20,
+               "x": 4,
+               "y": 110
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Database size",
+                  "refId": "Database size"
+               }
+            ],
+            "title": "Database size",
+            "type": "timeseries"
+         },
+         {
             "collapsed": false,
             "gridPos": {
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 110
+               "y": 118
             },
             "panels": [ ],
             "title": "PostgreSQL Settings",
@@ -3612,7 +3767,7 @@
                "h": 16,
                "w": 24,
                "x": 0,
-               "y": 111
+               "y": 119
             },
             "options": {
                "footer": {
