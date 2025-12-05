@@ -94,7 +94,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Maximum replication lag in seconds across all replicas.'
       ),
 
-    // Worst cache hit ratio
     worstCacheHitRatio:
       signals.cluster.worstCacheHitRatio.asGauge()
       + g.panel.gauge.standardOptions.withUnit('percentunit')
@@ -109,26 +108,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false)
-      + g.panel.gauge.options.withReduceOptions({
-        values: false,
-        calcs: ['lastNotNull'],
-        fields: '',
-        limit: 1,
-      })
-      + g.panel.gauge.options.withOrientation('auto')
       + g.panel.gauge.panelOptions.withDescription(
-        'Worst (lowest) cache hit ratio across all instances. Click gauge to drill down.'
-      )
-      + g.panel.gauge.standardOptions.withDisplayName('🔗 ${__field.labels.instance}')
-      + g.panel.gauge.standardOptions.withLinks([
-        {
-          title: '🔍 View Instance Details',
-          url: '/d/' + config.uid + '-overview?var-instance=${__field.labels.instance}&${__url_time_range}',
-          targetBlank: false,
-        },
-      ]),
+        'Lowest cache hit ratio across all instances.'
+      ),
 
-    // Worst connection utilization
     worstConnectionUtilization:
       signals.cluster.worstConnectionUtilization.asGauge()
       + g.panel.gauge.standardOptions.withUnit('percentunit')
@@ -143,24 +126,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false)
-      + g.panel.gauge.options.withReduceOptions({
-        values: false,
-        calcs: ['lastNotNull'],
-        fields: '',
-        limit: 1,
-      })
-      + g.panel.gauge.options.withOrientation('auto')
       + g.panel.gauge.panelOptions.withDescription(
-        'Worst (highest) connection utilization across all instances. Click gauge to drill down.'
-      )
-      + g.panel.gauge.standardOptions.withDisplayName('🔗 ${__field.labels.instance}')
-      + g.panel.gauge.standardOptions.withLinks([
-        {
-          title: '🔍 View Instance Details',
-          url: '/d/' + config.uid + '-overview?var-instance=${__field.labels.instance}&${__url_time_range}',
-          targetBlank: false,
-        },
-      ]),
+        'Highest connection utilization across all instances.'
+      ),
 
     // Total deadlocks
     totalDeadlocks:
@@ -499,7 +467,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total WAL archive failures across all instances.'
       ),
 
-    // Worst lock utilization
     worstLockUtilization:
       signals.cluster.worstLockUtilization.asGauge()
       + g.panel.gauge.standardOptions.withUnit('percentunit')
@@ -516,7 +483,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.gauge.options.withMinVizWidth(150)
       + g.panel.gauge.options.withShowThresholdLabels(false)
       + g.panel.gauge.panelOptions.withDescription(
-        'Worst (highest) lock utilization across all instances.'
+        'Highest lock utilization across all instances.'
       ),
 
     // Total exporter errors

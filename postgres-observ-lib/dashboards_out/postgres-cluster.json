@@ -469,17 +469,9 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Worst (lowest) cache hit ratio across all instances. Click gauge to drill down.",
+         "description": "Lowest cache hit ratio across all instances.",
          "fieldConfig": {
             "defaults": {
-               "displayName": "🔗 ${__field.labels.instance}",
-               "links": [
-                  {
-                     "targetBlank": false,
-                     "title": "🔍 View Instance Details",
-                     "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
-                  }
-               ],
                "max": 1,
                "min": 0,
                "thresholds": {
@@ -528,15 +520,6 @@
          "options": {
             "minVizHeight": 200,
             "minVizWidth": 200,
-            "orientation": "auto",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ],
-               "fields": "",
-               "limit": 1,
-               "values": false
-            },
             "showThresholdLabels": false
          },
          "pluginVersion": "v11.0.0",
@@ -546,10 +529,10 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "label_replace(\n  bottomk(1,\n    sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    /\n    (\n      sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n      +\n      sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n      + 1\n    )\n  ),\n  \"worst_instance\", \"$1\", \"instance\", \"(.*)\"\n)\n",
+               "expr": "min by (job,cluster) (\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  + 1\n)\n\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{instance}}",
+               "legendFormat": "Worst cache hit ratio",
                "refId": "Worst cache hit ratio"
             }
          ],
@@ -561,17 +544,9 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Worst (highest) connection utilization across all instances. Click gauge to drill down.",
+         "description": "Highest connection utilization across all instances.",
          "fieldConfig": {
             "defaults": {
-               "displayName": "🔗 ${__field.labels.instance}",
-               "links": [
-                  {
-                     "targetBlank": false,
-                     "title": "🔍 View Instance Details",
-                     "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
-                  }
-               ],
                "max": 1,
                "min": 0,
                "thresholds": {
@@ -620,15 +595,6 @@
          "options": {
             "minVizHeight": 200,
             "minVizWidth": 200,
-            "orientation": "auto",
-            "reduceOptions": {
-               "calcs": [
-                  "lastNotNull"
-               ],
-               "fields": "",
-               "limit": 1,
-               "values": false
-            },
             "showThresholdLabels": false
          },
          "pluginVersion": "v11.0.0",
@@ -638,10 +604,10 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "label_replace(\n  topk(1,\n    sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n    /\n    max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n  ),\n  \"worst_instance\", \"$1\", \"instance\", \"(.*)\"\n)\n",
+               "expr": "max by (job,cluster) (\n  sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{instance}}",
+               "legendFormat": "Worst connection utilization",
                "refId": "Worst connection utilization"
             }
          ],
@@ -1589,7 +1555,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Worst (highest) lock utilization across all instances.",
+         "description": "Highest lock utilization across all instances.",
          "fieldConfig": {
             "defaults": {
                "color": {
@@ -1652,10 +1618,10 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "max by (job,cluster) (\n  (\n  sum by (job,cluster, instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    max by (job,cluster, instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n    *\n    max by (job,cluster, instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+               "expr": "max by (job,cluster) (\n  sum by (instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{cluster}}: Worst lock utilization",
+               "legendFormat": "Worst lock utilization",
                "refId": "Worst lock utilization"
             }
          ],

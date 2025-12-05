@@ -97,53 +97,43 @@ function(this)
         },
       },
 
-      // Worst (minimum) cache hit ratio across cluster - keeps instance label for drill-down
       worstCacheHitRatio: {
         name: 'Worst cache hit ratio',
-        description: 'Lowest cache hit ratio across all instances. Shows worst-performing instance.',
-        type: 'raw',
+        description: 'Lowest cache hit ratio across all instances.',
+        type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'min',
         sources: {
           postgres_exporter: {
             expr: |||
-              label_replace(
-                bottomk(1,
-                  sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                  /
-                  (
-                    sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                    +
-                    sum by (instance) (pg_stat_database_blks_read{%(queriesSelector)s})
-                    + 1
-                  )
-                ),
-                "worst_instance", "$1", "instance", "(.*)"
+              sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+              /
+              (
+                sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                +
+                sum by (instance) (pg_stat_database_blks_read{%(queriesSelector)s})
+                + 1
               )
             |||,
-            legendCustomTemplate: '{{instance}}',
+            legendCustomTemplate: 'Worst cache hit ratio',
           },
         },
       },
 
-      // Worst (maximum) connection utilization across cluster - keeps instance label for drill-down
       worstConnectionUtilization: {
         name: 'Worst connection utilization',
         description: 'Highest connection utilization across all instances.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'max',
         sources: {
           postgres_exporter: {
             expr: |||
-              label_replace(
-                topk(1,
-                  sum by (instance) (pg_stat_activity_count{%(queriesSelector)s})
-                  /
-                  max by (instance) (pg_settings_max_connections{%(queriesSelector)s})
-                ),
-                "worst_instance", "$1", "instance", "(.*)"
-              )
+              sum by (instance) (pg_stat_activity_count{%(queriesSelector)s})
+              /
+              max by (instance) (pg_settings_max_connections{%(queriesSelector)s})
             |||,
-            legendCustomTemplate: '{{instance}}',
+            legendCustomTemplate: 'Worst connection utilization',
           },
         },
       },
@@ -320,7 +310,6 @@ function(this)
         },
       },
 
-      // Worst lock utilization across cluster
       worstLockUtilization: {
         name: 'Worst lock utilization',
         description: 'Highest lock utilization across all instances.',
@@ -330,17 +319,15 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
+              sum by (instance) (pg_locks_count{%(queriesSelector)s})
+              /
               (
-                sum by (%(agg)s, instance) (pg_locks_count{%(queriesSelector)s})
-                /
-                (
-                  max by (%(agg)s, instance) (pg_settings_max_locks_per_transaction{%(queriesSelector)s})
-                  *
-                  max by (%(agg)s, instance) (pg_settings_max_connections{%(queriesSelector)s})
-                )
+                max by (instance) (pg_settings_max_locks_per_transaction{%(queriesSelector)s})
+                *
+                max by (instance) (pg_settings_max_connections{%(queriesSelector)s})
               )
             |||,
-            legendCustomTemplate: '{{cluster}}: Worst lock utilization',
+            legendCustomTemplate: 'Worst lock utilization',
           },
         },
       },
