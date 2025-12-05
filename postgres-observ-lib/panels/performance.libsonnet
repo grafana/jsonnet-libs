@@ -13,6 +13,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Combined commits and rollbacks per second.'
       ),
 
+    // QPS - Queries per second
+    queriesPerSecond:
+      signals.performance.queriesPerSecond.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('ops')
+      + g.panel.timeSeries.panelOptions.withDescription(
+        'Queries per second. Requires pg_stat_statements extension.'
+      ),
+
     // Active connections
     activeConnections:
       signals.performance.activeConnections.asTimeSeries()

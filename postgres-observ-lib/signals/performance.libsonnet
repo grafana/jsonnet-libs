@@ -27,7 +27,25 @@ function(this)
               +
               rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: TPS',
+            legendCustomTemplate: ' TPS',
+          },
+        },
+      },
+
+      // QPS - Queries per second (requires pg_stat_statements)
+      queriesPerSecond: {
+        name: 'Queries per second',
+        description: 'Queries per second. Requires pg_stat_statements extension.',
+        type: 'raw',
+        unit: 'ops',
+        sources: {
+          postgres_exporter: {
+            expr: |||
+              sum by (%(agg)s) (
+                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
+            legendCustomTemplate: ' QPS',
           },
         },
       },
@@ -42,7 +60,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Active connections',
+            legendCustomTemplate: ' Active connections',
           },
         },
       },
@@ -56,7 +74,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_temp_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Temp bytes',
+            legendCustomTemplate: ' Temp bytes',
           },
         },
       },
@@ -70,7 +88,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_blks_read{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Disk reads',
+            legendCustomTemplate: ' Disk reads',
           },
         },
       },
@@ -85,7 +103,7 @@ function(this)
           postgres_exporter: {
             // Note: type='counter' automatically applies rate()
             expr: 'pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Buffers allocated',
+            legendCustomTemplate: ' Buffers allocated',
           },
         },
       },
@@ -108,7 +126,7 @@ function(this)
                 sum(rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
               )
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Rollback ratio',
+            legendCustomTemplate: ' Rollback ratio',
           },
         },
       },
@@ -126,7 +144,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Fetched',
+            legendCustomTemplate: ' Fetched',
           },
         },
       },
@@ -140,7 +158,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_returned{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Returned',
+            legendCustomTemplate: ' Returned',
           },
         },
       },
@@ -154,7 +172,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Inserted',
+            legendCustomTemplate: ' Inserted',
           },
         },
       },
@@ -168,7 +186,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Updated',
+            legendCustomTemplate: ' Updated',
           },
         },
       },
@@ -182,7 +200,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Deleted',
+            legendCustomTemplate: ' Deleted',
           },
         },
       },
@@ -200,7 +218,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Allocated',
+            legendCustomTemplate: ' Allocated',
           },
         },
       },
@@ -214,7 +232,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Cleaned',
+            legendCustomTemplate: ' Cleaned',
           },
         },
       },
@@ -228,7 +246,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Clean total',
+            legendCustomTemplate: ' Clean total',
           },
         },
       },
@@ -242,7 +260,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Max written stops',
+            legendCustomTemplate: ' Max written stops',
           },
         },
       },
@@ -256,7 +274,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'time() - pg_stat_bgwriter_stats_reset_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Stats age',
+            legendCustomTemplate: ' Stats age',
           },
         },
       },

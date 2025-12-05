@@ -34,9 +34,9 @@ local g = import '../g.libsonnet';
             excludeByName: {
               Time: true,
               __name__: false,
-              job: false,
-              cluster: false,
-              instance: false,
+              job: true,
+              cluster: true,
+              instance: true,
               server: true,
               server_id: true,
               environment: true,
@@ -44,15 +44,9 @@ local g = import '../g.libsonnet';
             indexByName: {
               __name__: 0,
               Value: 1,
-              cluster: 2,
-              instance: 3,
-              job: 4,
             },
             renameByName: {
               __name__: 'Setting',
-              job: 'Job',
-              cluster: 'Cluster',
-              instance: 'Instance',
               Value: 'Value',
             },
           },

@@ -469,10 +469,17 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Worst (lowest) cache hit ratio across all instances.",
+         "description": "Worst (lowest) cache hit ratio across all instances. Click gauge to drill down.",
          "fieldConfig": {
             "defaults": {
-               "displayName": "${__field.labels.instance}",
+               "displayName": "🔗 ${__field.labels.instance}",
+               "links": [
+                  {
+                     "targetBlank": false,
+                     "title": "🔍 View Instance Details",
+                     "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
+                  }
+               ],
                "max": 1,
                "min": 0,
                "thresholds": {
@@ -518,13 +525,6 @@
             "x": 0,
             "y": 7
          },
-         "links": [
-            {
-               "targetBlank": false,
-               "title": "🔍 Check Instance",
-               "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
-            }
-         ],
          "options": {
             "minVizHeight": 200,
             "minVizWidth": 200,
@@ -561,10 +561,17 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Worst (highest) connection utilization across all instances.",
+         "description": "Worst (highest) connection utilization across all instances. Click gauge to drill down.",
          "fieldConfig": {
             "defaults": {
-               "displayName": "${__field.labels.instance}",
+               "displayName": "🔗 ${__field.labels.instance}",
+               "links": [
+                  {
+                     "targetBlank": false,
+                     "title": "🔍 View Instance Details",
+                     "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
+                  }
+               ],
                "max": 1,
                "min": 0,
                "thresholds": {
@@ -610,13 +617,6 @@
             "x": 8,
             "y": 7
          },
-         "links": [
-            {
-               "targetBlank": false,
-               "title": "🔍 Check Instance",
-               "url": "/d/postgres-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
-            }
-         ],
          "options": {
             "minVizHeight": 200,
             "minVizWidth": 200,
@@ -1761,7 +1761,7 @@
                   "lineWidth": 2,
                   "showPoints": "never",
                   "thresholdsStyle": {
-                     "mode": "line+area"
+                     "mode": "line"
                   }
                },
                "thresholds": {
@@ -1845,7 +1845,7 @@
                   "lineWidth": 2,
                   "showPoints": "never",
                   "thresholdsStyle": {
-                     "mode": "line+area"
+                     "mode": "line"
                   }
                },
                "thresholds": {
@@ -1988,8 +1988,138 @@
             "y": 44
          },
          "panels": [ ],
-         "title": "Read/Write Split",
+         "title": "Throughput & Read/Write Split",
          "type": "row"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Transactions per second per instance. Compare workload distribution.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "ops"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "TPS by instance"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ops"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 45
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n\n)",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{instance}}: TPS",
+               "refId": "TPS by instance"
+            }
+         ],
+         "title": "TPS by Instance",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+         },
+         "description": "Queries per second per instance. Requires pg_stat_statements extension.",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 30,
+                  "gradientMode": "opacity",
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 2,
+                  "showPoints": "never"
+               },
+               "unit": "ops"
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byFrameRefID",
+                     "options": "QPS by instance"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ops"
+                     }
+                  ]
+               }
+            ]
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 45
+         },
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list"
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "desc"
+            }
+         },
+         "pluginVersion": "v11.0.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "sum by (instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)\n",
+               "format": "time_series",
+               "instant": false,
+               "legendFormat": "{{instance}}: QPS",
+               "refId": "QPS by instance"
+            }
+         ],
+         "title": "QPS by Instance",
+         "type": "timeseries"
       },
       {
          "datasource": {
@@ -2052,9 +2182,9 @@
          },
          "gridPos": {
             "h": 8,
-            "w": 12,
+            "w": 8,
             "x": 0,
-            "y": 45
+            "y": 53
          },
          "options": {
             "legend": {
@@ -2139,9 +2269,9 @@
          },
          "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 45
+            "w": 8,
+            "x": 8,
+            "y": 53
          },
          "options": {
             "legend": {
@@ -2168,71 +2298,6 @@
             }
          ],
          "title": "Read Operations by Instance",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-         },
-         "description": "Transactions per second per instance. Compare workload distribution.",
-         "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "fillOpacity": 30,
-                  "gradientMode": "opacity",
-                  "lineInterpolation": "smooth",
-                  "lineWidth": 2,
-                  "showPoints": "never"
-               },
-               "unit": "ops"
-            },
-            "overrides": [
-               {
-                  "matcher": {
-                     "id": "byFrameRefID",
-                     "options": "TPS by instance"
-                  },
-                  "properties": [
-                     {
-                        "id": "unit",
-                        "value": "ops"
-                     }
-                  ]
-               }
-            ]
-         },
-         "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 53
-         },
-         "options": {
-            "legend": {
-               "calcs": [ ],
-               "displayMode": "list"
-            },
-            "tooltip": {
-               "mode": "multi",
-               "sort": "desc"
-            }
-         },
-         "pluginVersion": "v11.0.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${datasource}"
-               },
-               "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n\n)",
-               "format": "time_series",
-               "instant": false,
-               "legendFormat": "{{instance}}: TPS",
-               "refId": "TPS by instance"
-            }
-         ],
-         "title": "TPS by Instance",
          "type": "timeseries"
       },
       {
@@ -2274,8 +2339,8 @@
          },
          "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
+            "w": 8,
+            "x": 16,
             "y": 53
          },
          "options": {

@@ -481,6 +481,25 @@ function(this)
         },
       },
 
+      // QPS by instance (requires pg_stat_statements)
+      qpsByInstance: {
+        name: 'QPS by instance',
+        description: 'Queries per second per instance. Requires pg_stat_statements extension.',
+        type: 'raw',
+        unit: 'ops',
+        sources: {
+          postgres_exporter: {
+            expr: |||
+              sum by (instance) (
+                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
+            aggKeepLabels: ['instance'],
+            legendCustomTemplate: '{{instance}}: QPS',
+          },
+        },
+      },
+
       // Total writes (for ratio calculation)
       totalWrites: {
         name: 'Total writes',

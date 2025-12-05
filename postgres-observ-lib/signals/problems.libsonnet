@@ -21,11 +21,8 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: |||
-              count(pg_stat_activity_max_tx_duration{%(queriesSelector)s, state="active"} > 300) by (%(agg)s)
-              or vector(0)
-            |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Long-running queries',
+            expr: 'pg_long_running_transactions{%(queriesSelector)s}',
+            legendCustomTemplate: ' Long-running queries',
           },
         },
       },
@@ -43,7 +40,7 @@ function(this)
               pg_locks_count{%(queriesSelector)s, mode="ExclusiveLock"}
               or vector(0)
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Blocked queries',
+            legendCustomTemplate: ' Blocked queries',
           },
         },
       },
@@ -57,7 +54,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Idle in transaction',
+            legendCustomTemplate: ' Idle in transaction',
           },
         },
       },
@@ -71,7 +68,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL archive failures',
+            legendCustomTemplate: ' WAL archive failures',
           },
         },
       },
@@ -88,7 +85,7 @@ function(this)
             // This counts times bgwriter had to stop due to writing too many buffers
             // Note: type='counter' automatically applies rate()
             expr: 'pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Max written clean',
+            legendCustomTemplate: ' Max written clean',
           },
         },
       },
@@ -103,7 +100,7 @@ function(this)
           postgres_exporter: {
             // type='counter' automatically applies rate()
             expr: 'pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Buffers cleaned',
+            legendCustomTemplate: ' Buffers cleaned',
           },
         },
       },
@@ -121,7 +118,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_conflicts{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Conflicts',
+            legendCustomTemplate: ' Conflicts',
           },
         },
       },
@@ -143,7 +140,7 @@ function(this)
                 max by (%(agg)s) (pg_settings_max_connections{%(queriesSelector)s})
               )
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Lock utilization',
+            legendCustomTemplate: ' Lock utilization',
           },
         },
       },
@@ -163,7 +160,7 @@ function(this)
               or
               (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Inactive replication slots',
+            legendCustomTemplate: ' Inactive replication slots',
           },
         },
       },
@@ -177,7 +174,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Exporter errors',
+            legendCustomTemplate: ' Exporter errors',
           },
         },
       },

@@ -62,13 +62,16 @@ local g = import './g.libsonnet';
 
     // Read/Write Split
     clusterReadWrite:
-      g.panel.row.new('Read/Write Split')
+      g.panel.row.new('Throughput & Read/Write Split')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.cluster.writeOperations { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.readOperations { gridPos+: { w: 12, h: 8 } },
+        // First row: TPS and QPS
         panels.cluster.tpsByInstance { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.readWriteRatio { gridPos+: { w: 12, h: 8 } },
+        panels.cluster.qpsByInstance { gridPos+: { w: 12, h: 8 } },
+        // Second row: Read/Write split
+        panels.cluster.writeOperations { gridPos+: { w: 8, h: 8 } },
+        panels.cluster.readOperations { gridPos+: { w: 8, h: 8 } },
+        panels.cluster.readWriteRatio { gridPos+: { w: 8, h: 8 } },
       ]),
 
     // Cluster Resources
@@ -132,6 +135,7 @@ local g = import './g.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
+        panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
         panels.performance.rowsActivity { gridPos+: { w: 12, h: 8 } },
         panels.performance.connectionUtilizationTimeSeries { gridPos+: { w: 12, h: 8 } },
         panels.performance.cacheHitRatioTimeSeries { gridPos+: { w: 12, h: 8 } },
@@ -146,16 +150,22 @@ local g = import './g.libsonnet';
       g.panel.row.new('Maintenance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
+        // Row 1: Stat cards - Vacuum | Index | Storage
         panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.oldestVacuum { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.sequentialScanRatio { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.unusedIndexes { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.databaseSize { gridPos+: { w: 4, h: 4 } },
         panels.maintenance.walSize { gridPos+: { w: 4, h: 4 } },
+        // Row 2: Time series - Vacuum | Storage
         panels.maintenance.deadTupleRatio { gridPos+: { w: 12, h: 8 } },
+        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 12, h: 8 } },
+        // Row 3: Tables - Vacuum | Index
         panels.maintenance.tableVacuumStatus { gridPos+: { w: 12, h: 8 } },
         panels.maintenance.unusedIndexesTable { gridPos+: { w: 12, h: 8 } },
-        panels.maintenance.databaseSizeTimeSeries { gridPos+: { w: 12, h: 8 } },
+        // Row 4: Analyze - Stat | Table
+        panels.maintenance.oldestAnalyze { gridPos+: { w: 4, h: 8 } },
+        panels.maintenance.tableAnalyzeStatus { gridPos+: { w: 20, h: 8 } },
       ]),
 
     // Tier 5: Query Analysis - Root cause (separate dashboard)

@@ -124,16 +124,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       })
       + g.panel.gauge.options.withOrientation('auto')
       + g.panel.gauge.panelOptions.withDescription(
-        'Worst (lowest) cache hit ratio across all instances.'
+        'Worst (lowest) cache hit ratio across all instances. Click gauge to drill down.'
       )
-      + g.panel.gauge.panelOptions.withLinks([
+      + g.panel.gauge.standardOptions.withDisplayName('🔗 ${__field.labels.instance}')
+      + g.panel.gauge.standardOptions.withLinks([
         {
-          title: '🔍 Check Instance',
+          title: '🔍 View Instance Details',
           url: '/d/' + config.uid + '-overview?var-instance=${__field.labels.instance}&${__url_time_range}',
           targetBlank: false,
         },
-      ])
-      + g.panel.gauge.standardOptions.withDisplayName('${__field.labels.instance}'),
+      ]),
 
     // Worst connection utilization
     worstConnectionUtilization:
@@ -158,16 +158,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       })
       + g.panel.gauge.options.withOrientation('auto')
       + g.panel.gauge.panelOptions.withDescription(
-        'Worst (highest) connection utilization across all instances.'
+        'Worst (highest) connection utilization across all instances. Click gauge to drill down.'
       )
-      + g.panel.gauge.panelOptions.withLinks([
+      + g.panel.gauge.standardOptions.withDisplayName('🔗 ${__field.labels.instance}')
+      + g.panel.gauge.standardOptions.withLinks([
         {
-          title: '🔍 Check Instance',
+          title: '🔍 View Instance Details',
           url: '/d/' + config.uid + '-overview?var-instance=${__field.labels.instance}&${__url_time_range}',
           targetBlank: false,
         },
-      ])
-      + g.panel.gauge.standardOptions.withDisplayName('${__field.labels.instance}'),
+      ]),
 
     // Total deadlocks
     totalDeadlocks:
@@ -429,7 +429,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 5, color: 'yellow' },
         { value: 30, color: 'red' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
 
     // Replication slot lag by instance (time series)
     replicationSlotLagTimeSeries:
@@ -445,7 +445,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 10485760, color: 'yellow' },   // 10MB
         { value: 104857600, color: 'red' },     // 100MB
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
 
     // WAL position (time series)
     walPositionTimeSeries:
@@ -594,6 +594,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.panelOptions.withTitle('TPS by Instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Transactions per second per instance. Compare workload distribution.'
+      )
+      + g.panel.timeSeries.standardOptions.withUnit('ops'),
+
+    // QPS by instance (requires pg_stat_statements)
+    qpsByInstance:
+      signals.cluster.qpsByInstance.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.panelOptions.withTitle('QPS by Instance')
+      + g.panel.timeSeries.panelOptions.withDescription(
+        'Queries per second per instance. Requires pg_stat_statements extension.'
       )
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 

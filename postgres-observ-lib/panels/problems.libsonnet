@@ -4,13 +4,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
+    // Common stat styling for consistent appearance
+    local statBase =
+      commonlib.panels.generic.stat.info.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.options.withTextMode('value')
+      + g.panel.stat.standardOptions.color.withMode('thresholds')
+      + g.panel.stat.options.withColorMode('value'),
+
     // Long-running queries
     longRunningQueries:
       signals.problems.longRunningQueries.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statBase
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'yellow' },
@@ -23,10 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Blocked queries
     blockedQueries:
       signals.problems.blockedQueries.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statBase
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'yellow' },
@@ -39,10 +41,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Idle in transaction
     idleInTransaction:
       signals.problems.idleInTransaction.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statBase
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 5, color: 'yellow' },
@@ -55,10 +54,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // WAL archive failures
     walArchiveFailures:
       signals.problems.walArchiveFailures.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statBase
       + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -70,10 +67,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Bgwriter max written clean (I/O pressure indicator)
     checkpointWarnings:
       signals.problems.checkpointWarnings.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
+      + statBase
       + g.panel.stat.standardOptions.withUnit('ops')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 0.01, color: 'yellow' },
@@ -138,10 +133,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Inactive replication slots
     inactiveReplicationSlots:
       signals.problems.inactiveReplicationSlots.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statBase
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -153,9 +145,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Exporter errors
     exporterErrors:
       signals.problems.exporterErrors.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.options.withColorMode('value')
+      + statBase
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -165,4 +155,3 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
   },
 }
-

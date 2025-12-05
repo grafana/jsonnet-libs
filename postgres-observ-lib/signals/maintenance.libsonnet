@@ -33,7 +33,7 @@ function(this)
               /
               count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Tables needing vacuum',
+            legendCustomTemplate: ' Tables needing vacuum',
           },
         },
       },
@@ -53,7 +53,7 @@ function(this)
               and
               pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Oldest vacuum',
+            legendCustomTemplate: ' Oldest vacuum',
           },
         },
       },
@@ -74,7 +74,7 @@ function(this)
               )
             |||,
             aggKeepLabels: ['schemaname', 'relname'],
-            legendCustomTemplate: '{{cluster}} - {{instance}}: {{ schemaname }}.{{ relname }}',
+            legendCustomTemplate: ' {{ schemaname }}.{{ relname }}',
           },
         },
       },
@@ -95,7 +95,7 @@ function(this)
               pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
             |||,
             aggKeepLabels: ['schemaname', 'relname'],
-            legendCustomTemplate: '{{cluster}} - {{instance}}: {{ schemaname }}.{{ relname }}',
+            legendCustomTemplate: ' {{ schemaname }}.{{ relname }}',
           },
         },
       },
@@ -119,7 +119,7 @@ function(this)
                 + 1
               )
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Seq scan ratio',
+            legendCustomTemplate: ' Seq scan ratio',
           },
         },
       },
@@ -140,7 +140,7 @@ function(this)
               and
               (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Unused indexes',
+            legendCustomTemplate: ' Unused indexes',
           },
         },
       },
@@ -192,7 +192,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_database_size_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}} - {{instance}}: Database size',
+            legendCustomTemplate: ' Database size',
           },
         },
       },
@@ -200,20 +200,55 @@ function(this)
       // WAL position (total WAL bytes written)
       walSize: {
         name: 'WAL position',
-        description: 'Current WAL LSN position in bytes (total WAL written).',
-        type: 'gauge',
+        description: 'Current WAL LSN position in bytes (total WAL written). Only available on primary.',
+        type: 'raw',
         unit: 'bytes',
+        sources: {
+          postgres_exporter: {
+            // Use max to get single value from replication stats (primary only)
+            // This metric only exists on primary nodes
+            expr: 'max(pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s})',
+            legendCustomTemplate: 'WAL position',
+          },
+        },
+      },
+
+      // Oldest analyze age (is autoanalyze working?)
+      oldestAnalyze: {
+        name: 'Oldest analyze age',
+        description: 'Time since oldest table was last analyzed. Stale stats can lead to poor query plans.',
+        type: 'gauge',
+        unit: 's',
         aggFunction: 'max',
         sources: {
           postgres_exporter: {
-            // Use current WAL LSN position from replication stats (primary only)
-            // Falls back to 0 if no replication is configured
-            // aggFunction: 'max' handles the outer aggregation
             expr: |||
-              pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}
-              or vector(0)
+              (time() - pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s})
+              and
+              pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s} > 0
             |||,
-            legendCustomTemplate: '{{cluster}} - {{instance}}: WAL position',
+            legendCustomTemplate: ' Oldest analyze',
+          },
+        },
+      },
+
+      // Last analyze time per table
+      lastAnalyzeAge: {
+        name: 'Last analyze age',
+        description: 'Time since each table was last analyzed.',
+        type: 'gauge',
+        unit: 's',
+        sources: {
+          postgres_exporter: {
+            expr: |||
+              (
+                time() - pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s}
+              )
+              and
+              pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s} > 0
+            |||,
+            aggKeepLabels: ['schemaname', 'relname'],
+            legendCustomTemplate: ' {{ schemaname }}.{{ relname }}',
           },
         },
       },

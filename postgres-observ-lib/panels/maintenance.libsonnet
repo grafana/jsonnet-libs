@@ -70,9 +70,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: {
+            job: true,
+            instance: true,
+            cluster: true,
+          },
           renameByName: {
-            job: 'Job',
-            instance: 'Instance',
             schemaname: 'Schema',
             relname: 'Table',
             'Value #Dead tuple ratio': 'Dead Tuple Ratio',
@@ -178,26 +181,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
           include: {
-            names: ['cluster', 'instance', 'job', 'schemaname', 'relname', 'indexrelname'],
+            names: ['schemaname', 'relname', 'indexrelname'],
           },
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
           renameByName: {
-            cluster: 'Cluster',
-            instance: 'Instance',
-            job: 'Job',
             schemaname: 'Schema',
             relname: 'Table',
             indexrelname: 'Index',
           },
           indexByName: {
-            cluster: 0,
-            instance: 1,
-            job: 2,
-            schemaname: 3,
-            relname: 4,
-            indexrelname: 5,
+            schemaname: 0,
+            relname: 1,
+            indexrelname: 2,
           },
         }),
         commonlib.panels.generic.table.base.transformations.sortBy('Index', desc=false),
@@ -222,5 +219,87 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.stat.info.stylize()
       + g.panel.stat.options.withGraphMode('area')
       + g.panel.stat.standardOptions.withUnit('bytes'),
+
+    // Oldest analyze age
+    oldestAnalyze:
+      signals.maintenance.oldestAnalyze.asStat()
+      + commonlib.panels.generic.stat.info.stylize()
+      + g.panel.stat.options.withGraphMode('area')
+      + g.panel.stat.standardOptions.withUnit('dtdhms')
+      + g.panel.stat.standardOptions.thresholds.withSteps([
+        { value: 0, color: 'green' },
+        { value: 86400, color: 'yellow' },    // 1 day in seconds
+        { value: 604800, color: 'orange' },   // 7 days in seconds
+        { value: 1209600, color: 'red' },     // 14 days in seconds
+      ])
+      + g.panel.stat.options.withColorMode('value')
+      + g.panel.stat.panelOptions.withDescription(
+        'Time since oldest table was last analyzed. Stale stats can lead to poor query plans.'
+      ),
+
+    // Table analyze status
+    tableAnalyzeStatus:
+      g.panel.table.new('Table Analyze Status')
+      + g.panel.table.panelOptions.withDescription(
+        'Tables with time since last analyze. Stale statistics can cause poor query plans.'
+      )
+      + signals.maintenance.lastAnalyzeAge.asTableColumn(override='byName', format='table')
+      + g.panel.table.queryOptions.withTransformations([
+        g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          include: {
+            pattern: '^(?!Time).*$',
+          },
+        }),
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: {
+            job: true,
+            instance: true,
+            cluster: true,
+          },
+          renameByName: {
+            schemaname: 'Schema',
+            relname: 'Table',
+            Value: 'Last Analyze Age',
+          },
+          indexByName: {
+            schemaname: 0,
+            relname: 1,
+            Value: 2,
+          },
+        }),
+        commonlib.panels.generic.table.base.transformations.sortBy('Last Analyze Age', desc=true),
+      ])
+      + g.panel.table.standardOptions.withOverrides([
+        g.panel.table.fieldOverride.byName.new('Last Analyze Age')
+        + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withUnit('dtdhms')
+          + g.panel.table.standardOptions.color.withMode('thresholds')
+          + g.panel.table.standardOptions.thresholds.withSteps([
+            { value: 0, color: 'green' },
+            { value: 86400, color: 'yellow' },    // 1 day in seconds
+            { value: 604800, color: 'orange' },   // 7 days in seconds
+            { value: 1209600, color: 'red' },     // 14 days in seconds
+          ])
+          + g.panel.table.standardOptions.withMappings([
+            {
+              type: 'special',
+              options: {
+                match: 'null',
+                result: { text: 'Never', color: 'red' },
+              },
+            },
+            {
+              type: 'special',
+              options: {
+                match: 'nan',
+                result: { text: 'Never', color: 'red' },
+              },
+            },
+          ])
+        )
+        + g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }),
+      ]),
   },
 }
