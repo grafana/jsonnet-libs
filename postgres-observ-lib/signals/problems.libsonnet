@@ -1,7 +1,3 @@
-// Tier 2: Active Problems Signals
-// DBA Question: "What needs immediate attention?"
-// These signals trigger alerts and indicate current issues
-
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -105,11 +101,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Additional signals from upstream postgres_mixin
-      // ============================================
-
-      // Database conflicts (replica only)
       conflicts: {
         name: 'Conflicts',
         description: 'Number of queries cancelled due to conflicts with recovery on standby servers.',

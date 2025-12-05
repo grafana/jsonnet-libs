@@ -1,4 +1,3 @@
-// Tier 2: Active Problems Panels
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
@@ -95,11 +94,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.problems.blockedQueries.asPanelMixin()
       + signals.problems.idleInTransaction.asPanelMixin(),
 
-    // ============================================
-    // Additional panels from upstream postgres_mixin
-    // ============================================
-
-    // Conflicts and Deadlocks (combined panel from upstream)
+    // Conflicts and Deadlocks
     conflictsDeadlocks:
       g.panel.timeSeries.new('Conflicts / Deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()

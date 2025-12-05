@@ -1,15 +1,8 @@
-// Cluster-level Panels
-// Panels for the PostgreSQL Cluster Overview dashboard
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals, config):: {
-    // ============================================
-    // Row 1: Cluster Health At-a-Glance
-    // ============================================
-
-    // Cluster status (UP/DOWN)
     clusterStatus:
       signals.cluster.clusterStatus.asStat()
       + commonlib.panels.generic.stat.info.stylize()
@@ -184,10 +177,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total deadlocks detected across all instances in the selected time range.'
       ),
 
-    // ============================================
-    // Row 2: Instance Table
-    // ============================================
-
     instanceTable:
       g.panel.table.new('Cluster Instances')
       + g.panel.table.panelOptions.withDescription(
@@ -354,11 +343,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       },
 
-    // ============================================
-    // Row 3: Master History / Replica Promotion
-    // ============================================
-
-    // Current primary stat
     currentPrimary:
       signals.cluster.currentPrimary.asStat()
       + commonlib.panels.generic.stat.info.stylize()
@@ -411,11 +395,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.timeSeries.standardOptions.color.withMode('thresholds'),
 
-    // ============================================
-    // Row 4: Replication Topology & Lag
-    // ============================================
-
-    // Replication lag by instance (time series)
     replicationLagTimeSeries:
       signals.cluster.replicationLagByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -458,11 +437,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('bytes')
       + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('scheme'),
 
-    // ============================================
-    // Row 5: Cluster Problems
-    // ============================================
-
-    // Total long-running queries
     totalLongRunningQueries:
       signals.cluster.totalLongRunningQueries.asStat()
       + commonlib.panels.generic.stat.info.stylize()
@@ -559,11 +533,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total exporter scrape errors across all instances.'
       ),
 
-    // ============================================
-    // Row 6: Read/Write Split
-    // ============================================
-
-    // Write operations (primary only) - stacked
     writeOperations:
       g.panel.timeSeries.new('Write Operations (Primary)')
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -624,11 +593,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.options.legend.withWidth(350)  // Wider legend
       + g.panel.pieChart.standardOptions.withUnit('rows/s'),
 
-    // ============================================
-    // Row 7: Cluster Resources
-    // ============================================
-
-    // Total connections time series
     totalConnectionsTimeSeries:
       g.panel.timeSeries.new('Total Connections')
       + commonlib.panels.generic.timeSeries.base.stylize()

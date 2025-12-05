@@ -31,7 +31,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Rate of execution time consumption per second for each query.\n\nShows how much CPU/execution time each query is currently consuming.\nHigher values indicate queries that are actively using more resources.\n\nFormula: rate(pg_stat_statements_seconds_total[$__rate_interval])\n\nUse this to identify queries that are currently impacting performance.\n",
+         "description": "Execution time consumption rate per query. Higher values = more resource usage.",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -96,7 +96,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Average execution time per call for each query.\n\nShows how long each query takes on average when executed.\nHigher values indicate slow individual query executions.\n\nFormula: total_time / calls\n\nUse this to find queries that need optimization (slow but maybe not called often).\n",
+         "description": "Average execution time per call. Higher values = slower queries.",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -161,7 +161,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Rate of query executions per second.\n\nShows how often each query is being called.\nHigh-frequency queries are candidates for caching or connection pooling.\n\nFormula: rate(pg_stat_statements_calls_total[$__rate_interval])\n",
+         "description": "Query execution rate. High-frequency queries may benefit from caching.",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -226,7 +226,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Rate of rows returned/affected per second for each query.\n\nHigh values may indicate:\n- Missing WHERE clauses (full table scans)\n- Missing LIMIT clauses\n- Inefficient joins returning too many rows\n\nFormula: rate(pg_stat_statements_rows_total[$__rate_interval])\n",
+         "description": "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses.",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -291,7 +291,7 @@
             "type": "datasource",
             "uid": "-- Mixed --"
          },
-         "description": "Comprehensive query performance statistics from pg_stat_statements.\n\nColumns explained:\n• Time/s: Execution time rate (seconds of query time per second) - matches \"Query time consumption rate\" graph\n• Calls/s: Call rate (queries per second) - matches \"Most frequent queries\" graph\n• Avg Time: Average time per call (total_time / calls) - matches \"Slowest queries\" graph\n• Total Time: Cumulative execution time since stats reset\n\nSort by Time/s to find currently impactful queries.\nSort by Avg Time to find slow individual queries.\n",
+         "description": "Query statistics from pg_stat_statements. Sort by Time/s for current impact, Avg Time for slow queries.",
          "fieldConfig": {
             "overrides": [
                {
@@ -303,10 +303,6 @@
                      {
                         "id": "unit",
                         "value": "s"
-                     },
-                     {
-                        "id": "description",
-                        "value": "Execution time rate (seconds consumed per second). Higher = more current load. Matches \"Query time consumption rate\" graph."
                      }
                   ]
                },
@@ -319,10 +315,6 @@
                      {
                         "id": "unit",
                         "value": "ops"
-                     },
-                     {
-                        "id": "description",
-                        "value": "Call rate (executions per second). Higher = more frequently called. Matches \"Most frequent queries\" graph."
                      }
                   ]
                },
@@ -335,10 +327,6 @@
                      {
                         "id": "unit",
                         "value": "s"
-                     },
-                     {
-                        "id": "description",
-                        "value": "Average execution time per call (total_time / calls). Higher = slower query. Matches \"Slowest queries\" graph."
                      }
                   ]
                },
@@ -351,46 +339,6 @@
                      {
                         "id": "unit",
                         "value": "s"
-                     },
-                     {
-                        "id": "description",
-                        "value": "Cumulative execution time since pg_stat_statements was reset."
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Query ID"
-                  },
-                  "properties": [
-                     {
-                        "id": "description",
-                        "value": "Unique query identifier from pg_stat_statements. Use this to find the actual query text in the database."
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "Database"
-                  },
-                  "properties": [
-                     {
-                        "id": "description",
-                        "value": "Database where the query was executed."
-                     }
-                  ]
-               },
-               {
-                  "matcher": {
-                     "id": "byName",
-                     "options": "User"
-                  },
-                  "properties": [
-                     {
-                        "id": "description",
-                        "value": "PostgreSQL user who executed the query."
                      }
                   ]
                }

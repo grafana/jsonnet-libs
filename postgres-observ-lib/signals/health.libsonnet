@@ -1,7 +1,3 @@
-// Tier 1: Critical Health Signals
-// DBA Question: "Is there a problem RIGHT NOW?"
-// These 6 signals provide at-a-glance health status
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

@@ -1,4 +1,3 @@
-// Tier 5: Query Analysis Panels
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
@@ -11,16 +10,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('s')
       + g.panel.timeSeries.panelOptions.withTitle('Query time consumption rate')
       + g.panel.timeSeries.panelOptions.withDescription(
-        |||
-          Rate of execution time consumption per second for each query.
-          
-          Shows how much CPU/execution time each query is currently consuming.
-          Higher values indicate queries that are actively using more resources.
-          
-          Formula: rate(pg_stat_statements_seconds_total[$__rate_interval])
-          
-          Use this to identify queries that are currently impacting performance.
-        |||
+        'Execution time consumption rate per query. Higher values = more resource usage.'
       ),
 
     // Slowest queries by mean time
@@ -29,16 +19,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('s')
       + g.panel.timeSeries.panelOptions.withDescription(
-        |||
-          Average execution time per call for each query.
-          
-          Shows how long each query takes on average when executed.
-          Higher values indicate slow individual query executions.
-          
-          Formula: total_time / calls
-          
-          Use this to find queries that need optimization (slow but maybe not called often).
-        |||
+        'Average execution time per call. Higher values = slower queries.'
       ),
 
     // Most frequent queries
@@ -47,14 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ops')
       + g.panel.timeSeries.panelOptions.withDescription(
-        |||
-          Rate of query executions per second.
-          
-          Shows how often each query is being called.
-          High-frequency queries are candidates for caching or connection pooling.
-          
-          Formula: rate(pg_stat_statements_calls_total[$__rate_interval])
-        |||
+        'Query execution rate. High-frequency queries may benefit from caching.'
       ),
 
     // Top queries by rows
@@ -63,34 +37,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
       + g.panel.timeSeries.panelOptions.withDescription(
-        |||
-          Rate of rows returned/affected per second for each query.
-          
-          High values may indicate:
-          - Missing WHERE clauses (full table scans)
-          - Missing LIMIT clauses
-          - Inefficient joins returning too many rows
-          
-          Formula: rate(pg_stat_statements_rows_total[$__rate_interval])
-        |||
+        'Rows returned per query. High values may indicate missing WHERE/LIMIT clauses.'
       ),
 
     // Combined table view
     queryStatsTable:
       g.panel.table.new('Query Statistics')
       + g.panel.table.panelOptions.withDescription(
-        |||
-          Comprehensive query performance statistics from pg_stat_statements.
-          
-          Columns explained:
-          • Time/s: Execution time rate (seconds of query time per second) - matches "Query time consumption rate" graph
-          • Calls/s: Call rate (queries per second) - matches "Most frequent queries" graph
-          • Avg Time: Average time per call (total_time / calls) - matches "Slowest queries" graph
-          • Total Time: Cumulative execution time since stats reset
-          
-          Sort by Time/s to find currently impactful queries.
-          Sort by Avg Time to find slow individual queries.
-        |||
+        'Query statistics from pg_stat_statements. Sort by Time/s for current impact, Avg Time for slow queries.'
       )
       + g.panel.table.options.withSortBy([
         { desc: true, displayName: 'Time/s' },
@@ -175,46 +129,24 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           matcher: { id: 'byName', options: 'Time/s' },
           properties: [
             { id: 'unit', value: 's' },
-            { id: 'description', value: 'Execution time rate (seconds consumed per second). Higher = more current load. Matches "Query time consumption rate" graph.' },
           ],
         },
         {
           matcher: { id: 'byName', options: 'Calls/s' },
           properties: [
             { id: 'unit', value: 'ops' },
-            { id: 'description', value: 'Call rate (executions per second). Higher = more frequently called. Matches "Most frequent queries" graph.' },
           ],
         },
         {
           matcher: { id: 'byName', options: 'Avg Time' },
           properties: [
             { id: 'unit', value: 's' },
-            { id: 'description', value: 'Average execution time per call (total_time / calls). Higher = slower query. Matches "Slowest queries" graph.' },
           ],
         },
         {
           matcher: { id: 'byName', options: 'Total Time' },
           properties: [
             { id: 'unit', value: 's' },
-            { id: 'description', value: 'Cumulative execution time since pg_stat_statements was reset.' },
-          ],
-        },
-        {
-          matcher: { id: 'byName', options: 'Query ID' },
-          properties: [
-            { id: 'description', value: 'Unique query identifier from pg_stat_statements. Use this to find the actual query text in the database.' },
-          ],
-        },
-        {
-          matcher: { id: 'byName', options: 'Database' },
-          properties: [
-            { id: 'description', value: 'Database where the query was executed.' },
-          ],
-        },
-        {
-          matcher: { id: 'byName', options: 'User' },
-          properties: [
-            { id: 'description', value: 'PostgreSQL user who executed the query.' },
           ],
         },
       ]),

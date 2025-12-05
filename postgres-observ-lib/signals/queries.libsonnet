@@ -1,8 +1,3 @@
-// Tier 5: Query Analysis Signals
-// DBA Question: "Which query is causing the problem?"
-// Root cause analysis using pg_stat_statements
-// Requires: pg_stat_statements extension
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

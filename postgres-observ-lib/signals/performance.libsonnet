@@ -1,7 +1,3 @@
-// Tier 3: Performance Trends Signals
-// DBA Question: "Is performance acceptable? What's the trend?"
-// Time series for monitoring throughput and resource usage
-
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -131,11 +127,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Rows Activity (from upstream postgres_mixin)
-      // ============================================
-
-      // Rows fetched per second
       rowsFetched: {
         name: 'Rows fetched',
         description: 'Number of rows fetched by queries per second.',
@@ -205,11 +196,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Buffer Activity (from upstream postgres_mixin)
-      // ============================================
-
-      // Buffers allocated (for buffersActivity panel)
       buffersAlloc: {
         name: 'Buffers alloc',
         description: 'Number of buffers allocated per second.',

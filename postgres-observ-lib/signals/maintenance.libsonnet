@@ -1,7 +1,3 @@
-// Tier 4: Maintenance Signals
-// DBA Question: "What maintenance tasks need attention?"
-// Actionable metrics for vacuum, bloat, and index health
-
 function(this)
   {
     filteringSelector: this.filteringSelector,

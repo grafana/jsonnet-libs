@@ -1,4 +1,3 @@
-// PostgreSQL Settings Panels
 local g = import '../g.libsonnet';
 
 {

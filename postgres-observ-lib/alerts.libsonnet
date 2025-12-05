@@ -7,7 +7,7 @@
       {
         name: 'PostgreSQL',
         rules: [
-          // Tier 1: Critical Health Alerts
+          // Critical Health Alerts
           {
             alert: 'PostgreSQLDown',
             expr: 'pg_up{%(filteringSelector)s} == 0' % alertConfig,
@@ -85,7 +85,7 @@
             },
           },
 
-          // Tier 2: Active Problems Alerts
+          // Active Problems Alerts
           {
             alert: 'PostgreSQLLongRunningQuery',
             expr: |||
@@ -125,7 +125,7 @@
             },
           },
 
-          // Tier 4: Maintenance Alerts
+          // Maintenance Alerts
           {
             alert: 'PostgreSQLHighDeadTuples',
             expr: |||
@@ -160,10 +160,6 @@
               description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over 7 days.',
             },
           },
-
-          // ============================================
-          // Alerts from upstream postgres_mixin
-          // ============================================
 
           {
             alert: 'PostgreSQLTooManyRollbacks',

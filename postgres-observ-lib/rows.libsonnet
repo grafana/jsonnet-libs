@@ -2,11 +2,6 @@ local g = import './g.libsonnet';
 
 {
   new(panels, type):: {
-    // ============================================
-    // CLUSTER DASHBOARD ROWS
-    // ============================================
-
-    // Cluster Health At-a-Glance
     clusterHealth:
       g.panel.row.new('Cluster Health')
       + g.panel.row.withCollapsed(false)
@@ -85,11 +80,6 @@ local g = import './g.libsonnet';
         panels.cluster.walPositionTimeSeries { gridPos+: { w: 12, h: 8 } },
       ]),
 
-    // ============================================
-    // INSTANCE DASHBOARD ROWS (existing)
-    // ============================================
-
-    // Tier 1: Critical Health - Always visible at top
     health:
       g.panel.row.new('Health')
       + g.panel.row.withCollapsed(false)

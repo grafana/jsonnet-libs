@@ -1,7 +1,3 @@
-// Cluster-level Signals
-// DBA Question: "How is my cluster as a whole?"
-// Aggregated signals across all instances in a cluster
-
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -13,11 +9,6 @@ function(this)
       postgres_exporter: 'pg_up',
     },
     signals: {
-      // ============================================
-      // Cluster Health Signals
-      // ============================================
-
-      // Cluster status - minimum of all instances (0 if any is down)
       clusterStatus: {
         name: 'Cluster status',
         description: 'Whether all PostgreSQL instances in the cluster are up. 0 if any instance is down.',
@@ -171,11 +162,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Master History / Failover Signals
-      // ============================================
-
-      // Current primary instance (for display)
       currentPrimary: {
         name: 'Current primary',
         description: 'The instance currently acting as primary.',
@@ -235,11 +221,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Replication Topology Signals
-      // ============================================
-
-      // Replication lag per replica (for time series)
       replicationLagByInstance: {
         name: 'Replication lag by instance',
         description: 'Replication lag in seconds per replica instance.',
@@ -284,11 +265,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Cluster Problems (Aggregated)
-      // ============================================
-
-      // Total long-running queries across cluster
       totalLongRunningQueries: {
         name: 'Total long-running queries',
         description: 'Total queries running longer than 5 minutes across all instances.',
@@ -383,11 +359,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Read/Write Split Signals
-      // ============================================
-
-      // Write operations from primary only (inserts)
       primaryInserts: {
         name: 'Primary inserts',
         description: 'Rows inserted per second on the primary.',
@@ -540,11 +511,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Cluster Resources Signals
-      // ============================================
-
-      // Total connections across cluster
       totalConnections: {
         name: 'Total connections',
         description: 'Total active connections across all instances.',
@@ -632,11 +598,6 @@ function(this)
         },
       },
 
-      // ============================================
-      // Instance Table Signals (for table panel)
-      // ============================================
-
-      // Instance status for table
       instanceStatus: {
         name: 'Instance status',
         description: 'Status of each instance.',

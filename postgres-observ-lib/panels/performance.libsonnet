@@ -1,4 +1,3 @@
-// Tier 3: Performance Trends Panels
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
@@ -102,11 +101,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Percentage of transactions rolled back. High values indicate application issues.'
       ),
 
-    // ============================================
-    // Rows Activity (from upstream postgres_mixin)
-    // ============================================
-
-    // Rows activity panel - combined view
+    // Rows activity
     rowsActivity:
       g.panel.timeSeries.new('Rows Activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
@@ -120,11 +115,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Row-level activity showing reads (fetched/returned) and writes (inserted/updated/deleted).'
       ),
 
-    // ============================================
-    // Buffer Activity (from upstream postgres_mixin)
-    // ============================================
-
-    // Buffers activity panel - combined view
+    // Buffers activity
     buffersActivity:
       g.panel.timeSeries.new('Buffers Activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
