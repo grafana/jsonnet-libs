@@ -42,9 +42,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     },
 
     asMonitoringMixin(): {
-      grafanaDashboards: this.grafana.dashboards,
-      prometheusAlerts: this.prometheus.alerts,
-      prometheusRules: this.prometheus.recordingRules,
+      grafanaDashboards+:: this.grafana.dashboards,
+      prometheusAlerts+:: this.prometheus.alerts,
+      prometheusRules+:: this.prometheus.recordingRules,
     },
   },
 
