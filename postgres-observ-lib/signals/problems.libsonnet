@@ -86,21 +86,6 @@ function(this)
         },
       },
 
-      // Buffers cleaned by bgwriter
-      backendWrites: {
-        name: 'Bgwriter buffers cleaned',
-        description: 'Buffers written by the background writer per second.',
-        type: 'counter',
-        unit: 'ops',
-        sources: {
-          postgres_exporter: {
-            // type='counter' automatically applies rate()
-            expr: 'pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}',
-            legendCustomTemplate: ' Buffers cleaned',
-          },
-        },
-      },
-
       conflicts: {
         name: 'Conflicts',
         description: 'Number of queries cancelled due to conflicts with recovery on standby servers.',

@@ -77,19 +77,5 @@ function(this)
         },
       },
 
-      // Query statistics table
-      queryStats: {
-        name: 'Query statistics',
-        description: 'All query statistics in table format.',
-        type: 'raw',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
-            aggKeepLabels: ['queryid', 'datname', 'user'],
-            legendCustomTemplate: '{{ queryid }}',
-          },
-        },
-      },
     },
   }

@@ -21,14 +21,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Queries per second. Requires pg_stat_statements extension.'
       ),
 
-    // Active connections
-    activeConnections:
-      signals.performance.activeConnections.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withDescription(
-        'Total active connections over time.'
-      ),
-
     connectionUtilizationTimeSeries:
       signals.health.connectionUtilization.asTimeSeries()
       + commonlib.panels.generic.timeSeries.percentage.stylize()

@@ -152,20 +152,6 @@ function(this)
         },
       },
 
-      currentPrimary: {
-        name: 'Current primary',
-        description: 'The instance currently acting as primary.',
-        type: 'gauge',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_replication_is_replica{%(queriesSelector)s} == 0',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
-          },
-        },
-      },
-
       // Role per instance (for state timeline)
       instanceRole: {
         name: 'Instance role',
@@ -192,21 +178,6 @@ function(this)
             expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[5m])',
             aggKeepLabels: ['instance'],
             legendCustomTemplate: '{{instance}}: Role changes',
-          },
-        },
-      },
-
-      // Role changes for table - count over dashboard time range
-      instanceRoleChanges: {
-        name: 'Instance role changes',
-        description: 'Number of role changes (failovers) per instance in the selected time range.',
-        type: 'raw',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[$__range])',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
           },
         },
       },
@@ -521,21 +492,6 @@ function(this)
           postgres_exporter: {
             expr: 'pg_settings_max_connections{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Total max connections',
-          },
-        },
-      },
-
-      // Connections by instance
-      connectionsByInstance: {
-        name: 'Connections by instance',
-        description: 'Active connections per instance.',
-        type: 'gauge',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Connections',
           },
         },
       },

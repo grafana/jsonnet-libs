@@ -80,22 +80,24 @@ local g = import './g.libsonnet';
           ), setPanelIDs=false
         ),
 
-      // Main overview dashboard - Single pane of glass
+      // Instance overview dashboard - Drill-down from cluster view
       'postgres-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Instance Overview')
         + g.dashboard.withVariables(
           instanceVariables
           + [settingsFilterVar]
         )
-        + g.dashboard.withTags(this.config.dashboardTags)
+        + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
         + g.dashboard.withUid(this.config.uid + '-overview')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
         + g.dashboard.withDescription(
           |||
-            PostgreSQL monitoring dashboard for DBAs.
+            PostgreSQL instance monitoring dashboard.
 
-            Tiers:
-            - Health: At-a-glance status (always visible)
+            Drill down from the Cluster Overview to investigate a specific instance.
+
+            Sections:
+            - Health: At-a-glance status
             - Problems: Issues needing attention
             - Performance: Throughput and resource trends
             - Maintenance: Vacuum, bloat, and capacity planning

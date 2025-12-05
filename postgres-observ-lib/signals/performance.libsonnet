@@ -46,21 +46,6 @@ function(this)
         },
       },
 
-      // Connection trend
-      activeConnections: {
-        name: 'Active connections',
-        description: 'Current number of connections to PostgreSQL.',
-        type: 'gauge',
-        unit: 'short',
-        // aggFunction: 'sum' is default, let it handle aggregation
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            legendCustomTemplate: ' Active connections',
-          },
-        },
-      },
-
       // Are queries spilling to disk?
       tempBytesWritten: {
         name: 'Temp bytes written',

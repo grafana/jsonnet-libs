@@ -78,23 +78,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Buffer flush bottlenecks per second. When bgwriter hits its limit, backends must flush buffers themselves, causing latency spikes. Should be 0.'
       ),
 
-    // Bgwriter buffers cleaned
-    backendWrites:
-      signals.problems.backendWrites.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('ops')
-      + g.panel.timeSeries.panelOptions.withDescription(
-        'Rate of buffers cleaned by the background writer per second.'
-      ),
-
-    // Combined problems row panel
-    problemsSummary:
-      g.panel.timeSeries.new('Active Problems')
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + signals.problems.longRunningQueries.asPanelMixin()
-      + signals.problems.blockedQueries.asPanelMixin()
-      + signals.problems.idleInTransaction.asPanelMixin(),
-
     // Conflicts and Deadlocks
     conflictsDeadlocks:
       g.panel.timeSeries.new('Conflicts / Deadlocks')

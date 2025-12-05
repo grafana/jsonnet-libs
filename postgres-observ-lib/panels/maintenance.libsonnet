@@ -214,11 +214,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('bytes'),
 
-    walSize:
-      signals.maintenance.walSize.asStat()
-      + commonlib.panels.disk.stat.total.stylize()
-      + g.panel.stat.options.withGraphMode('area'),
-
     // Oldest analyze age
     oldestAnalyze:
       signals.maintenance.oldestAnalyze.asStat()

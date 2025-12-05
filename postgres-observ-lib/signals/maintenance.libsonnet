@@ -141,43 +141,6 @@ function(this)
         },
       },
 
-      // Unused indexes list (for table display)
-      unusedIndexesList: {
-        name: 'Unused indexes list',
-        description: 'List of indexes with zero buffer hits and disk reads.',
-        type: 'gauge',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            // Show indexes with zero buffer hits AND zero disk reads, keeping index details
-            expr: |||
-              (
-                (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
-                and
-                (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
-              ) * 0
-            |||,
-            aggKeepLabels: ['indexrelname', 'relname', 'schemaname'],
-            legendCustomTemplate: '{{ schemaname }}.{{ relname }}.{{ indexrelname }}',
-          },
-        },
-      },
-
-      // Index table size (per table, for context)
-      indexTableSize: {
-        name: 'Table index size',
-        description: 'Total index size per table in bytes.',
-        type: 'gauge',
-        unit: 'bytes',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_user_tables_index_size_bytes{%(queriesSelector)s}',
-            aggKeepLabels: ['relname', 'schemaname'],
-            legendCustomTemplate: '{{ schemaname }}.{{ relname }}',
-          },
-        },
-      },
-
       // Database size
       databaseSize: {
         name: 'Database size',
@@ -189,22 +152,6 @@ function(this)
           postgres_exporter: {
             expr: 'pg_database_size_bytes{%(queriesSelector)s}',
             legendCustomTemplate: ' Database size',
-          },
-        },
-      },
-
-      // WAL position (total WAL bytes written)
-      walSize: {
-        name: 'WAL position',
-        description: 'Current WAL LSN position in bytes (total WAL written). Only available on primary.',
-        type: 'raw',
-        unit: 'bytes',
-        sources: {
-          postgres_exporter: {
-            // Use max to get single value from replication stats (primary only)
-            // This metric only exists on primary nodes
-            expr: 'max(pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s})',
-            legendCustomTemplate: 'WAL position',
           },
         },
       },

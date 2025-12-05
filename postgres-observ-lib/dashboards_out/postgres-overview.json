@@ -1,5 +1,5 @@
 {
-      "description": "PostgreSQL monitoring dashboard for DBAs.\n\nTiers:\n- Health: At-a-glance status (always visible)\n- Problems: Issues needing attention\n- Performance: Throughput and resource trends\n- Maintenance: Vacuum, bloat, and capacity planning\n- Settings: PostgreSQL configuration parameters\n",
+      "description": "PostgreSQL instance monitoring dashboard.\n\nDrill down from the Cluster Overview to investigate a specific instance.\n\nSections:\n- Health: At-a-glance status\n- Problems: Issues needing attention\n- Performance: Throughput and resource trends\n- Maintenance: Vacuum, bloat, and capacity planning\n- Settings: PostgreSQL configuration parameters\n",
       "links": [
          {
             "asDropdown": false,
@@ -3838,7 +3838,8 @@
       "schemaVersion": 39,
       "tags": [
          "postgres",
-         "database"
+         "database",
+         "instance"
       ],
       "templating": {
          "list": [
@@ -3920,6 +3921,6 @@
          "to": "now"
       },
       "timezone": "utc",
-      "title": "PostgreSQL Overview",
+      "title": "PostgreSQL Instance Overview",
       "uid": "postgres-overview"
    }

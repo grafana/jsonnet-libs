@@ -300,16 +300,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       },
 
-    currentPrimary:
-      signals.cluster.currentPrimary.asStat()
-      + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.options.withTextMode('name')
-      + g.panel.stat.options.withColorMode('background')
-      + g.panel.stat.standardOptions.color.withFixedColor('blue')
-      + g.panel.stat.panelOptions.withDescription(
-        'The instance currently acting as primary.'
-      ),
-
     // Primary role history (state timeline)
     primaryRoleHistory:
       g.panel.stateTimeline.new('Primary Role History')
