@@ -19,12 +19,12 @@ function(this)
         name: 'Top queries by total time',
         description: 'Queries consuming the most cumulative execution time. Primary optimization targets.',
         type: 'raw',
-        unit: 'ms',
+        unit: 's',
         sources: {
           postgres_exporter: {
-            expr: 'topk(10, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval]) * 1000)',
-            aggKeepLabels: ['queryid', 'query'],
-            legendCustomTemplate: '{{ query }}',
+            expr: 'topk(10, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval]))',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
         },
       },
@@ -32,18 +32,22 @@ function(this)
       // What's the slowest query? (performance fix)
       slowestQueriesByMeanTime: {
         name: 'Slowest queries by mean time',
-        description: 'Queries with highest average execution time.',
+        description: 'Queries with highest average execution time (total time / calls).',
         type: 'raw',
-        unit: 'ms',
+        unit: 's',
         sources: {
           postgres_exporter: {
             expr: |||
-              topk(10, 
-                pg_stat_statements_mean_time_seconds{%(queriesSelector)s} * 1000
+              topk(10,
+                (
+                  pg_stat_statements_seconds_total{%(queriesSelector)s}
+                  /
+                  (pg_stat_statements_calls_total{%(queriesSelector)s} + 1)
+                )
               )
             |||,
-            aggKeepLabels: ['queryid', 'query'],
-            legendCustomTemplate: '{{ query }}',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
         },
       },
@@ -57,54 +61,40 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'topk(10, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval]))',
-            aggKeepLabels: ['queryid', 'query'],
-            legendCustomTemplate: '{{ query }}',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
         },
       },
 
-      // What needs more memory? (work_mem tuning)
-      queriesUsingTempFiles: {
-        name: 'Queries using temp files',
-        description: 'Queries writing to temp files. Indicates work_mem is too small for these queries.',
+      // Rows returned per query (useful for identifying expensive queries)
+      topQueriesByRows: {
+        name: 'Top queries by rows',
+        description: 'Queries returning the most rows. May indicate full table scans.',
         type: 'raw',
-        unit: 'bytes',
+        unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: |||
-              topk(10, 
-                rate(pg_stat_statements_temp_blks_written_total{%(queriesSelector)s}[$__rate_interval]) * 8192
-              )
-            |||,
-            aggKeepLabels: ['queryid', 'query'],
-            legendCustomTemplate: '{{ query }}',
+            expr: 'topk(10, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[$__rate_interval]))',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
         },
       },
 
-      // Query I/O efficiency
-      queryCacheHitRatio: {
-        name: 'Query cache efficiency',
-        description: 'Cache hit ratio per query. Low values indicate queries not benefiting from cache.',
+      // Query statistics table
+      queryStats: {
+        name: 'Query statistics',
+        description: 'All query statistics in table format.',
         type: 'raw',
-        unit: 'percentunit',
+        unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: |||
-              pg_stat_statements_shared_blks_hit_total{%(queriesSelector)s}
-              /
-              (
-                pg_stat_statements_shared_blks_hit_total{%(queriesSelector)s}
-                +
-                pg_stat_statements_shared_blks_read_total{%(queriesSelector)s}
-                + 1
-              )
-            |||,
-            aggKeepLabels: ['queryid', 'query'],
-            legendCustomTemplate: '{{ query }}',
+            expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }}',
           },
         },
       },
     },
   }
-

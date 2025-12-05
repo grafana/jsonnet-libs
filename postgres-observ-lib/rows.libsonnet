@@ -176,7 +176,7 @@ local g = import './g.libsonnet';
         panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 8 } },
         panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 12, h: 8 } },
         panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 8 } },
-        panels.queries.queriesUsingTempFiles { gridPos+: { w: 12, h: 8 } },
+        panels.queries.topQueriesByRows { gridPos+: { w: 12, h: 8 } },
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 10 } },
       ]),
 

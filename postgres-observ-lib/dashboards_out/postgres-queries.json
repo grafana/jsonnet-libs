@@ -31,7 +31,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Queries consuming most total execution time. Primary optimization targets.",
+         "description": "Rate of execution time consumption per second for each query.\n\nShows how much CPU/execution time each query is currently consuming.\nHigher values indicate queries that are actively using more resources.\n\nFormula: rate(pg_stat_statements_seconds_total[$__rate_interval])\n\nUse this to identify queries that are currently impacting performance.\n",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -41,7 +41,7 @@
                   "lineWidth": 2,
                   "showPoints": "never"
                },
-               "unit": "ms"
+               "unit": "s"
             },
             "overrides": [
                {
@@ -52,7 +52,7 @@
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "ms"
+                        "value": "s"
                      }
                   ]
                }
@@ -81,14 +81,14 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+               "expr": "topk(10, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{ query }}",
+               "legendFormat": "{{ queryid }} ({{ datname }})",
                "refId": "Top queries by total time"
             }
          ],
-         "title": "Top queries by total time",
+         "title": "Query time consumption rate",
          "type": "timeseries"
       },
       {
@@ -96,7 +96,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Queries with highest average execution time.",
+         "description": "Average execution time per call for each query.\n\nShows how long each query takes on average when executed.\nHigher values indicate slow individual query executions.\n\nFormula: total_time / calls\n\nUse this to find queries that need optimization (slow but maybe not called often).\n",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -106,7 +106,7 @@
                   "lineWidth": 2,
                   "showPoints": "never"
                },
-               "unit": "ms"
+               "unit": "s"
             },
             "overrides": [
                {
@@ -117,7 +117,7 @@
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "ms"
+                        "value": "s"
                      }
                   ]
                }
@@ -146,10 +146,10 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n",
+               "expr": "topk(10,\n  (\n    pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  )\n)\n",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{ query }}",
+               "legendFormat": "{{ queryid }} ({{ datname }})",
                "refId": "Slowest queries by mean time"
             }
          ],
@@ -161,7 +161,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Most frequently executed queries.",
+         "description": "Rate of query executions per second.\n\nShows how often each query is being called.\nHigh-frequency queries are candidates for caching or connection pooling.\n\nFormula: rate(pg_stat_statements_calls_total[$__rate_interval])\n",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -214,7 +214,7 @@
                "expr": "topk(10, rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{ query }}",
+               "legendFormat": "{{ queryid }} ({{ datname }})",
                "refId": "Most frequent queries"
             }
          ],
@@ -226,7 +226,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
          },
-         "description": "Queries writing to temp files. Consider increasing work_mem.",
+         "description": "Rate of rows returned/affected per second for each query.\n\nHigh values may indicate:\n- Missing WHERE clauses (full table scans)\n- Missing LIMIT clauses\n- Inefficient joins returning too many rows\n\nFormula: rate(pg_stat_statements_rows_total[$__rate_interval])\n",
          "fieldConfig": {
             "defaults": {
                "custom": {
@@ -236,18 +236,18 @@
                   "lineWidth": 2,
                   "showPoints": "never"
                },
-               "unit": "bytes"
+               "unit": "rows/s"
             },
             "overrides": [
                {
                   "matcher": {
                      "id": "byFrameRefID",
-                     "options": "Queries using temp files"
+                     "options": "Top queries by rows"
                   },
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "bytes"
+                        "value": "rows/s"
                      }
                   ]
                }
@@ -276,38 +276,121 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "topk(10, \n  rate(pg_stat_statements_temp_blks_written_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) * 8192\n)\n",
+               "expr": "topk(10, rate(pg_stat_statements_rows_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                "format": "time_series",
                "instant": false,
-               "legendFormat": "{{ query }}",
-               "refId": "Queries using temp files"
+               "legendFormat": "{{ queryid }} ({{ datname }})",
+               "refId": "Top queries by rows"
             }
          ],
-         "title": "Queries using temp files",
+         "title": "Top queries by rows",
          "type": "timeseries"
       },
       {
          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Mixed --"
          },
-         "description": "Query performance statistics. Requires pg_stat_statements extension.",
+         "description": "Comprehensive query performance statistics from pg_stat_statements.\n\nColumns explained:\n• Time/s: Execution time rate (seconds of query time per second) - matches \"Query time consumption rate\" graph\n• Calls/s: Call rate (queries per second) - matches \"Most frequent queries\" graph\n• Avg Time: Average time per call (total_time / calls) - matches \"Slowest queries\" graph\n• Total Time: Cumulative execution time since stats reset\n\nSort by Time/s to find currently impactful queries.\nSort by Avg Time to find slow individual queries.\n",
          "fieldConfig": {
-            "defaults": {
-               "custom": {
-                  "filterable": false
-               }
-            },
             "overrides": [
                {
                   "matcher": {
                      "id": "byName",
-                     "options": "Slowest queries by mean time"
+                     "options": "Time/s"
                   },
                   "properties": [
                      {
                         "id": "unit",
-                        "value": "ms"
+                        "value": "s"
+                     },
+                     {
+                        "id": "description",
+                        "value": "Execution time rate (seconds consumed per second). Higher = more current load. Matches \"Query time consumption rate\" graph."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Calls/s"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "ops"
+                     },
+                     {
+                        "id": "description",
+                        "value": "Call rate (executions per second). Higher = more frequently called. Matches \"Most frequent queries\" graph."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Avg Time"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "s"
+                     },
+                     {
+                        "id": "description",
+                        "value": "Average execution time per call (total_time / calls). Higher = slower query. Matches \"Slowest queries\" graph."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Total Time"
+                  },
+                  "properties": [
+                     {
+                        "id": "unit",
+                        "value": "s"
+                     },
+                     {
+                        "id": "description",
+                        "value": "Cumulative execution time since pg_stat_statements was reset."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Query ID"
+                  },
+                  "properties": [
+                     {
+                        "id": "description",
+                        "value": "Unique query identifier from pg_stat_statements. Use this to find the actual query text in the database."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "Database"
+                  },
+                  "properties": [
+                     {
+                        "id": "description",
+                        "value": "Database where the query was executed."
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "User"
+                  },
+                  "properties": [
+                     {
+                        "id": "description",
+                        "value": "PostgreSQL user who executed the query."
                      }
                   ]
                }
@@ -319,6 +402,14 @@
             "x": 0,
             "y": 19
          },
+         "options": {
+            "sortBy": [
+               {
+                  "desc": true,
+                  "displayName": "Time/s"
+               }
+            ]
+         },
          "pluginVersion": "v11.0.0",
          "targets": [
             {
@@ -326,11 +417,40 @@
                   "type": "prometheus",
                   "uid": "${datasource}"
                },
-               "expr": "topk(10, \n  pg_stat_statements_mean_time_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 1000\n)\n",
+               "expr": "rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                "format": "table",
                "instant": true,
-               "legendFormat": "{{ query }}",
-               "refId": "Slowest queries by mean time"
+               "refId": "TimeRate"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+               "format": "table",
+               "instant": true,
+               "refId": "CallsRate"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} / (pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)",
+               "format": "table",
+               "instant": true,
+               "refId": "MeanTime"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "expr": "pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+               "format": "table",
+               "instant": true,
+               "refId": "TotalTime"
             }
          ],
          "title": "Query Statistics",
@@ -339,37 +459,39 @@
                "id": "merge"
             },
             {
-               "id": "renameByRegex",
-               "options": {
-                  "regex": "Value #(.*)",
-                  "renamePattern": "$1"
-               }
-            },
-            {
-               "id": "filterFieldsByName",
-               "options": {
-                  "include": {
-                     "pattern": "^(?!Time).*$"
-                  }
-               }
-            },
-            {
                "id": "organize",
                "options": {
+                  "excludeByName": {
+                     "Time": true,
+                     "Time 1": true,
+                     "Time 2": true,
+                     "Time 3": true,
+                     "Time 4": true,
+                     "Time 5": true,
+                     "__name__": true,
+                     "cluster": true,
+                     "environment": true,
+                     "instance": true,
+                     "job": true,
+                     "server_id": true
+                  },
                   "indexByName": {
-                     "cluster": 1,
-                     "instance": 2,
-                     "job": 0,
-                     "query": 3,
-                     "queryid": 4
+                     "Value #CallsRate": 4,
+                     "Value #MeanTime": 5,
+                     "Value #TimeRate": 3,
+                     "Value #TotalTime": 6,
+                     "datname": 1,
+                     "queryid": 0,
+                     "user": 2
                   },
                   "renameByName": {
-                     "Value": "Query Statistics",
-                     "cluster": "Cluster",
-                     "instance": "Instance",
-                     "job": "Job",
-                     "query": "Query",
-                     "queryid": "Queryid"
+                     "Value #CallsRate": "Calls/s",
+                     "Value #MeanTime": "Avg Time",
+                     "Value #TimeRate": "Time/s",
+                     "Value #TotalTime": "Total Time",
+                     "datname": "Database",
+                     "queryid": "Query ID",
+                     "user": "User"
                   }
                }
             },
@@ -380,7 +502,7 @@
                   "sort": [
                      {
                         "desc": true,
-                        "field": "Value"
+                        "field": "Time/s"
                      }
                   ]
                }
