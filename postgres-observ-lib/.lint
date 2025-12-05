@@ -6,7 +6,7 @@ exclusions:
     reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"
     entries:
       - dashboard: "PostgreSQL Cluster Overview"
-      - dashboard: "PostgreSQL Overview"
+      - dashboard: "PostgreSQL Instance Overview"
       - dashboard: "PostgreSQL Query Performance"
 
   target-instance-rule:
