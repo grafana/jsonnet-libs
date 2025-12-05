@@ -34,6 +34,9 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
+            expr: 'time() - windows_system_boot_time_timestamp{%(queriesSelector)s}',
+          },
+          prometheus_pre_0_31: {
             expr: 'time() - windows_system_boot_time_timestamp_seconds{%(queriesSelector)s}',
           },
           prometheus_pre_0_30: {
@@ -48,12 +51,14 @@ function(this)
         description: 'System boot time',
         unit: 's',
         sources: {
+          prometheus: {
+            expr: 'windows_system_boot_time_timestamp{%(queriesSelector)s}',
+          },
+          prometheus_pre_0_31: {
+            expr: 'windows_system_boot_time_timestamp_seconds{%(queriesSelector)s}',
+          },
           prometheus_pre_0_30: {
             expr: 'windows_system_system_up_time{%(queriesSelector)s}',
-          },
-          // https://github.com/prometheus-community/windows_exporter/releases/tag/v0.30.0
-          prometheus: {
-            expr: 'windows_system_boot_time_timestamp_seconds{%(queriesSelector)s}',
           },
         },
       },
@@ -186,7 +191,7 @@ function(this)
             legendCustomTemplate: 'Time adjustments',
           },
           // https://github.com/prometheus-community/windows_exporter/pull/1910
-          prometheus_pre_0_30: {
+          prometheus_pre_0_31: {
             expr: 'windows_time_clock_frequency_adjustment_ppb_total{%(queriesSelector)s}',
             legendCustomTemplate: 'Time adjustments',
           },
@@ -201,6 +206,10 @@ function(this)
         sources: {
           prometheus: {
             expr: 'windows_time_timezone{%(queriesSelector)s}',
+            infoLabel: 'timezone',
+          },
+          prometheus_pre_0_31: {
+            expr: 'windows_os_timezone{%(queriesSelector)s}',
             infoLabel: 'timezone',
           },
           prometheus_pre_0_30: {
