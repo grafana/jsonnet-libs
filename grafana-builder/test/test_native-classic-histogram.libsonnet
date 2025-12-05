@@ -59,3 +59,49 @@ test.new(std.thisFile)
     ],
   )
 )
+
+
++ test.case.new(
+  name='LatencyPanel from recording',
+  test=test.expect.eq(
+    actual=std.get(builder.latencyPanelNativeHistogram('cluster_job_route:cortex_request_duration_seconds_bucket', 'cluster="cluster1"', '1e3', [99, 50], true), 'targets'),
+    expected=[
+      {
+        expr: '(histogram_quantile(0.99, sum (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster="cluster1"})) * 1e3) and on() (vector($latency_metrics) == -1)',
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A',
+      },
+      {
+        expr: '(histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket_bucket:sum_rate{cluster="cluster1"})) * 1e3) and on() (vector($latency_metrics) == 1)',
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A_classic',
+      },
+      {
+        expr: '(histogram_quantile(0.50, sum (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster="cluster1"})) * 1e3) and on() (vector($latency_metrics) == -1)',
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B',
+      },
+      {
+        expr: '(histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket_bucket:sum_rate{cluster="cluster1"})) * 1e3) and on() (vector($latency_metrics) == 1)',
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B_classic',
+      },
+      {
+        expr: '(1e3 * sum(histogram_sum(cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster="cluster1"})) /\nsum(histogram_count(cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster="cluster1"}))\n) and on() (vector($latency_metrics) == -1)',
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C',
+      },
+      {
+        expr: '(1e3 * sum(cluster_job_route:cortex_request_duration_seconds_bucket_sum:sum_rate{cluster="cluster1"}) /\nsum(cluster_job_route:cortex_request_duration_seconds_bucket_count:sum_rate{cluster="cluster1"})\n) and on() (vector($latency_metrics) == 1)',
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C_classic',
+      },
+    ]
+  )
+)
