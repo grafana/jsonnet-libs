@@ -33,9 +33,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
-        { value: 0, color: 'red' },         // Just restarted
-        { value: 300, color: 'yellow' },    // 5 minutes
-        { value: 3600, color: 'green' },    // 1 hour+
+        { value: 0, color: 'red' },  // Just restarted
+        { value: 300, color: 'yellow' },  // 5 minutes
+        { value: 3600, color: 'green' },  // 1 hour+
       ]),
 
     // Connection utilization gauge
@@ -160,9 +160,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 10485760, color: 'yellow' },   // 10MB
+        { value: 10485760, color: 'yellow' },  // 10MB
         { value: 104857600, color: 'orange' },  // 100MB
-        { value: 1073741824, color: 'red' },    // 1GB
+        { value: 1073741824, color: 'red' },  // 1GB
       ]),
   },
 }

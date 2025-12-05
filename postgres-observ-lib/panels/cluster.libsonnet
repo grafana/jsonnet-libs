@@ -54,9 +54,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
-        { value: 0, color: 'red' },      // No primary = critical
-        { value: 1, color: 'green' },    // Exactly 1 = healthy
-        { value: 2, color: 'yellow' },   // Multiple primaries = split brain warning
+        { value: 0, color: 'red' },  // No primary = critical
+        { value: 1, color: 'green' },  // Exactly 1 = healthy
+        { value: 2, color: 'yellow' },  // Multiple primaries = split brain warning
       ])
       + g.panel.stat.panelOptions.withDescription(
         'Number of primary instances. Should be exactly 1 for a healthy cluster.'
@@ -70,8 +70,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
-        { value: 0, color: 'yellow' },   // No replicas = warning
-        { value: 1, color: 'green' },    // At least 1 = good
+        { value: 0, color: 'yellow' },  // No replicas = warning
+        { value: 1, color: 'green' },  // At least 1 = good
       ])
       + g.panel.stat.panelOptions.withDescription(
         'Number of replica instances in the cluster.'
@@ -389,8 +389,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('bytes')
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 10485760, color: 'yellow' },   // 10MB
-        { value: 104857600, color: 'red' },     // 100MB
+        { value: 10485760, color: 'yellow' },  // 10MB
+        { value: 104857600, color: 'red' },  // 100MB
       ])
       + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
 
@@ -611,4 +611,3 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // walPositionTimeSeries is defined in Row 4
   },
 }
-

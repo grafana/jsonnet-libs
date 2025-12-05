@@ -3,7 +3,7 @@ local g = import '../g.libsonnet';
 {
   new(config):: {
     // Build the selector from config
-    local baseSelector = 
+    local baseSelector =
       if config.filteringSelector != '' then config.filteringSelector + ','
       else '',
     local selector = baseSelector + 'job=~"$job",cluster=~"$cluster",instance=~"$instance"',
@@ -143,4 +143,3 @@ local g = import '../g.libsonnet';
       + g.panel.table.options.footer.withEnablePagination(true),
   },
 }
-

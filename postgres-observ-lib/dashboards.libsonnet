@@ -8,7 +8,7 @@ local g = import './g.libsonnet';
       + g.dashboard.variable.textbox.generalOptions.withDescription('Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.');
 
     // Helper to make a variable single-select (no "All", no multi)
-    local makeSingleSelect(v) = v + {
+    local makeSingleSelect(v) = v {
       includeAll: false,
       multi: false,
       allValue: null,
@@ -49,7 +49,7 @@ local g = import './g.libsonnet';
         + g.dashboard.withDescription(
           |||
             PostgreSQL Cluster monitoring dashboard.
-            
+
             Provides a top-level view of the entire cluster:
             - Cluster health at-a-glance
             - Instance list with drill-down
@@ -57,7 +57,7 @@ local g = import './g.libsonnet';
             - Replication topology and lag
             - Read/Write split visibility
             - Cluster-wide problems and resources
-            
+
             Click on an instance row to drill down to the instance-level dashboard.
           |||
         )
@@ -87,7 +87,7 @@ local g = import './g.libsonnet';
         + g.dashboard.withDescription(
           |||
             PostgreSQL monitoring dashboard for DBAs.
-            
+
             Tiers:
             - Health: At-a-glance status (always visible)
             - Problems: Issues needing attention
@@ -118,14 +118,14 @@ local g = import './g.libsonnet';
         + g.dashboard.withDescription(
           |||
             PostgreSQL query performance analysis.
-            
+
             Requires pg_stat_statements extension:
-            
+
             1. Add to postgresql.conf:
                shared_preload_libraries = 'pg_stat_statements'
-            
+
             2. Restart PostgreSQL
-            
+
             3. Create extension:
                CREATE EXTENSION pg_stat_statements;
           |||

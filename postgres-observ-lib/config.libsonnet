@@ -6,19 +6,19 @@
   alertsFilteringSelector: 'job=~".+", instance=~".+"',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
-  
+
   // Dashboard settings
   uid: 'postgres',
   dashboardNamePrefix: '',
   dashboardTags: ['postgres', 'database'],
-  
+
   // Metrics source - extensible pattern for future sources
   // Currently only 'postgres_exporter' (prometheus community exporter) is implemented
   metricsSource: ['postgres_exporter'],
-  
+
   // Feature flags
   enableQueryAnalysis: true,  // Requires pg_stat_statements extension
-  
+
   // Alert thresholds
   alerts: {
     connectionUtilization: {

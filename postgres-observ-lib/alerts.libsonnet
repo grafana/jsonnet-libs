@@ -2,7 +2,7 @@
   new(this): {
     // Use alertsFilteringSelector for all alert rules (no Grafana variables)
     local alertConfig = this.config { filteringSelector: this.config.alertsFilteringSelector },
-    
+
     groups: [
       {
         name: 'PostgreSQL',

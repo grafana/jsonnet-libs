@@ -12,9 +12,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 0.05, color: 'yellow' },   // 5% of tables
-        { value: 0.1, color: 'orange' },    // 10% of tables
-        { value: 0.2, color: 'red' },       // 20% of tables
+        { value: 0.05, color: 'yellow' },  // 5% of tables
+        { value: 0.1, color: 'orange' },  // 10% of tables
+        { value: 0.2, color: 'red' },  // 20% of tables
       ])
       + g.panel.stat.panelOptions.withDescription(
         'Ratio of tables with > 10% dead tuples. Run VACUUM on these tables.'
@@ -102,8 +102,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.standardOptions.color.withMode('thresholds')
           + g.panel.table.standardOptions.thresholds.withSteps([
             { value: 0, color: 'green' },
-            { value: 86400, color: 'yellow' },    // 1 day in seconds
-            { value: 604800, color: 'red' },      // 7 days in seconds
+            { value: 86400, color: 'yellow' },  // 1 day in seconds
+            { value: 604800, color: 'red' },  // 7 days in seconds
           ])
           + g.panel.table.standardOptions.withMappings([
             {
@@ -227,9 +227,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.withUnit('dtdhms')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
-        { value: 86400, color: 'yellow' },    // 1 day in seconds
-        { value: 604800, color: 'orange' },   // 7 days in seconds
-        { value: 1209600, color: 'red' },     // 14 days in seconds
+        { value: 86400, color: 'yellow' },  // 1 day in seconds
+        { value: 604800, color: 'orange' },  // 7 days in seconds
+        { value: 1209600, color: 'red' },  // 14 days in seconds
       ])
       + g.panel.stat.options.withColorMode('value')
       + g.panel.stat.panelOptions.withDescription(
@@ -277,9 +277,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.standardOptions.color.withMode('thresholds')
           + g.panel.table.standardOptions.thresholds.withSteps([
             { value: 0, color: 'green' },
-            { value: 86400, color: 'yellow' },    // 1 day in seconds
-            { value: 604800, color: 'orange' },   // 7 days in seconds
-            { value: 1209600, color: 'red' },     // 14 days in seconds
+            { value: 86400, color: 'yellow' },  // 1 day in seconds
+            { value: 604800, color: 'orange' },  // 7 days in seconds
+            { value: 1209600, color: 'red' },  // 14 days in seconds
           ])
           + g.panel.table.standardOptions.withMappings([
             {
