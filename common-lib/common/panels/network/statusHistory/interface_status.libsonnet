@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local tokens = import '../../../tokens/main.libsonnet';
 local base = import './base.libsonnet';
 local statusHistory = g.panel.statusHistory;
 base {
@@ -15,12 +16,12 @@ base {
         options: {
           '0': {
             text: 'Down',
-            color: 'light-red',
+            color: tokens.base.colors.palette.critical,
             index: 0,
           },
           '1': {
             text: 'Up',
-            color: 'light-green',
+            color: tokens.base.colors.palette.ok,
             index: 1,
           },
         },
