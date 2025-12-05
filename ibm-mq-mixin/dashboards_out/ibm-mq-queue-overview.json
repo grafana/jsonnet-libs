@@ -1,113 +1,108 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "title": "IBM MQ cluster overview",
+            "type": "link",
+            "url": "/d/ibmmq-cluster-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "IBM MQ logs",
+            "type": "link",
+            "url": "/d/ibmmq-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "IBM MQ queue manager overview",
+            "type": "link",
+            "url": "/d/ibmmq-queue-manager-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "IBM MQ topics overview",
+            "type": "link",
+            "url": "/d/ibmmq-topics-overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "ibm-mq-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other IBM MQ dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Queue overview",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The average amount of time a message spends in the queue.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_average_queue_time_seconds{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_average_queue_time_seconds{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}"
+                  "instant": false,
+                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}",
+                  "refId": "Average queue time"
                }
             ],
             "title": "Average queue time",
@@ -115,89 +110,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The amount of expired messages in the queue.",
+            "description": "The expired messages of the queue.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_expired_messages{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_expired_messages{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}"
+                  "instant": false,
+                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}",
+                  "refId": "Expired messages"
                }
             ],
             "title": "Expired messages",
@@ -205,189 +162,118 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of active messages in the queue.",
+            "description": "The depth of the queue.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_depth{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_depth{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}"
+                  "instant": false,
+                  "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{queue}}",
+                  "refId": "Queue depth"
                }
             ],
-            "title": "Depth",
+            "title": "Queue depth",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The amount of throughput going through the queue via MQGETs and MQPUTs.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "decbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 9,
                "x": 0,
-               "y": 16
+               "y": 17
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqget_bytes{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqget_bytes{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQGET"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQGET",
+                  "refId": "MQGET bytes"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqput_bytes{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqput_bytes{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQPUT"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQPUT",
+                  "refId": "MQPUT bytes"
                }
             ],
             "title": "Operation throughput",
@@ -395,67 +281,30 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of queue operations of the queue manager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
                   "unit": "operations"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 15,
                "x": 9,
-               "y": 16
+               "y": 17
             },
             "id": 6,
             "options": {
@@ -466,68 +315,80 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqset_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqset_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQSET"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQSET",
+                  "refId": "MQSET operations"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqinq_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqinq_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQINQ"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQINQ",
+                  "refId": "MQINQ operations"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqget_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqget_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQGET"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQGET",
+                  "refId": "MQGET operations"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqopen_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqopen_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQOPEN"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQOPEN",
+                  "refId": "MQOPEN operations"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqclose_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqclose_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQCLOSE"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQCLOSE",
+                  "refId": "MQCLOSE operations"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_queue_mqput_mqput1_count{job=~\"$job\", mq_cluster=~\"$mq_cluster\", qmgr=~\"$qmgr\", queue=~\"$queue\"}",
+                  "expr": "ibmmq_queue_mqput_mqput1_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\", queue=~\"$queue\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{qmgr}} - {{queue}} - MQPUT/MQPUT1"
+                  "instant": false,
+                  "legendFormat": "{{qmgr}} - {{queue}} - MQPUT/MQPUT1",
+                  "refId": "MQPUT/MQPUT1 operations"
                }
             ],
             "title": "Operations",
@@ -535,134 +396,115 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "ibm-mq-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(ibmmq_queue_average_queue_time_seconds,job)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=\"integrations/ibm-mq\"}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
-               "label": "MQ cluster",
-               "multi": true,
-               "name": "mq_cluster",
-               "options": [ ],
-               "query": "label_values(ibmmq_queue_average_queue_time_seconds{job=~\"$job\"},mq_cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Queue manager",
-               "multi": true,
-               "name": "qmgr",
-               "options": [ ],
-               "query": "label_values(ibmmq_queue_average_queue_time_seconds{mq_cluster=~\"$mq_cluster\"},qmgr)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Queue",
-               "multi": true,
-               "name": "queue",
-               "options": [ ],
-               "query": "label_values(ibmmq_queue_average_queue_time_seconds{qmgr=~\"$qmgr\"},queue)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
                "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "options": [ ],
-               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, cluster)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=\"integrations/ibm-mq\",job=~\"$job\"}, cluster)",
                "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "MQ cluster",
+               "multi": false,
+               "name": "mq_cluster",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\"}, mq_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Queue manager",
+               "multi": true,
+               "name": "qmgr",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\"}, qmgr)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Queue",
+               "multi": true,
+               "name": "queue",
+               "query": "label_values(ibmmq_queue_average_queue_time_seconds, queue)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },
@@ -670,33 +512,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "IBM MQ queue overview",
-      "uid": "ibm-mq-queue-overview",
-      "version": 0
+      "uid": "ibmmq-queue-overview"
    }
