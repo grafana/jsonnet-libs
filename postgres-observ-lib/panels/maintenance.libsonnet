@@ -74,7 +74,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Table vacuum status - dead tuple ratio + last vacuum time
     tableVacuumStatus:
-      g.panel.table.new('Table Vacuum Status')
+      g.panel.table.new('Table vacuum status')
       + g.panel.table.panelOptions.withDescription(
         'Tables with dead tuple ratio and time since last vacuum. Sort by dead tuple ratio to find tables needing VACUUM.'
       )
@@ -98,14 +98,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
-            'Value #Dead tuple ratio': 'Dead Tuple Ratio',
-            'Value #Last vacuum age': 'Last Vacuum Age',
+            'Value #Dead tuple ratio': 'Dead tuple ratio',
+            'Value #Last vacuum age': 'Last vacuum age',
           },
         }),
-        commonlib.panels.generic.table.base.transformations.sortBy('Dead Tuple Ratio', desc=true),
+        commonlib.panels.generic.table.base.transformations.sortBy('Dead tuple ratio', desc=true),
       ])
       + g.panel.table.standardOptions.withOverrides([
-        g.panel.table.fieldOverride.byName.new('Dead Tuple Ratio')
+        g.panel.table.fieldOverride.byName.new('Dead tuple ratio')
         + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
           g.panel.table.standardOptions.withUnit('percentunit')
           + g.panel.table.standardOptions.color.withMode('thresholds')
@@ -117,7 +117,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ])
         )
         + g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }),
-        g.panel.table.fieldOverride.byName.new('Last Vacuum Age')
+        g.panel.table.fieldOverride.byName.new('Last vacuum age')
         + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
           g.panel.table.standardOptions.withUnit('dtdhms')
           + g.panel.table.standardOptions.color.withMode('thresholds')
@@ -180,7 +180,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Unused indexes table
     unusedIndexesTable:
-      g.panel.table.new('Unused Indexes')
+      g.panel.table.new('Unused indexes')
       + g.panel.table.panelOptions.withDescription(
         'Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.'
       )
@@ -254,7 +254,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Table analyze status
     tableAnalyzeStatus:
-      g.panel.table.new('Table Analyze Status')
+      g.panel.table.new('Table analyze status')
       + g.panel.table.panelOptions.withDescription(
         'Tables with time since last analyze. Stale statistics can cause poor query plans.'
       )
@@ -276,7 +276,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
-            Value: 'Last Analyze Age',
+            Value: 'Last analyze age',
           },
           indexByName: {
             schemaname: 0,
@@ -287,7 +287,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.table.base.transformations.sortBy('Last Analyze Age', desc=true),
       ])
       + g.panel.table.standardOptions.withOverrides([
-        g.panel.table.fieldOverride.byName.new('Last Analyze Age')
+        g.panel.table.fieldOverride.byName.new('Last analyze age')
         + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
           g.panel.table.standardOptions.withUnit('dtdhms')
           + g.panel.table.standardOptions.color.withMode('thresholds')

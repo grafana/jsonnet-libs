@@ -86,7 +86,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.problems.checkpointWarnings.asStat()
       + withInstantQuery
       + statBase
-      + g.panel.stat.panelOptions.withTitle('I/O Pressure')
+      + g.panel.stat.panelOptions.withTitle('I/O pressure')
       + g.panel.stat.standardOptions.withUnit('cps')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
@@ -100,7 +100,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Conflicts and Deadlocks
     conflictsDeadlocks:
-      g.panel.timeSeries.new('Conflicts / Deadlocks')
+      g.panel.timeSeries.new('Conflicts & Deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + signals.health.deadlocks.asPanelMixin()

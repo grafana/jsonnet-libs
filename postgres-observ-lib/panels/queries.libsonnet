@@ -53,7 +53,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Combined table view - shows all queries, independent of topk variable
     // Users can sort by any column to find queries of interest
     queryStatsTable:
-      g.panel.table.new('Query Statistics')
+      g.panel.table.new('Query statistics')
       + g.panel.table.panelOptions.withDescription(
         'Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze.'
       )

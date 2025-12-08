@@ -3,7 +3,7 @@ local g = import './g.libsonnet';
 {
   new(panels, type):: {
     clusterHealth:
-      g.panel.row.new('Cluster Health')
+      g.panel.row.new('Cluster health')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Line 1: Status indicators (6 panels x 4 = 24)
@@ -21,7 +21,7 @@ local g = import './g.libsonnet';
 
     // Cluster Instances Table with Role History
     clusterInstances:
-      g.panel.row.new('Cluster Instances')
+      g.panel.row.new('Cluster instances')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Line 1: Instance table + Role history (split 50/50)
@@ -43,7 +43,7 @@ local g = import './g.libsonnet';
 
     // Cluster Problems - High visibility row for active issues
     clusterProblems:
-      g.panel.row.new('Cluster Problems')
+      g.panel.row.new('Cluster problems')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Problem stats (6 panels x 4 = 24, taller for visibility)
@@ -57,7 +57,7 @@ local g = import './g.libsonnet';
 
     // Read/Write Split
     clusterReadWrite:
-      g.panel.row.new('Throughput & Read/Write Split')
+      g.panel.row.new('Throughput & read/write split')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // First row: TPS and QPS
@@ -71,7 +71,7 @@ local g = import './g.libsonnet';
 
     // Cluster Resources
     clusterResources:
-      g.panel.row.new('Cluster Resources')
+      g.panel.row.new('Cluster resources')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.cluster.totalConnectionsTimeSeries { gridPos+: { w: 12, h: 8 } },
@@ -102,7 +102,7 @@ local g = import './g.libsonnet';
 
     // Tier 2: Active Problems - Expands when issues exist
     problems:
-      g.panel.row.new('Active Problems')
+      g.panel.row.new('Active problems')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Line 1: Problem indicators (3 panels x 8 = 24)
@@ -119,10 +119,10 @@ local g = import './g.libsonnet';
         panels.problems.conflictsDeadlocks { gridPos+: { w: 8, h: 6 } },
       ]),
 
-    // Tier 3: Performance Trends - Time series
+    // Tier 3: Performance Trends - Time series (collapsed for faster loading)
     performance:
-      g.panel.row.new('Performance Trends')
-      + g.panel.row.withCollapsed(false)
+      g.panel.row.new('Performance trends')
+      + g.panel.row.withCollapsed(true)
       + g.panel.row.withPanels([
         panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
         panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
@@ -137,10 +137,10 @@ local g = import './g.libsonnet';
         panels.performance.rollbackRatio { gridPos+: { w: 12, h: 8 } },
       ]),
 
-    // Tier 4: Maintenance - Actionable tasks
+    // Tier 4: Maintenance - Actionable tasks (collapsed for faster loading)
     maintenance:
       g.panel.row.new('Maintenance')
-      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withCollapsed(true)
       + g.panel.row.withPanels([
         // Row 1: Vacuum - Stats | Time series
         panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 8 } },
@@ -162,7 +162,7 @@ local g = import './g.libsonnet';
 
     // Tier 5: Query Analysis - Root cause (separate dashboard)
     queries:
-      g.panel.row.new('Query Analysis')
+      g.panel.row.new('Query analysis')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 14 } },
@@ -172,10 +172,10 @@ local g = import './g.libsonnet';
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 12 } },
       ]),
 
-    // Tier 6: Settings - PostgreSQL configuration parameters
+    // Tier 6: Settings - PostgreSQL configuration parameters (collapsed for faster loading)
     settings:
-      g.panel.row.new('PostgreSQL Settings')
-      + g.panel.row.withCollapsed(false)
+      g.panel.row.new('PostgreSQL settings')
+      + g.panel.row.withCollapsed(true)
       + g.panel.row.withPanels([
         panels.settings.settingsTable { gridPos+: { w: 24, h: 16 } },
       ]),

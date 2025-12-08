@@ -168,7 +168,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     instanceTable:
-      g.panel.table.new('Cluster Instances')
+      g.panel.table.new('Cluster instances')
       + g.panel.table.panelOptions.withDescription(
         'All PostgreSQL instances in the cluster. Click a row to view instance details.'
       )
@@ -336,7 +336,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Primary role history (state timeline)
     primaryRoleHistory:
-      g.panel.stateTimeline.new('Primary Role History')
+      g.panel.stateTimeline.new('Primary role history')
       + g.panel.stateTimeline.panelOptions.withDescription(
         'Timeline showing the role of each instance. Blue = Primary, Purple = Replica. Role changes indicate failover events.'
       )
@@ -361,7 +361,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     failoverEvents:
       signals.cluster.roleChanges.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('Failover Events')
+      + g.panel.timeSeries.panelOptions.withTitle('Failover events')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Detects role changes (failovers). Spikes indicate when an instance changed role.'
       )
@@ -377,7 +377,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     replicationLagTimeSeries:
       signals.cluster.replicationLagByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('Replication Lag by Instance')
+      + g.panel.timeSeries.panelOptions.withTitle('Replication lag by instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Replication lag in seconds per replica instance.'
       )
@@ -393,7 +393,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     replicationSlotLagTimeSeries:
       signals.cluster.replicationSlotLagByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('Replication Slot Lag')
+      + g.panel.timeSeries.panelOptions.withTitle('Replication slot lag')
       + g.panel.timeSeries.panelOptions.withDescription(
         'WAL bytes pending per replication slot. High values indicate slow replicas.'
       )
@@ -409,7 +409,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     walPositionTimeSeries:
       signals.cluster.walPosition.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('WAL Position')
+      + g.panel.timeSeries.panelOptions.withTitle('WAL position')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Current WAL LSN position on the primary. Shows total WAL written over time.'
       )
@@ -513,7 +513,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     writeOperations:
-      g.panel.timeSeries.new('Write Operations (Primary)')
+      g.panel.timeSeries.new('Write operations (primary)')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Write operations (INSERT, UPDATE, DELETE) from the primary instance only.'
@@ -529,7 +529,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     readOperations:
       signals.cluster.readsByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('Read Operations by Instance')
+      + g.panel.timeSeries.panelOptions.withTitle('Read operations by instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Rows fetched per second per instance. Shows read distribution across primary and replicas.'
       )
@@ -539,7 +539,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     tpsByInstance:
       signals.cluster.tpsByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('TPS by Instance')
+      + g.panel.timeSeries.panelOptions.withTitle('TPS by instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Transactions per second per instance. Compare workload distribution.'
       )
@@ -549,7 +549,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     qpsByInstance:
       signals.cluster.qpsByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('QPS by Instance')
+      + g.panel.timeSeries.panelOptions.withTitle('QPS by instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Queries per second per instance. Requires pg_stat_statements extension.'
       )
@@ -557,7 +557,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write ratio pie chart
     readWriteRatio:
-      g.panel.pieChart.new('Read/Write Ratio')
+      g.panel.pieChart.new('Read/write ratio')
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations to write operations cluster-wide.'
       )
@@ -572,7 +572,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.standardOptions.withUnit('rows/s'),
 
     totalConnectionsTimeSeries:
-      g.panel.timeSeries.new('Total Connections')
+      g.panel.timeSeries.new('Total connections')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Total connections across all instances vs total max connections.'
@@ -594,7 +594,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     cacheHitRatioByInstanceTimeSeries:
       signals.cluster.cacheHitRatioByInstance.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.panelOptions.withTitle('Cache Hit Ratio by Instance')
+      + g.panel.timeSeries.panelOptions.withTitle('Cache hit ratio by instance')
       + g.panel.timeSeries.panelOptions.withDescription(
         'Cache hit ratio per instance over time.'
       )

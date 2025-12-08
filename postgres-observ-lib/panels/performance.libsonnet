@@ -100,7 +100,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     rowsActivity:
-      g.panel.timeSeries.new('Rows Activity')
+      g.panel.timeSeries.new('Rows activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
       + signals.performance.rowsFetched.asPanelMixin()
@@ -118,7 +118,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     buffersActivity:
-      g.panel.timeSeries.new('Buffers Activity')
+      g.panel.timeSeries.new('Buffers activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ops')
       + signals.performance.buffersAlloc.asPanelMixin()
@@ -136,7 +136,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write ratio pie chart
     readWriteRatio:
-      g.panel.pieChart.new('Read/Write Ratio')
+      g.panel.pieChart.new('Read/Write ratio')
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations (fetched) to write operations (insert+update+delete).'
       )
@@ -154,7 +154,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write time series (complements pie chart)
     readWriteTimeSeries:
-      g.panel.timeSeries.new('Read/Write Over Time')
+      g.panel.timeSeries.new('Read/Write over time')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
       + signals.performance.rowsFetched.asPanelMixin()

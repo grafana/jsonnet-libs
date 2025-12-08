@@ -6,7 +6,7 @@ local g = import '../g.libsonnet';
 
     // Settings table - shows all pg_settings_* metrics in a searchable table
     settingsTable:
-      g.panel.table.new('PostgreSQL Settings')
+      g.panel.table.new('PostgreSQL settings')
       + g.panel.table.panelOptions.withDescription(
         'PostgreSQL configuration settings. Use the Settings Filter variable above to search by setting name (regex). Default .* shows all settings.'
       )

@@ -23,7 +23,7 @@
                "y": 0
             },
             "panels": [ ],
-            "title": "Query Analysis",
+            "title": "Query analysis",
             "type": "row"
          },
          {
@@ -455,7 +455,7 @@
                   "refId": "TotalTime"
                }
             ],
-            "title": "Query Statistics",
+            "title": "Query statistics",
             "transformations": [
                {
                   "id": "merge"

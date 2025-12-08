@@ -23,7 +23,7 @@
                "y": 0
             },
             "panels": [ ],
-            "title": "Cluster Health",
+            "title": "Cluster health",
             "type": "row"
          },
          {
@@ -801,7 +801,7 @@
                "y": 13
             },
             "panels": [ ],
-            "title": "Cluster Instances",
+            "title": "Cluster instances",
             "type": "row"
          },
          {
@@ -1153,7 +1153,7 @@
                   "refId": "Instance replication lag"
                }
             ],
-            "title": "Cluster Instances",
+            "title": "Cluster instances",
             "transformations": [
                {
                   "id": "merge"
@@ -1263,7 +1263,7 @@
                   "refId": "Instance role"
                }
             ],
-            "title": "Primary Role History",
+            "title": "Primary role history",
             "type": "state-timeline"
          },
          {
@@ -1344,7 +1344,7 @@
                   "refId": "Role changes"
                }
             ],
-            "title": "Failover Events",
+            "title": "Failover events",
             "type": "timeseries"
          },
          {
@@ -1356,7 +1356,7 @@
                "y": 28
             },
             "panels": [ ],
-            "title": "Cluster Problems",
+            "title": "Cluster problems",
             "type": "row"
          },
          {
@@ -1974,7 +1974,7 @@
                   "refId": "Replication lag by instance"
                }
             ],
-            "title": "Replication Lag by Instance",
+            "title": "Replication lag by instance",
             "type": "timeseries"
          },
          {
@@ -2058,7 +2058,7 @@
                   "refId": "Replication slot lag by instance"
                }
             ],
-            "title": "Replication Slot Lag",
+            "title": "Replication slot lag",
             "type": "timeseries"
          },
          {
@@ -2123,7 +2123,7 @@
                   "refId": "WAL position"
                }
             ],
-            "title": "WAL Position",
+            "title": "WAL position",
             "type": "timeseries"
          },
          {
@@ -2135,7 +2135,7 @@
                "y": 44
             },
             "panels": [ ],
-            "title": "Throughput & Read/Write Split",
+            "title": "Throughput & read/write split",
             "type": "row"
          },
          {
@@ -2200,7 +2200,7 @@
                   "refId": "TPS by instance"
                }
             ],
-            "title": "TPS by Instance",
+            "title": "TPS by instance",
             "type": "timeseries"
          },
          {
@@ -2265,7 +2265,7 @@
                   "refId": "QPS by instance"
                }
             ],
-            "title": "QPS by Instance",
+            "title": "QPS by instance",
             "type": "timeseries"
          },
          {
@@ -2379,7 +2379,7 @@
                   "refId": "Primary deletes"
                }
             ],
-            "title": "Write Operations (Primary)",
+            "title": "Write operations (primary)",
             "type": "timeseries"
          },
          {
@@ -2444,7 +2444,7 @@
                   "refId": "Reads by instance"
                }
             ],
-            "title": "Read Operations by Instance",
+            "title": "Read operations by instance",
             "type": "timeseries"
          },
          {
@@ -2528,7 +2528,7 @@
                   "refId": "Total writes"
                }
             ],
-            "title": "Read/Write Ratio",
+            "title": "Read/write ratio",
             "type": "piechart"
          },
          {
@@ -2540,7 +2540,7 @@
                "y": 61
             },
             "panels": [ ],
-            "title": "Cluster Resources",
+            "title": "Cluster resources",
             "type": "row"
          },
          {
@@ -2626,7 +2626,7 @@
                   "refId": "Total max connections"
                }
             ],
-            "title": "Total Connections",
+            "title": "Total connections",
             "type": "timeseries"
          },
          {
@@ -2721,7 +2721,7 @@
                   "refId": "Cache hit ratio by instance"
                }
             ],
-            "title": "Cache Hit Ratio by Instance",
+            "title": "Cache hit ratio by instance",
             "type": "timeseries"
          },
          {
@@ -2859,7 +2859,7 @@
                   "refId": "WAL position"
                }
             ],
-            "title": "WAL Position",
+            "title": "WAL position",
             "type": "timeseries"
          }
       ],

@@ -25,9 +25,9 @@ function(this)
                   /
                   (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
                 ) > 0.1
-              )
+              ) OR on() vector(0)
               /
-              count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
+              count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})              
             |||,
             legendCustomTemplate: ' Tables needing vacuum',
           },
