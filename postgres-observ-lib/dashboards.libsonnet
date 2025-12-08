@@ -26,26 +26,33 @@ local g = import './g.libsonnet';
       for v in vars
     ];
 
+    // Helper to make cluster label optional with .* (matches empty labels too)
+    local makeClusterOptional(vars) = [
+      if v.name == 'cluster' then v { allValue: '.*' } else v
+      for v in vars
+    ];
+
     // Cluster dashboard variables: exclude instance, make cluster single-select
     local clusterVariables = makeSingleSelectByName(
       std.filter(function(v) v.name != 'instance', this.signals.cluster.getVariablesMultiChoice()),
       ['cluster']
     );
 
-    // Instance dashboard variables: make instance single-select
-    local instanceVariables = makeSingleSelectByName(
-      this.signals.health.getVariablesMultiChoice(),
-      ['instance']
+    local instanceVariables = makeClusterOptional(
+      makeSingleSelectByName(
+        this.signals.health.getVariablesMultiChoice(),
+        ['instance']
+      )
     );
 
-    // Queries dashboard variables: make instance single-select, add topk
-    local queriesVariables = makeSingleSelectByName(
-      this.signals.queries.getVariablesMultiChoice(),
-      ['instance']
+    local queriesVariables = makeClusterOptional(
+      makeSingleSelectByName(
+        this.signals.queries.getVariablesMultiChoice(),
+        ['instance']
+      )
     ) + [topkVar];
 
     {
-      // Cluster overview dashboard - Top-level view of the entire cluster
       'postgres-cluster.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Cluster Overview')
         + g.dashboard.withVariables(clusterVariables)
@@ -71,7 +78,7 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
               this.grafana.rows.clusterHealth,
-              this.grafana.rows.clusterInstances,  // Includes role history and failover events
+              this.grafana.rows.clusterInstances,
               this.grafana.rows.clusterProblems,
               this.grafana.rows.clusterReplication,
               this.grafana.rows.clusterReadWrite,
@@ -80,7 +87,6 @@ local g = import './g.libsonnet';
           ), setPanelIDs=false
         ),
 
-      // Instance overview dashboard - Drill-down from cluster view
       'postgres-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Instance Overview')
         + g.dashboard.withVariables(
@@ -116,7 +122,6 @@ local g = import './g.libsonnet';
           ), setPanelIDs=false
         ),
 
-      // Query performance dashboard - Requires pg_stat_statements
       'postgres-queries.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Query Performance')
         + g.dashboard.withVariables(queriesVariables)
@@ -125,17 +130,7 @@ local g = import './g.libsonnet';
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
         + g.dashboard.withDescription(
           |||
-            PostgreSQL query performance analysis.
-
-            Requires pg_stat_statements extension:
-
-            1. Add to postgresql.conf:
-               shared_preload_libraries = 'pg_stat_statements'
-
-            2. Restart PostgreSQL
-
-            3. Create extension:
-               CREATE EXTENSION pg_stat_statements;
+            PostgreSQL query performance analysis.            
           |||
         )
         + g.dashboard.withPanels(

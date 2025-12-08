@@ -30,7 +30,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.8, color: 'yellow' },
         { value: 0.95, color: 'red' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean']),
 
     tempBytesWritten:
       signals.performance.tempBytesWritten.asTimeSeries()
@@ -61,6 +64,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.95, color: 'green' },
       ])
       + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])
       + g.panel.timeSeries.panelOptions.withDescription(
         'Cache hit ratio over time. Should stay above 95%.'
       ),
@@ -115,7 +121,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.performance.buffersBackend.asPanelMixin()
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
-      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])
       + g.panel.timeSeries.options.legend.withSortBy('Last *')
       + g.panel.timeSeries.options.legend.withSortDesc(true)
       + g.panel.timeSeries.panelOptions.withDescription(
@@ -139,5 +145,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.options.legend.withPlacement('bottom')
       + g.panel.pieChart.options.legend.withValues(['value', 'percent'])
       + g.panel.pieChart.standardOptions.withUnit('rows/s'),
+
+    // Read/Write time series (complements pie chart)
+    readWriteTimeSeries:
+      g.panel.timeSeries.new('Read/Write Over Time')
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('rows/s')
+      + signals.performance.rowsFetched.asPanelMixin()
+      + signals.performance.rowsInserted.asPanelMixin()
+      + signals.performance.rowsUpdated.asPanelMixin()
+      + signals.performance.rowsDeleted.asPanelMixin()
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])
+      + g.panel.timeSeries.panelOptions.withDescription(
+        'Read (fetched) and write (insert/update/delete) operations over time.'
+      ),
   },
 }

@@ -1604,6 +1604,136 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Combined commits and rollbacks per second.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Transactions per second"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 37
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " TPS",
+                  "refId": "Transactions per second"
+               }
+            ],
+            "title": "Transactions per second",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Queries per second. Requires pg_stat_statements extension.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Queries per second"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 37
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " QPS",
+                  "refId": "Queries per second"
+               }
+            ],
+            "title": "Queries per second",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
                "type": "datasource",
                "uid": "-- Mixed --"
             },
@@ -1667,7 +1797,7 @@
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 37
+               "y": 45
             },
             "options": {
                "displayLabels": [ ],
@@ -1734,140 +1864,10 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Combined commits and rollbacks per second.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "ops"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Transactions per second"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "ops"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 37
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n+\nrate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " TPS",
-                  "refId": "Transactions per second"
-               }
-            ],
-            "title": "Transactions per second",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Queries per second. Requires pg_stat_statements extension.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "ops"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Queries per second"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "ops"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 37
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " QPS",
-                  "refId": "Queries per second"
-               }
-            ],
-            "title": "Queries per second",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Row-level activity showing reads (fetched/returned) and writes (inserted/updated/deleted).",
+            "description": "Read (fetched) and write (insert/update/delete) operations over time.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1884,18 +1884,6 @@
                      "matcher": {
                         "id": "byFrameRefID",
                         "options": "Rows fetched"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "rows/s"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Rows returned"
                      },
                      "properties": [
                         {
@@ -1944,19 +1932,20 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
-               "x": 0,
+               "w": 16,
+               "x": 8,
                "y": 45
             },
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "sortBy": "Last *",
-                  "sortDesc": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -1975,17 +1964,6 @@
                   "instant": false,
                   "legendFormat": " Fetched",
                   "refId": "Rows fetched"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_tup_returned{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Returned",
-                  "refId": "Rows returned"
                },
                {
                   "datasource": {
@@ -2021,7 +1999,99 @@
                   "refId": "Rows deleted"
                }
             ],
-            "title": "Rows Activity",
+            "title": "Read/Write Over Time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Percentage of max_connections in use. Above 80% is warning, above 95% is critical.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "thresholdsStyle": {
+                        "mode": "line"
+                     }
+                  },
+                  "decimals": 1,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "yellow",
+                           "value": 0.80000000000000004
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.94999999999999996
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Connection utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 53
+            },
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": " Connection utilization",
+                  "refId": "Connection utilization"
+               }
+            ],
+            "title": "Connection utilization",
             "type": "timeseries"
          },
          {
@@ -2096,12 +2166,15 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 53
+               "y": 61
             },
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
                   "placement": "right",
@@ -2168,92 +2241,6 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Percentage of max_connections in use. Above 80% is warning, above 95% is critical.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "continuous-BlYlRd"
-                  },
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "scheme",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
-                  },
-                  "decimals": 1,
-                  "max": 1,
-                  "min": 0,
-                  "thresholds": {
-                     "steps": [
-                        {
-                           "color": "yellow",
-                           "value": 0.80000000000000004
-                        },
-                        {
-                           "color": "red",
-                           "value": 0.94999999999999996
-                        }
-                     ]
-                  },
-                  "unit": "percentunit"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Connection utilization"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "percentunit"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 61
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": " Connection utilization",
-                  "refId": "Connection utilization"
-               }
-            ],
-            "title": "Connection utilization",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
             "description": "Cache hit ratio over time. Should stay above 95%.",
             "fieldConfig": {
                "defaults": {
@@ -2312,14 +2299,20 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 61
+               "w": 24,
+               "x": 0,
+               "y": 69
             },
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -2379,7 +2372,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 69
+               "y": 77
             },
             "options": {
                "legend": {
@@ -2444,7 +2437,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 69
+               "y": 77
             },
             "options": {
                "legend": {
@@ -2509,7 +2502,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 77
+               "y": 85
             },
             "options": {
                "legend": {
@@ -2595,7 +2588,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 77
+               "y": 85
             },
             "options": {
                "legend": {
@@ -2630,7 +2623,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 85
+               "y": 93
             },
             "panels": [ ],
             "title": "Maintenance",
@@ -2689,7 +2682,7 @@
                "h": 8,
                "w": 4,
                "x": 0,
-               "y": 86
+               "y": 94
             },
             "options": {
                "colorMode": "value",
@@ -2766,7 +2759,7 @@
                "h": 8,
                "w": 4,
                "x": 4,
-               "y": 86
+               "y": 94
             },
             "options": {
                "colorMode": "value",
@@ -2859,7 +2852,7 @@
                "h": 8,
                "w": 16,
                "x": 8,
-               "y": 86
+               "y": 94
             },
             "options": {
                "legend": {
@@ -3022,7 +3015,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 94
+               "y": 102
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -3146,7 +3139,7 @@
                "h": 8,
                "w": 4,
                "x": 0,
-               "y": 102
+               "y": 110
             },
             "options": {
                "colorMode": "value",
@@ -3222,7 +3215,7 @@
                "h": 8,
                "w": 4,
                "x": 4,
-               "y": 102
+               "y": 110
             },
             "options": {
                "colorMode": "value",
@@ -3260,7 +3253,7 @@
                "h": 8,
                "w": 16,
                "x": 8,
-               "y": 102
+               "y": 110
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -3372,7 +3365,7 @@
                "h": 8,
                "w": 4,
                "x": 0,
-               "y": 110
+               "y": 118
             },
             "options": {
                "colorMode": "value",
@@ -3486,7 +3479,7 @@
                "h": 8,
                "w": 20,
                "x": 4,
-               "y": 110
+               "y": 118
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -3580,7 +3573,7 @@
                "h": 8,
                "w": 4,
                "x": 0,
-               "y": 118
+               "y": 126
             },
             "options": {
                "colorMode": "fixed",
@@ -3644,7 +3637,7 @@
                "h": 8,
                "w": 20,
                "x": 4,
-               "y": 118
+               "y": 126
             },
             "options": {
                "legend": {
@@ -3679,7 +3672,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 126
+               "y": 134
             },
             "panels": [ ],
             "title": "PostgreSQL Settings",
@@ -3767,7 +3760,7 @@
                "h": 16,
                "w": 24,
                "x": 0,
-               "y": 127
+               "y": 135
             },
             "options": {
                "footer": {
@@ -3866,7 +3859,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"

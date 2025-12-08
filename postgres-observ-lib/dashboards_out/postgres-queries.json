@@ -1,5 +1,5 @@
 {
-      "description": "PostgreSQL query performance analysis.\n\nRequires pg_stat_statements extension:\n\n1. Add to postgresql.conf:\n   shared_preload_libraries = 'pg_stat_statements'\n\n2. Restart PostgreSQL\n\n3. Create extension:\n   CREATE EXTENSION pg_stat_statements;\n",
+      "description": "PostgreSQL query performance analysis.            \n",
       "links": [
          {
             "asDropdown": false,
@@ -535,7 +535,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"

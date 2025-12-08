@@ -124,13 +124,13 @@ local g = import './g.libsonnet';
       g.panel.row.new('Performance Trends')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
+        panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
+        panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
         panels.performance.readWriteRatio { gridPos+: { w: 8, h: 8 } },
-        panels.performance.transactionsPerSecond { gridPos+: { w: 8, h: 8 } },
-        panels.performance.queriesPerSecond { gridPos+: { w: 8, h: 8 } },
-        panels.performance.rowsActivity { gridPos+: { w: 24, h: 8 } },
-        panels.performance.buffersActivity { gridPos+: { w: 24, h: 8 } },
-        panels.performance.connectionUtilizationTimeSeries { gridPos+: { w: 12, h: 8 } },
-        panels.performance.cacheHitRatioTimeSeries { gridPos+: { w: 12, h: 8 } },
+        panels.performance.readWriteTimeSeries { gridPos+: { w: 16, h: 8 } },        
+        panels.performance.connectionUtilizationTimeSeries { gridPos+: { w: 24, h: 8 } },
+        panels.performance.buffersActivity { gridPos+: { w: 24, h: 8 } },        
+        panels.performance.cacheHitRatioTimeSeries { gridPos+: { w: 24, h: 8 } },
         panels.performance.diskReads { gridPos+: { w: 12, h: 8 } },
         panels.performance.tempBytesWritten { gridPos+: { w: 12, h: 8 } },
         panels.performance.checkpointDuration { gridPos+: { w: 12, h: 8 } },
