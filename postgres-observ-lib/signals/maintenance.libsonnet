@@ -15,21 +15,26 @@ function(this)
         description: 'Ratio of tables with dead tuple ratio > 10% to total tables.',
         type: 'gauge',
         unit: 'percentunit',
-        aggFunction: 'avg',  // Use avg for ratio, not sum
         sources: {
           postgres_exporter: {
             expr: |||
-              count(
+              avg by (job, cluster, instance) (
                 (
-                  pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
-                  /
-                  (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
-                ) > 0.1
-              ) OR on() vector(0)
-              /
-              count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})              
+                  count(
+                    (
+                      pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
+                      /
+                      (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
+                    ) > 0.1
+                  )
+                  OR
+                  vector(0)
+                )
+                /
+                count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
+              )
             |||,
-            legendCustomTemplate: ' Tables needing vacuum',
+            legendCustomTemplate: 'Tables needing vacuum',
           },
         },
       },

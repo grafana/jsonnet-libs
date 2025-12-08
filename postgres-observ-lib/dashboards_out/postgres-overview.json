@@ -2942,10 +2942,10 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "avg by (job,cluster,instance) (\n  count(\n  (\n    pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  ) > 0.1\n) OR on() vector(0)\n/\ncount(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})              \n\n)",
+                        "expr": "sum by (job,cluster,instance) (\n  avg by (job, cluster, instance) (\n  (\n    count(\n      (\n        pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n        /\n        (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n      ) > 0.1\n    )\n    OR\n    vector(0)\n  )\n  /\n  count(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
                         "format": "time_series",
                         "instant": true,
-                        "legendFormat": " Tables needing vacuum",
+                        "legendFormat": "Tables needing vacuum",
                         "refId": "Tables needing vacuum ratio"
                      }
                   ],
