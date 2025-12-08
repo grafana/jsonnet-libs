@@ -1,12 +1,9 @@
 local g = import '../g.libsonnet';
 
 {
-  new(config):: {
-    // Build the selector from config
-    local baseSelector =
-      if config.filteringSelector != '' then config.filteringSelector + ','
-      else '',
-    local selector = baseSelector + 'job=~"$job",cluster=~"$cluster",instance=~"$instance"',
+  new(signals):: {
+    // Get queriesSelector from signals layer (built by common-lib from config)
+    local queriesSelector = signals.health.templatingVariables.queriesSelector,
 
     // Settings table - shows all pg_settings_* metrics in a searchable table
     settingsTable:
@@ -20,7 +17,7 @@ local g = import '../g.libsonnet';
             type: 'prometheus',
             uid: '${datasource}',
           },
-          expr: '{__name__=~"pg_settings_.*${settingsFilter}.*",' + selector + '}',
+          expr: std.format('{__name__=~"pg_settings_.*${settingsFilter}.*",%(queriesSelector)s}', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'Settings',

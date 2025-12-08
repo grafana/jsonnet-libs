@@ -5,7 +5,7 @@
     performance: (import './performance.libsonnet').new(signals),
     maintenance: (import './maintenance.libsonnet').new(signals),
     queries: (import './queries.libsonnet').new(signals),
-    settings: (import './settings.libsonnet').new(config),
+    settings: (import './settings.libsonnet').new(signals),
     cluster: (import './cluster.libsonnet').new(signals, config),
   },
 }

@@ -3,6 +3,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
+    // Get queriesSelector from signals layer (built by common-lib from config)
+    local queriesSelector = signals.queries.templatingVariables.queriesSelector,
+
     // Legend sorted by last value descending
     local legendSortedByValue =
       g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -61,35 +64,35 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.table.queryOptions.withTargets([
         {
           datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: 'rate(pg_stat_statements_seconds_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"}[$__rate_interval])',
+          expr: std.format('rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval])', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'TimeRate',
         },
         {
           datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: 'rate(pg_stat_statements_calls_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"}[$__rate_interval])',
+          expr: std.format('rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'CallsRate',
         },
         {
           datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: 'rate(pg_stat_statements_rows_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"}[$__rate_interval])',
+          expr: std.format('rate(pg_stat_statements_rows_total{%(queriesSelector)s}[$__rate_interval])', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'RowsRate',
         },
         {
           datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: 'pg_stat_statements_seconds_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} / (pg_stat_statements_calls_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} + 1)',
+          expr: std.format('pg_stat_statements_seconds_total{%(queriesSelector)s} / (pg_stat_statements_calls_total{%(queriesSelector)s} + 1)', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'MeanTime',
         },
         {
           datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: 'pg_stat_statements_seconds_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"}',
+          expr: std.format('pg_stat_statements_seconds_total{%(queriesSelector)s}', { queriesSelector: queriesSelector }),
           format: 'table',
           instant: true,
           refId: 'TotalTime',
