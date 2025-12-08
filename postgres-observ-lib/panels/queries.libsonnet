@@ -2,8 +2,7 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
-    // Get queriesSelector from signals layer (built by common-lib from config)
+  new(signals):: {    
     local queriesSelector = signals.queries.templatingVariables.queriesSelector,
 
     // Legend sorted by last value descending

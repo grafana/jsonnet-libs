@@ -2245,7 +2245,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "continuous-BlYlRd"
+                     "mode": "thresholds"
                   },
                   "custom": {
                      "fillOpacity": 30,
@@ -2254,7 +2254,7 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "thresholdsStyle": {
-                        "mode": "line"
+                        "mode": "line+area"
                      }
                   },
                   "decimals": 1,

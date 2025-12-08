@@ -63,7 +63,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line')
+      + g.panel.timeSeries.standardOptions.color.withMode('thresholds')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area')
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])

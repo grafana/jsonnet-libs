@@ -1,8 +1,7 @@
 local g = import '../g.libsonnet';
 
 {
-  new(signals):: {
-    // Get queriesSelector from signals layer (built by common-lib from config)
+  new(signals):: {    
     local queriesSelector = signals.health.templatingVariables.queriesSelector,
 
     // Settings table - shows all pg_settings_* metrics in a searchable table

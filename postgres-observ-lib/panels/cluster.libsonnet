@@ -560,7 +560,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line'),
+      + g.panel.timeSeries.standardOptions.color.withMode('thresholds')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area'),
 
     totalDatabaseSize:
       signals.cluster.totalDatabaseSize.asStat()

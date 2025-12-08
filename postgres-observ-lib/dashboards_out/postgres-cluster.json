@@ -2456,6 +2456,9 @@
             "description": "Cache hit ratio per instance over time.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -2463,7 +2466,7 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "thresholdsStyle": {
-                        "mode": "line"
+                        "mode": "line+area"
                      }
                   },
                   "max": 1,
