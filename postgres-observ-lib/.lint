@@ -17,10 +17,10 @@ exclusions:
   panel-units-rule:
     reason: "rows/s is semantically correct; table panels don't require units"
     entries:
-      - panel: "Write Operations (Primary)"
-      - panel: "Read Operations by Instance"
-      - panel: "Rows Activity"
+      - panel: "Write operations (primary)"
+      - panel: "Read operations by instance"
+      - panel: "Rows activity"
       - panel: "Top queries by rows"
-      - panel: "Unused Indexes"
-      - panel: "PostgreSQL Settings"
-      - panel: "Read/Write Over Time"
+      - panel: "Unused indexes"
+      - panel: "PostgreSQL settings"
+      - panel: "Read/Write over time"
