@@ -272,12 +272,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           matcher: { id: 'byName', options: 'Uptime' },
           properties: [
             { id: 'unit', value: 'dtdurations' },
-            { id: 'custom.width', value: 100 },
+            { id: 'custom.width', value: 120 },
           ],
         },
         {
           matcher: { id: 'byName', options: 'Conn %' },
           properties: [
+            { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
             { id: 'thresholds', value: { mode: 'absolute', steps: [
@@ -293,6 +294,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: { id: 'byName', options: 'Cache %' },
           properties: [
+            { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
             { id: 'thresholds', value: { mode: 'absolute', steps: [
@@ -309,6 +311,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: { id: 'byName', options: 'Lag' },
           properties: [
+            { id: 'custom.width', value: 80 },
             { id: 'unit', value: 's' },
             { id: 'custom.cellOptions', value: { type: 'color-text' } },
             { id: 'thresholds', value: { mode: 'absolute', steps: [

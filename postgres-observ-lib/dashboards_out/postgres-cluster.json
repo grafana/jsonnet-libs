@@ -925,7 +925,7 @@
                         },
                         {
                            "id": "custom.width",
-                           "value": 100
+                           "value": 120
                         }
                      ]
                   },
@@ -935,6 +935,10 @@
                         "options": "Conn %"
                      },
                      "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 150
+                        },
                         {
                            "id": "unit",
                            "value": "percentunit"
@@ -988,6 +992,10 @@
                      },
                      "properties": [
                         {
+                           "id": "custom.width",
+                           "value": 150
+                        },
+                        {
                            "id": "unit",
                            "value": "percentunit"
                         },
@@ -1039,6 +1047,10 @@
                         "options": "Lag"
                      },
                      "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 80
+                        },
                         {
                            "id": "unit",
                            "value": "s"
