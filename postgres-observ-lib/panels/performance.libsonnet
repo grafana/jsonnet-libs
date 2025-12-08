@@ -27,10 +27,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
       + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
-        { value: 0.8, color: 'yellow' },
+        { value: 0, color: 'green' },
+        { value: 0.7, color: 'yellow' },
+        { value: 0.85, color: 'orange' },
         { value: 0.95, color: 'red' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line')
+      + g.panel.timeSeries.standardOptions.color.withMode('thresholds')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('scheme')
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean']),
@@ -65,6 +69,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.timeSeries.standardOptions.color.withMode('thresholds')
       + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('scheme')
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])

@@ -67,7 +67,10 @@
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
                   "placement": "bottom",
@@ -137,7 +140,10 @@
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
                   "placement": "bottom",
@@ -207,7 +213,10 @@
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
                   "placement": "bottom",
@@ -277,7 +286,10 @@
             "options": {
                "legend": {
                   "calcs": [
-                     "lastNotNull"
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
                   ],
                   "displayMode": "table",
                   "placement": "bottom",
@@ -615,6 +627,6 @@
          "to": "now"
       },
       "timezone": "utc",
-      "title": "PostgreSQL Query Performance",
+      "title": "PostgreSQL query performance",
       "uid": "postgres-queries"
    }

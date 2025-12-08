@@ -33,8 +33,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              pg_locks_count{%(queriesSelector)s, mode="ExclusiveLock"}
-              or vector(0)
+              pg_locks_count{%(queriesSelector)s, mode="exclusivelock"}              
             |||,
             legendCustomTemplate: ' Blocked queries',
           },

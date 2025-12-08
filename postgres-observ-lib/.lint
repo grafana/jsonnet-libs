@@ -5,14 +5,14 @@ exclusions:
   template-instance-rule:
     reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"
     entries:
-      - dashboard: "PostgreSQL Cluster Overview"
-      - dashboard: "PostgreSQL Instance Overview"
-      - dashboard: "PostgreSQL Query Performance"
+      - dashboard: "PostgreSQL cluster overview"
+      - dashboard: "PostgreSQL instance overview"
+      - dashboard: "PostgreSQL query performance"
 
   target-instance-rule:
     reason: "Cluster level dashboard shows all instances"
     entries:
-      - dashboard: "PostgreSQL Cluster Overview"
+      - dashboard: "PostgreSQL cluster overview"
 
   panel-units-rule:
     reason: "rows/s is semantically correct; table panels don't require units"

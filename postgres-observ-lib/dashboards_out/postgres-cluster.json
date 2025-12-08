@@ -53,6 +53,16 @@
                            }
                         },
                         "type": "value"
+                     },
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "red",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
                      }
                   ],
                   "thresholds": {
@@ -107,7 +117,7 @@
                   },
                   "expr": "min by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Cluster status",
                   "refId": "Cluster status"
                }
@@ -126,7 +136,19 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "orange",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ]
                },
                "overrides": [
                   {
@@ -167,7 +189,7 @@
                   },
                   "expr": "count by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Total instances",
                   "refId": "Total instances"
                }
@@ -186,7 +208,19 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "thresholds"
-                  }
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "red",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ]
                },
                "overrides": [
                   {
@@ -227,7 +261,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Up instances",
                   "refId": "Up instances"
                }
@@ -247,6 +281,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "red",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -303,7 +349,7 @@
                   },
                   "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Primary count",
                   "refId": "Primary count"
                }
@@ -323,6 +369,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "orange",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -375,7 +433,7 @@
                   },
                   "expr": "count by (job,cluster) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 1\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Replica count",
                   "refId": "Replica count"
                }
@@ -395,6 +453,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -456,7 +526,7 @@
                   },
                   "expr": "max by (job,cluster) (\n  pg_replication_lag_seconds{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Max replication lag",
                   "refId": "Max replication lag"
                }
@@ -472,6 +542,18 @@
             "description": "Lowest cache hit ratio across all instances.",
             "fieldConfig": {
                "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "max": 1,
                   "min": 0,
                   "thresholds": {
@@ -531,7 +613,7 @@
                   },
                   "expr": "min by (job,cluster) (\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  + 1\n)\n\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "Worst cache hit ratio",
                   "refId": "Worst cache hit ratio"
                }
@@ -547,6 +629,18 @@
             "description": "Highest connection utilization across all instances.",
             "fieldConfig": {
                "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "orange",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "max": 1,
                   "min": 0,
                   "thresholds": {
@@ -606,7 +700,7 @@
                   },
                   "expr": "max by (job,cluster) (\n  sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "Worst connection utilization",
                   "refId": "Worst connection utilization"
                }
@@ -626,6 +720,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -678,7 +784,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Total deadlocks",
                   "refId": "Total deadlocks"
                }
@@ -721,8 +827,17 @@
                      },
                      "properties": [
                         {
-                           "id": "custom.width",
-                           "value": 400
+                           "id": "custom.minWidth",
+                           "value": 350
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "View Instance",
+                                 "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}"
+                              }
+                           ]
                         }
                      ]
                   },
@@ -828,7 +943,8 @@
                            "id": "custom.cellOptions",
                            "value": {
                               "mode": "lcd",
-                              "type": "gauge"
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
                            }
                         },
                         {
@@ -845,8 +961,12 @@
                                     "value": 0.69999999999999996
                                  },
                                  {
-                                    "color": "red",
+                                    "color": "orange",
                                     "value": 0.84999999999999998
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 0.94999999999999996
                                  }
                               ]
                            }
@@ -858,10 +978,6 @@
                         {
                            "id": "max",
                            "value": 1
-                        },
-                        {
-                           "id": "custom.width",
-                           "value": 200
                         }
                      ]
                   },
@@ -879,7 +995,8 @@
                            "id": "custom.cellOptions",
                            "value": {
                               "mode": "lcd",
-                              "type": "gauge"
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
                            }
                         },
                         {
@@ -913,10 +1030,6 @@
                         {
                            "id": "max",
                            "value": 1
-                        },
-                        {
-                           "id": "custom.width",
-                           "value": 200
                         }
                      ]
                   },
@@ -955,10 +1068,6 @@
                                  }
                               ]
                            }
-                        },
-                        {
-                           "id": "custom.width",
-                           "value": 80
                         }
                      ]
                   }
@@ -1262,6 +1371,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -1318,7 +1439,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_long_running_transactions{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Long-running queries",
                   "refId": "Total long-running queries"
                }
@@ -1338,6 +1459,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -1394,7 +1527,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\", mode=\"exclusivelock\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Blocked queries",
                   "refId": "Total blocked queries"
                }
@@ -1414,6 +1547,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -1470,7 +1615,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\", state=\"idle in transaction\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Idle in transaction",
                   "refId": "Total idle in transaction"
                }
@@ -1490,6 +1635,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "orange",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -1542,7 +1699,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  rate(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: WAL archive failures",
                   "refId": "Total WAL archive failures"
                }
@@ -1561,6 +1718,18 @@
                   "color": {
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "yellow",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "max": 1,
                   "min": 0,
                   "thresholds": {
@@ -1620,7 +1789,7 @@
                   },
                   "expr": "max by (job,cluster) (\n  sum by (instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "Worst lock utilization",
                   "refId": "Worst lock utilization"
                }
@@ -1640,6 +1809,18 @@
                      "fixedColor": "text",
                      "mode": "thresholds"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "red",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "thresholds": {
                      "steps": [
                         {
@@ -1692,7 +1873,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_exporter_last_scrape_error{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Exporter errors",
                   "refId": "Total exporter errors"
                }
@@ -2461,7 +2642,7 @@
                   },
                   "custom": {
                      "fillOpacity": 30,
-                     "gradientMode": "opacity",
+                     "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
@@ -2512,8 +2693,14 @@
             },
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -2549,6 +2736,18 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "orange",
+                              "text": "No data"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
                   "unit": "bytes"
                },
                "overrides": [
@@ -2590,7 +2789,7 @@
                   },
                   "expr": "sum by (job,cluster) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
                   "format": "time_series",
-                  "instant": false,
+                  "instant": true,
                   "legendFormat": "{{cluster}}: Total database size",
                   "refId": "Total database size"
                }
@@ -2716,6 +2915,6 @@
          "to": "now"
       },
       "timezone": "utc",
-      "title": "PostgreSQL Cluster Overview",
+      "title": "PostgreSQL cluster overview",
       "uid": "postgres-cluster"
    }

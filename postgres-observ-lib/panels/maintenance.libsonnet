@@ -3,6 +3,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
+    // Helper to convert stat panel queries to instant queries for current status
+    local withInstantQuery = {
+      targets: std.map(function(t) t { instant: true }, super.targets),
+    },
+
+    // No data mappings by severity
+    local noDataOrange = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'orange' } } },
+    local noDataYellow = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'yellow' } } },
+
     local statWithThresholds =
       commonlib.panels.generic.stat.base.stylize()
       + g.panel.stat.options.withGraphMode('none')
@@ -12,6 +21,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     tablesNeedingVacuum:
       signals.maintenance.tablesNeedingVacuum.asStat()
+      + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('percentunit')
       + g.panel.stat.standardOptions.thresholds.withSteps([
@@ -20,12 +30,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.1, color: 'orange' },  // 10% of tables
         { value: 0.2, color: 'red' },  // 20% of tables
       ])
+      + g.panel.stat.standardOptions.withMappings([noDataOrange])
       + g.panel.stat.panelOptions.withDescription(
         'Ratio of tables with > 10% dead tuples. Run VACUUM on these tables.'
       ),
 
     oldestVacuum:
       signals.maintenance.oldestVacuum.asStat()
+      + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('s')
       + g.panel.stat.standardOptions.thresholds.withSteps([
@@ -33,6 +45,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 604800, color: 'yellow' },  // 7 days
         { value: 1209600, color: 'red' },  // 14 days
       ])
+      + g.panel.stat.standardOptions.withMappings([noDataOrange])
       + g.panel.stat.panelOptions.withDescription(
         'Time since oldest table was vacuumed. > 7 days is warning.'
       ),
@@ -48,7 +61,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.1, color: 'orange' },
         { value: 0.2, color: 'red' },
       ])
-      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line')
+      + g.panel.timeSeries.standardOptions.color.withMode('thresholds')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('line+area')
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
@@ -135,6 +149,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Sequential scan ratio
     sequentialScanRatio:
       signals.maintenance.sequentialScanRatio.asStat()
+      + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withUnit('percentunit')
       + g.panel.stat.standardOptions.thresholds.withSteps([
@@ -143,6 +158,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.4, color: 'orange' },
         { value: 0.6, color: 'red' },
       ])
+      + g.panel.stat.standardOptions.withMappings([noDataYellow])
       + g.panel.stat.panelOptions.withDescription(
         'Ratio of seq scans to total. High values indicate missing indexes.'
       ),
@@ -150,12 +166,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Unused indexes count
     unusedIndexes:
       signals.maintenance.unusedIndexes.asStat()
+      + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 5, color: 'yellow' },
         { value: 10, color: 'orange' },
       ])
+      + g.panel.stat.standardOptions.withMappings([noDataYellow])
       + g.panel.stat.panelOptions.withDescription(
         'Indexes with zero scans. Candidates for removal.'
       ),
@@ -206,8 +224,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     databaseSize:
       signals.maintenance.databaseSize.asStat()
+      + withInstantQuery
       + commonlib.panels.disk.stat.total.stylize()
-      + g.panel.stat.options.withGraphMode('area'),
+      + g.panel.stat.options.withGraphMode('area')
+      + g.panel.stat.standardOptions.withMappings([noDataOrange]),
 
     databaseSizeTimeSeries:
       signals.maintenance.databaseSize.asTimeSeries()
@@ -217,6 +237,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Oldest analyze age
     oldestAnalyze:
       signals.maintenance.oldestAnalyze.asStat()
+      + withInstantQuery
       + statWithThresholds
       + g.panel.stat.options.withGraphMode('area')
       + g.panel.stat.standardOptions.withUnit('dtdhms')
@@ -226,6 +247,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 604800, color: 'orange' },  // 7 days in seconds
         { value: 1209600, color: 'red' },  // 14 days in seconds
       ])
+      + g.panel.stat.standardOptions.withMappings([noDataOrange])
       + g.panel.stat.panelOptions.withDescription(
         'Time since oldest table was last analyzed. Stale stats can lead to poor query plans.'
       ),

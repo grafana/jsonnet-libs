@@ -54,7 +54,7 @@ local g = import './g.libsonnet';
 
     {
       'postgres-cluster.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Cluster Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL cluster overview')
         + g.dashboard.withVariables(clusterVariables)
         + g.dashboard.withTags(this.config.dashboardTags + ['cluster'])
         + g.dashboard.withUid(this.config.uid + '-cluster')
@@ -88,7 +88,7 @@ local g = import './g.libsonnet';
         ),
 
       'postgres-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Instance Overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance overview')
         + g.dashboard.withVariables(
           instanceVariables
           + [settingsFilterVar]
@@ -123,7 +123,7 @@ local g = import './g.libsonnet';
         ),
 
       'postgres-queries.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL Query Performance')
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL query performance')
         + g.dashboard.withVariables(queriesVariables)
         + g.dashboard.withTags(this.config.dashboardTags + ['pg_stat_statements'])
         + g.dashboard.withUid(this.config.uid + '-queries')
