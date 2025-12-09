@@ -367,6 +367,9 @@
             },
             "id": 7,
             "options": {
+               "displayLabels": [
+                  "name"
+               ],
                "legend": {
                   "displayMode": "list",
                   "placement": "bottom",

@@ -42,6 +42,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.cluster.queueOperationsMqclose.asTarget(),
           signals.cluster.queueOperationsMqput.asTarget(),
         ])
+        + g.panel.pieChart.options.withDisplayLabels(['name'])
         + g.panel.pieChart.panelOptions.withDescription('The number of queue operations of the cluster.')
         + g.panel.pieChart.standardOptions.withUnit('operations')
         + g.panel.pieChart.options.withLegend({ displayMode: 'list', placement: 'bottom', showLegend: true })
