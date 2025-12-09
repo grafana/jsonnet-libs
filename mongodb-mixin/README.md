@@ -1,6 +1,6 @@
-# MongoDB Mixin
+# MongoDB mixin
 
-The MongoDB Mixin is a set of configurable, reusable, and extensible alerts and dashboards based on the metrics exported by [Percona MongoDB Exporter](https://github.com/percona/mongodb_exporter).
+The MongoDB mixin is a set of configurable, reusable, and extensible alerts and dashboards based on the metrics exported by [Percona MongoDB Exporter](https://github.com/percona/mongodb_exporter).
 
 This mixin includes 3 dashboards suited for MongoDB, namely MongoDB Cluster, MongoDB Instance and MongoDB ReplicaSet.
 

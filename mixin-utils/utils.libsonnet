@@ -45,27 +45,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
   ncHistogramSumRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
-    local rateOpen = if from_recording then '' else 'rate(';
-    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
-    {
-      classic: '%(rateOpen)s%(metric)s_sum%(suffix)s{%(selector)s}%(rateClose)s' % {
-        metric: metric,
-        rateInterval: rate_interval,
-        rateOpen: rateOpen,
-        rateClose: rateClose,
-        selector: selector,
-        suffix: if from_recording then ':sum_rate' else '',
-      },
-      native: 'histogram_sum(%(rateOpen)s%(metric)s%(suffix)s{%(selector)s}%(rateClose)s)' % {
-        metric: metric,
-        rateInterval: rate_interval,
-        rateOpen: rateOpen,
-        rateClose: rateClose,
-        selector: selector,
-        suffix: if from_recording then ':sum_rate' else '',
-      },
-    },
-
+    $.ncHistogramChange('sum', 'rate', metric, selector, rate_interval, from_recording),
 
   // The ncHistogramCountRate (native classic histogram count rate) function is
   // used to calculate the histogram rate of count from native histograms or
@@ -73,24 +53,38 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
   ncHistogramCountRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
-    local rateOpen = if from_recording then '' else 'rate(';
-    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
+    $.ncHistogramChange('count', 'rate', metric, selector, rate_interval, from_recording),
+
+  // The ncHistogramCountIncrease (native classic histogram count rate) function is
+  // used to calculate the histogram increase of count from native histograms or
+  // classic histograms. Metric name should be provided without _count suffix.
+  ncHistogramCountIncrease(metric, selector, rate_interval='$__rate_interval')::
+    $.ncHistogramChange('count', 'increase', metric, selector, rate_interval, false),
+
+  // ncHistogramChange is a helper function to generate queries for either
+  // histogram sum or count changes over time using the specified function
+  // (e.g., rate, increase). Metric name should be provided without _sum or
+  // _count suffix.
+  ncHistogramChange(sum_or_count, func_name, metric, selector, rate_interval='$__rate_interval', from_recording=false)::
+    local funcOpen = if from_recording then '' else '%s(' % func_name;
+    local funcClose = if from_recording then '' else '[%s])' % rate_interval;
+    local suffix = if from_recording then ':sum_%s' % func_name else '';
     {
-      classic: '%(rateOpen)s%(metric)s_count%(suffix)s{%(selector)s}%(rateClose)s' % {
+      classic: '%(funcOpen)s%(metric)s_%(sum_or_count)s%(suffix)s{%(selector)s}%(funcClose)s' % {
         metric: metric,
-        rateInterval: rate_interval,
-        rateOpen: rateOpen,
-        rateClose: rateClose,
+        sum_or_count: sum_or_count,
+        funcOpen: funcOpen,
+        funcClose: funcClose,
         selector: selector,
-        suffix: if from_recording then ':sum_rate' else '',
+        suffix: suffix,
       },
-      native: 'histogram_count(%(rateOpen)s%(metric)s%(suffix)s{%(selector)s}%(rateClose)s)' % {
+      native: 'histogram_%(sum_or_count)s(%(funcOpen)s%(metric)s%(suffix)s{%(selector)s}%(funcClose)s)' % {
         metric: metric,
-        rateInterval: rate_interval,
-        rateOpen: rateOpen,
-        rateClose: rateClose,
+        sum_or_count: sum_or_count,
+        funcOpen: funcOpen,
+        funcClose: funcClose,
         selector: selector,
-        suffix: if from_recording then ':sum_rate' else '',
+        suffix: suffix,
       },
     },
 
@@ -100,24 +94,27 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // classic histograms.
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
-  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false)::
+  ncHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false, sum_by=[])::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%s) ' % std.join(', ', sum_by) else '';
     local multiplierStr = if multiplier == '' then '' else '%s * ' % multiplier;
     {
       classic: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).classic,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).classic,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
       native: |||
-        %(multiplier)ssum(%(sumMetricQuery)s) /
-        sum(%(countMetricQuery)s)
+        %(multiplier)ssum%(sumBy)s(%(sumMetricQuery)s) /
+        sum%(sumBy)s(%(countMetricQuery)s)
       ||| % {
         sumMetricQuery: $.ncHistogramSumRate(metric, selector, rate_interval, from_recording).native,
         countMetricQuery: $.ncHistogramCountRate(metric, selector, rate_interval, from_recording).native,
         multiplier: multiplierStr,
+        sumBy: sumBy,
       },
     },
 
@@ -166,6 +163,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
         sumBy: sumBy,
       },
     },
+
+  // ncHistogramApplyTemplate (native classic histogram template applier)
+  // Takes a template like 'label_replace(%s, "x", "$1", "y", ".*")'
+  // with a single substitution and applies to both the classic and native
+  // histogram query.
+  ncHistogramApplyTemplate(template, query):: {
+    assert $.isNativeClassicQuery(query),
+    native: template % query.native,
+    classic: template % query.classic,
+  },
 
   // ncHistogramComment (native classic histogram comment) helps attach
   // comments to the query and also keep multiline strings where applicable.

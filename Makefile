@@ -87,4 +87,5 @@ update-mixins:
 
 tests:
 	pushd . && cd ./common-lib && make vendor && make tests
+	pushd . && cd ./grafana-builder/test && make tests
 	pushd . && cd ./mixin-utils/test && make tests
