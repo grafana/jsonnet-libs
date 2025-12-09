@@ -25,8 +25,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     uncleanLeaderElectionStat:
       signals.clusterReplicaManager.uncleanLeaderElection.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
-    preferredReplicaInbalanceStat:
-      signals.clusterReplicaManager.preferredReplicaInbalance.asStat()
+    preferredReplicaImbalanceStat:
+      signals.clusterReplicaManager.preferredReplicaImbalance.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
 
     onlinePartitionsStat:
