@@ -212,7 +212,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 std.join(',', this.config.groupLabels),
                 this.signals.brokerReplicaManager.underMinISRPartitions.asRuleExpression(),
               ],
-              'for': '2m',
+              'for': '5m',
               keep_firing_for: '5m',
               labels: {
                 severity: 'critical',

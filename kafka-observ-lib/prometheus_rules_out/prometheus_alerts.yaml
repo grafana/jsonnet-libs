@@ -170,7 +170,7 @@ groups:
             summary: Kafka partitions below minimum ISR - writes unavailable.
           expr: |
             sum by (kafka_cluster) (kafka_cluster_partition_underminisr{}) > 0
-          for: 2m
+          for: 5m
           keep_firing_for: 5m
           labels:
             severity: critical
