@@ -53,7 +53,7 @@ base {
         )
         + fieldConfig.defaults.custom.withFillOpacity(0)
         + timeSeries.standardOptions.color.withMode(tokens.base.colors.mode.single)
-        + timeSeries.standardOptions.color.withFixedColor(tokens.base.colors.palette['light-purple']),
+        + timeSeries.standardOptions.color.withFixedColor(tokens.base.colors.palette.threshold),
       )
     ),
 }
