@@ -74,7 +74,7 @@
                         "mode": "normal"
                      }
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -172,7 +172,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -225,7 +225,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -294,7 +294,7 @@
                         "mode": "normal"
                      }
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {

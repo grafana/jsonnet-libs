@@ -80,7 +80,7 @@
                         }
                      ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -140,7 +140,7 @@
                         }
                      ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -200,7 +200,7 @@
                         }
                      ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {

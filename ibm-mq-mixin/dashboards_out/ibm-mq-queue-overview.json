@@ -83,8 +83,10 @@
             "id": 2,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -123,7 +125,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -175,7 +177,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {

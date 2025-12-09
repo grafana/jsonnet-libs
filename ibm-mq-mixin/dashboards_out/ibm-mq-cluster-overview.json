@@ -68,12 +68,12 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
                "h": 7,
-               "w": 4,
+               "w": 6,
                "x": 0,
                "y": 1
             },
@@ -116,13 +116,13 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
                "h": 7,
-               "w": 4,
-               "x": 4,
+               "w": 6,
+               "x": 6,
                "y": 1
             },
             "id": 3,
@@ -164,13 +164,13 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
                "h": 7,
-               "w": 4,
-               "x": 8,
+               "w": 6,
+               "x": 12,
                "y": 1
             },
             "id": 4,
@@ -212,13 +212,13 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
                "h": 7,
-               "w": 4,
-               "x": 12,
+               "w": 6,
+               "x": 18,
                "y": 1
             },
             "id": 5,
@@ -250,6 +250,106 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The status of the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "fixed"
+                  },
+                  "custom": {
+                     "align": "center",
+                     "cellOptions": {
+                        "type": "color-text"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Not suspended"
+                           },
+                           "1": {
+                              "color": "red",
+                              "index": 1,
+                              "text": "Suspended"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ]
+               }
+            },
+            "gridPos": {
+               "h": 7,
+               "w": 16,
+               "x": 0,
+               "y": 8
+            },
+            "id": 6,
+            "options": {
+               "enablePagination": true
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "ibmmq_cluster_suspend{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}} - {{mq_cluster}}",
+                  "refId": "Cluster status"
+               }
+            ],
+            "title": "Cluster status",
+            "transformations": [
+               {
+                  "id": "joinByLabels",
+                  "options": {
+                     "join": [
+                        "cluster",
+                        "mq_cluster",
+                        "qmgr"
+                     ],
+                     "value": "__name__"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "cluster": "Cluster",
+                        "ibmmq_cluster_suspend": "Status",
+                        "mq_cluster": "MQ cluster",
+                        "qmgr": "Queue manager"
+                     }
+                  }
+               },
+               {
+                  "id": "reduce",
+                  "options": {
+                     "includeTimeField": false,
+                     "mode": "reduceFields",
+                     "reducers": [
+                        "last"
+                     ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
                "type": "datasource",
                "uid": "-- Mixed --"
             },
@@ -260,12 +360,12 @@
                }
             },
             "gridPos": {
-               "h": 15,
+               "h": 14,
                "w": 8,
                "x": 16,
-               "y": 1
+               "y": 8
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "displayMode": "list",
@@ -356,106 +456,6 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The status of the cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "fixed"
-                  },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "color-text"
-                     },
-                     "inspect": false
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "0": {
-                              "color": "green",
-                              "index": 0,
-                              "text": "Not suspended"
-                           },
-                           "1": {
-                              "color": "red",
-                              "index": 1,
-                              "text": "Suspended"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ]
-               }
-            },
-            "gridPos": {
-               "h": 4,
-               "w": 16,
-               "x": 0,
-               "y": 5
-            },
-            "id": 7,
-            "options": {
-               "enablePagination": true
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "ibmmq_cluster_suspend{job=\"integrations/ibm-mq\",job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{job}} - {{mq_cluster}}",
-                  "refId": "Cluster status"
-               }
-            ],
-            "title": "Cluster status",
-            "transformations": [
-               {
-                  "id": "joinByLabels",
-                  "options": {
-                     "join": [
-                        "cluster",
-                        "mq_cluster",
-                        "qmgr"
-                     ],
-                     "value": "__name__"
-                  }
-               },
-               {
-                  "id": "organize",
-                  "options": {
-                     "excludeByName": { },
-                     "indexByName": { },
-                     "renameByName": {
-                        "cluster": "Cluster",
-                        "ibmmq_cluster_suspend": "Status",
-                        "mq_cluster": "MQ cluster",
-                        "qmgr": "Queue manager"
-                     }
-                  }
-               },
-               {
-                  "id": "reduce",
-                  "options": {
-                     "includeTimeField": false,
-                     "mode": "reduceFields",
-                     "reducers": [
-                        "last"
-                     ]
-                  }
-               }
-            ],
-            "type": "table"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
             "description": "The queue managers of the cluster displayed in a table.",
             "fieldConfig": {
                "defaults": {
@@ -512,10 +512,10 @@
                }
             },
             "gridPos": {
-               "h": 4,
+               "h": 7,
                "w": 16,
                "x": 0,
-               "y": 9
+               "y": 15
             },
             "id": 8,
             "options": {
@@ -596,7 +596,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 17
+               "y": 23
             },
             "id": 9,
             "options": {

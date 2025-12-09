@@ -15,7 +15,7 @@ function(this) {
       name: 'Topic messages received',
       type: 'gauge',
       description: 'Received messages per topic.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_topic_messages_received{%(queriesSelector)s}',
@@ -28,7 +28,7 @@ function(this) {
       name: 'Topic messages put',
       type: 'gauge',
       description: 'Put messages per topic.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_topic_messages_put{%(queriesSelector)s}',
@@ -80,7 +80,7 @@ function(this) {
       name: 'Topic subscribers',
       type: 'gauge',
       description: 'The number of subscribers per topic.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_topic_subscriber_count{%(queriesSelector)s}',
@@ -93,7 +93,7 @@ function(this) {
       name: 'Topic publishers',
       type: 'gauge',
       description: 'The number of publishers per topic.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_topic_publisher_count{%(queriesSelector)s}',
@@ -106,7 +106,7 @@ function(this) {
       name: 'Subscription messages received',
       type: 'gauge',
       description: 'The number of messages a subscription receives.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_subscription_messsages_received{%(queriesSelector)s}',

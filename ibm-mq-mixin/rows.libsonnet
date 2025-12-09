@@ -15,14 +15,24 @@ local g = import './g.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          panels.clusterClusters { gridPos+: { h: 7, w: 4, x: 0, y: 0 } },
-          panels.clusterQueueManagers { gridPos+: { h: 7, w: 4, x: 4, y: 0 } },
-          panels.clusterTopics { gridPos+: { h: 7, w: 4, x: 8, y: 0 } },
-          panels.clusterQueues { gridPos+: { h: 7, w: 4, x: 12, y: 0 } },
-          panels.clusterQueueOperations { gridPos+: { h: 15, w: 8, x: 16, y: 0 } },
-          panels.clusterStatusTable { gridPos+: { h: 4, w: 16, x: 0, y: 7 } },
-          panels.clusterQueueManagerStatusTable { gridPos+: { h: 4, w: 16, x: 0, y: 11 } },
-          panels.clusterTransmissionQueueTime { gridPos+: { h: 8, w: 24, x: 0, y: 15 } },
+          // First row within the overview "row" (group) - Stat panels
+          panels.clusterClusters { gridPos+: { h: 7, w: 6 } },
+          panels.clusterQueueManagers { gridPos+: { h: 7, w: 6 } },
+          panels.clusterTopics { gridPos+: { h: 7, w: 6 } },
+          panels.clusterQueues { gridPos+: { h: 7, w: 6 } },
+
+          // Second Row within the overview "row" - Cluster status table + pie chart
+          panels.clusterStatusTable { gridPos+: { h: 7, w: 16 } },
+          panels.clusterQueueOperations { gridPos+: { h: 14, w: 8 } },
+
+
+          // Third row within the overview "row" - Cluster manager status
+          // Note: wraps into 7 by 16 space left over in previous row
+          panels.clusterQueueManagerStatusTable { gridPos+: { h: 7, w: 16 } },
+
+
+          // Fourth row  - No longer need to wrap
+          panels.clusterTransmissionQueueTime { gridPos+: { h: 8, w: 24 } },
         ]
       ),
 

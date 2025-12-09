@@ -65,7 +65,7 @@
                         "mode": "normal"
                      }
                   },
-                  "unit": "none"
+                  "unit": "short"
                },
                "overrides": [
                   {

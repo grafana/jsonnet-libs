@@ -15,22 +15,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       clusterClusters:
         commonlib.panels.generic.stat.info.new('Clusters', targets=[signals.cluster.clusters.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The unique number of clusters being reported.')
-        + g.panel.stat.standardOptions.withUnit('none'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       clusterQueueManagers:
         commonlib.panels.generic.stat.info.new('Queue managers', targets=[signals.cluster.queueManagers.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The unique number of queue managers in the cluster being reported.')
-        + g.panel.stat.standardOptions.withUnit('none'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       clusterTopics:
         commonlib.panels.generic.stat.info.new('Topics', targets=[signals.cluster.topics.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The unique number of topics in the cluster.')
-        + g.panel.stat.standardOptions.withUnit('none'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       clusterQueues:
         commonlib.panels.generic.stat.info.new('Queues', targets=[signals.cluster.queues.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The unique number of queues in the cluster.')
-        + g.panel.stat.standardOptions.withUnit('none'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       clusterQueueOperations:
         g.panel.pieChart.new('Queue operations')
@@ -192,7 +192,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       qmgrActiveListeners:
         commonlib.panels.generic.stat.info.new('Active listeners', targets=[signals.queueManager.activeListeners.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The number of active listeners for the queue manager.')
-        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.standardOptions.withUnit('short')
         + g.panel.stat.standardOptions.thresholds.withSteps([
           g.panel.stat.standardOptions.threshold.step.withColor('red')
           + g.panel.stat.standardOptions.threshold.step.withValue(null),
@@ -204,7 +204,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       qmgrActiveConnections:
         commonlib.panels.generic.stat.info.new('Active connections', targets=[signals.queueManager.activeConnections.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The number of active connections for the queue manager.')
-        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.standardOptions.withUnit('short')
         + g.panel.stat.standardOptions.thresholds.withSteps([
           g.panel.stat.standardOptions.threshold.step.withColor('red')
           + g.panel.stat.standardOptions.threshold.step.withValue(null),
@@ -216,7 +216,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       qmgrQueues:
         commonlib.panels.generic.stat.info.new('Queues', targets=[signals.queueManager.queues.asTarget()])
         + g.panel.stat.panelOptions.withDescription('The unique number of queues being managed by the queue manager.')
-        + g.panel.stat.standardOptions.withUnit('none')
+        + g.panel.stat.standardOptions.withUnit('short')
         + g.panel.stat.standardOptions.thresholds.withSteps([
           g.panel.stat.standardOptions.threshold.step.withColor('red')
           + g.panel.stat.standardOptions.threshold.step.withValue(null),
@@ -380,6 +380,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new('Average queue time', targets=[
           signals.queue.averageQueueTime.asTarget(),
         ])
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.panelOptions.withDescription('The average amount of time a message spends in the queue.')
         + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -388,14 +390,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.queue.expiredMessages.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The expired messages of the queue.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       queueDepth:
         commonlib.panels.generic.timeSeries.base.new('Queue depth', targets=[
           signals.queue.queueDepth.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The depth of the queue.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       queueOldestMessageAge:
         commonlib.panels.generic.timeSeries.base.new('Oldest message age', targets=[
@@ -409,7 +411,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.queue.inputOutputRate.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The input/output rate of the queue.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       queueTimeOnQueue:
         commonlib.panels.generic.timeSeries.base.new('Time on queue', targets=[
@@ -423,7 +425,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.queue.purgedMessages.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The purged messages from the queue.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       queueInputOutputBytes:
         commonlib.panels.generic.timeSeries.base.new('Input/output bytes', targets=[
@@ -471,7 +473,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.topic.topicMessagesReceived.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('Received messages per topic.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
@@ -493,7 +495,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.topic.subscribers.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of subscribers per topic.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
@@ -502,7 +504,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.topic.publishers.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of publishers per topic.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
@@ -511,7 +513,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.topic.subscriptionMessagesReceived.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of messages a subscription receives.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('right'),

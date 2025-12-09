@@ -15,7 +15,7 @@ function(this) {
       name: 'Active listeners',
       type: 'gauge',
       description: 'The number of active listeners for the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_active_listeners{%(queriesSelector)s}',
@@ -41,7 +41,7 @@ function(this) {
       name: 'Queue depth',
       type: 'gauge',
       description: 'The depth of the queue.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_queue_depth{%(queriesSelector)s}',
@@ -54,7 +54,7 @@ function(this) {
       name: 'Active connections',
       type: 'gauge',
       description: 'The number of active connections for the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_connection_count{%(queriesSelector)s}',
@@ -67,7 +67,7 @@ function(this) {
       name: 'Queues',
       type: 'raw',
       description: 'The unique number of queues being managed by the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'count(count(ibmmq_queue_depth{%(queriesSelector)s}) by (queue, mq_cluster, qmgr))',
@@ -161,7 +161,7 @@ function(this) {
       name: 'Commits',
       type: 'gauge',
       description: 'The commits of the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_commit_count{%(queriesSelector)s}',
@@ -187,7 +187,7 @@ function(this) {
       name: 'Published messages',
       type: 'gauge',
       description: 'The number of messages being published by the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_published_to_subscribers_message_count{%(queriesSelector)s}',
@@ -200,7 +200,7 @@ function(this) {
       name: 'Expired messages',
       type: 'gauge',
       description: 'The expired messages of the queue manager.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_qmgr_expired_message_count{%(queriesSelector)s}',

@@ -15,7 +15,7 @@ function(this) {
       name: 'Clusters',
       type: 'raw',
       description: 'The unique number of clusters being reported.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'count(count(ibmmq_qmgr_commit_count{%(queriesSelector)s}) by (mq_cluster))',
@@ -28,7 +28,7 @@ function(this) {
       name: 'Queue managers',
       type: 'raw',
       description: 'The unique number of queue managers in the cluster being reported.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'count(count(ibmmq_qmgr_commit_count{%(queriesSelector)s}) by (qmgr, mq_cluster))',
@@ -41,7 +41,7 @@ function(this) {
       name: 'Topics',
       type: 'raw',
       description: 'The unique number of topics in the cluster.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'count(count(ibmmq_topic_messages_received{%(queriesSelector)s}) by (topic, mq_cluster))',
@@ -54,7 +54,7 @@ function(this) {
       name: 'Queues',
       type: 'raw',
       description: 'The unique number of queues in the cluster.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'count(count(ibmmq_queue_depth{%(queriesSelector)s}) by (queue, mq_cluster))',

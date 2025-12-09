@@ -28,7 +28,7 @@ function(this) {
       name: 'Expired messages',
       type: 'gauge',
       description: 'The expired messages of the queue.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_expired_messages{%(queriesSelector)s, queue=~"$queue"}',
@@ -41,7 +41,7 @@ function(this) {
       name: 'Queue depth',
       type: 'gauge',
       description: 'The depth of the queue.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_depth{%(queriesSelector)s, queue=~"$queue"}',
@@ -67,7 +67,7 @@ function(this) {
       name: 'Input/output rate',
       type: 'gauge',
       description: 'The input/output rate of the queue.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_input_output_rate{%(queriesSelector)s, queue=~"$queue"}',
@@ -93,7 +93,7 @@ function(this) {
       name: 'Purged messages',
       type: 'gauge',
       description: 'The purged messages from the queue.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_purged_messages{%(queriesSelector)s, queue=~"$queue"}',
