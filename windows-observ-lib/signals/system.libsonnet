@@ -208,14 +208,11 @@ function(this)
             expr: 'windows_time_timezone{%(queriesSelector)s}',
             infoLabel: 'timezone',
           },
-          prometheus_pre_0_31: {
-            expr: 'windows_os_timezone{%(queriesSelector)s}',
-            infoLabel: 'timezone',
-          },
           prometheus_pre_0_30: {
             expr: 'windows_os_timezone{%(queriesSelector)s}',
             infoLabel: 'timezone',
           },
+          prometheus_pre_0_31: self.prometheus_pre_0_30,
         },
       },
     },

@@ -10,8 +10,8 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       prometheus: 'windows_memory_physical_total_bytes',
-      prometheus_pre_0_31: 'windows_cs_physical_memory_bytes',
       prometheus_pre_0_30: 'windows_cs_physical_memory_bytes',
+      prometheus_pre_0_31: self.prometheus_pre_0_30,
     },
     signals: {
       memoryTotal: {
@@ -25,14 +25,11 @@ function(this)
             expr: 'windows_memory_physical_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Memory total',
           },
-          prometheus_pre_0_31: {
-            expr: 'windows_cs_physical_memory_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: 'Memory total',
-          },
           prometheus_pre_0_30: {
             expr: 'windows_cs_physical_memory_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Memory total',
           },
+          prometheus_pre_0_31: self.prometheus_pre_0_30,
         },
       },
       memoryFree: {
@@ -45,12 +42,10 @@ function(this)
           prometheus: {
             expr: 'windows_memory_physical_free_bytes{%(queriesSelector)s}',
           },
-          prometheus_pre_0_31: {
-            expr: 'windows_os_physical_memory_free_bytes{%(queriesSelector)s}',
-          },
           prometheus_pre_0_30: {
             expr: 'windows_os_physical_memory_free_bytes{%(queriesSelector)s}',
           },
+          prometheus_pre_0_31: self.prometheus_pre_0_30,
         },
       },
       memoryUsed: {
@@ -64,15 +59,11 @@ function(this)
             expr: 'windows_memory_physical_total_bytes{%(queriesSelector)s} - windows_memory_physical_free_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Memory used',
           },
-          prometheus_pre_0_31: {
-            expr: 'windows_cs_physical_memory_bytes{%(queriesSelector)s} - windows_os_physical_memory_free_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: 'Memory used',
-          },
           prometheus_pre_0_30: {
             expr: 'windows_cs_physical_memory_bytes{%(queriesSelector)s} - windows_os_physical_memory_free_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Memory used',
           },
-
+          prometheus_pre_0_31: self.prometheus_pre_0_30,
         },
       },
       memoryUsagePercent: {
@@ -85,12 +76,10 @@ function(this)
           prometheus: {
             expr: '100 - windows_memory_physical_free_bytes{%(queriesSelector)s} / windows_memory_physical_total_bytes{%(queriesSelector)s} * 100',
           },
-          prometheus_pre_0_31: {
-            expr: '100 - windows_os_physical_memory_free_bytes{%(queriesSelector)s} / windows_cs_physical_memory_bytes{%(queriesSelector)s} * 100',
-          },
           prometheus_pre_0_30: {
             expr: '100 - windows_os_physical_memory_free_bytes{%(queriesSelector)s} / windows_cs_physical_memory_bytes{%(queriesSelector)s} * 100',
           },
+          prometheus_pre_0_31: self.prometheus_pre_0_30,
         },
       },
       memoryPageTotal: {
