@@ -2942,7 +2942,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "avg by (kafka_cluster) (\n  java_lang_classloading_loadedclasscount{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "expr": "avg by (kafka_cluster) (\n  java_lang_classloading_loadedclasscount{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded_total{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{kafka_cluster}}: Classes loaded",
