@@ -551,7 +551,8 @@ local utils = import 'mixin-utils/utils.libsonnet';
   },
 
   // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
-  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
+  // By default it shows the 99th and 50th quantile.
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3', quantile=[99, 50], from_recording=false):: {
     nullPointMode: 'null as zero',
     fieldConfig+: {
       defaults+: {
@@ -561,44 +562,45 @@ local utils = import 'mixin-utils/utils.libsonnet';
         unit: 'ms',
       },
     },
-    targets: [
-      {
-        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: '99th percentile',
-        refId: 'A',
-      },
-      {
-        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: '99th percentile',
-        refId: 'A_classic',
-      },
-      {
-        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: '50th percentile',
-        refId: 'B',
-      },
-      {
-        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: '50th percentile',
-        refId: 'B_classic',
-      },
-      {
-        expr: utils.showNativeHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: 'Average',
-        refId: 'C',
-      },
-      {
-        expr: utils.showClassicHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
-        format: 'time_series',
-        legendFormat: 'Average',
-        refId: 'C_classic',
-      },
-    ],
+    targets:
+      local getNextRefId(targets) = std.char(std.codepoint('A') + std.length(targets) / 2);
+      local qTargets =
+        std.foldl(
+          function(acc, q)
+            local qStr = std.toString(q);
+            acc + [
+              {
+                expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile(std.format('%.2f', q / 100), metricName, selector, multiplier=multiplier, from_recording=from_recording)),
+                format: 'time_series',
+                legendFormat: qStr + 'th percentile',
+                refId: getNextRefId(acc),
+              },
+              {
+                expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile(std.format('%.2f', q / 100), metricName, selector, multiplier=multiplier, from_recording=from_recording)),
+                format: 'time_series',
+                legendFormat: qStr + 'th percentile',
+                refId: getNextRefId(acc) + '_classic',
+              },
+            ]
+          ,
+          quantile,
+          []
+        );
+      qTargets +
+      [
+        {
+          expr: utils.showNativeHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier, from_recording=from_recording)),
+          format: 'time_series',
+          legendFormat: 'Average',
+          refId: getNextRefId(qTargets),
+        },
+        {
+          expr: utils.showClassicHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier, from_recording=from_recording)),
+          format: 'time_series',
+          legendFormat: 'Average',
+          refId: getNextRefId(qTargets) + '_classic',
+        },
+      ],
     yaxes: $.yaxes('ms'),
   },
 

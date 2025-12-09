@@ -10,6 +10,16 @@
     },
   },
 
+  issuer:: self.clusterIssuer {
+    new(name): {
+      apiVersion: 'cert-manager.io/v1',
+      kind: 'Issuer',
+      metadata: {
+        name: name,
+      },
+    },
+  },
+
   clusterIssuer:: {
     new(name): {
       apiVersion: 'cert-manager.io/v1',
