@@ -16,7 +16,11 @@ function(this)
     signals: {
       consumerGroupLag: {
         name: 'Consumer group lag',
-        description: 'Current approximate lag of a ConsumerGroup at Topic/Partition.',
+        description: |||
+          Number of messages a consumer group is behind the latest available offset for a topic partition.  
+          High or growing lag indicates consumers can't keep up with producer throughput.  
+          Critical metric for consumer health and real-time processing requirements.
+        |||,
         type: 'gauge',
         unit: 'short',
         aggFunction: 'sum',
@@ -35,7 +39,11 @@ function(this)
 
       consumerGroupLagTime: {
         name: 'Consumer group lag in ms',
-        description: 'Current approximate lag of a ConsumerGroup at Topic/Partition.',
+        description: |||
+          Time lag in milliseconds between message production and consumption for a consumer group.  
+          Represents real-time delay in message processing.  
+          More intuitive than message count lag for understanding business impact of delays.
+        |||,
         type: 'gauge',
         unit: 'ms',
         optional: true,
@@ -50,7 +58,11 @@ function(this)
 
       consumerGroupConsumeRate: {
         name: 'Consumer group consume rate',
-        description: 'Consumer group consume rate.',
+        description: |||
+          Rate at which a consumer group is consuming and committing offsets for a topic.  
+          Measures consumer throughput and processing speed.  
+          Should match or exceed producer rate to prevent growing lag.
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {
