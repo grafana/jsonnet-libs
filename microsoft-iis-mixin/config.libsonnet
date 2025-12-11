@@ -29,7 +29,7 @@
   alertsWarningHighWorkerProcessFailures: 10,  // count
 
   // Metrics source
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
 
   // Signal definitions grouped by dashboard
   signals+: {
