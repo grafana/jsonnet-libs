@@ -7,6 +7,65 @@ local utils = commonlib.utils;
     {
       local signals = this.signals,
 
+      // Shared transformations for geomap panels
+      local geoTransformations = [
+        {
+          id: 'groupBy',
+          options: {
+            fields: {
+              Value: {
+                aggregations: ['sum', 'mean', 'lastNotNull'],
+                operation: 'aggregate',
+              },
+              country: {
+                aggregations: [],
+                operation: 'groupby',
+              },
+              host: {
+                aggregations: [],
+              },
+              instance: {
+                aggregations: [],
+                operation: 'groupby',
+              },
+              job: {
+                aggregations: [],
+                operation: 'groupby',
+              },
+              region: {
+                aggregations: [],
+                operation: 'groupby',
+              },
+              status: {
+                aggregations: [],
+                operation: 'groupby',
+              },
+              zone: {
+                aggregations: [],
+              },
+            },
+          },
+        },
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {},
+            indexByName: {},
+            renameByName: {
+              'Value (lastNotNull)': 'Last',
+              'Value (mean)': 'Mean',
+              'Value (sum)': 'Total',
+              country: 'Country',
+              instance: 'Instance',
+              job: 'Job',
+              region: 'Region',
+              status: 'Status',
+              zone: 'Zone',
+            },
+          },
+        },
+      ],
+
       // Zone panels
 
       alertsPanel: {
@@ -150,14 +209,105 @@ local utils = commonlib.utils;
 
       // Pool panels
       poolStatusPanel:
-        commonlib.panels.generic.table.base.new(
-          'Pool status',
-          targets=[
-            signals.pool.poolStatus.asTarget() { format: 'table' },
-            signals.pool.requests.asTarget() { format: 'table' },
-          ],
-          description='A table view of the pools in your zone showing their health and rate of requests.'
-        ),
+        g.panel.table.new('Pool status')
+        + g.panel.table.panelOptions.withDescription('A table view of the pools in your zone showing their health and rate of requests.')
+        + g.panel.table.queryOptions.withTargets([
+          signals.pool.poolStatus.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withIntervalFactor(2)
+          + g.query.prometheus.withLegendFormat(''),
+          signals.pool.requests.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withIntervalFactor(2)
+          + g.query.prometheus.withLegendFormat(''),
+        ])
+        + g.panel.table.standardOptions.withUnit('reqps')
+        + g.panel.table.standardOptions.withMappings([
+          {
+            type: 'value',
+            options: {
+              'Health=1': {
+                index: 0,
+                text: 'Healthy',
+              },
+            },
+          },
+        ])
+        + g.panel.table.queryOptions.withTransformations([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'pool_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'pool_name',
+                  'Value #A',
+                  'load_balancer_name 2',
+                  'origin_name',
+                  'Value #B',
+                  'zone 2',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              indexByName: {
+                pool_name: 0,
+                'load_balancer_name 2': 1,
+                origin_name: 2,
+                'zone 2': 3,
+                'Value #B': 4,
+                'Value #A': 5,
+              },
+              renameByName: {
+                pool_name: 'Pool',
+                'load_balancer_name 2': 'Load balancer',
+                origin_name: 'Origin',
+                'zone 2': 'Zone',
+                'Value #B': 'Requests',
+                'Value #A': 'Health',
+              },
+            },
+          },
+        ])
+        + g.panel.table.standardOptions.withOverrides([
+          g.panel.table.fieldOverride.byName.new('Health')
+          + g.panel.table.fieldOverride.byName.withProperty(
+            'custom.cellOptions',
+            {
+              type: 'color-text',
+            }
+          )
+          + g.panel.table.fieldOverride.byName.withProperty(
+            'mappings',
+            [
+              {
+                type: 'value',
+                options: {
+                  '0': {
+                    color: 'red',
+                    index: 1,
+                    text: 'Unhealthy',
+                  },
+                  '1': {
+                    color: 'green',
+                    index: 0,
+                    text: 'Healthy',
+                  },
+                },
+              },
+            ]
+          ),
+        ]),
 
       poolRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -209,16 +359,104 @@ local utils = commonlib.utils;
         g.panel.geomap.new('Geographic distribution')
         + g.panel.geomap.panelOptions.withDescription('Geomap panel currently showing $geo_metric for the zone.')
         + g.panel.geomap.queryOptions.withTargets([
-          signals.geomap.geoMapByCountry.asTarget() { interval: '1m' }
+          signals.geomap.geoMapByCountry.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withIntervalFactor(2)
           + g.query.prometheus.withLegendFormat(''),
+        ])
+        + g.panel.geomap.standardOptions.color.withMode('continuous-BlPu')
+        + g.panel.geomap.queryOptions.withTransformations(geoTransformations)
+        + g.panel.geomap.options.withBasemap({ type: 'default', name: 'Layer 0', config: {} })
+        + g.panel.geomap.options.withView({ id: 'zero', lat: 0, lon: 0, zoom: 1, allLayers: true })
+        + g.panel.geomap.options.withTooltip({ mode: 'multi' })
+        + g.panel.geomap.options.withControls({
+          mouseWheelZoom: true,
+          showAttribution: true,
+          showDebug: false,
+          showMeasure: false,
+          showScale: false,
+          showZoom: true,
+        })
+        + g.panel.geomap.options.withLayers([
+          {
+            type: 'markers',
+            name: 'Total',
+            tooltip: true,
+            location: {
+              mode: 'lookup',
+              lookup: 'country',
+              gazetteer: 'public/gazetteer/countries.json',
+            },
+            config: {
+              showLegend: true,
+              style: {
+                color: {
+                  field: 'Total',
+                  fixed: 'dark-green',
+                },
+                opacity: 0.4,
+                size: {
+                  field: 'Total',
+                  fixed: 5,
+                  min: 7,
+                  max: 15,
+                },
+                symbol: {
+                  mode: 'fixed',
+                  fixed: 'img/icons/marker/circle.svg',
+                },
+                symbolAlign: {
+                  horizontal: 'center',
+                  vertical: 'center',
+                },
+                rotation: {
+                  mode: 'mod',
+                  fixed: 0,
+                  min: -360,
+                  max: 360,
+                },
+                textConfig: {
+                  fontSize: 12,
+                  offsetX: 0,
+                  offsetY: 0,
+                  textAlign: 'center',
+                  textBaseline: 'middle',
+                },
+              },
+            },
+          },
         ]),
       geoMetricsByCountryTablePanel:
         g.panel.table.new('Geographic distribution')
         + g.panel.table.panelOptions.withDescription('Table currently showing $geo_metric for the zone.')
         + g.panel.table.queryOptions.withTargets([
-          signals.geomap.geoMetricsByCountryTable.asTarget()
+          signals.geomap.geoMapByCountry.asTarget()
           + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInterval('2m')
+          + g.query.prometheus.withIntervalFactor(2)
           + g.query.prometheus.withLegendFormat(''),
+        ])
+        + g.panel.table.queryOptions.withTransformations(geoTransformations)
+        + g.panel.table.standardOptions.withOverrides([
+          g.panel.table.fieldOverride.byRegexp.new('/Total|Mean|Last/')
+          + g.panel.table.fieldOverride.byRegexp.withProperty(
+            'custom.cellOptions',
+            {
+              mode: 'basic',
+              type: 'gauge',
+              valueDisplayMode: 'text',
+            }
+          )
+          + g.panel.table.fieldOverride.byRegexp.withProperty(
+            'color',
+            {
+              mode: 'continuous-BlPu',
+            }
+          ),
+        ])
+        + g.panel.table.options.withSortBy([
+          { desc: true, displayName: 'Total' },
         ]),
     },
 }

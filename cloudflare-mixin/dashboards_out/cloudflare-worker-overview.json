@@ -29,7 +29,7 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare"
+               "cloudflare-mixin"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -265,7 +265,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "cloudflare"
+         "cloudflare-mixin"
       ],
       "templating": {
          "list": [

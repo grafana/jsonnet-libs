@@ -29,7 +29,7 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare"
+               "cloudflare-mixin"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -83,10 +83,62 @@
          },
          {
             "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "A table view of the pools in your zone showing their health and rate of requests.",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "Health=1": {
+                              "index": 0,
+                              "text": "Healthy"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "unit": "reqps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Health"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Unhealthy"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Healthy"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 8,
                "w": 12,
@@ -94,7 +146,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -104,7 +156,8 @@
                   "expr": "cloudflare_zone_pool_health_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": false,
-                  "legendFormat": "{{ pool_name }}",
+                  "intervalFactor": 2,
+                  "legendFormat": "",
                   "refId": "Pool status"
                },
                {
@@ -115,11 +168,58 @@
                   "expr": "rate(cloudflare_zone_pool_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": false,
-                  "legendFormat": "{{ pool_name }}",
+                  "intervalFactor": 2,
+                  "legendFormat": "",
                   "refId": "Request rate"
                }
             ],
             "title": "Pool status",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "pool_name",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "pool_name",
+                           "Value #A",
+                           "load_balancer_name 2",
+                           "origin_name",
+                           "Value #B",
+                           "zone 2"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": {
+                        "Value #A": 5,
+                        "Value #B": 4,
+                        "load_balancer_name 2": 1,
+                        "origin_name": 2,
+                        "pool_name": 0,
+                        "zone 2": 3
+                     },
+                     "renameByName": {
+                        "Value #A": "Health",
+                        "Value #B": "Requests",
+                        "load_balancer_name 2": "Load balancer",
+                        "origin_name": "Origin",
+                        "pool_name": "Pool",
+                        "zone 2": "Zone"
+                     }
+                  }
+               }
+            ],
             "type": "table"
          },
          {
@@ -695,7 +795,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "cloudflare"
+         "cloudflare-mixin"
       ],
       "templating": {
          "list": [

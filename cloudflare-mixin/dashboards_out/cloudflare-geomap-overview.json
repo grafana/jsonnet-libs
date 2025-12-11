@@ -29,7 +29,7 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare"
+               "cloudflare-mixin"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -42,6 +42,32 @@
                "uid": "-- Mixed --"
             },
             "description": "Table currently showing $geo_metric for the zone.",
+            "fieldConfig": {
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/Total|Mean|Last/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "text"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlPu"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 7,
                "w": 24,
@@ -49,6 +75,14 @@
                "y": 0
             },
             "id": 1,
+            "options": {
+               "sortBy": [
+                  {
+                     "desc": true,
+                     "displayName": "Total"
+                  }
+               ]
+            },
             "pluginVersion": "v11.4.0",
             "targets": [
                {
@@ -59,11 +93,74 @@
                   "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "",
                   "refId": "$geo_metric Distribution"
                }
             ],
             "title": "Geographic distribution",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value": {
+                           "aggregations": [
+                              "sum",
+                              "mean",
+                              "lastNotNull"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "country": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "host": {
+                           "aggregations": [ ]
+                        },
+                        "instance": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "job": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "region": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "status": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "zone": {
+                           "aggregations": [ ]
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value (lastNotNull)": "Last",
+                        "Value (mean)": "Mean",
+                        "Value (sum)": "Total",
+                        "country": "Country",
+                        "instance": "Instance",
+                        "job": "Job",
+                        "region": "Region",
+                        "status": "Status",
+                        "zone": "Zone"
+                     }
+                  }
+               }
+            ],
             "type": "table"
          },
          {
@@ -72,13 +169,94 @@
                "uid": "-- Mixed --"
             },
             "description": "Geomap panel currently showing $geo_metric for the zone.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlPu"
+                  }
+               }
+            },
             "gridPos": {
-               "h": 12,
+               "h": 24,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 24
             },
             "id": 2,
+            "options": {
+               "basemap": {
+                  "config": { },
+                  "name": "Layer 0",
+                  "type": "default"
+               },
+               "controls": {
+                  "mouseWheelZoom": true,
+                  "showAttribution": true,
+                  "showDebug": false,
+                  "showMeasure": false,
+                  "showScale": false,
+                  "showZoom": true
+               },
+               "layers": [
+                  {
+                     "config": {
+                        "showLegend": true,
+                        "style": {
+                           "color": {
+                              "field": "Total",
+                              "fixed": "dark-green"
+                           },
+                           "opacity": 0.40000000000000002,
+                           "rotation": {
+                              "fixed": 0,
+                              "max": 360,
+                              "min": -360,
+                              "mode": "mod"
+                           },
+                           "size": {
+                              "field": "Total",
+                              "fixed": 5,
+                              "max": 15,
+                              "min": 7
+                           },
+                           "symbol": {
+                              "fixed": "img/icons/marker/circle.svg",
+                              "mode": "fixed"
+                           },
+                           "symbolAlign": {
+                              "horizontal": "center",
+                              "vertical": "center"
+                           },
+                           "textConfig": {
+                              "fontSize": 12,
+                              "offsetX": 0,
+                              "offsetY": 0,
+                              "textAlign": "center",
+                              "textBaseline": "middle"
+                           }
+                        }
+                     },
+                     "location": {
+                        "gazetteer": "public/gazetteer/countries.json",
+                        "lookup": "country",
+                        "mode": "lookup"
+                     },
+                     "name": "Total",
+                     "tooltip": true,
+                     "type": "markers"
+                  }
+               ],
+               "tooltip": {
+                  "mode": "multi"
+               },
+               "view": {
+                  "allLayers": true,
+                  "id": "zero",
+                  "lat": 0,
+                  "lon": 0,
+                  "zoom": 1
+               }
+            },
             "pluginVersion": "v11.4.0",
             "targets": [
                {
@@ -87,21 +265,84 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
+                  "format": "table",
+                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "instant": false,
-                  "interval": "1m",
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "",
                   "refId": "$geo_metric Distribution"
                }
             ],
             "title": "Geographic distribution",
+            "transformations": [
+               {
+                  "id": "groupBy",
+                  "options": {
+                     "fields": {
+                        "Value": {
+                           "aggregations": [
+                              "sum",
+                              "mean",
+                              "lastNotNull"
+                           ],
+                           "operation": "aggregate"
+                        },
+                        "country": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "host": {
+                           "aggregations": [ ]
+                        },
+                        "instance": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "job": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "region": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "status": {
+                           "aggregations": [ ],
+                           "operation": "groupby"
+                        },
+                        "zone": {
+                           "aggregations": [ ]
+                        }
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value (lastNotNull)": "Last",
+                        "Value (mean)": "Mean",
+                        "Value (sum)": "Total",
+                        "country": "Country",
+                        "instance": "Instance",
+                        "job": "Job",
+                        "region": "Region",
+                        "status": "Status",
+                        "zone": "Zone"
+                     }
+                  }
+               }
+            ],
             "type": "geomap"
          }
       ],
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "cloudflare"
+         "cloudflare-mixin"
       ],
       "templating": {
          "list": [

@@ -22,18 +22,5 @@ function(this) {
         },
       },
     },
-    geoMetricsByCountryTable: {
-      name: '$geo_metric Distribution',
-      nameShort: 'Distribution',
-      type: 'counter',
-      description: 'Distribution of the selected metric by country.',
-      unit: 'short',
-      sources: {
-        prometheus: {
-          expr: '${geo_metric}{%(queriesSelector)s}',
-          rangeFunction: 'increase',
-        },
-      },
-    },
   },
 }
