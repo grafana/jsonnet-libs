@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
     local signals = this.signals,
-    local vars = this.grafana.variables,
 
     // Overview - Requests
     requests:

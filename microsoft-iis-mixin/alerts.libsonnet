@@ -49,7 +49,7 @@
               summary: 'There is a low success rate for websocket connections for an application.',
               description:
                 ('The success rate for websocket connections is {{ printf "%%.0f" $value }} over the last 5m on {{ $labels.instance }} - {{ $labels.app }}, ' +
-                 'which is above the threshold of %(alertsCriticalLowWebsocketConnectionSuccessRate)s.') % this.config,
+                 'which is below the threshold of %(alertsCriticalLowWebsocketConnectionSuccessRate)s.') % this.config,
             },
           },
           {
