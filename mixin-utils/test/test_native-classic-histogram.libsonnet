@@ -258,3 +258,59 @@ test.new(std.thisFile)
     }
   )
 )
++ test.case.new(
+  name='showClassicHistogramQuery defaults',
+  test=test.expect.eq(
+    actual=utils.showClassicHistogramQuery({ classic: 'foo' }),
+    expected='(foo) and on() (vector($latency_metrics) == 1)',
+  )
+)
++ test.case.new(
+  name='showClassicHistogramQuery other variable',
+  test=test.expect.eq(
+    actual=utils.showClassicHistogramQuery({ classic: 'foo' }, dashboard_variable='my_var'),
+    expected='(foo) and on() (vector($my_var) == 1)',
+  )
+)
++ test.case.new(
+  name='showClassicHistogramQuery disable',
+  test=test.expect.eq(
+    actual=utils.showClassicHistogramQuery({ classic: 'foo' }, disable=true),
+    expected='(foo) and on() (vector(1) == 1)',
+  )
+)
++ test.case.new(
+  name='showClassicHistogramQuery disable ignore dashboard variable',
+  test=test.expect.eq(
+    actual=utils.showClassicHistogramQuery({ classic: 'foo' }, dashboard_variable='my_var', disable=true),
+    expected='(foo) and on() (vector(1) == 1)',
+  )
+)
++ test.case.new(
+  name='showNativeHistogramQuery defaults',
+  test=test.expect.eq(
+    actual=utils.showNativeHistogramQuery({ native: 'foo' }),
+    expected='(foo) and on() (vector($latency_metrics) == -1)',
+  )
+)
++ test.case.new(
+  name='showNativeHistogramQuery other variable',
+  test=test.expect.eq(
+    actual=utils.showNativeHistogramQuery({ native: 'foo' }, dashboard_variable='my_var'),
+    expected='(foo) and on() (vector($my_var) == -1)',
+  )
+)
++ test.case.new(
+  name='showNativeHistogramQuery disable',
+  test=test.expect.eq(
+    actual=utils.showNativeHistogramQuery({ native: 'foo' }, disable=true),
+    expected='(foo) and on() (vector(1) == -1)',
+  )
+)
++ test.case.new(
+  name='showNativeHistogramQuery disable ignore dashboard variable',
+  test=test.expect.eq(
+    actual=utils.showNativeHistogramQuery({ native: 'foo' }, dashboard_variable='my_var', disable=true),
+    expected='(foo) and on() (vector(1) == -1)',
+  )
+)
