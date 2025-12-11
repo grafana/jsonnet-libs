@@ -33,7 +33,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'increase(cloudflare_zone_requests_cached{%(queriesSelector)s}[$__interval:]) / increase(cloudflare_zone_requests_total{%(queriesSelector)s}[$__interval:])',
+            expr: 'increase(cloudflare_zone_requests_cached{%(queriesSelector)s}[$__interval:] offset -$__interval) / increase(cloudflare_zone_requests_total{%(queriesSelector)s}[$__interval:] offset -$__interval)',
             legendCustomTemplate: '{{ zone }}',
           },
         },

@@ -4,14 +4,21 @@ local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 local cloudflare =
   cloudflarelib.new() +
   cloudflarelib.withConfigMixin({
-    filteringSelector: 'job=~"integrations/cloudflare"',
+    filteringSelector: 'job="integrations/cloudflare"',
     uid: 'cloudflare',
   });
 
 local optional_labels = {
+  cluster+: {
+    allValue: '.*',
+  },
   script_name+: {
     allValue: '.*',
     label: 'Script',
+  },
+  zone+: {
+    allValue: '.*',
+    label: 'Zone',
   },
 };
 

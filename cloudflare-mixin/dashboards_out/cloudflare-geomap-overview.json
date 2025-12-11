@@ -4,18 +4,21 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Geographic overview",
             "type": "link",
             "url": "/d/cloudflare_cloudflare_geomap_overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Worker overview",
             "type": "link",
             "url": "/d/cloudflare_cloudflare_worker_overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Zone overview",
             "type": "link",
@@ -53,14 +56,14 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "",
                   "refId": "$geo_metric Distribution"
                }
             ],
-            "title": "Geographic Distribution",
+            "title": "Geographic distribution",
             "type": "table"
          },
          {
@@ -83,7 +86,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -91,7 +94,7 @@
                   "refId": "$geo_metric Distribution"
                }
             ],
-            "title": "Geographic Distribution",
+            "title": "Geographic distribution",
             "type": "geomap"
          }
       ],
@@ -119,13 +122,13 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\"}, job)",
+               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
@@ -134,13 +137,13 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
+               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
@@ -149,7 +152,7 @@
                "label": "Zone",
                "multi": true,
                "name": "zone",
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
+               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -164,7 +167,7 @@
                "label": "Script",
                "multi": true,
                "name": "script_name",
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
+               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -179,7 +182,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(cloudflare_zone_requests_total{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -221,6 +224,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Cloudflare Geomap overview",
+      "title": "Cloudflare geomap overview",
       "uid": "cloudflare_cloudflare_geomap_overview"
    }

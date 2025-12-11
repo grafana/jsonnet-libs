@@ -42,7 +42,6 @@ local utils = commonlib.utils;
           description='The rate at which requests to the zone occur.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cachedRequestsPanel:
@@ -54,7 +53,6 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withMax(1)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.thresholdsStyle.withMode('area')
         + g.panel.timeSeries.standardOptions.thresholds.withMode('percentage')
@@ -71,7 +69,6 @@ local utils = commonlib.utils;
           description='The number of threats that have targeted the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bandwidthPanel:
@@ -94,7 +91,6 @@ local utils = commonlib.utils;
           description='The amount of cached and encrypted bandwidth that occurs in the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars'),
 
@@ -105,7 +101,6 @@ local utils = commonlib.utils;
           description='The content types that bandwidth is being used for in the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withShowPoints('auto'),
@@ -120,7 +115,6 @@ local utils = commonlib.utils;
           description='The number of unique and total page views.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -131,7 +125,6 @@ local utils = commonlib.utils;
           description='The number of different HTTP status codes used for requests in the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'max', 'mean'])
@@ -145,7 +138,6 @@ local utils = commonlib.utils;
           description='The number of zone views by browser family.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       colocationRequestsPanel:
@@ -174,7 +166,6 @@ local utils = commonlib.utils;
           description='Rate of requests to the pool.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // Worker panels
@@ -185,7 +176,6 @@ local utils = commonlib.utils;
           description='CPU time consumed by the worker.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(54)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       workerDurationPanel:
@@ -195,7 +185,6 @@ local utils = commonlib.utils;
           description='Duration of worker execution.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(54)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       workerRequestsPanel:
@@ -205,7 +194,6 @@ local utils = commonlib.utils;
           description='Rate of requests to the worker.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       workerErrorsPanel:
@@ -215,18 +203,17 @@ local utils = commonlib.utils;
           description='Number of errors from the worker.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       geoMetricByCountryGeomapPanel:
-        g.panel.geomap.new('Geographic Distribution')
+        g.panel.geomap.new('Geographic distribution')
         + g.panel.geomap.panelOptions.withDescription('Geomap panel currently showing $geo_metric for the zone.')
         + g.panel.geomap.queryOptions.withTargets([
           signals.geomap.geoMapByCountry.asTarget() { interval: '1m' }
           + g.query.prometheus.withLegendFormat(''),
         ]),
       geoMetricsByCountryTablePanel:
-        g.panel.table.new('Geographic Distribution')
+        g.panel.table.new('Geographic distribution')
         + g.panel.table.panelOptions.withDescription('Table currently showing $geo_metric for the zone.')
         + g.panel.table.queryOptions.withTargets([
           signals.geomap.geoMetricsByCountryTable.asTarget()

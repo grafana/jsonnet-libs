@@ -59,7 +59,7 @@ local g = import './g.libsonnet';
         ),
 
       'cloudflare-geomap-overview.json':
-        g.dashboard.new(prefix + ' Geomap overview')
+        g.dashboard.new(prefix + ' geomap overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
