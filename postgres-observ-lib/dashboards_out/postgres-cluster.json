@@ -2063,10 +2063,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance,client_addr,application_name,state) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "sum by (job,cluster,instance,slot_name) (\n  pg_replication_slots_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{client_addr}} ({{state}})",
+                  "legendFormat": "{{slot_name}}",
                   "refId": "Replication slot lag by instance"
                }
             ],

@@ -131,9 +131,7 @@ function(this)
             // Count replicas not in streaming state as a proxy for inactive slots
             // Returns 0 if no non-streaming slots exist
             expr: |||
-              count by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s, state!="streaming"})
-              or
-              (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
+              count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0) or vector (0)
             |||,
             legendCustomTemplate: ' Inactive replication slots',
           },

@@ -204,9 +204,9 @@ function(this)
         unit: 'bytes',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
-            aggKeepLabels: ['instance', 'client_addr', 'application_name', 'state'],
-            legendCustomTemplate: '{{client_addr}} ({{state}})',
+            expr: 'pg_replication_slots_pg_wal_lsn_diff{%(queriesSelector)s}',
+            aggKeepLabels: ['instance', 'slot_name'],
+            legendCustomTemplate: '{{slot_name}}',
           },
         },
       },

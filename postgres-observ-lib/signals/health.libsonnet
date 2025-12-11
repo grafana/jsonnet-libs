@@ -144,7 +144,7 @@ function(this)
         aggFunction: 'max',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
+            expr: 'pg_replication_slots_pg_wal_lsn_diff{%(queriesSelector)s}',
             legendCustomTemplate: ' Replication slot lag',
           },
         },

@@ -828,7 +828,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,cluster,instance) (\n  pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,cluster,instance) (\n  pg_replication_slots_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Replication slot lag",
@@ -1631,7 +1631,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", state!=\"streaming\"})\nor\n(0 * group by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))\n\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_replication_slots_active{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0) or vector (0)\n\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Inactive replication slots",

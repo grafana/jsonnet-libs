@@ -209,8 +209,7 @@
           },
           {
             alert: 'PostgreSQLInactiveReplicationSlot',
-            // Check for replicas not in streaming state as proxy for inactive slots
-            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(filteringSelector)s, state!="streaming"} > 0' % alertConfig,
+            expr: 'count(pg_replication_slots_active{%(filteringSelector)s} == 0) > 0' % alertConfig,
             'for': '30m',
             labels: { severity: 'critical' },
             annotations: {
