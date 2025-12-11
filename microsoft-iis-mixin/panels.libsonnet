@@ -40,9 +40,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       )
       + g.panel.timeSeries.panelOptions.withDescription('Number of async I/O requests that are currently queued for an IIS site.')
       + g.panel.timeSeries.standardOptions.withUnit('requests')
-      + g.panel.timeSeries.standardOptions.withMin(0)
-      + g.panel.timeSeries.options.legend.withPlacement('bottom')
-      + g.panel.timeSeries.options.tooltip.withMode('none'),
+      + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     rejectedAsyncIORequests:
       commonlib.panels.network.timeSeries.base.new(
@@ -73,7 +71,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       )
       + g.panel.timeSeries.panelOptions.withDescription('The traffic received by an IIS site.')
       + g.panel.timeSeries.standardOptions.withUnit('Bps')
-      + g.panel.timeSeries.standardOptions.withMin(0)
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     filesSent:
@@ -86,7 +83,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       )
       + g.panel.timeSeries.panelOptions.withDescription('The files sent by an IIS site.')
       + g.panel.timeSeries.standardOptions.withUnit('files')
-      + g.panel.timeSeries.standardOptions.withMin(0)
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
     filesReceived:

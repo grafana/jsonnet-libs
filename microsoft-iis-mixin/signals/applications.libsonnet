@@ -209,7 +209,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:]) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:]),1)) * 100',
+            expr: 'sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval),1)) * 100',
             legendCustomTemplate: '{{instance}} - {{app}}',
           },
         },
@@ -222,7 +222,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:]) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:]),1)) * 100',
+            expr: 'sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval),1)) * 100',
             legendCustomTemplate: '{{instance}} - {{app}}',
           },
         },
@@ -235,7 +235,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:]) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:]),1)) * 100',
+            expr: 'sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval),1)) * 100',
             legendCustomTemplate: '{{instance}} - {{app}}',
           },
         },
@@ -245,10 +245,10 @@ function(this)
         name: 'Worker output cache hit ratio',
         type: 'raw',
         description: 'The current output cache hit ratio for an IIS worker process.',
-        unit: 'none',
+        unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:]) / clamp_min(increase(windows_iis_worker_output_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:]),1))',
+            expr: 'sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_output_queries_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval),1))',
             legendCustomTemplate: '{{instance}} - {{app}}',
           },
         },

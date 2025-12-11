@@ -726,7 +726,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]),1)) * 100",
+                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -780,7 +780,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]),1)) * 100",
+                  "expr": "sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -834,7 +834,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]),1)) * 100",
+                  "expr": "sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -888,7 +888,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]) / clamp_min(increase(windows_iis_worker_output_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]),1))",
+                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_output_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",

@@ -7,7 +7,7 @@
           {
             alert: 'MicrosoftIISRejectedAsyncIORequests',
             expr: |||
-              increase(windows_iis_rejected_async_io_requests_total[5m]) > %(alertsWarningHighRejectedAsyncIORequests)s
+              increase(windows_iis_rejected_async_io_requests_total{%(filteringSelector)s}[5m]) > %(alertsWarningHighRejectedAsyncIORequests)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -23,7 +23,7 @@
           {
             alert: 'MicrosoftIIS5xxRequestErrors',
             expr: |||
-              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5.."}[5m])) > %(alertsCriticalHigh5xxRequests)s
+              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5..", %(filteringSelector)s}[5m])) > %(alertsCriticalHigh5xxRequests)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -39,7 +39,7 @@
           {
             alert: 'MicrosoftIISSuccessRateForWebsocket',
             expr: |||
-              sum without (pid)  (increase(windows_iis_worker_websocket_connection_accepted_total[5m]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total[5m]),1)) * 100 > %(alertsCriticalLowWebsocketConnectionSuccessRate)s
+              sum without (pid)  (increase(windows_iis_worker_websocket_connection_accepted_total{%(filteringSelector)s}[5m]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total{%(filteringSelector)s}[5m]),1)) * 100 < %(alertsCriticalLowWebsocketConnectionSuccessRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -55,7 +55,7 @@
           {
             alert: 'MicrosoftIISThreadpoolUtilization',
             expr: |||
-              sum without (pid, state)(windows_iis_worker_threads / windows_iis_worker_max_threads) * 100 > %(alertsCriticalHighThreadPoolUtilization)s
+              sum without (pid, state)(windows_iis_worker_threads{%(filteringSelector)s} / windows_iis_worker_max_threads{%(filteringSelector)s}) * 100 > %(alertsCriticalHighThreadPoolUtilization)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -71,7 +71,7 @@
           {
             alert: 'MicrosoftIISWorkerProcessFailures',
             expr: |||
-              increase(windows_iis_total_worker_process_failures[5m]) > %(alertsWarningHighWorkerProcessFailures)s
+              increase(windows_iis_total_worker_process_failures{%(filteringSelector)s}[5m]) > %(alertsWarningHighWorkerProcessFailures)s
             ||| % this.config,
             'for': '5m',
             labels: {

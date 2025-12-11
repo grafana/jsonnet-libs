@@ -27,6 +27,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
                 this.grafana.rows.overviewAsyncIO,
                 this.grafana.rows.overviewTraffic,
                 this.grafana.rows.overviewConnections,
+                this.grafana.rows.overviewCache,
               ]
             )
           )

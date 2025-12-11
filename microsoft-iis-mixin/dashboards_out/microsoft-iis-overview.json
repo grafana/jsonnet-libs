@@ -198,7 +198,6 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "min": 0,
                   "unit": "requests"
                }
             },
@@ -216,7 +215,7 @@
                   "placement": "bottom"
                },
                "tooltip": {
-                  "mode": "none",
+                  "mode": "multi",
                   "sort": "desc"
                }
             },
@@ -227,7 +226,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(windows_iis_blocked_async_io_requests_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", site=~\"$site\"}[$__rate_interval])",
+                  "expr": "increase(windows_iis_blocked_async_io_requests_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", site=~\"$site\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -284,7 +283,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(windows_iis_rejected_async_io_requests_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", site=~\"$site\"}[$__rate_interval])",
+                  "expr": "increase(windows_iis_rejected_async_io_requests_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", site=~\"$site\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -379,7 +378,6 @@
                      "showPoints": "never"
                   },
                   "decimals": 1,
-                  "min": 0,
                   "noValue": "No traffic",
                   "unit": "Bps"
                }
@@ -434,7 +432,6 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "min": 0,
                   "unit": "files"
                }
             },
@@ -651,6 +648,237 @@
                }
             ],
             "title": "Attempted connections",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "id": 15,
+            "panels": [ ],
+            "title": "Cache",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The current file cache hit ratio for an IIS server.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 45
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(windows_iis_server_file_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_server_file_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval),1) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{job}} - {{instance}}",
+                  "refId": "File cache hit ratio"
+               }
+            ],
+            "title": "File cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The current URI cache hit ratio for an IIS server.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 45
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(instance, job) (increase(windows_iis_server_uri_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_server_uri_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval),1)) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{job}} - {{instance}}",
+                  "refId": "URI cache hit ratio"
+               }
+            ],
+            "title": "URI cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The current metadata cache hit ratio for an IIS server.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 53
+            },
+            "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(windows_iis_server_metadata_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_server_metadata_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval),1) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{job}} - {{instance}}",
+                  "refId": "Metadata cache hit ratio"
+               }
+            ],
+            "title": "Metadata cache hit ratio",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The current output cache hit ratio for an IIS site.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 53
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(windows_iis_server_output_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_server_output_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset $__interval), 1) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{job}} - {{instance}}",
+                  "refId": "Output cache hit ratio"
+               }
+            ],
+            "title": "Output cache hit ratio",
             "type": "timeseries"
          }
       ],
