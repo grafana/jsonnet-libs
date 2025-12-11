@@ -14,9 +14,10 @@
   dashboardNamePrefix: '',
 
   // 'prometheus_pre_0_30' points to old metrics schema prior to breaking changes in windows_exporter v0.30.0,
-  // 'prometheus' points to current metrics schema.
-  // Use any of the above or both.
-  metricsSource: ['prometheus', 'prometheus_pre_0_30'],
+  // 'prometheus_pre_0_31' points to metrics schema from v0.30.0 to v0.31.0,
+  // 'prometheus' points to current metrics schema (v0.31.0+, Alloy v1.11+).
+  // Use any of the above or combination based on your exporter version.
+  metricsSource: ['prometheus', 'prometheus_pre_0_31', 'prometheus_pre_0_30'],
 
   // optional
   ignoreVolumes: 'HarddiskVolume.*',
