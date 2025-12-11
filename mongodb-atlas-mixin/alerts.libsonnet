@@ -1,14 +1,14 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    groups: [
       {
-        name: 'mongodb-atlas-alerts',
+        name: this.config.uid + '-alerts',
         rules: [
           {
-            alert: 'MongoDBAtlasHighNumberOfCollectionExclusiveDeadlocks',
+            alert: 'MongoDBAtlasCollExclusiveDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_W[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -18,14 +18,14 @@
               description:
                 (
                   'The number of collection exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfCollectionIntentExclusiveDeadlocks',
+            alert: 'MongoDBAtlasCollIntentExclDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_w[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -35,14 +35,14 @@
               description:
                 (
                   'The number of collection intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfCollectionSharedDeadlocks',
+            alert: 'MongoDBAtlasCollSharedDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_R[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -52,14 +52,14 @@
               description:
                 (
                   'The number of collection shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfCollectionIntentSharedDeadlocks',
+            alert: 'MongoDBAtlasCollIntentSharedDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_r[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -69,14 +69,14 @@
               description:
                 (
                   'The number of collection intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfDatabaseExclusiveDeadlocks',
+            alert: 'MongoDBAtlasDBExclusiveDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_W[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -86,14 +86,14 @@
               description:
                 (
                   'The number of database exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfDatabaseIntentExclusiveDeadlocks',
+            alert: 'MongoDBAtlasDBIntentExclDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_w[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -103,14 +103,14 @@
               description:
                 (
                   'The number of database intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfDatabaseSharedDeadlocks',
+            alert: 'MongoDBAtlasDBSharedDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_R[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -120,14 +120,14 @@
               description:
                 (
                   'The number of database shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfDatabaseIntentSharedDeadlocks',
+            alert: 'MongoDBAtlasDBIntentSharedDeadlocks',
             expr: |||
               sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_r[5m])) > %(alertsDeadlocks)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -137,14 +137,14 @@
               description:
                 (
                   'The number of database intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfSlowNetworkRequests',
+            alert: 'MongoDBAtlasSlowNetworkRequests',
             expr: |||
               sum without (cl_role,rs_nm,rs_state,process_port) (increase(mongodb_network_numSlowSSLOperations[5m])) + sum without (cl_role,rs_nm,rs_state,process_port) (increase(mongodb_network_numSlowDNSOperations[5m])) > %(alertsSlowNetworkRequests)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -154,14 +154,14 @@
               description:
                 (
                   'The number of DNS and SSL operations taking more than 1 second to complete on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsSlowNetworkRequests)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'MongoDBAtlasDiskSpaceLow',
             expr: |||
               100 * ((sum without (disk_name) (hardware_disk_metrics_disk_space_used_bytes)) / clamp_min((sum without (disk_name) (hardware_disk_metrics_disk_space_used_bytes)) + (sum without (disk_name) (hardware_disk_metrics_disk_space_free_bytes)), 1)) > %(alertsHighDiskUsage)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -171,14 +171,14 @@
               description:
                 (
                   'The amount of hardware disk space being used on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}}%% which is above the threshold of %(alertsHighDiskUsage)s%%.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'MongoDBAtlasSlowHardwareIO',
             expr: |||
               (sum without (disk_name) (increase(hardware_disk_metrics_read_time_milliseconds[5m])) + sum without (disk_name) (increase(hardware_disk_metrics_write_time_milliseconds[5m]))) / 1000 > %(alertsSlowHardwareIO)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -188,14 +188,14 @@
               description:
                 (
                   'The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} seconds which is above the threshold of %(alertsSlowHardwareIO)s seconds.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'MongoDBAtlasHighNumberOfTimeoutElections',
+            alert: 'MongoDBAtlasElectionTimeouts',
             expr: |||
               sum without (cl_role,process_port,instance,rs_state) (increase(mongodb_electionMetrics_electionTimeout_called[5m])) > %(alertsHighTimeoutElections)s
-            ||| % $._config,
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -204,8 +204,8 @@
               summary: 'There is a high number of elections being called due to the primary node timing out.',
               description:
                 (
-                  'The number of elections being called due to the primary node timing out in replica set {{$labels.rs_m}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsHighTimeoutElections)s.'
-                ) % $._config,
+                  'The number of elections being called due to the primary node timing out in replica set {{$labels.rs_nm}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsHighTimeoutElections)s.'
+                ) % this.config,
             },
           },
         ],

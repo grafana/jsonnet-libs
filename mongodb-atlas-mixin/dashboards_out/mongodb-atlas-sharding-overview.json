@@ -2,7 +2,7 @@
       "annotations": {
          "list": [ ]
       },
-      "description": "Overview of MongoDB Atlas operation metrics.",
+      "description": "Overview of MongoDB Atlas sharding metrics.",
       "links": [
          {
             "keepTime": true,
@@ -15,6 +15,12 @@
             "title": "MongoDB Atlas elections overview",
             "type": "link",
             "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
          },
          {
             "asDropdown": true,
@@ -31,12 +37,6 @@
             "title": "MongoDB Atlas performance overview",
             "type": "link",
             "url": "/d/mongodb-atlas-performance-overview"
-         },
-         {
-            "keepTime": true,
-            "title": "MongoDB Atlas sharding overview",
-            "type": "link",
-            "url": "/d/mongodb-atlas-sharding-overview"
          }
       ],
       "panels": [
@@ -50,7 +50,7 @@
             },
             "id": 1,
             "panels": [ ],
-            "title": "Operations",
+            "title": "General sharding statistics",
             "type": "row"
          },
          {
@@ -58,7 +58,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of query operations.",
+            "description": "Number of times that a thread hit a stale config exception and triggered a metadata refresh.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -95,15 +95,15 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_query{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_shardingStatistics_countStaleConfigErrors{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
                   "legendFormat": "{{instance}}",
-                  "refId": "Query operations"
+                  "refId": "Stale config errors"
                }
             ],
-            "title": "Query operations",
+            "title": "Stale configs / $__interval",
             "type": "timeseries"
          },
          {
@@ -111,7 +111,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of insert operations.",
+            "description": "Chunk migration frequency for this node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -148,15 +148,15 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_insert{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_shardingStatistics_countRecipientMoveChunkStarted{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
                   "legendFormat": "{{instance}}",
-                  "refId": "Insert operations"
+                  "refId": "Chunk migrations started as recipient"
                }
             ],
-            "title": "Insert operations",
+            "title": "Chunk migrations / $__interval",
             "type": "timeseries"
          },
          {
@@ -164,7 +164,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of update operations.",
+            "description": "The number of documents cloned on this node when it acted as primary for the donor and acted as primary for the recipient.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -172,7 +172,10 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
                   "unit": "none"
                }
@@ -201,15 +204,27 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_update{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_shardingStatistics_countDocsClonedOnDonor{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
-                  "legendFormat": "{{instance}}",
-                  "refId": "Update operations"
+                  "legendFormat": "{{instance}} - donor",
+                  "refId": "Documents cloned on donor"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(mongodb_shardingStatistics_countDocsClonedOnRecipient{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - recipient",
+                  "refId": "Documents cloned on recipient"
                }
             ],
-            "title": "Update operations",
+            "title": "Docs cloned / $__interval",
             "type": "timeseries"
          },
          {
@@ -217,7 +232,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of delete operations.",
+            "description": "The time taken by the catch-up and update metadata phases of a range migration, by this node.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -227,7 +242,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "ms"
                }
             },
             "gridPos": {
@@ -254,15 +269,15 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_delete{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "increase(mongodb_shardingStatistics_totalCriticalSectionTimeMillis{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
                   "legendFormat": "{{instance}}",
-                  "refId": "Delete operations"
+                  "refId": "Critical section time"
                }
             ],
-            "title": "Delete operations",
+            "title": "Critical section time / $__interval",
             "type": "timeseries"
          },
          {
@@ -275,7 +290,7 @@
             },
             "id": 6,
             "panels": [ ],
-            "title": "Connections",
+            "title": "Catalog cache",
             "type": "row"
          },
          {
@@ -283,7 +298,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of incoming connections from clients to the node.",
+            "description": "The number of incremental and full refreshes that have started.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -291,10 +306,11 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never"
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
                   },
-                  "decimals": 1,
-                  "noValue": "No packets",
                   "unit": "none"
                }
             },
@@ -322,14 +338,27 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "mongodb_connections_current{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}",
-                  "refId": "Current connections"
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - incremental",
+                  "refId": "Incremental catalog cache refreshes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - full",
+                  "refId": "Full catalog cache refreshes"
                }
             ],
-            "title": "Current connections",
+            "title": "Refreshes started / $__interval",
             "type": "timeseries"
          },
          {
@@ -337,7 +366,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of connections that currently have operations in progress.",
+            "description": "The number of full and incremental refreshes that have failed.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -374,14 +403,238 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "mongodb_connections_active{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countFailedRefreshes{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Failed catalog cache refreshes"
+               }
+            ],
+            "title": "Refreshes failed / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of times that a thread hit a stale config exception for the catalog cache and triggered a metadata refresh.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 0,
+               "y": 26
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Catalog cache stale config errors"
+               }
+            ],
+            "title": "Cache stale configs / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of database and collection entries that are currently in the catalog cache.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 6,
+               "y": 26
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_numDatabaseEntries{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - database",
+                  "refId": "Database entries in catalog cache"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_numCollectionEntries{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - collection",
+                  "refId": "Collection entries in catalog cache"
+               }
+            ],
+            "title": "Cache entries / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of time that threads had to wait for a refresh of the metadata.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 26
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_totalRefreshWaitTimeMicros{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Catalog cache refresh wait time"
+               }
+            ],
+            "title": "Cache refresh time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of operations that are blocked by a refresh of the catalog cache. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 26
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
-                  "refId": "Active connections"
+                  "refId": "Operations blocked by catalog cache refresh"
                }
             ],
-            "title": "Active connections",
+            "title": "Cache operations blocked",
             "type": "timeseries"
          },
          {
@@ -390,11 +643,11 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 26
+               "y": 34
             },
-            "id": 9,
+            "id": 13,
             "panels": [ ],
-            "title": "Read/Write operations",
+            "title": "Shard operations",
             "type": "row"
          },
          {
@@ -402,7 +655,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The rate of read and write operations performed by the node.",
+            "description": "The rate of CRUD operations and aggregation commands run that targeted all shards. Specific to mongos nodes found under replica set \"none\".",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -419,12 +672,11 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 27
+               "y": 35
             },
-            "id": 10,
+            "id": 14,
             "options": {
                "legend": {
-                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
                   "placement": "right"
@@ -441,25 +693,58 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opLatencies_reads_ops{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}} - reads",
-                  "refId": "Read operations by instance"
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting all shards"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opLatencies_writes_ops{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}} - writes",
-                  "refId": "Write operations by instance"
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting all shards"
                }
             ],
-            "title": "Read and write operations",
+            "title": "All shards",
             "type": "timeseries"
          },
          {
@@ -467,7 +752,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The latency time for read and write operations performed by this node.",
+            "description": "The rate of CRUD operations and aggregation commands run that targeted more than 1 shard. Specific to mongos nodes found under replica set \"none\".",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -477,19 +762,18 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "µs"
+                  "unit": "ops"
                }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 27
+               "y": 35
             },
-            "id": 11,
+            "id": 15,
             "options": {
                "legend": {
-                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
                   "placement": "right"
@@ -506,48 +790,66 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_opLatencies_reads_latency{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - reads",
-                  "refId": "Read latency by instance"
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting many shards"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_opLatencies_writes_latency{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - writes",
-                  "refId": "Write latency by instance"
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting many shards"
                }
             ],
-            "title": "Read and write latency / $__interval",
+            "title": "Many shards",
             "type": "timeseries"
-         },
-         {
-            "collapsed": false,
-            "gridPos": {
-               "h": 1,
-               "w": 0,
-               "x": 0,
-               "y": 35
-            },
-            "id": 12,
-            "panels": [ ],
-            "title": "Locks",
-            "type": "row"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of deadlocks that have occurred for the database lock.",
+            "description": "The rate of CRUD operations and aggregation commands run that targeted 1 shard. Specific to mongos nodes found under replica set \"none\".",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -557,296 +859,21 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "ops"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
-               "y": 36
-            },
-            "id": 13,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Database exclusive lock deadlocks by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Database intent exclusive lock deadlocks by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Database shared lock deadlocks by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Database intent shared lock deadlocks by instance"
-               }
-            ],
-            "title": "Database deadlocks / $__interval",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "The number of database lock acquisitions that had to wait.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
-                  },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 36
-            },
-            "id": 14,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Database exclusive lock wait count by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Database intent exclusive lock wait count by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Database shared lock wait count by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Database intent shared lock wait count by instance"
-               }
-            ],
-            "title": "Database wait count / $__interval",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "The time spent waiting for the database lock acquisition.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
-                  },
-                  "unit": "µs"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 36
-            },
-            "id": 15,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Database exclusive lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Database intent exclusive lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Database shared lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Database intent shared lock acquisition time by instance"
-               }
-            ],
-            "title": "Database wait time / $__interval",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "The number of deadlocks that have occurred for the collection lock.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
-                  },
-                  "unit": "none"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 0,
-               "y": 44
+               "y": 43
             },
             "id": 16,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -860,51 +887,58 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Collection exclusive lock deadlocks by instance"
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting one shard"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Collection intent exclusive lock deadlocks by instance"
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting one shard"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Collection shared lock deadlocks by instance"
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting one shard"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Collection intent shared lock deadlocks by instance"
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting one shard"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting one shard"
                }
             ],
-            "title": "Collection deadlocks / $__interval",
+            "title": "One shard",
             "type": "timeseries"
          },
          {
@@ -912,7 +946,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of collection lock acquisitions that had to wait.",
+            "description": "The rate of CRUD operations and aggregation commands run on an unsharded collection. Specific to mongos nodes found under replica set \"none\".",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -920,25 +954,23 @@
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
+                     "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "ops"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 44
+               "w": 12,
+               "x": 12,
+               "y": 43
             },
             "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -952,143 +984,58 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Collection exclusive lock wait count by instance"
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations on unsharded collections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Collection intent exclusive lock wait count by instance"
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations on unsharded collections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Collection shared lock wait count by instance"
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations on unsharded collections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Collection intent shared lock wait count by instance"
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations on unsharded collections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations on unsharded collections"
                }
             ],
-            "title": "Collection wait count / $__interval",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "The time spent waiting for the collection lock acquisition.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "stacking": {
-                        "mode": "normal"
-                     }
-                  },
-                  "unit": "µs"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 44
-            },
-            "id": 18,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - exclusive",
-                  "refId": "Collection exclusive lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent exclusive",
-                  "refId": "Collection intent exclusive lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - shared",
-                  "refId": "Collection shared lock acquisition time by instance"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=\"integrations/mongodb-atlas\",job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "2m",
-                  "legendFormat": "{{instance}} - intent shared",
-                  "refId": "Collection intent shared lock acquisition time by instance"
-               }
-            ],
-            "title": "Collection wait time / $__interval",
+            "title": "Unsharded",
             "type": "timeseries"
          }
       ],
@@ -1171,6 +1118,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "MongoDB Atlas operations overview",
-      "uid": "mongodb-atlas-operations-overview"
+      "title": "MongoDB Atlas sharding overview",
+      "uid": "mongodb-atlas-sharding-overview"
    }
