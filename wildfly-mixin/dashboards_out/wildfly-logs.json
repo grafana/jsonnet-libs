@@ -217,7 +217,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "wildfly"
+         "wildfly-mixin"
       ],
       "templating": {
          "list": [
