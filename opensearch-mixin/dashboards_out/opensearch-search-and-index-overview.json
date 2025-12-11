@@ -80,7 +80,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_query_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_query_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -92,7 +92,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_fetch_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_fetch_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -104,7 +104,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_scroll_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}\n)",
+                  "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_scroll_current_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1456,7 +1456,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "opensearch"
+         "opensearch-mixin"
       ],
       "templating": {
          "list": [
