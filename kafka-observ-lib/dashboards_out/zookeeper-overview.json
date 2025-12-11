@@ -2139,7 +2139,7 @@
                         "expr": "avg by (kafka_cluster, gc) (\n  rate(jvm_gc_collection_seconds_sum{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_collection_seconds_count{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ kafka_cluster }}: {{ gc }} (avg)",
+                        "legendFormat": "{{kafka_cluster}}: {{ gc }} (avg)",
                         "refId": "GC time (avg)"
                      }
                   ],
