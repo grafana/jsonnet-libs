@@ -15,18 +15,14 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "SAP HANA instance overview",
             "type": "link",
             "url": "/d/sap-hana-instance-overview"
          },
          {
-            "keepTime": true,
-            "title": "SAP HANA logs",
-            "type": "link",
-            "url": "/d/sap-hana-logs"
-         },
-         {
+            "includeVars": true,
             "keepTime": true,
             "title": "SAP HANA system overview",
             "type": "link",

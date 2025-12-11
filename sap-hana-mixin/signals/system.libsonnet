@@ -1,5 +1,5 @@
 function(this) {
-  local aggregationLabels = std.join(',', this.groupLabels + this.instanceLabels),
+  local aggregationLabels = std.join(', ', this.groupLabels + this.instanceLabels),
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,

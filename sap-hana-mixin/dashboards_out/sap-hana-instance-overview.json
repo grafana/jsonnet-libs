@@ -16,18 +16,14 @@
             "type": "dashboards"
          },
          {
-            "keepTime": true,
-            "title": "SAP HANA instance overview",
-            "type": "link",
-            "url": "/d/sap-hana-instance-overview"
-         },
-         {
+            "includeVars": true,
             "keepTime": true,
             "title": "SAP HANA logs",
             "type": "link",
             "url": "/d/sap-hana-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "SAP HANA system overview",
             "type": "link",
@@ -576,7 +572,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,sid,host, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "expr": "avg by (job, sid, host, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{host}} - {{service}} - {{sql_type}}",
@@ -628,7 +624,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,sid,host, service, sql_type) (hanadb_sql_service_lock_per_exec_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, service, sql_type) (hanadb_sql_service_lock_per_exec_ms{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{host}} - {{service}} - {{sql_type}}",
@@ -882,7 +878,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,sid,host, database_name, table_name, schema_name) (topk(5, hanadb_table_cs_top_mem_total_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}))",
+                  "expr": "sum by (job, sid, host, database_name, table_name, schema_name) (topk(5, hanadb_table_cs_top_mem_total_mb{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{host}} - {{database_name}} - {{schema_name}} - {{table_name}}",
@@ -934,7 +930,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,sid,host, sql_hash) (hanadb_sql_top_time_consumers_mu{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
+                  "expr": "sum by (job, sid, host, sql_hash) (hanadb_sql_top_time_consumers_mu{job=\"integrations/sap-hana\",job=~\"$job\",sid=~\"$sid\",host=~\"$host\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{host}} - hash: {{sql_hash}}",

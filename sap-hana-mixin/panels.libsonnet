@@ -32,8 +32,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average system replication log shipping delay in the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
-        ])
         + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
 
       systemCpuUsagePanel:

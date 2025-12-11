@@ -37,7 +37,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           vars.multiInstance,
           uid + '-system-overview',
           tags,
-          links,
+          links { sapHanaOverview+:: {} },
           annotations,
           timezone,
           refresh,
@@ -63,7 +63,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           vars.multiInstance,
           uid + '-instance-overview',
           tags,
-          links,
+          links { sapHanaInstance+:: {} },
           annotations,
           timezone,
           refresh,
@@ -84,7 +84,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           dashboards+:
             {
               logs+:
-                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { couchdbLogs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { sapHanaLogs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
             },
           panels+:
             {
