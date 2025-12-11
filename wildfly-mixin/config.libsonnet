@@ -6,7 +6,7 @@
   instanceLabels: ['instance'],
 
   uid: 'wildfly',
-  dashboardTags: [self.uid],
+  dashboardTags: [self.uid + '-mixin'],
   dashboardNamePrefix: 'Wildfly',
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
