@@ -1244,7 +1244,7 @@
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [
-         "opensearch"
+         "opensearch-mixin"
       ],
       "templating": {
          "list": [

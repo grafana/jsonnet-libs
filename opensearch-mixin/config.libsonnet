@@ -6,7 +6,7 @@
   instanceLabels: ['instance'],
 
   uid: 'opensearch',
-  dashboardTags: [self.uid],
+  dashboardTags: [self.uid + '-mixin'],
   dashboardNamePrefix: 'OpenSearch',
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
