@@ -15,7 +15,7 @@ local g = import './g.libsonnet';
       link.link.new('Geographic overview', '/d/' + this.grafana.dashboards['cloudflare-geomap-overview.json'].uid)
       + link.link.options.withKeepTime(true)
       + link.link.options.withIncludeVars(true),
-      
+
     otherDashboards:
       link.dashboards.new('All dashboards', this.config.dashboardTags)
       + link.dashboards.options.withIncludeVars(true)
