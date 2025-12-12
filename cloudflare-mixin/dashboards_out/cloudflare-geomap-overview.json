@@ -266,7 +266,6 @@
                   },
                   "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
-                  "expr": "increase(${geo_metric}{job=~\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "instant": false,
                   "interval": "2m",
                   "intervalFactor": 2,
