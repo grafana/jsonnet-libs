@@ -106,7 +106,11 @@ local utils = commonlib.utils;
       cachedRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Cached requests / $__interval',
-          targets=[signals.zone.requestsCached.asTarget()],
+          targets=[
+            signals.zone.requestsCached.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='The percentage of requests to the zone that are cached.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
@@ -124,7 +128,11 @@ local utils = commonlib.utils;
       threatsPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Threats / $__interval',
-          targets=[signals.zone.threatsTotal.asTarget()],
+          targets=[
+            signals.zone.threatsTotal.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='The number of threats that have targeted the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -144,8 +152,12 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Bandwidth type / $__interval',
           targets=[
-            signals.zone.bandwidthSslEncrypted.asTarget(),
-            signals.zone.bandwidthCached.asTarget(),
+            signals.zone.bandwidthSslEncrypted.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+            signals.zone.bandwidthCached.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
           ],
           description='The amount of cached and encrypted bandwidth that occurs in the zone.'
         )
@@ -156,7 +168,11 @@ local utils = commonlib.utils;
       bandwidthContentTypePanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Bandwidth content type / $__interval',
-          targets=[signals.zone.bandwidthContentType.asTarget()],
+          targets=[
+            signals.zone.bandwidthContentType.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='The content types that bandwidth is being used for in the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
@@ -168,8 +184,12 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Unique page views / $__interval',
           targets=[
-            signals.zone.uniquesTotal.asTarget(),
-            signals.zone.repeatVisitors.asTarget(),
+            signals.zone.uniquesTotal.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+            signals.zone.repeatVisitors.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
           ],
           description='The number of unique and total page views.'
         )
@@ -180,7 +200,11 @@ local utils = commonlib.utils;
       requestsStatusPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Request HTTP status / $__interval',
-          targets=[signals.zone.requestsStatus.asTarget()],
+          targets=[
+            signals.zone.requestsStatus.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='The number of different HTTP status codes used for requests in the zone.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -193,7 +217,11 @@ local utils = commonlib.utils;
       browserMapPanel:
         commonlib.panels.generic.timeSeries.base.new(
           'Browser page views / $__interval',
-          targets=[signals.zone.requestsBrowserMap.asTarget()],
+          targets=[
+            signals.zone.requestsBrowserMap.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='The number of zone views by browser family.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
@@ -202,25 +230,88 @@ local utils = commonlib.utils;
       colocationRequestsPanel:
         commonlib.panels.generic.table.base.new(
           'Colocation requests',
-          targets=[signals.zone.colocationRequests.asTarget()],
+          targets=[
+            signals.zone.colocationRequests.asTarget()
+            + g.query.prometheus.withFormat('time_series')
+            + g.query.prometheus.withIntervalFactor(2)
+            + g.query.prometheus.withLegendFormat(''),
+          ],
           description='The different colocations being used by the zone and their request rates.'
         )
-        + g.panel.table.standardOptions.withUnit('reqps'),
+        + g.panel.table.standardOptions.withUnit('reqps')
+        + g.panel.table.fieldConfig.defaults.custom.withAlign('left')
+        + g.panel.table.fieldConfig.defaults.custom.withCellOptions({ type: 'auto' })
+        + g.panel.table.fieldConfig.defaults.custom.withInspect(false)
+        + g.panel.table.queryOptions.withTransformations([
+          {
+            id: 'reduce',
+            options: {
+              reducers: ['lastNotNull'],
+            },
+          },
+          {
+            id: 'extractFields',
+            options: {
+              format: 'auto',
+              source: 'Field',
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {
+                Field: true,
+                cluster: true,
+                host: true,
+                instance: true,
+                job: true,
+                script_name: true,
+              },
+              indexByName: {
+                Field: 3,
+                'Last *': 2,
+                colocation: 1,
+                host: 4,
+                instance: 5,
+                job: 6,
+                zone: 0,
+              },
+              renameByName: {
+                'Last *': 'Requests',
+                colocation: 'Colocation',
+                zone: 'Zone',
+              },
+            },
+          },
+        ])
+        + g.panel.table.options.withCellHeight('sm')
+        + g.panel.table.options.footer.withCountRows(false)
+        + g.panel.table.options.footer.withFields('')
+        + g.panel.table.options.footer.withReducer(['sum'])
+        + g.panel.table.options.footer.withShow(false)
+        + g.panel.table.options.withShowHeader(true)
+        + g.panel.table.options.withSortBy([
+          { desc: true, displayName: 'Requests' },
+        ]),
 
       // Pool panels
       poolStatusPanel:
-        g.panel.table.new('Pool status')
-        + g.panel.table.panelOptions.withDescription('A table view of the pools in your zone showing their health and rate of requests.')
-        + g.panel.table.queryOptions.withTargets([
-          signals.pool.poolStatus.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withIntervalFactor(2)
-          + g.query.prometheus.withLegendFormat(''),
-          signals.pool.requests.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withIntervalFactor(2)
-          + g.query.prometheus.withLegendFormat(''),
-        ])
+        commonlib.panels.generic.table.base.new(
+          'Pool status',
+          targets=[
+            signals.pool.poolStatus.asTarget()
+            + g.query.prometheus.withRefId('A')
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withIntervalFactor(2)
+            + g.query.prometheus.withLegendFormat(''),
+            signals.pool.requests.asTarget()
+            + g.query.prometheus.withRefId('B')
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withIntervalFactor(2)
+            + g.query.prometheus.withLegendFormat(''),
+          ],
+          description='A table view of the pools in your zone showing their health and rate of requests.'
+        )
         + g.panel.table.standardOptions.withUnit('reqps')
         + g.panel.table.standardOptions.withMappings([
           {
@@ -307,6 +398,8 @@ local utils = commonlib.utils;
               },
             ]
           ),
+          g.panel.table.fieldOverride.byName.new('Requests')
+          + g.panel.table.fieldOverride.byName.withProperty('decimals', 4),
         ]),
 
       poolRequestsPanel:
@@ -325,8 +418,9 @@ local utils = commonlib.utils;
           targets=[signals.worker.cpuTime.asTarget()],
           description='CPU time consumed by the worker.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       workerDurationPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -335,7 +429,8 @@ local utils = commonlib.utils;
           description='Duration of worker execution.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       workerRequestsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -348,8 +443,12 @@ local utils = commonlib.utils;
 
       workerErrorsPanel:
         commonlib.panels.generic.timeSeries.base.new(
-          'Worker errors',
-          targets=[signals.worker.errorsCount.asTarget()],
+          'Worker errors / $__interval',
+          targets=[
+            signals.worker.errorsCount.asTarget()
+            + g.query.prometheus.withInterval('1m')
+            + g.query.prometheus.withIntervalFactor(2),
+          ],
           description='Number of errors from the worker.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('short')
@@ -428,15 +527,17 @@ local utils = commonlib.utils;
           },
         ]),
       geoMetricsByCountryTablePanel:
-        g.panel.table.new('Geographic distribution')
-        + g.panel.table.panelOptions.withDescription('Table currently showing $geo_metric for the zone.')
-        + g.panel.table.queryOptions.withTargets([
-          signals.geomap.geoMapByCountry.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInterval('2m')
-          + g.query.prometheus.withIntervalFactor(2)
-          + g.query.prometheus.withLegendFormat(''),
-        ])
+        commonlib.panels.generic.table.base.new(
+          'Geographic distribution',
+          targets=[
+            signals.geomap.geoMapByCountry.asTarget()
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInterval('2m')
+            + g.query.prometheus.withIntervalFactor(2)
+            + g.query.prometheus.withLegendFormat(''),
+          ],
+          description='Table currently showing $geo_metric for the zone.'
+        )
         + g.panel.table.queryOptions.withTransformations(geoTransformations)
         + g.panel.table.standardOptions.withOverrides([
           g.panel.table.fieldOverride.byRegexp.new('/Total|Mean|Last/')

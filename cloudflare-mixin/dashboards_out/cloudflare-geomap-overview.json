@@ -38,8 +38,8 @@
       "panels": [
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Table currently showing $geo_metric for the zone.",
             "fieldConfig": {
@@ -83,7 +83,7 @@
                   }
                ]
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {

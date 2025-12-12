@@ -65,7 +65,7 @@
                      "showPoints": "never",
                      "spanNulls": false
                   },
-                  "unit": "s"
+                  "unit": "ms"
                }
             },
             "gridPos": {
@@ -78,7 +78,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -131,7 +132,8 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -254,11 +256,13 @@
                   "expr": "increase(cloudflare_worker_errors_count{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{ script_name }}",
                   "refId": "Worker errors"
                }
             ],
-            "title": "Worker errors",
+            "title": "Worker errors / $__interval",
             "type": "timeseries"
          }
       ],
