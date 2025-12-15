@@ -160,14 +160,38 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
-                severity: this.config.alertInterfaceDownSeverity,
+                severity: 'critical',
+              },
+              annotations: {
+                summary: 'Critical network interface is down on SNMP device.',
+                description: |||
+                  A critical network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.%s}} is down. 
+                  Note that only interfaces with ifAdminStatus = `up` and matching `%s` are being checked and considered critical.
+                ||| % [instanceLabel, this.config.alertInterfaceDownSelectorCritical],
+              },
+              'for': '5m',
+              keep_firing_for: '5m',
+            },
+            {
+              alert: 'SNMPInterfaceDown',
+              expr: |||
+                      (%s) == 2
+                      # only alert if interface is adminatratively up:
+                      and (%s) != 2
+                    |||
+                    % [
+                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
+                      this.signals.interface.ifAdminStatus.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
               },
               annotations: {
                 summary: 'Network interface is down on SNMP device.',
                 description: |||
                   Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.%s}} is down. 
                   Only interfaces with ifAdminStatus = `up` and matching `%s` are being checked.
-                ||| % [instanceLabel, this.config.alertInterfaceDownSelector],
+                ||| % [instanceLabel, this.config.alertInterfaceDownSelectorWarning],
               },
               'for': '5m',
               keep_firing_for: '5m',
