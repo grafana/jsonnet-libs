@@ -30,7 +30,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         filteringSelector=this.config.filteringSelector,
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
-        varMetric='couchdb_couch_replicator_cluster_is_stable',
+        # this should be in applicable to both 'prometheus' and 'prometheusWithTotal' metrics sources
+        varMetric='couchdb_database_reads_total',
         customAllValue='.+',
         enableLokiLogs=this.config.enableLokiLogs,
       ),

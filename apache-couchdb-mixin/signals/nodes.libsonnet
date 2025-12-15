@@ -9,7 +9,7 @@ function(this) {
   aggLevel: 'none',
   aggFunction: 'avg',
   discoveryMetric: {
-    prometheus: 'couchdb_couch_replicator_cluster_is_stable',
+    prometheus: 'couchdb_database_reads_total',
   },
 
   signals: {
@@ -129,12 +129,12 @@ function(this) {
     requestMethods: {
       name: 'Request methods',
       nameShort: 'Request methods',
-      type: 'counter',
+      type: 'raw',
       description: 'The request rate split by HTTP Method for a node.',
       unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_request_methods{%(queriesSelector)s}',
+          expr: 'rate(couchdb_httpd_request_methods{%(queriesSelector)s}[$__rate_interval]) > 0',
           legendCustomTemplate: legendCustomTemplate + ' - {{method}}',
         },
       },
@@ -232,12 +232,13 @@ function(this) {
     goodResponseStatuses: {
       name: 'Good response statuses',
       nameShort: 'Good response status',
-      type: 'counter',
+      type: 'raw',
       description: 'The response rate split by good HTTP statuses for a node.',
       unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[23].*"}',
+          // filter out 0 values to declutter information that is not pertinent
+          expr: 'rate(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[23].*"}[$__rate_interval]) > 0',
           legendCustomTemplate: legendCustomTemplate + ' - {{code}}',
         },
       },
@@ -246,12 +247,13 @@ function(this) {
     errorResponseStatuses: {
       name: 'Error response statuses',
       nameShort: 'Error response status',
-      type: 'counter',
+      type: 'raw',
       description: 'The response rate split by error HTTP statuses for a node.',
       unit: 'reqps',
       sources: {
         prometheus: {
-          expr: 'couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[45].*"}',
+          // filter out 0 values to declutter information that is not pertinent
+          expr: 'rate(couchdb_httpd_status_codes{%(queriesSelector)s, code=~"[45].*"}[$__rate_interval]) > 0',
           legendCustomTemplate: legendCustomTemplate + ' - {{code}}',
         },
       },
@@ -260,13 +262,13 @@ function(this) {
     logTypes: {
       name: 'Log types',
       nameShort: 'Log types',
-      type: 'counter',
+      type: 'raw',
       description: 'The number of logged messages for a node.',
       unit: 'none',
       sources: {
         prometheus: {
-          expr: 'couchdb_couch_log_requests_total{%(queriesSelector)s}',
-          rangeFunction: 'increase',
+          // filter out 0 values to declutter information that is not pertinent
+          expr: 'increase(couchdb_couch_log_requests_total{%(queriesSelector)s}[$__interval:] offset -$__interval) > 0',
           legendCustomTemplate: legendCustomTemplate + ' - {{level}}',
         },
       },

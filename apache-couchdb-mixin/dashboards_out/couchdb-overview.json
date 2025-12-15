@@ -7,7 +7,7 @@
             "keepTime": true,
             "title": "Apache CouchDB logs",
             "type": "link",
-            "url": "couchdb-logs"
+            "url": "/d/couchdb-logs"
          },
          {
             "keepTime": true,
@@ -735,7 +735,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes.",
+            "description": "The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes by default. If you want to see the data for a specific node, you can filter by instance.",
             "gridPos": {
                "h": 8,
                "w": 12,
@@ -1306,7 +1306,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\"}, job)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1321,7 +1321,7 @@
                "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1336,7 +1336,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1351,7 +1351,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

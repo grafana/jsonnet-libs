@@ -9,7 +9,7 @@ function(this) {
   aggLevel: 'none',
   aggFunction: 'avg',
   discoveryMetric: {
-    prometheus: 'couchdb_couch_replicator_cluster_is_stable',
+    prometheus: 'couchdb_database_reads_total',
   },
   signals: {
     changesManagerDeaths: {

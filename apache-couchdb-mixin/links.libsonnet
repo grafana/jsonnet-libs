@@ -21,7 +21,7 @@ local g = import './g.libsonnet';
     +
     if this.config.enableLokiLogs then {
       couchdbLogs:
-        link.link.new(this.config.dashboardNamePrefix + ' logs', this.grafana.dashboards['couchdb-logs.json'].uid)
+        link.link.new(this.config.dashboardNamePrefix + ' logs', '/d/' + this.grafana.dashboards['couchdb-logs.json'].uid)
         + link.link.options.withKeepTime(true),
     } else {},
 }

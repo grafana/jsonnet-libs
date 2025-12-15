@@ -7,7 +7,7 @@
             "keepTime": true,
             "title": "Apache CouchDB logs",
             "type": "link",
-            "url": "couchdb-logs"
+            "url": "/d/couchdb-logs"
          },
          {
             "keepTime": true,
@@ -652,7 +652,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(couchdb_httpd_request_methods{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(couchdb_httpd_request_methods{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -668,7 +668,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) for a node.",
+            "description": "Responses grouped by HTTP status type (2xx, 3xx, 4xx, 5xx). Filter by instance to see specific node data.",
             "fieldConfig": {
                "defaults": {
                   "unit": "none"
@@ -785,7 +785,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[23].*\"}[$__rate_interval])",
+                  "expr": "rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[23].*\"}[$__rate_interval]) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -840,7 +840,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval])",
+                  "expr": "rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval]) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -908,7 +908,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(couchdb_couch_log_requests_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(couchdb_couch_log_requests_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -944,7 +944,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\"}, job)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -959,7 +959,7 @@
                "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -974,7 +974,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -989,7 +989,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -129,7 +129,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.overview.responseStatus3xx.asTarget() { interval: '2m' },
           signals.overview.responseStatus4xx.asTarget() { interval: '2m' },
           signals.overview.responseStatus5xx.asTarget() { interval: '2m' },
-        ]) + g.panel.pieChart.panelOptions.withDescription('The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes.'),
+        ]) + g.panel.pieChart.panelOptions.withDescription('The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes by default. If you want to see the data for a specific node, you can filter by instance.'),
 
       overviewGoodResponseStatusesPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -312,7 +312,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.nodes.responseStatus4xx.asTarget() { interval: '2m' },
           signals.nodes.responseStatus5xx.asTarget() { interval: '2m' },
         ])
-        + g.panel.pieChart.panelOptions.withDescription('The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) for a node.')
+        + g.panel.pieChart.panelOptions.withDescription('Responses grouped by HTTP status type (2xx, 3xx, 4xx, 5xx). Filter by instance to see specific node data.')
         + g.panel.pieChart.standardOptions.withUnit('none')
         + g.panel.pieChart.options.legend.withAsTable(true)
         + g.panel.pieChart.options.legend.withPlacement('right'),

@@ -79,7 +79,7 @@ If you need to customize this behavior, you can modify the `metricsSource` in yo
 {
   _config+:: {
     // For CouchDB 3.5.0+ only (no _total suffix)
-    metricsSource: ['prometheus'],
+    metricsSource: ['prometheus']
 
     // OR for backwards compatibility with both versions
     metricsSource: ['prometheus', 'prometheusWithTotal'],
