@@ -71,13 +71,12 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'sum by(app, job, instance) (increase(windows_iis_worker_websocket_connection_accepted_total{%(queriesSelector)s, app=~"$application"}[$__interval:]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total{%(queriesSelector)s, app=~"$application"}[$__interval:]),1)) * 100',
+            expr: 'sum by(app, job, instance) (increase(windows_iis_worker_websocket_connection_accepted_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total{%(queriesSelector)s, app=~"$application"}[$__interval:] offset $__interval),1)) * 100',
             legendCustomTemplate: '{{instance}} - {{app}}',
           },
         },
       },
 
-      // Worker thread signals
       currentWorkerThreads: {
         name: 'Current worker threads',
         type: 'gauge',

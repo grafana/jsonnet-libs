@@ -23,8 +23,8 @@
           {
             alert: 'MicrosoftIIS5xxRequestErrors',
             expr: |||
-              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5..", %(filteringSelector)s}[5m])) > %(alertsCriticalHigh5xxRequests)s
-            ||| % this.config,
+              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5.."%(filteringSelector)s}[5m])) > %(alertsCriticalHigh5xxRequests)s
+            ||| % (this.config { filteringSelector: if this.config.filteringSelector != '' then ',' + this.config.filteringSelector else '' }),
             'for': '5m',
             labels: {
               severity: 'critical',

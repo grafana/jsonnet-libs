@@ -5,11 +5,13 @@ local g = import './g.libsonnet';
     {
       microsoftIISOverview:
         link.link.new('Microsoft IIS overview', '/d/' + this.grafana.dashboards['microsoft-iis-overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       microsoftIISApplications:
         link.link.new('Microsoft IIS applications', '/d/' + this.grafana.dashboards['microsoft-iis-applications.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       microsoftIISDashboards:
         link.dashboards.new('All dashboards', this.config.dashboardTags)

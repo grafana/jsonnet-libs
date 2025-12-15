@@ -21,6 +21,7 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Microsoft IIS overview",
             "type": "link",
@@ -93,7 +94,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(app, job, instance) (\n  rate(windows_iis_worker_requests_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
+                  "expr": "sum by(app, job, instance) (\n  rate(windows_iis_worker_requests_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{app}}",
@@ -156,7 +157,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(app, instance, job, status_code) (\n  rate(windows_iis_worker_request_errors_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
+                  "expr": "sum by(app, instance, job, status_code) (\n  rate(windows_iis_worker_request_errors_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{app}} - {{status_code}}",
@@ -224,7 +225,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(app, instance, job) (\n  rate(windows_iis_worker_websocket_connection_attempts_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
+                  "expr": "sum by(app, instance, job) (\n  rate(windows_iis_worker_websocket_connection_attempts_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -278,7 +279,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(app, job, instance) (increase(windows_iis_worker_websocket_connection_accepted_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:]),1)) * 100",
+                  "expr": "sum by(app, job, instance) (increase(windows_iis_worker_websocket_connection_accepted_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -330,7 +331,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_iis_worker_threads{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}",
+                  "expr": "windows_iis_worker_threads{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{app}} - {{state}}",
@@ -383,7 +384,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, instance, app) (windows_iis_worker_threads{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"})/ clamp_min(sum by (job, instance, app) (windows_iis_worker_max_threads{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}),1) * 100",
+                  "expr": "sum by (job, instance, app) (windows_iis_worker_threads{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"})/ clamp_min(sum by (job, instance, app) (windows_iis_worker_max_threads{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}),1) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{app}}",
@@ -448,7 +449,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(app, instance, job) (\n  windows_iis_current_worker_processes{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}\n)",
+                  "expr": "sum by(app, instance, job) (\n  windows_iis_current_worker_processes{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{app}}",
@@ -500,7 +501,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(windows_iis_total_worker_process_failures{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(windows_iis_total_worker_process_failures{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -553,7 +554,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(windows_iis_total_worker_process_startup_failures{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(windows_iis_total_worker_process_startup_failures{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -606,7 +607,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(windows_iis_total_worker_process_shutdown_failures{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(windows_iis_total_worker_process_shutdown_failures{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -659,7 +660,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(windows_iis_total_worker_process_ping_failures{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(windows_iis_total_worker_process_ping_failures{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -726,7 +727,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
+                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_file_cache_hits_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_file_cache_queries_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -780,7 +781,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
+                  "expr": "sum by(instance, job, app) (increase(windows_iis_worker_uri_cache_hits_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_uri_cache_queries_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -834,7 +835,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
+                  "expr": "sum by(job, instance, app)(increase(windows_iis_worker_metadata_cache_hits_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_metadata_cache_queries_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -888,7 +889,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_output_queries_total{job=\"integrations/iis\",job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1))",
+                  "expr": "sum by(job, instance, app) (increase(windows_iis_worker_output_cache_hits_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval) / clamp_min(increase(windows_iis_worker_output_queries_total{job=~\"$job\",instance=~\"$instance\", app=~\"$application\"}[$__interval:] offset $__interval),1))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -924,7 +925,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(windows_iis_requests_total{job=\"integrations/iis\"}, job)",
+               "query": "label_values(windows_iis_requests_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -939,7 +940,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(windows_iis_requests_total{job=\"integrations/iis\",job=~\"$job\"}, instance)",
+               "query": "label_values(windows_iis_requests_total{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

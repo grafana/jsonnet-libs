@@ -10,6 +10,7 @@
             "url": "/d/microsoftiis-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Microsoft IIS applications",
             "type": "link",
@@ -26,6 +27,7 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Microsoft IIS overview",
             "type": "link",
@@ -179,7 +181,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/iis\",job=~\"$job\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -221,7 +223,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/iis\",job=~\"$job\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -252,7 +254,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/iis\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -267,7 +269,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/iis\",job=~\"$job\"}, level)",
+               "query": "label_values({,job=~\"$job\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
