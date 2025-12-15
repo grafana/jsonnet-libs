@@ -6,11 +6,13 @@ local g = import './g.libsonnet';
     {
       couchdbOverview:
         link.link.new(this.config.dashboardNamePrefix + ' overview', '/d/' + this.grafana.dashboards['couchdb-overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       couchdbNodes:
         link.link.new(this.config.dashboardNamePrefix + ' nodes', '/d/' + this.grafana.dashboards['couchdb-nodes.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       otherDashboards:
         link.dashboards.new('All dashboards', this.config.dashboardTags)
@@ -22,6 +24,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then {
       couchdbLogs:
         link.link.new(this.config.dashboardNamePrefix + ' logs', '/d/' + this.grafana.dashboards['couchdb-logs.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
     } else {},
 }

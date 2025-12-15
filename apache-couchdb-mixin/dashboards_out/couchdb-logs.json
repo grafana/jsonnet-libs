@@ -4,12 +4,14 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache CouchDB nodes",
             "type": "link",
             "url": "/d/couchdb_nodes"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache CouchDB overview",
             "type": "link",

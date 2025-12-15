@@ -4,12 +4,14 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache CouchDB logs",
             "type": "link",
             "url": "/d/couchdb-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache CouchDB overview",
             "type": "link",
