@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/apache-couchdb"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job', 'couchdb_cluster', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],

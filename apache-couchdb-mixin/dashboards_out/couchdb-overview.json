@@ -79,7 +79,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(job, couchdb_cluster, cluster) (couchdb_request_time_seconds_count{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
+                  "expr": "count(count by(job, couchdb_cluster, cluster) (couchdb_request_time_seconds_count{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster }}",
@@ -126,7 +126,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(count by(job, couchdb_cluster, cluster, instance) (couchdb_request_time_seconds_count{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
+                  "expr": "sum(count by(job, couchdb_cluster, cluster, instance) (couchdb_request_time_seconds_count{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster }}",
@@ -184,7 +184,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(min by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) / count(count by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) * 100",
+                  "expr": "sum(min by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) / count(count by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster }}",
@@ -235,7 +235,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_os_files_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_os_files{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_os_files_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_os_files{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster }}",
@@ -286,7 +286,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_databases_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_databases{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_databases_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_databases{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster }}",
@@ -338,7 +338,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_writes_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_writes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -391,7 +391,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -444,7 +444,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -497,7 +497,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_timeouts_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_timeouts_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -550,7 +550,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_temporary_view_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_temporary_view_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -618,7 +618,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster, method) (increase(couchdb_httpd_request_methods{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval))",
+                  "expr": "sum by(job, couchdb_cluster, cluster, method) (increase(couchdb_httpd_request_methods{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -669,7 +669,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster, quantile) (couchdb_request_time_seconds{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "timeseries",
                   "instant": true,
                   "legendFormat": "{{ couchdb_cluster }} - {{quantile}}",
@@ -721,7 +721,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\nor\nsum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\nor\nsum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -752,7 +752,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"2.*\"}[$__interval:] offset $__interval)) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"2.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -764,7 +764,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"3.*\"}[$__interval:] offset $__interval)) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"3.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -776,7 +776,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"4.*\"}[$__interval:] offset $__interval)) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"4.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -788,7 +788,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"5.*\"}[$__interval:] offset $__interval)) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"5.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -841,7 +841,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[23].*\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[23].*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -894,7 +894,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -959,7 +959,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1012,7 +1012,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_queue_deaths_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_queue_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster}}",
@@ -1064,7 +1064,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_reader_deaths_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_reader_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster}}",
@@ -1116,7 +1116,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_owner_crashes_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_owner_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster}}",
@@ -1168,7 +1168,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_worker_crashes_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_worker_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster}}",
@@ -1220,7 +1220,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_crashes_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ couchdb_cluster}}",
@@ -1272,7 +1272,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_pending{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_pending{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1308,7 +1308,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\"}, job)",
+               "query": "label_values(couchdb_database_reads_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1323,7 +1323,7 @@
                "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
-               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\"}, couchdb_cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\"}, couchdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1338,7 +1338,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1353,7 +1353,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(couchdb_database_reads_total{job=\"integrations/apache-couchdb\",job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
