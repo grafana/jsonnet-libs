@@ -4,6 +4,7 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache HBase logs",
             "type": "link",
@@ -20,6 +21,7 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache HBase RegionServer overview",
             "type": "link",

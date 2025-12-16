@@ -5,11 +5,13 @@ local g = import './g.libsonnet';
     {
       clusterOverview:
         link.link.new(this.config.dashboardNamePrefix + ' cluster overview', '/d/' + this.grafana.dashboards['apache-hbase-cluster-overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       regionServerOverview:
         link.link.new(this.config.dashboardNamePrefix + ' RegionServer overview', '/d/' + this.grafana.dashboards['apache-hbase-regionserver-overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
 
       otherDashboards:
         link.dashboards.new('All ' + this.config.dashboardNamePrefix + ' dashboards', this.config.dashboardTags)
@@ -22,7 +24,8 @@ local g = import './g.libsonnet';
       {
         logs:
           link.link.new(this.config.dashboardNamePrefix + ' logs', '/d/' + this.grafana.dashboards['apache-hbase-logs.json'].uid)
-          + link.link.options.withKeepTime(true),
+          + link.link.options.withKeepTime(true)
+          + link.link.options.withIncludeVars(true),
       }
     else {},
 }

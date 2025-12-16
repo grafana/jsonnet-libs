@@ -3,7 +3,7 @@
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job', 'hbase_cluster'],
   instanceLabels: ['instance'],
-  logLabels: ['job', 'hbase_cluster', 'instance'],
+  logLabels: ['hbase_cluster', 'job', 'instance'],
 
   dashboardTags: [self.uid + '-mixin'],
   uid: 'apache-hbase',

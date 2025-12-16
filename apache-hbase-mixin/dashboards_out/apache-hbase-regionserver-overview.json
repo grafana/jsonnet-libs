@@ -4,12 +4,14 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache HBase cluster overview",
             "type": "link",
             "url": "/d/apachehbase-cluster-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache HBase logs",
             "type": "link",
