@@ -15,7 +15,7 @@ function(this)
         nameShort: 'CPU time',
         type: 'gauge',
         description: 'CPU time consumed by the worker.',
-        unit: 's',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: 'cloudflare_worker_cpu_time{%(queriesSelector)s}',
@@ -40,8 +40,8 @@ function(this)
         name: 'Worker requests',
         nameShort: 'Requests',
         type: 'counter',
-        description: 'Number of requests to the worker.',
-        unit: '/ sec',
+        description: 'Rate of requests to the worker.',
+        unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'cloudflare_worker_requests_count{%(queriesSelector)s}',

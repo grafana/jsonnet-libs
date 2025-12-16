@@ -29,7 +29,7 @@
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "cloudflare"
+               "cloudflare-mixin"
             ],
             "title": "All dashboards",
             "type": "dashboards"
@@ -87,6 +87,70 @@
                "uid": "${datasource}"
             },
             "description": "A table view of the pools in your zone showing their health and rate of requests.",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "Health=1": {
+                              "index": 0,
+                              "text": "Healthy"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "unit": "reqps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Health"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Unhealthy"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Healthy"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Requests"
+                     },
+                     "properties": [
+                        {
+                           "id": "decimals",
+                           "value": 4
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 8,
                "w": 12,
@@ -104,8 +168,9 @@
                   "expr": "cloudflare_zone_pool_health_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": false,
-                  "legendFormat": "{{ pool_name }}",
-                  "refId": "Pool status"
+                  "intervalFactor": 2,
+                  "legendFormat": "",
+                  "refId": "A"
                },
                {
                   "datasource": {
@@ -115,11 +180,58 @@
                   "expr": "rate(cloudflare_zone_pool_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": false,
-                  "legendFormat": "{{ pool_name }}",
-                  "refId": "Request rate"
+                  "intervalFactor": 2,
+                  "legendFormat": "",
+                  "refId": "B"
                }
             ],
             "title": "Pool status",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "pool_name",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "pool_name",
+                           "Value #A",
+                           "load_balancer_name 2",
+                           "origin_name",
+                           "Value #B",
+                           "zone 2"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": {
+                        "Value #A": 5,
+                        "Value #B": 4,
+                        "load_balancer_name 2": 1,
+                        "origin_name": 2,
+                        "pool_name": 0,
+                        "zone 2": 3
+                     },
+                     "renameByName": {
+                        "Value #A": "Health",
+                        "Value #B": "Requests",
+                        "load_balancer_name 2": "Load balancer",
+                        "origin_name": "Origin",
+                        "pool_name": "Pool",
+                        "zone 2": "Zone"
+                     }
+                  }
+               }
+            ],
             "type": "table"
          },
          {
@@ -243,6 +355,8 @@
                   "expr": "increase(cloudflare_zone_requests_cached{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / increase(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{ zone }}",
                   "refId": "Zone cached requests"
                }
@@ -293,9 +407,11 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_threats_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_threats_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{ zone }}",
                   "refId": "Zone threats"
                }
@@ -400,10 +516,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_bandwidth_ssl_encrypted{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_bandwidth_ssl_encrypted{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - SSL encrypted",
                   "refId": "Zone SSL encrypted bandwidth"
                },
                {
@@ -411,10 +529,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_bandwidth_cached{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_bandwidth_cached{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - Cached",
                   "refId": "Zone cached bandwidth"
                }
             ],
@@ -465,9 +585,11 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_bandwidth_content_type{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_bandwidth_content_type{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{ content_type }}",
                   "refId": "Zone bandwidth by content type"
                }
@@ -518,10 +640,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_requests_browser_map_page_views_count{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_requests_browser_map_page_views_count{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - {{family}}",
                   "refId": "Zone browser map pageviews"
                }
             ],
@@ -574,10 +698,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - unique",
                   "refId": "Zone unique visitors"
                },
                {
@@ -585,10 +711,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "cloudflare_zone_pageviews_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"} - cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "expr": "increase(cloudflare_zone_pageviews_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) - increase(cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ zone }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - non-unique",
                   "refId": "Zone repeat visitors"
                }
             ],
@@ -646,10 +774,12 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_requests_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "increase(cloudflare_zone_requests_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ status }}",
+                  "interval": "1m",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{zone}} - {{status}}",
                   "refId": "Zone requests by status"
                }
             ],
@@ -664,6 +794,13 @@
             "description": "The different colocations being used by the zone and their request rates.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "align": "left",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
                   "unit": "reqps"
                }
             },
@@ -674,6 +811,26 @@
                "y": 49
             },
             "id": 13,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": [
+                     ""
+                  ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true,
+               "sortBy": [
+                  {
+                     "desc": true,
+                     "displayName": "Requests"
+                  }
+               ]
+            },
             "pluginVersion": "v11.0.0",
             "targets": [
                {
@@ -684,18 +841,63 @@
                   "expr": "rate(cloudflare_zone_colocation_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ colo_code }}",
+                  "intervalFactor": 2,
+                  "legendFormat": "",
                   "refId": "Zone colocation requests"
                }
             ],
             "title": "Colocation requests",
+            "transformations": [
+               {
+                  "id": "reduce",
+                  "options": {
+                     "reducers": [
+                        "lastNotNull"
+                     ]
+                  }
+               },
+               {
+                  "id": "extractFields",
+                  "options": {
+                     "format": "auto",
+                     "source": "Field"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Field": true,
+                        "cluster": true,
+                        "host": true,
+                        "instance": true,
+                        "job": true,
+                        "script_name": true
+                     },
+                     "indexByName": {
+                        "Field": 3,
+                        "Last *": 2,
+                        "colocation": 1,
+                        "host": 4,
+                        "instance": 5,
+                        "job": 6,
+                        "zone": 0
+                     },
+                     "renameByName": {
+                        "Last *": "Requests",
+                        "colocation": "Colocation",
+                        "zone": "Zone"
+                     }
+                  }
+               }
+            ],
             "type": "table"
          }
       ],
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "cloudflare"
+         "cloudflare-mixin"
       ],
       "templating": {
          "list": [

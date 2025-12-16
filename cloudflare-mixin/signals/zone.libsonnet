@@ -16,8 +16,8 @@ function(this)
         name: 'Zone requests total',
         nameShort: 'Requests',
         type: 'counter',
-        description: 'Total number of requests to the zone.',
-        unit: '/ sec',
+        description: 'Rate of requests to the zone.',
+        unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_requests_total{%(queriesSelector)s}',
@@ -48,6 +48,7 @@ function(this)
           prometheus: {
             expr: 'cloudflare_zone_threats_total{%(queriesSelector)s}',
             legendCustomTemplate: '{{ zone }}',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -73,7 +74,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_bandwidth_ssl_encrypted{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ zone }}',
+            legendCustomTemplate: '{{zone}} - SSL encrypted',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -86,7 +88,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_bandwidth_cached{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ zone }}',
+            legendCustomTemplate: '{{zone}} - Cached',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -100,6 +103,7 @@ function(this)
           prometheus: {
             expr: 'cloudflare_zone_bandwidth_content_type{%(queriesSelector)s}',
             legendCustomTemplate: '{{ content_type }}',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -112,7 +116,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_uniques_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ zone }}',
+            legendCustomTemplate: '{{zone}} - unique',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -133,12 +138,12 @@ function(this)
         name: 'Zone repeat visitors',
         nameShort: 'Repeat visitors',
         type: 'raw',
-        description: 'Number of repeat visitors (pageviews - uniques).',
+        description: 'Rate of repeat visitors (pageviews - uniques).',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'cloudflare_zone_pageviews_total{%(queriesSelector)s} - cloudflare_zone_uniques_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ zone }}',
+            expr: 'increase(cloudflare_zone_pageviews_total{%(queriesSelector)s}[$__interval:] offset -$__interval) - increase(cloudflare_zone_uniques_total{%(queriesSelector)s}[$__interval:] offset -$__interval)',
+            legendCustomTemplate: '{{zone}} - non-unique',
           },
         },
       },
@@ -151,7 +156,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_requests_status{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ status }}',
+            legendCustomTemplate: '{{zone}} - {{status}}',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -164,7 +170,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_requests_browser_map_page_views_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ zone }}',
+            legendCustomTemplate: '{{zone}} - {{family}}',
+            rangeFunction: 'increase',
           },
         },
       },
@@ -172,12 +179,12 @@ function(this)
         name: 'Zone colocation requests',
         nameShort: 'Colocation requests',
         type: 'counter',
-        description: 'Requests by colocation center.',
-        unit: '/ sec',
+        description: 'Rate of requests by colocation center.',
+        unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'cloudflare_zone_colocation_requests_total{%(queriesSelector)s}',
-            legendCustomTemplate: '{{ colo_code }}',
+            legendCustomTemplate: '',
           },
         },
       },

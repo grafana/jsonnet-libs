@@ -64,7 +64,7 @@ local g = import './g.libsonnet';
           g.util.grid.wrapPanels(
             [
               this.grafana.panels.geoMetricsByCountryTablePanel + g.panel.table.gridPos.withW(24) + g.panel.table.gridPos.withH(7),
-              this.grafana.panels.geoMetricByCountryGeomapPanel + g.panel.geomap.gridPos.withW(24) + g.panel.geomap.gridPos.withH(12),
+              this.grafana.panels.geoMetricByCountryGeomapPanel + g.panel.geomap.gridPos.withW(24) + g.panel.geomap.gridPos.withH(24),
             ]
           )
         )

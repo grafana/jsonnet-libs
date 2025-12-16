@@ -5,7 +5,7 @@
   groupLabels: ['job', 'cluster', 'zone', 'script_name'],
   instanceLabels: ['instance'],
 
-  dashboardTags: [self.uid],
+  dashboardTags: [self.uid + '-mixin'],
   legendLabels: ['instance'],
   uid: 'cloudflare',
   dashboardNamePrefix: 'Cloudflare',
