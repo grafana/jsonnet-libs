@@ -214,7 +214,7 @@ function(this) {
       nameShort: 'MQSET',
       type: 'raw',
       description: 'The number of MQSET queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{%(queriesSelector)s})',
@@ -228,7 +228,7 @@ function(this) {
       nameShort: 'MQINQ',
       type: 'raw',
       description: 'The number of MQINQ queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{%(queriesSelector)s})',
@@ -242,7 +242,7 @@ function(this) {
       nameShort: 'MQGET',
       type: 'raw',
       description: 'The number of MQGET queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqget_count{%(queriesSelector)s})',
@@ -256,7 +256,7 @@ function(this) {
       nameShort: 'MQOPEN',
       type: 'raw',
       description: 'The number of MQOPEN queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqopen_count{%(queriesSelector)s})',
@@ -270,7 +270,7 @@ function(this) {
       nameShort: 'MQCLOSE',
       type: 'raw',
       description: 'The number of MQCLOSE queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqclose_count{%(queriesSelector)s})',
@@ -284,7 +284,7 @@ function(this) {
       nameShort: 'MQPUT/MQPUT1',
       type: 'raw',
       description: 'The number of MQPUT/MQPUT1 queue operations of the queue manager.',
-      unit: 'operations',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqput_mqput1_count{%(queriesSelector)s})',

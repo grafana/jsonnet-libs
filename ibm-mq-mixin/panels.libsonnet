@@ -44,7 +44,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.panel.pieChart.options.withDisplayLabels(['name'])
         + g.panel.pieChart.panelOptions.withDescription('The number of queue operations of the cluster.')
-        + g.panel.pieChart.standardOptions.withUnit('operations')
+        + g.panel.pieChart.standardOptions.withUnit('short')
         + g.panel.pieChart.options.withLegend({ displayMode: 'list', placement: 'bottom', showLegend: true })
         + g.panel.pieChart.options.withPieType('pie')
         + g.panel.pieChart.options.reduceOptions.withCalcs(['lastNotNull']),
@@ -330,7 +330,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.queueManager.queueOperationsMqput.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of queue operations of the queue manager.')
-        + g.panel.timeSeries.standardOptions.withUnit('operations')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
@@ -430,7 +430,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.queue.mqputMqput1Count.asTarget(),
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of queue operations of the queue manager.')
-        + g.panel.timeSeries.standardOptions.withUnit('operations')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'max', 'mean'])
         + g.panel.timeSeries.options.legend.withDisplayMode('table')

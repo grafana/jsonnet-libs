@@ -299,7 +299,7 @@
                         "mode": "normal"
                      }
                   },
-                  "unit": "operations"
+                  "unit": "short"
                }
             },
             "gridPos": {
