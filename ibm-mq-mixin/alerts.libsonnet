@@ -18,7 +18,7 @@
                 summary: 'There are expired messages, which imply that application resilience is failing.',
                 description:
                   (
-                    'The number of expired messages in the {{$labels.qmgr}} is {{$labels.value}} which is above the threshold of %(alertsExpiredMessages)s.'
+                    'The number of expired messages in the {{$labels.qmgr}} is {{ printf "%%.0f" $value }} which is above the threshold of %(alertsExpiredMessages)s.'
                   ) % this.config,
               },
             },
@@ -35,7 +35,7 @@
                 summary: 'Stale messages have been detected.',
                 description:
                   (
-                    'A stale message with an age of {{$labels.value}} has been sitting in the {{$labels.queue}} which is above the threshold of %(alertsStaleMessagesSeconds)ss.'
+                    'A stale message with an age of {{ printf "%%.0f" $value }}s has been sitting in the {{$labels.queue}} which is above the threshold of %(alertsStaleMessagesSeconds)ss.'
                   ) % this.config,
               },
             },
@@ -52,7 +52,7 @@
                 summary: 'There is limited disk available for a queue manager.',
                 description:
                   (
-                    'The amount of disk space available for {{$labels.qmgr}} is at {{$labels.value}}%% which is below the threshold of %(alertsLowDiskSpace)s%%.'
+                    'The amount of disk space available for {{$labels.qmgr}} is at {{ printf "%%.0f" $value }}%% which is below the threshold of %(alertsLowDiskSpace)s%%.'
                   ) % this.config,
               },
             },
@@ -69,7 +69,7 @@
                 summary: 'There is a high CPU usage estimate for a queue manager.',
                 description:
                   (
-                    'The amount of CPU usage for the queue manager {{$labels.qmgr}} is at {{$labels.value}}%% which is above the threshold of %(alertsHighQueueManagerCpuUsage)s%%.'
+                    'The amount of CPU usage for the queue manager {{$labels.qmgr}} is at {{ printf "%%.0f" $value }}%% which is above the threshold of %(alertsHighQueueManagerCpuUsage)s%%.'
                   ) % this.config,
               },
             },

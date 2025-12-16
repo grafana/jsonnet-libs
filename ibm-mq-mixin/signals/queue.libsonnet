@@ -80,7 +80,7 @@ function(this) {
       name: 'Time on queue',
       type: 'gauge',
       description: 'The average time messages spent on the queue.',
-      unit: 'µs',
+      unit: 's',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_time_on_queue_seconds{%(queriesSelector)s, queue=~"$queue"}',

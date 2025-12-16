@@ -351,26 +351,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
-      qmgrErrorLogs:
-        g.panel.logs.new('Error logs')
-        + g.panel.logs.panelOptions.withDescription('Recent error logs from the queue manager.')
-        + g.panel.logs.options.withEnableLogDetails(true)
-        + g.panel.logs.options.withShowTime(false)
-        + g.panel.logs.options.withWrapLogMessage(false)
-        + g.panel.logs.options.withDedupStrategy('none')
-        + g.panel.logs.options.withPrettifyLogMessage(false)
-        + g.panel.logs.options.withShowCommonLabels(false)
-        + g.panel.logs.options.withShowLabels(false)
-        + g.panel.logs.options.withSortOrder('Descending')
-        + g.panel.logs.queryOptions.withDatasource('loki', '${loki_datasource}')
-        + g.panel.logs.queryOptions.withTargets([
-          g.query.loki.new(
-            '${loki_datasource}',
-            '{job=~"$job", qmgr=~"$qmgr"} |= `` | (filename=~"/var/mqm/qmgrs/.*/errors/.*LOG" or log_type="mq-qmgr-error")'
-          )
-          + g.query.loki.withRefId('A'),
-        ]),
-
       /*
       -------------------------
       Queue Overview
@@ -399,13 +379,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The depth of the queue.')
         + g.panel.timeSeries.standardOptions.withUnit('short'),
-
-      queueOldestMessageAge:
-        commonlib.panels.generic.timeSeries.base.new('Oldest message age', targets=[
-          signals.queue.oldestMessageAge.asTarget(),
-        ])
-        + g.panel.timeSeries.panelOptions.withDescription('The oldest message age of the queue.')
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
 
       queueInputOutputRate:
         commonlib.panels.generic.timeSeries.base.new('Input/output rate', targets=[

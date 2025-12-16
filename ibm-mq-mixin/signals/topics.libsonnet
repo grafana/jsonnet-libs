@@ -109,7 +109,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'ibmmq_subscription_messsages_received{%(queriesSelector)s}',
+          expr: 'ibmmq_subscription_messages_received{%(queriesSelector)s}',
           legendCustomTemplate: '{{mq_cluster}} - {{qmgr}} - {{subscription}}',
         },
       },

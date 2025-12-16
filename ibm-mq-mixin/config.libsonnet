@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/ibm-mq"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job', 'cluster', 'mq_cluster'],
   instanceLabels: ['instance', 'qmgr'],
   uid: 'ibm-mq',
