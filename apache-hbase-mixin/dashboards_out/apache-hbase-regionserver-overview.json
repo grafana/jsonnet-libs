@@ -78,7 +78,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (server_region_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (server_region_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -126,7 +126,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (server_store_file_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (server_store_file_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -174,7 +174,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (server_store_file_size{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (server_store_file_size{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -222,7 +222,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_open_connections{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_open_connections{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -276,7 +276,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_metrics_mem_heap_used_m{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=\"RegionServer\"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=\"RegionServer\"}, 1)",
+                  "expr": "jvm_metrics_mem_heap_used_m{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=\"RegionServer\"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=\"RegionServer\"}, 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -337,7 +337,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(server_total_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(server_total_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -388,7 +388,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_read_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_read_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "read",
@@ -399,7 +399,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_write_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_write_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "write",
@@ -410,7 +410,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_cp_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_cp_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "copy",
@@ -421,7 +421,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_filtered_read_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_filtered_read_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "filtered read",
@@ -432,7 +432,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_get_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_get_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "rpc get",
@@ -443,7 +443,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_scan_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_scan_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "rpc scan",
@@ -454,7 +454,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_full_scan_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_full_scan_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "rpc full scan",
@@ -465,7 +465,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_mutate_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_mutate_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "rpc mutate",
@@ -476,7 +476,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_multi_request_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_rpc_multi_request_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "rpc multi",
@@ -528,7 +528,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_region_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "server_region_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -585,7 +585,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "region_server_num_open_connections{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "region_server_num_open_connections{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -637,7 +637,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_store_file_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "server_store_file_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -690,7 +690,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_store_file_size{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "server_store_file_size{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -748,7 +748,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_general_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_general_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "general",
@@ -759,7 +759,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_replication_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_replication_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "replication",
@@ -770,7 +770,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_read_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_read_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "read",
@@ -781,7 +781,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_write_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_write_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "write",
@@ -792,7 +792,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_scan_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_scan_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "scan",
@@ -803,7 +803,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_priority_queue{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_calls_in_priority_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "priority",
@@ -865,7 +865,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_append_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_append_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "append",
@@ -876,7 +876,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_put_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_put_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "put",
@@ -887,7 +887,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_delete_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_delete_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "delete",
@@ -898,7 +898,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_get_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_get_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "get",
@@ -909,7 +909,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_increment_count{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(server_slow_increment_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "increment",
@@ -963,7 +963,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_block_cache_express_hit_percent{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "server_block_cache_express_hit_percent{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -1017,7 +1017,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_successes{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_successes{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs success",
@@ -1028,7 +1028,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_failures{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_failures{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs failure",
@@ -1063,7 +1063,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(server_num_region_servers{job=\"integrations/apache-hbase\"}, job)",
+               "query": "label_values(server_num_region_servers{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1078,7 +1078,7 @@
                "label": "Apache HBase cluster",
                "multi": true,
                "name": "hbase_cluster",
-               "query": "label_values(server_num_region_servers{job=\"integrations/apache-hbase\",job=~\"$job\"}, hbase_cluster)",
+               "query": "label_values(server_num_region_servers{job=~\"$job\"}, hbase_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1093,7 +1093,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(server_num_region_servers{job=\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\"}, instance)",
+               "query": "label_values(server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
