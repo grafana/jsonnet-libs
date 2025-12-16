@@ -2,7 +2,7 @@
   local this = self,
 
   // Filtering and label configuration
-  filteringSelector: 'job="integrations/sap-hana"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
 
   groupLabels: ['job', 'sid'],
   instanceLabels: ['host'],
@@ -32,7 +32,7 @@
 
 
   // Metrics source for signals
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
 
   // Signal definitions
   signals: {

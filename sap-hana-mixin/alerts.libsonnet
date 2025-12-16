@@ -24,7 +24,7 @@
           {
             alert: 'SapHanaHighPhysicalMemoryUsage',
             expr: |||
-              100 * sum without (instance) (hanadb_host_memory_resident_mb{%(filteringSelector)s}) / sum without (instance) (hanadb_host_memory_physical_total_mb{%(filteringSelector)s}) > %(alertsCriticalHighPhysicalMemoryUsage)s
+              100 * sum by (job, sid, host)(hanadb_host_memory_resident_mb{%(filteringSelector)s}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{%(filteringSelector)s}) > %(alertsCriticalHighPhysicalMemoryUsage)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -40,7 +40,7 @@
           {
             alert: 'SapHanaMemAllocLimitBelowRecommendation',
             expr: |||
-              100 * sum without (instance) (hanadb_host_memory_alloc_limit_mb{%(filteringSelector)s}) / sum without (instance) (hanadb_host_memory_physical_total_mb{%(filteringSelector)s}) < %(alertsWarningLowMemAllocLimit)s
+              100 * sum by (job, sid, host) (hanadb_host_memory_alloc_limit_mb{%(filteringSelector)s}) / sum by (job, sid, host) (hanadb_host_memory_physical_total_mb{%(filteringSelector)s}) < %(alertsWarningLowMemAllocLimit)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -56,7 +56,7 @@
           {
             alert: 'SapHanaHighMemoryUsage',
             expr: |||
-              100 * sum without (instance) (hanadb_host_memory_used_total_mb{%(filteringSelector)s}) / sum without (instance) (hanadb_host_memory_alloc_limit_mb{%(filteringSelector)s}) > %(alertsCriticalHighMemoryUsage)s
+              100 * sum by (job, sid, host) (hanadb_host_memory_used_total_mb{%(filteringSelector)s}) / sum by (job, sid, host) (hanadb_host_memory_alloc_limit_mb{%(filteringSelector)s}) > %(alertsCriticalHighMemoryUsage)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -72,7 +72,7 @@
           {
             alert: 'SapHanaHighDiskUtilization',
             expr: |||
-              100 * sum without (instance) (hanadb_disk_total_used_size_mb{%(filteringSelector)s}) / sum without (instance) (hanadb_disk_total_size_mb{%(filteringSelector)s}) > %(alertsCriticalHighDiskUtilization)s
+              100 * sum by (job, sid, host) (hanadb_disk_total_used_size_mb{%(filteringSelector)s}) / sum by (job, sid, host) (hanadb_disk_total_size_mb{%(filteringSelector)s}) > %(alertsCriticalHighDiskUtilization)s
             ||| % config,
             'for': '5m',
             labels: {
