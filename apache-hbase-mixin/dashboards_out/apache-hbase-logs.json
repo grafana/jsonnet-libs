@@ -175,7 +175,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({hbase_cluster=~\"$hbase_cluster\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\".+\",job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -217,7 +217,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{hbase_cluster=~\"$hbase_cluster\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\".+\",job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -245,25 +245,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Apache HBase cluster",
-               "multi": true,
-               "name": "hbase_cluster",
-               "query": "label_values({}, hbase_cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({,hbase_cluster=~\"$hbase_cluster\"}, job)",
+               "query": "label_values({job=~\".+\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -278,7 +263,22 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({,hbase_cluster=~\"$hbase_cluster\",job=~\"$job\"}, instance)",
+               "query": "label_values({job=~\".+\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Apache HBase cluster",
+               "multi": true,
+               "name": "hbase_cluster",
+               "query": "label_values({job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, hbase_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -293,7 +293,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,hbase_cluster=~\"$hbase_cluster\",job=~\"$job\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\".+\",job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -98,7 +98,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"} * 0  + 1 )",
+                  "expr": "max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"} * 0  + 1 )",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -109,7 +109,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"false\"}) * 0)",
+                  "expr": "(max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"false\"}) * 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -157,7 +157,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"}",
+                  "expr": "server_num_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -217,7 +217,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "server_num_dead_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"}",
+                  "expr": "server_num_dead_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", isactivemaster=\"true\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -299,7 +299,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "label_replace(server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}, \"master_instance\", \"$1\", \"instance\", \"(.+)\")",
+                  "expr": "label_replace(server_num_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}, \"master_instance\", \"$1\", \"instance\", \"(.+)\")",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{hbase_cluster}}",
@@ -310,7 +310,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "label_replace(server_num_reference_files{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}, \"region_server_instance\", \"$1\", \"instance\", \"(.+)\")",
+                  "expr": "label_replace(server_num_reference_files{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}, \"region_server_instance\", \"$1\", \"instance\", \"(.+)\")",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{hbase_cluster}}",
@@ -429,7 +429,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_open_connections{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_open_connections{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters",
@@ -487,7 +487,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_metrics_mem_heap_used_m{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=~\"Master\"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=~\"Master\"}, 1)",
+                  "expr": "jvm_metrics_mem_heap_used_m{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=~\"Master\"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\", processname=~\"Master\"}, 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - {{instance}}",
@@ -544,7 +544,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_open_connections{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_open_connections{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters",
@@ -555,7 +555,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (region_server_num_open_connections{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (region_server_num_open_connections{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - RegionServers",
@@ -613,7 +613,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_successes{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_successes{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters success",
@@ -624,7 +624,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_failures{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(master_authentication_failures{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - masters failure",
@@ -635,7 +635,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_successes{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_successes{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs success",
@@ -646,7 +646,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_failures{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,hbase_cluster) (rate(region_server_authentication_failures{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - rs failure",
@@ -698,7 +698,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "master_queue_size{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "master_queue_size{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - {{instance}}",
@@ -756,7 +756,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_general_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_general_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - general",
@@ -767,7 +767,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_replication_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_replication_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - replication",
@@ -778,7 +778,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_read_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_read_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - read",
@@ -789,7 +789,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_write_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_write_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - write",
@@ -800,7 +800,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_scan_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_scan_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - scan",
@@ -811,7 +811,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_priority_queue{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by(job,hbase_cluster) (master_num_calls_in_priority_queue{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - priority",
@@ -863,7 +863,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "assignment_manager_rit_count{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "assignment_manager_rit_count{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -874,7 +874,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "assignment_manager_rit_count_over_threshold{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "assignment_manager_rit_count_over_threshold{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}} - old",
@@ -926,7 +926,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "assignment_manager_rit_oldest_age{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
+                  "expr": "assignment_manager_rit_oldest_age{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hbase_cluster}}",
@@ -961,7 +961,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(server_num_region_servers{}, job)",
+               "query": "label_values(server_num_region_servers{job=~\".+\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -976,7 +976,7 @@
                "label": "Apache HBase cluster",
                "multi": true,
                "name": "hbase_cluster",
-               "query": "label_values(server_num_region_servers{job=~\"$job\"}, hbase_cluster)",
+               "query": "label_values(server_num_region_servers{job=~\".+\",job=~\"$job\"}, hbase_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -991,7 +991,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(server_num_region_servers{job=~\"$job\",hbase_cluster=~\"$hbase_cluster\"}, instance)",
+               "query": "label_values(server_num_region_servers{job=~\".+\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
