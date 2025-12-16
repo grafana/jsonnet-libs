@@ -150,7 +150,7 @@ function(this)
         name: 'Master queue size',
         type: 'gauge',
         description: 'The size of the queue of requests, operations, and tasks to be processed by the master.',
-        unit: 'decbytes',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'master_queue_size{%(queriesSelector)s}',

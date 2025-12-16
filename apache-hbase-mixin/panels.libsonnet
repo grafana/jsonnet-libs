@@ -241,7 +241,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.cluster.masterQueueSize.asTarget()],
           description='The size of the queue of requests, operations, and tasks to be processed by the master.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       masterQueuedCallsPanel:
         commonlib.panels.generic.timeSeries.base.new(

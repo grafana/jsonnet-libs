@@ -669,7 +669,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "decbytes"
+                  "unit": "short"
                }
             },
             "gridPos": {
