@@ -196,7 +196,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",qmgr=~\"$qmgr\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",qmgr=~\"$qmgr\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -238,7 +238,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",qmgr=~\"$qmgr\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",qmgr=~\"$qmgr\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -266,10 +266,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Job",
+               "label": "Cluster",
                "multi": true,
-               "name": "job",
-               "query": "label_values({}, job)",
+               "name": "cluster",
+               "query": "label_values({job=~\".+\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -281,10 +281,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Cluster",
+               "label": "Job",
                "multi": true,
-               "name": "cluster",
-               "query": "label_values({,job=~\"$job\"}, cluster)",
+               "name": "job",
+               "query": "label_values({job=~\".+\",cluster=~\"$cluster\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -299,7 +299,7 @@
                "label": "MQ cluster",
                "multi": false,
                "name": "mq_cluster",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\"}, mq_cluster)",
+               "query": "label_values({job=~\".+\",cluster=~\"$cluster\",job=~\"$job\"}, mq_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -314,7 +314,7 @@
                "label": "Queue manager",
                "multi": true,
                "name": "qmgr",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\"}, qmgr)",
+               "query": "label_values({job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\"}, qmgr)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -94,7 +94,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(ibmmq_qmgr_commit_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (mq_cluster))",
+                  "expr": "count(count(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (mq_cluster))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}} - {{mq_cluster}}",
@@ -142,7 +142,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(ibmmq_qmgr_commit_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (qmgr, mq_cluster))",
+                  "expr": "count(count(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (qmgr, mq_cluster))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{}}",
@@ -190,7 +190,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(ibmmq_topic_messages_received{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (topic, mq_cluster))",
+                  "expr": "count(count(ibmmq_topic_messages_received{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (topic, mq_cluster))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}} - {{mq_cluster}}",
@@ -238,7 +238,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(ibmmq_queue_depth{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (queue, mq_cluster))",
+                  "expr": "count(count(ibmmq_queue_depth{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}) by (queue, mq_cluster))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
@@ -302,7 +302,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_cluster_suspend{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "expr": "ibmmq_cluster_suspend{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}} - {{mq_cluster}}",
@@ -389,7 +389,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqset_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqset_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQSET",
@@ -400,7 +400,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqinq_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqinq_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQINQ",
@@ -411,7 +411,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqget_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqget_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQGET",
@@ -422,7 +422,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqopen_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqopen_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQOPEN",
@@ -433,7 +433,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqclose_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqclose_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQCLOSE",
@@ -444,7 +444,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
+                  "expr": "sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "MQPUT/MQPUT1",
@@ -531,7 +531,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_qmgr_status{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "expr": "ibmmq_qmgr_status{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
@@ -619,7 +619,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_channel_xmitq_time_short{type=\"SENDER\", job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "expr": "ibmmq_channel_xmitq_time_short{type=\"SENDER\", job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{channel}} - short",
@@ -630,7 +630,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_channel_xmitq_time_long{type=~\"SENDER\", job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "expr": "ibmmq_channel_xmitq_time_long{type=~\"SENDER\", job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{channel}} - long",
@@ -656,21 +656,6 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${prometheus_datasource}"
-               },
-               "includeAll": true,
-               "label": "Job",
-               "multi": true,
-               "name": "job",
-               "query": "label_values(ibmmq_qmgr_commit_count{}, job)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
                "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
@@ -680,7 +665,22 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\"}, cluster)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\".+\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -695,7 +695,7 @@
                "label": "MQ cluster",
                "multi": false,
                "name": "mq_cluster",
-               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\",cluster=~\"$cluster\"}, mq_cluster)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\"}, mq_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -710,7 +710,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\"}, instance)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -725,7 +725,7 @@
                "label": "Queue manager",
                "multi": true,
                "name": "qmgr",
-               "query": "label_values(ibmmq_qmgr_commit_count{job=~\"$job\",cluster=~\"$cluster\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\"}, qmgr)",
+               "query": "label_values(ibmmq_qmgr_commit_count{job=~\".+\",cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\"}, qmgr)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

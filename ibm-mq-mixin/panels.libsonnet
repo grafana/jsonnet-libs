@@ -380,6 +380,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('The depth of the queue.')
         + g.panel.timeSeries.standardOptions.withUnit('short'),
 
+      queueOldestMessageAge:
+        commonlib.panels.generic.timeSeries.base.new('Oldest message age', targets=[
+          signals.queue.oldestMessageAge.asTarget(),
+        ])
+        + g.panel.timeSeries.panelOptions.withDescription('The oldest message age of the queue.')
+        + g.panel.timeSeries.standardOptions.withUnit('s'),
+
       queueInputOutputRate:
         commonlib.panels.generic.timeSeries.base.new('Input/output rate', targets=[
           signals.queue.inputOutputRate.asTarget(),
