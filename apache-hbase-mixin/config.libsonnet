@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job=~".+"',  // set to apply static filters to all queries and alerts, i.e. job="bar"
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job', 'hbase_cluster'],
   instanceLabels: ['instance'],
   logLabels: ['job', 'instance', 'hbase_cluster'],
