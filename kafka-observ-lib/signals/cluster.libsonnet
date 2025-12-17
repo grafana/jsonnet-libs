@@ -17,7 +17,9 @@ function(this)
       activeControllers: {
         name: 'Active kafka controllers',
         description: |||
-          Active kafka controllers count.
+          Number of active controllers in the cluster. Should always be exactly 1.  
+          Zero indicates no controller elected, preventing cluster operations.  
+          More than one indicates split-brain requiring immediate attention.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -41,7 +43,10 @@ function(this)
       role: {
         name: 'Current role',
         description: |||
-          0 - follower, 1 - controller.
+          Broker's current controller role: 0 indicates follower, 1 indicates active controller.  
+          Only one broker should have value 1 at any time.  
+          Used to identify which broker is managing cluster metadata and leadership.
+          Current controller role: 0 - follower, 1 - controller.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -119,7 +124,9 @@ function(this)
       kraftBrokerRole: {
         name: 'Current role (kraft)',
         description: |||
-          Any value - broker in kraft.
+          Broker state in KRaft mode (Kafka without ZooKeeper).  
+          Any value indicates the broker is running in KRaft mode.  
+          Used to identify KRaft-enabled brokers in the cluster.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -155,7 +162,7 @@ function(this)
       brokersCount: {
         name: 'Brokers count',
         description: |||
-          Active brokers count.
+          Total number of active brokers currently registered and reporting in the cluster.  
         |||,
         type: 'gauge',
         unit: 'short',
@@ -178,7 +185,10 @@ function(this)
 
       clusterMessagesInPerSec: {
         name: 'Cluster messages in',
-        description: 'Cluster messages in.',
+        description: |||
+          Aggregate rate of incoming messages across all brokers and topics in the cluster.  
+          Represents total producer throughput and write workload.  
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {
@@ -195,7 +205,10 @@ function(this)
       },
       clusterBytesInPerSec: {
         name: 'Cluster bytes in',
-        description: 'Cluster bytes in rate.',
+        description: |||
+          Aggregate rate of incoming data in bytes across all brokers from producers.  
+          Measures total network ingress and storage write load.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {
@@ -212,7 +225,10 @@ function(this)
       },
       clusterBytesOutPerSec: {
         name: 'Cluster bytes out',
-        description: 'Cluster bytes out rate.',
+        description: |||
+          Aggregate rate of outgoing data in bytes across all brokers to consumers and followers.  
+          Measures total network egress load and consumer throughput.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {
