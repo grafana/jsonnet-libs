@@ -25,11 +25,9 @@ local g = import './g.libsonnet';
           panels.clusterStatusTable { gridPos+: { h: 7, w: 16 } },
           panels.clusterQueueOperations { gridPos+: { h: 14, w: 8 } },
 
-
           // Third row within the overview "row" - Cluster manager status
           // Note: wraps into 7 by 16 space left over in previous row
           panels.clusterQueueManagerStatusTable { gridPos+: { h: 7, w: 16 } },
-
 
           // Fourth row  - No longer need to wrap
           panels.clusterTransmissionQueueTime { gridPos+: { h: 8, w: 24 } },

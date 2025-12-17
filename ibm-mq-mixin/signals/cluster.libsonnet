@@ -68,7 +68,7 @@ function(this) {
       nameShort: 'MQSET',
       type: 'raw',
       description: 'The number of MQSET queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqset_count{%(queriesSelector)s})',
@@ -82,7 +82,7 @@ function(this) {
       nameShort: 'MQINQ',
       type: 'raw',
       description: 'The number of MQINQ queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqinq_count{%(queriesSelector)s})',
@@ -96,7 +96,7 @@ function(this) {
       nameShort: 'MQGET',
       type: 'raw',
       description: 'The number of MQGET queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqget_count{%(queriesSelector)s})',
@@ -110,7 +110,7 @@ function(this) {
       nameShort: 'MQOPEN',
       type: 'raw',
       description: 'The number of MQOPEN queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqopen_count{%(queriesSelector)s})',
@@ -124,7 +124,7 @@ function(this) {
       nameShort: 'MQCLOSE',
       type: 'raw',
       description: 'The number of MQCLOSE queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqclose_count{%(queriesSelector)s})',
@@ -138,7 +138,7 @@ function(this) {
       nameShort: 'MQPUT/MQPUT1',
       type: 'raw',
       description: 'The number of MQPUT/MQPUT1 queue operations of the cluster.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{%(queriesSelector)s})',

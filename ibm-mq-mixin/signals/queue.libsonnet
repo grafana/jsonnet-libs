@@ -161,7 +161,7 @@ function(this) {
       nameShort: 'MQSET',
       type: 'gauge',
       description: 'The number of MQSET queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqset_count{%(queriesSelector)s, queue=~"$queue"}',
@@ -175,7 +175,7 @@ function(this) {
       nameShort: 'MQINQ',
       type: 'gauge',
       description: 'The number of MQINQ queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqinq_count{%(queriesSelector)s, queue=~"$queue"}',
@@ -189,7 +189,7 @@ function(this) {
       nameShort: 'MQGET',
       type: 'gauge',
       description: 'The number of MQGET queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqget_count{%(queriesSelector)s, queue=~"$queue"}',
@@ -203,7 +203,7 @@ function(this) {
       nameShort: 'MQOPEN',
       type: 'gauge',
       description: 'The number of MQOPEN queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqopen_count{%(queriesSelector)s, queue=~"$queue"}',
@@ -217,7 +217,7 @@ function(this) {
       nameShort: 'MQCLOSE',
       type: 'gauge',
       description: 'The number of MQCLOSE queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqclose_count{%(queriesSelector)s, queue=~"$queue"}',
@@ -231,7 +231,7 @@ function(this) {
       nameShort: 'MQPUT/MQPUT1',
       type: 'gauge',
       description: 'The number of MQPUT/MQPUT1 queue operations.',
-      unit: 'short',
+      unit: 'operations',
       sources: {
         prometheus: {
           expr: 'ibmmq_queue_mqput_mqput1_count{%(queriesSelector)s, queue=~"$queue"}',

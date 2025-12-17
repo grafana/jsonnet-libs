@@ -74,6 +74,7 @@
                         "mode": "normal"
                      }
                   },
+                  "noValue": "0",
                   "unit": "short"
                }
             },
@@ -120,6 +121,7 @@
             "description": "The time since the topic last received a message.",
             "fieldConfig": {
                "defaults": {
+                  "noValue": "0",
                   "unit": "s"
                }
             },
@@ -172,6 +174,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "noValue": "0",
                   "unit": "short"
                }
             },
@@ -225,6 +228,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "noValue": "0",
                   "unit": "short"
                }
             },
@@ -322,7 +326,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "ibmmq_subscription_messages_received{cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
+                  "expr": "ibmmq_subscription_messsages_received{cluster=~\"$cluster\",job=~\"$job\",mq_cluster=~\"$mq_cluster\",instance=~\"$instance\",qmgr=~\"$qmgr\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mq_cluster}} - {{qmgr}} - {{subscription}}",

@@ -356,7 +356,7 @@
             "description": "The number of queue operations of the cluster.",
             "fieldConfig": {
                "defaults": {
-                  "unit": "short"
+                  "unit": "operations"
                }
             },
             "gridPos": {

@@ -42,7 +42,7 @@
             {
               alert: 'IBMMQLowDiskSpace',
               expr: |||
-                sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_queue_manager_file_system_free_space_percentage{%(filteringSelector)s}) <= %(alertsLowDiskSpace)s
+                sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_queue_manager_file_system_free_space_percentage{%(filteringSelector)s}) < %(alertsLowDiskSpace)s
               ||| % this.config,
               'for': '5m',
               labels: {
