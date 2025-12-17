@@ -4,28 +4,34 @@
       },
       "links": [
          {
+            "keepTime": true,
+            "title": "Microsoft IIS Logs",
+            "type": "link",
+            "url": "/d/microsoftiis-logs"
+         },
+         {
             "includeVars": true,
             "keepTime": true,
-            "title": "Apache HBase cluster overview",
+            "title": "Microsoft IIS applications",
             "type": "link",
-            "url": "/d/apachehbase-cluster-overview"
+            "url": "/d/microsoftiis_applications"
          },
          {
             "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
-               "apache-hbase-mixin"
+               "microsoft-iis-mixin"
             ],
-            "title": "All Apache HBase dashboards",
+            "title": "All dashboards",
             "type": "dashboards"
          },
          {
             "includeVars": true,
             "keepTime": true,
-            "title": "Apache HBase RegionServer overview",
+            "title": "Microsoft IIS overview",
             "type": "link",
-            "url": "/d/apachehbase-regionserver-overview"
+            "url": "/d/microsoftiis_overview"
          }
       ],
       "panels": [
@@ -175,7 +181,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -217,7 +223,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -227,7 +233,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "apache-hbase-mixin"
+         "microsoft-iis-mixin"
       ],
       "templating": {
          "list": [
@@ -260,40 +266,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values({job=~\"$job\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Apache HBase cluster",
-               "multi": true,
-               "name": "hbase_cluster",
-               "query": "label_values({job=~\"$job\",instance=~\"$instance\"}, hbase_cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\"}, level)",
+               "query": "label_values({,job=~\"$job\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -331,6 +307,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "Apache HBase logs",
-      "uid": "apachehbase-logs"
+      "title": "Microsoft IIS logs",
+      "uid": "microsoftiis-logs"
    }
