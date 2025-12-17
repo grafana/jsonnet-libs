@@ -14,18 +14,21 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise databases",
             "type": "link",
             "url": "/d/redisenterprise_databases"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise nodes",
             "type": "link",
             "url": "/d/redisenterprise_nodes"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise overview",
             "type": "link",
@@ -179,7 +182,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",redis_cluster=~\"$redis_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -221,7 +224,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",redis_cluster=~\"$redis_cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -252,7 +255,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/redis-enterprise\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -267,7 +270,7 @@
                "label": "Redis cluster",
                "multi": true,
                "name": "redis_cluster",
-               "query": "label_values({job=\"integrations/redis-enterprise\",job=~\"$job\"}, redis_cluster)",
+               "query": "label_values({job=~\"$job\"}, redis_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

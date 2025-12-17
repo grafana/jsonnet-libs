@@ -14,18 +14,21 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise databases",
             "type": "link",
             "url": "/d/redisenterprise_databases"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise logs",
             "type": "link",
             "url": "/d/redisenterprise-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Redis Enterprise overview",
             "type": "link",
@@ -88,7 +91,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_up{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -150,7 +153,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bdb_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
+                  "expr": "bdb_up{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "db: {{ bdb }}",
@@ -212,7 +215,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "redis_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "redis_up{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "redis: {{ redis }}",
@@ -308,7 +311,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
+                  "expr": "(sum(redis_used_memory{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -319,7 +322,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_up{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -425,7 +428,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum(redis_used_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
+                  "expr": "(sum(redis_used_memory{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job) / clamp_min(sum(node_available_memory{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\"}) by (redis_cluster, node, job), 1)) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -482,7 +485,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_cpu_system{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"} * 100",
+                  "expr": "node_cpu_system{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"} * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} - system",
@@ -493,7 +496,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_cpu_user{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"} * 100",
+                  "expr": "node_cpu_user{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"} * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} - user",
@@ -547,7 +550,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_ingress_bytes{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_ingress_bytes{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -601,7 +604,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_egress_bytes{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_egress_bytes{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -656,7 +659,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_total_req{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_total_req{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -710,7 +713,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_conns{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_conns{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -765,7 +768,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_avg_latency{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_avg_latency{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -817,7 +820,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_ephemeral_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_ephemeral_storage_free{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -869,7 +872,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "node_persistent_storage_free{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
+                  "expr": "node_persistent_storage_free{job=~\"$job\",redis_cluster=~\"$redis_cluster\",instance=~\"$instance\", node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }}",
@@ -904,7 +907,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(node_up{job=\"integrations/redis-enterprise\"}, job)",
+               "query": "label_values(node_up{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -919,7 +922,7 @@
                "label": "Redis cluster",
                "multi": true,
                "name": "redis_cluster",
-               "query": "label_values(node_up{job=\"integrations/redis-enterprise\",job=~\"$job\"}, redis_cluster)",
+               "query": "label_values(node_up{job=~\"$job\"}, redis_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -934,7 +937,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(node_up{job=\"integrations/redis-enterprise\",job=~\"$job\",redis_cluster=~\"$redis_cluster\"}, instance)",
+               "query": "label_values(node_up{job=~\"$job\",redis_cluster=~\"$redis_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

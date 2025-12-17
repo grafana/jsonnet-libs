@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/redis-enterprise"',
+  filteringSelector: '',
   groupLabels: ['job', 'redis_cluster'],
   instanceLabels: ['instance'],
   nodeLabels: ['node'],
