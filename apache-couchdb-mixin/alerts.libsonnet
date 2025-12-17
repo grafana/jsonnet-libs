@@ -1,5 +1,5 @@
 {
-  prometheusAlerts+:: {
+  new(this): {
     groups+: [
       {
         name: 'ApacheCouchDBAlerts',
@@ -7,8 +7,8 @@
           {
             alert: 'CouchDBUnhealthyCluster',
             expr: |||
-              min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable) < %(alertsCriticalClusterIsUnstable5m)s
-            ||| % $._config,
+              min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{%(filteringSelector)s}) < %(alertsCriticalClusterIsUnstable5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -19,14 +19,14 @@
                 (
                   '{{$labels.couchdb_cluster}} has reported a value of {{ printf "%%.0f" $value }} for its stability over the last 5 minutes, ' +
                   'which is below the threshold of %(alertsCriticalClusterIsUnstable5m)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBHigh4xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"4.*"}[5m])) > %(alertsWarning4xxResponseCodes5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s}[5m])) > %(alertsWarning4xxResponseCodes5m)s
+            ||| % (this.config { filteringSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ',code=~"4.."' else 'code=~"4.."' }),
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -37,14 +37,14 @@
                 (
                   '{{ printf "%%.0f" $value }} 4xx responses have been detected over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarning4xxResponseCodes5m)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBHigh5xxResponseCodes',
             expr: |||
-              sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"5.*"}[5m])) > %(alertsCritical5xxResponseCodes5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_httpd_status_codes{%(filteringSelector)s}[5m])) > %(alertsCritical5xxResponseCodes5m)s
+            ||| % (this.config { filteringSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ',code=~"5.."' else 'code=~"5.."' }),
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -55,14 +55,14 @@
                 (
                   '{{ printf "%%.0f" $value }} 5xx responses have been detected over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCritical5xxResponseCodes5m)s.'
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBModerateRequestLatency',
             expr: |||
-              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsWarningRequestLatency5m)s
-            ||| % $._config,
+              sum by(job, instance) (rate(couchdb_request_time_seconds_sum{%(filteringSelector)s}[5m]) / rate(couchdb_request_time_seconds_count{%(filteringSelector)s}[5m])) * 1000 > %(alertsWarningRequestLatency5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -73,14 +73,14 @@
                 (
                   'An average of {{ printf "%%.0f" $value }}ms of request latency has occurred over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningRequestLatency5m)sms. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBHighRequestLatency',
             expr: |||
-              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsCriticalRequestLatency5m)s
-            ||| % $._config,
+              sum by(job, instance) (rate(couchdb_request_time_seconds_sum{%(filteringSelector)s}[5m]) / rate(couchdb_request_time_seconds_count{%(filteringSelector)s}[5m])) * 1000 > %(alertsCriticalRequestLatency5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -91,14 +91,14 @@
                 (
                   'An average of {{ printf "%%.0f" $value }}ms of request latency has occurred over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalRequestLatency5m)sms. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBManyReplicatorJobsPending',
             expr: |||
-              sum by(job, instance) (couchdb_couch_replicator_jobs_pending) > %(alertsWarningPendingReplicatorJobs5m)s
-            ||| % $._config,
+              sum by(job, instance) (couchdb_couch_replicator_jobs_pending{%(filteringSelector)s}) > %(alertsWarningPendingReplicatorJobs5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -109,14 +109,14 @@
                 (
                   '{{ printf "%%.0f" $value }} replicator jobs are pending on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningPendingReplicatorJobs5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBReplicatorJobsCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_jobs_crashes_total[5m])) > %(alertsCriticalCrashingReplicatorJobs5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_couch_replicator_jobs_crashes_total{%(filteringSelector)s}[5m])) > %(alertsCriticalCrashingReplicatorJobs5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -127,14 +127,14 @@
                 (
                   '{{ printf "%%.0f" $value }} replicator jobs have crashed over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsCriticalCrashingReplicatorJobs5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
             alert: 'CouchDBReplicatorChangesQueuesDying',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_changes_queue_deaths_total[5m])) > %(alertsWarningDyingReplicatorChangesQueues5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_couch_replicator_changes_queue_deaths_total{%(filteringSelector)s}[5m])) > %(alertsWarningDyingReplicatorChangesQueues5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -145,14 +145,14 @@
                 (
                   '{{ printf "%%.0f" $value }} replicator changes queue processes have died over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningDyingReplicatorChangesQueues5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'CouchDBReplicatorConnectionOwnersCrashing',
+            alert: 'CouchDBReplicatorOwnersCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_connection_owner_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionOwners5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_couch_replicator_connection_owner_crashes_total{%(filteringSelector)s}[5m])) > %(alertsWarningCrashingReplicatorConnectionOwners5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -163,14 +163,14 @@
                 (
                   '{{ printf "%%.0f" $value }} replicator connection owner processes have crashed over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningCrashingReplicatorConnectionOwners5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
           {
-            alert: 'CouchDBReplicatorConnectionWorkersCrashing',
+            alert: 'CouchDBReplicatorWorkersCrashing',
             expr: |||
-              sum by(job, instance) (increase(couchdb_couch_replicator_connection_worker_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionWorkers5m)s
-            ||| % $._config,
+              sum by(job, instance) (increase(couchdb_couch_replicator_connection_worker_crashes_total{%(filteringSelector)s}[5m])) > %(alertsWarningCrashingReplicatorConnectionWorkers5m)s
+            ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -181,7 +181,7 @@
                 (
                   '{{ printf "%%.0f" $value }} replicator connection worker processes have crashed over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(alertsWarningCrashingReplicatorConnectionWorkers5m)s. '
-                ) % $._config,
+                ) % this.config,
             },
           },
         ],
