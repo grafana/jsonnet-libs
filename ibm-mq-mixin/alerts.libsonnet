@@ -59,7 +59,7 @@
             {
               alert: 'IBMMQHighQueueManagerCpuUsage',
               expr: |||
-                sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_user_cpu_time_estimate_for_queue_manager_percentage{%(filteringSelector)s}) >= %(alertsHighQueueManagerCpuUsage)s
+                sum without (description,hostname,instance,job,platform) (ibmmq_qmgr_user_cpu_time_estimate_for_queue_manager_percentage{%(filteringSelector)s}) > %(alertsHighQueueManagerCpuUsage)s
               ||| % this.config,
               'for': '5m',
               labels: {
