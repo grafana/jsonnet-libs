@@ -18,7 +18,7 @@
   // only fire alerts 'interface is down' for the following selector:
   // deprecated, use alertInterfaceDownSelectorWarning, alertInterfaceDownSelectorCritical, alertInterfaceDownSelectorInfo instead
   alertInterfaceDownSelector: self.alertInterfaceDownSelectorWarning,
-  alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|VPN)|ISP).*"',
+  alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
   // change according to your org naming conventions
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical).*"',
 
