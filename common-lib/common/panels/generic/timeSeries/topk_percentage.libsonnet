@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local tokens = import '../../../tokens/main.libsonnet';
 local base = import './base.libsonnet';
 local generic = import './main.libsonnet';
 local timeSeries = g.panel.timeSeries;
@@ -51,8 +52,8 @@ base {
           }
         )
         + fieldConfig.defaults.custom.withFillOpacity(0)
-        + timeSeries.standardOptions.color.withMode('fixed')
-        + timeSeries.standardOptions.color.withFixedColor('light-purple'),
+        + timeSeries.standardOptions.color.withMode(tokens.base.colors.mode.single)
+        + timeSeries.standardOptions.color.withFixedColor(tokens.base.colors.palette.threshold),
       )
     ),
 }
