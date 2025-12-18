@@ -156,7 +156,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       and (%s) != 2
                     |||
                     % [
-                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
+                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelectorCritical).asRuleExpression(),
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
@@ -180,7 +180,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       and (%s) != 2
                     |||
                     % [
-                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
+                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelectorWarning).asRuleExpression(),
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
