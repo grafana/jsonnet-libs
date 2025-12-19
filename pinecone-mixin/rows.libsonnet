@@ -7,7 +7,7 @@ local g = import './g.libsonnet';
       g.panel.row.new('Overview')
       + g.panel.row.withCollapsed(false),
       // Stat panels - key metrics at a glance
-      this.grafana.panels.indexesCountStat
+      panels.indexesCountStat
       + g.panel.stat.gridPos.withW(8)
       + g.panel.stat.gridPos.withH(4),
       this.grafana.panels.totalRecordsStat
