@@ -2,6 +2,7 @@ local g = import './g.libsonnet';
 
 {
   new(this): {
+      local panels = this.grafana.panels.
     // Overview row with stat panels, aggregate metrics, and table
     overview: [
       g.panel.row.new('Overview')
@@ -10,9 +11,7 @@ local g = import './g.libsonnet';
       panels.indexesCountStat
       + g.panel.stat.gridPos.withW(8)
       + g.panel.stat.gridPos.withH(4),
-      this.grafana.panels.totalRecordsStat
-      + g.panel.stat.gridPos.withW(8)
-      + g.panel.stat.gridPos.withH(4),
+      this.grafana.panels.totalRecordsStat { gridPos+: { h: 4, w: 8 } },
       this.grafana.panels.totalStorageStat
       + g.panel.stat.gridPos.withW(8)
       + g.panel.stat.gridPos.withH(4),

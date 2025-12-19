@@ -4,7 +4,7 @@ local g = import '../g.libsonnet';
   new(this):
     {
       'pinecone-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'Pinecone overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + ' overview')
         + g.dashboard.withUid(this.config.uid + '-overview')
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withTimezone(this.config.dashboardTimezone)
