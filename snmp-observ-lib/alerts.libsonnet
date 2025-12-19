@@ -263,7 +263,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                   Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last 5 minutes.
                 ||| % [instanceLabel],
               },
-              'for': '0',
               keep_firing_for: '5m',
             },
           ],

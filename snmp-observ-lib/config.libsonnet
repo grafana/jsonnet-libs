@@ -20,7 +20,7 @@
   alertInterfaceDownSelector: self.alertInterfaceDownSelectorWarning,
   alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
   // change according to your org naming conventions
-  alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical).*"',
+  alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
 
   // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
   // This will clamp max interface traffic possible to 1000Gbps.
