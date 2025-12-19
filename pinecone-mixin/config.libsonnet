@@ -5,7 +5,7 @@
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
-    dashboardNamePrefix: '',
+    dashboardNamePrefix: 'Pinecone',
     uid: 'pinecone',
     
     // Filtering and labels
