@@ -8,7 +8,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(): {
     local this = self,
-    config: config._config,
+    config: config,
 
     signals:
       {
@@ -51,7 +51,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   },
 
   withConfigMixin(config): {
-    new(): self.new() + { config+: config },
+    config+: config,
   },
 }
-

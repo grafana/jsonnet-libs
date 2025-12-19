@@ -28,8 +28,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.panelOptions.withDescription('Total operations per second across all indexes (read + write).'),
 
     totalReadWriteOperations:
-      g.panel.timeSeries.new('Read vs Write Operations')
+      commonlib.panels.generic.timeSeries.base.new('Read vs Write Operations', targets=[])
       + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.queryOptions.withDatasource('prometheus', '${datasource}')
       + g.panel.timeSeries.standardOptions.withUnit('reqps')
       + overviewSignals.totalReadOperationsPerSec.asPanelMixin()
       + overviewSignals.totalWriteOperationsPerSec.asPanelMixin()
@@ -168,4 +169,3 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.panelOptions.withDescription('Read units consumed per index over time.'),
   },
 }
-

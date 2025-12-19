@@ -2,7 +2,7 @@ local g = import './g.libsonnet';
 
 {
   new(this): {
-      local panels = this.grafana.panels.
+    local panels = this.grafana.panels,
     // Overview row with stat panels, aggregate metrics, and table
     overview: [
       g.panel.row.new('Overview')
@@ -75,4 +75,3 @@ local g = import './g.libsonnet';
     ],
   },
 }
-
