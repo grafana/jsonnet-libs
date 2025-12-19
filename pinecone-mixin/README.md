@@ -104,7 +104,8 @@ prometheus.remote_write "metrics" {
 
 ## Install Tools
 
-To use this mixin, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
+To use this mixin, a working Golang toolchain is required, alongside having `mixtool` and `jsonnetfmt` installed. 
+To do so, run the following:
 
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
