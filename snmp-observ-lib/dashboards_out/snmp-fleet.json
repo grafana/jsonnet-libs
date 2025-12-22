@@ -662,6 +662,10 @@
             "description": "Network interface traffic out.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -679,6 +683,10 @@
                      }
                   ],
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
@@ -757,6 +765,10 @@
             "description": "Network interface errors in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -774,6 +786,10 @@
                      }
                   ],
                   "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -844,6 +860,10 @@
             "description": "Network interface discards in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -861,6 +881,10 @@
                      }
                   ],
                   "noValue": "No dropped packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -942,6 +966,10 @@
             "description": "Network interface unicast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -959,6 +987,10 @@
                      }
                   ],
                   "noValue": "No unicast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1029,6 +1061,10 @@
             "description": "Network interface broadcast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1046,6 +1082,10 @@
                      }
                   ],
                   "noValue": "No broadcast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1116,6 +1156,10 @@
             "description": "Network interface multicast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1133,6 +1177,10 @@
                      }
                   ],
                   "noValue": "No multicast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [

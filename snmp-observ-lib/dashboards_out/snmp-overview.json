@@ -85,6 +85,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                },
                "overrides": [
@@ -109,7 +118,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -146,6 +154,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                },
                "overrides": [
@@ -170,7 +187,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -205,7 +221,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "decimals": 1,
@@ -275,6 +291,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -287,6 +304,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -346,6 +367,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -358,6 +380,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -966,6 +992,10 @@
             "description": "Network interface traffic out.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -977,6 +1007,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
@@ -1055,6 +1089,10 @@
             "description": "Network interface errors in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1066,6 +1104,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1136,6 +1178,10 @@
             "description": "Network interface discards in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1147,6 +1193,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No dropped packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1228,6 +1278,10 @@
             "description": "Network interface unicast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1239,6 +1293,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No unicast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1309,6 +1367,10 @@
             "description": "Network interface broadcast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1320,6 +1382,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No broadcast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1390,6 +1456,10 @@
             "description": "Network interface multicast packets in.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1401,6 +1471,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No multicast packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -1605,6 +1679,10 @@
                   "description": "The current value of receive buffer-to-buffer credits for this port.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "axisCenteredZero": false,
                            "axisLabel": "out(-) | in(+)",
@@ -1616,6 +1694,10 @@
                         },
                         "decimals": 1,
                         "noValue": "No packets",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "pps"
                      },
                      "overrides": [
@@ -1686,6 +1768,10 @@
                   "description": "-TxWaitCount: The number of times the FC-port waited due to lack of transmit credits.\n\n-FramesDiscard: The number of frames discarded by the FC-port.\n\n-TxWtAvgBBCreditTransitionToZero: increments if the credit available is zero for 100 ms.\n\n-BBCreditTransistionFromZero: increments if the transmit b2b credit is zero.\n\n-BBCreditTransistionToZero: increments if the receive b2b credit is zero.\n\n-InvalidTxWords: The number of invalid transmission words detected by the FC-Port.\n\n-InvalidCrcs: The number of invalid CRCs detected by the FC-Port.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "axisCenteredZero": false,
                            "axisLabel": "out(-) | in(+)",
@@ -1697,6 +1783,10 @@
                         },
                         "decimals": 1,
                         "noValue": "No errors",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "pps"
                      },
                      "overrides": [
@@ -1836,6 +1926,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "custom": {
@@ -1848,6 +1939,10 @@
                            "showPoints": "never"
                         },
                         "decimals": 1,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "celsius"
                      },
                      "overrides": [
@@ -1906,12 +2001,20 @@
                   "description": "DC voltage sensor.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         }
                      },
                      "overrides": [
@@ -1970,12 +2073,20 @@
                   "description": "Power used in Watts.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         }
                      },
                      "overrides": [
@@ -2034,12 +2145,20 @@
                   "description": "Receive/Transmit power.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         }
                      },
                      "overrides": [
@@ -2098,12 +2217,20 @@
                   "description": "Fan speed.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         }
                      },
                      "overrides": [
