@@ -9,6 +9,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(): {
     local this = self,
     config: config,
+    local alertsObj = alerts.new(this),
 
     signals:
       {
@@ -39,7 +40,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     },
 
     prometheus: {
-      alerts: alerts.new(this),
+      alerts: alertsObj.prometheusAlerts,
       recordingRules: {},
     },
 
