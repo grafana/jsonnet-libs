@@ -10,13 +10,12 @@ function(this)
 
       stepUpCmdCalled: {
         name: 'Step-up elections called',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of step-up elections called.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_stepUpCmd_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_stepUpCmd_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - called',
           },
         },
@@ -24,13 +23,12 @@ function(this)
 
       stepUpCmdSuccessful: {
         name: 'Step-up elections successful',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of successful step-up elections.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_stepUpCmd_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_stepUpCmd_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - successful',
           },
         },
@@ -38,13 +36,12 @@ function(this)
 
       priorityTakeoverCalled: {
         name: 'Priority takeover elections called',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of priority takeover elections called.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_priorityTakeover_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_priorityTakeover_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - called',
           },
         },
@@ -52,13 +49,12 @@ function(this)
 
       priorityTakeoverSuccessful: {
         name: 'Priority takeover elections successful',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of successful priority takeover elections.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_priorityTakeover_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_priorityTakeover_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - successful',
           },
         },
@@ -66,13 +62,12 @@ function(this)
 
       catchUpTakeoverCalled: {
         name: 'Catch-up takeover elections called',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-up takeover elections called.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_catchUpTakeover_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_catchUpTakeover_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - called',
           },
         },
@@ -80,13 +75,12 @@ function(this)
 
       catchUpTakeoverSuccessful: {
         name: 'Catch-up takeover elections successful',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of successful catch-up takeover elections.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_catchUpTakeover_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_catchUpTakeover_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - successful',
           },
         },
@@ -94,13 +88,12 @@ function(this)
 
       electionTimeoutCalled: {
         name: 'Election timeout elections called',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of election timeout elections called.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_electionTimeout_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_electionTimeout_called{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - called',
           },
         },
@@ -108,13 +101,12 @@ function(this)
 
       electionTimeoutSuccessful: {
         name: 'Election timeout elections successful',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of successful election timeout elections.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_electionTimeout_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_electionTimeout_successful{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}} - successful',
           },
         },
@@ -122,13 +114,12 @@ function(this)
 
       numCatchUps: {
         name: 'Number of catch-ups',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-up operations.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_numCatchUps{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_numCatchUps{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -136,13 +127,12 @@ function(this)
 
       numCatchUpsSkipped: {
         name: 'Number of catch-ups skipped',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-ups skipped.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_numCatchUpsSkipped{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_numCatchUpsSkipped{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -150,13 +140,12 @@ function(this)
 
       numCatchUpsSucceeded: {
         name: 'Number of catch-ups succeeded',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-ups succeeded.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_numCatchUpsSucceeded{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_numCatchUpsSucceeded{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -164,13 +153,12 @@ function(this)
 
       numCatchUpsFailedWithError: {
         name: 'Number of catch-ups failed with error',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-ups failed with error.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_numCatchUpsFailedWithError{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -178,13 +166,12 @@ function(this)
 
       numCatchUpsTimedOut: {
         name: 'Number of catch-up timeouts',
-        type: 'counter',
+        type: 'raw',
         description: 'Number of catch-up timeouts.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'mongodb_electionMetrics_numCatchUpsTimedOut{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
-            rangeFunction: 'increase',
+            expr: 'increase(mongodb_electionMetrics_numCatchUpsTimedOut{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
             legendCustomTemplate: '{{instance}}',
           },
         },
@@ -192,7 +179,7 @@ function(this)
 
       averageCatchUpOps: {
         name: 'Average catch-up operations',
-        type: 'gauge',
+        type: 'raw',
         aggLevel: 'instance',
         aggFunction: 'sum',
         description: 'Average catch-up operations.',

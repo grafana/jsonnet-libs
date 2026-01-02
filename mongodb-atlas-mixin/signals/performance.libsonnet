@@ -622,13 +622,13 @@ function(this)
 
       networkSlowDNSByInstance: {
         name: 'Slow DNS operations by instance',
-        type: 'counter',
+        type: 'raw',
         aggLevel: 'none',
         description: 'Number of slow DNS operations per instance.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_numSlowDNSOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
+            expr: 'rate(mongodb_network_numSlowDNSOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__rate_interval]) > 0',
             legendCustomTemplate: '{{instance}} - DNS',
           },
         },
@@ -636,13 +636,13 @@ function(this)
 
       networkSlowSSLByInstance: {
         name: 'Slow SSL operations by instance',
-        type: 'counter',
+        type: 'raw',
         aggLevel: 'none',
         description: 'Number of slow SSL operations per instance.',
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_numSlowSSLOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
+            expr: 'rate(mongodb_network_numSlowSSLOperations{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__rate_interval]) > 0',
             legendCustomTemplate: '{{instance}} - SSL',
           },
         },
@@ -650,13 +650,13 @@ function(this)
 
       networkBytesInByInstance: {
         name: 'Network bytes received by instance',
-        type: 'counter',
+        type: 'raw',
         aggLevel: 'none',
         description: 'Network bytes received per instance.',
         unit: 'Bps',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
+            expr: 'rate(mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__rate_interval]) > 0',
             legendCustomTemplate: '{{instance}} - received',
           },
         },
@@ -664,13 +664,13 @@ function(this)
 
       networkBytesOutByInstance: {
         name: 'Network bytes sent by instance',
-        type: 'counter',
+        type: 'raw',
         aggLevel: 'none',
         description: 'Network bytes sent per instance.',
         unit: 'Bps',
         sources: {
           prometheus: {
-            expr: 'mongodb_network_bytesOut{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
+            expr: 'rate(mongodb_network_bytesOut{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__rate_interval]) > 0',
             legendCustomTemplate: '{{instance}} - sent',
           },
         },

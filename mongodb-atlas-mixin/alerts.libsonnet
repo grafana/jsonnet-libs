@@ -177,7 +177,7 @@
           {
             alert: 'MongoDBAtlasSlowHardwareIO',
             expr: |||
-              (sum without (disk_name) (increase(hardware_disk_metrics_read_time_milliseconds[5m])) + sum without (disk_name) (increase(hardware_disk_metrics_write_time_milliseconds[5m]))) / 1000 > %(alertsSlowHardwareIO)s
+              (sum without (disk_name) (increase(hardware_disk_metrics_read_time_milliseconds[5m])) + sum without (disk_name) (increase(hardware_disk_metrics_write_time_milliseconds[5m]))) > %(alertsSlowHardwareIO)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -187,7 +187,7 @@
               summary: 'Read and write I/Os are taking too long to complete.',
               description:
                 (
-                  'The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} seconds which is above the threshold of %(alertsSlowHardwareIO)s seconds.'
+                  'The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} milliseconds which is above the threshold of %(alertsSlowHardwareIO)s milliseconds.'
                 ) % this.config,
             },
           },

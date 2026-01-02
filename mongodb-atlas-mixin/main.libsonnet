@@ -2,7 +2,6 @@ local alerts = import './alerts.libsonnet';
 local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
 local links = import './links.libsonnet';
-local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
@@ -26,6 +25,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
+      panels: (import './panels/main.libsonnet').new(this.signals, this.config),
       variables: commonlib.variables.new(
         filteringSelector=this.config.filteringSelector,
         groupLabels=this.config.groupLabels,
@@ -36,7 +36,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
       annotations: {},
       links: links.new(this),
-      panels: panels.new(this),
       dashboards: dashboards.new(this),
       rows: rows.new(this),
     },
