@@ -1,8 +1,8 @@
 {
   local this = self,
 
-  
-  filteringSelector: '', // 
+
+  filteringSelector: '',  //
   // Basic filtering - MongoDB Atlas uses job and cl_name (cluster name) as primary filters
   groupLabels: ['job', 'cl_name'],
   instanceLabels: ['instance'],

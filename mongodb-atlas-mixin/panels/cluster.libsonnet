@@ -3,12 +3,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals, config): {
-  
+
     //
     // Inventory table panels (for shard, config, mongos nodes)
     //
 
-      shardNodesTable:
+    shardNodesTable:
       commonlib.panels.generic.table.base.new(
         'Shard nodes',
         targets=[
