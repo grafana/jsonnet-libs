@@ -27,16 +27,9 @@
   // Alert thresholds
   alertsQueryLatencySimpleWarningMs: 125,  // 100-125ms for simple queries (using 125ms)
   alertsQueryLatencySimpleCriticalMs: 300,  // 200-300ms for simple queries (using 300ms)
-  alertsQueryLatencyComplexWarningMs: 250,  // 250ms for complex queries
-  alertsQueryLatencyComplexCriticalMs: 500,  // 500ms for complex queries
-  // Baseline increase thresholds as integer percentages (110 = 110% of baseline = 10% increase)
-  alertsQueryLatencyBaselineIncreaseWarning: 110,  // 10% above 5-min baseline (110% of baseline)
-  alertsQueryLatencyBaselineIncreaseCritical: 120,  // 20% above 5-min baseline (120% of baseline)
 
   alertsUpsertLatencyWarningMs: 250,  // 250ms sustained
   alertsUpsertLatencyCriticalMs: 500,  // 500ms sustained
-  alertsUpsertLatencyBaselineIncreaseWarning: 115,  // 15% above 15-min baseline (115% of baseline)
-  alertsUpsertLatencyBaselineIncreaseCritical: 130,  // 30% above 15-min baseline (130% of baseline)
 
   // Saturation alert thresholds
   alertsSaturationIndexFullnessWarning: 70,  // 70% index fullness (0-100 scale)
