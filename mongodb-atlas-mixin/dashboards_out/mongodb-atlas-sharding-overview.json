@@ -1,0 +1,1123 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "Overview of MongoDB Atlas sharding metrics.",
+      "links": [
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas cluster overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas elections overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "mongodb-atlas-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas performance overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-performance-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "General sharding statistics",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of times that a thread hit a stale config exception and triggered a metadata refresh.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_countStaleConfigErrors{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Stale config errors"
+               }
+            ],
+            "title": "Stale configs / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Chunk migration frequency for this node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_countRecipientMoveChunkStarted{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Chunk migrations started as recipient"
+               }
+            ],
+            "title": "Chunk migrations / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of documents cloned on this node when it acted as primary for the donor and acted as primary for the recipient.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_countDocsClonedOnDonor{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - donor",
+                  "refId": "Documents cloned on donor"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(mongodb_shardingStatistics_countDocsClonedOnRecipient{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - recipient",
+                  "refId": "Documents cloned on recipient"
+               }
+            ],
+            "title": "Docs cloned / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The time taken by the catch-up and update metadata phases of a range migration, by this node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(mongodb_shardingStatistics_totalCriticalSectionTimeMillis{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Critical section time"
+               }
+            ],
+            "title": "Critical section time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Catalog cache",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of incremental and full refreshes that have started.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 18
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - incremental",
+                  "refId": "Incremental catalog cache refreshes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - full",
+                  "refId": "Full catalog cache refreshes"
+               }
+            ],
+            "title": "Refreshes started / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of full and incremental refreshes that have failed.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 18
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countFailedRefreshes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Failed catalog cache refreshes"
+               }
+            ],
+            "title": "Refreshes failed / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of times that a thread hit a stale config exception for the catalog cache and triggered a metadata refresh.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 0,
+               "y": 26
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Catalog cache stale config errors"
+               }
+            ],
+            "title": "Cache stale configs / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of database and collection entries that are currently in the catalog cache.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 6,
+               "y": 26
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_numDatabaseEntries{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - database",
+                  "refId": "Database entries in catalog cache"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_numCollectionEntries{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - collection",
+                  "refId": "Collection entries in catalog cache"
+               }
+            ],
+            "title": "Cache entries / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of time that threads had to wait for a refresh of the metadata.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 26
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_totalRefreshWaitTimeMicros{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Catalog cache refresh wait time"
+               }
+            ],
+            "title": "Cache refresh time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of operations that are blocked by a refresh of the catalog cache. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 26
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Operations blocked by catalog cache refresh"
+               }
+            ],
+            "title": "Cache operations blocked",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 34
+            },
+            "id": 13,
+            "panels": [ ],
+            "title": "Shard operations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of CRUD operations and aggregation commands run that targeted all shards. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 35
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting all shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting all shards"
+               }
+            ],
+            "title": "All shards",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of CRUD operations and aggregation commands run that targeted more than 1 shard. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 35
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting many shards"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting many shards"
+               }
+            ],
+            "title": "Many shards",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of CRUD operations and aggregation commands run that targeted 1 shard. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 43
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations targeting one shard"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations targeting one shard"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations targeting one shard"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations targeting one shard"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations targeting one shard"
+               }
+            ],
+            "title": "One shard",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of CRUD operations and aggregation commands run on an unsharded collection. Specific to mongos nodes found under replica set \"none\".",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 43
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - find",
+                  "refId": "Find operations on unsharded collections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - insert",
+                  "refId": "Insert operations on unsharded collections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - update",
+                  "refId": "Update operations on unsharded collections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - delete",
+                  "refId": "Delete operations on unsharded collections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - aggregate",
+                  "refId": "Aggregate operations on unsharded collections"
+               }
+            ],
+            "title": "Unsharded",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "mongodb-atlas-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(mongodb_network_bytesIn{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Atlas cluster",
+               "multi": true,
+               "name": "cl_name",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"}, cl_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Node",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Replica set",
+               "multi": true,
+               "name": "rs_nm",
+               "query": "label_values(mongodb_network_bytesIn, rs_nm)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "MongoDB Atlas sharding overview",
+      "uid": "mongodb-atlas-sharding-overview"
+   }

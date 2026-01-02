@@ -1,0 +1,751 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "description": "Overview of MongoDB Atlas performance metrics.",
+      "links": [
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas cluster overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-cluster-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas elections overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "mongodb-atlas-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "MongoDB Atlas sharding overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-sharding-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Memory and hardware",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of RAM and virtual memory being used by the database process.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "mbytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "mongodb_mem_resident{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - RAM",
+                  "refId": "Memory resident by instance"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "mongodb_mem_virtual{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - virtual",
+                  "refId": "Memory virtual by instance"
+               }
+            ],
+            "title": "Memory",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of time spent servicing CPU interrupts.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(hardware_system_cpu_irq_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU interrupt service time by instance"
+               }
+            ],
+            "title": "Hardware CPU interrupt service time / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "panels": [ ],
+            "title": "Disk",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of free and used disk space on this node's hardware.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "decbytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 10
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - free",
+                  "refId": "Disk space free"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - used",
+                  "refId": "Disk space used"
+               }
+            ],
+            "title": "Disk space",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The disk space utilization for this node's hardware.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "max": 1,
+                  "min": 0,
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 10
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}), 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Disk space utilization by instance"
+               }
+            ],
+            "title": "Disk space utilization",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 18
+            },
+            "id": 7,
+            "panels": [ ],
+            "title": "Network",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of distinct requests the node has received.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 19
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_network_numRequests{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Network requests by instance"
+               }
+            ],
+            "title": "Network requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of slow DNS and SSL operations received by this node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "noValue": "No traffic",
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 19
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [
+                     "last*",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_network_numSlowDNSOperations{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval]) > 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - DNS",
+                  "refId": "Slow DNS operations by instance"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_network_numSlowSSLOperations{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval]) > 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - SSL",
+                  "refId": "Slow SSL operations by instance"
+               }
+            ],
+            "title": "Slow network requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of bytes sent and received by the node over a network connection.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 27
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval]) > 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - received",
+                  "refId": "Network bytes received by instance"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(mongodb_network_bytesOut{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval]) > 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - sent",
+                  "refId": "Network bytes sent by instance"
+               }
+            ],
+            "title": "Network throughput",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 35
+            },
+            "id": 11,
+            "panels": [ ],
+            "title": "Hardware I/O",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The rate of read and write I/O's processed by this node.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "iops"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 36
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(hardware_disk_metrics_read_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - reads",
+                  "refId": "Disk read operations by instance"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "hardware_disk_metrics_write_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - writes",
+                  "refId": "Disk write operations by instance"
+               }
+            ],
+            "title": "Hardware I/O",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of time the node has spent waiting for read and write I/O's to process.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 44
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "asTable": true,
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(hardware_disk_metrics_read_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - read",
+                  "refId": "Disk read I/O time by instance"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "increase(hardware_disk_metrics_write_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - write",
+                  "refId": "Disk write I/O time by instance"
+               }
+            ],
+            "title": "Hardware I/O wait time / $__interval",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "mongodb-atlas-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(mongodb_network_bytesIn{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Atlas cluster",
+               "multi": true,
+               "name": "cl_name",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"}, cl_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Node",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Replica set",
+               "multi": true,
+               "name": "rs_nm",
+               "query": "label_values(mongodb_network_bytesIn, rs_nm)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "MongoDB Atlas performance overview",
+      "uid": "mongodb-atlas-performance-overview"
+   }
