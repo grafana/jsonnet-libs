@@ -16,7 +16,11 @@ function(this)
     signals: {
       topicMessagesPerSec: {
         name: 'Messages in per second',
-        description: 'Messages in per second.',
+        description: |||
+          Rate of messages produced to this topic across all partitions.  
+          Indicates topic write activity and producer throughput.  
+          Use to identify hot topics and understand data flow patterns.
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {
@@ -31,7 +35,9 @@ function(this)
       // used in table:
       topicMessagesPerSecByPartition: {
         name: 'Messages in per second',
-        description: 'Messages in per second.',
+        description: |||
+          Rate of messages produced to each partition within this topic.  
+        |||,
         type: 'counter',
         unit: 'mps',
         legendCustomTemplate: '{{ topic }}/{{ partition }}',
@@ -47,7 +53,9 @@ function(this)
       // JMX exporter extras
       topicBytesInPerSec: {
         name: 'Topic bytes in',
-        description: 'Topic bytes in rate.',
+        description: |||
+          Rate of incoming data in bytes written to this topic from producers.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {
@@ -67,7 +75,9 @@ function(this)
       },
       topicBytesOutPerSec: {
         name: 'Topic bytes out',
-        description: 'Topic bytes out rate.',
+        description: |||
+          Rate of outgoing data in bytes read from this topic by consumers.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {
@@ -87,7 +97,9 @@ function(this)
       },
       topicLogStartOffset: {
         name: 'Topic start offset',
-        description: 'Topic start offset.',
+        description: |||
+          Earliest available offset for each partition due to retention or deletion.  
+        |||,
         type: 'gauge',
         unit: 'none',
         aggFunction: 'max',
@@ -109,7 +121,11 @@ function(this)
       },
       topicLogEndOffset: {
         name: 'Topic end offset',
-        description: 'Topic end offset.',
+        description: |||
+          Latest offset (high water mark) for each partition representing newest available message.  
+          Continuously increases as new messages arrive.  
+          Difference between end and start offsets indicates total messages available.
+        |||,
         type: 'gauge',
         unit: 'none',
         aggFunction: 'max',
@@ -126,7 +142,10 @@ function(this)
       },
       topicLogSize: {
         name: 'Topic log size',
-        description: 'Size in bytes of the current topic-partition.',
+        description: |||
+          Total size in bytes of data stored on disk for each topic partition.  
+          Grows with incoming messages and shrinks with retention cleanup.  
+        |||,
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'max',
