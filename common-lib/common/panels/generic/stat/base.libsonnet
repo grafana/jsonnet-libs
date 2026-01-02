@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local tokens = import '../../../tokens/main.libsonnet';
 local stat = g.panel.stat;
 local base = import '../base.libsonnet';
 
@@ -9,6 +10,23 @@ base {
 
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
-    + stat.standardOptions.color.withMode('fixed')
-    + stat.standardOptions.color.withFixedColor('text'),
+    + stat.standardOptions.color.withMode(tokens.base.colors.mode.single)
+    + stat.standardOptions.color.withFixedColor(tokens.base.colors.palette.default)
+    // remove 0-80(green), >80 red threshold by default.
+    + {
+      fieldConfig+: {
+        defaults+: {
+
+          thresholds: {
+            mode: 'absolute',
+            steps: [
+              {
+                color: tokens.base.colors.palette.default,
+                value: null,
+              },
+            ],
+          },
+        },
+      },
+    },
 }
