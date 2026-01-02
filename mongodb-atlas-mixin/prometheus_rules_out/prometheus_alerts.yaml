@@ -93,10 +93,10 @@ groups:
             severity: warning
         - alert: MongoDBAtlasSlowHardwareIO
           annotations:
-            description: The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%.0f" $value}} milliseconds which is above the threshold of 3 milliseconds.
+            description: The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%.0f" $value}} milliseconds which is above the threshold of 3000 milliseconds.
             summary: Read and write I/Os are taking too long to complete.
           expr: |
-            (sum without (disk_name) (increase(hardware_disk_metrics_read_time_milliseconds[5m])) + sum without (disk_name) (increase(hardware_disk_metrics_write_time_milliseconds[5m]))) > 3
+            (sum without (disk_name) (increase(hardware_disk_metrics_read_time_milliseconds[5m])) + sum without (disk_name) (increase(hardware_disk_metrics_write_time_milliseconds[5m]))) > 3000
           for: 5m
           labels:
             severity: warning

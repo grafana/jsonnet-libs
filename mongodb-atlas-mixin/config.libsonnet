@@ -29,7 +29,7 @@
   alertsDeadlocks: 10,  // count
   alertsSlowNetworkRequests: 10,  // count
   alertsHighDiskUsage: 90,  // %
-  alertsSlowHardwareIO: 3,  // seconds
+  alertsSlowHardwareIO: 3000,  // milliseconds
   alertsHighTimeoutElections: 10,  // count
 
   // Metrics source

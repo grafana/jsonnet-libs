@@ -107,7 +107,7 @@ Default thresholds can be configured in `config.libsonnet`.
     alertsDeadlocks: 10,  // count
     alertsSlowNetworkRequests: 10,  // count
     alertsHighDiskUsage: 90,  // percentage: 0-100
-    alertsSlowHardwareIO: 3,  // seconds
+    alertsSlowHardwareIO: 3000,  // milliseconds
     alertsHighTimeoutElections: 10,  // count
   },
 }
