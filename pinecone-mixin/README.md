@@ -1,6 +1,6 @@
 # Pinecone Mixin
 
-The Pinecone mixin is a set of configurable Grafana dashboards and alerts based on the metrics exported by the [Pinecone Prometheus exporter](https://docs.pinecone.io/guides/production/monitoring#monitor-with-prometheus).
+The Pinecone mixin is a set of configurable Grafana dashboards and alerts based on the metrics exported by [Pinecone's built-in Prometheus exporter](https://docs.pinecone.io/guides/production/monitoring#monitor-with-prometheus).
 
 ## Dashboards
 
@@ -29,7 +29,7 @@ To monitor all serverless indexes in a project using Alloy, add the following to
 ```alloy
 prometheus.scrape "pinecone" {
   targets = discovery.http "pinecone" {
-    url = "https://api.pinecone.io/prometheus/projects/PROJECT_ID/metrics/discovery"
+    url = "https://api.pinecone.io/prometheus/projects/<your-project-ID>/metrics/discovery"
     refresh_interval = "1m"
     authorization {
       type = "Bearer"
