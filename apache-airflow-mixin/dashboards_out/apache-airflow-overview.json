@@ -50,7 +50,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -77,7 +77,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_dag_processing_import_errors{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_dag_processing_import_errors{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -102,7 +102,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -129,7 +129,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_sla_missed{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(airflow_sla_missed{job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -155,7 +155,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -182,7 +182,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_ti_failures{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(airflow_ti_failures{job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -236,7 +236,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_duration_success_sum{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_duration_success_count{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
+                  "expr": "increase(airflow_dagrun_duration_success_sum{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_duration_success_count{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -290,7 +290,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_duration_failed_sum{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_duration_failed_count{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
+                  "expr": "increase(airflow_dagrun_duration_failed_sum{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_duration_failed_count{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -329,7 +329,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_dag_task_duration_sum{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dag_task_duration_count{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:] offset -$__interval),1) != 0",
+                  "expr": "increase(airflow_dag_task_duration_sum{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dag_task_duration_count{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\"}[$__interval:] offset -$__interval),1) != 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -348,7 +348,7 @@
             "description": "The number of task counts by DAG ID in the Apache Airflow system.",
             "fieldConfig": {
                "defaults": {
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -371,7 +371,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, instance, dag_id, state) (increase(airflow_task_finish_total{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__interval:] offset -$__interval) > 0)",
+                  "expr": "sum by(job, instance, dag_id, state) (increase(airflow_task_finish_total{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__interval:] offset -$__interval) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -397,7 +397,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -425,7 +425,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_task_finish_total{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__interval:] offset -$__interval) > 0",
+                  "expr": "increase(airflow_task_finish_total{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\", task_id=~\"$task_id\", state=~\"$state\"}[$__interval:] offset -$__interval) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -492,7 +492,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(airflow_dagrun_schedule_delay_sum{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_schedule_delay_count{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
+                  "expr": "increase(airflow_dagrun_schedule_delay_sum{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval)/clamp_min(increase(airflow_dagrun_schedule_delay_count{job=~\"$job\",instance=~\"$instance\", dag_id=~\"$dag_id\"}[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -545,7 +545,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_scheduler_tasks_executable{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_scheduler_tasks_executable{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - executable",
@@ -556,7 +556,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_scheduler_tasks_starving{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_scheduler_tasks_starving{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - starving",
@@ -581,7 +581,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -608,7 +608,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_executor_running_tasks{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_executor_running_tasks{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - running",
@@ -619,7 +619,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_executor_queued_tasks{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_executor_queued_tasks{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - queued",
@@ -630,7 +630,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_executor_open_slots{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "airflow_executor_open_slots{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - open",
@@ -655,7 +655,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -682,7 +682,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_pool_running_slots{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_running_slots{job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{pool_name}} - running",
@@ -693,7 +693,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_pool_queued_slots{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_queued_slots{job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{pool_name}} - queued",
@@ -704,7 +704,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_pool_starving_tasks{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_starving_tasks{job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{pool_name}} - starving",
@@ -715,7 +715,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "airflow_pool_open_slots{job=\"integrations/apache-airflow\",job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
+                  "expr": "airflow_pool_open_slots{job=~\"$job\",instance=~\"$instance\", pool_name=~\"$pool_name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{pool_name}} - open",
@@ -750,7 +750,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(airflow_dagbag_size{job=\"integrations/apache-airflow\"}, job)",
+               "query": "label_values(airflow_dagbag_size{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -765,7 +765,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(airflow_dagbag_size{job=\"integrations/apache-airflow\",job=~\"$job\"}, instance)",
+               "query": "label_values(airflow_dagbag_size{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -837,7 +837,7 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "default",

@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/apache-airflow"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   overviewLabels: [],
@@ -9,7 +9,7 @@
   dashboardNamePrefix: 'Apache Airflow',
 
   // additional params
-  dashboardPeriod: 'now-6h',
+  dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 

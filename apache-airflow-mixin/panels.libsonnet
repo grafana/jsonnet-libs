@@ -12,21 +12,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       dagFileParsingErrorsPanel:
         commonlib.panels.generic.timeSeries.base.new('DAG file parsing errors', targets=[signals.overview.dagParsingErrors.asTarget()])
         + g.panel.timeSeries.panelOptions.withDescription('The number of errors from trying to parse DAG files in an Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       slaIssuesPanel:
         commonlib.panels.generic.timeSeries.base.new('SLA misses', targets=[
           signals.overview.taskSlaMisses.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of Service Level Agreement misses for any DAG runs in the Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       taskFailuresPanel:
         commonlib.panels.generic.timeSeries.base.new('Task failures', targets=[
           signals.overview.taskFailures.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The overall task instances failures for an Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       dagSuccessDurationPanel:
         commonlib.panels.generic.timeSeries.base.new('DAG success duration', targets=[
@@ -65,14 +65,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.pieChart.options.legend.withPlacement('right')
         + g.panel.pieChart.options.legend.withAsTable(true)
         + g.panel.pieChart.panelOptions.withDescription('The number of task counts by DAG ID in the Apache Airflow system.')
-        + g.panel.pieChart.standardOptions.withUnit('none'),
+        + g.panel.pieChart.standardOptions.withUnit('short'),
 
       taskCountsPanel:
         commonlib.panels.generic.timeSeries.base.new('Task counts', targets=[
           signals.overview.taskFinishTotal.asTarget() { interval: '2m' },
         ])
         + g.panel.timeSeries.panelOptions.withDescription('The number of task counts by Task ID in the Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
@@ -114,7 +114,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of current tasks that the executors are handling in the Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       poolTaskSlotsPanel:
@@ -128,7 +128,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of current task slots that the pools are handling in the Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
     },
 }
