@@ -285,20 +285,45 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
           ),
         ] + dashboard.templating.list,
       },
-      panels: [
+      panels: if std.objectHas(dashboard, 'panels') && std.isArray(dashboard.panels) && std.length(dashboard.panels) > 0 then [
         if std.objectHas(panel, 'targets') then
           panel {
             targets: [
               if std.objectHas(target, 'expr') then
                 target {
-                  expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                  expr: local temp = std.strReplace(target.expr, '${', '___DOLLAR_BRACE___');
+                       local replaced = std.strReplace(temp, '{', '{asserts_env=~"$env", asserts_site=~"$site", ');
+                       std.strReplace(replaced, '___DOLLAR_BRACE___', '${'),
                 }
               else target
               for target in panel.targets
             ],
           } else panel
         for panel in dashboard.panels
-      ],
+      ] else [],
+
+      rows: if std.objectHas(dashboard, 'rows') && std.isArray(dashboard.rows) && std.length(dashboard.rows) > 0 then [
+        row {
+          panels: [
+            if std.objectHas(panel, 'targets') then
+              panel {
+                targets: [
+                  if std.objectHas(target, 'expr') then
+                    target {
+                      expr: local temp = std.strReplace(target.expr, '${', '___DOLLAR_BRACE___');
+                           local replaced = std.strReplace(temp, '{', '{asserts_env=~"$env", asserts_site=~"$site", ');
+                           std.strReplace(replaced, '___DOLLAR_BRACE___', '${'),
+                    }
+                  else target
+                  for target in panel.targets
+                ],
+              }
+            else panel
+            for panel in row.panels
+          ],
+        }
+        for row in dashboard.rows
+      ] else [],
     },
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {

@@ -156,18 +156,42 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       and (%s) != 2
                     |||
                     % [
-                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
+                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelectorCritical).asRuleExpression(),
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
-                severity: this.config.alertInterfaceDownSeverity,
+                severity: 'critical',
+              },
+              annotations: {
+                summary: 'Critical network interface is down on SNMP device.',
+                description: |||
+                  A critical network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.%s}} is down. 
+                  Note that only interfaces with ifAdminStatus = `up` and matching `%s` are being checked and considered critical.
+                ||| % [instanceLabel, this.config.alertInterfaceDownSelectorCritical],
+              },
+              'for': '5m',
+              keep_firing_for: '5m',
+            },
+            {
+              alert: 'SNMPInterfaceDown',
+              expr: |||
+                      (%s) == 2
+                      # only alert if interface is adminatratively up:
+                      and (%s) != 2
+                    |||
+                    % [
+                      this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelectorWarning).asRuleExpression(),
+                      this.signals.interface.ifAdminStatus.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
               },
               annotations: {
                 summary: 'Network interface is down on SNMP device.',
                 description: |||
                   Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.%s}} is down. 
                   Only interfaces with ifAdminStatus = `up` and matching `%s` are being checked.
-                ||| % [instanceLabel, this.config.alertInterfaceDownSelector],
+                ||| % [instanceLabel, this.config.alertInterfaceDownSelectorWarning],
               },
               'for': '5m',
               keep_firing_for: '5m',
@@ -175,13 +199,15 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               alert: 'SNMPInterfaceDrops',
               expr: |||
-                      (%s) > 0
+                      (%s) > %s
                       or
-                      (%s) > 0
+                      (%s) > %s
                     |||
                     % [
                       this.signals.interface.networkInDroppedPerSec.asRuleExpression(),
+                      this.config.alertsPacketsDroppedPerSecThresholdWarning,
                       this.signals.interface.networkOutDroppedPerSec.asRuleExpression(),
+                      this.config.alertsPacketsDroppedPerSecThresholdWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -198,13 +224,15 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               alert: 'SNMPInterfaceErrors',
               expr: |||
-                      (%s) > 0
+                      (%s) > %s
                       or
-                      (%s) > 0
+                      (%s) > %s
                     |||
                     % [
                       this.signals.interface.networkInErrorsPerSec.asRuleExpression(),
+                      this.config.alertsErrorsPerSecThresholdWarning,
                       this.signals.interface.networkOutErrorsPerSec.asRuleExpression(),
+                      this.config.alertsErrorsPerSecThresholdWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -235,7 +263,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                   Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last 5 minutes.
                 ||| % [instanceLabel],
               },
-              'for': '0',
               keep_firing_for: '5m',
             },
           ],
@@ -261,15 +288,15 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'SNMPExporterSlowScrape',
-              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > 50' % this.config.filteringSelector,
+              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > %s' % [this.config.filteringSelector, this.config.alertsSlowScrapeThresholdInfo],
               labels: {
                 severity: 'info',
               },
               annotations: {
                 summary: 'SNMP exporter scrape is slow.',
                 description: |||
-                  SNMP exporter scrape of {{ $labels.%s }} is taking more than 50 seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
-                ||| % instanceLabel,
+                  SNMP exporter scrape of {{ $labels.%s }} is taking more than %s seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
+                ||| % [instanceLabel, this.config.alertsSlowScrapeThresholdInfo],
               },
               'for': '10m',
               keep_firing_for: '5m',

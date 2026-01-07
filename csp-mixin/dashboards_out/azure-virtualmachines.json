@@ -1,0 +1,2081 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of VM instances",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Instance count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(sum by (resourceName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Instance count"
+               }
+            ],
+            "title": "Instance count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Measure of availability of virtual machines",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Not Available"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Available"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-background"
+                           }
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 150
+                        },
+                        {
+                           "id": "custom.align",
+                           "value": "center"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 5,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 3,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "VM Availability"
+               }
+            ],
+            "title": "VM Availability",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "job": true,
+                        "resourceGroup": true,
+                        "subscriptionName": true
+                     },
+                     "includeByName": { },
+                     "indexByName": { },
+                     "renameByName": {
+                        "resourceName": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Fractional utilization of allocated CPU on an instance",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "gradient",
+                              "type": "gauge",
+                              "valueDisplayMode": "text"
+                           }
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "yellow",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "green",
+                                    "value": 30
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 85
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 4,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Top 5 Instances by CPU utilitization"
+               }
+            ],
+            "title": "Top 5 Instances by CPU utilitization",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "job": false,
+                        "subscriptionName": true
+                     },
+                     "indexByName": {
+                        "Time": 1,
+                        "Value": 4,
+                        "job": 2,
+                        "resourceGroup": 3,
+                        "resourceName": 0
+                     },
+                     "renameByName": {
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "List of top 5 instances with less amount of physical memory immediately available for allocation.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Top 5 Instances by Less available memory"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 5,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "bottomk(5,\n  avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Top 5 Instances by Less available memory"
+               }
+            ],
+            "title": "Top 5 Instances by Less available memory",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "resourceGroup": false,
+                        "subscriptionName": true
+                     },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Time": 1,
+                        "Value": 5,
+                        "job": 2,
+                        "resourceGroup": 3,
+                        "resourceName": 0,
+                        "subscriptionName": 4
+                     },
+                     "renameByName": {
+                        "Value": "",
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "List of top 5 instances by disk read bytes",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Top 5 Instances by Disk read bytes"
+               }
+            ],
+            "title": "Top 5 Instances by Disk read bytes",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "job": false,
+                        "subscriptionName": true
+                     },
+                     "indexByName": {
+                        "Time": 1,
+                        "Value": 4,
+                        "job": 2,
+                        "resourceGroup": 3,
+                        "resourceName": 0
+                     },
+                     "renameByName": {
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "List of top 5 instances by disk write bytes",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "decbytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 100
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 17
+            },
+            "id": 7,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(5,\n  sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Top 5 Instances by Disk write bytes"
+               }
+            ],
+            "title": "Top 5 Instances by Disk write bytes",
+            "transformations": [
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true,
+                        "job": false,
+                        "subscriptionName": true
+                     },
+                     "indexByName": {
+                        "Time": 1,
+                        "Value": 4,
+                        "job": 2,
+                        "resourceGroup": 3,
+                        "resourceName": 0
+                     },
+                     "renameByName": {
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Instance"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #CPU Utilization average"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "yellow",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "green",
+                                    "value": 30
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 85
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "displayName",
+                           "value": "Cpu utilization"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Available memory"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Available memory"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Disk read bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Disk read bytes"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Disk write bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Disk write bytes"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "resourceName"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Instance"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Network received"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Network received"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Network sent"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Network sent"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 25
+            },
+            "id": 8,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "CPU Utilization average"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "Available memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "Network sent"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "Network received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "Disk read bytes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{resourceName}}",
+                  "refId": "Disk write bytes"
+               }
+            ],
+            "title": "Instances",
+            "transformations": [
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Time": 0,
+                        "Value #Available memory": 6,
+                        "Value #CPU Utilization average": 5,
+                        "Value #Disk read bytes (total)": 7,
+                        "Value #Disk write bytes (total)": 8,
+                        "Value #Network throughput received": 9,
+                        "Value #Network throughput sent": 10,
+                        "job": 2,
+                        "resourceGroup": 3,
+                        "resourceName": 1,
+                        "subscriptionName": 4
+                     },
+                     "renameByName": {
+                        "job": "Job",
+                        "resourceGroup": "Group",
+                        "resourceName": "Instance",
+                        "subscriptionName": "Subscription"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Bytes read/written from/to disk during monitoring period",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk read/write bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk write bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 33
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Read",
+                  "refId": "Disk read/write bytes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Write",
+                  "refId": "Disk write bytes"
+               }
+            ],
+            "title": "Disk read/write bytes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Disk read/write IOPS",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "noValue": "0"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk read/write operations"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk write operations"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 33
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  avg by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Read",
+                  "refId": "Disk read/write operations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg(\n  avg by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Write",
+                  "refId": "Disk write operations"
+               }
+            ],
+            "title": "Disk read/write operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of bytes sent/received over the network.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Network throughput sent/received"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Network throughput received"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 41
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sent",
+                  "refId": "Network throughput sent/received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Received",
+                  "refId": "Network throughput received"
+               }
+            ],
+            "title": "Network throughput sent/received",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of current flows in the inbound/outbound direction",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Flows"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Outbound flows"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 41
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  rate(azure_microsoft_compute_virtualmachines_inbound_flows_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}[$__rate_interval])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "In",
+                  "refId": "Flows"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum(\n  sum by (job,resourceGroup,subscriptionName) (\n  rate(azure_microsoft_compute_virtualmachines_outbound_flows_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}[$__rate_interval])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Out",
+                  "refId": "Outbound flows"
+               }
+            ],
+            "title": "Flows",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 49
+            },
+            "id": 13,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "datasource",
+                     "uid": "-- Mixed --"
+                  },
+                  "gridPos": {
+                     "h": 2,
+                     "w": 24,
+                     "x": 0,
+                     "y": 50
+                  },
+                  "id": 14,
+                  "options": {
+                     "content": "Use this section to look at one instance at a time by picking a value in the *ResourceName* picker at the top of the dashboard."
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "title": "Instances",
+                  "type": "text"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "CPU Utilization average"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "percent"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 58
+                  },
+                  "id": 15,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "CPU Utilization average"
+                     }
+                  ],
+                  "title": "CPU Utilization average",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Amount of physical memory, in bytes, immediately available for allocation to a process or for system use in the Virtual Machine",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Available memory"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 58
+                  },
+                  "id": 16,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Available memory"
+                     }
+                  ],
+                  "title": "Available memory",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Total number of credits consumed by the Virtual Machine.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "CPU Credits consumed"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 66
+                  },
+                  "id": 17,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  rate(azure_microsoft_compute_virtualmachines_cpu_credits_consumed_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "CPU Credits consumed"
+                     }
+                  ],
+                  "title": "CPU Credits consumed",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Total number of credits available to burst.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "CPU Credits remaining"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 66
+                  },
+                  "id": 18,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  rate(azure_microsoft_compute_virtualmachines_cpu_credits_remaining_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "CPU Credits remaining"
+                     }
+                  ],
+                  "title": "CPU Credits remaining",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of bytes received on all network interfaces by the Virtual Machine(s)",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Network received"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 74
+                  },
+                  "id": 19,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Network received"
+                     }
+                  ],
+                  "title": "Network received",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of bytes sent to all network interfaces by the Virtual Machine(s)",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Network sent"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 74
+                  },
+                  "id": 20,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Network sent"
+                     }
+                  ],
+                  "title": "Network sent",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Bytes read from disk during monitoring period",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Disk read bytes"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 82
+                  },
+                  "id": 21,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Disk read bytes"
+                     }
+                  ],
+                  "title": "Disk read bytes",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Bytes written to disk during monitoring period",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Disk write bytes"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "decbytes"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 82
+                  },
+                  "id": 22,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Disk write bytes"
+                     }
+                  ],
+                  "title": "Disk write bytes",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Disk read IOPS",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Disk read operations"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 90
+                  },
+                  "id": 23,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Disk read operations"
+                     }
+                  ],
+                  "title": "Disk read operations",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Disk write IOPS",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "noValue": "0"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Disk write operations"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 90
+                  },
+                  "id": 24,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (job,resourceGroup,subscriptionName,resourceName) (\n  azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Disk write operations"
+                     }
+                  ],
+                  "title": "Disk write operations",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "The number of current flows in the inbound direction (traffic going into the VM).",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Inbound flows"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 98
+                  },
+                  "id": 25,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  rate(azure_microsoft_compute_virtualmachines_inbound_flows_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Inbound flows"
+                     }
+                  ],
+                  "title": "Inbound flows",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Number of current flows in the outbound direction",
+                  "fieldConfig": {
+                     "defaults": {
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Outbound flows"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "cps"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 98
+                  },
+                  "id": 26,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.0.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "sum by (job,resourceGroup,subscriptionName,resourceName) (\n  rate(azure_microsoft_compute_virtualmachines_outbound_flows_average_count{job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\",resourceName=~\"$resourceName\"}[$__rate_interval])\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{resourceName}}",
+                        "refId": "Outbound flows"
+                     }
+                  ],
+                  "title": "Outbound flows",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Instance",
+            "type": "row"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "azure-cloud-provider"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count\",job=\"integrations/azure\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Group",
+               "multi": true,
+               "name": "resourceGroup",
+               "query": "label_values({__name__=~\"azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count\",job=\"integrations/azure\",job=~\"$job\"}, resourceGroup)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Subscription",
+               "multi": true,
+               "name": "subscriptionName",
+               "query": "label_values({__name__=~\"azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\"}, subscriptionName)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "resourceName",
+               "query": "label_values({__name__=~\"azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count\",job=\"integrations/azure\",job=~\"$job\",resourceGroup=~\"$resourceGroup\",subscriptionName=~\"$subscriptionName\"}, resourceName)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timepicker": {
+         "time_options": [
+            "now-1h"
+         ]
+      },
+      "timezone": "default",
+      "title": "Azure Virtual Machines",
+      "uid": "azure-virtualmachines"
+   }

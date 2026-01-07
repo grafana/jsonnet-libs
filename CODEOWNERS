@@ -16,3 +16,7 @@
 /grafana-cloud-integration-utils/ @grafana/cloud-integrations
 /logs-lib/ @grafana/cloud-integrations
 /status-panels-lib/ @grafana/cloud-integrations
+
+/temporal-mixin/ @grafana/devex
+/supabase-mixin/ @grafana/devex
+/cloudflare-workers-mixin/ @grafana/devex

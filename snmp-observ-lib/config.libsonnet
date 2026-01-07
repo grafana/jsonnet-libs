@@ -15,9 +15,12 @@
   // pick vendors you have. See README for full list.
   metricsSource: ['generic', 'cisco', 'mikrotik', 'juniper'],
 
-  //only fire alerts 'interface is down' for the following selector:
-  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)|ISP).*"',
-  alertInterfaceDownSeverity: 'warning',
+  // only fire alerts 'interface is down' for the following selector:
+  // deprecated, use alertInterfaceDownSelectorWarning, alertInterfaceDownSelectorCritical, alertInterfaceDownSelectorInfo instead
+  alertInterfaceDownSelector: self.alertInterfaceDownSelectorWarning,
+  alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
+  // change according to your org naming conventions
+  alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
 
   // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
   // This will clamp max interface traffic possible to 1000Gbps.
@@ -34,6 +37,9 @@
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
   alertMemoryUsageThresholdCritical: 90,
   alertsCPUThresholdWarning: 90,
+  alertsPacketsDroppedPerSecThresholdWarning: 0,
+  alertsErrorsPerSecThresholdWarning: 0,
+  alertsSlowScrapeThresholdInfo: 50,
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),

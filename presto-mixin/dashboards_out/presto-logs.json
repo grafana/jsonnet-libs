@@ -1,17 +1,35 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "presto-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Presto dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto coordinator",
+            "type": "link",
+            "url": "/d/presto_coordinator"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto overview",
+            "type": "link",
+            "url": "/d/presto_overview"
+         },
+         {
+            "keepTime": true,
+            "title": "Presto worker",
+            "type": "link",
+            "url": "/d/presto_worker"
          }
       ],
       "panels": [
@@ -161,7 +179,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/presto\",job=~\"$job\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +212,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,7 +221,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/presto\",job=~\"$job\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -246,40 +264,25 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Presto_cluster",
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values({job=~\"integrations/presto\",job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Presto cluster",
                "multi": true,
                "name": "presto_cluster",
-               "query": "label_values({job=~\"integrations/presto\",job=~\"$job\"}, presto_cluster)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "instance",
-               "query": "label_values({job=~\"integrations/presto\",job=~\"$job\",presto_cluster=~\"$presto_cluster\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Level",
-               "multi": true,
-               "name": "level",
-               "query": "label_values({job=~\"integrations/presto\",job=~\"$job\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -301,14 +304,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
-      "title": "Presto logs overview",
-      "uid": "presto-logs-overview"
+      "timezone": "default",
+      "title": "Presto logs",
+      "uid": "presto-logs"
    }

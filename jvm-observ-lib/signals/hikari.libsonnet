@@ -9,8 +9,8 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       java_micrometer: 'hikaricp_connections',  // https://github.com/brettwooldridge/HikariCP/blob/dev/src/main/java/com/zaxxer/hikari/metrics/micrometer/MicrometerMetricsTracker.java
-      otel: 'hikaricp_connections',
-      otel_with_suffixes: self.otel,
+      otel_old: 'hikaricp_connections',
+      otel_old_with_suffixes: self.otel_old,
     },
     signals: {
       connections: {
@@ -24,11 +24,12 @@ function(this)
             expr: 'hikaricp_connections{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel: {
+          java_micrometer_with_suffixes: self.java_micrometer,
+          otel_old: {
             expr: 'hikaricp_connections{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
         },
       },
       timeouts: {
@@ -40,6 +41,10 @@ function(this)
         sources: {
           java_micrometer: {
             expr: 'hikaricp_connections_timeout_total{%(queriesSelector)s}',
+            aggKeepLabels: ['pool'],
+          },
+          java_micrometer_with_suffixes: {
+            expr: 'hikaricp_connections_timeout{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
         },
@@ -55,11 +60,12 @@ function(this)
             expr: 'hikaricp_connections_active{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel: {
+          java_micrometer_with_suffixes: self.java_micrometer,
+          otel_old: {
             expr: 'hikaricp_connections_active{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
         },
       },
       connectionsIdle: {
@@ -73,11 +79,12 @@ function(this)
             expr: 'hikaricp_connections_idle{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel: {
+          java_micrometer_with_suffixes: self.java_micrometer,
+          otel_old: {
             expr: 'hikaricp_connections_idle{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
         },
       },
       connectionsPending: {
@@ -91,12 +98,13 @@ function(this)
             expr: 'hikaricp_connections_pending{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          otel: {
+          java_micrometer_with_suffixes: self.java_micrometer,
+          otel_old: {
             expr: 'hikaricp_connections_pending{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
 
           },
-          otel_with_suffixes: self.otel,
+          otel_old_with_suffixes: self.otel_old,
         },
       },
       connectionsCreationDurationAvg: {
@@ -108,11 +116,19 @@ function(this)
         sources: {
           java_micrometer: {
             expr: |||
+              rate(hikaricp_connections_creation_sum{%(queriesSelector)s}[$__rate_interval])
+              /rate(hikaricp_connections_creation_count{%(queriesSelector)s}[$__rate_interval])
+            |||,
+            aggKeepLabels: ['pool'],
+          },
+          java_micrometer_with_suffixes: {
+            expr: |||
               rate(hikaricp_connections_creation_seconds_sum{%(queriesSelector)s}[$__rate_interval])
               /rate(hikaricp_connections_creation_seconds_count{%(queriesSelector)s}[$__rate_interval])
             |||,
             aggKeepLabels: ['pool'],
           },
+
         },
       },
       connectionsUsageDurationAvg: {
@@ -123,6 +139,13 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: |||
+              rate(hikaricp_connections_usage_sum{%(queriesSelector)s}[$__rate_interval])
+              /rate(hikaricp_connections_usage_count{%(queriesSelector)s}[$__rate_interval])
+            |||,
+            aggKeepLabels: ['pool'],
+          },
+          java_micrometer_with_suffixes: {
             expr: |||
               rate(hikaricp_connections_usage_seconds_sum{%(queriesSelector)s}[$__rate_interval])
               /rate(hikaricp_connections_usage_seconds_count{%(queriesSelector)s}[$__rate_interval])
@@ -140,6 +163,13 @@ function(this)
         sources: {
           java_micrometer: {
             expr: |||
+              rate(hikaricp_connections_acquire_sum{%(queriesSelector)s}[$__rate_interval])
+              /rate(hikaricp_connections_acquire_count{%(queriesSelector)s}[$__rate_interval])
+            |||,
+            aggKeepLabels: ['pool'],
+          },
+          java_micrometer_with_suffixes: {
+            expr: |||
               rate(hikaricp_connections_acquire_seconds_sum{%(queriesSelector)s}[$__rate_interval])
               /rate(hikaricp_connections_acquire_seconds_count{%(queriesSelector)s}[$__rate_interval])
             |||,
@@ -154,7 +184,7 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          otel: {
+          otel_old: {
             expr: 'hikaricp_connections_creation_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
@@ -171,7 +201,7 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          otel: {
+          otel_old: {
             expr: 'hikaricp_connections_usage_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
@@ -188,7 +218,7 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          otel: {
+          otel_old: {
             expr: 'hikaricp_connections_acquire_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
