@@ -14,7 +14,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'rate(pinecone_db_op_query_duration_total{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_total{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleWarningMs)s / 1000)' % this.config {
                 queryLatencySimpleWarningMs: this.config.alertsQueryLatencySimpleWarningMs,
               },
-              'for': '3m',
+              'for': '5m',
               keep_firing_for: '5m',
               labels: {
                 severity: 'warning',
@@ -33,7 +33,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'rate(pinecone_db_op_query_duration_total{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_total{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleCriticalMs)s / 1000)' % this.config {
                 queryLatencySimpleCriticalMs: this.config.alertsQueryLatencySimpleCriticalMs,
               },
-              'for': '3m',
+              'for': '5m',
               keep_firing_for: '5m',
               labels: {
                 severity: 'critical',
@@ -52,7 +52,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'rate(pinecone_db_op_upsert_duration_total{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_total{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyWarningMs)s / 1000)' % this.config {
                 upsertLatencyWarningMs: this.config.alertsUpsertLatencyWarningMs,
               },
-              'for': '3m',
+              'for': '5m',
               keep_firing_for: '5m',
               labels: {
                 severity: 'warning',
@@ -71,7 +71,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'rate(pinecone_db_op_upsert_duration_total{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_total{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyCriticalMs)s / 1000)' % this.config {
                 upsertLatencyCriticalMs: this.config.alertsUpsertLatencyCriticalMs,
               },
-              'for': '3m',
+              'for': '5m',
               keep_firing_for: '5m',
               labels: {
                 severity: 'critical',

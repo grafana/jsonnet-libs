@@ -12,7 +12,6 @@ The Pinecone mixin is a set of configurable Grafana dashboards and alerts based 
 | ----- | ------- |
 | PineconeHighQueryLatency | Query latency exceeds baseline thresholds, indicating performance degradation in query operations. |
 | PineconeHighUpsertLatency | Upsert latency exceeds baseline thresholds, indicating performance degradation in upsert operations. |
-| PineconeHighErrorRate | Error rate exceeds configured thresholds, indicating increased request failures. |
 | PineconeHighStorageUsage | Index storage usage is high, risking degraded performance. |
 | PineconeHighUnitConsumption | Read or write unit consumption is increasing rapidly or nearing allocated limits. |
 
@@ -33,7 +32,7 @@ prometheus.scrape "pinecone" {
     refresh_interval = "1m"
     authorization {
       type = "Bearer"
-      credentials = "API_KEY"
+      credentials = "<your-api-key>"
     }
   }.targets
   forward_to = [prometheus.remote_write.metrics.receiver]
@@ -41,12 +40,12 @@ prometheus.scrape "pinecone" {
 
 prometheus.remote_write "metrics" {
   endpoint {
-    url = "YOUR_PROMETHEUS_REMOTE_WRITE_ENDPOINT"
+    url = "<your-prometheus-remote-write-endpoint>"
   }
 }
 ```
 
-Replace `PROJECT_ID` and `API_KEY` with your Pinecone project ID and API key. For more details, see the [Pinecone monitoring documentation](https://docs.pinecone.io/guides/production/monitoring#monitor-with-prometheus).
+Replace `<your-project-ID>` and `<your-api-key>` with your Pinecone project ID and API key. For more details, see the [Pinecone monitoring documentation](https://docs.pinecone.io/guides/production/monitoring#monitor-with-prometheus).
 
 **Note:** If you have more than one Pinecone project, you need to add separate scrape configurations for each project with different project IDs and targets. It is recommended to add a `project_id` label via relabeling to distinguish metrics from different projects.
 
@@ -54,11 +53,11 @@ Replace `PROJECT_ID` and `API_KEY` with your Pinecone project ID and API key. Fo
 
 ```alloy
 discovery.http "pinecone_project_1" {
-  url = "https://api.pinecone.io/prometheus/projects/PROJECT_ID_1/metrics/discovery"
+  url = "https://api.pinecone.io/prometheus/projects/<your-project-ID>/metrics/discovery"
   refresh_interval = "1m"
   authorization {
     type = "Bearer"
-    credentials = "API_KEY_1"
+    credentials = "<your-api-key>"
   }
 }
 
@@ -75,11 +74,11 @@ prometheus.scrape "pinecone_project_1" {
 }
 
 discovery.http "pinecone_project_2" {
-  url = "https://api.pinecone.io/prometheus/projects/PROJECT_ID_2/metrics/discovery"
+  url = "https://api.pinecone.io/prometheus/projects/<your-project-ID>/metrics/discovery"
   refresh_interval = "1m"
   authorization {
     type = "Bearer"
-    credentials = "API_KEY_2"
+    credentials = "<your-api-key>"
   }
 }
 
@@ -97,7 +96,7 @@ prometheus.scrape "pinecone_project_2" {
 
 prometheus.remote_write "metrics" {
   endpoint {
-    url = "YOUR_PROMETHEUS_REMOTE_WRITE_ENDPOINT"
+    url = "<your-prometheus-remote-write-endpoint>"
   }
 }
 ```

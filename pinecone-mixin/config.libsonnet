@@ -9,7 +9,7 @@
 
   // Filtering and labels
   filteringSelector: '',
-  groupLabels: ['job'],
+  groupLabels: ['cloud', 'region', 'job'],
   instanceLabels: ['instance', 'index_name'],
 
   // Metrics source
@@ -25,20 +25,20 @@
   enableLokiLogs: false,
 
   // Alert thresholds
-  alertsQueryLatencySimpleWarningMs: 125,  // 100-125ms for simple queries (using 125ms)
-  alertsQueryLatencySimpleCriticalMs: 300,  // 200-300ms for simple queries (using 300ms)
+  alertsQueryLatencySimpleWarningMs: 125,  // Suggested range: 100-125ms for simple queries
+  alertsQueryLatencySimpleCriticalMs: 300,  // Suggested range: 200-300ms for simple queries
 
-  alertsUpsertLatencyWarningMs: 250,  // 250ms sustained
-  alertsUpsertLatencyCriticalMs: 500,  // 500ms sustained
+  alertsUpsertLatencyWarningMs: 250,  // Sustained latency threshold
+  alertsUpsertLatencyCriticalMs: 500,  // Sustained latency threshold
 
   // Saturation alert thresholds
-  alertsSaturationIndexFullnessWarning: 70,  // 70% index fullness (0-100 scale)
-  alertsSaturationIndexFullnessCritical: 85,  // 85% index fullness (0-100 scale)
-  alertsSaturationStorageUsageWarning: 75,  // 75% of allowed storage size
-  alertsSaturationStorageGrowthCritical: 25,  // 25% storage growth over 1 hour
+  alertsSaturationIndexFullnessWarning: 70,  // Index fullness percentage (0-100 scale)
+  alertsSaturationIndexFullnessCritical: 85,  // Index fullness percentage (0-100 scale)
+  alertsSaturationStorageUsageWarning: 75,  // Percentage of allowed storage size
+  alertsSaturationStorageGrowthCritical: 25,  // Storage growth percentage over 1 hour
 
   // Unit burn-down alert thresholds
   // Baseline increase thresholds as integer percentages (130 = 130% of baseline = 30% increase)
-  alertsUnitBurnDownBaselineIncreaseWarning: 130,  // 30% above 30-min baseline (130% of baseline)
-  alertsUnitBurnDownBudgetUsageWarning: 80,  // 80% of allocated budget (set to 0 to disable budget check if no budget metric exists)
+  alertsUnitBurnDownBaselineIncreaseWarning: 130,  // Percentage above 30-min baseline
+  alertsUnitBurnDownBudgetUsageWarning: 80,  // Percentage of allocated budget
 }
