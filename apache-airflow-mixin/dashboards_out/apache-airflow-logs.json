@@ -256,7 +256,7 @@
                "label": "DAG",
                "multi": true,
                "name": "dag_file",
-               "query": "label_values({,job=~\"$job\"}, dag_file)",
+               "query": "label_values({job=~\"$job\"}, dag_file)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -271,7 +271,7 @@
                "label": "Filename",
                "multi": true,
                "name": "filename",
-               "query": "label_values({,job=~\"$job\",dag_file=~\"$dag_file\"}, filename)",
+               "query": "label_values({job=~\"$job\",dag_file=~\"$dag_file\"}, filename)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
