@@ -74,6 +74,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('The number of task counts by Task ID in the Apache Airflow system.')
         + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       //
@@ -90,6 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('The amount of average delay between recent scheduled DAG runtime and the actual DAG runtime by DAG ID in the Apache Airflow system.')
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       schedulerTasksPanel:

@@ -28,7 +28,7 @@ groups:
             summary: The delay in DAG schedule time to DAG run time has reached the critical threshold.
           expr: |
             increase(airflow_dagrun_schedule_delay_sum{}[5m]) / clamp_min(increase(airflow_dagrun_schedule_delay_count{}[5m]),1) > 60
-          for: 1m
+          for: 5m
           labels:
             severity: critical
         - alert: ApacheAirflowDAGFailures
@@ -38,6 +38,6 @@ groups:
             summary: There have been DAG failures detected.
           expr: |
             increase(airflow_dagrun_duration_failed_count{}[5m]) > 0
-          for: 1m
+          for: 5m
           labels:
             severity: critical
