@@ -8,22 +8,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // System overview panels
       systemReplicaStatusPanel:
-        g.panel.stat.new('Replica status')
-        + g.panel.stat.queryOptions.withTargets([
-          signals.system.replicaStatus.asTarget(),
-        ])
-        + signals.system.replicaStatus.asOverride()
-        + g.panel.stat.panelOptions.withDescription('State of the replicas in the SAP HANA system')
-        + g.panel.stat.options.withColorMode('value')
-        + g.panel.stat.options.withGraphMode('none')
-        + g.panel.stat.options.withTextMode('auto')
-        + g.panel.stat.standardOptions.thresholds.withMode('absolute')
-        + g.panel.stat.standardOptions.thresholds.withSteps([
-          { color: 'green', value: null },
-          { color: 'green', value: 0 },
-          { color: 'yellow', value: 1 },
-          { color: 'red', value: 3 },
-        ]),
+        commonlib.panels.generic.stat.base.new('Replica status', targets=[signals.system.replicaStatus.asTarget()])
+        + g.panel.stat.panelOptions.withDescription('State of the replicas in the SAP HANA system'),
 
       systemReplicationShipDelayPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -101,42 +87,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       systemActiveConnectionsPanel:
-        g.panel.stat.new('Active connections')
-        + g.panel.stat.queryOptions.withTargets([
-          signals.system.activeConnections.asTarget(),
-        ])
+        commonlib.panels.generic.stat.base.new('Active connections', targets=[signals.system.activeConnections.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Number of connections in active states across the SAP HANA system')
-        + g.panel.stat.standardOptions.withUnit('short')
-        + g.panel.stat.standardOptions.color.withMode('fixed')
-        + g.panel.stat.standardOptions.color.withFixedColor('blue')
-        + g.panel.stat.options.withColorMode('value')
-        + g.panel.stat.options.withGraphMode('none')
-        + g.panel.stat.options.withTextMode('auto'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       systemIdleConnectionsPanel:
-        g.panel.stat.new('Idle connections')
-        + g.panel.stat.queryOptions.withTargets([
-          signals.system.idleConnections.asTarget(),
-        ])
+        commonlib.panels.generic.stat.base.new('Idle connections', targets=[signals.system.idleConnections.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Number of connections in the idle state across the SAP HANA system')
-        + g.panel.stat.standardOptions.withUnit('short')
-        + g.panel.stat.standardOptions.color.withMode('fixed')
-        + g.panel.stat.standardOptions.color.withFixedColor('blue')
-        + g.panel.stat.options.withColorMode('value')
-        + g.panel.stat.options.withGraphMode('none')
-        + g.panel.stat.options.withTextMode('auto'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       systemAlertsPanel:
-        g.panel.stat.new('Alerts')
-        + g.panel.stat.queryOptions.withTargets([
-          signals.system.alertsCount.asTarget(),
-        ])
+        commonlib.panels.generic.stat.base.new('Alerts', targets=[signals.system.alertsCount.asTarget()])
         + g.panel.stat.panelOptions.withDescription('Count of the SAP HANA current alerts in the SAP HANA system')
-        + g.panel.stat.standardOptions.withUnit('short')
-        + g.panel.stat.standardOptions.color.withMode('thresholds')
-        + g.panel.stat.options.withColorMode('value')
-        + g.panel.stat.options.withGraphMode('none')
-        + g.panel.stat.options.withTextMode('auto'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       systemRecentAlertsPanel:
         g.panel.table.new('Recent alerts')
@@ -303,11 +266,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.stat.options.withTextMode('auto'),
 
       instanceRecentAlertsPanel:
-        g.panel.table.new('Recent alerts')
-        + g.panel.table.queryOptions.withDatasource(type='prometheus', uid='${' + this.grafana.variables.datasources.prometheus.name + '}')
-        + g.panel.table.queryOptions.withTargets([
-          signals.instance.recentAlerts.asTableTarget(),
-        ])
+        commonlib.panels.generic.table.base.new('Recent alerts', targets=[signals.instance.recentAlerts.asTableTarget()])
         + g.panel.table.panelOptions.withDescription('Table of the recent SAP HANA current alerts in the SAP HANA instance')
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')

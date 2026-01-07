@@ -25,11 +25,11 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.systemReplicationRow,
-                this.grafana.rows.systemResourcesRow,
-                this.grafana.rows.systemIORow,
-                this.grafana.rows.systemPerformanceRow,
                 this.grafana.rows.systemAlertsRow,
+                this.grafana.rows.systemResourcesRow,
+                this.grafana.rows.systemReplicationRow,
+                this.grafana.rows.systemPerformanceRow,
+                this.grafana.rows.systemIORow,
               ]
             )
           )
@@ -52,9 +52,9 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             g.util.grid.wrapPanels(
               [
                 this.grafana.rows.instanceResourcesRow,
+                this.grafana.rows.instanceAlertsRow,
                 this.grafana.rows.instanceIORow,
                 this.grafana.rows.instancePerformanceRow,
-                this.grafana.rows.instanceAlertsRow,
                 this.grafana.rows.instanceOutliersRow,
               ]
             )

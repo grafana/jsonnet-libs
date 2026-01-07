@@ -48,19 +48,19 @@ groups:
             severity: critical
         - alert: SapHanaHighSqlExecutionTime
           annotations:
-            description: The average SQL execution time is at {{ printf "%.2f" $value }}s on {{$labels.host}} which is above the threshold of 1s.
+            description: The average SQL execution time is at {{ printf "%.2f" $value }}ms on {{$labels.host}} which is above the threshold of 1000ms.
             summary: SAP HANA SQL average execution time is high.
           expr: |
-            avg without (database_name, port, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{}) / 1000 > 1
+            avg without (database_name, port, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{}) > 1000
           for: 5m
           labels:
             severity: critical
         - alert: SapHanaHighReplicationShippingTime
           annotations:
-            description: The average system replication log shipping delay is at {{ printf "%.2f" $value }}s from primary site {{$labels.site_name}} to replica site {{$labels.secondary_site_name}} which is above the threshold of 1s.
+            description: The average system replication log shipping delay is at {{ printf "%.2f" $value }}ms from primary site {{$labels.site_name}} to replica site {{$labels.secondary_site_name}} which is above the threshold of 1000ms.
             summary: SAP HANA system replication log shipping delay is high.
           expr: |
-            avg without (database_name, port, secondary_port, replication_mode) (hanadb_sr_ship_delay{}) > 1
+            avg without (database_name, port, secondary_port, replication_mode) (hanadb_sr_ship_delay{}) > 1000
           for: 5m
           labels:
             severity: critical

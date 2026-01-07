@@ -88,7 +88,7 @@
           {
             alert: 'SapHanaHighSqlExecutionTime',
             expr: |||
-              avg without (database_name, port, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{%(filteringSelector)s}) / 1000 > %(alertsCriticalHighSqlExecutionTime)s
+              avg without (database_name, port, service, sql_type) (hanadb_sql_service_elap_per_exec_avg_ms{%(filteringSelector)s}) > %(alertsCriticalHighSqlExecutionTimeMs)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -97,14 +97,14 @@
             annotations: {
               summary: 'SAP HANA SQL average execution time is high.',
               description: (
-                'The average SQL execution time is at {{ printf "%%.2f" $value }}s on {{$labels.host}} which is above the threshold of %(alertsCriticalHighSqlExecutionTime)ss.'
+                'The average SQL execution time is at {{ printf "%%.2f" $value }}ms on {{$labels.host}} which is above the threshold of %(alertsCriticalHighSqlExecutionTimeMs)sms.'
               ) % config,
             },
           },
           {
             alert: 'SapHanaHighReplicationShippingTime',
             expr: |||
-              avg without (database_name, port, secondary_port, replication_mode) (hanadb_sr_ship_delay{%(filteringSelector)s}) > %(alertsCriticalHighReplicationShippingTime)s
+              avg without (database_name, port, secondary_port, replication_mode) (hanadb_sr_ship_delay{%(filteringSelector)s}) > %(alertsCriticalHighReplicationShippingTimeMs)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -113,7 +113,7 @@
             annotations: {
               summary: 'SAP HANA system replication log shipping delay is high.',
               description: (
-                'The average system replication log shipping delay is at {{ printf "%%.2f" $value }}s from primary site {{$labels.site_name}} to replica site {{$labels.secondary_site_name}} which is above the threshold of %(alertsCriticalHighReplicationShippingTime)ss.'
+                'The average system replication log shipping delay is at {{ printf "%%.2f" $value }}ms from primary site {{$labels.site_name}} to replica site {{$labels.secondary_site_name}} which is above the threshold of %(alertsCriticalHighReplicationShippingTimeMs)sms.'
               ) % config,
             },
           },

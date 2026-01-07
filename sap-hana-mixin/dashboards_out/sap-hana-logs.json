@@ -264,7 +264,7 @@
                "label": "SAP HANA system",
                "multi": true,
                "name": "sid",
-               "query": "label_values({,job=~\"$job\"}, sid)",
+               "query": "label_values({job=~\"$job\"}, sid)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -279,7 +279,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",sid=~\"$sid\"}, level)",
+               "query": "label_values({job=~\"$job\",sid=~\"$sid\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
