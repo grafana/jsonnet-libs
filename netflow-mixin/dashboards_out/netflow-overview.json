@@ -2,18 +2,31 @@
       "panels": [
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
-            "description": "Total observed traffic, aggregated by receiving device",
+            "description": "Total observed traffic, aggregated by collecting device",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "axisPlacement": "right",
                      "lineInterpolation": "smooth"
-                  },
-                  "unit": "bytes"
-               }
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Traffic rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 5,
@@ -22,23 +35,26 @@
                "y": 1
             },
             "id": 1,
-            "interval": "1m",
             "options": {
                "legend": {
                   "showLegend": false
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (device_name)\n"
+                  "expr": "sum(irate(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__rate_interval])) by (device_name)\nor\nsum(irate(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__rate_interval])) by (device_name)\nor\nsum(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (device_name)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{device_name}}: Traffic rate",
+                  "refId": "Traffic rate"
                }
             ],
-            "title": "Total traffic",
+            "title": "Traffic rate",
             "transparent": true,
             "type": "timeseries"
          },
@@ -60,7 +76,43 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "TotalTraffic"
+                        "options": "Collecting Devices"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Sources"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Destinations"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Total Traffic"
                      },
                      "properties": [
                         {
@@ -87,35 +139,46 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (device_name))\n",
-                  "legendFormat": "Collecting devices"
+                  "expr": "count(count(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (device_name))\nor\ncount(count(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (device_name))\nor\ncount(count(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (device_name))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Collecting devices",
+                  "refId": "Collecting Devices"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_local_address))\n",
-                  "legendFormat": "Sources"
+                  "expr": "count(count(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_local_address))\nor\ncount(count(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_local_address))\nor\ncount(count(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_local_address))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sources",
+                  "refId": "Sources"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_peer_address))\n",
-                  "legendFormat": "Destinations"
+                  "expr": "count(count(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_peer_address))\nor\ncount(count(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_peer_address))\nor\ncount(count(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_peer_address))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Destinations",
+                  "refId": "Destinations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range]))\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))",
+                  "format": "time_series",
+                  "instant": false,
                   "legendFormat": "Total observed traffic",
-                  "refId": "TotalTraffic"
+                  "refId": "Total Traffic"
                }
             ],
             "title": "",
@@ -124,8 +187,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Source adresses ordered by observed traffic during the time range",
             "fieldConfig": {
@@ -133,6 +196,9 @@
                   "color": {
                      "fixedColor": "green",
                      "mode": "fixed"
+                  },
+                  "custom": {
+                     "filterable": false
                   }
                },
                "overrides": [
@@ -166,15 +232,18 @@
             },
             "id": 3,
             "interval": "1m",
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5,network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n})\n",
-                  "format": "table"
+                  "expr": "topk(5,increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\ntopk(5,increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\ntopk(5,network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"})",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{job}}: Top sources",
+                  "refId": "Top sources"
                }
             ],
             "title": "Top sources",
@@ -244,8 +313,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Destination adresses ordered by observed traffic during the time range",
             "fieldConfig": {
@@ -253,6 +322,9 @@
                   "color": {
                      "fixedColor": "green",
                      "mode": "fixed"
+                  },
+                  "custom": {
+                     "filterable": false
                   }
                },
                "overrides": [
@@ -286,15 +358,18 @@
             },
             "id": 4,
             "interval": "1m",
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5,network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n})\n",
-                  "format": "table"
+                  "expr": "topk(5,increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\ntopk(5,increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range]))\nor\ntopk(5,network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"})",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{job}}: Top sources",
+                  "refId": "Top sources"
                }
             ],
             "title": "Top destinations",
@@ -386,14 +461,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Source/Destination pairs and their total traffic across all dimensions. Ordered by total traffic during selected time range",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "mode": "continuous-BlPu"
+                  },
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "bytes"
                },
@@ -434,22 +512,23 @@
                "y": 15
             },
             "id": 6,
-            "interval": "1m",
             "options": {
                "footer": {
                   "enablePagination": true
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(\n  sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])\n) by (network_local_address,network_peer_address)\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address,network_peer_address)\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address,network_peer_address)\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address,network_peer_address)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{job}}: Conversation total bytes",
+                  "refId": "Conversation total bytes"
                }
             ],
             "title": "Conversation total bytes",
@@ -486,8 +565,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Traffic distribution of source/destination pairs over time",
             "fieldConfig": {
@@ -501,7 +580,21 @@
                      }
                   },
                   "unit": "bytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Conversation traffic over time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 7,
@@ -510,20 +603,23 @@
                "y": 15
             },
             "id": 7,
-            "interval": "1m",
             "options": {
                "legend": {
                   "showLegend": false
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}) by (network_local_address,network_peer_address,device_name)\n"
+                  "expr": "sum(irate(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__rate_interval])) by (network_local_address,network_peer_address)\nor\nsum(irate(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__rate_interval])) by (network_local_address,network_peer_address)\nor\nsum(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}) by (network_local_address,network_peer_address,device_name) / 60",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{network_local_address}} -> {{ network_peer_address }} // {{device_name}}",
+                  "refId": "Conversation traffic over time"
                }
             ],
             "title": "Conversation traffic over time",
@@ -535,7 +631,6 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Breakdown of total traffic between source/destination pairs observed during the selected time range",
             "fieldConfig": {
                "defaults": {
                   "unit": "bytes"
@@ -566,11 +661,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_local_address,network_peer_address)\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address,network_peer_address,device_name)\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address,network_peer_address,device_name)\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_address, network_peer_address, device_name)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{network_local_address}} -> {{ network_peer_address }} // {{device_name}}",
+                  "refId": "Breakdown by source/destination pair"
                }
             ],
             "title": "Breakdown by source/destination pair",
@@ -591,14 +688,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "List of protocols and the total amount of observed traffic during the selected time range",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "mode": "continuous-BlPu"
+                  },
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "bytes"
                },
@@ -628,17 +728,18 @@
                "y": 31
             },
             "id": 10,
-            "interval": "1m",
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_protocol_name)\n",
+                  "expr": "label_replace(sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-beyla>\",\"<not-yet-supported-by-beyla>\",\"(.*)\")\nor\nlabel_replace(sum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-obi>\",\"<not-yet-supported-by-obi>\",\"(.*)\")\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{network_protocol_name}}",
+                  "refId": "Total bytes"
                }
             ],
             "title": "Total bytes",
@@ -690,7 +791,6 @@
                "y": 31
             },
             "id": 11,
-            "interval": "1m",
             "options": {
                "legend": {
                   "displayMode": "table",
@@ -709,11 +809,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__range])) by (network_protocol_name)\n",
+                  "expr": "label_replace(sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-beyla>\",\"<not-yet-supported-by-beyla>\",\"(.*)\")\nor\nlabel_replace(sum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-obi>\",\"<not-yet-supported-by-obi>\",\"(.*)\")\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_protocol_name)",
+                  "format": "table",
                   "instant": true,
-                  "legendFormat": "{{network_protocol_name}}"
+                  "legendFormat": "{{network_protocol_name}}",
+                  "refId": "Total bytes"
                }
             ],
             "title": "Distribution",
@@ -722,8 +824,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Protocols and the amount of observed traffic over the selected time range",
             "fieldConfig": {
@@ -735,9 +837,22 @@
                         "group": "A",
                         "mode": "normal"
                      }
-                  },
-                  "unit": "bytes"
-               }
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Protocol traffic over time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -746,17 +861,19 @@
                "y": 38
             },
             "id": 12,
-            "interval": "1m",
             "maxDataPoints": 20,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n}[$__interval])) by (network_protocol_name)\n",
-                  "legendFormat": "{{network_protocol_name}}"
+                  "expr": "label_replace(sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__interval])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-beyla>\",\"<not-yet-supported-by-beyla>\",\"(.*)\")\nor\nlabel_replace(sum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__interval])) by (network_protocol_name),\"network_protocol_name\",\"<not-yet-supported-by-obi>\",\"<not-yet-supported-by-obi>\",\"(.*)\")\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__interval])) by (network_protocol_name)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{network_protocol_name}}",
+                  "refId": "Protocol traffic over time"
                }
             ],
             "title": "Protocol traffic over time",
@@ -796,7 +913,6 @@
                "y": 47
             },
             "id": 14,
-            "interval": "1m",
             "options": {
                "layers": [
                   {
@@ -829,11 +945,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_peer_country)\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_peer_country)\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\",network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{job}}: Traffic by destination",
+                  "refId": "Traffic by destination"
                }
             ],
             "title": "Top destination",
@@ -841,14 +959,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Total traffic to specific countries during the selected time range",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "mode": "continuous-BlPu"
+                  },
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "bytes"
                },
@@ -899,19 +1020,21 @@
                   "enablePagination": true
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_peer_country)\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_peer_country)\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\",network_peer_country!=\"Private IP\"}[$__range])) by (network_peer_country)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{job}}: Traffic by destination",
+                  "refId": "Traffic by destination"
                }
             ],
-            "title": "",
+            "title": "Traffic by destination",
             "transformations": [
                {
                   "id": "sortBy",
@@ -964,7 +1087,6 @@
                "y": 47
             },
             "id": 16,
-            "interval": "1m",
             "options": {
                "layers": [
                   {
@@ -1009,14 +1131,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "Total traffic from specific countries during the selected time range",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "mode": "continuous-BlPu"
+                  },
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "bytes"
                },
@@ -1067,19 +1192,21 @@
                   "enablePagination": true
                }
             },
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$prometheus_datasource"
+                     "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum_over_time(network_io_by_flow_bytes{device_name=~\"$device_name\",\nnetwork_local_address=~\"$network_local_address\",\nnetwork_peer_address=~\"$network_peer_address\",\njob=~\"$job\"\n,network_local_country!=\"Private IP\"}[$__range])) by (network_local_country)\n",
+                  "expr": "sum(increase(beyla_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_country)\nor\nsum(increase(obi_network_flow_bytes_total{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\"}[$__range])) by (network_local_country)\nor\nsum(sum_over_time(network_io_by_flow_bytes{job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\",device_name=~\"$device_name\",network_local_country!=\"Private IP\"}[$__range])) by (network_local_country)",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{job}}: Traffic by Source",
+                  "refId": "Traffic by Source"
                }
             ],
-            "title": "",
+            "title": "Traffic by source",
             "transformations": [
                {
                   "id": "sortBy",
@@ -1198,73 +1325,61 @@
       "templating": {
          "list": [
             {
-               "label": "Prometheus data source",
+               "label": "Data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "type": "datasource"
-            },
-            {
-               "label": "Loki data source",
-               "name": "loki_datasource",
-               "query": "loki",
+               "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "$prometheus_datasource"
+                  "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(job)",
+               "query": "label_values({__name__=~\"obi_network_flow_bytes_total|network_io_by_flow_bytes|beyla_network_flow_bytes_total\",job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\"}, job)",
                "refresh": 2,
+               "sort": 1,
                "type": "query"
             },
             {
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "$prometheus_datasource"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Device name",
+               "label": "Device_name",
                "multi": true,
                "name": "device_name",
-               "query": "label_values(device_name)",
+               "query": "label_values({__name__=~\"obi_network_flow_bytes_total|network_io_by_flow_bytes|beyla_network_flow_bytes_total\",job=~\"integrations/ktranslate-netflow|integrations/beyla-host-network\",job=~\"$job\"}, device_name)",
                "refresh": 2,
+               "sort": 1,
                "type": "query"
             },
             {
-               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "$prometheus_datasource"
+                  "uid": "${prometheus_datasource}"
                },
-               "includeAll": true,
-               "label": "Source",
-               "multi": true,
-               "name": "network_local_address",
-               "query": "label_values(network_local_address)",
-               "refresh": 2,
-               "type": "query"
-            },
-            {
-               "allValue": ".+",
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "$prometheus_datasource"
-               },
-               "includeAll": true,
-               "label": "Destination",
-               "multi": true,
-               "name": "network_peer_address",
-               "query": "label_values(network_peer_address)",
-               "refresh": 2,
-               "type": "query"
+               "defaultKeys": [
+                  {
+                     "text": "network_local_address",
+                     "value": "network_local_address"
+                  },
+                  {
+                     "text": "network_peer_address",
+                     "value": "network_peer_address"
+                  }
+               ],
+               "description": "Add additional filters",
+               "label": "Ad hoc filters",
+               "name": "adhoc",
+               "type": "adhoc"
             }
          ]
       },
