@@ -5669,9 +5669,9 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_resource_exhausted_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace, resource_exhausted_cause)",
+          "expr": "sum(temporal_cloud_v1_resource_exhausted_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace, operation)",
           "interval": "",
-          "legendFormat": "{{temporal_namespace}}-{{resource_exhausted_cause}}",
+          "legendFormat": "{{temporal_namespace}}-{{operation}}",
           "range": true,
           "refId": "A"
         }
