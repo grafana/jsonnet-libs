@@ -79,10 +79,10 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum(rate(pinecone_db_op_query_total{%(queriesSelector)s}[$__rate_interval]))
-              + sum(rate(pinecone_db_op_fetch_total{%(queriesSelector)s}[$__rate_interval]))
-              + sum(rate(pinecone_db_op_upsert_total{%(queriesSelector)s}[$__rate_interval]))
-              + sum(rate(pinecone_db_op_delete_total{%(queriesSelector)s}[$__rate_interval]))
+              sum(rate(pinecone_db_op_query_count{%(queriesSelector)s}[$__rate_interval]))
+              + sum(rate(pinecone_db_op_fetch_count{%(queriesSelector)s}[$__rate_interval]))
+              + sum(rate(pinecone_db_op_upsert_count{%(queriesSelector)s}[$__rate_interval]))
+              + sum(rate(pinecone_db_op_delete_count{%(queriesSelector)s}[$__rate_interval]))
             |||,
             legendCustomTemplate: 'Total operations',
           },
@@ -102,8 +102,8 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum(rate(pinecone_db_op_query_total{%(queriesSelector)s}[$__rate_interval]))
-              + sum(rate(pinecone_db_op_fetch_total{%(queriesSelector)s}[$__rate_interval]))
+              sum(rate(pinecone_db_op_query_count{%(queriesSelector)s}[$__rate_interval]))
+              + sum(rate(pinecone_db_op_fetch_count{%(queriesSelector)s}[$__rate_interval]))
             |||,
             legendCustomTemplate: 'Read operations',
           },
@@ -123,8 +123,8 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum(rate(pinecone_db_op_upsert_total{%(queriesSelector)s}[$__rate_interval]))
-              + sum(rate(pinecone_db_op_delete_total{%(queriesSelector)s}[$__rate_interval]))
+              sum(rate(pinecone_db_op_upsert_count{%(queriesSelector)s}[$__rate_interval]))
+              + sum(rate(pinecone_db_op_delete_count{%(queriesSelector)s}[$__rate_interval]))
             |||,
             legendCustomTemplate: 'Write operations',
           },

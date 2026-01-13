@@ -11,7 +11,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           rules: [
             {
               alert: 'PineconeHighQueryLatencyWarning',
-              expr: 'rate(pinecone_db_op_query_duration_total{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_total{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleWarningMs)s / 1000)' % this.config {
+              expr: 'rate(pinecone_db_op_query_duration_sum{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_count{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleWarningMs)s / 1000)' % this.config {
                 queryLatencySimpleWarningMs: this.config.alertsQueryLatencySimpleWarningMs,
               },
               'for': '5m',
@@ -30,7 +30,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'PineconeHighQueryLatencyCritical',
-              expr: 'rate(pinecone_db_op_query_duration_total{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_total{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleCriticalMs)s / 1000)' % this.config {
+              expr: 'rate(pinecone_db_op_query_duration_sum{%(filteringSelector)s}[5m]) / clamp_min(rate(pinecone_db_op_query_count{%(filteringSelector)s}[5m]), 1) > (%(queryLatencySimpleCriticalMs)s / 1000)' % this.config {
                 queryLatencySimpleCriticalMs: this.config.alertsQueryLatencySimpleCriticalMs,
               },
               'for': '5m',
@@ -49,7 +49,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'PineconeHighUpsertLatencyWarning',
-              expr: 'rate(pinecone_db_op_upsert_duration_total{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_total{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyWarningMs)s / 1000)' % this.config {
+              expr: 'rate(pinecone_db_op_upsert_duration_sum{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_count{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyWarningMs)s / 1000)' % this.config {
                 upsertLatencyWarningMs: this.config.alertsUpsertLatencyWarningMs,
               },
               'for': '5m',
@@ -68,7 +68,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'PineconeHighUpsertLatencyCritical',
-              expr: 'rate(pinecone_db_op_upsert_duration_total{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_total{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyCriticalMs)s / 1000)' % this.config {
+              expr: 'rate(pinecone_db_op_upsert_duration_sum{%(filteringSelector)s}[15m]) / clamp_min(rate(pinecone_db_op_upsert_count{%(filteringSelector)s}[15m]), 1) > (%(upsertLatencyCriticalMs)s / 1000)' % this.config {
                 upsertLatencyCriticalMs: this.config.alertsUpsertLatencyCriticalMs,
               },
               'for': '5m',
@@ -139,8 +139,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               alert: 'PineconeUnitBurnDownWarning',
               expr: |||
                 (
-                  rate(pinecone_db_read_unit_total{%(filteringSelector)s}[30m])
-                  / clamp_min(rate(pinecone_db_read_unit_total{%(filteringSelector)s}[30m] offset 30m), 1)
+                  rate(pinecone_db_read_unit_count{%(filteringSelector)s}[30m])
+                  / clamp_min(rate(pinecone_db_read_unit_count{%(filteringSelector)s}[30m] offset 30m), 1)
                   > (%(unitBurnDownBaselineIncreaseWarning)s / 100)
                 )
                 OR
@@ -151,9 +151,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 )
                 OR
                 (
-                  increase(pinecone_db_read_unit_total{%(filteringSelector)s}[1h]) > 0
+                  increase(pinecone_db_read_unit_count{%(filteringSelector)s}[1h]) > 0
                   AND
-                  100 * 24 * increase(pinecone_db_read_unit_total{%(filteringSelector)s}[1h]) / clamp_min(pinecone_db_read_unit_budget{%(filteringSelector)s}, 1) > %(unitBurnDownBudgetUsageWarning)s
+                  100 * 24 * increase(pinecone_db_read_unit_count{%(filteringSelector)s}[1h]) / clamp_min(pinecone_db_read_unit_budget{%(filteringSelector)s}, 1) > %(unitBurnDownBudgetUsageWarning)s
                 )
                 OR
                 (

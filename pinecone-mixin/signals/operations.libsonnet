@@ -6,7 +6,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    aggLevel: 'none',  // Show each index separately without aggregation
+    aggLevel: 'instance',  // Aggregate by groupLabels + instanceLabels (cloud, region, job, index_name) to combine instances
     aggFunction: 'sum',
     discoveryMetric: {
       prometheus: 'pinecone_db_record_total',
@@ -48,7 +48,7 @@ function(this)
         description: 'The number of upsert requests made to an index.',
         sources: {
           prometheus: {
-            expr: 'pinecone_db_op_upsert_total{%(queriesSelector)s}',
+            expr: 'pinecone_db_op_upsert_count{%(queriesSelector)s}',
           },
         },
       },
@@ -65,7 +65,7 @@ function(this)
         |||,
         sources: {
           prometheus: {
-            expr: 'rate(pinecone_db_op_upsert_duration_total{%(queriesSelector)s}[$__rate_interval]) / rate(pinecone_db_op_upsert_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by(cloud, region, job, index_name) (rate(pinecone_db_op_upsert_duration_sum{%(queriesSelector)s}[$__rate_interval])) / sum by(cloud, region, job, index_name) (rate(pinecone_db_op_upsert_count{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -79,7 +79,7 @@ function(this)
         description: 'The number of query requests made to an index.',
         sources: {
           prometheus: {
-            expr: 'pinecone_db_op_query_total{%(queriesSelector)s}',
+            expr: 'pinecone_db_op_query_count{%(queriesSelector)s}',
           },
         },
       },
@@ -96,7 +96,7 @@ function(this)
         |||,
         sources: {
           prometheus: {
-            expr: 'rate(pinecone_db_op_query_duration_total{%(queriesSelector)s}[$__rate_interval]) / rate(pinecone_db_op_query_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by(cloud, region, job, index_name) (rate(pinecone_db_op_query_duration_sum{%(queriesSelector)s}[$__rate_interval])) / sum by(cloud, region, job, index_name) (rate(pinecone_db_op_query_count{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -110,7 +110,7 @@ function(this)
         description: 'The number of fetch requests made to an index.',
         sources: {
           prometheus: {
-            expr: 'pinecone_db_op_fetch_total{%(queriesSelector)s}',
+            expr: 'pinecone_db_op_fetch_count{%(queriesSelector)s}',
           },
         },
       },
@@ -127,7 +127,7 @@ function(this)
         |||,
         sources: {
           prometheus: {
-            expr: 'rate(pinecone_db_op_fetch_duration_total{%(queriesSelector)s}[$__rate_interval]) / rate(pinecone_db_op_fetch_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by(cloud, region, job, index_name) (rate(pinecone_db_op_fetch_duration_sum{%(queriesSelector)s}[$__rate_interval])) / sum by(cloud, region, job, index_name) (rate(pinecone_db_op_fetch_count{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -141,7 +141,7 @@ function(this)
         description: 'The number of delete requests made to an index.',
         sources: {
           prometheus: {
-            expr: 'pinecone_db_op_delete_total{%(queriesSelector)s}',
+            expr: 'pinecone_db_op_delete_count{%(queriesSelector)s}',
           },
         },
       },
@@ -158,7 +158,7 @@ function(this)
         |||,
         sources: {
           prometheus: {
-            expr: 'rate(pinecone_db_op_delete_duration_total{%(queriesSelector)s}[$__rate_interval]) / rate(pinecone_db_op_delete_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'sum by(cloud, region, job, index_name) (rate(pinecone_db_op_delete_duration_sum{%(queriesSelector)s}[$__rate_interval])) / sum by(cloud, region, job, index_name) (rate(pinecone_db_op_delete_count{%(queriesSelector)s}[$__rate_interval]))',
           },
         },
       },
@@ -185,7 +185,7 @@ function(this)
         description: 'The total number of read units consumed by an index.',
         sources: {
           prometheus: {
-            expr: 'pinecone_db_read_unit_total{%(queriesSelector)s}',
+            expr: 'pinecone_db_read_unit_count{%(queriesSelector)s}',
           },
         },
       },
