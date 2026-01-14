@@ -510,7 +510,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Pending frontend requests - Single aggregated value",
+      "description": "Pending requests - Single aggregated value",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -574,7 +574,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(temporal_cloud_v1_frontend_service_pending_requests{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
+          "expr": "sum(temporal_cloud_v1_service_pending_requests{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
           "hide": false,
           "legendFormat": "Pending Requests / sec",
           "range": true,
@@ -738,7 +738,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by(temporal_namespace, region) (temporal_cloud_v1_frontend_service_request_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
+          "expr": "sum by(temporal_namespace, region) (temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\", region=~\"$region\"})",
           "hide": false,
           "legendFormat": "{{temporal_namespace}} - {{region}}",
           "range": true,
@@ -4468,7 +4468,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_frontend_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "expr": "sum(temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
           "legendFormat": "RPS (requests per second)",
           "range": true,
@@ -4480,7 +4480,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "temporal_cloud_v1_frontend_rps_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
+          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
           "hide": false,
           "instant": false,
           "legendFormat": "limit",
@@ -5228,7 +5228,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_frontend_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "expr": "sum(temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
           "legendFormat": "RPS (requests per second)",
           "range": true,
@@ -5240,7 +5240,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "temporal_cloud_v1_frontend_rps_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
+          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
           "hide": false,
           "instant": false,
           "legendFormat": "limit",
@@ -5348,14 +5348,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_frontend_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace,operation)",
+          "expr": "sum(temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace,operation)",
           "interval": "",
           "legendFormat": "{{operation}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Frontend Service Requests / Operation",
+      "title": "Service Requests / Operation",
       "type": "timeseries"
     },
     {
@@ -5455,14 +5455,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_frontend_service_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
+          "expr": "sum(temporal_cloud_v1_service_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Frontend Service Errors",
+      "title": "Service Errors",
       "type": "timeseries"
     },
     {
@@ -5562,14 +5562,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(temporal_cloud_v1_frontend_service_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace,operation)",
+          "expr": "sum(temporal_cloud_v1_service_error_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace,operation)",
           "interval": "",
           "legendFormat": "{{operation}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Frontend Service Errors / Operation",
+      "title": "Service Errors / Operation",
       "type": "timeseries"
     },
     {
@@ -6208,450 +6208,6 @@
       ],
       "title": "SignalWithStartWorkflowExecution Latency",
       "type": "timeseries"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 171
-      },
-      "id": 17,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "The number of state transitions over the past 30 days",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "continuous-GrYlRd"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 0,
-            "y": 498
-          },
-          "id": 10,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
-          },
-          "pluginVersion": "12.2.0-17638611789",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(sum_over_time(temporal_cloud_v1_state_transition_count{temporal_namespace=~\"$temporal_namespace\"}[30d])/(30 * 24 * 60) * 30 * 24 * 60 * 60)",
-              "hide": false,
-              "instant": false,
-              "legendFormat": "__auto",
-              "range": true,
-              "refId": "B"
-            }
-          ],
-          "title": "30 Day State Transitions",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "The number of state transitions over the past 7 days",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "continuous-GrYlRd"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
-            "y": 498
-          },
-          "id": 14,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
-          },
-          "pluginVersion": "12.2.0-17638611789",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "exemplar": true,
-              "expr": "sum(sum_over_time(temporal_cloud_v1_state_transition_count{temporal_namespace=~\"$temporal_namespace\"}[7d])/(7 * 24 * 60) * 7 * 24 * 60 * 60)",
-              "interval": "",
-              "legendFormat": "{{temporal_namespace}}",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "7 Day State Transitions",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "The number of state transitions over the past day",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "continuous-GrYlRd"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
-            "y": 498
-          },
-          "id": 15,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
-          },
-          "pluginVersion": "12.2.0-17638611789",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "exemplar": true,
-              "expr": "sum(sum_over_time(temporal_cloud_v1_state_transition_count{temporal_namespace=~\"$temporal_namespace\"}[1d])/(1 * 24 * 60) * 1 * 24 * 60 * 60)",
-              "interval": "",
-              "legendFormat": "{{temporal_namespace}}",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "1 Day State Transitions",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "The number of state transitions per second",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "showValues": false,
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 503
-          },
-          "id": 2,
-          "options": {
-            "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true,
-              "sortBy": "Max",
-              "sortDesc": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "single",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.2.0-17638611789",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "exemplar": true,
-              "expr": "sum(temporal_cloud_v1_state_transition_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
-              "interval": "",
-              "legendFormat": "{{temporal_namespace}}",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "State Transitions",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "The number of state transitions per action.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "showValues": false,
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 503
-          },
-          "id": 87,
-          "options": {
-            "legend": {
-              "calcs": [
-                "lastNotNull",
-                "min",
-                "max"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true,
-              "sortBy": "Max",
-              "sortDesc": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "single",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.2.0-17638611789",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "exemplar": true,
-              "expr": "sum(temporal_cloud_v1_state_transition_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace) / sum(temporal_cloud_v1_total_action_count{temporal_namespace=~\"${temporal_namespace}\"}) by (temporal_namespace)",
-              "interval": "",
-              "legendFormat": "ratio",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "State Transition / Actions",
-          "type": "timeseries"
-        }
-      ],
-      "title": "Self Hosted -> Cloud Migration",
-      "type": "row"
     }
   ],
   "preload": false,
@@ -6685,7 +6241,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(temporal_cloud_v1_frontend_service_request_count,temporal_namespace)",
+        "definition": "label_values(temporal_cloud_v1_service_request_count,temporal_namespace)",
         "includeAll": true,
         "label": "Temporal namespace",
         "multi": true,
@@ -6693,7 +6249,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(temporal_cloud_v1_frontend_service_request_count,temporal_namespace)",
+          "query": "label_values(temporal_cloud_v1_service_request_count,temporal_namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -6712,7 +6268,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(temporal_cloud_v1_frontend_service_request_count,region)",
+        "definition": "label_values(temporal_cloud_v1_service_request_count,region)",
         "includeAll": true,
         "label": "Temporal region",
         "multi": true,
@@ -6720,7 +6276,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(temporal_cloud_v1_frontend_service_request_count,region)",
+          "query": "label_values(temporal_cloud_v1_service_request_count,region)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
