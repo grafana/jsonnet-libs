@@ -4,9 +4,9 @@ function(this)
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,  // ['index_name']
+    instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    aggLevel: 'group',  // Aggregate at group level (sum across selected indexes)
+    aggLevel: 'group', 
     aggFunction: 'sum',
     discoveryMetric: {
       prometheus: 'pinecone_db_record_total',

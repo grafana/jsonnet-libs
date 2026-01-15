@@ -7,7 +7,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     prometheusAlerts: {
       groups: [
         {
-          name: this.config.uid + '-pinecone-alerts',
+          name: this.config.uid + '-alerts',
           rules: [
             {
               alert: 'PineconeHighQueryLatencyWarning',
