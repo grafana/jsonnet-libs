@@ -104,6 +104,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.upsertTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlPu')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Rate of upsert requests per index.'),
 
     upsertDuration:
@@ -111,6 +113,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ms')
       + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlPu')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Average upsert operation duration per index.'),
 
     // Read operation panels
@@ -118,6 +122,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.queryTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('palette-classic-by-name')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Rate of query requests per index.'),
 
     queryDuration:
@@ -125,6 +131,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ms')
       + g.panel.timeSeries.standardOptions.color.withMode('palette-classic-by-name')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Average query operation duration per index.'),
 
     // Fetch
@@ -132,6 +140,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.fetchTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlPu')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Rate of fetch requests per index.'),
 
     fetchDuration:
@@ -139,6 +149,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ms')
       + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlPu')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Average fetch operation duration per index.'),
 
     // Delete
@@ -146,6 +158,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.deleteTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('palette-classic-by-name')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Rate of delete requests per index.'),
 
     deleteDuration:
@@ -153,6 +167,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ms')
       + g.panel.timeSeries.standardOptions.color.withMode('palette-classic-by-name')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Average delete operation duration per index.'),
 
     // Resource usage panels
@@ -160,12 +176,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.writeUnitsTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlPu')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Write units consumed per index over time.'),
 
     readUnitsTotal:
       signals.readUnitsTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.color.withMode('palette-classic-by-name')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.panelOptions.withDescription('Read units consumed per index over time.'),
   },
 }

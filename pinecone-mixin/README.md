@@ -12,7 +12,6 @@ The Pinecone mixin is a set of configurable Grafana dashboards and alerts based 
 | ----- | ------- |
 | PineconeHighQueryLatency | Query latency exceeds baseline thresholds, indicating performance degradation in query operations. |
 | PineconeHighUpsertLatency | Upsert latency exceeds baseline thresholds, indicating performance degradation in upsert operations. |
-| PineconeHighStorageUsage | Index storage usage is high, risking degraded performance. |
 | PineconeHighUnitConsumption | Read or write unit consumption is increasing rapidly or nearing allocated limits. |
 
 Alert thresholds can be configured in `config.libsonnet`. See the generated `prometheus_alerts.yaml` for default values.

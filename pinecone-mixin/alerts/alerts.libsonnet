@@ -86,56 +86,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               },
             },
             {
-              alert: 'PineconeSaturationWarning',
-              expr: '(pinecone_index_fullness{%(filteringSelector)s} > %(indexFullnessWarning)s) OR ((100 * pinecone_db_storage_size_bytes{%(filteringSelector)s} / clamp_min(pinecone_db_storage_max_bytes{%(filteringSelector)s}, 1)) > %(storageUsageWarning)s)' % this.config {
-                indexFullnessWarning: this.config.alertsSaturationIndexFullnessWarning,
-                storageUsageWarning: this.config.alertsSaturationStorageUsageWarning,
-              },
-              'for': '5m',
-              keep_firing_for: '10m',
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Index nearing capacity or growing unexpectedly, risking degraded performance.',
-                description: 'Index saturation on {{ $labels.%s }} (index: {{ $labels.%s }}) is high. Index fullness: {{ printf "%%.1f" $value }}%%. This exceeds the warning threshold: either index fullness > %s%% or storage > %s%% of allowed size.' % [
-                  firstInstanceLabel,
-                  instanceLabel,
-                  this.config.alertsSaturationIndexFullnessWarning,
-                  this.config.alertsSaturationStorageUsageWarning,
-                ],
-              },
-            },
-            {
-              alert: 'PineconeSaturationCritical',
-              expr: |||
-                (pinecone_index_fullness{%(filteringSelector)s} > %(indexFullnessCritical)s)
-                OR
-                (
-                  100 * (pinecone_db_storage_size_bytes{%(filteringSelector)s} - pinecone_db_storage_size_bytes{%(filteringSelector)s} offset 1h) 
-                  / clamp_min(pinecone_db_storage_size_bytes{%(filteringSelector)s} offset 1h, 1)
-                  > %(storageGrowthCritical)s
-                )
-              ||| % this.config {
-                indexFullnessCritical: this.config.alertsSaturationIndexFullnessCritical,
-                storageGrowthCritical: this.config.alertsSaturationStorageGrowthCritical,
-              },
-              'for': '5m',
-              keep_firing_for: '10m',
-              labels: {
-                severity: 'critical',
-              },
-              annotations: {
-                summary: 'Index nearing capacity or growing unexpectedly, risking degraded performance.',
-                description: 'Index saturation on {{ $labels.%s }} (index: {{ $labels.%s }}) is critical. Index fullness: {{ printf "%%.1f" $value }}%%. CRITICAL: This exceeds the critical threshold: either index fullness > %s%% or storage growth > %s%% over 1 hour.' % [
-                  firstInstanceLabel,
-                  instanceLabel,
-                  this.config.alertsSaturationIndexFullnessCritical,
-                  this.config.alertsSaturationStorageGrowthCritical,
-                ],
-              },
-            },
-            {
               alert: 'PineconeUnitBurnDownWarning',
               expr: |||
                 (

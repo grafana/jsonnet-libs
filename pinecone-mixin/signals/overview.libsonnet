@@ -6,7 +6,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     enableLokiLogs: this.enableLokiLogs,
-    aggLevel: 'group', 
+    aggLevel: 'group',
     aggFunction: 'sum',
     discoveryMetric: {
       prometheus: 'pinecone_db_record_total',
