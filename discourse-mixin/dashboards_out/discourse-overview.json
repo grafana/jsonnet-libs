@@ -34,6 +34,10 @@
             "description": "Rate of HTTP traffic over time for the entire application. Grouped by response code.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -43,6 +47,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "reqps"
                }
             },
@@ -90,6 +98,10 @@
             "description": "Active web requests for the entire application",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -99,6 +111,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "reqps"
                }
             },
@@ -144,6 +160,10 @@
             "description": "Queued web requests for the entire application.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -153,6 +173,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "reqps"
                }
             },
@@ -198,6 +222,10 @@
             "description": "Rate of pageviews for the entire application. Grouped by type and service.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -207,6 +235,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "none"
                }
             },
@@ -265,6 +297,10 @@
             "description": "The median amount of time for \"latest\" page requests for the selected site.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -274,6 +310,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "s"
                }
             },
@@ -319,6 +359,10 @@
             "description": "The median amount of time for \"topics show\" requests for the selected site.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -328,6 +372,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No packets",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "s"
                }
             },
@@ -373,6 +421,11 @@
             "description": "The percentiles for the amount of time for \"latest\" page requests for the selected site.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
                   "unit": "s"
                }
             },

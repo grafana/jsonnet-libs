@@ -53,6 +53,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     latestRequestTimePercentiles:
       g.panel.histogram.new('Latest request time percentiles')
       + g.panel.histogram.queryOptions.withTargets([signals.overview.latestRequestTimePercentiles.asTarget()])
+      + g.panel.histogram.fieldConfig.defaults.custom.stacking.withMode('normal')
       + g.panel.histogram.panelOptions.withDescription('The percentiles for the amount of time for "latest" page requests for the selected site.')
       + g.panel.histogram.standardOptions.withUnit('s'),
 

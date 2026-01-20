@@ -35,7 +35,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -49,6 +49,15 @@
                         "type": "special"
                      }
                   ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -94,7 +103,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -108,6 +117,15 @@
                         "type": "special"
                      }
                   ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -153,7 +171,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -167,6 +185,15 @@
                         "type": "special"
                      }
                   ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -224,12 +251,20 @@
             "description": "The number of scheduled jobs ran over an interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -276,12 +311,20 @@
             "description": "The amount of sidekiq jobs ran over an interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -341,12 +384,20 @@
             "description": "Time spent in scheduled jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -395,12 +446,20 @@
             "description": "Time spent in Sidekiq jobs broken out by job name.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -462,12 +521,20 @@
             "description": "Total RSS Memory used by process. Broken up by pid.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -514,12 +581,20 @@
             "description": "Current heap size of V8 engine. Broken up by process type",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
