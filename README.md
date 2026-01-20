@@ -41,9 +41,9 @@ The monitoring mixins in this repository use two linting tools to ensure quality
 
 Observability library is a flexible format to describe dashboards and alerts in a modular way so libraries can be imported into one another or into monitoring-mixins. Observability libraries can be found in folders with `-observ-lib` suffix. [Common library](https://github.com/grafana/jsonnet-libs/tree/master/common-lib) is also used to apply consistent style options.
 
- ### Observability libraries signal extention
+### Observability libraries signal extention
 
- [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
+[Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
 
 Examples:
  - [docker-mixin](docker-mixin/)
@@ -55,7 +55,7 @@ Examples:
  - [csp-mixin](csp-mixin/)
  - [windows-observ-lib](windows-observ-lib/)
 
- ## Prometheus rules testing for monitoring mixins and observability libraries
+## Prometheus rules testing for monitoring mixins and observability libraries
 
 It is highly recommended to test prometheus alerts with [promtool test rules](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules) command when complex PromQL queries are used or when additional queries are used in alerts' annotations.
 
