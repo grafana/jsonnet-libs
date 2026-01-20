@@ -1,93 +1,89 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Apache CouchDB logs",
+            "type": "link",
+            "url": "/d/couchdb-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Apache CouchDB nodes",
+            "type": "link",
+            "url": "/d/couchdb_nodes"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-couchdb-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Apache CouchDB dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of clusters being reported.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "yellow",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "green",
-                           "value": 1
-                        }
-                     ]
+                     "fixedColor": "text",
+                     "mode": "fixed"
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
-               "colorMode": "value",
+               "colorMode": "fixed",
                "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
+                  ]
+               }
             },
-            "pluginVersion": "9.2.3",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}))",
+                  "expr": "count(count by(job, couchdb_cluster, cluster) (couchdb_request_time_seconds_count{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ couchdb_cluster }}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Number of clusters"
                }
             ],
             "title": "Number of clusters",
@@ -95,66 +91,46 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of nodes being reported.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "red",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "green",
-                           "value": 1
-                        }
-                     ]
+                     "fixedColor": "text",
+                     "mode": "fixed"
                   }
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
-               "colorMode": "value",
+               "colorMode": "fixed",
                "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
+                  ]
+               }
             },
-            "pluginVersion": "9.2.3",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}))",
+                  "expr": "sum(count by(job, couchdb_cluster, cluster, instance) (couchdb_request_time_seconds_count{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ couchdb_cluster }}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Number of nodes"
                }
             ],
             "title": "Number of nodes",
@@ -162,21 +138,16 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "Percentage of clusters that have all nodes that are currently reporting healthy.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
-                           "color": "yellow",
-                           "value": null
+                           "color": "yellow"
                         },
                         {
                            "color": "red",
@@ -193,41 +164,31 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 0
+               "y": 1
             },
             "id": 4,
             "options": {
                "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "text": { },
-               "textMode": "auto"
+               "graphMode": "none"
             },
-            "pluginVersion": "9.2.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"})) / count(count by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"})) * 100",
+                  "expr": "sum(min by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) / count(count by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_cluster_is_stable{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})) * 100",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{ couchdb_cluster }}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Clusters healthy"
                }
             ],
             "title": "Clusters healthy",
@@ -235,90 +196,50 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The total number of file descriptors open aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(couchdb_cluster, job) (couchdb_open_os_files_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_os_files_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_os_files{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Open OS files"
                }
             ],
             "title": "Open OS files",
@@ -326,90 +247,50 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The total number of open databases aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 9
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (couchdb_open_databases_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_open_databases_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})\nor\nsum by(job, couchdb_cluster, cluster) (couchdb_open_databases{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Open databases"
                }
             ],
             "title": "Open databases",
@@ -417,90 +298,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of database writes aggregated across all nodes.",
+            "description": "The total number of database writes aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "wps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 12
+               "y": 17
             },
             "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_database_writes_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_writes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Database writes"
                }
             ],
             "title": "Database writes",
@@ -508,90 +351,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of database reads aggregated across all nodes.",
+            "description": "The total number of database reads aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "rps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 12
+               "y": 17
             },
             "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_database_reads_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Database reads"
                }
             ],
             "title": "Database reads",
@@ -599,90 +404,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of view reads aggregated across all nodes.",
+            "description": "The total number of view reads aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "rps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 8,
                "x": 0,
-               "y": 18
+               "y": 25
             },
             "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_reads_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "View reads"
                }
             ],
             "title": "View reads",
@@ -690,90 +457,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of view requests that timed out aggregated across all nodes.",
+            "description": "The total number of view requests that timed out aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 8,
                "x": 8,
-               "y": 18
+               "y": 25
             },
             "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_timeouts_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_view_timeouts_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "View timeouts"
                }
             ],
             "title": "View timeouts",
@@ -781,90 +510,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The number of temporary view reads aggregated across all nodes.",
+            "description": "The total number of temporary view reads aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "rps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 8,
                "x": 16,
-               "y": 18
+               "y": 25
             },
             "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_httpd_temporary_view_reads_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_temporary_view_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Temporary view reads"
                }
             ],
             "title": "Temporary view reads",
@@ -872,316 +563,67 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 24
+               "y": 33
             },
             "id": 12,
-            "targets": [ ],
+            "panels": [ ],
             "title": "Requests",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of bulk requests aggregated across all nodes.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "reqps"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 12,
-               "x": 0,
-               "y": 25
-            },
-            "id": 13,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-               }
-            },
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum by(job, couchdb_cluster) (rate(couchdb_httpd_bulk_requests_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval]))",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
-               }
-            ],
-            "title": "Bulk requests",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The average request latency quantiles aggregated across all nodes.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "s"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 12,
-               "x": 12,
-               "y": 25
-            },
-            "id": 14,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
-               }
-            },
-            "pluginVersion": "9.2.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", quantile=~\"0.5\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - p50"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", quantile=~\"0.75\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - p75"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", quantile=~\"0.95\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - p95"
-               },
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", quantile=~\"0.99\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - p99"
-               }
-            ],
-            "title": "Request latency quantiles",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The request rate split by HTTP Method aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 31
+               "y": 34
             },
-            "id": 15,
+            "id": 13,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
-                  "sort": "none"
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, method) (rate(couchdb_httpd_request_methods{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__rate_interval])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster, method) (increase(couchdb_httpd_request_methods{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - {{method}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - {{method}}",
+                  "refId": "Request methods"
                }
             ],
             "title": "Request methods",
@@ -1189,91 +631,169 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
-            "description": "The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes.",
+            "description": "The request latency aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "palette-classic"
+                     "mode": "thresholds"
                   },
                   "custom": {
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
+                     "stacking": {
+                        "mode": "normal"
                      }
                   },
-                  "mappings": [ ]
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 12,
-               "x": 12,
-               "y": 31
-            },
-            "id": 16,
-            "options": {
-               "legend": {
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
-               },
-               "pieType": "pie",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "none"
+                  "unit": "s"
                }
             },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 34
+            },
+            "id": 14,
+            "options": {
+               "bucketCount": 60,
+               "legend": {
+                  "asTable": true,
+                  "placement": "right"
+               }
+            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"2.*\"}[$__interval:])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster, quantile) (couchdb_request_time_seconds{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "format": "timeseries",
+                  "instant": true,
+                  "legendFormat": "{{ couchdb_cluster }} - {{quantile}}",
+                  "refId": "Request latency"
+               }
+            ],
+            "title": "Request latency quantiles",
+            "type": "histogram"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The total number of bulk requests aggregated across all nodes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "rps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 42
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\nor\nsum by(job, couchdb_cluster, cluster) (rate(couchdb_httpd_bulk_requests{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - 2xx"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }}",
+                  "refId": "Bulk requests"
+               }
+            ],
+            "title": "Bulk requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes by default. If you want to see the data for a specific node, you can filter by instance.",
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 42
+            },
+            "id": 16,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"2.*\"}[$__interval:] offset $__interval)) != 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - 2xx",
+                  "refId": "Response status 2XX"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"3.*\"}[$__interval:])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"3.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - 3xx"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - 3xx",
+                  "refId": "Response status 3XX"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"4.*\"}[$__interval:])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"4.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - 4xx"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - 4xx",
+                  "refId": "Response status 4XX"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"5.*\"}[$__interval:])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"5.*\"}[$__interval:] offset $__interval)) != 0",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - 5xx"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - 5xx",
+                  "refId": "Response status 5XX"
                }
             ],
             "title": "Response status overview",
@@ -1281,90 +801,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The response rate split by good HTTP statuses aggregated across all nodes.",
+            "description": "The total number of good response (HTTP 2xx-3xx) statuses aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 37
+               "y": 50
             },
             "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
-                  "sort": "none"
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"[23].*\"}[$__rate_interval])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[23].*\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - {{code}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - {{code}}",
+                  "refId": "Good response statuses"
                }
             ],
             "title": "Good response statuses",
@@ -1372,90 +854,52 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The response rate split by error HTTP statuses aggregated across all nodes.",
+            "description": "The total number of error response statuses (HTTP 4xx-5xx) aggregated across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 37
+               "y": 50
             },
             "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
-                  "sort": "none"
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\", code=~\"[45].*\"}[$__rate_interval])) != 0",
+                  "expr": "sum by(job, couchdb_cluster, cluster, code) (rate(couchdb_httpd_status_codes{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", code=~\"[45].*\"}[$__rate_interval]))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}} - {{code}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster }} - {{code}}",
+                  "refId": "Error response statuses"
                }
             ],
             "title": "Error response statuses",
@@ -1463,107 +907,64 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 43
+               "y": 58
             },
             "id": 19,
-            "targets": [ ],
+            "panels": [ ],
             "title": "Replication",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of replicator changes manager processor deaths across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 44
+               "y": 59
             },
             "id": 20,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Changes manager deaths"
                }
             ],
             "title": "Replicator changes manager deaths",
@@ -1571,91 +972,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of replicator changes queue processor deaths across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 44
+               "y": 59
             },
             "id": 21,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_queue_deaths_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_queue_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Changes queue deaths"
                }
             ],
             "title": "Replicator changes queue deaths",
@@ -1663,91 +1024,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of replicator changes reader processor deaths across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 44
+               "y": 59
             },
             "id": 22,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_reader_deaths_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_changes_reader_deaths_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Changes reader deaths"
                }
             ],
             "title": "Replicator changes reader deaths",
@@ -1755,91 +1076,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of replicator connection owner crashes across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 50
+               "y": 67
             },
             "id": 23,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_owner_crashes_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_owner_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Connection owner crashes"
                }
             ],
             "title": "Replicator connection owner crashes",
@@ -1847,91 +1128,51 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of replicator connection worker crashes across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 50
+               "y": 67
             },
             "id": 24,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_worker_crashes_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_connection_worker_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Connection worker crashes"
                }
             ],
             "title": "Replicator connection worker crashes",
@@ -1939,272 +1180,191 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of replicator job crashes across all nodes.",
+            "description": "Number of replicator jobs crashes across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 56
+               "y": 75
             },
             "id": 25,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_jobs_crashes_total{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"}[$__interval:]))",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_crashes_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Jobs crashes"
                }
             ],
-            "title": "Replicator job crashes",
+            "title": "Replicator jobs crashes",
             "type": "timeseries"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of replicator jobs pending across all nodes.",
+            "description": "Number of replicator jobs queued across all nodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 56
+               "y": 75
             },
             "id": 26,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job, couchdb_cluster) (couchdb_couch_replicator_jobs_pending{job=~\"$job\", couchdb_cluster=~\"$couchdb_cluster\"})",
+                  "expr": "sum by(job, couchdb_cluster, cluster) (couchdb_couch_replicator_jobs_pending{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{couchdb_cluster}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{ couchdb_cluster}}",
+                  "refId": "Jobs queued"
                }
             ],
-            "title": "Replicator jobs pending",
+            "title": "Replicator jobs queued",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "apache-couchdb-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable, job)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "query": "label_values(couchdb_database_reads_total{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             },
             {
-               "allValue": "",
-               "current": { },
+               "allValue": ".*",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=~\"$job\"}, cluster)",
-               "refresh": 1,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": "",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
                "includeAll": true,
                "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
-               "options": [ ],
-               "query": "label_values(couchdb_couch_replicator_cluster_is_stable{job=~\"$job\"}, couchdb_cluster)",
-               "refresh": 1,
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\"}, couchdb_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(couchdb_database_reads_total{job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
                "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "datasource"
             }
          ]
       },
@@ -2212,33 +1372,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache CouchDB overview",
-      "uid": "couchdb-overview",
-      "version": 0
+      "uid": "couchdb_overview"
    }

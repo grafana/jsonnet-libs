@@ -37,11 +37,11 @@ function(
           type='alphabetical',
           asc=true,
           caseInsensitive=false
-        )
-      ;
+        );
+      local additionalFilters = if std.length(_filteringSelector) > 0 then [_filteringSelector] else [];
       [
         chainVarProto(chainVar)
-        for chainVar in utils.chainLabels(labels, [_filteringSelector])
+        for chainVar in utils.chainLabels(labels, additionalFilters)
       ],
 
     datasource:

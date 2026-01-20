@@ -15,7 +15,10 @@ function(this)
     signals: {
       brokerMessagesInPerSec: {
         name: 'Broker messages in',
-        description: 'Broker messages in.',
+        description: |||
+          Rate of incoming messages published to this broker across all topics.  
+          Tracks producer throughput and write workload.  
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {
@@ -32,7 +35,10 @@ function(this)
       },
       brokerBytesInPerSec: {
         name: 'Broker bytes in',
-        description: 'Broker bytes in rate.',
+        description: |||
+          Rate of incoming data in bytes published to this broker from producers.  
+          Measures network and storage write load.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {
@@ -49,7 +55,10 @@ function(this)
       },
       brokerBytesOutPerSec: {
         name: 'Broker bytes out',
-        description: 'Broker bytes out rate.',
+        description: |||
+          Rate of outgoing data in bytes sent from this broker to consumers and followers.  
+          Measures network read load and consumer throughput.  
+        |||,
         type: 'counter',
         unit: 'Bps',
         sources: {

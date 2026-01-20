@@ -4,6 +4,7 @@ local timeSeries = g.panel.timeSeries;
 local percentage = import '../timeSeries/percentage.libsonnet';
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local fieldConfig = g.panel.timeSeries.fieldConfig;
+local tokens = import '../../../tokens/main.libsonnet';
 local base = import './base.libsonnet';
 // This panel can be used to display gauge metrics in table columns with unknown max/min values.
 // Examples: Network bandwidth, RPS.
@@ -19,7 +20,7 @@ base {
       + fieldOverride.byName.withProperty('custom.cellOptions', { type: 'gauge', mode: 'basic' })
       + fieldOverride.byName.withProperty('fieldMinMax', true)
       + fieldOverride.byName.withPropertiesFromOptions(
-        timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
+        timeSeries.standardOptions.color.withMode(tokens.base.colors.mode.coldhot)
       ),
     ),
 }
