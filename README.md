@@ -63,6 +63,42 @@ promtool tests files should be placed in tests directory in the root of the libr
 
 A good example of promtool tests can be found in windows-observ-lib: [prometheus_alerts_test.yaml](windows-observ-lib/tests/prometheus_alerts_test.yaml)
 
+## Contributing
+
+### Install mixin dependencies
+
+Install tools required to format, lint and test mixins.
+
+```console
+make
+```
+
+### Updating a mixin
+
+Change to the target mixin directory:
+
+```console
+cd memcached-mixin/
+```
+
+Install jsonnet dependencies using `jsonnet-bundler`:
+
+```console
+jb install
+```
+
+Edit the dashboard(s), alert(s) or other files:
+
+```console
+vim dashboards.jsonnet
+```
+
+Format, lint and generate the updated mixin rendered files:
+
+```console
+make
+```
+
 ## LICENSE
 
 [Apache-2.0](LICENSE)
