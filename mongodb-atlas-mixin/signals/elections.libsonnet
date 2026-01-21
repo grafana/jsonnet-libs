@@ -155,7 +155,7 @@ function(this)
         name: 'Number of catch-ups failed with error',
         type: 'raw',
         description: 'Number of catch-ups failed with error.',
-          unit: 'short',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval) > 0',
