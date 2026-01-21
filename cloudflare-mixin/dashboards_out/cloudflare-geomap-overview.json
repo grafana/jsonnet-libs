@@ -100,7 +100,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(${geo_metric}{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
                   "instant": false,
                   "interval": "2m",
@@ -274,7 +274,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(${geo_metric}{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(${geo_metric}{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "table",
                   "instant": false,
                   "interval": "2m",
@@ -372,7 +372,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\"}, job)",
+               "query": "label_values(cloudflare_zone_requests_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -387,7 +387,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -402,7 +402,7 @@
                "label": "Zone",
                "multi": true,
                "name": "zone",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\"}, zone)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -417,7 +417,7 @@
                "label": "Script",
                "multi": true,
                "name": "script_name",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -432,7 +432,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

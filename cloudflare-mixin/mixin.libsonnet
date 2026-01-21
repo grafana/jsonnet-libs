@@ -1,11 +1,11 @@
+local config = import './config.libsonnet';
 local cloudflarelib = import './main.libsonnet';
 local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
 local cloudflare =
   cloudflarelib.new() +
   cloudflarelib.withConfigMixin({
-    filteringSelector: 'job="integrations/cloudflare"',
-    uid: 'cloudflare',
+    uid: config.uid,
   });
 
 local optional_labels = {

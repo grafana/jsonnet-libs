@@ -135,7 +135,7 @@ local utils = commonlib.utils;
           ],
           description='The number of threats that have targeted the zone.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bandwidthPanel:
@@ -193,7 +193,7 @@ local utils = commonlib.utils;
           ],
           description='The number of unique and total page views.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
@@ -207,7 +207,7 @@ local utils = commonlib.utils;
           ],
           description='The number of different HTTP status codes used for requests in the zone.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false)
         + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'max', 'mean'])
@@ -224,7 +224,7 @@ local utils = commonlib.utils;
           ],
           description='The number of zone views by browser family.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       colocationRequestsPanel:

@@ -173,7 +173,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "cloudflare_zone_pool_health_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
+                  "expr": "cloudflare_zone_pool_health_status{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": false,
                   "intervalFactor": 2,
@@ -185,7 +185,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_pool_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_pool_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": false,
                   "intervalFactor": 2,
@@ -293,7 +293,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ zone }}",
@@ -372,7 +372,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_cached{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / increase(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_requests_cached{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / increase(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -408,7 +408,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -435,7 +435,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_threats_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_threats_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -498,7 +498,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_bandwidth_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ zone }}",
@@ -560,7 +560,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_bandwidth_ssl_encrypted{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_bandwidth_ssl_encrypted{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -573,7 +573,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_bandwidth_cached{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_bandwidth_cached{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -637,7 +637,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_bandwidth_content_type{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_bandwidth_content_type{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -673,7 +673,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -700,7 +700,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_browser_map_page_views_count{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_requests_browser_map_page_views_count{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -739,7 +739,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -766,7 +766,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_uniques_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -779,7 +779,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_pageviews_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) - increase(cloudflare_zone_uniques_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_pageviews_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval) - increase(cloudflare_zone_uniques_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -818,7 +818,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -850,7 +850,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(cloudflare_zone_requests_status{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cloudflare_zone_requests_status{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -922,7 +922,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(cloudflare_zone_colocation_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(cloudflare_zone_colocation_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1002,7 +1002,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\"}, job)",
+               "query": "label_values(cloudflare_zone_requests_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1017,7 +1017,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\"}, cluster)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1032,7 +1032,7 @@
                "label": "Zone",
                "multi": true,
                "name": "zone",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\"}, zone)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\"}, zone)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1047,7 +1047,7 @@
                "label": "Script",
                "multi": true,
                "name": "script_name",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\"}, script_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1062,7 +1062,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(cloudflare_zone_requests_total{job=\"integrations/cloudflare\",job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
+               "query": "label_values(cloudflare_zone_requests_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

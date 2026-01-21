@@ -1,7 +1,7 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job="integrations/cloudflare"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job', 'cluster', 'zone', 'script_name'],
   instanceLabels: ['instance'],
 
@@ -14,7 +14,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
 
   // alerts thresholds
   alertsHighThreatCount: 3,  // count

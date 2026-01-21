@@ -35,8 +35,8 @@
           {
             alert: 'CloudflareHighHTTPErrorCodes',
             expr: |||
-              sum without (instance) (increase(cloudflare_zone_requests_status{%(filteringSelector)s,status=~"4.*|5.*"}[5m])) > %(alertsHighHTTPErrorCodeCount)s
-            ||| % this.config,
+              sum without (instance) (increase(cloudflare_zone_requests_status{%(filteringSelector)s}[5m])) > %(alertsHighHTTPErrorCodeCount)s
+            ||| % (this.config { filteringSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ',status=~"4.*|5.*"' else 'status=~"4.*|5.*"' }),
             'for': '5m',
             labels: {
               severity: 'warning',
