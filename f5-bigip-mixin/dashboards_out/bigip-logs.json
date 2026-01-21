@@ -1,49 +1,45 @@
 {
       "annotations": {
-         "list": [
-            { }
-         ]
+         "list": [ ]
       },
       "links": [
          {
-            "f5BigipClusterOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP cluster overview",
-               "type": "link",
-               "url": "/d/f5bigip_cluster_overview"
-            },
-            "f5BigipNodeOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP node overview",
-               "type": "link",
-               "url": "/d/f5bigip_node_overview"
-            },
-            "f5BigipPoolOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP pool overview",
-               "type": "link",
-               "url": "/d/f5bigip_pool_overview"
-            },
-            "f5BigipVirtualServerOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP virtual server overview",
-               "type": "link",
-               "url": "/d/f5bigip_virtual_server_overview"
-            },
-            "otherDashboards": {
-               "asDropdown": true,
-               "includeVars": true,
-               "keepTime": true,
-               "tags": [
-                  "f5-bigip-mixin"
-               ],
-               "title": "All dashboards",
-               "type": "dashboards"
-            }
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP cluster overview",
+            "type": "link",
+            "url": "/d/f5bigip_cluster_overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP node overview",
+            "type": "link",
+            "url": "/d/f5bigip_node_overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP pool overview",
+            "type": "link",
+            "url": "/d/f5bigip_pool_overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP virtual server overview",
+            "type": "link",
+            "url": "/d/f5bigip_virtual_server_overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "f5-bigip-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [

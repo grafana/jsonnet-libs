@@ -14,7 +14,7 @@ function(this) {
       nameShort: 'Status',
       type: 'gauge',
       description: 'The availability status of the node.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_status_availability_state{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -45,7 +45,7 @@ function(this) {
       nameShort: 'Requests',
       type: 'counter',
       description: 'The number of requests made to the node.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_tot_requests{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -60,7 +60,7 @@ function(this) {
       nameShort: 'Sessions',
       type: 'gauge',
       description: 'The current number of active sessions to the node.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_cur_sessions{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -74,7 +74,7 @@ function(this) {
       nameShort: 'Current conns',
       type: 'gauge',
       description: 'The current active server-side connections to the node in comparison to the maximum connection capacity.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_cur_conns{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -88,7 +88,7 @@ function(this) {
       nameShort: 'Max conns',
       type: 'gauge',
       description: 'The maximum server-side connection capacity for the node.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_max_conns{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -130,7 +130,7 @@ function(this) {
       nameShort: 'Pkts in',
       type: 'counter',
       description: 'The number of packets received by the node from the pool.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_pkts_in{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
@@ -145,7 +145,7 @@ function(this) {
       nameShort: 'Pkts out',
       type: 'counter',
       description: 'The number of packets sent by the node from the pool.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_pkts_out{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',

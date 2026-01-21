@@ -58,7 +58,7 @@ function(this) {
       nameShort: 'Top active nodes',
       type: 'raw',
       description: 'Nodes with the highest number of active server-side connections.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'topk($k, bigip_node_serverside_cur_conns{%(queriesSelector)s, partition=~"$bigip_partition"})',
@@ -86,7 +86,7 @@ function(this) {
       nameShort: 'Top pool members',
       type: 'raw',
       description: 'Pools with the highest number of active members.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'topk($k, bigip_pool_active_member_cnt{%(queriesSelector)s, partition=~"$bigip_partition"})',
@@ -100,7 +100,7 @@ function(this) {
       nameShort: 'Top pools',
       type: 'raw',
       description: 'Pools with the highest number of requests.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'topk($k, increase(bigip_pool_tot_requests{%(queriesSelector)s, partition=~"$bigip_partition"}[$__interval:] offset -$__interval))',
@@ -114,7 +114,7 @@ function(this) {
       nameShort: 'Top queue depth',
       type: 'raw',
       description: 'Pools with the largest connection queues.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'topk($k, bigip_pool_connq_depth{%(queriesSelector)s, partition=~"$bigip_partition"})',

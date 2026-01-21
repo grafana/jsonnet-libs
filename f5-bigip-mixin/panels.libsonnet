@@ -77,7 +77,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.cluster.topActiveServersideNodes.asTarget(),
         ])
         + g.panel.barGauge.panelOptions.withDescription('Nodes with the highest number of active server-side connections.')
-        + g.panel.barGauge.standardOptions.withUnit('none')
+        + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
@@ -99,7 +99,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.cluster.topActiveMembersInPools.asTarget(),
         ])
         + g.panel.barGauge.panelOptions.withDescription('Pools with the highest number of active members.')
-        + g.panel.barGauge.standardOptions.withUnit('none')
+        + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
@@ -110,7 +110,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.cluster.topRequestedPools.asTarget() { interval+: '2m' },
         ])
         + g.panel.barGauge.panelOptions.withDescription('Pools with the highest number of requests.')
-        + g.panel.barGauge.standardOptions.withUnit('none')
+        + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
@@ -121,7 +121,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.cluster.topQueueDepthPools.asTarget(),
         ])
         + g.panel.barGauge.panelOptions.withDescription('Pools with the largest connection queues.')
-        + g.panel.barGauge.standardOptions.withUnit('none')
+        + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
@@ -150,10 +150,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Node panels
       nodeAvailabilityStatusTable:
-        g.panel.table.new('Availability status')
-        + g.panel.table.queryOptions.withTargets([
-          signals.node.availabilityState.asTableTarget(),
-        ])
+      commonlib.panels.generic.table.base.new(
+        title='Availability status',
+        targets=[signals.node.availabilityState.asTableTarget()],
+      )
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
@@ -172,7 +172,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           }),
         ])
         + g.panel.table.panelOptions.withDescription('The availability status of the node.')
-        + g.panel.table.standardOptions.withUnit('none'),
+        + g.panel.table.standardOptions.withUnit('short'),
 
       nodeRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -180,7 +180,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.totalRequests.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of requests made to the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       nodeActiveSessionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -188,7 +189,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.currentSessions.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current number of active sessions to the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       nodeConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -199,7 +201,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current active server-side connections to the node in comparison to the maximum connection capacity.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       nodeTrafficInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -207,7 +210,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesIn.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data received from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       nodeTrafficOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -215,7 +219,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesOut.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data sent from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       nodePacketsInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -223,7 +228,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversidePktsIn.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets received by the node from the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       nodePacketsOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -231,14 +236,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversidePktsOut.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets sent by the node from the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       // Pool panels
       poolAvailabilityStatusTable:
-        g.panel.table.new('Availability status')
-        + g.panel.table.queryOptions.withTargets([
-          signals.pool.availabilityState.asTableTarget(),
-        ])
+        commonlib.panels.generic.table.base.new(
+          title='Availability status',
+          targets=[signals.pool.availabilityState.asTableTarget()],
+        )
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
@@ -257,7 +262,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           }),
         ])
         + g.panel.table.panelOptions.withDescription('The availability status of the pool.')
-        + g.panel.table.standardOptions.withUnit('none'),
+        + g.panel.table.standardOptions.withUnit('short'),
 
       poolRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -265,7 +270,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.pool.totalRequests.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of requests made to the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolMembersTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -276,7 +281,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of active and minimum required members within the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -287,7 +292,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current and maximum number of node connections within the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolConnectionQueueDepthTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -295,7 +300,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.pool.connectionQueueDepth.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The depth of connection queues within the pool, including the current depth.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolConnectionQueueServicedTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -303,7 +308,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.pool.connectionQueueServiced.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of connections that have been serviced within the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolTrafficInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -327,7 +332,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.pool.serversidePktsIn.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets received from virtual servers by the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       poolPacketsOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -335,14 +340,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.pool.serversidePktsOut.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets sent from virtual servers by the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       // Virtual Server panels
       virtualServerAvailabilityStatusTable:
-        g.panel.table.new('Availability status')
-        + g.panel.table.queryOptions.withTargets([
-          signals.virtualServer.availabilityState.asTableTarget(),
-        ])
+        commonlib.panels.generic.table.base.new(
+          title='Availability status',
+          targets=[signals.virtualServer.availabilityState.asTableTarget()],
+        )
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
@@ -361,7 +366,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           }),
         ])
         + g.panel.table.panelOptions.withDescription('The availability status of the virtual server.')
-        + g.panel.table.standardOptions.withUnit('none'),
+        + g.panel.table.standardOptions.withUnit('short'),
 
       virtualServerRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -369,7 +374,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.virtualServer.totalRequests.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of requests made to the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerAvgConnectionDurationTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -389,7 +394,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The evicted and current client-side connections within the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerEphemeralConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -401,7 +406,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The ephemeral evicted and current client-side connections within the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerTrafficInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -441,7 +446,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.virtualServer.clientsidePktsIn.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets received by the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerPacketsOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -449,7 +454,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.virtualServer.clientsidePktsOut.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of packets sent by the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerEphemeralPacketsInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -457,7 +462,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.virtualServer.ephemeralPktsIn.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of ephemeral packets received by the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       virtualServerEphemeralPacketsOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -465,6 +470,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.virtualServer.ephemeralPktsOut.asTarget() { interval+: '2m' }]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of ephemeral packets sent by the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
     },
 }

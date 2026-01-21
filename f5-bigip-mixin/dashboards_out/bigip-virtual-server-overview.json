@@ -1,49 +1,45 @@
 {
       "annotations": {
-         "list": [
-            { }
-         ]
+         "list": [ ]
       },
       "links": [
          {
-            "f5BigipClusterOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP cluster overview",
-               "type": "link",
-               "url": "/d/f5bigip_cluster_overview"
-            },
-            "f5BigipLogs": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP logs",
-               "type": "link",
-               "url": "/d/f5bigip-logs"
-            },
-            "f5BigipNodeOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP node overview",
-               "type": "link",
-               "url": "/d/f5bigip_node_overview"
-            },
-            "f5BigipPoolOverview": {
-               "includeVars": true,
-               "keepTime": true,
-               "title": "F5 BIG-IP pool overview",
-               "type": "link",
-               "url": "/d/f5bigip_pool_overview"
-            },
-            "otherDashboards": {
-               "asDropdown": true,
-               "includeVars": true,
-               "keepTime": true,
-               "tags": [
-                  "f5-bigip-mixin"
-               ],
-               "title": "All dashboards",
-               "type": "dashboards"
-            }
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP cluster overview",
+            "type": "link",
+            "url": "/d/f5bigip_cluster_overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP logs",
+            "type": "link",
+            "url": "/d/f5bigip-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP node overview",
+            "type": "link",
+            "url": "/d/f5bigip_node_overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "F5 BIG-IP pool overview",
+            "type": "link",
+            "url": "/d/f5bigip_pool_overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "f5-bigip-mixin"
+            ],
+            "title": "All dashboards",
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -62,13 +58,13 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "The availability status of the virtual server.",
             "fieldConfig": {
                "defaults": {
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -78,7 +74,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.4.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
@@ -129,7 +125,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -234,7 +230,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -308,7 +304,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -592,7 +588,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -645,7 +641,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -698,7 +694,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {
@@ -751,7 +747,7 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "unit": "none"
+                  "unit": "short"
                }
             },
             "gridPos": {

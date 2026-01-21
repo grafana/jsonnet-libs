@@ -14,7 +14,7 @@ function(this) {
       nameShort: 'Status',
       type: 'gauge',
       description: 'The availability status of the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_status_availability_state{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -45,7 +45,7 @@ function(this) {
       nameShort: 'Requests',
       type: 'counter',
       description: 'The number of requests made to the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_tot_requests{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -74,7 +74,7 @@ function(this) {
       nameShort: 'Current conns',
       type: 'gauge',
       description: 'The evicted and current client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_cur_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -88,7 +88,7 @@ function(this) {
       nameShort: 'Max conns',
       type: 'gauge',
       description: 'The maximum client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_max_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -102,7 +102,7 @@ function(this) {
       nameShort: 'Evicted conns',
       type: 'gauge',
       description: 'The evicted client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_evicted_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -116,7 +116,7 @@ function(this) {
       nameShort: 'Ephemeral current',
       type: 'gauge',
       description: 'The ephemeral evicted and current client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_cur_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -130,7 +130,7 @@ function(this) {
       nameShort: 'Ephemeral max',
       type: 'gauge',
       description: 'The ephemeral maximum client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_max_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -144,7 +144,7 @@ function(this) {
       nameShort: 'Ephemeral evicted',
       type: 'gauge',
       description: 'The ephemeral evicted client-side connections within the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_evicted_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -214,7 +214,7 @@ function(this) {
       nameShort: 'Pkts in',
       type: 'counter',
       description: 'The number of packets received by the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_pkts_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -229,7 +229,7 @@ function(this) {
       nameShort: 'Pkts out',
       type: 'counter',
       description: 'The number of packets sent by the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_pkts_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -244,7 +244,7 @@ function(this) {
       nameShort: 'Ephemeral pkts in',
       type: 'counter',
       description: 'The number of ephemeral packets received by the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_pkts_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
@@ -259,7 +259,7 @@ function(this) {
       nameShort: 'Ephemeral pkts out',
       type: 'counter',
       description: 'The number of ephemeral packets sent by the virtual server.',
-      unit: 'none',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_pkts_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',

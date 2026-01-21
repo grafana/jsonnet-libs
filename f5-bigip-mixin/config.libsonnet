@@ -21,7 +21,7 @@
   showLogsVolume: true,
 
   // metrics source for signals
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
   signals: {
     cluster: (import './signals/cluster.libsonnet')(this),
     node: (import './signals/node.libsonnet')(this),

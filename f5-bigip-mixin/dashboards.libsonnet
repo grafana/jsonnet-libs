@@ -197,10 +197,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
-    + g.dashboard.withLinks(links)
+    + g.dashboard.withLinks(std.objectValues(links))
     + g.dashboard.withTimezone(timezone)
     + g.dashboard.withRefresh(refresh)
     + g.dashboard.time.withFrom(period)
     + g.dashboard.withVariables(vars)
-    + g.dashboard.withAnnotations(annotations),
+    + g.dashboard.withAnnotations(std.objectValues(annotations)),
 }
