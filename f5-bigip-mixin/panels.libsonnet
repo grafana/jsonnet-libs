@@ -150,10 +150,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Node panels
       nodeAvailabilityStatusTable:
-      commonlib.panels.generic.table.base.new(
-        title='Availability status',
-        targets=[signals.node.availabilityState.asTableTarget()],
-      )
+        commonlib.panels.generic.table.base.new(
+          title='Availability status',
+          targets=[signals.node.availabilityState.asTableTarget()],
+        )
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
