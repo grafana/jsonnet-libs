@@ -2,7 +2,7 @@
   local this = self,
 
 
-  filteringSelector: '',  //
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   // Basic filtering - MongoDB Atlas uses job and cl_name (cluster name) as primary filters
   groupLabels: ['job', 'cl_name'],
   instanceLabels: ['instance'],

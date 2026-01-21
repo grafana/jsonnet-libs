@@ -47,7 +47,7 @@ local g = import './g.libsonnet';
       g.panel.row.new('Operations')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.connections { gridPos+: { w: 24 } },  // TODO position this in the correct place
+        panels.connections { gridPos+: { w: 24 } },
         panels.readwriteOperations { gridPos+: { w: 12 } },
         panels.operations { gridPos+: { w: 12 } },
         panels.readwriteLatency { gridPos+: { w: 24 } },

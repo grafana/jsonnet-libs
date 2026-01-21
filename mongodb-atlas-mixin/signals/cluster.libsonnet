@@ -14,7 +14,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'none',
         description: 'A representative metric for the shard node inventory.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="shardsvr"}',  // representative metric for a table
@@ -28,7 +28,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'none',
         description: 'A representative metric for the config node inventory.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="configsvr"}',  // representative metric for a table
@@ -42,7 +42,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'none',
         description: 'A representative metric for the mongos node inventory.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_network_bytesIn{%(queriesSelector)s, rs_nm=~"$rs_nm", cl_role="mongos"}',  // representative metric for a table
@@ -268,7 +268,7 @@ function(this)
         name: 'Insert operations',
         type: 'raw',
         description: 'Number of insert operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_opcounters_insert{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -281,7 +281,7 @@ function(this)
         name: 'Query operations',
         type: 'raw',
         description: 'Number of query operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_opcounters_query{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -294,7 +294,7 @@ function(this)
         name: 'Update operations',
         type: 'raw',
         description: 'Number of update operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_opcounters_update{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -307,7 +307,7 @@ function(this)
         name: 'Delete operations',
         type: 'raw',
         description: 'Number of delete operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_opcounters_delete{%(queriesSelector)s, rs_nm=~"$rs_nm"}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -348,7 +348,7 @@ function(this)
         name: 'Global lock queue - readers',
         type: 'raw',
         description: 'Number of read operations queued due to locks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(mongodb_globalLock_currentQueue_readers{%(queriesSelector)s, rs_nm=~"$rs_nm"}) by (cl_name)',
@@ -361,7 +361,7 @@ function(this)
         name: 'Global lock queue - writers',
         type: 'raw',
         description: 'Number of write operations queued due to locks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(mongodb_globalLock_currentQueue_writers{%(queriesSelector)s, rs_nm=~"$rs_nm"}) by (cl_name)',
@@ -374,7 +374,7 @@ function(this)
         name: 'Global lock active clients - readers',
         type: 'raw',
         description: 'Number of active read operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(mongodb_globalLock_activeClients_readers{%(queriesSelector)s}) by (cl_name)',
@@ -387,7 +387,7 @@ function(this)
         name: 'Global lock active clients - writers',
         type: 'raw',
         description: 'Number of active write operations.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(mongodb_globalLock_activeClients_writers{%(queriesSelector)s}) by (cl_name)',
@@ -400,7 +400,7 @@ function(this)
         name: 'Database exclusive lock deadlocks',
         type: 'raw',
         description: 'Database exclusive lock deadlocks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_deadlockCount_W{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -413,7 +413,7 @@ function(this)
         name: 'Database intent exclusive lock deadlocks',
         type: 'raw',
         description: 'Database intent exclusive lock deadlocks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_deadlockCount_w{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -426,7 +426,7 @@ function(this)
         name: 'Database shared lock deadlocks',
         type: 'raw',
         description: 'Database shared lock deadlocks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_deadlockCount_R{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -439,7 +439,7 @@ function(this)
         name: 'Database intent shared lock deadlocks',
         type: 'raw',
         description: 'Database intent shared lock deadlocks.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_deadlockCount_r{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -452,7 +452,7 @@ function(this)
         name: 'Database exclusive lock wait count',
         type: 'raw',
         description: 'Database exclusive lock wait count.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_acquireWaitCount_W{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -465,7 +465,7 @@ function(this)
         name: 'Database intent exclusive lock wait count',
         type: 'raw',
         description: 'Database intent exclusive lock wait count.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_acquireWaitCount_w{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -478,7 +478,7 @@ function(this)
         name: 'Database shared lock wait count',
         type: 'raw',
         description: 'Database shared lock wait count.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_acquireWaitCount_R{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',
@@ -491,7 +491,7 @@ function(this)
         name: 'Database intent shared lock wait count',
         type: 'raw',
         description: 'Database intent shared lock wait count.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum(increase(mongodb_locks_Database_acquireWaitCount_r{%(queriesSelector)s}[$__interval:] offset -$__interval)) by (cl_name)',

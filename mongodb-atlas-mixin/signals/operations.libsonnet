@@ -66,7 +66,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'none',
         description: 'Current number of incoming connections.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_connections_current{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -80,7 +80,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'none',
         description: 'Current number of connections with operations in progress.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_connections_active{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -353,7 +353,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection intent exclusive lock deadlocks per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_deadlockCount_w{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -368,7 +368,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection shared lock deadlocks per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_deadlockCount_R{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -383,7 +383,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection intent shared lock deadlocks per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_deadlockCount_r{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -399,7 +399,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection exclusive lock wait count per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_acquireWaitCount_W{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -414,7 +414,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection intent exclusive lock wait count per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_acquireWaitCount_w{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -429,7 +429,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection shared lock wait count per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_acquireWaitCount_R{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -444,7 +444,7 @@ function(this)
         type: 'counter',
         aggLevel: 'none',
         description: 'Collection intent shared lock wait count per instance.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_locks_Collection_acquireWaitCount_r{%(queriesSelector)s, rs_nm=~"$rs_nm"}',

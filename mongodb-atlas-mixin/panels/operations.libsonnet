@@ -82,6 +82,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.panelOptions.withDescription('The latency time for read and write operations performed by this node.')
       + g.panel.timeSeries.standardOptions.withUnit('µs')
       + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withAsTable(true),
 
     // Operations dashboard - database locks

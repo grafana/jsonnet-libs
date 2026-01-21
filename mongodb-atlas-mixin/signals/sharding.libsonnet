@@ -14,7 +14,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Stale config errors triggering metadata refresh.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_countStaleConfigErrors{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -28,7 +28,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Chunk migrations started as recipient.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_countRecipientMoveChunkStarted{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -42,7 +42,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Documents cloned when acting as donor.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_countDocsClonedOnDonor{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -55,7 +55,7 @@ function(this)
         name: 'Documents cloned on recipient',
         type: 'counter',
         description: 'Documents cloned when acting as recipient.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_countDocsClonedOnRecipient{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -85,7 +85,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Incremental catalog cache refreshes started.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -99,7 +99,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Full catalog cache refreshes started.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -113,7 +113,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Failed catalog cache refreshes.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_countFailedRefreshes{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -127,7 +127,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Stale config errors in catalog cache.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -141,7 +141,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Database entries in catalog cache.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_numDatabaseEntries{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
@@ -155,7 +155,7 @@ function(this)
         type: 'counter',
         rangeFunction: 'increase',
         description: 'Collection entries in catalog cache.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'mongodb_shardingStatistics_catalogCache_numCollectionEntries{%(queriesSelector)s, rs_nm=~"$rs_nm"}',
