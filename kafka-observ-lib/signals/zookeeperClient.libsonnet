@@ -15,7 +15,11 @@ function(this)
     signals: {
       zookeeperRequestLatency: {
         name: 'Zookeeper request latency',
-        description: 'Latency in millseconds for ZooKeeper requests from broker.',
+        description: |||
+          Latency in milliseconds for ZooKeeper requests from broker to ZooKeeper ensemble.  
+          High latency indicates ZooKeeper performance issues or network problems.  
+          Critical for broker operations like leader election and metadata updates.
+        |||,
         type: 'gauge',
         unit: 'ms',
         sources: {
@@ -30,7 +34,11 @@ function(this)
       },
       zookeeperConnections: {
         name: 'Zookeeper connections',
-        description: 'Zookeeper connections rate.',
+        description: |||
+          Rate of successful ZooKeeper connections established by broker.  
+          Frequent connections may indicate session instability or network issues.  
+          Should be stable in healthy clusters with occasional reconnections during maintenance.
+        |||,
         type: 'counter',
         unit: 'short',
         optional: true,
@@ -45,7 +53,11 @@ function(this)
       },
       zookeeperExpiredConnections: {
         name: 'Zookeeper expired connections',
-        description: 'Zookeeper expired connections rate.',
+        description: |||
+          Rate of ZooKeeper session expirations from broker.  
+          Expirations cause broker to lose cluster membership temporarily.  
+          Indicates GC pauses, network issues, or ZooKeeper overload requiring investigation.
+        |||,
         type: 'counter',
         unit: 'short',
         optional: true,
@@ -60,7 +72,11 @@ function(this)
       },
       zookeeperDisconnects: {
         name: 'Zookeeper disconnects',
-        description: 'Zookeeper disconnects rate.',
+        description: |||
+          Rate of ZooKeeper disconnections from broker.  
+          Frequent disconnects indicate unstable ZooKeeper connectivity or network problems.  
+          Can lead to ISR changes and performance degradation if persistent.
+        |||,
         type: 'counter',
         unit: 'short',
         optional: true,
@@ -75,7 +91,11 @@ function(this)
       },
       zookeeperAuthFailures: {
         name: 'Zookeeper auth failures',
-        description: 'Zookeeper auth failures from Kafka.',
+        description: |||
+          Rate of ZooKeeper authentication failures from broker.  
+          Indicates incorrect credentials, ACL issues, or security configuration problems.  
+          Prevents broker from accessing ZooKeeper data and requires immediate security review.
+        |||,
         type: 'counter',
         unit: 'short',
         optional: true,

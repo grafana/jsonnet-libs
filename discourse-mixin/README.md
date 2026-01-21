@@ -9,8 +9,8 @@ The Discourse mixin contains the following dashboards:
 
 The Discourse mixin contains the following alerts:
 
-- DiscourseRequestsHigh5xxErrors
-- DiscourseRequestsHigh4xxErrors
+- DiscourseHigh5xxErrors
+- DiscourseHigh4xxErrors
 
 ## Discourse Overview
 
