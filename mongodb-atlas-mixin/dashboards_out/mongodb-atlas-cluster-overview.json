@@ -5,12 +5,14 @@
       "description": "Overview of MongoDB Atlas cluster metrics.",
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "MongoDB Atlas elections overview",
             "type": "link",
             "url": "/d/mongodb-atlas-elections-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "MongoDB Atlas operations overview",
             "type": "link",
@@ -27,12 +29,14 @@
             "type": "dashboards"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "MongoDB Atlas performance overview",
             "type": "link",
             "url": "/d/mongodb-atlas-performance-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "MongoDB Atlas sharding overview",
             "type": "link",
