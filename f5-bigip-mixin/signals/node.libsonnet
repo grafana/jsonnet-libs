@@ -1,5 +1,6 @@
 function(this) {
   local aggregationLabels = '(' + std.join(',', this.groupLabels + this.instanceLabels) + ')',
+  local nodeSelector = 'node=~"$bigip_node", partition=~"$bigip_partition"',
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -17,7 +18,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_status_availability_state{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_status_availability_state{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
           valueMappings: [
             {
@@ -48,7 +49,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_tot_requests{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_tot_requests{%(queriesSelector)s, ' + nodeSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
@@ -63,7 +64,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_cur_sessions{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_cur_sessions{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
       },
@@ -77,7 +78,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_cur_conns{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_cur_conns{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
       },
@@ -91,7 +92,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_max_conns{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_max_conns{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
       },
@@ -105,7 +106,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_bytes_in{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_bytes_in{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
       },
@@ -119,7 +120,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_bytes_out{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_bytes_out{%(queriesSelector)s, ' + nodeSelector + '}',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
       },
@@ -133,7 +134,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_pkts_in{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_pkts_in{%(queriesSelector)s, ' + nodeSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },
@@ -148,7 +149,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_node_serverside_pkts_out{%(queriesSelector)s, node=~"$bigip_node", partition=~"$bigip_partition"}',
+          expr: 'bigip_node_serverside_pkts_out{%(queriesSelector)s, ' + nodeSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{node}} - {{instance}}',
         },

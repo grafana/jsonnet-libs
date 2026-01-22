@@ -1,5 +1,6 @@
 function(this) {
   local aggregationLabels = '(' + std.join(',', this.groupLabels + this.instanceLabels) + ')',
+  local virtualServerSelector = 'vs=~"$bigip_vs", partition=~"$bigip_partition"',
   filteringSelector: this.filteringSelector,
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
@@ -17,7 +18,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_status_availability_state{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_status_availability_state{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
           valueMappings: [
             {
@@ -48,7 +49,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_tot_requests{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_tot_requests{%(queriesSelector)s, ' + virtualServerSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
@@ -63,7 +64,7 @@ function(this) {
       unit: 'ms',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_cs_mean_conn_dur{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_cs_mean_conn_dur{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -77,7 +78,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_cur_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_cur_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -91,7 +92,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_max_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_max_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -105,7 +106,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_evicted_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_evicted_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -119,7 +120,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_cur_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_cur_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -133,7 +134,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_max_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_max_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -147,7 +148,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_evicted_conns{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_evicted_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}} - evicted',
         },
       },
@@ -161,7 +162,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_bytes_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_bytes_in{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -175,7 +176,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_bytes_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_bytes_out{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -189,7 +190,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_bytes_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_bytes_in{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -203,7 +204,7 @@ function(this) {
       unit: 'Bps',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_bytes_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_bytes_out{%(queriesSelector)s, ' + virtualServerSelector + '}',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
       },
@@ -217,7 +218,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_pkts_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_pkts_in{%(queriesSelector)s, ' + virtualServerSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
@@ -232,7 +233,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_clientside_pkts_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_clientside_pkts_out{%(queriesSelector)s, ' + virtualServerSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
@@ -247,7 +248,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_pkts_in{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_pkts_in{%(queriesSelector)s, ' + virtualServerSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
@@ -262,7 +263,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'bigip_vs_ephemeral_pkts_out{%(queriesSelector)s, vs=~"$bigip_vs", partition=~"$bigip_partition"}',
+          expr: 'bigip_vs_ephemeral_pkts_out{%(queriesSelector)s, ' + virtualServerSelector + '}',
           rangeFunction: 'increase',
           legendCustomTemplate: '{{vs}} - {{instance}}',
         },
