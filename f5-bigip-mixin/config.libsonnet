@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/f5-bigip"',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'f5-bigip',

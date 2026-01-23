@@ -89,7 +89,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_status_availability_state{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -168,7 +168,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_pool_tot_requests{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(bigip_pool_tot_requests{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -229,7 +229,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_active_member_cnt{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_active_member_cnt{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -240,7 +240,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_min_active_members{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_min_active_members{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -300,7 +300,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_serverside_cur_conns{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_serverside_cur_conns{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -311,7 +311,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_serverside_max_conns{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_serverside_max_conns{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -371,7 +371,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bigip_pool_connq_depth{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
+                  "expr": "bigip_pool_connq_depth{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -431,7 +431,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_pool_connq_serviced{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(bigip_pool_connq_serviced{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -492,7 +492,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(bigip_pool_serverside_bytes_in{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__rate_interval])",
+                  "expr": "rate(bigip_pool_serverside_bytes_in{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -552,7 +552,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(bigip_pool_serverside_bytes_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__rate_interval])",
+                  "expr": "rate(bigip_pool_serverside_bytes_out{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -612,7 +612,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_pool_serverside_pkts_in{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(bigip_pool_serverside_pkts_in{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -673,7 +673,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(bigip_pool_serverside_pkts_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(bigip_pool_serverside_pkts_out{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -709,7 +709,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\"}, job)",
+               "query": "label_values(bigip_node_status_availability_state{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -724,7 +724,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\"}, instance)",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -747,7 +747,7 @@
                "label": "BIG-IP pool",
                "multi": true,
                "name": "bigip_pool",
-               "query": "label_values(bigip_pool_status_availability_state{job=\"integrations/f5-bigip\"}, pool)",
+               "query": "label_values(bigip_pool_status_availability_state{}, pool)",
                "refresh": 2,
                "type": "query"
             },
@@ -761,7 +761,7 @@
                "label": "BIG-IP partition",
                "multi": true,
                "name": "bigip_partition",
-               "query": "label_values(bigip_pool_status_availability_state{job=\"integrations/f5-bigip\", pool=~\"$bigip_pool\"}, partition)",
+               "query": "label_values(bigip_pool_status_availability_state{, pool=~\"$bigip_pool\"}, partition)",
                "refresh": 2,
                "type": "query"
             }

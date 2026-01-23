@@ -106,7 +106,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job,instance,partition) (bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}),1)",
+                  "expr": "100 * sum by (job,instance,partition) (bigip_node_status_availability_state{job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_node_status_availability_state{job=~\"$job\",instance=~\"$instance\"}),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -167,7 +167,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job,instance,partition) (bigip_pool_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_pool_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}),1)",
+                  "expr": "100 * sum by (job,instance,partition) (bigip_pool_status_availability_state{job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_pool_status_availability_state{job=~\"$job\",instance=~\"$instance\"}),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -228,7 +228,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum by (job,instance,partition) (bigip_vs_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_vs_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\"}),1)",
+                  "expr": "100 * sum by (job,instance,partition) (bigip_vs_status_availability_state{job=~\"$job\",instance=~\"$instance\"}) / clamp_min(count by (job,instance,partition) (bigip_vs_status_availability_state{job=~\"$job\",instance=~\"$instance\"}),1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -269,7 +269,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, bigip_node_serverside_cur_conns{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "expr": "topk($k, bigip_node_serverside_cur_conns{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}} - {{instance}}",
@@ -309,7 +309,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, increase(bigip_node_serverside_bytes_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
+                  "expr": "topk($k, increase(bigip_node_serverside_bytes_out{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -350,7 +350,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, bigip_pool_active_member_cnt{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "expr": "topk($k, bigip_pool_active_member_cnt{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -390,7 +390,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, increase(bigip_pool_tot_requests{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
+                  "expr": "topk($k, increase(bigip_pool_tot_requests{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -431,7 +431,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, bigip_pool_connq_depth{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "expr": "topk($k, bigip_pool_connq_depth{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pool}} - {{instance}}",
@@ -471,7 +471,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, increase(bigip_vs_clientside_bytes_in{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)) + topk($k, increase(bigip_vs_clientside_bytes_out{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
+                  "expr": "topk($k, increase(bigip_vs_clientside_bytes_in{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval)) + topk($k, increase(bigip_vs_clientside_bytes_out{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"}[$__interval:] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -512,7 +512,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, bigip_vs_cs_mean_conn_dur{job=\"integrations/f5-bigip\",job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
+                  "expr": "topk($k, bigip_vs_cs_mean_conn_dur{job=~\"$job\",instance=~\"$instance\", partition=~\"$bigip_partition\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{vs}} - {{instance}}",
@@ -547,7 +547,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\"}, job)",
+               "query": "label_values(bigip_node_status_availability_state{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -562,7 +562,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\",job=~\"$job\"}, instance)",
+               "query": "label_values(bigip_node_status_availability_state{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -620,7 +620,7 @@
                "label": "BIG-IP partition",
                "multi": true,
                "name": "bigip_partition",
-               "query": "label_values(bigip_node_status_availability_state{job=\"integrations/f5-bigip\"}, partition)",
+               "query": "label_values(bigip_node_status_availability_state{}, partition)",
                "refresh": 2,
                "type": "query"
             }
