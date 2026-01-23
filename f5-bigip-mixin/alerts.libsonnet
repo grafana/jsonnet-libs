@@ -1,14 +1,16 @@
 {
-  prometheusAlerts+:: {
-    groups+: [
+  new(this): {
+    local config = this.config,
+
+    groups: [
       {
-        name: 'bigip-alerts',
+        name: 'f5-bigip-alerts',
         rules: [
           {
             alert: 'BigIPLowNodeAvailabilityStatus',
             expr: |||
-              100 * (sum(bigip_node_status_availability_state) / clamp_min(count(bigip_node_status_availability_state), 1)) < %(alertsCriticalNodeAvailability)s
-            ||| % $._config,
+              100 * (sum(bigip_node_status_availability_state{%(filteringSelector)s}) / clamp_min(count(bigip_node_status_availability_state{%(filteringSelector)s}), 1)) < %(alertsCriticalNodeAvailability)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -19,14 +21,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of available nodes, ' +
                   'which is below the threshold of %(alertsCriticalNodeAvailability)s.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'BigIPServerSideConnectionLimit',
             expr: |||
-              max without(instance, job) (100 * bigip_node_serverside_cur_conns / clamp_min(bigip_node_serverside_max_conns, 1)) > %(alertsWarningServerSideConnectionLimit)s
-            ||| % $._config,
+              max without(instance, job) (100 * bigip_node_serverside_cur_conns{%(filteringSelector)s} / clamp_min(bigip_node_serverside_max_conns{%(filteringSelector)s}, 1)) > %(alertsWarningServerSideConnectionLimit)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -37,14 +39,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent of the max number of connections in use on node {{$labels.node}}, ' +
                   'which is above the threshold of %(alertsWarningServerSideConnectionLimit)s percent.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'BigIPHighRequestRate',
             expr: |||
-              max without(instance, job) (100 * rate(bigip_pool_tot_requests[10m]) / clamp_min(rate(bigip_pool_tot_requests[50m] offset 10m), 1)) > %(alertsCriticalHighRequestRate)s
-            ||| % $._config,
+              max without(instance, job) (100 * rate(bigip_pool_tot_requests{%(filteringSelector)s}[10m]) / clamp_min(rate(bigip_pool_tot_requests{%(filteringSelector)s}[50m] offset 10m), 1)) > %(alertsCriticalHighRequestRate)s
+            ||| % config,
             'for': '10m',
             labels: {
               severity: 'warning',
@@ -55,14 +57,14 @@
                 (
                   '{{ printf "%%.0f" $value }} percent increase in requests on pool {{$labels.pool}}, ' +
                   'which is above the threshold of %(alertsCriticalHighRequestRate)s.'
-                ) % $._config,
+                ) % config,
             },
           },
           {
             alert: 'BigIPHighConnectionQueueDepth',
             expr: |||
-              max without(instance, job) (100 * rate(bigip_pool_connq_depth[5m])) / clamp_min(rate(bigip_pool_connq_depth[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
-            ||| % $._config,
+              max without(instance, job) (100 * rate(bigip_pool_connq_depth{%(filteringSelector)s}[5m])) / clamp_min(rate(bigip_pool_connq_depth{%(filteringSelector)s}[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
+            ||| % config,
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -73,7 +75,7 @@
                 (
                   '{{ printf "%%.0f" $value }} percent increase in connection queue depth on node {{$labels.pool}}, ' +
                   'which is above the threshold of %(alertsCriticalHighConnectionQueueDepth)s.'
-                ) % $._config,
+                ) % config,
             },
           },
         ],
