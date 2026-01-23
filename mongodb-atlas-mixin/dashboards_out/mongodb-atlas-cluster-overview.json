@@ -1,105 +1,84 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "Overview of MongoDB Atlas cluster metrics.",
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas elections overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas operations overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-operations-overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "mongodb-atlas-mixin"
             ],
-            "targetBlank": false,
-            "title": "MongoDB Atlas dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas performance overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-performance-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas sharding overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-sharding-overview"
          }
       ],
       "panels": [
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
                "y": 0
             },
-            "id": 2,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 1,
+            "panels": [ ],
             "title": "Shard",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "An inventory table for shard nodes in the environment.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
                   },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "filterable": false,
-                     "inspect": false
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "1": {
-                              "index": 0,
-                              "text": "Primary"
-                           },
-                           "2": {
-                              "index": 1,
-                              "text": "Secondary"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   }
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "cl_role"
+                        "options": "Role"
                      },
                      "properties": [
                         {
@@ -111,57 +90,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "rs_state"
+                        "options": "State"
                      },
                      "properties": [
                         {
                            "id": "custom.width",
                            "value": 100
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "rs_nm"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 250
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "cl_name"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 300
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "group_id"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 300
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "State"
-                     },
-                     "properties": [
+                        },
                         {
                            "id": "custom.cellOptions",
                            "value": {
@@ -189,53 +124,74 @@
                            ]
                         }
                      ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Replica set"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 250
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 300
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Group"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 300
+                        }
+                     ]
                   }
                ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 24,
                "x": 0,
                "y": 1
             },
-            "id": 3,
+            "id": 2,
             "options": {
-               "cellHeight": "md",
                "footer": {
-                  "countRows": false,
-                  "enablePagination": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true
+                  "enablePagination": true
+               }
             },
-            "pluginVersion": "10.2.0-59981",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\", cl_role=\"shardsvr\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Shard node representative metric"
                }
             ],
             "title": "Shard nodes",
             "transformations": [
                {
-                  "id": "reduce",
-                  "options": {
-                     "labelsToFields": true,
-                     "reducers": [
-                        "lastNotNull"
-                     ]
-                  }
-               },
-               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
@@ -271,21 +227,18 @@
                   }
                },
                {
-                  "id": "filterByValue",
+                  "id": "filterFieldsByName",
                   "options": {
-                     "filters": [
-                        {
-                           "config": {
-                              "id": "equal",
-                              "options": {
-                                 "value": "shardsvr"
-                              }
-                           },
-                           "fieldName": "Role"
-                        }
-                     ],
-                     "match": "all",
-                     "type": "include"
+                     "include": {
+                        "names": [
+                           "Group",
+                           "Cluster",
+                           "Role",
+                           "Node",
+                           "Replica set",
+                           "State"
+                        ]
+                     }
                   }
                }
             ],
@@ -293,78 +246,39 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 7
+               "y": 9
             },
-            "id": 4,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 3,
+            "panels": [ ],
             "title": "Config",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "An inventory table for config nodes in the environment.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
                   },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "filterable": false,
-                     "inspect": false
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "1": {
-                              "index": 0,
-                              "text": "Primary"
-                           },
-                           "2": {
-                              "index": 1,
-                              "text": "Secondary"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   }
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "cl_role"
+                        "options": "Role"
                      },
                      "properties": [
                         {
@@ -376,57 +290,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "rs_state"
+                        "options": "State"
                      },
                      "properties": [
                         {
                            "id": "custom.width",
                            "value": 100
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "rs_nm"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 250
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "cl_name"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 300
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "group_id"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 300
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "State"
-                     },
-                     "properties": [
+                        },
                         {
                            "id": "custom.cellOptions",
                            "value": {
@@ -454,52 +324,73 @@
                            ]
                         }
                      ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Replica set"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 250
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 300
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Group"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 300
+                        }
+                     ]
                   }
                ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 24,
                "x": 0,
-               "y": 8
+               "y": 10
             },
-            "id": 5,
+            "id": 4,
             "options": {
-               "cellHeight": "md",
                "footer": {
-                  "countRows": false,
-                  "enablePagination": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true
+                  "enablePagination": true
+               }
             },
-            "pluginVersion": "10.2.0-59981",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\", cl_role=\"configsvr\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Config inventory representative metric"
                }
             ],
             "title": "Config nodes",
             "transformations": [
-               {
-                  "id": "reduce",
-                  "options": {
-                     "labelsToFields": true,
-                     "reducers": [
-                        "lastNotNull"
-                     ]
-                  }
-               },
                {
                   "id": "organize",
                   "options": {
@@ -536,21 +427,18 @@
                   }
                },
                {
-                  "id": "filterByValue",
+                  "id": "filterFieldsByName",
                   "options": {
-                     "filters": [
-                        {
-                           "config": {
-                              "id": "equal",
-                              "options": {
-                                 "value": "configsvr"
-                              }
-                           },
-                           "fieldName": "Role"
-                        }
-                     ],
-                     "match": "all",
-                     "type": "include"
+                     "include": {
+                        "names": [
+                           "Group",
+                           "Cluster",
+                           "Role",
+                           "Node",
+                           "Replica set",
+                           "State"
+                        ]
+                     }
                   }
                }
             ],
@@ -558,78 +446,39 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 14
+               "y": 18
             },
-            "id": 6,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 5,
+            "panels": [ ],
             "title": "mongos",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "An inventory table for mongos nodes in the environment.",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "thresholds"
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
                   },
-                  "custom": {
-                     "align": "center",
-                     "cellOptions": {
-                        "type": "auto"
-                     },
-                     "filterable": false,
-                     "inspect": false
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "1": {
-                              "index": 0,
-                              "text": "Primary"
-                           },
-                           "2": {
-                              "index": 1,
-                              "text": "Secondary"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   }
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "cl_role"
+                        "options": "Role"
                      },
                      "properties": [
                         {
@@ -641,19 +490,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "rs_state"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.width",
-                           "value": 100
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "rs_nm"
+                        "options": "Replica set"
                      },
                      "properties": [
                         {
@@ -665,7 +502,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "cl_name"
+                        "options": "Cluster"
                      },
                      "properties": [
                         {
@@ -677,7 +514,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "group_id"
+                        "options": "Group"
                      },
                      "properties": [
                         {
@@ -689,48 +526,33 @@
                ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 24,
                "x": 0,
-               "y": 15
+               "y": 19
             },
-            "id": 7,
+            "id": 6,
             "options": {
-               "cellHeight": "md",
                "footer": {
-                  "countRows": false,
-                  "enablePagination": false,
-                  "fields": "",
-                  "reducer": [
-                     "sum"
-                  ],
-                  "show": false
-               },
-               "showHeader": true
+                  "enablePagination": true
+               }
             },
-            "pluginVersion": "10.2.0-59981",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
+                  "expr": "mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\", cl_role=\"mongos\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Mongos node representative metric"
                }
             ],
             "title": "mongos nodes",
             "transformations": [
-               {
-                  "id": "reduce",
-                  "options": {
-                     "labelsToFields": true,
-                     "reducers": [
-                        "lastNotNull"
-                     ]
-                  }
-               },
                {
                   "id": "organize",
                   "options": {
@@ -767,21 +589,18 @@
                   }
                },
                {
-                  "id": "filterByValue",
+                  "id": "filterFieldsByName",
                   "options": {
-                     "filters": [
-                        {
-                           "config": {
-                              "id": "equal",
-                              "options": {
-                                 "value": "mongos"
-                              }
-                           },
-                           "fieldName": "Role"
-                        }
-                     ],
-                     "match": "all",
-                     "type": "include"
+                     "include": {
+                        "names": [
+                           "Group",
+                           "Cluster",
+                           "Role",
+                           "Node",
+                           "Replica set",
+                           "State"
+                        ]
+                     }
                   }
                }
             ],
@@ -789,121 +608,90 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 21
+               "y": 27
             },
-            "id": 8,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 7,
+            "panels": [ ],
             "title": "Performance",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of read and write I/O's processed.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "iops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
+               "h": 8,
+               "w": 12,
                "x": 0,
-               "y": 22
+               "y": 28
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
-                  "calcs": [ ],
+                  "asTable": true,
+                  "calcs": [
+                     "last*",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(hardware_disk_metrics_read_count{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(hardware_disk_metrics_read_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Disk read operations"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(hardware_disk_metrics_write_count{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(hardware_disk_metrics_write_count{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Disk write operations"
                }
             ],
             "title": "Hardware I/O",
@@ -911,97 +699,79 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The amount of time spent waiting for I/O requests.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 6,
-               "y": 22
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 28
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
-                  "calcs": [ ],
+                  "asTable": true,
+                  "calcs": [
+                     "last*",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(hardware_disk_metrics_read_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(hardware_disk_metrics_read_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\",cl_name=~\"$cl_name\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Disk read I/O time"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(hardware_disk_metrics_write_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(hardware_disk_metrics_write_time_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\",cl_name=~\"$cl_name\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Disk write I/O time"
                }
             ],
             "title": "Hardware I/O wait time / $__interval",
@@ -1009,87 +779,60 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The amount of time spent servicing CPU interrupts.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "ms"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 12,
-               "y": 22
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 36
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(hardware_system_cpu_irq_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(hardware_system_cpu_irq_milliseconds{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\",cl_name=~\"$cl_name\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}}",
+                  "refId": "CPU interrupt service time"
                }
             ],
             "title": "Hardware CPU interrupt service time / $__interval",
@@ -1097,95 +840,70 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The amount of RAM and virtual memory being used.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "mbytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 18,
-               "y": 22
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 36
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_mem_resident{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_mem_resident{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - RAM"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - RAM",
+                  "refId": "Memory resident (RAM)"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_mem_virtual{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_mem_virtual{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - virtual"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - virtual",
+                  "refId": "Memory virtual"
                }
             ],
             "title": "Memory used",
@@ -1193,88 +911,61 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The percentage of hardware space used.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "max": 1,
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "percentunit"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
+               "h": 8,
+               "w": 24,
                "x": 0,
-               "y": 28
+               "y": 44
             },
-            "id": 13,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "(sum (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\"}) by(cl_name)) / (clamp_min(sum (hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\"}) by(cl_name) + sum (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\"}) by(cl_name),0.1))",
+                  "expr": "(sum (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) by (cl_name)) / clamp_min((sum (hardware_disk_metrics_disk_space_used_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) by (cl_name)) + (sum (hardware_disk_metrics_disk_space_free_bytes{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) by (cl_name)), 1)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}}"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}}",
+                  "refId": "Disk space utilization"
                }
             ],
             "title": "Disk space usage",
@@ -1282,86 +973,59 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of distinct requests that the server has received.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 6,
-               "y": 28
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 52
             },
-            "id": 14,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_network_numRequests{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_network_numRequests{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}}"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}}",
+                  "refId": "Network requests"
                }
             ],
             "title": "Network requests",
@@ -1369,192 +1033,152 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of bytes sent and received over network connections.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
+               "h": 8,
+               "w": 12,
                "x": 12,
-               "y": 28
+               "y": 52
             },
-            "id": 15,
+            "id": 14,
             "options": {
                "legend": {
-                  "calcs": [ ],
+                  "asTable": true,
+                  "calcs": [
+                     "last*",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - received"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - received",
+                  "refId": "Network bytes received"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_network_bytesOut{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_network_bytesOut{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - sent"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - sent",
+                  "refId": "Network bytes sent"
                }
             ],
             "title": "Network throughput",
-            "transformations": [ ],
             "type": "timeseries"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The rate of DNS and SSL operations that took longer than 1 second.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 6,
-               "x": 18,
-               "y": 28
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 60
             },
-            "id": 16,
+            "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_network_numSlowDNSOperations{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_network_numSlowDNSOperations{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - DNS"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - DNS",
+                  "refId": "Slow DNS operations"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_network_numSlowSSLOperations{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_network_numSlowSSLOperations{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - SSL"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - SSL",
+                  "refId": "Slow SSL operations"
                }
             ],
             "title": "Slow requests",
@@ -1562,112 +1186,75 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 34
+               "y": 68
             },
-            "id": 17,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 16,
+            "panels": [ ],
             "title": "Operations",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The rate of incoming connections to the cluster created.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
-                  "unit": "conns/s"
-               },
-               "overrides": [ ]
+                  "unit": "conns"
+               }
             },
             "gridPos": {
-               "h": 6,
-               "w": 12,
+               "h": 8,
+               "w": 24,
                "x": 0,
-               "y": 35
+               "y": 69
             },
-            "id": 18,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_connections_totalCreated{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_connections_totalCreated{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}}",
+                  "refId": "Connections created"
                }
             ],
             "title": "Connections",
@@ -1675,95 +1262,88 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of read and write operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "ops"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
-               "h": 12,
-               "w": 6,
-               "x": 12,
-               "y": 35
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 77
             },
-            "id": 19,
+            "id": 18,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_opLatencies_reads_ops{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_opLatencies_reads_ops{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Read operation count"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (rate(mongodb_opLatencies_writes_ops{job=~\"$job\",cl_name=~\"$cl_name\"}[$__rate_interval])) by (cl_name)",
+                  "expr": "sum(rate(mongodb_opLatencies_writes_ops{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Write operation count"
                }
             ],
             "title": "Read/Write operations",
@@ -1771,96 +1351,85 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "datasource",
+               "uid": "-- Mixed --"
             },
             "description": "The number of insert, query, update, and delete operations.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     }
-                  },
-                  "mappings": [ ],
-                  "unit": "none"
-               },
-               "overrides": [ ]
-            },
             "gridPos": {
-               "h": 12,
-               "w": 6,
-               "x": 18,
-               "y": 35
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 77
             },
-            "id": 20,
+            "id": 19,
             "options": {
-               "displayLabels": [ ],
                "legend": {
+                  "asTable": true,
                   "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true,
+                  "placement": "right",
                   "values": [
                      "value"
                   ]
                },
-               "pieType": "pie",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
+                  ]
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opcounters_insert{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_opcounters_insert{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - insert"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - insert",
+                  "refId": "Insert operations"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opcounters_query{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_opcounters_query{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - query"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - query",
+                  "refId": "Query operations"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opcounters_update{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_opcounters_update{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - update"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - update",
+                  "refId": "Update operations"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opcounters_delete{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_opcounters_delete{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - delete"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - delete",
+                  "refId": "Delete operations"
                }
             ],
             "title": "Operations",
@@ -1868,97 +1437,91 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The latency for read and write operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "axisCenteredZero": true,
+                     "axisLabel": "write(-) | read(+)",
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "µs"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/write|written/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.transform",
+                           "value": "negative-Y"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
-               "h": 6,
-               "w": 12,
+               "h": 8,
+               "w": 24,
                "x": 0,
-               "y": 41
+               "y": 85
             },
-            "id": 21,
+            "id": 20,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opLatencies_reads_latency{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_opLatencies_reads_latency{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Read operation latency"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_opLatencies_writes_latency{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "increase(mongodb_opLatencies_writes_latency{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Write operation latency"
                }
             ],
             "title": "Read/Write latency / $__interval",
@@ -1966,121 +1529,85 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 47
+               "y": 93
             },
-            "id": 22,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 21,
+            "panels": [ ],
             "title": "Locks",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of reads and writes queued because of a lock.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "steps": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 48
+               "y": 94
             },
-            "id": 23,
+            "id": 22,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_globalLock_currentQueue_readers{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_globalLock_currentQueue_readers{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Global lock queue - readers"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_globalLock_currentQueue_writers{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_globalLock_currentQueue_writers{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Global lock queue - writers"
                }
             ],
             "title": "Current queue",
@@ -2088,95 +1615,72 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of reads and writes being actively performed by connected clients.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "steps": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 48
+               "y": 94
             },
-            "id": 24,
+            "id": 23,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_globalLock_activeClients_readers{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_globalLock_activeClients_readers{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - reads"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - reads",
+                  "refId": "Global lock active clients - readers"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (mongodb_globalLock_activeClients_writers{job=~\"$job\",cl_name=~\"$cl_name\"}) by (cl_name)",
+                  "expr": "sum(mongodb_globalLock_activeClients_writers{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}) by (cl_name)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - writes"
+                  "instant": false,
+                  "legendFormat": "{{cl_name}} - writes",
+                  "refId": "Global lock active clients - writers"
                }
             ],
             "title": "Active client operations",
@@ -2184,117 +1688,97 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of deadlocks for database level locks.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "steps": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 0,
-               "y": 54
+               "y": 102
             },
-            "id": 25,
+            "id": 24,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - exclusive",
+                  "refId": "Database exclusive lock deadlocks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - intent exclusive",
+                  "refId": "Database intent exclusive lock deadlocks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - shared",
+                  "refId": "Database shared lock deadlocks"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - intent shared",
+                  "refId": "Database intent shared lock deadlocks"
                }
             ],
             "title": "Database deadlocks / $__interval",
@@ -2302,117 +1786,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of times lock acquisitions encounter waits for database level locks.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [ ]
+                     "steps": [ ]
+                  }
+               }
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 12,
                "x": 12,
-               "y": 54
+               "y": 102
             },
-            "id": 26,
+            "id": 25,
             "options": {
                "legend": {
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - exclusive",
+                  "refId": "Database exclusive lock wait count"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - intent exclusive",
+                  "refId": "Database intent exclusive lock wait count"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - shared",
+                  "refId": "Database shared lock wait count"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\"}[$__interval:])) by (cl_name)",
+                  "expr": "sum(increase(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\"}[$__interval:] offset -$__interval)) by (cl_name)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{cl_name}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{cl_name}} - intent shared",
+                  "refId": "Database intent shared lock wait count"
                }
             ],
             "title": "Database waits acquiring lock / $__interval",
@@ -2420,68 +1886,76 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "mongodb-atlas-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": null,
-               "current": { },
+               "allValue": ".+",
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn,job)",
+               "query": "label_values(mongodb_network_bytesIn{}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Atlas cluster",
                "multi": true,
                "name": "cl_name",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"},cl_name)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"}, cl_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Node",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Replica set",
+               "multi": true,
+               "name": "rs_nm",
+               "query": "label_values(mongodb_network_bytesIn, rs_nm)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },
@@ -2489,33 +1963,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "MongoDB Atlas cluster overview",
-      "uid": "mongodb-atlas-cluster-overview",
-      "version": 0
+      "uid": "mongodb-atlas-cluster-overview"
    }
