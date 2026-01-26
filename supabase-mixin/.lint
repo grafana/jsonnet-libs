@@ -9,3 +9,5 @@ exclusions:
     reason: "Supabase instance filtering is accomplished by the project"
   panel-units-rule:
     reason: "Unit set as Number(none)"
+  panel-title-description-rule:
+    reason: "Upstream dashboard violates this rule"
