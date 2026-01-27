@@ -1,3 +1,4 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local stat = g.panel.stat;
@@ -11,74 +12,21 @@ local filters = |||
   network_peer_address=~"$network_peer_address",
   job=~"$job"
 |||;
+local signals = import '../signals/main.libsonnet';
 {
-  totalTraffic: timeSeries.new('Total traffic')
-                + timeSeries.panelOptions.withDescription('Total observed traffic, aggregated by receiving device')
-                + timeSeries.queryOptions.withInterval('1m')
-                + timeSeries.queryOptions.withTargets(
-                  [
-                    g.query.prometheus.new(
-                      '$prometheus_datasource',
-                      |||
-                        sum(network_io_by_flow_bytes{%s}) by (device_name)
-                      ||| % [filters],
-                    ),
-                  ]
-                )
-                + timeSeries.panelOptions.withTransparent(true)
-                + timeSeries.standardOptions.withUnit('bytes')
-                + timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
-                + timeSeries.fieldConfig.defaults.custom.withAxisPlacement('right')
-                + timeSeries.options.legend.withShowLegend(false),
+  trafficRate: signals.trafficRate.asTimeSeries()
+               + timeSeries.panelOptions.withTransparent(true)
+               + timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
+               + timeSeries.fieldConfig.defaults.custom.withAxisPlacement('right')
+               + timeSeries.options.legend.withShowLegend(false),
 
   stats: stat.new('')
          + stat.panelOptions.withDescription('Known sources, destinations, endpoints and total overall traffic')
          + stat.queryOptions.withInterval('1m')
-         + stat.queryOptions.withTargets(
-           [
-             g.query.prometheus.new(
-               '$prometheus_datasource',
-               |||
-                 count(count(network_io_by_flow_bytes{%s}) by (device_name))
-               ||| % [filters],
-             )
-             + g.query.prometheus.withLegendFormat('Collecting devices'),
-             g.query.prometheus.new(
-               '$prometheus_datasource',
-               |||
-                 count(count(network_io_by_flow_bytes{%s}) by (network_local_address))
-               ||| % [filters],
-             )
-             + g.query.prometheus.withLegendFormat('Sources'),
-             g.query.prometheus.new(
-               '$prometheus_datasource',
-               |||
-                 count(count(network_io_by_flow_bytes{%s}) by (network_peer_address))
-               ||| % [filters],
-             )
-             + g.query.prometheus.withLegendFormat('Destinations'),
-             g.query.prometheus.new(
-               '$prometheus_datasource',
-               |||
-                 sum(sum_over_time(network_io_by_flow_bytes{%s}[$__range]))
-               ||| % [filters],
-             )
-             + g.query.prometheus.withLegendFormat('Total observed traffic')
-             + g.query.prometheus.withRefId('TotalTraffic'),
-           ]
-         )
-         + stat.standardOptions.withOverrides([{
-           matcher: {
-             id: 'byFrameRefID',
-             options: 'TotalTraffic',
-           },
-           properties: [
-             {
-               id: 'unit',
-               value: 'bytes',
-             },
-           ],
-         }])
+         + signals.collectingDevices.asPanelMixin()
+         + signals.sources.asPanelMixin()
+         + signals.destinations.asPanelMixin()
+         + signals.totalTraffic.asPanelMixin()
          + stat.standardOptions.withMin(0)
          + { fieldConfig+: { defaults+: { fieldMinMax: true } } }
          + stat.standardOptions.color.withMode('palette-classic')
@@ -86,8 +34,7 @@ local filters = |||
          + stat.panelOptions.withTransparent(true),
 
 
-  topSources: table.new('Top sources')
-              + table.panelOptions.withDescription('Source adresses ordered by observed traffic during the time range')
+  topSources: signals.topSources.asTable()
               + table.standardOptions.withOverrides([
                 {
                   matcher: {
@@ -113,16 +60,7 @@ local filters = |||
               + table.standardOptions.color.withMode('fixed')
               + table.standardOptions.color.withFixedColor('green')
               + table.queryOptions.withInterval('1m')
-              + table.queryOptions.withTargets([
-                g.query.prometheus.new(
-                  '$prometheus_datasource',
-                  |||
-                    topk(5,network_io_by_flow_bytes{%s})
-                  ||| % [filters],
-                )
-                + g.query.prometheus.withFormat('table'),
-              ])
-              + table.queryOptions.withTransformationsMixin([
+              + table.queryOptions.withTransformations([
                 {
                   id: 'groupBy',
                   options: {
@@ -260,8 +198,7 @@ local filters = |||
                        },
                      },
                    ]),
-  conversationTotalBytes: table.new('Conversation total bytes')
-                          + table.panelOptions.withDescription('Source/Destination pairs and their total traffic across all dimensions. Ordered by total traffic during selected time range')
+  conversationTotalBytes: signals.conversationTraffic.asTable()
                           + table.standardOptions.withOverrides([
                             {
                               matcher: {
@@ -294,19 +231,6 @@ local filters = |||
                           + table.standardOptions.color.withMode('continuous-BlPu')
                           + table.standardOptions.withUnit('bytes')
                           + table.options.footer.withEnablePagination(true)
-                          + table.queryOptions.withInterval('1m')
-                          + table.queryOptions.withTargets([
-                            g.query.prometheus.new(
-                              '$prometheus_datasource',
-                              |||
-                                sum(
-                                  sum_over_time(network_io_by_flow_bytes{%s}[$__range])
-                                ) by (network_local_address,network_peer_address)
-                              ||| % [filters],
-                            )
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withFormat('table'),
-                          ])
                           + table.queryOptions.withTransformations([
                             {
                               id: 'sortBy',
@@ -337,24 +261,15 @@ local filters = |||
                             },
                           ]),
 
-  conversationTraffic: timeSeries.new('Conversation traffic over time')
-                       + timeSeries.panelOptions.withDescription('Traffic distribution of source/destination pairs over time')
+  conversationTraffic: signals.conversationTrafficOverTime.asTimeSeries()
                        + timeSeries.panelOptions.withTransparent(true)
                        + timeSeries.standardOptions.withUnit('bytes')
                        + timeSeries.options.legend.withShowLegend(false)
                        + timeSeries.fieldConfig.defaults.custom.withLineInterpolation('smooth')
                        + timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
-                       + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal', group: 'A' })
-                       + timeSeries.queryOptions.withInterval('1m')
-                       + timeSeries.queryOptions.withTargets([
-                         g.query.prometheus.new('$prometheus_datasource',
-                                                |||
-                                                  sum(network_io_by_flow_bytes{%s}) by (network_local_address,network_peer_address,device_name)
-                                                ||| % [filters]),
-                       ]),
+                       + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal', group: 'A' }),
 
   conversationByPair: pieChart.new('Breakdown by source/destination pair')
-                      + pieChart.panelOptions.withDescription('Breakdown of total traffic between source/destination pairs observed during the selected time range')
                       + pieChart.panelOptions.withTransparent(true)
                       + pieChart.options.legend.withPlacement('right')
                       + pieChart.options.legend.withValues(['value'])
@@ -363,17 +278,9 @@ local filters = |||
                       + pieChart.options.reduceOptions.withValues(true)
                       + pieChart.queryOptions.withInterval('1m')
                       + pieChart.queryOptions.withTargets([
-                        g.query.prometheus.new(
-                          '$prometheus_datasource',
-                          |||
-                            sum(sum_over_time(network_io_by_flow_bytes{%s}[$__range])) by (network_local_address,network_peer_address)
-                          ||| % [filters],
-                        )
-                        + g.query.prometheus.withInstant(true)
-                        + g.query.prometheus.withFormat('table'),
+                        signals.conversationPairs.asTableTarget(),
                       ]),
-  protocolTotalBytes: table.new('Total bytes')
-                      + table.panelOptions.withDescription('List of protocols and the total amount of observed traffic during the selected time range')
+  protocolTotalBytes: signals.protocolTraffic.asTable()
                       + table.standardOptions.color.withMode('continuous-BlPu')
                       + table.standardOptions.withUnit('bytes')
                       + table.standardOptions.withOverrides([
@@ -393,17 +300,6 @@ local filters = |||
                             },
                           ],
                         },
-                      ])
-                      + table.queryOptions.withInterval('1m')
-                      + table.queryOptions.withTargets([
-                        g.query.prometheus.new(
-                          '$prometheus_datasource',
-                          |||
-                            sum(sum_over_time(network_io_by_flow_bytes{%s}[$__range])) by (network_protocol_name)
-                          ||| % [filters],
-                        )
-                        + g.query.prometheus.withInstant(true)
-                        + g.query.prometheus.withFormat('table'),
                       ])
                       + table.queryOptions.withTransformations([
                         {
@@ -442,35 +338,16 @@ local filters = |||
                         + pieChart.standardOptions.withUnit('bytes')
                         + pieChart.options.withPieType('donut')
                         + pieChart.options.reduceOptions.withValues(true)
-                        + pieChart.queryOptions.withInterval('1m')
                         + pieChart.queryOptions.withTargets([
-                          g.query.prometheus.new(
-                            '$prometheus_datasource',
-                            |||
-                              sum(sum_over_time(network_io_by_flow_bytes{%s}[$__range])) by (network_protocol_name)
-                            ||| % [filters],
-                          )
-                          + g.query.prometheus.withLegendFormat('{{network_protocol_name}}')
-                          + g.query.prometheus.withInstant(true),
+                          signals.protocolTraffic.asTableTarget()
+                          + g.query.prometheus.withLegendFormat('{{network_protocol_name}}'),
                         ]),
-  protocolOverTime: timeSeries.new('Protocol traffic over time')
-                    + pieChart.panelOptions.withDescription('Protocols and the amount of observed traffic over the selected time range')
+  protocolOverTime: signals.protocolOverTime.asTimeSeries()
                     + timeSeries.panelOptions.withTransparent(true)
-                    + timeSeries.standardOptions.withUnit('bytes')
                     + timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
                     + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal', group: 'A' })
                     + timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
-                    + timeSeries.queryOptions.withMaxDataPoints(20)
-                    + timeSeries.queryOptions.withInterval('1m')
-                    + timeSeries.queryOptions.withTargets([
-                      g.query.prometheus.new(
-                        '$prometheus_datasource',
-                        |||
-                          sum(sum_over_time(network_io_by_flow_bytes{%s}[$__interval])) by (network_protocol_name)
-                        ||| % [filters],
-                      )
-                      + g.query.prometheus.withLegendFormat('{{network_protocol_name}}'),
-                    ]),
+                    + timeSeries.queryOptions.withMaxDataPoints(20),
   topDestinationMap: geomap.new('Top destination')
                      + geomap.panelOptions.withDescription('Geographic heatmap showing the total amount of traffic to specific countries')
                      + geomap.standardOptions.withUnit('bytes')
@@ -500,23 +377,13 @@ local filters = |||
                          type: 'heatmap',
                        },
                      ])
-                     + geomap.queryOptions.withInterval('1m')
                      + geomap.queryOptions.withTargets([
-                       g.query.prometheus.new(
-                         '$prometheus_datasource',
-                         |||
-                           sum(sum_over_time(network_io_by_flow_bytes{%s,network_peer_country!="Private IP"}[$__range])) by (network_peer_country)
-                         ||| % [filters],
-                       )
-                       + g.query.prometheus.withFormat('table')
-                       + g.query.prometheus.withInstant(true),
+                       signals.trafficByDestination.asTableTarget(),
                      ]),
-  destinationsLegend: table.new('')
-                      + table.panelOptions.withDescription('Total traffic to specific countries during the selected time range')
+  destinationsLegend: signals.trafficByDestination.asTable()
                       + table.standardOptions.withUnit('bytes')
                       + table.standardOptions.color.withMode('continuous-BlPu')
                       + table.queryOptions.withInterval('1m')
-                      + table.queryOptions.withTargets(self.topDestinationMap.targets)
                       + table.options.footer.withEnablePagination(true)
                       + table.standardOptions.withOverrides([
                         {
@@ -619,8 +486,9 @@ local filters = |||
                    + g.query.prometheus.withInstant(true),
                  ]),
   sourcesLegend: self.destinationsLegend
+                 + table.panelOptions.withTitle('Traffic by source')
                  + table.panelOptions.withDescription('Total traffic from specific countries during the selected time range')
-                 + table.queryOptions.withTargets(self.topSourcesMap.targets),
+                 + table.queryOptions.withTargets([signals.trafficBySource.asTableTarget()]),
   collectorLogs: logs.new('Collector logs')
                  + logs.panelOptions.withDescription('Logs of the ktranslate instance')
                  + logs.queryOptions.withTargets([
