@@ -17,6 +17,7 @@ function(this)
         name: 'Active sessions',
         nameShort: 'Active sessions',
         type: 'gauge',
+        unit: 'short',
         description: 'Number of active sessions to deployment over time',
         sources: {
           prometheus: {
@@ -29,6 +30,7 @@ function(this)
         name: 'Expired sessions',
         nameShort: 'Expired sessions',
         type: 'counter',
+        unit: 'short',
         description: 'Number of sessions that have expired for a deployment over time',
         sources: {
           prometheus: {
@@ -42,6 +44,7 @@ function(this)
         name: 'Rejected sessions',
         nameShort: 'Rejected sessions',
         type: 'counter',
+        unit: 'short',
         description: 'Number of sessions that have been rejected from a deployment over time',
         sources: {
           prometheus: {
