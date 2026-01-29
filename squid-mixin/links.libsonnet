@@ -6,12 +6,14 @@ local g = import './g.libsonnet';
     {
       squidOverview:
         link.link.new('Squid overview', '/d/' + this.grafana.dashboards['squid-overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
     } + if this.config.enableLokiLogs then
       {
         logs:
           link.link.new('Squid logs', '/d/' + this.grafana.dashboards['squid-logs.json'].uid)
-          + link.link.options.withKeepTime(true),
+          + link.link.options.withKeepTime(true)
+          + link.link.options.withIncludeVars(true),
       }
     else {},
 }

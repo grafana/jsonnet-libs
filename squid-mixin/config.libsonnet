@@ -2,7 +2,7 @@
   local this = self,
 
   // Basic filtering
-  filteringSelector: 'job="integrations/squid"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
@@ -14,7 +14,7 @@
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
 
   // Logs configuration
   enableLokiLogs: true,

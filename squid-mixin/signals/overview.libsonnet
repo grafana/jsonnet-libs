@@ -361,7 +361,7 @@ function(this)
         description: 'Cache misses service time 50th percentile.',
         sources: {
           prometheus: {
-            expr: 'squid_Cache_Nisses_50{%(queriesSelector)s}',
+            expr: 'squid_Cache_Misses_50{%(queriesSelector)s}',
             legendCustomTemplate: '50%%',
           },
         },
