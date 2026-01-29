@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/wildfly"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],
@@ -11,7 +11,7 @@
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: 'prometheus',  // metrics source for signals
+  metricsSource: ['prometheus'],  // metrics source for signals
 
   // Logging configuration
   enableLokiLogs: true,
@@ -20,8 +20,8 @@
   showLogsVolume: true,
 
   // alerts thresholds
-  alertsErrorRequestErrorRate: '30',
-  alertsErrorRejectedSessions: '20',
+  alertsErrorRequestErrorRate: 30,  // % - percentage of requests resulting in 5XX error responses
+  alertsErrorRejectedSessions: 20,  // sessions - number of rejected sessions over 5m period
 
   // Signals configuration
   signals+: {

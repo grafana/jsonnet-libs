@@ -91,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Active connections',
           targets=[signals.datasource.connectionsActive.asTarget() { intervalFactor: 2 }],
-          description='Connections to the datasource over time'
+          description='Active connections to the datasource over time'
         )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },
@@ -103,7 +103,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'Idle connections',
           targets=[signals.datasource.connectionsIdle.asTarget() { intervalFactor: 2 }],
-          description='Connections to the datasource over time'
+          description='Idle connections to the datasource over time'
         )
         + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green', value: null },

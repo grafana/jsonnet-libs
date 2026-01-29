@@ -1,5 +1,5 @@
 groups:
-    - name: WildflyAlerts
+    - name: wildfly-alerts
       rules:
         - alert: HighPercentageOfErrorResponses
           annotations:

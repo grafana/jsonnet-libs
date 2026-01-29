@@ -6,12 +6,14 @@
       "id": null,
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Wildfly logs",
             "type": "link",
             "url": "/d/wildfly-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Wildfly overview",
             "type": "link",
@@ -37,7 +39,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Connections to the datasource over time",
+            "description": "Active connections to the datasource over time",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -86,7 +88,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "wildfly_datasources_pool_in_use_count{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",data_source=~\"$data_source\"}",
+                  "expr": "wildfly_datasources_pool_in_use_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",data_source=~\"$data_source\"}",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -102,7 +104,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Connections to the datasource over time",
+            "description": "Idle connections to the datasource over time",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -151,7 +153,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "wildfly_datasources_pool_idle_count{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",data_source=~\"$data_source\"}",
+                  "expr": "wildfly_datasources_pool_idle_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",data_source=~\"$data_source\"}",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -229,7 +231,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_transactions_number_of_transactions_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(wildfly_transactions_number_of_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -295,7 +297,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "wildfly_transactions_number_of_inflight_transactions{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "wildfly_transactions_number_of_inflight_transactions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -360,7 +362,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(wildfly_transactions_number_of_aborted_transactions_total{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(wildfly_transactions_number_of_aborted_transactions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -397,7 +399,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\"}, job)",
+               "query": "label_values(wildfly_batch_jberet_active_count{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -412,7 +414,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\",job=~\"$job\"}, cluster)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -427,7 +429,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(wildfly_batch_jberet_active_count{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(wildfly_batch_jberet_active_count{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -447,7 +449,7 @@
                },
                "multi": true,
                "name": "data_source",
-               "query": "label_values(wildfly_datasources_pool_in_use_count{job=\"integrations/wildfly\",job=~\"$job\",cluster=~\"$cluster\"}, data_source)",
+               "query": "label_values(wildfly_datasources_pool_in_use_count{job=~\"$job\",cluster=~\"$cluster\"}, data_source)",
                "refresh": 2,
                "type": "query"
             }

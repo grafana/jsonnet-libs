@@ -1,5 +1,4 @@
 local g = import './g.libsonnet';
-local commonlib = import 'common-lib/common/main.libsonnet';
 local logslib = import 'logs-lib/logs/main.libsonnet';
 {
   local root = self,
@@ -13,7 +12,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local extraLogLabels = this.config.extraLogLabels;
     {
 
       'wildfly-overview.json':

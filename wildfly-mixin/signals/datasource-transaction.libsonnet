@@ -16,6 +16,7 @@ function(this)
           name: 'Created transactions',
           nameShort: 'Created transactions',
           type: 'counter',
+          unit: 'short',
           description: 'Number of transactions that were created over time',
           sources: {
             prometheus: {
@@ -29,6 +30,7 @@ function(this)
           name: 'In-flight transactions',
           nameShort: 'In-flight transactions',
           type: 'gauge',
+          unit: 'short',
           description: 'Number of transactions that are in-flight over time',
           sources: {
             prometheus: {
@@ -41,6 +43,7 @@ function(this)
           name: 'Aborted transactions',
           nameShort: 'Aborted transactions',
           type: 'counter',
+          unit: 'short',
           description: 'Number of transactions that have been aborted over time',
           sources: {
             prometheus: {

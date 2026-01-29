@@ -17,6 +17,7 @@ function(this)
         name: 'Active connections',
         nameShort: 'Active connections',
         type: 'gauge',
+        unit: 'short',
         description: 'Connections to the datasource over time',
         sources: {
           prometheus: {
@@ -29,6 +30,7 @@ function(this)
         name: 'Idle connections',
         nameShort: 'Idle connections',
         type: 'gauge',
+        unit: 'short',
         description: 'Idle connections to the datasource over time',
         sources: {
           prometheus: {

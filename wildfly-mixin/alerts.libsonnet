@@ -1,8 +1,8 @@
 {
   new(this): {
-    groups+: [
+    groups: [
       {
-        name: 'WildflyAlerts',
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'HighPercentageOfErrorResponses',
