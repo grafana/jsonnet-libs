@@ -25,7 +25,7 @@ groups:
                 {{$labels.cluster}} has had {{ printf "%.0f" $value }} shard reallocation over the last 1m which is above the threshold of 0.
             summary: A node has gone offline or has been disconnected triggering shard reallocation.
           expr: |
-            sum without(type) (opensearch_cluster_shards_number{, type="relocating"}) > 0
+            sum without(type) (opensearch_cluster_shards_number{type="relocating", }) > 0
           for: 1m
           labels:
             severity: warning
@@ -35,7 +35,7 @@ groups:
                 {{$labels.cluster}} has had {{ printf "%.0f" $value }} shard unassigned over the last 5m which is above the threshold of 0.
             summary: There are shards that have been detected as unassigned.
           expr: |
-            sum without(type) (opensearch_cluster_shards_number{, type="unassigned"}) > 0
+            sum without(type) (opensearch_cluster_shards_number{type="unassigned", }) > 0
           for: 5m
           labels:
             severity: warning
@@ -102,20 +102,20 @@ groups:
         - alert: OpenSearchModerateRequestLatency
           annotations:
             description: |
-                {{$labels.index}} has had {{ printf "%.0f" $value }}s of request latency over the last 5m which is above the threshold of 0.5.
+                {{$labels.index}} has had {{ printf "%.0f" $value }}s of request latency over the last 5m which is above the threshold of 500ms.
             summary: The request latency has exceeded the warning threshold.
           expr: |
-            sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{, context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > 0.5
+            sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{context="total", }[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > 500 / 1000
           for: 5m
           labels:
             severity: warning
         - alert: OpenSearchModerateIndexLatency
           annotations:
             description: |
-                {{$labels.index}} has had {{ printf "%.0f" $value }}s of index latency over the last 5m which is above the threshold of 0.5.
+                {{$labels.index}} has had {{ printf "%.0f" $value }}s of index latency over the last 5m which is above the threshold of 500ms.
             summary: The index latency has exceeded the warning threshold.
           expr: |
-            sum without(context) (increase(opensearch_index_indexing_index_time_seconds{, context="total"}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > 0.5
+            sum without(context) (increase(opensearch_index_indexing_index_time_seconds{context="total", }[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > 500 / 1000
           for: 5m
           labels:
             severity: warning

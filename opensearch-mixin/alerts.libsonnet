@@ -41,7 +41,7 @@
           {
             alert: 'OpenSearchUnstableShardReallocation',
             expr: |||
-              sum without(type) (opensearch_cluster_shards_number{%(filteringSelector)s, type="relocating"}) > %(alertsWarningShardReallocations)s
+              sum without(type) (opensearch_cluster_shards_number{type="relocating", %(filteringSelector)s}) > %(alertsWarningShardReallocations)s
             ||| % this.config,
             'for': '1m',
             labels: {
@@ -57,7 +57,7 @@
           {
             alert: 'OpenSearchUnstableShardUnassigned',
             expr: |||
-              sum without(type) (opensearch_cluster_shards_number{%(filteringSelector)s, type="unassigned"}) > %(alertsWarningShardUnassigned)s
+              sum without(type) (opensearch_cluster_shards_number{type="unassigned", %(filteringSelector)s}) > %(alertsWarningShardUnassigned)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -169,7 +169,7 @@
           {
             alert: 'OpenSearchModerateRequestLatency',
             expr: |||
-              sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{%(filteringSelector)s, context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s / 1000
+              sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{context="total", %(filteringSelector)s}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s / 1000
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -185,7 +185,7 @@
           {
             alert: 'OpenSearchModerateIndexLatency',
             expr: |||
-              sum without(context) (increase(opensearch_index_indexing_index_time_seconds{%(filteringSelector)s, context="total"}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > %(alertsWarningIndexLatency)s / 1000
+              sum without(context) (increase(opensearch_index_indexing_index_time_seconds{context="total", %(filteringSelector)s}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > %(alertsWarningIndexLatency)s / 1000
             ||| % this.config,
             'for': '5m',
             labels: {
