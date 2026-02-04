@@ -31,6 +31,7 @@ function(this)
         name: 'Node count',
         description: 'The number of running nodes across the OpenSearch cluster.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'min',
         sources: {
@@ -44,6 +45,7 @@ function(this)
         name: 'Data node count',
         description: 'The number of data nodes in the OpenSearch cluster.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'min',
         sources: {
@@ -57,6 +59,7 @@ function(this)
         name: 'Shard count',
         description: 'The number of shards in the OpenSearch cluster across all indices.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'max',
         sources: {
@@ -72,6 +75,7 @@ function(this)
         name: 'Shard status',
         description: 'Shard status counts across the OpenSearch cluster.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'min',
         sources: {
@@ -100,6 +104,7 @@ function(this)
         name: 'Pending tasks',
         description: 'The number of tasks waiting to be executed across the OpenSearch cluster.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -110,7 +115,7 @@ function(this)
         },
       },
       cluster_task_max_wait_seconds: {
-        name: 'Max task wait time',
+        name: 'Task max wait time',
         description: 'The max wait time for tasks to be executed across the OpenSearch cluster.',
         type: 'gauge',
         aggLevel: 'group',
@@ -129,7 +134,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'group',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_indices_indexing_index_count{%(queriesSelectorGroupOnly)s}',
@@ -255,7 +260,7 @@ function(this)
           prometheus: {
             expr: 'opensearch_os_cpu_percent{%(queriesSelectorGroupOnly)s}',
             legendCustomTemplate: '{{node}}',
-            exprWrappers: [['topk(10, sort_desc(', '))']],
+            exprWrappers: [['topk($k, sort_desc(', '))']],
           },
         },
       },
@@ -266,7 +271,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'topk(10, sort_desc((100 * (\n'
+            expr: 'topk($k, sort_desc((100 * (\n'
                   + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_total_bytes{%(queriesSelectorGroupOnly)s}) - \n'
                   + '  sum by(' + this.groupAggListWithInstance + ') (opensearch_fs_path_free_bytes{%(queriesSelectorGroupOnly)s})\n'
                   + ') / \n'
@@ -282,7 +287,7 @@ function(this)
         type: 'counter',
         aggLevel: 'group',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_circuitbreaker_tripped_count{%(queriesSelectorGroupOnly)s}',
@@ -298,7 +303,7 @@ function(this)
         unit: 'reqps',
         sources: {
           prometheus: {
-            expr: 'topk(10, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
+            expr: 'topk($k, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
                   + '  opensearch_index_search_fetch_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
                   + '  opensearch_index_search_query_current_number{%(queriesSelectorGroupOnly)s, context="total"} + \n'
                   + '  opensearch_index_search_scroll_current_number{%(queriesSelectorGroupOnly)s, context="total"}\n'
@@ -314,7 +319,7 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'topk(10, sort_desc(sum by(index, ' + this.groupAggList + ') ((\n'
+            expr: 'topk($k, sort_desc(sum by(index, ' + this.groupAggList + ') ((\n'
                   + '  increase(opensearch_index_search_fetch_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
                   + '  increase(opensearch_index_search_query_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) + \n'
                   + '  increase(opensearch_index_search_scroll_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval)\n'
@@ -334,7 +339,7 @@ function(this)
         unit: 'percent',
         sources: {
           prometheus: {
-            expr: 'topk(10, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
+            expr: 'topk($k, sort_desc(avg by(index, ' + this.groupAggList + ') (\n'
                   + '  100 * (opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
                   + '  opensearch_index_querycache_hit_count{%(queriesSelectorGroupOnly)s, context="total"}) / \n'
                   + '  clamp_min((opensearch_index_requestcache_hit_count{%(queriesSelectorGroupOnly)s, context="total"} + \n'
@@ -357,7 +362,7 @@ function(this)
           prometheus: {
             expr: 'opensearch_ingest_total_count{%(queriesSelectorGroupOnly)s}',
             legendCustomTemplate: '{{node}}',
-            exprWrappers: [['topk(10, ', ')']],
+            exprWrappers: [['topk($k, ', ')']],
             aggKeepLabels: ['node'],
           },
         },
@@ -369,7 +374,7 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'topk(10, sum by(' + this.groupAggListWithInstance + ') (\n'
+            expr: 'topk($k, sum by(' + this.groupAggListWithInstance + ') (\n'
                   + '  increase(opensearch_ingest_total_time_seconds{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval) / \n'
                   + '  clamp_min(increase(opensearch_ingest_total_count{%(queriesSelectorGroupOnly)s}[$__interval:] offset $__interval), 1)\n'
                   + '))',
@@ -383,13 +388,13 @@ function(this)
         type: 'counter',
         aggLevel: 'group',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_ingest_total_failed_count{%(queriesSelectorGroupOnly)s}',
             legendCustomTemplate: '{{node}}',
             rangeFunction: 'increase',
-            exprWrappers: [['topk(10, ', ')']],
+            exprWrappers: [['topk($k, ', ')']],
             aggKeepLabels: ['node'],
 
           },
@@ -406,7 +411,7 @@ function(this)
           prometheus: {
             expr: 'opensearch_index_indexing_index_current_number{%(queriesSelectorGroupOnly)s}',
             legendCustomTemplate: '{{index}}',
-            exprWrappers: [['topk(10, ', ')']],
+            exprWrappers: [['topk($k, ', ')']],
             aggKeepLabels: ['index'],
           },
         },
@@ -418,7 +423,7 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'topk(10, avg by(index, ' + this.groupAggList + ') (\n'
+            expr: 'topk($k, avg by(index, ' + this.groupAggList + ') (\n'
                   + '  increase(opensearch_index_indexing_index_time_seconds{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval) / \n'
                   + '  clamp_min(increase(opensearch_index_indexing_index_count{%(queriesSelectorGroupOnly)s, context="total"}[$__interval:] offset $__interval), 1)\n'
                   + '))',
@@ -432,13 +437,13 @@ function(this)
         type: 'counter',
         aggLevel: 'group',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_indexing_index_failed_count{%(queriesSelectorGroupOnly)s}',
             legendCustomTemplate: '{{index}}',
             rangeFunction: 'increase',
-            exprWrappers: [['topk(10, ', ')']],
+            exprWrappers: [['topk($k, ', ')']],
             aggKeepLabels: ['index'],
           },
         },

@@ -30,7 +30,15 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             ]),
           )
         ) + root.applyCommon(
-          vars.multiInstance,
+          vars.multiInstance + [
+            g.dashboard.variable.custom.new(
+              'k',
+              values=['3', '5', '10', '15', '25'],
+            ) + g.dashboard.variable.custom.generalOptions.withCurrent('10')
+            + g.dashboard.variable.custom.generalOptions.withLabel('Top K')
+            + g.dashboard.variable.custom.selectionOptions.withMulti(false)
+            + g.dashboard.variable.custom.selectionOptions.withIncludeAll(false),
+          ],
           uid + '-cluster-overview',
           tags,
           links { opensearchClusterOverview+:: {} },

@@ -19,6 +19,7 @@ function(this)
         name: 'Node role: data',
         description: 'Data role present flag.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'instance',
         aggFunction: 'max',
         sources: {
@@ -34,6 +35,7 @@ function(this)
         name: 'Node role: master',
         description: 'Master role present flag.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'instance',
         aggFunction: 'max',
         sources: {
@@ -49,6 +51,7 @@ function(this)
         name: 'Node role: ingest',
         description: 'Ingest role present flag.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'instance',
         aggFunction: 'max',
         sources: {
@@ -64,6 +67,7 @@ function(this)
         name: 'Node role: cluster_manager',
         description: 'Cluster manager role present flag.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'instance',
         aggFunction: 'max',
         sources: {
@@ -79,6 +83,7 @@ function(this)
         name: 'Node role: remote_cluster_client',
         description: 'Remote cluster client role present flag.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'instance',
         aggFunction: 'max',
         sources: {
@@ -218,7 +223,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_circuitbreaker_tripped_count{%(queriesSelector)s}',
@@ -300,7 +305,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'instance',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_jvm_bufferpool_number{%(queriesSelector)s}',
@@ -328,7 +333,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_jvm_gc_collection_count{%(queriesSelector)s}',
@@ -383,7 +388,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'instance',
         aggFunction: 'sum',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_threadpool_tasks_number{%(queriesSelector)s}',

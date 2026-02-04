@@ -6,7 +6,7 @@ local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 local mixin = mixinlib.new()
               + mixinlib.withConfigMixin(
                 {
-                  filteringSelecter: config.filteringSelector,
+                  filteringSelector: config.filteringSelector,
                   uid: config.uid,
                   enableLokiLogs: config.enableLokiLogs,
                 }

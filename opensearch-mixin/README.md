@@ -109,8 +109,8 @@ Default thresholds can be configured in `config.libsonnet`
     alertsCriticalCPUUsage: 85,
     alertsWarningMemoryUsage: 70,
     alertsCriticalMemoryUsage: 85,
-    alertsWarningRequestLatency: 0.5,  // seconds
-    alertsWarningIndexLatency: 0.5,  // seconds
+    alertsWarningRequestLatency: 500,  // milliseconds
+    alertsWarningIndexLatency: 500,  // milliseconds
   },
 }
 ```

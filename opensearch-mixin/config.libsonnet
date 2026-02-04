@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/opensearch"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster', 'opensearch_cluster'],
   logLabels: ['job', 'cluster', 'opensearch_cluster'],
   instanceLabels: ['instance'],
@@ -11,7 +11,7 @@
   dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  metricsSource: 'prometheus',  // metrics source for signals
+  metricsSource: ['prometheus'],  // metrics source for signals
 
   // Logging configuration
   enableLokiLogs: true,
@@ -32,8 +32,8 @@
   alertsCriticalCPUUsage: 85,  // %
   alertsWarningMemoryUsage: 70,  // %
   alertsCriticalMemoryUsage: 85,  // %
-  alertsWarningRequestLatency: 0.5,  // seconds
-  alertsWarningIndexLatency: 0.5,  // seconds
+  alertsWarningRequestLatency: 500,  // milliseconds
+  alertsWarningIndexLatency: 500,  // milliseconds
 
   // Signals configuration
   signals+: {

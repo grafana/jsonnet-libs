@@ -80,28 +80,28 @@ local g = import './g.libsonnet';
       g.panel.row.new('Node health')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.nodeCpuUsage { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeMemoryUsage { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeIO { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeOpenConnections { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeDiskUsage { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeMemorySwap { gridPos+: { w: 6 } },
-        this.grafana.panels.nodeNetworkTraffic { gridPos+: { w: 6 } },
-        this.grafana.panels.circuitBreakers { gridPos+: { w: 6 } },
+        this.grafana.panels.nodeCpuUsage { gridPos+: { w: 8 } },
+        this.grafana.panels.nodeMemoryUsage { gridPos+: { w: 16 } },
+        this.grafana.panels.nodeIO { gridPos+: { w: 12 } },
+        this.grafana.panels.nodeOpenConnections { gridPos+: { w: 12 } },
+        this.grafana.panels.nodeDiskUsage { gridPos+: { w: 16 } },
+        this.grafana.panels.nodeMemorySwap { gridPos+: { w: 8 } },
+        this.grafana.panels.nodeNetworkTraffic { gridPos+: { w: 12 } },
+        this.grafana.panels.circuitBreakers { gridPos+: { w: 12 } },
       ]),
 
     nodeJVMRow:
       g.panel.row.new('Node JVM')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.jvmHeapUsedVsCommitted { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmNonheapUsedVsCommitted { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmThreads { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmBufferPools { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmUptime { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmGarbageCollections { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmGarbageCollectionTime { gridPos+: { w: 6 } },
-        this.grafana.panels.jvmBufferPoolUsage { gridPos+: { w: 6 } },
+        this.grafana.panels.jvmHeapUsedVsCommitted { gridPos+: { w: 8 } },
+        this.grafana.panels.jvmNonheapUsedVsCommitted { gridPos+: { w: 8 } },
+        this.grafana.panels.jvmThreads { gridPos+: { w: 8 } },
+        this.grafana.panels.jvmBufferPools { gridPos+: { w: 12 } },
+        this.grafana.panels.jvmUptime { gridPos+: { w: 12 } },
+        this.grafana.panels.jvmGarbageCollections { gridPos+: { w: 8 } },
+        this.grafana.panels.jvmGarbageCollectionTime { gridPos+: { w: 8 } },
+        this.grafana.panels.jvmBufferPoolUsage { gridPos+: { w: 8 } },
       ]),
 
     threadPoolsRow:
@@ -118,38 +118,38 @@ local g = import './g.libsonnet';
       g.panel.row.new('Request performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.searchRequestRatePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.searchRequestLatencyPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.searchCacheHitRatioPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.searchCacheEvictionsPanel { gridPos+: { w: 6 } },
+        this.grafana.panels.searchRequestRatePanel { gridPos+: { w: 8 } },
+        this.grafana.panels.searchRequestLatencyPanel { gridPos+: { w: 16 } },
+        this.grafana.panels.searchCacheHitRatioPanel { gridPos+: { w: 16 } },
+        this.grafana.panels.searchCacheEvictionsPanel { gridPos+: { w: 8 } },
       ]),
 
     searchAndIndexIndexingPerformanceRow:
       g.panel.row.new('Indexing performance')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.indexingRatePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.indexingLatencyPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.indexingFailuresPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.flushLatencyPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.mergeTimePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.refreshLatencyPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.translogOperationsPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.docsDeletedPanel { gridPos+: { w: 6 } },
+        this.grafana.panels.indexingRatePanel { gridPos+: { w: 8 } },
+        this.grafana.panels.indexingLatencyPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.indexingFailuresPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.flushLatencyPanel { gridPos+: { w: 12 } },
+        this.grafana.panels.mergeTimePanel { gridPos+: { w: 12 } },
+        this.grafana.panels.refreshLatencyPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.translogOperationsPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.docsDeletedPanel { gridPos+: { w: 8 } },
       ]),
 
     searchAndIndexCapacityRow:
       g.panel.row.new('Index capacity')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        this.grafana.panels.documentsIndexedPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.segmentCountPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.mergeCountPanel { gridPos+: { w: 6 } },
-        this.grafana.panels.cacheSizePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.searchAndIndexStoreSizePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.segmentSizePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.mergeSizePanel { gridPos+: { w: 6 } },
-        this.grafana.panels.searchAndIndexShardCountPanel { gridPos+: { w: 6 } },
+        this.grafana.panels.documentsIndexedPanel { gridPos+: { w: 16 } },
+        this.grafana.panels.searchAndIndexShardCountPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.segmentCountPanel { gridPos+: { w: 8 } },
+        this.grafana.panels.mergeCountPanel { gridPos+: { w: 16 } },
+        this.grafana.panels.cacheSizePanel { gridPos+: { w: 12 } },
+        this.grafana.panels.searchAndIndexStoreSizePanel { gridPos+: { w: 12 } },
+        this.grafana.panels.segmentSizePanel { gridPos+: { w: 16 } },
+        this.grafana.panels.mergeSizePanel { gridPos+: { w: 8 } },
       ]),
   },
 }

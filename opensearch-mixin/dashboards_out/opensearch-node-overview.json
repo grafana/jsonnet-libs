@@ -6,18 +6,21 @@
       "id": null,
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Opensearch logs",
             "type": "link",
             "url": "/d/opensearch-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Opensearch cluster overview",
             "type": "link",
             "url": "/d/opensearch-cluster-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Opensearch search and index overview",
             "type": "link",
@@ -63,7 +66,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
+               "w": 8,
                "x": 0,
                "y": 1
             },
@@ -85,7 +88,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "opensearch_os_cpu_percent{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}",
+                  "expr": "opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}}",
@@ -120,8 +123,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
+               "w": 16,
+               "x": 8,
                "y": 1
             },
             "id": 3,
@@ -142,7 +145,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "opensearch_os_mem_used_percent{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}",
+                  "expr": "opensearch_os_mem_used_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}}",
@@ -197,9 +200,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 1
+               "w": 12,
+               "x": 0,
+               "y": 9
             },
             "id": 4,
             "options": {
@@ -219,7 +222,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_fs_io_total_read_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_fs_io_total_read_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -231,7 +234,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_fs_io_total_write_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_fs_io_total_write_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -265,9 +268,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 1
+               "w": 12,
+               "x": 12,
+               "y": 9
             },
             "id": 5,
             "options": {
@@ -287,7 +290,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_transport_server_open_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_transport_server_open_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}}",
@@ -322,9 +325,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
+               "w": 16,
                "x": 0,
-               "y": 9
+               "y": 17
             },
             "id": 6,
             "options": {
@@ -344,7 +347,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - (100 * opensearch_fs_path_free_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} / clamp_min(opensearch_fs_path_total_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}, 1))",
+                  "expr": "100 - (100 * opensearch_fs_path_free_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} / clamp_min(opensearch_fs_path_total_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}, 1))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}}",
@@ -379,9 +382,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 9
+               "w": 8,
+               "x": 16,
+               "y": 17
             },
             "id": 7,
             "options": {
@@ -401,7 +404,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * opensearch_os_swap_used_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} / clamp_min((opensearch_os_swap_used_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} + opensearch_os_swap_free_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}), 1)",
+                  "expr": "100 * opensearch_os_swap_used_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} / clamp_min((opensearch_os_swap_used_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"} + opensearch_os_swap_free_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}), 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node}}",
@@ -431,9 +434,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 9
+               "w": 12,
+               "x": 0,
+               "y": 25
             },
             "id": 8,
             "options": {
@@ -453,7 +456,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_transport_rx_bytes_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)\n * 8",
+                  "expr": "\n  sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_transport_rx_bytes_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)\n * 8",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -465,7 +468,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_transport_tx_bytes_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)\n * 8",
+                  "expr": "\n  sum by (job,cluster,opensearch_cluster,instance,node) (\n  rate(opensearch_transport_tx_bytes_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__rate_interval])\n)\n * 8",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -496,9 +499,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 9
+               "w": 12,
+               "x": 12,
+               "y": 25
             },
             "id": 9,
             "options": {
@@ -518,7 +521,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_circuitbreaker_tripped_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_circuitbreaker_tripped_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -536,7 +539,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 17
+               "y": 33
             },
             "id": 10,
             "panels": [ ],
@@ -589,7 +592,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 18
+               "y": 34
             },
             "id": 11,
             "maxDataPoints": 100,
@@ -604,7 +607,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"data\"}[1m]) == 1\n)\n * 2",
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"data\"}[1m]) == 1\n)\n * 2",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} / data",
@@ -615,7 +618,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"master\"}[1m]) == 1\n)\n * 3",
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"master\"}[1m]) == 1\n)\n * 3",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} / master",
@@ -626,7 +629,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"ingest\"}[1m]) == 1\n)\n * 4",
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"ingest\"}[1m]) == 1\n)\n * 4",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} / ingest",
@@ -637,7 +640,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"cluster_manager\"}[1m]) == 1\n)\n * 5",
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"cluster_manager\"}[1m]) == 1\n)\n * 5",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} / cluster_manager",
@@ -648,7 +651,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"remote_cluster_client\"}[1m]) == 1\n)\n * 6",
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,instance,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\", role=\"remote_cluster_client\"}[1m]) == 1\n)\n * 6",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ node }} / remote_client",
@@ -664,7 +667,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 26
+               "y": 42
             },
             "id": 12,
             "panels": [ ],
@@ -691,9 +694,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
+               "w": 8,
                "x": 0,
-               "y": 27
+               "y": 43
             },
             "id": 13,
             "options": {
@@ -713,7 +716,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_heap_used_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_heap_used_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -725,7 +728,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_heap_committed_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_heap_committed_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -756,9 +759,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 27
+               "w": 8,
+               "x": 8,
+               "y": 43
             },
             "id": 14,
             "options": {
@@ -778,7 +781,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_nonheap_used_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_nonheap_used_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -790,7 +793,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_nonheap_committed_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_mem_nonheap_committed_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -821,9 +824,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 27
+               "w": 8,
+               "x": 16,
+               "y": 43
             },
             "id": 15,
             "options": {
@@ -843,7 +846,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_threads_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_threads_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -874,9 +877,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 27
+               "w": 12,
+               "x": 0,
+               "y": 51
             },
             "id": 16,
             "options": {
@@ -896,7 +899,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (\n  opensearch_jvm_bufferpool_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (\n  opensearch_jvm_bufferpool_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -927,9 +930,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 0,
-               "y": 35
+               "w": 12,
+               "x": 12,
+               "y": 51
             },
             "id": 17,
             "options": {
@@ -949,7 +952,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_uptime_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_jvm_uptime_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -980,9 +983,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 6,
-               "y": 35
+               "w": 8,
+               "x": 0,
+               "y": 59
             },
             "id": 18,
             "options": {
@@ -1002,7 +1005,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_jvm_gc_collection_count{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_jvm_gc_collection_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1034,9 +1037,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 12,
-               "y": 35
+               "w": 8,
+               "x": 8,
+               "y": 59
             },
             "id": 19,
             "options": {
@@ -1056,7 +1059,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_jvm_gc_collection_time_seconds{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  increase(opensearch_jvm_gc_collection_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1088,9 +1091,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
-               "x": 18,
-               "y": 35
+               "w": 8,
+               "x": 16,
+               "y": 59
             },
             "id": 20,
             "options": {
@@ -1110,7 +1113,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * (sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (opensearch_jvm_bufferpool_used_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"})) / clamp_min((sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (opensearch_jvm_bufferpool_total_capacity_bytes{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"})),1)",
+                  "expr": "100 * (sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (opensearch_jvm_bufferpool_used_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"})) / clamp_min((sum by (job,cluster,opensearch_cluster,instance,node,bufferpool) (opensearch_jvm_bufferpool_total_capacity_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"})),1)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1127,7 +1130,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 43
+               "y": 67
             },
             "id": 21,
             "panels": [ ],
@@ -1156,7 +1159,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 44
+               "y": 68
             },
             "id": 22,
             "options": {
@@ -1176,7 +1179,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_threadpool_threads_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_threadpool_threads_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1209,7 +1212,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 44
+               "y": 68
             },
             "id": 23,
             "options": {
@@ -1229,7 +1232,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_threadpool_tasks_number{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
+                  "expr": "sum by (job,cluster,opensearch_cluster,instance,node) (\n  opensearch_threadpool_tasks_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",node=~\"$node\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "intervalFactor": 2,
@@ -1265,7 +1268,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\"}, job)",
+               "query": "label_values(opensearch_os_cpu_percent{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1280,7 +1283,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\"}, cluster)",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1295,7 +1298,7 @@
                "label": "Opensearch_cluster",
                "multi": true,
                "name": "opensearch_cluster",
-               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1310,7 +1313,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(opensearch_cluster_status{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, instance)",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1330,7 +1333,7 @@
                },
                "multi": true,
                "name": "node",
-               "query": "label_values(opensearch_os_cpu_percent{job=\"integrations/opensearch\",job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\"}, node)",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\"}, node)",
                "refresh": 2,
                "type": "query"
             }

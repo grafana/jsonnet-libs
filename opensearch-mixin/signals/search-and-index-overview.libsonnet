@@ -139,7 +139,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_querycache_evictions_count{%(queriesSelector)s, context="total"}',
@@ -154,7 +154,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_requestcache_evictions_count{%(queriesSelector)s, context="total"}',
@@ -169,7 +169,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_fielddata_evictions_count{%(queriesSelector)s, context="total"}',
@@ -347,7 +347,7 @@ function(this)
         type: 'counter',
         aggLevel: 'instance',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_merges_total_docs_count{%(queriesSelector)s, context="total"}',
@@ -448,7 +448,7 @@ function(this)
         type: 'gauge',
         aggLevel: 'instance',
         aggFunction: 'avg',
-        unit: 'count',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'opensearch_index_shards_number{%(queriesSelector)s, type=~"active|active_primary"}',

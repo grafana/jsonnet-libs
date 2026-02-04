@@ -169,7 +169,7 @@
           {
             alert: 'OpenSearchModerateRequestLatency',
             expr: |||
-              sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{%(filteringSelector)s, context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s
+              sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{%(filteringSelector)s, context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s / 1000
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -178,14 +178,14 @@
             annotations: {
               summary: 'The request latency has exceeded the warning threshold.',
               description: |||
-                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of request latency over the last 5m which is above the threshold of %(alertsWarningRequestLatency)s.
+                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of request latency over the last 5m which is above the threshold of %(alertsWarningRequestLatency)sms.
               ||| % this.config,
             },
           },
           {
             alert: 'OpenSearchModerateIndexLatency',
             expr: |||
-              sum without(context) (increase(opensearch_index_indexing_index_time_seconds{%(filteringSelector)s, context="total"}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > %(alertsWarningIndexLatency)s
+              sum without(context) (increase(opensearch_index_indexing_index_time_seconds{%(filteringSelector)s, context="total"}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > %(alertsWarningIndexLatency)s / 1000
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -194,7 +194,7 @@
             annotations: {
               summary: 'The index latency has exceeded the warning threshold.',
               description: |||
-                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of index latency over the last 5m which is above the threshold of %(alertsWarningIndexLatency)s.
+                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of index latency over the last 5m which is above the threshold of %(alertsWarningIndexLatency)sms.
               ||| % this.config,
             },
           },
