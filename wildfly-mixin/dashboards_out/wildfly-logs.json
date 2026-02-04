@@ -255,7 +255,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -270,7 +270,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -285,7 +285,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -300,7 +300,7 @@
                "label": "Severity",
                "multi": true,
                "name": "severity",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"}, severity)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",level=~\"$level\"}, severity)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

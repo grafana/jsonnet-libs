@@ -42,6 +42,10 @@
             "description": "Active connections to the datasource over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -51,6 +55,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -107,6 +112,10 @@
             "description": "Idle connections to the datasource over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -116,6 +125,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -185,6 +195,10 @@
             "description": "Number of transactions that were created over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -194,6 +208,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -251,6 +266,10 @@
             "description": "Number of transactions that are in-flight over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -260,6 +279,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -316,6 +336,10 @@
             "description": "Number of transactions that have been aborted over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -325,6 +349,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",

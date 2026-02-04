@@ -42,12 +42,20 @@
             "description": "Requests rate over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -96,6 +104,10 @@
             "description": "Rate of requests that result in 500 over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -105,6 +117,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -176,6 +189,10 @@
             "description": "Throughput rate of data received over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -183,6 +200,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "binBps"
                }
@@ -231,6 +252,10 @@
             "description": "Throughput rate of data sent over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -240,6 +265,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -311,6 +337,10 @@
             "description": "Number of active sessions to deployment over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -320,6 +350,7 @@
                      "spanNulls": false
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -376,6 +407,10 @@
             "description": "Number of sessions that have expired for a deployment over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -386,6 +421,7 @@
                   },
                   "decimals": 0,
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -443,6 +479,10 @@
             "description": "Number of sessions that have been rejected from a deployment over time",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -453,6 +493,7 @@
                   },
                   "decimals": 0,
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
