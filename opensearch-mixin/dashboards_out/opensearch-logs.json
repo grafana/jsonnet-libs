@@ -262,7 +262,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -277,7 +277,7 @@
                "label": "Opensearch_cluster",
                "multi": true,
                "name": "opensearch_cluster",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -292,7 +292,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -307,7 +307,7 @@
                "label": "Severity",
                "multi": true,
                "name": "severity",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\"}, severity)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",level=~\"$level\"}, severity)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

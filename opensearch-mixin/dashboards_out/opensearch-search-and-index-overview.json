@@ -49,12 +49,20 @@
             "description": "Rate of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -86,6 +94,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_query_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - query",
                   "refId": "Search queries in-flight"
                },
@@ -97,6 +106,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_fetch_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - fetch",
                   "refId": "Search fetch in-flight"
                },
@@ -108,6 +118,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_search_scroll_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - scroll",
                   "refId": "Search scroll in-flight"
                }
@@ -123,12 +134,20 @@
             "description": "Latency of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -160,6 +179,8 @@
                   "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_query_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_query_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - query",
                   "refId": "Search query latency (avg)"
                },
@@ -171,6 +192,8 @@
                   "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_fetch_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_fetch_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - fetch",
                   "refId": "Search fetch latency (avg)"
                },
@@ -182,6 +205,8 @@
                   "expr": "avg by (job,opensearch_cluster,index) (\n  increase(opensearch_index_search_scroll_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_search_scroll_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - scroll",
                   "refId": "Search scroll latency (avg)"
                }
@@ -197,12 +222,20 @@
             "description": "Ratio of query cache and request cache hits and misses.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -234,6 +267,7 @@
                   "expr": "avg by(job,opensearch_cluster,index) (\n  100 * (opensearch_index_requestcache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}) / \n  clamp_min(opensearch_index_requestcache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"} + \n  opensearch_index_requestcache_miss_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}, 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - request",
                   "refId": "Request cache hit rate %%"
                },
@@ -245,6 +279,7 @@
                   "expr": "avg by(job,opensearch_cluster,index) (\n  100 * (opensearch_index_querycache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}) / \n  clamp_min(opensearch_index_querycache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"} + \n  opensearch_index_querycache_miss_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}, 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - query",
                   "refId": "Query cache hit rate %%"
                }
@@ -260,6 +295,10 @@
             "description": "Total evictions count by cache type for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -268,6 +307,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -309,6 +349,8 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_querycache_evictions_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - query cache",
                   "refId": "Query cache evictions"
                },
@@ -320,6 +362,8 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_requestcache_evictions_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - request cache",
                   "refId": "Request cache evictions"
                },
@@ -331,6 +375,8 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_fielddata_evictions_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - field data",
                   "refId": "Fielddata evictions"
                }
@@ -359,12 +405,20 @@
             "description": "Rate of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "documents/s"
                }
@@ -396,6 +450,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_index_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\",context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Indexing current"
                }
@@ -411,6 +466,10 @@
             "description": "Document indexing latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -419,6 +478,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -460,6 +520,8 @@
                   "expr": "avg by(job,cluster,opensearch_cluster) (\n  increase(opensearch_index_indexing_index_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_indexing_index_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=~\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}: Indexing latency (avg)",
                   "refId": "Indexing latency (avg)"
                }
@@ -475,6 +537,10 @@
             "description": "Number of indexing failures for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -483,6 +549,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -524,6 +591,8 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_indexing_index_failed_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\",context=\"total\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Indexing failed (avg)"
                }
@@ -539,6 +608,10 @@
             "description": "Index flush latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -547,6 +620,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -588,6 +662,8 @@
                   "expr": "avg by(job,cluster,opensearch_cluster,index) (\n  increase(opensearch_index_flush_total_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_flush_total_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Flush latency (avg)"
                }
@@ -603,6 +679,10 @@
             "description": "Index merge time for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -612,6 +692,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -653,6 +734,8 @@
                   "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - total",
                   "refId": "Merge time increase"
                },
@@ -664,6 +747,8 @@
                   "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_stopped_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - stopped",
                   "refId": "Merge stopped time increase"
                },
@@ -675,6 +760,8 @@
                   "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_throttled_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}} - throttled",
                   "refId": "Merge throttled time increase"
                }
@@ -690,6 +777,10 @@
             "description": "Index refresh latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -698,6 +789,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -739,6 +831,8 @@
                   "expr": "avg by(job,opensearch_cluster,index) (\n  increase(opensearch_index_refresh_total_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_refresh_total_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset $__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "2m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Refresh latency (avg)"
                }
@@ -754,6 +848,10 @@
             "description": "Current number of translog operations for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -762,6 +860,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -803,6 +902,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_translog_operations_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Translog operations"
                }
@@ -818,6 +918,10 @@
             "description": "Rate of documents deleted for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -826,6 +930,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -867,6 +972,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_delete_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Indexing delete current"
                }
@@ -895,6 +1001,10 @@
             "description": "Number of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -903,6 +1013,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -944,6 +1055,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_indexing_index_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Indexing count (avg)"
                }
@@ -959,6 +1071,10 @@
             "description": "The number of index shards for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -967,6 +1083,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1008,6 +1125,7 @@
                   "expr": "sum by (index) (\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_shards_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", type=~\"active|active_primary\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{ index }}",
                   "refId": "Active shards per index"
                }
@@ -1023,6 +1141,10 @@
             "description": "Current number of segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1031,6 +1153,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1072,6 +1195,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_segments_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Segments number"
                }
@@ -1087,6 +1211,10 @@
             "description": "Number of merge operations for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -1096,6 +1224,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1137,6 +1266,7 @@
                   "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  increase(opensearch_index_merges_total_docs_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}[$__interval:] offset -$__interval)\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}: Merge docs increase",
                   "refId": "Merge docs increase"
                }
@@ -1152,6 +1282,10 @@
             "description": "Size of query cache and request cache.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1160,6 +1294,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1201,6 +1336,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_index_querycache_memory_size_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{opensearch_cluster}}: Query cache memory bytes",
                   "refId": "Query cache memory bytes"
                },
@@ -1212,6 +1348,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_index_requestcache_memory_size_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{opensearch_cluster}}: Request cache memory bytes",
                   "refId": "Request cache memory bytes"
                }
@@ -1227,6 +1364,10 @@
             "description": "Size of the store in bytes for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1235,6 +1376,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1276,6 +1418,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_store_size_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Store size bytes"
                }
@@ -1291,6 +1434,10 @@
             "description": "Memory used by segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1299,6 +1446,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1340,6 +1488,7 @@
                   "expr": "avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_segments_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Segments memory bytes"
                }
@@ -1355,6 +1504,10 @@
             "description": "Size of merge operations in bytes for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -1364,6 +1517,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1405,6 +1559,7 @@
                   "expr": "(\n  avg by (job,cluster,opensearch_cluster,instance,index) (\n  opensearch_index_merges_current_size_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\",instance=~\"$instance\",index=~\"$index\", context=\"total\"}\n)\n) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{index}}",
                   "refId": "Merge current size bytes"
                }
