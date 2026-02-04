@@ -248,7 +248,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -263,7 +263,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -278,7 +278,7 @@
                "label": "Severity",
                "multi": true,
                "name": "severity",
-               "query": "label_values({,job=~\"$job\",cluster=~\"$cluster\",level=~\"$level\"}, severity)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",level=~\"$level\"}, severity)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

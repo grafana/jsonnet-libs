@@ -36,12 +36,20 @@
             "description": "The request rate of client.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -90,12 +98,20 @@
             "description": "The number of client HTTP errors.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "errors/s"
                }
@@ -144,12 +160,20 @@
             "description": "The client cache hit ratio.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -198,12 +222,20 @@
             "description": "The throughput of client HTTP data sent.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KBs"
                }
@@ -252,12 +284,20 @@
             "description": "The throughput of client HTTP data received.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KBs"
                }
@@ -306,12 +346,20 @@
             "description": "The throughput of client cache hit.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KBs"
                }
@@ -360,12 +408,20 @@
             "description": "HTTP request service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -434,12 +490,20 @@
             "description": "Cache hits service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -511,12 +575,20 @@
             "description": "Cache misses service time percentiles.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -601,6 +673,10 @@
             "description": "The number of HTTP, FTP, and other server requests.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -610,6 +686,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -684,6 +764,10 @@
             "description": "The number of HTTP, FTP, and other server request errors.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -693,6 +777,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "errors/s"
                }
@@ -767,6 +855,10 @@
             "description": "The number of HTTP, FTP, and other server sent throughput.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -776,6 +868,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KBs"
                }
@@ -850,6 +946,10 @@
             "description": "The number of objects read from disk and the number of objects saved to disk.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -859,6 +959,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "cps"
                }
@@ -920,12 +1024,20 @@
             "description": "DNS lookup service time percentiles",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -997,6 +1109,10 @@
             "description": "The number of HTTP, FTP, and other server throughput.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1006,6 +1122,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KBs"
                }
