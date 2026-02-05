@@ -88,7 +88,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Number of Collections in Shards",
+            "title": "Number of collections in shards",
             "transformations": [
                {
                   "id": "filterFieldsByName",
@@ -160,7 +160,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Size of Collections in Shards",
+            "title": "Size of collections in shards",
             "transformations": [
                {
                   "id": "labelsToFields",
@@ -239,7 +239,7 @@
                   "refId": "A"
                }
             ],
-            "title": "# of Shards",
+            "title": "# of shards",
             "type": "stat"
          },
          {
@@ -416,7 +416,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Draining Shards",
+            "title": "Draining shards",
             "type": "stat"
          },
          {
@@ -475,7 +475,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Sharded Collections",
+            "title": "Sharded collections",
             "type": "stat"
          },
          {
@@ -589,11 +589,11 @@
                   "exemplar": true,
                   "expr": "max(mongodb_mongos_sharding_balancer_enabled{job=~\"$job\",mongodb_cluster=\"$cluster\"})",
                   "interval": "",
-                  "legendFormat": "Cluster Balanced",
+                  "legendFormat": "Cluster balanced",
                   "refId": "A"
                }
             ],
-            "title": "Balancer Enabled",
+            "title": "Balancer enabled",
             "type": "stat"
          },
          {
@@ -648,11 +648,11 @@
                   "exemplar": true,
                   "expr": "min(mongodb_mongos_sharding_chunks_is_balanced{job=~\"$job\",mongodb_cluster=\"$cluster\"})",
                   "interval": "",
-                  "legendFormat": "Cluster Balanced",
+                  "legendFormat": "Cluster balanced",
                   "refId": "A"
                }
             ],
-            "title": "Chuncks Balanced",
+            "title": "Chuncks balanced",
             "type": "stat"
          },
          {
@@ -707,7 +707,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Shard Services QPS - $shard",
+            "title": "Shard services QPS - $shard",
             "type": "gauge"
          },
          {
@@ -760,7 +760,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Config Services QPS - ",
+            "title": "Config services QPS - ",
             "type": "gauge"
          },
          {
@@ -813,7 +813,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Mongos Services QPS",
+            "title": "Mongos services QPS",
             "type": "gauge"
          },
          {
@@ -827,7 +827,7 @@
             },
             "id": 20,
             "panels": [ ],
-            "title": "Chunks in Shards",
+            "title": "Chunks in shards",
             "type": "row"
          },
          {
@@ -879,7 +879,7 @@
                   "refId": "A"
                }
             ],
-            "title": "# of Chunks in Shards",
+            "title": "# of chunks in shards",
             "transformations": [
                {
                   "id": "labelsToFields",
@@ -987,7 +987,7 @@
             ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "Dynamic of Chunks",
+            "title": "Dynamic of chunks",
             "type": "timeseries"
          },
          {
@@ -1073,7 +1073,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Chunk Split Events",
+            "title": "Chunk split events",
             "type": "timeseries"
          },
          {
@@ -1159,7 +1159,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Chunk Move Events",
+            "title": "Chunk move events",
             "type": "timeseries"
          },
          {
@@ -1173,7 +1173,7 @@
             },
             "id": 29,
             "panels": [ ],
-            "title": "Indexes in Shards",
+            "title": "Indexes in shards",
             "type": "row"
          },
          {
@@ -1225,7 +1225,7 @@
                   "refId": "A"
                }
             ],
-            "title": "# Indexes per Shard",
+            "title": "# Indexes per shard",
             "transformations": [
                {
                   "id": "labelsToFields",
@@ -1334,7 +1334,7 @@
             ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "Dynamic of Indexes",
+            "title": "Dynamic of indexes",
             "type": "timeseries"
          },
          {
@@ -1387,7 +1387,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Size of Indexes per Shard",
+            "title": "Size of indexes per shard",
             "transformations": [
                {
                   "id": "labelsToFields",
@@ -1496,7 +1496,7 @@
             ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "Dynamic of Indexes Size",
+            "title": "Dynamic of indexes size",
             "type": "timeseries"
          },
          {
@@ -1591,7 +1591,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Current Connections per Instance",
+            "title": "Current connections per instance",
             "type": "timeseries"
          },
          {
@@ -1672,7 +1672,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Current Connections per Instance",
+            "title": "Current connections per instance",
             "type": "timeseries"
          },
          {
@@ -1753,7 +1753,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Available Connections per Instance",
+            "title": "Available connections per instance",
             "type": "timeseries"
          },
          {
@@ -1834,7 +1834,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Current Connections per Shard",
+            "title": "Current connections per shard",
             "type": "timeseries"
          },
          {
@@ -1929,7 +1929,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Operattions Per Shard",
+            "title": "Operattions per shard",
             "type": "timeseries"
          },
          {
@@ -2010,7 +2010,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Operations By Type",
+            "title": "Operations by type",
             "type": "timeseries"
          },
          {
@@ -2192,7 +2192,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Cursors Per Shard",
+            "title": "Cursors per shard",
             "type": "timeseries"
          },
          {
@@ -2273,7 +2273,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Mongos Cursors",
+            "title": "MongoDB cursors",
             "type": "timeseries"
          },
          {
@@ -2354,7 +2354,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Cursors By Instance",
+            "title": "Cursors By instance",
             "type": "timeseries"
          },
          {
@@ -2368,7 +2368,7 @@
             },
             "id": 47,
             "panels": [ ],
-            "title": "Additional Info",
+            "title": "Additional info",
             "type": "row"
          },
          {
@@ -2449,7 +2449,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Replication Lag by Set",
+            "title": "Replication lag by set",
             "type": "timeseries"
          },
          {
@@ -2530,7 +2530,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Replication Lag by Set",
+            "title": "Replication lag by set",
             "type": "timeseries"
          }
       ],
@@ -2663,7 +2663,7 @@
       },
       "timepicker": { },
       "timezone": "",
-      "title": "MongoDB Cluster",
+      "title": "MongoDB cluster",
       "uid": "nU5ylgi7z",
       "version": 2
    }

@@ -41,9 +41,9 @@ The monitoring mixins in this repository use two linting tools to ensure quality
 
 Observability library is a flexible format to describe dashboards and alerts in a modular way so libraries can be imported into one another or into monitoring-mixins. Observability libraries can be found in folders with `-observ-lib` suffix. [Common library](https://github.com/grafana/jsonnet-libs/tree/master/common-lib) is also used to apply consistent style options.
 
- ### Observability libraries signal extention
+### Observability libraries signal extention
 
- [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
+[Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
 
 Examples:
  - [docker-mixin](docker-mixin/)
@@ -55,13 +55,49 @@ Examples:
  - [csp-mixin](csp-mixin/)
  - [windows-observ-lib](windows-observ-lib/)
 
- ## Prometheus rules testing for monitoring mixins and observability libraries
+## Prometheus rules testing for monitoring mixins and observability libraries
 
 It is highly recommended to test prometheus alerts with [promtool test rules](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules) command when complex PromQL queries are used or when additional queries are used in alerts' annotations.
 
 promtool tests files should be placed in tests directory in the root of the library and should be named like `prometheus_*.yaml`. This will enable running tests ing Github Actions and with `make test` command.
 
 A good example of promtool tests can be found in windows-observ-lib: [prometheus_alerts_test.yaml](windows-observ-lib/tests/prometheus_alerts_test.yaml)
+
+## Contributing
+
+### Install mixin dependencies
+
+Install tools required to format, lint and test mixins.
+
+```console
+make
+```
+
+### Updating a mixin
+
+Change to the target mixin directory:
+
+```console
+cd memcached-mixin/
+```
+
+Install jsonnet dependencies using `jsonnet-bundler`:
+
+```console
+jb install
+```
+
+Edit the dashboard(s), alert(s) or other files:
+
+```console
+vim dashboards.jsonnet
+```
+
+Format, lint and generate the updated mixin rendered files:
+
+```console
+make
+```
 
 ## LICENSE
 
