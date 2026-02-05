@@ -364,10 +364,7 @@
                      "gradientMode": "scheme",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "showPoints": "never",
-                     "thresholdsStyle": {
-                        "mode": "line"
-                     }
+                     "showPoints": "never"
                   },
                   "decimals": 1,
                   "max": 100,
