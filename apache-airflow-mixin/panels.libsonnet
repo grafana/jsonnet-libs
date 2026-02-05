@@ -103,7 +103,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of current tasks that the scheduler is handling in the Apache Airflow system.')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       executorTasksPanel:

@@ -41,7 +41,7 @@
             expr: |||
               increase(airflow_dagrun_schedule_delay_sum{%(filteringSelector)s}[5m]) / clamp_min(increase(airflow_dagrun_schedule_delay_count{%(filteringSelector)s}[5m]),1) > %(alertsCriticalDAGScheduleDelayLevel)s
             ||| % this.config,
-            'for': '5m',
+            'for': '1m',
             labels: {
               severity: 'critical',
             },
@@ -57,7 +57,7 @@
             expr: |||
               increase(airflow_dagrun_duration_failed_count{%(filteringSelector)s}[5m]) > %(alertsCriticalFailedDAGs)s
             ||| % this.config,
-            'for': '5m',
+            'for': '1m',
             labels: {
               severity: 'critical',
             },

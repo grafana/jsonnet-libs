@@ -5,7 +5,7 @@ local g = import './g.libsonnet';
   new(this): {
                apacheAirflowOverview:
                  link.link.new(this.config.dashboardNamePrefix + ' overview', '/d/' + this.grafana.dashboards['apache-airflow-overview.json'].uid)
-                 + link.link.options.withKeepTime(true)
+                 + link.dashboards.options.withKeepTime(true)
                  + link.dashboards.options.withIncludeVars(true),
 
                otherDashboards:
