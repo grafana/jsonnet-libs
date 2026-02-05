@@ -217,7 +217,7 @@
           "refId": "A"
         }
       ],
-      "title": "ReplSet",
+      "title": "Replica set",
       "transformations": [
         {
           "id": "labelsToFields",
@@ -293,7 +293,7 @@
         "y": 1
       },
       "type": "stat",
-      "title": "Current ReplSet State",
+      "title": "Current replica set state",
       "transformations": [],
       "datasource": {
         "type": "prometheus",
@@ -411,7 +411,7 @@
       },
       "id": 4,
       "panels": [],
-      "title": "Service Summary",
+      "title": "Service summary",
       "type": "row"
     },
     {
@@ -513,7 +513,7 @@
           "refId": "C"
         }
       ],
-      "title": "Command Operations",
+      "title": "Command operations",
       "type": "timeseries"
     },
     {
@@ -685,7 +685,7 @@
           "refId": "A"
         }
       ],
-      "title": "Document Operations",
+      "title": "Document operations",
       "type": "timeseries"
     },
     {
@@ -771,7 +771,7 @@
           "refId": "A"
         }
       ],
-      "title": "Latency Detail",
+      "title": "Latency detail",
       "type": "timeseries"
     },
     {
@@ -857,7 +857,7 @@
           "refId": "A"
         }
       ],
-      "title": "Queued Operations",
+      "title": "Queued operations",
       "type": "timeseries"
     },
     {
@@ -1037,7 +1037,7 @@
           "refId": "B"
         }
       ],
-      "title": "Scanned and Moved Objects",
+      "title": "Scanned and moved objects",
       "type": "timeseries"
     },
     {
@@ -1124,7 +1124,7 @@
           "refId": "A"
         }
       ],
-      "title": "Assert Events",
+      "title": "Assert events",
       "type": "timeseries"
     },
     {
@@ -1218,7 +1218,7 @@
           "refId": "B"
         }
       ],
-      "title": "getLastError Write Operations",
+      "title": "getLastError write operations",
       "type": "timeseries"
     },
     {
@@ -1312,7 +1312,7 @@
           "refId": "B"
         }
       ],
-      "title": "Query Efficiency",
+      "title": "Query efficiency",
       "type": "timeseries"
     },
     {
@@ -1391,11 +1391,11 @@
           "exemplar": true,
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "Write Wait Time",
+          "legendFormat": "Write wait time",
           "refId": "A"
         }
       ],
-      "title": "getLastError Write Time",
+      "title": "getLastError write time",
       "type": "timeseries"
     },
     {
@@ -1481,7 +1481,7 @@
           "refId": "A"
         }
       ],
-      "title": "Page Faults",
+      "title": "Page faults",
       "type": "timeseries"
     }
   ],
@@ -1586,7 +1586,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "MongoDB Instance",
+  "title": "MongoDB instance",
   "uid": "68bDO-m7k",
   "version": 3
 }

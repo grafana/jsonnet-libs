@@ -15,7 +15,11 @@ function(this)
     signals: {
       producerConversion: {
         name: 'Message conversion (producer)',
-        description: 'The number of messages produced converted to match the log.message.format.version.',
+        description: |||
+          Rate of producer messages requiring format conversion to match broker's log.message.format.version.  
+          Conversions add CPU overhead and latency.  
+          Non-zero values suggest producer and broker version mismatches requiring alignment.
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {
@@ -32,7 +36,11 @@ function(this)
       },
       consumerConversion: {
         name: 'Message conversion (consumer)',
-        description: 'The number of messages consumed converted at consumer to match the log.message.format.version.',
+        description: |||
+          Rate of messages requiring format conversion during consumer fetch to match log.message.format.version.  
+          Conversions impact broker CPU and consumer latency.  
+          Indicates version mismatch between stored messages and consumer expectations.
+        |||,
         type: 'counter',
         unit: 'mps',
         sources: {

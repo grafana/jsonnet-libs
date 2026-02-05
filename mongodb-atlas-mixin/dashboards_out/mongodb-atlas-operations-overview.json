@@ -1,114 +1,118 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
+      "description": "Overview of MongoDB Atlas operation metrics.",
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas cluster overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-cluster-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas elections overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-elections-overview"
+         },
+         {
+            "asDropdown": true,
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "mongodb-atlas-mixin"
             ],
-            "targetBlank": false,
-            "title": "MongoDB Atlas dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All dashboards",
+            "type": "dashboards"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas performance overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-performance-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB Atlas sharding overview",
+            "type": "link",
+            "url": "/d/mongodb-atlas-sharding-overview"
          }
       ],
       "panels": [
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
             },
-            "description": "The rate of query operations the node has received.",
+            "id": 1,
+            "panels": [ ],
+            "title": "Operations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of query operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
             "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_query{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opcounters_query{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Query operations"
                }
             ],
             "title": "Query operations",
@@ -116,87 +120,60 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The rate of insert operations the node has received.",
+            "description": "The number of insert operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
             "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_insert{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opcounters_insert{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Insert operations"
                }
             ],
             "title": "Insert operations",
@@ -204,87 +181,60 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The rate of update operations this node has received.",
+            "description": "The number of update operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_update{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opcounters_update{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Update operations"
                }
             ],
             "title": "Update operations",
@@ -292,175 +242,135 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "The rate of delete operations this node has received.",
+            "description": "The number of delete operations.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
-                  "unit": "ops"
-               },
-               "overrides": [ ]
+                  "unit": "none"
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
             "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opcounters_delete{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opcounters_delete{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}}",
+                  "refId": "Delete operations"
                }
             ],
             "title": "Delete operations",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 17
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Connections",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of incoming connections from clients to the node.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
+                  "decimals": 1,
+                  "noValue": "No packets",
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 18
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_connections_current{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}",
+                  "expr": "mongodb_connections_current{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Current connections"
                }
             ],
             "title": "Current connections",
@@ -468,183 +378,145 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of connections that currently have operations in progress.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 18
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "mongodb_connections_active{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}",
+                  "expr": "mongodb_connections_active{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}}"
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Active connections"
                }
             ],
             "title": "Active connections",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 26
+            },
+            "id": 9,
+            "panels": [ ],
+            "title": "Read/Write operations",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The rate of read and write operations performed by the node.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "ops"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 24
+               "y": 27
             },
-            "id": 8,
+            "id": 10,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opLatencies_reads_ops{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opLatencies_reads_ops{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - reads"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - reads",
+                  "refId": "Read operations by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "rate(mongodb_opLatencies_writes_ops{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(mongodb_opLatencies_writes_ops{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__rate_interval])",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - writes"
+                  "instant": false,
+                  "legendFormat": "{{instance}} - writes",
+                  "refId": "Write operations by instance"
                }
             ],
             "title": "Read and write operations",
@@ -652,240 +524,184 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The latency time for read and write operations performed by this node.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 24
+               "y": 27
             },
-            "id": 9,
+            "id": 11,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_opLatencies_reads_latency{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_opLatencies_reads_latency{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - reads"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - reads",
+                  "refId": "Read latency by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_opLatencies_writes_latency{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_opLatencies_writes_latency{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - writes"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - writes",
+                  "refId": "Write latency by instance"
                }
             ],
             "title": "Read and write latency / $__interval",
             "type": "timeseries"
          },
          {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
+            "collapsed": false,
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 32
+               "y": 35
             },
-            "id": 10,
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": ""
-               }
-            ],
+            "id": 12,
+            "panels": [ ],
             "title": "Locks",
             "type": "row"
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of deadlocks that have occurred for the database lock.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 33
+               "y": 36
             },
-            "id": 11,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock deadlocks by instance"
                }
             ],
             "title": "Database deadlocks / $__interval",
@@ -893,117 +709,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of database lock acquisitions that had to wait.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 33
+               "y": 36
             },
-            "id": 12,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock wait count by instance"
                }
             ],
             "title": "Database wait count / $__interval",
@@ -1011,117 +809,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The time spent waiting for the database lock acquisition.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 33
+               "y": 36
             },
-            "id": 13,
+            "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Database exclusive lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Database intent exclusive lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Database shared lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Database intent shared lock acquisition time by instance"
                }
             ],
             "title": "Database wait time / $__interval",
@@ -1129,117 +909,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of deadlocks that have occurred for the collection lock.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 41
+               "y": 44
             },
-            "id": 14,
+            "id": 16,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_deadlockCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_deadlockCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_deadlockCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock deadlocks by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_deadlockCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock deadlocks by instance"
                }
             ],
             "title": "Collection deadlocks / $__interval",
@@ -1247,117 +1009,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The number of collection lock acquisitions that had to wait.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 41
+               "y": 44
             },
-            "id": 15,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock wait count by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_acquireWaitCount_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock wait count by instance"
                }
             ],
             "title": "Collection wait count / $__interval",
@@ -1365,117 +1109,99 @@
          },
          {
             "datasource": {
-               "uid": "${prometheus_datasource}"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "The time spent waiting for the collection lock acquisition.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 10,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "insertNulls": false,
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": false,
                      "stacking": {
-                        "group": "A",
                         "mode": "normal"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
                      }
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "µs"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 41
+               "y": 44
             },
-            "id": 16,
+            "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - exclusive",
+                  "refId": "Collection exclusive lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent exclusive"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent exclusive",
+                  "refId": "Collection intent exclusive lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - shared",
+                  "refId": "Collection shared lock acquisition time by instance"
                },
                {
                   "datasource": {
-                     "uid": "${prometheus_datasource}"
+                     "type": "prometheus",
+                     "uid": "${datasource}"
                   },
-                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~\"$job\",cl_name=~\"$cl_name\",rs_nm=~\"$rs\",instance=~\"$instance\"}[$__interval:])",
+                  "expr": "increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~\"$job\",cl_name=~\"$cl_name\",instance=~\"$instance\", rs_nm=~\"$rs_nm\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{instance}} - intent shared"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{instance}} - intent shared",
+                  "refId": "Collection intent shared lock acquisition time by instance"
                }
             ],
             "title": "Collection wait time / $__interval",
@@ -1483,112 +1209,76 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "mongodb-atlas-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
-               "name": "prometheus_datasource",
-               "options": [ ],
+               "label": "Data source",
+               "name": "datasource",
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
-               "allValue": null,
-               "current": { },
+               "allValue": ".+",
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn,job)",
+               "query": "label_values(mongodb_network_bytesIn{}, job)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Atlas cluster",
                "multi": true,
                "name": "cl_name",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"},cl_name)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\"}, cl_name)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
-                  "uid": "${prometheus_datasource}"
+                  "type": "prometheus",
+                  "uid": "${datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Replica set",
-               "multi": true,
-               "name": "rs",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{cl_name=~\"$cl_name\"},rs_nm)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
                "includeAll": true,
                "label": "Node",
                "multi": true,
                "name": "instance",
-               "options": [ ],
-               "query": "label_values(mongodb_network_bytesIn{rs_nm=~\"$rs\"},instance)",
+               "query": "label_values(mongodb_network_bytesIn{job=~\"$job\",cl_name=~\"$cl_name\"}, instance)",
                "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Replica set",
+               "multi": true,
+               "name": "rs_nm",
+               "query": "label_values(mongodb_network_bytesIn, rs_nm)",
+               "refresh": 2,
+               "type": "query"
             }
          ]
       },
@@ -1596,33 +1286,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "MongoDB Atlas operations overview",
-      "uid": "mongodb-atlas-operations-overview",
-      "version": 0
+      "uid": "mongodb-atlas-operations-overview"
    }

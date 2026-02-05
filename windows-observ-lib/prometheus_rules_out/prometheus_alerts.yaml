@@ -84,9 +84,13 @@ groups:
           expr: |
             (time() - windows_system_boot_time_timestamp_seconds{}
             or
+            time() - windows_system_boot_time_timestamp{}
+            or
             time() - windows_system_system_up_time{}) < 600
             and
             ((time() - windows_system_boot_time_timestamp_seconds{} offset 10m)
+            or
+            (time() - windows_system_boot_time_timestamp{} offset 10m)
             or
             (time() - windows_system_system_up_time{} offset 10m)) > 600
           labels:

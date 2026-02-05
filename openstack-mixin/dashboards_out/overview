@@ -370,7 +370,7 @@
             },
             "id": 7,
             "options": {
-               "alertInstanceLabelFilter": "job=~\"integrations/openstack\"=~\"${job=~\"integrations/openstack\":regex}\",job=~\"${job:regex}\""
+               "alertInstanceLabelFilter": "job=\"integrations/openstack\"=~\"${job=\"integrations/openstack\":regex}\",job=~\"${job:regex}\""
             },
             "pluginVersion": "v10.0.0",
             "title": "Alerts",
@@ -1229,7 +1229,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(openstack_identity_up{job=~\"integrations/openstack\"}, job)",
+               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1244,7 +1244,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(openstack_identity_up{job=~\"integrations/openstack\",job=~\"$job\"}, instance)",
+               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
