@@ -66,7 +66,7 @@ function(this) {
     schemaMemoryUsage: {
       name: 'Schema memory usage',
       nameShort: 'Schema memory',
-      type: 'gauge',
+      type: 'raw',
       description: 'Total used memory by schema in the SAP HANA instance',
       unit: 'decmbytes',
       sources: {

@@ -29,7 +29,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         filteringSelector=this.config.filteringSelector,
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
-        varMetric='hanadb_cpu_busy_percent',
+        varMetric='hanadb_host_memory_alloc_limit_mb',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
       annotations: {},

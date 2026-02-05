@@ -8,32 +8,32 @@ local g = import './g.libsonnet';
     systemReplicationRow:
       g.panel.row.new('Replication')
       + g.panel.row.withPanels([
-        panels.systemReplicaStatusPanel { gridPos: { h: 6, w: 9, x: 0, y: 0 } },
-        panels.systemReplicationShipDelayPanel { gridPos: { h: 6, w: 15, x: 9, y: 0 } },
+        panels.systemReplicaStatusPanel { gridPos: { h: 6, w: 9 } },
+        panels.systemReplicationShipDelayPanel { gridPos: { h: 6, w: 15 } },
       ]),
 
     systemResourcesRow:
       g.panel.row.new('Resources')
       + g.panel.row.withPanels([
-        panels.systemCpuUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 1 } },
-        panels.systemDiskUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 1 } },
-        panels.systemPhysicalMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 7 } },
-        panels.systemHanaMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 7 } },
+        panels.systemCpuUsagePanel { gridPos: { h: 6, w: 12 } },
+        panels.systemDiskUsagePanel { gridPos: { h: 6, w: 12 } },
+        panels.systemPhysicalMemoryUsagePanel { gridPos: { h: 6, w: 12 } },
+        panels.systemHanaMemoryUsagePanel { gridPos: { h: 6, w: 12 } },
       ]),
 
     systemIORow:
       g.panel.row.new('I/O')
       + g.panel.row.withPanels([
-        panels.systemNetworkIOThroughputPanel { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
-        panels.systemDiskIOThroughputPanel { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
+        panels.systemNetworkIOThroughputPanel { gridPos: { h: 6, w: 12 } },
+        panels.systemDiskIOThroughputPanel { gridPos: { h: 6, w: 12 } },
       ]),
 
     systemPerformanceRow:
       g.panel.row.new('Performance')
       + g.panel.row.withPanels([
-        panels.systemAvgQueryExecutionTimePanel { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
-        panels.systemActiveConnectionsPanel { gridPos: { h: 6, w: 6, x: 12, y: 19 } },
-        panels.systemIdleConnectionsPanel { gridPos: { h: 6, w: 6, x: 18, y: 19 } },
+        panels.systemAvgQueryExecutionTimePanel { gridPos: { h: 6, w: 12 } },
+        panels.systemActiveConnectionsPanel { gridPos: { h: 6, w: 6 } },
+        panels.systemIdleConnectionsPanel { gridPos: { h: 6, w: 6 } },
       ]),
 
     systemAlertsRow:
@@ -63,9 +63,9 @@ local g = import './g.libsonnet';
     instancePerformanceRow:
       g.panel.row.new('Performance')
       + g.panel.row.withPanels([
-        panels.instanceConnectionsPanel { gridPos: { w: 8 } },
-        panels.instanceAvgQueryExecutionTimePanel { gridPos: { w: 8 } },
-        panels.instanceAvgLockWaitTimePanel { gridPos: { w: 8 } },
+        panels.instanceConnectionsPanel { gridPos: { w: 24 } },
+        panels.instanceAvgQueryExecutionTimePanel { gridPos: { w: 12 } },
+        panels.instanceAvgLockWaitTimePanel { gridPos: { w: 12 } },
       ]),
 
     instanceAlertsRow:

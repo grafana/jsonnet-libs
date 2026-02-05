@@ -9,7 +9,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // System overview panels
       systemReplicaStatusPanel:
         commonlib.panels.generic.stat.base.new('Replica status', targets=[signals.system.replicaStatus.asTarget()])
-        + g.panel.stat.panelOptions.withDescription('State of the replicas in the SAP HANA system'),
+        + g.panel.stat.panelOptions.withDescription('State of the replicas in the SAP HANA system')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.withMappings([
+          {
+            options: {
+              '0': { color: 'green', index: 0, text: 'ACTIVE' },
+              '1': { color: 'yellow', index: 1, text: 'INITIALIZING' },
+              '2': { color: 'yellow', index: 2, text: 'SYNCING' },
+              '3': { color: 'red', index: 3, text: 'UNKNOWN' },
+              '4': { color: 'red', index: 4, text: 'ERROR' },
+              '99': { color: 'red', index: 5, text: 'UNMAPPED' },
+            },
+            type: 'value',
+          },
+        ])
+        + g.panel.stat.standardOptions.thresholds.withMode('absolute')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('green'),
+          g.panel.stat.thresholdStep.withColor('green') + g.panel.stat.thresholdStep.withValue(0),
+          g.panel.stat.thresholdStep.withColor('yellow') + g.panel.stat.thresholdStep.withValue(1),
+          g.panel.stat.thresholdStep.withColor('red') + g.panel.stat.thresholdStep.withValue(3),
+        ]),
 
       systemReplicationShipDelayPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -18,7 +39,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average system replication log shipping delay in the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemCpuUsagePanel:
         commonlib.panels.cpu.timeSeries.utilization.new(
@@ -27,7 +49,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('CPU usage percentage of the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemDiskUsagePanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -36,7 +59,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Disk utilization percentage of the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemPhysicalMemoryUsagePanel:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -48,7 +72,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Physical memory utilization percentage of the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' })
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemHanaMemoryUsagePanel:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -57,7 +83,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Total amount of used memory by processes in the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' }),
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemNetworkIOThroughputPanel:
         commonlib.panels.network.timeSeries.traffic.new(
@@ -68,7 +95,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Network I/O throughput in the SAP HANA system')
-        + g.panel.timeSeries.standardOptions.withUnit('KBs'),
+        + g.panel.timeSeries.standardOptions.withUnit('KBs')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemDiskIOThroughputPanel:
         commonlib.panels.disk.timeSeries.ioBytesPerSec.new(
@@ -76,7 +105,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.system.diskIOThroughput.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Disk throughput for the SAP HANA system')
-        + g.panel.timeSeries.standardOptions.withUnit('KBs'),
+        + g.panel.timeSeries.standardOptions.withUnit('KBs')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemAvgQueryExecutionTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -84,7 +115,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.system.avgQueryExecutionTime.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average elapsed time per execution across the SAP HANA system')
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       systemActiveConnectionsPanel:
         commonlib.panels.generic.stat.base.new('Active connections', targets=[signals.system.activeConnections.asTarget()])
@@ -102,11 +135,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.stat.standardOptions.withUnit('short'),
 
       systemRecentAlertsPanel:
-        g.panel.table.new('Recent alerts')
-        + g.panel.table.queryOptions.withDatasource(type='prometheus', uid='${' + this.grafana.variables.datasources.prometheus.name + '}')
-        + g.panel.table.queryOptions.withTargets([
-          signals.system.recentAlerts.asTableTarget(),
-        ])
+        commonlib.panels.generic.table.base.new('Recent alerts', targets=[signals.system.recentAlerts.asTableTarget()])
         + g.panel.table.panelOptions.withDescription('Table of the recent SAP HANA current alerts in the SAP HANA system')
         + g.panel.table.queryOptions.withTransformations([
           g.panel.table.transformation.withId('organize')
@@ -181,7 +210,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.instance.cpuUsageByCore.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('CPU usage percentage of the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceDiskUsagePanel:
         commonlib.panels.disk.timeSeries.usagePercent.new(
@@ -189,7 +220,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.instance.diskUsage.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Disk utilization percentage of the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instancePhysicalMemoryUsagePanel:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -200,7 +233,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Physical memory utilization percentage of the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceSchemaMemoryUsagePanel:
         commonlib.panels.memory.timeSeries.usageBytes.new(
@@ -208,7 +243,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.instance.schemaMemoryUsage.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Total used memory by schema in the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('decmbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceNetworkIOThroughputPanel:
         commonlib.panels.network.timeSeries.traffic.new(
@@ -219,7 +256,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Network I/O throughput for the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('KBs'),
+        + g.panel.timeSeries.standardOptions.withUnit('KBs')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceDiskIOThroughputPanel:
         commonlib.panels.disk.timeSeries.ioBytesPerSec.new(
@@ -227,7 +266,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.instance.diskIOByDisk.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Disk throughput for the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('KBs'),
+        + g.panel.timeSeries.standardOptions.withUnit('KBs')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceConnectionsPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -235,7 +276,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.instance.connectionsByStatus.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Number of connections grouped by type and status in the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceAvgQueryExecutionTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -243,7 +286,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.performance.avgQueryExecutionTime.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average elapsed time per execution by service and SQL type in the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceAvgLockWaitTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -251,19 +296,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.performance.avgLockWaitTime.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Average lock wait time per execution by service and SQL type in the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceAlertsPanel:
-        g.panel.stat.new('Alerts')
-        + g.panel.stat.queryOptions.withTargets([
-          signals.instance.alertsCount.asTarget(),
-        ])
+        commonlib.panels.generic.stat.base.new('Alerts', targets=[signals.instance.alertsCount.asTarget()])
         + g.panel.stat.panelOptions.withDescription("Count of the SAP HANA instance's current alerts")
-        + g.panel.stat.standardOptions.withUnit('short')
-        + g.panel.stat.standardOptions.color.withMode('thresholds')
-        + g.panel.stat.options.withColorMode('value')
-        + g.panel.stat.options.withGraphMode('none')
-        + g.panel.stat.options.withTextMode('auto'),
+        + g.panel.stat.standardOptions.withUnit('short'),
 
       instanceRecentAlertsPanel:
         commonlib.panels.generic.table.base.new('Recent alerts', targets=[signals.instance.recentAlerts.asTableTarget()])
@@ -338,7 +378,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.performance.topTablesByMemory.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Top tables by the sum of memory size in the main, delta, and history parts for the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('decmbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       instanceTopSQLByTimePanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -346,7 +388,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.performance.topSQLByTime.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('Top statements by time consumed over all executions for the SAP HANA instance')
-        + g.panel.timeSeries.standardOptions.withUnit('µs'),
+        + g.panel.timeSeries.standardOptions.withUnit('µs')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
     },
 }
