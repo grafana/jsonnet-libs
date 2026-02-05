@@ -72,7 +72,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('Physical memory utilization percentage of the SAP HANA system')
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withThresholdsStyle({ mode: 'line' })
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
