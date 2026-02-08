@@ -1,4 +1,7 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
             "asDropdown": false,
@@ -34,8 +37,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                },
                "overrides": [
@@ -67,7 +79,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count(container_last_seen{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\", name!=\"\"})",
+                  "expr": "count(container_last_seen{job=~\"$job\",instance=~\"$instance\", name!=\"\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Containers",
@@ -86,8 +98,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                },
                "overrides": [
@@ -119,7 +140,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count (sum by (image) (container_last_seen{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\", name!=\"\"}))",
+                  "expr": "count (sum by (image) (container_last_seen{job=~\"$job\",instance=~\"$instance\", name!=\"\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Images",
@@ -138,12 +159,21 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -183,7 +213,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance, name) (rate(container_cpu_usage_seconds_total{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\", name!=\"\"}[$__rate_interval])) * 100",
+                  "expr": "avg by (job,instance, name) (rate(container_cpu_usage_seconds_total{job=~\"$job\",instance=~\"$instance\", name!=\"\"}[$__rate_interval])) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -214,12 +244,21 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -259,7 +298,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum(\n  container_spec_memory_reservation_limit_bytes{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\", name!=\"\"}\n  )\n/ \navg(\n    machine_memory_bytes{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\"}\n) * 100\n",
+                  "expr": "sum(\n  container_spec_memory_reservation_limit_bytes{job=~\"$job\",instance=~\"$instance\", name!=\"\"}\n  )\n/ \navg(\n    machine_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\n) * 100\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Memory reserved",
@@ -290,12 +329,21 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -335,7 +383,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg(\n  sum by (instance) (container_memory_usage_bytes{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\", name!=\"\"})\n  /\n  avg by (instance) (machine_memory_bytes{job!=\"kubelet\",job=~\"$job\",instance=~\"$instance\"})\n) * 100\n",
+                  "expr": "avg(\n  sum by (instance) (container_memory_usage_bytes{job=~\"$job\",instance=~\"$instance\", name!=\"\"})\n  /\n  avg by (instance) (machine_memory_bytes{job=~\"$job\",instance=~\"$instance\"})\n) * 100\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Memory used",
@@ -378,6 +426,10 @@
             "description": "CPU time consumed in seconds by container.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisSoftMax": 100,
                      "fillOpacity": 30,
@@ -389,7 +441,11 @@
                         "mode": "normal"
                      }
                   },
-                  "min": 0
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
                },
                "overrides": [
                   {
@@ -430,7 +486,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 *\n  rate(container_cpu_usage_seconds_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
+                  "expr": "100 *\n  rate(container_cpu_usage_seconds_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}",
@@ -448,6 +504,10 @@
             "description": "Current memory usage in bytes, including all memory regardless of when it was accessed by container.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -459,6 +519,10 @@
                      }
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -483,7 +547,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -529,7 +593,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "container_memory_usage_bytes{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}",
+                  "expr": "container_memory_usage_bytes{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}",
@@ -560,6 +624,10 @@
             "description": "Network traffic (bits per sec) measures data transmitted and received.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -574,6 +642,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
@@ -639,7 +711,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "8 *\n  rate(container_network_receive_bytes_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
+                  "expr": "8 *\n  rate(container_network_receive_bytes_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} receive",
@@ -650,7 +722,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "8 *\n  rate(container_network_transmit_bytes_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
+                  "expr": "8 *\n  rate(container_network_transmit_bytes_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} transmit",
@@ -668,6 +740,10 @@
             "description": "Network errors refer to issues that occur during the transmission of data across a network. \n\nThese errors can result from various factors, including physical issues, jitter, collisions, noise and interference.\n\nMonitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -680,6 +756,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                },
                "overrides": [
@@ -757,7 +837,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_network_receive_packets_dropped_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_network_receive_packets_dropped_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} rx drops",
@@ -768,7 +848,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_network_transmit_packets_dropped_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_network_transmit_packets_dropped_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} tx drops",
@@ -779,7 +859,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_network_receive_errors_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_network_receive_errors_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} rx errors",
@@ -790,7 +870,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_network_transmit_errors_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_network_transmit_errors_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{interface}} tx errors",
@@ -821,14 +901,22 @@
             "description": "Disk space usage is the amount of storage being used on a device's hard drive or storage medium, in bytes.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
-                     "fillOpacity": 1,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -870,7 +958,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "container_fs_usage_bytes{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}",
+                  "expr": "container_fs_usage_bytes{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{device}}",
@@ -888,14 +976,22 @@
             "description": "The number of I/O requests per second for the device/volume.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": true,
                      "axisLabel": "write(-) | read(+)",
-                     "fillOpacity": 1,
+                     "fillOpacity": 10,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "iops"
                },
@@ -962,7 +1058,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_fs_reads_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_fs_reads_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{device}} read",
@@ -973,7 +1069,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(container_fs_writes_total{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
+                  "expr": "rate(container_fs_writes_total{ name!=\"\",job=~\"$job\",instance=~\"$instance\",name=~\"$name\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{name}}/{{device}} write",
@@ -1008,7 +1104,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(container_last_seen{job!=\"kubelet\"}, job)",
+               "query": "label_values(container_last_seen{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1023,7 +1119,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(container_last_seen{job!=\"kubelet\",job=~\"$job\"}, instance)",
+               "query": "label_values(container_last_seen{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1038,7 +1134,7 @@
                "label": "Name",
                "multi": true,
                "name": "name",
-               "query": "label_values(container_last_seen{job!=\"kubelet\", name!=\"\",job=~\"$job\",instance=~\"$instance\"}, name)",
+               "query": "label_values(container_last_seen{ name!=\"\",job=~\"$job\",instance=~\"$instance\"}, name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1046,13 +1142,8 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
-      },
-      "timepicker": {
-         "time_options": [
-            "now-1h"
-         ]
       },
       "timezone": "default",
       "title": "Docker overview",

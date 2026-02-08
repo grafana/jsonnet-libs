@@ -71,6 +71,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     diskUsageBytes:
       commonlib.panels.disk.timeSeries.usage.new('Disk usage', targets=[])
       + g.panel.timeSeries.standardOptions.withMin(0)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + this.signals.container.diskUsageBytes.asPanelMixin(),
 
     diskIO:
@@ -79,6 +80,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[],
         description='The number of I/O requests per second for the device/volume.'
       )
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + this.signals.container.diskReads.asPanelMixin()
       + this.signals.container.diskWrites.asPanelMixin(),
   },
