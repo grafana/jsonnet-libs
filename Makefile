@@ -1,5 +1,5 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 PROMTOOL_VERSION := 3.2.0
 
 # Detect OS and architecture
