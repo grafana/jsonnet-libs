@@ -1,10 +1,11 @@
 local istiolib = import './main.libsonnet';
+local config = import './config.libsonnet';
 
 local istio =
   istiolib.new()
   + istiolib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/istio"',
+      filteringSelector: config.filteringSelector,
       uid: 'istio',
       groupLabels: ['job', 'cluster'],
       // disable loki logs

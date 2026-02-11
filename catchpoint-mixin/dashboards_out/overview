@@ -860,7 +860,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\"}, job)",
+               "query": "label_values(catchpoint_any_error{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -875,7 +875,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\",job=~\"$job\"}, instance)",
+               "query": "label_values(catchpoint_any_error{,job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -890,7 +890,7 @@
                "label": "Test_name",
                "multi": true,
                "name": "test_name",
-               "query": "label_values(catchpoint_any_error{job=~\"integrations/catchpoint\",job=~\"$job\",instance=~\"$instance\"}, test_name)",
+               "query": "label_values(catchpoint_any_error{,job=~\"$job\",instance=~\"$instance\"}, test_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

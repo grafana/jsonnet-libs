@@ -166,7 +166,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (response_code) (count_over_time({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (response_code) (count_over_time({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ response_code }}"
                }
             ],
@@ -208,7 +208,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -239,7 +239,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/istio\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -254,7 +254,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -269,7 +269,7 @@
                "label": "Pod",
                "multi": true,
                "name": "pod",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\"}, pod)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\"}, pod)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -284,7 +284,7 @@
                "label": "Log_type",
                "multi": true,
                "name": "log_type",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\"}, log_type)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\"}, log_type)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -299,7 +299,7 @@
                "label": "Protocol",
                "multi": true,
                "name": "protocol",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\"}, protocol)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\"}, protocol)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -314,7 +314,7 @@
                "label": "Request_method",
                "multi": true,
                "name": "request_method",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\"}, request_method)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\"}, request_method)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -329,7 +329,7 @@
                "label": "Response_code",
                "multi": true,
                "name": "response_code",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\"}, response_code)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\"}, response_code)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -344,7 +344,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"integrations/istio\",job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\"}, level)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\",pod=~\"$pod\",log_type=~\"$log_type\",protocol=~\"$protocol\",request_method=~\"$request_method\",response_code=~\"$response_code\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

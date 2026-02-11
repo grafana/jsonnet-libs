@@ -813,7 +813,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\"}, job)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -828,7 +828,7 @@
                "label": "Datacenter",
                "multi": true,
                "name": "vcenter_datacenter_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\"}, vcenter_datacenter_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{,job=~\"$job\"}, vcenter_datacenter_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

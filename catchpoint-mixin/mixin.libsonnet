@@ -1,10 +1,11 @@
 local catchpointlib = import './main.libsonnet';
+local config = import './config.libsonnet';
 
 local catchpoint =
   catchpointlib.new()
   + catchpointlib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/catchpoint"',
+      filteringSelector: config.filteringSelector,
       uid: 'catchpoint',
       enableLokiLogs: true,
     }
