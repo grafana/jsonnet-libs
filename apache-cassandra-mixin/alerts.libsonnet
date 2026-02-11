@@ -61,8 +61,8 @@
           {
             alert: 'BlockedCompactionTasksFound',
             expr: |||
-              cassandra_threadpools_currentlyblockedtasks_count{threadpools="CompactionExecutor", path="internal", %(filteringSelector)s} > %(alertsCriticalBlockedCompactionTasks5m)s
-            ||| % this.config,
+              cassandra_threadpools_currentlyblockedtasks_count{%(blockedCompactionSelector)s} > %(alertsCriticalBlockedCompactionTasks5m)s
+            ||| % this.config { blockedCompactionSelector: if this.config.filteringSelector != '' then 'threadpools="CompactionExecutor", path="internal", ' + this.config.filteringSelector else 'threadpools="CompactionExecutor", path="internal"' },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -97,8 +97,8 @@
           {
             alert: 'UnavailableWriteRequestsFound',
             expr: |||
-              sum  without (cassandra_cluster) (cassandra_clientrequest_unavailables_count{clientrequest="Write", %(filteringSelector)s}) > %(alertsCriticalUnavailableWriteRequests5m)s
-            ||| % this.config,
+              sum  without (cassandra_cluster) (cassandra_clientrequest_unavailables_count{%(unavailableWriteSelector)s}) > %(alertsCriticalUnavailableWriteRequests5m)s
+            ||| % this.config { unavailableWriteSelector: if this.config.filteringSelector != '' then 'clientrequest="Write", ' + this.config.filteringSelector else 'clientrequest="Write"' },
             'for': '5m',
             labels: { severity: 'critical' },
             annotations: { summary: 'Unavailable exceptions have been encountered while performing writes in this cluster.', description: ('{{ printf "%%.0f" $value }} unavailable write requests have been found over the last 5 minutes on {{$labels.instance}}, ' + 'which is above the threshold of %(alertsCriticalUnavailableWriteRequests5m)s. ') % this.config },
@@ -124,8 +124,8 @@
           {
             alert: 'HighMemoryUsage',
             expr: |||
-              sum by (instance) (jvm_memory_usage_used_bytes{%(filteringSelector)s, area="Heap"}) / sum by (instance) (jvm_physical_memory_size{%(filteringSelector)s}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
-            ||| % this.config,
+              sum by (instance) (jvm_memory_usage_used_bytes{%(heapSelector)s}) / sum by (instance) (jvm_physical_memory_size{%(filteringSelector)s}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
+            ||| % this.config { heapSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', area="Heap"' else 'area="Heap"' },
             'for': '5m',
             labels: {
               severity: 'critical',

@@ -42,9 +42,9 @@
           {
             alert: 'GitLabHigh5xxResponses',
             expr: |||
-              100 * sum by (instance, status) (rate(http_requests_total{%(filteringSelector)s,status=~"5[0-9][0-9]"}[5m])) / sum by (instance) (rate(http_requests_total{%(filteringSelector)s}[5m])) 
+              100 * sum by (instance, status) (rate(http_requests_total{%(filteringSelector5xx)s}[5m])) / sum by (instance) (rate(http_requests_total{%(filteringSelector)s}[5m])) 
               > %(alertsCritical5xxResponses)s
-            ||| % this.config,
+            ||| % this.config { filteringSelector5xx: if this.config.filteringSelector != '' then this.config.filteringSelector + ',status=~"5[0-9][0-9]"' else 'status=~"5[0-9][0-9]"' },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -60,9 +60,9 @@
           {
             alert: 'GitLabHigh4xxResponses',
             expr: |||
-              100 * sum by (instance, status) (rate(http_requests_total{%(filteringSelector)s,status=~"4[0-9][0-9]"}[5m])) / sum by (instance) (rate(http_requests_total{%(filteringSelector)s}[5m]))
+              100 * sum by (instance, status) (rate(http_requests_total{%(filteringSelector4xx)s}[5m])) / sum by (instance) (rate(http_requests_total{%(filteringSelector)s}[5m]))
               > %(alertsWarning4xxResponses)s
-            ||| % this.config,
+            ||| % this.config { filteringSelector4xx: if this.config.filteringSelector != '' then this.config.filteringSelector + ',status=~"4[0-9][0-9]"' else 'status=~"4[0-9][0-9]"' },
             'for': '5m',
             labels: {
               severity: 'warning',

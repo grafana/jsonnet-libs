@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job="integrations/openstack"',
+  filteringSelector: '',
   groupLabels: ['job'],
   // instance of openstack cluster
   instanceLabels: ['instance'],

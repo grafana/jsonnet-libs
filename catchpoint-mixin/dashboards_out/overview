@@ -34,6 +34,10 @@
             "description": "The top number of errors encountered among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -41,6 +45,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -117,6 +125,10 @@
             "description": "The top average total load time among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -124,6 +136,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -167,6 +183,10 @@
             "description": "The top average total load time among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -174,6 +194,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -217,6 +241,10 @@
             "description": "The top average document completion time among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -224,6 +252,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -267,6 +299,10 @@
             "description": "The top average document completion time among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -274,6 +310,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -329,6 +369,10 @@
             "description": "The lowest average success request ratio among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -336,6 +380,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percentunit"
                }
@@ -379,6 +427,10 @@
             "description": "The lowest average success request ratio among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -386,6 +438,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percentunit"
                }
@@ -441,6 +497,10 @@
             "description": "The top average connection setup time among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -448,6 +508,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -491,6 +555,10 @@
             "description": "The top average connection setup time among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -498,6 +566,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -541,6 +613,10 @@
             "description": "The top average content loading time among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -548,6 +624,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -591,6 +671,10 @@
             "description": "The top average content loading time among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -598,6 +682,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -641,6 +729,10 @@
             "description": "The top average number of redirects among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -648,6 +740,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -690,6 +786,10 @@
             "description": "The top average number of redirects among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "opacity",
@@ -697,6 +797,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": "true"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },

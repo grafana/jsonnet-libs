@@ -1,6 +1,6 @@
 {
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
-  filteringSelector: 'job=~"integrations/istio"',
+  filteringSelector: '',
   // Used to identify 'group' of instances.
   groupLabels: ['job', 'cluster'],
 

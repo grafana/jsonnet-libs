@@ -1,7 +1,7 @@
 {
 
   local this = self,
-  filteringSelector: 'job="integrations/apache-mesos"',
+  filteringSelector: '',
   groupLabels: ['job', 'mesos_cluster', 'cluster'],
   instanceLabels: ['instance'],
 

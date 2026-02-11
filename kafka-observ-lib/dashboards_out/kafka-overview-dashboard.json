@@ -29,7 +29,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Active kafka controllers count.\n",
+            "description": "Number of active controllers in the cluster. Should always be exactly 1.  \nZero indicates no controller elected, preventing cluster operations.  \nMore than one indicates split-brain requiring immediate attention.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -89,7 +89,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Active brokers count.\n",
+            "description": "Total number of active brokers currently registered and reporting in the cluster.  \n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -149,7 +149,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Unclean leader election rate.\n",
+            "description": "Rate of unclean leader elections occurring in the cluster. An unclean leader election happens\nwhen a partition leader fails and a replica that was not fully in-sync (not in the ISR) is\nelected as the new leader. This results in potential data loss as the new leader may be missing\nmessages that were committed to the previous leader. Unclean elections occur when unclean.leader.election.enable\nis set to true and there are no in-sync replicas available. Any occurrence of unclean elections\nindicates a serious problem with cluster availability and replication health that risks data integrity.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -200,7 +200,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The count of topic partitions for which the leader is not the preferred leader.\n",
+            "description": "The count of topic partitions for which the leader is not the preferred leader. In Kafka,\neach partition has a preferred leader replica (typically the first replica in the replica list).\nWhen leadership is not on the preferred replica, the cluster may experience uneven load distribution\nacross brokers, leading to performance imbalances. This can occur after broker failures and restarts,\nor during cluster maintenance. Running the preferred replica election can help rebalance leadership\nand optimize cluster performance. A consistently high imbalance may indicate issues with automatic\nleader rebalancing or the need for manual intervention.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -212,7 +212,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Preferred replica inbalance"
+                        "options": "Preferred replica imbalance"
                      },
                      "properties": [
                         {
@@ -239,11 +239,11 @@
                   "expr": "sum by (kafka_cluster) (\n  kafka_controller_kafkacontroller_preferredreplicaimbalancecount_value{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\nsum by (kafka_cluster) (\n  kafka_controller_kafkacontroller_preferredreplicaimbalancecount{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{kafka_cluster}}: Preferred replica inbalance",
-                  "refId": "Preferred replica inbalance"
+                  "legendFormat": "{{kafka_cluster}}: Preferred replica imbalance",
+                  "refId": "Preferred replica imbalance"
                }
             ],
-            "title": "Preferred replica inbalance",
+            "title": "Preferred replica imbalance",
             "type": "stat"
          },
          {
@@ -420,7 +420,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Online partitions.\n",
+            "description": "Number of partitions that are currently online and available on this broker. This includes\npartitions where this broker is either the leader or a follower replica. The total count\nreflects the broker's share of the topic partitions across the cluster. A sudden drop in\nonline partitions may indicate broker issues, partition reassignments, or cluster rebalancing.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -471,7 +471,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of partitions that dont have an active leader and are hence not writable or readable.\n",
+            "description": "Number of partitions that don't have an active leader and are hence not writable or readable.\nOffline partitions indicate a critical availability issue as producers cannot write to these\npartitions and consumers cannot read from them. This typically occurs when all replicas for\na partition are down or when there are not enough in-sync replicas to elect a new leader.\nAny non-zero value requires immediate investigation and remediation to restore service availability.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -522,7 +522,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of under replicated partitions (| ISR | < | all replicas |).\n",
+            "description": "Number of partitions that have fewer in-sync replicas (ISR) than the configured replication factor.\nUnder-replicated partitions indicate potential data availability issues, as there are fewer copies\nof the data than desired. This could be caused by broker failures, network issues, or brokers\nfalling behind in replication. A high number of under-replicated partitions poses a risk to\ndata durability and availability, as the loss of additional brokers could result in data loss.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -573,7 +573,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Under min ISR(In-Sync replicas) partitions.\n",
+            "description": "Number of partitions that have fewer in-sync replicas (ISR) than the configured minimum ISR threshold.\nWhen the number of ISRs for a partition falls below the min.insync.replicas setting, the partition\nbecomes unavailable for writes (if acks=all is configured), which helps prevent data loss but impacts\navailability. This metric indicates potential issues with broker availability, network connectivity,\nor replication lag that need immediate attention to restore write availability.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -624,7 +624,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "0 - follower, 1 - controller.\n",
+            "description": "Broker's current controller role: 0 indicates follower, 1 indicates active controller.  \nOnly one broker should have value 1 at any time.  \nUsed to identify which broker is managing cluster metadata and leadership.\nCurrent controller role: 0 - follower, 1 - controller.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -728,10 +728,10 @@
                ]
             },
             "gridPos": {
-               "h": 7,
+               "h": 10,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 15
             },
             "maxDataPoints": 100,
             "options": {
@@ -782,7 +782,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 20
+               "y": 25
             },
             "panels": [ ],
             "title": "Throughput",
@@ -851,7 +851,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 21
+               "y": 26
             },
             "options": {
                "legend": {
@@ -928,7 +928,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 21
+               "y": 26
             },
             "options": {
                "legend": {
@@ -963,7 +963,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 29
+               "y": 34
             },
             "panels": [ ],
             "title": "Replication",
@@ -974,7 +974,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Online partitions.\n",
+            "description": "Number of partitions that are currently online and available on this broker. This includes\npartitions where this broker is either the leader or a follower replica. The total count\nreflects the broker's share of the topic partitions across the cluster. A sudden drop in\nonline partitions may indicate broker issues, partition reassignments, or cluster rebalancing.\n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -1004,7 +1004,7 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 30
+               "y": 35
             },
             "options": {
                "legend": {
@@ -1038,7 +1038,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of partitions that dont have an active leader and are hence not writable or readable.\n",
+            "description": "Number of partitions that don't have an active leader and are hence not writable or readable.\nOffline partitions indicate a critical availability issue as producers cannot write to these\npartitions and consumers cannot read from them. This typically occurs when all replicas for\na partition are down or when there are not enough in-sync replicas to elect a new leader.\nAny non-zero value requires immediate investigation and remediation to restore service availability.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1077,7 +1077,7 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 30
+               "y": 35
             },
             "maxDataPoints": 100,
             "options": {
@@ -1112,7 +1112,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of under replicated partitions (| ISR | < | all replicas |).\n",
+            "description": "Number of partitions that have fewer in-sync replicas (ISR) than the configured replication factor.\nUnder-replicated partitions indicate potential data availability issues, as there are fewer copies\nof the data than desired. This could be caused by broker failures, network issues, or brokers\nfalling behind in replication. A high number of under-replicated partitions poses a risk to\ndata durability and availability, as the loss of additional brokers could result in data loss.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1151,7 +1151,7 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 36
+               "y": 41
             },
             "maxDataPoints": 100,
             "options": {
@@ -1186,7 +1186,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Under min ISR(In-Sync replicas) partitions.\n",
+            "description": "Number of partitions that have fewer in-sync replicas (ISR) than the configured minimum ISR threshold.\nWhen the number of ISRs for a partition falls below the min.insync.replicas setting, the partition\nbecomes unavailable for writes (if acks=all is configured), which helps prevent data loss but impacts\navailability. This metric indicates potential issues with broker availability, network connectivity,\nor replication lag that need immediate attention to restore write availability.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1225,7 +1225,7 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 36
+               "y": 41
             },
             "maxDataPoints": 100,
             "options": {
@@ -1290,7 +1290,7 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 42
+               "y": 47
             },
             "options": {
                "legend": {
@@ -1354,7 +1354,7 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 42
+               "y": 47
             },
             "options": {
                "legend": {
@@ -1389,7 +1389,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 48
+               "y": 53
             },
             "panels": [
                {
@@ -1478,7 +1478,7 @@
                      "h": 6,
                      "w": 8,
                      "x": 0,
-                     "y": 49
+                     "y": 54
                   },
                   "options": {
                      "legend": {
@@ -1639,7 +1639,7 @@
                      "h": 6,
                      "w": 8,
                      "x": 8,
-                     "y": 49
+                     "y": 54
                   },
                   "options": {
                      "legend": {
@@ -1800,7 +1800,7 @@
                      "h": 6,
                      "w": 8,
                      "x": 16,
-                     "y": 49
+                     "y": 54
                   },
                   "options": {
                      "legend": {
@@ -1885,7 +1885,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 55
+               "y": 60
             },
             "panels": [
                {
@@ -1893,7 +1893,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The number of messages produced converted to match the log.message.format.version.",
+                  "description": "Rate of producer messages requiring format conversion to match broker's log.message.format.version.  \nConversions add CPU overhead and latency.  \nNon-zero values suggest producer and broker version mismatches requiring alignment.\n",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -1923,7 +1923,7 @@
                      "h": 6,
                      "w": 12,
                      "x": 0,
-                     "y": 56
+                     "y": 61
                   },
                   "options": {
                      "legend": {
@@ -1957,7 +1957,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The number of messages consumed converted at consumer to match the log.message.format.version.",
+                  "description": "Rate of messages requiring format conversion during consumer fetch to match log.message.format.version.  \nConversions impact broker CPU and consumer latency.  \nIndicates version mismatch between stored messages and consumer expectations.\n",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -1987,7 +1987,7 @@
                      "h": 6,
                      "w": 12,
                      "x": 12,
-                     "y": 56
+                     "y": 61
                   },
                   "options": {
                      "legend": {
@@ -2026,7 +2026,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 62
+               "y": 67
             },
             "panels": [
                {
@@ -2034,7 +2034,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Latency in millseconds for ZooKeeper requests from broker.",
+                  "description": "Latency in milliseconds for ZooKeeper requests from broker to ZooKeeper ensemble.  \nHigh latency indicates ZooKeeper performance issues or network problems.  \nCritical for broker operations like leader election and metadata updates.\n",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -2064,7 +2064,7 @@
                      "h": 6,
                      "w": 8,
                      "x": 0,
-                     "y": 63
+                     "y": 68
                   },
                   "options": {
                      "legend": {
@@ -2098,7 +2098,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Zookeeper connections rate.",
+                  "description": "Rate of successful ZooKeeper connections established by broker.  \nFrequent connections may indicate session instability or network issues.  \nShould be stable in healthy clusters with occasional reconnections during maintenance.\n",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
@@ -2164,7 +2164,7 @@
                      "h": 6,
                      "w": 8,
                      "x": 8,
-                     "y": 63
+                     "y": 68
                   },
                   "options": {
                      "legend": {
@@ -2236,7 +2236,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 69
+               "y": 74
             },
             "panels": [ ],
             "title": "Process overview",
@@ -2289,7 +2289,7 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 70
+               "y": 75
             },
             "options": {
                "colorMode": "value",
@@ -2344,7 +2344,7 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 70
+               "y": 75
             },
             "options": {
                "colorMode": "fixed",
@@ -2438,7 +2438,7 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 70
+               "y": 75
             },
             "options": {
                "legend": {
@@ -2521,7 +2521,7 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 76
+               "y": 81
             },
             "options": {
                "legend": {
@@ -2627,7 +2627,7 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 76
+               "y": 81
             },
             "options": {
                "legend": {
@@ -2703,7 +2703,7 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 76
+               "y": 81
             },
             "options": {
                "legend": {
@@ -2749,7 +2749,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 82
+               "y": 87
             },
             "panels": [
                {
@@ -2774,7 +2774,7 @@
                      "h": 4,
                      "w": 4,
                      "x": 0,
-                     "y": 83
+                     "y": 88
                   },
                   "options": {
                      "colorMode": "value",
@@ -2823,7 +2823,7 @@
                      "h": 4,
                      "w": 4,
                      "x": 4,
-                     "y": 83
+                     "y": 88
                   },
                   "options": {
                      "colorMode": "value",
@@ -2882,7 +2882,7 @@
                      "h": 4,
                      "w": 4,
                      "x": 8,
-                     "y": 83
+                     "y": 88
                   },
                   "pluginVersion": "v11.0.0",
                   "targets": [
@@ -2933,7 +2933,7 @@
                      "h": 4,
                      "w": 4,
                      "x": 12,
-                     "y": 83
+                     "y": 88
                   },
                   "pluginVersion": "v11.0.0",
                   "targets": [
@@ -2942,7 +2942,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "avg by (kafka_cluster) (\n  java_lang_classloading_loadedclasscount{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
+                        "expr": "avg by (kafka_cluster) (\n  java_lang_classloading_loadedclasscount{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded_total{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)\nor\navg by (kafka_cluster) (\n  jvm_classes_loaded{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}\n)",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{kafka_cluster}}: Classes loaded",
@@ -2962,7 +2962,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 87
+               "y": 92
             },
             "panels": [
                {
@@ -3055,7 +3055,7 @@
                      "h": 8,
                      "w": 8,
                      "x": 0,
-                     "y": 88
+                     "y": 93
                   },
                   "h": 6,
                   "options": {
@@ -3198,7 +3198,7 @@
                      "h": 8,
                      "w": 8,
                      "x": 8,
-                     "y": 88
+                     "y": 93
                   },
                   "h": 6,
                   "options": {
@@ -3261,7 +3261,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 96
+               "y": 101
             },
             "panels": [
                {
@@ -3364,7 +3364,7 @@
                      "h": 8,
                      "w": 8,
                      "x": 0,
-                     "y": 97
+                     "y": 102
                   },
                   "options": {
                      "legend": {
@@ -3461,7 +3461,7 @@
                      "h": 8,
                      "w": 8,
                      "x": 8,
-                     "y": 97
+                     "y": 102
                   },
                   "options": {
                      "legend": {

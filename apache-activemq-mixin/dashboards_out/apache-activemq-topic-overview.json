@@ -61,8 +61,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -80,7 +89,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count (activemq_topic_queue_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "count (activemq_topic_queue_size{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -99,8 +108,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -118,7 +136,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_topic_producer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum (activemq_topic_producer_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -137,8 +155,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -156,7 +183,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "sum (activemq_topic_consumer_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -175,8 +202,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -194,7 +230,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "avg (activemq_topic_consumer_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -212,6 +248,10 @@
             "description": "Rate of messages being enqueued to topics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -219,6 +259,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -249,7 +293,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -268,6 +312,10 @@
             "description": "Rate of messages being dequeued from topics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -275,6 +323,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -305,7 +357,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -324,6 +376,10 @@
             "description": "Average time to enqueue messages to topics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -331,6 +387,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -361,7 +421,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -379,6 +439,10 @@
             "description": "Rate of messages expiring in topics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -386,6 +450,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -416,7 +484,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_expired_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_expired_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -435,12 +503,20 @@
             "description": "Top topics by consumers.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -472,7 +548,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
+                  "expr": "topk by (instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -490,6 +566,10 @@
             "description": "Average size of messages in topics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 54,
                      "gradientMode": "opacity",
@@ -497,6 +577,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -527,7 +611,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
+                  "expr": "activemq_topic_average_message_size{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -545,6 +629,10 @@
             "description": "Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "left",
                      "cellOptions": {
@@ -674,7 +762,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_topic_enqueue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "expr": "rate(activemq_topic_enqueue_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -686,7 +774,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(activemq_topic_dequeue_count{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
+                  "expr": "rate(activemq_topic_dequeue_count{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}[$__rate_interval])",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -698,7 +786,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_topic_average_enqueue_time{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "expr": "activemq_topic_average_enqueue_time{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -709,7 +797,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "activemq_topic_average_message_size{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
+                  "expr": "activemq_topic_average_message_size{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\",instance=~\"$instance\", destination!~\"ActiveMQ.Advisory.*\", destination=~\".*$name.*\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{activemq_cluster}} - {{ instance }} - {{ destination }}",
@@ -784,7 +872,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\"}, job)",
+               "query": "label_values(activemq_memory_usage_ratio{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -799,7 +887,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\"}, cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -814,7 +902,7 @@
                "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -829,7 +917,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(activemq_memory_usage_ratio{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
+               "query": "label_values(activemq_memory_usage_ratio{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

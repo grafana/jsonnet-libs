@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job=~".*openldap.*"',
+  filteringSelector: '',
   uid: 'openldap',
 
   enableMultiCluster: false,

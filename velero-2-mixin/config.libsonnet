@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job="integrations/velero"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'instance'],
   legendLabels: ['schedule'],

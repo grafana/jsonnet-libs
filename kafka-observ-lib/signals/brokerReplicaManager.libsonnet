@@ -80,7 +80,10 @@ function(this)
       onlinePartitions: {
         name: 'Online partitions',
         description: |||
-          Online partitions.
+          Number of partitions that are currently online and available on this broker. This includes
+          partitions where this broker is either the leader or a follower replica. The total count
+          reflects the broker's share of the topic partitions across the cluster. A sudden drop in
+          online partitions may indicate broker issues, partition reassignments, or cluster rebalancing.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -103,7 +106,11 @@ function(this)
       offlinePartitions: {
         name: 'Offline partitions',
         description: |||
-          Number of partitions that dont have an active leader and are hence not writable or readable.
+          Number of partitions that don't have an active leader and are hence not writable or readable.
+          Offline partitions indicate a critical availability issue as producers cannot write to these
+          partitions and consumers cannot read from them. This typically occurs when all replicas for
+          a partition are down or when there are not enough in-sync replicas to elect a new leader.
+          Any non-zero value requires immediate investigation and remediation to restore service availability.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -125,7 +132,11 @@ function(this)
       underReplicatedPartitions: {
         name: 'Under replicated partitions',
         description: |||
-          Number of under replicated partitions (| ISR | < | all replicas |).
+          Number of partitions that have fewer in-sync replicas (ISR) than the configured replication factor.
+          Under-replicated partitions indicate potential data availability issues, as there are fewer copies
+          of the data than desired. This could be caused by broker failures, network issues, or brokers
+          falling behind in replication. A high number of under-replicated partitions poses a risk to
+          data durability and availability, as the loss of additional brokers could result in data loss.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -145,7 +156,11 @@ function(this)
       underMinISRPartitions: {
         name: 'Under min ISR partitions',
         description: |||
-          Under min ISR(In-Sync replicas) partitions.
+          Number of partitions that have fewer in-sync replicas (ISR) than the configured minimum ISR threshold.
+          When the number of ISRs for a partition falls below the min.insync.replicas setting, the partition
+          becomes unavailable for writes (if acks=all is configured), which helps prevent data loss but impacts
+          availability. This metric indicates potential issues with broker availability, network connectivity,
+          or replication lag that need immediate attention to restore write availability.
         |||,
         type: 'gauge',
         unit: 'short',
@@ -165,7 +180,12 @@ function(this)
       uncleanLeaderElection: {
         name: 'Unclean leader election',
         description: |||
-          Unclean leader election rate.
+          Rate of unclean leader elections occurring in the cluster. An unclean leader election happens
+          when a partition leader fails and a replica that was not fully in-sync (not in the ISR) is
+          elected as the new leader. This results in potential data loss as the new leader may be missing
+          messages that were committed to the previous leader. Unclean elections occur when unclean.leader.election.enable
+          is set to true and there are no in-sync replicas available. Any occurrence of unclean elections
+          indicates a serious problem with cluster availability and replication health that risks data integrity.
         |||,
         type: 'raw',
         unit: 'short',
@@ -182,10 +202,16 @@ function(this)
             },
         },
       },
-      preferredReplicaInbalance: {
-        name: 'Preferred replica inbalance',
+      preferredReplicaImbalance: {
+        name: 'Preferred replica imbalance',
         description: |||
-          The count of topic partitions for which the leader is not the preferred leader.
+          The count of topic partitions for which the leader is not the preferred leader. In Kafka,
+          each partition has a preferred leader replica (typically the first replica in the replica list).
+          When leadership is not on the preferred replica, the cluster may experience uneven load distribution
+          across brokers, leading to performance imbalances. This can occur after broker failures and restarts,
+          or during cluster maintenance. Running the preferred replica election can help rebalance leadership
+          and optimize cluster performance. A consistently high imbalance may indicate issues with automatic
+          leader rebalancing or the need for manual intervention.
         |||,
         type: 'gauge',
         unit: 'short',

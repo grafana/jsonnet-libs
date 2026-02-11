@@ -55,6 +55,16 @@
             },
             "description": "Number of nodes in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -157,7 +167,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster, instance,ns) (aerospike_namespace_ns_cluster_size{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster, instance,ns) (aerospike_namespace_ns_cluster_size{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -188,6 +198,16 @@
             },
             "description": "Number of namespaces in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -295,7 +315,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster, instance,ns) (aerospike_namespace_ns_cluster_size{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster, instance,ns) (aerospike_namespace_ns_cluster_size{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -317,6 +337,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -328,7 +357,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -343,7 +371,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_namespace_unavailable_partitions{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_namespace_unavailable_partitions{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{aerospike_cluster}}",
@@ -365,6 +393,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -376,7 +413,6 @@
             },
             "id": 5,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -391,7 +427,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_namespace_dead_partitions{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_namespace_dead_partitions{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{aerospike_cluster}}",
@@ -408,6 +444,16 @@
             },
             "description": "Memory utilization for the top k nodes in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -498,7 +544,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_node_stats_system_free_mem_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
+                  "expr": "topk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_node_stats_system_free_mem_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -516,6 +562,16 @@
             },
             "description": "Disk utilization for the top k nodes in an Aerospike cluster. Compatible with Aerospike versions < 7.0 using legacy metrics.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -606,7 +662,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))\nor\ntopk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_namespace_device_free_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
+                  "expr": "topk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))\nor\ntopk($k, 100 - sum by(job,aerospike_cluster,cluster, instance,ns) (avg_over_time(aerospike_namespace_device_free_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__interval])))",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -625,6 +681,10 @@
             "description": "Rate of client read transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -632,6 +692,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -666,7 +730,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_success{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_success{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -678,7 +742,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -690,7 +754,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -702,7 +766,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_not_found{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_not_found{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -714,7 +778,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_read_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -733,6 +797,10 @@
             "description": "Rate of client write transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -740,6 +808,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -774,7 +846,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_success{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_success{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -786,7 +858,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -798,7 +870,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -810,7 +882,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_write_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -829,6 +901,10 @@
             "description": "Rate of client UDF transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -836,6 +912,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -870,7 +950,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_complete{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_complete{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -882,7 +962,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -894,7 +974,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -906,7 +986,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (rate(aerospike_namespace_client_udf_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -925,6 +1005,10 @@
             "description": "Number of active connections to an Aerospike cluster.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -932,6 +1016,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                }
@@ -960,7 +1048,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_client_connections{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_client_connections{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -972,7 +1060,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_fabric_connections{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_fabric_connections{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -984,7 +1072,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_heartbeat_connections{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
+                  "expr": "sum by(job,aerospike_cluster,cluster) (aerospike_node_stats_heartbeat_connections{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1020,7 +1108,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\"}, job)",
+               "query": "label_values(aerospike_namespace_data_used_pct{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1035,7 +1123,7 @@
                "label": "Aerospike cluster",
                "multi": true,
                "name": "aerospike_cluster",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\"}, aerospike_cluster)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\"}, aerospike_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1050,7 +1138,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1065,7 +1153,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1080,7 +1168,7 @@
                "label": "Namespace",
                "multi": true,
                "name": "ns",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}, ns)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}, ns)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

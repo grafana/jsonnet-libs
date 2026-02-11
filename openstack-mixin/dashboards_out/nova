@@ -35,7 +35,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
                   },
                   "mappings": [
@@ -55,6 +55,15 @@
                         "type": "value"
                      }
                   ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "string"
                }
             },
@@ -89,6 +98,10 @@
             "description": "The current number of total and running virtual machines.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -96,7 +109,11 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "decimals": 0
+                  "decimals": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
                }
             },
             "gridPos": {
@@ -140,6 +157,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -152,6 +170,10 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percentunit"
                }
             },
@@ -197,6 +219,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -209,6 +232,10 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percentunit"
                }
             },
@@ -254,6 +281,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -266,6 +294,10 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percentunit"
                }
             },

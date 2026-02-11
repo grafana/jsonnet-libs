@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/varnish-cache"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['varnish-mixin'],

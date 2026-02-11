@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/apache-hadoop"',
+  filteringSelector: '',
   groupLabels: ['job', 'hadoop_cluster', 'cluster'],
   instanceLabels: ['instance'],
 

@@ -1,17 +1,31 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
-            "asDropdown": false,
-            "icon": "external link",
-            "includeVars": false,
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Apache HBase cluster overview",
+            "type": "link",
+            "url": "/d/apachehbase-cluster-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-hbase-mixin"
             ],
-            "targetBlank": false,
-            "title": "Other Apache HBase Dashboards",
-            "type": "dashboards",
-            "url": ""
+            "title": "All Apache HBase dashboards",
+            "type": "dashboards"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Apache HBase RegionServer overview",
+            "type": "link",
+            "url": "/d/apachehbase-regionserver-overview"
          }
       ],
       "panels": [
@@ -161,7 +175,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\",logger=~\"$logger\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -194,7 +208,7 @@
                "enableLogDetails": true,
                "prettifyLogMessage": true,
                "showTime": false,
-               "wrapLogMessage": true
+               "wrapLogMessage": false
             },
             "pluginVersion": "v11.0.0",
             "targets": [
@@ -203,7 +217,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\",logger=~\"$logger\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -234,22 +248,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/apache-hbase\"}, job)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Hbase_cluster",
-               "multi": true,
-               "name": "hbase_cluster",
-               "query": "label_values({job=~\"integrations/apache-hbase\",job=~\"$job\"}, hbase_cluster)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -264,7 +263,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=~\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\"}, instance)",
+               "query": "label_values({job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -276,10 +275,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Logger",
+               "label": "Apache HBase cluster",
                "multi": true,
-               "name": "logger",
-               "query": "label_values({job=~\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\"}, logger)",
+               "name": "hbase_cluster",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\"}, hbase_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -294,7 +293,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"integrations/apache-hbase\",job=~\"$job\",hbase_cluster=~\"$hbase_cluster\",instance=~\"$instance\",logger=~\"$logger\"}, level)",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\",hbase_cluster=~\"$hbase_cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -316,14 +315,22 @@
                ],
                "query": "",
                "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
-      "title": "Apache HBase logs overview",
-      "uid": "apache-hbase-logs-overview"
+      "timezone": "default",
+      "title": "Apache HBase logs",
+      "uid": "apachehbase-logs"
    }
