@@ -308,6 +308,67 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
+            "description": "The rate at which all bandwidth in the zone occurs.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ zone }}",
+                  "refId": "Zone bandwidth"
+               }
+            ],
+            "title": "Bandwidth rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
             "description": "The percentage of requests to the zone that are cached.",
             "fieldConfig": {
                "defaults": {
@@ -350,11 +411,11 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 9
+               "w": 8,
+               "x": 0,
+               "y": 17
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -413,11 +474,11 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
+               "w": 8,
+               "x": 8,
                "y": 17
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -452,67 +513,6 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The rate at which all bandwidth in the zone occurs.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "fillOpacity": 10,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never",
-                     "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
-                  },
-                  "unit": "Bps"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 17
-            },
-            "id": 7,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "rate(cloudflare_zone_bandwidth_total{job=~\"$job\",cluster=~\"$cluster\",zone=~\"$zone\",script_name=~\"$script_name\",instance=~\"$instance\"}[$__rate_interval])",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{ zone }}",
-                  "refId": "Zone bandwidth"
-               }
-            ],
-            "title": "Bandwidth rate",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
             "description": "The amount of cached and encrypted bandwidth that occurs in the zone.",
             "fieldConfig": {
                "defaults": {
@@ -538,9 +538,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 25
+               "w": 8,
+               "x": 16,
+               "y": 17
             },
             "id": 8,
             "options": {
@@ -615,8 +615,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 8,
+               "x": 0,
                "y": 25
             },
             "id": 9,
@@ -678,9 +678,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 33
+               "w": 8,
+               "x": 8,
+               "y": 25
             },
             "id": 10,
             "options": {
@@ -744,9 +744,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 33
+               "w": 8,
+               "x": 16,
+               "y": 25
             },
             "id": 11,
             "options": {
@@ -825,7 +825,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 41
+               "y": 33
             },
             "id": 12,
             "options": {
@@ -892,7 +892,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 49
+               "y": 41
             },
             "id": 13,
             "options": {
