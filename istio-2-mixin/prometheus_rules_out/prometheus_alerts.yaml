@@ -29,7 +29,7 @@ groups:
                 {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the threshold of 0.
             summary: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
           expr: |
-            sum without(instance) (increase(pilot_conflict_inbound_listener{pod=~"istiod.*"}[5m])) + sum without(instance) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{pod=~"istiod.*"}[5m])) > 0
+            sum without(instance) (increase(pilot_conflict_inbound_listener{pod=~"istiod.+"}[5m])) + sum without(instance) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{pod=~"istiod.+"}[5m])) > 0
           for: 1m
           labels:
             severity: critical
@@ -39,7 +39,7 @@ groups:
                 {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} xDS rejections from envoy proxies, which is above the threshold of 0.
             summary: Istio Pilot is seeing a number of xDS rejections from envoy proxies.
           expr: |
-            sum without(instance) (increase(pilot_total_xds_rejects{pod=~"istiod.*"}[5m])) > 0
+            sum without(instance) (increase(pilot_total_xds_rejects{pod=~"istiod.+"}[5m])) > 0
           for: 1m
           labels:
             severity: warning

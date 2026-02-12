@@ -1,5 +1,5 @@
-local catchpointlib = import './main.libsonnet';
 local config = import './config.libsonnet';
+local catchpointlib = import './main.libsonnet';
 
 local catchpoint =
   catchpointlib.new()

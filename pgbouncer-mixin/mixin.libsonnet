@@ -1,5 +1,5 @@
-local pgbouncerlib = import './main.libsonnet';
 local config = import './config.libsonnet';
+local pgbouncerlib = import './main.libsonnet';
 
 local pgbouncer =
   pgbouncerlib.new()

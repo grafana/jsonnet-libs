@@ -48,7 +48,7 @@
             alert: 'IstioListenerConfigConflictsCritical',
             expr: |||
               sum without(instance) (increase(pilot_conflict_inbound_listener{%(istiodPodSelector)s}[5m])) + sum without(instance) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{%(istiodPodSelector)s}[5m])) > %(alertsCriticalListenerConfigConflicts)s
-            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.*"' else 'pod=~"istiod.*"' },
+            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.+"' else 'pod=~"istiod.+"' },
             'for': '1m',
             labels: {
               severity: 'critical',
@@ -64,7 +64,7 @@
             alert: 'IstioXDSConfigRejectionsWarning',
             expr: |||
               sum without(instance) (increase(pilot_total_xds_rejects{%(istiodPodSelector)s}[5m])) > %(alertsWarningXDSConfigRejections)s
-            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.*"' else 'pod=~"istiod.*"' },
+            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.+"' else 'pod=~"istiod.+"' },
             'for': '1m',
             labels: {
               severity: 'warning',

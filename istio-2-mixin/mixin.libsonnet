@@ -1,5 +1,5 @@
-local istiolib = import './main.libsonnet';
 local config = import './config.libsonnet';
+local istiolib = import './main.libsonnet';
 
 local istio =
   istiolib.new()

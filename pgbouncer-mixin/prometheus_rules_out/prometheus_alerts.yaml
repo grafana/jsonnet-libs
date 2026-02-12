@@ -1,7 +1,7 @@
 groups:
     - name: pgbouncer
       rules:
-        - alert: PGBouncerHighNumberClientWaitingConnections
+        - alert: PGBouncerHighNumberWaitingConnections
           annotations:
             description: |
                 The number of clients waiting for connections on {{ $labels.instance }} is now above 20. The current value is {{ $value | printf "%.2f" }}.
@@ -11,7 +11,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: PGBouncerHighClientWaitTime
+        - alert: PGBouncerHighWaitTime
           annotations:
             description: |
                 The wait time for user connections on {{ $labels.instance }}, is above 15. The current value is {{ $value | printf "%.2f" }}.
@@ -21,7 +21,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: PGBouncerHighServerConnectionSaturationWarning
+        - alert: PGBouncerServerSaturationWarning
           annotations:
             description: |
                 User connection capacity on {{ $labels.instance }}, is above 80%. The current value is {{ $value | printf "%.2f" }}.
@@ -31,7 +31,7 @@ groups:
           for: 5m
           labels:
             severity: warning
-        - alert: PGBouncerHighServerConnectionSaturationCritical
+        - alert: PGBouncerHighSaturationCritical
           annotations:
             description: |
                 User connection capacity on {{ $labels.instance }}, is above 90%. The current value is {{ $value | printf "%.2f" }}.
