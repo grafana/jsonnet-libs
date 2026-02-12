@@ -47,7 +47,7 @@ groups:
                 The percentage of packet errors on the ESXi host {{ $labels.vcenter_host_name }} is now above 20%. The current value is {{ $value | printf "%.2f" }}%.
             summary: High percentage of packet errors seen for ESXi host. High packet errors may indicate network issues that can lead to poor performance and connectivity problems for virtual machines running on this host.
           expr: |
-            100 * sum without (direction, object) (vcenter_host_network_packet_error_rate{object=""}) / clamp_min(sum without (direction, object) (vcenter_host_network_packet_rate{object=""}), 1) > 20
+            100 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_error_rate{object=""}) / clamp_min(sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_rate{object=""}), 1) > 20
           for: 5m
           labels:
             severity: warning
