@@ -518,6 +518,7 @@
                "type": "datasource"
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_process_start_time_seconds, job)",
                "hide": 0,
@@ -532,6 +533,7 @@
                "useTags": false
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_process_start_time_seconds{job=~\"$job\"}, instance)",
                "hide": 0,
@@ -546,6 +548,7 @@
                "useTags": false
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_backend_status{job=~\"$job\",instance=~\"$instance\"}, proxy)",
                "hide": 0,
@@ -560,6 +563,7 @@
                "useTags": false
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_server_status{job=~\"$job\",instance=~\"$instance\"}, server)",
                "hide": 0,

@@ -851,6 +851,7 @@
                "type": "datasource"
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_process_start_time_seconds, job)",
                "hide": 0,
@@ -865,6 +866,7 @@
                "useTags": false
             },
             {
+               "allValue": ".*",
                "datasource": "$datasource",
                "definition": "label_values(haproxy_process_start_time_seconds{job=~\"$job\"}, instance)",
                "hide": 0,
