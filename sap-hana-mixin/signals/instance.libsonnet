@@ -81,7 +81,7 @@ function(this) {
       name: 'Network receive rate',
       nameShort: 'Receive',
       type: 'raw',
-      description: 'Network I/O throughput for the SAP HANA instance',
+      description: 'Network receive throughput for the SAP HANA instance',
       unit: 'KBs',
       sources: {
         prometheus: {
@@ -95,7 +95,7 @@ function(this) {
       name: 'Network transmit rate',
       nameShort: 'Transmit',
       type: 'raw',
-      description: 'Network I/O throughput for the SAP HANA instance',
+      description: 'Network transmit throughput for the SAP HANA instance',
       unit: 'KBs',
       sources: {
         prometheus: {
