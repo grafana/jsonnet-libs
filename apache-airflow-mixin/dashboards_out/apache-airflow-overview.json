@@ -5,6 +5,7 @@
       "description": "Dashboard providing an overview of Apache Airflow DAGs, tasks, and scheduler performance.",
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Apache Airflow logs",
             "type": "link",
@@ -252,6 +253,7 @@
             "id": 5,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
                   "placement": "right"
@@ -314,6 +316,7 @@
             "id": 6,
             "options": {
                "legend": {
+                  "asTable": true,
                   "calcs": [ ],
                   "displayMode": "list",
                   "placement": "right"

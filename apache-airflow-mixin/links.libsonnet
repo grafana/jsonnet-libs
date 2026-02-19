@@ -19,6 +19,7 @@ local g = import './g.libsonnet';
                {
                  logs:
                    link.link.new(this.config.dashboardNamePrefix + ' logs', '/d/' + this.grafana.dashboards['apache-airflow-logs.json'].uid)
+                   + link.link.options.withIncludeVars(true)
                    + link.link.options.withKeepTime(true),
                } else {},
 }

@@ -35,6 +35,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('The average time taken for recent successful DAG runs by DAG ID in the Apache Airflow system.')
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       dagFailedDurationPanel:
@@ -44,6 +45,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('The average time taken for recent failed DAG runs by DAG ID in the Apache Airflow system.')
         + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.tooltip.withMode('multi'),
 
       taskDurationPanel:
