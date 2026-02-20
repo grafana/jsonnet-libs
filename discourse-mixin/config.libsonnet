@@ -2,7 +2,7 @@
   local this = self,
 
   // Filtering
-  filteringSelector: 'job="integrations/discourse"',
+  filteringSelector: '',
   groupLabels: ['job'],
   instanceLabels: ['instance'],
 

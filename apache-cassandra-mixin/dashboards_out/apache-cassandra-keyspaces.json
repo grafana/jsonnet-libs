@@ -74,7 +74,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by (keyspace) (cassandra_keyspace_writelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}))",
+                  "expr": "count(count by (keyspace) (cassandra_keyspace_writelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace}}",
@@ -92,12 +92,20 @@
             "description": "The number of writes performed on the keyspace.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -126,7 +134,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum(cassandra_keyspace_writelatency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum(cassandra_keyspace_writelatency_seconds_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -145,12 +153,20 @@
             "description": "The number of reads performed on the keyspace.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -179,7 +195,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum(cassandra_keyspace_readlatency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum(cassandra_keyspace_readlatency_seconds_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -198,12 +214,20 @@
             "description": "The 95th and 99th percentils of local write latency for keyspaces.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -233,7 +257,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace }} - p95",
@@ -244,7 +268,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace }} - p99",
@@ -262,12 +286,20 @@
             "description": "Average local read latency for keyspaces.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -297,7 +329,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace }} - p95",
@@ -308,7 +340,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace }} - p99",
@@ -326,12 +358,20 @@
             "description": "Total amount of disk space used by keyspaces.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -360,7 +400,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_totaldiskspaceused{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_totaldiskspaceused{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace}}",
@@ -378,12 +418,20 @@
             "description": "The number of compaction operations a keyspace is pending to perform.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -412,7 +460,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_pendingcompactions{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
+                  "expr": "sum(cassandra_keyspace_pendingcompactions{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace}}",
@@ -430,12 +478,20 @@
             "description": "Max partition size for keyspaces.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                }
@@ -464,7 +520,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max(cassandra_table_maxpartitionsize{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
+                  "expr": "max(cassandra_table_maxpartitionsize{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ keyspace}}",
@@ -482,12 +538,20 @@
             "description": "The number of repair jobs started per keyspace.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -516,7 +580,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum(cassandra_keyspace_repairjobsstarted_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum(cassandra_keyspace_repairjobsstarted_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -535,12 +599,20 @@
             "description": "The number of repair jobs that were completed.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -569,7 +641,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum(cassandra_keyspace_repairjobscompleted_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum(cassandra_keyspace_repairjobscompleted_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}) by (keyspace)[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -605,7 +677,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\"}, job)",
+               "query": "label_values(cassandra_cache_hitrate{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -620,7 +692,7 @@
                "label": "Cassandra cluster",
                "multi": true,
                "name": "cassandra_cluster",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\"}, cassandra_cluster)",
+               "query": "label_values(cassandra_cache_hitrate{job=~\"$job\"}, cassandra_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -635,7 +707,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\"}, instance)",
+               "query": "label_values(cassandra_cache_hitrate{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
