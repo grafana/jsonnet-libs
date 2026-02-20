@@ -1,21 +1,411 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "id": null,
       "links": [
          {
-            "asDropdown": false,
             "includeVars": true,
             "keepTime": true,
-            "tags": [
-               "opensearch-mixin"
-            ],
-            "title": "Other Opensearch dashboards",
-            "type": "dashboards"
+            "title": "Opensearch logs",
+            "type": "link",
+            "url": "/d/opensearch-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Opensearch node overview",
+            "type": "link",
+            "url": "/d/opensearch-node-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Opensearch search and index overview",
+            "type": "link",
+            "url": "/d/opensearch-search-and-index-overview"
          }
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Cluster overview",
+            "type": "row"
+         },
+         {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The overall health and availability of the OpenSearch cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "index": 0,
+                              "text": "Green"
+                           },
+                           "1": {
+                              "index": 1,
+                              "text": "Yellow"
+                           },
+                           "2": {
+                              "index": 2,
+                              "text": "Red"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 1
+                        },
+                        {
+                           "color": "red",
+                           "value": 2
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 5,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "min by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_status{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Cluster status"
+               }
+            ],
+            "title": "Cluster status",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of running nodes across the OpenSearch cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 5,
+               "x": 5,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "min by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_nodes_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Node count"
+               }
+            ],
+            "title": "Node count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of data nodes in the OpenSearch cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 5,
+               "x": 10,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "min by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_datanodes_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Data node count"
+               }
+            ],
+            "title": "Data node count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The number of shards in the OpenSearch cluster across all indices.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "green",
+                           "value": 1
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 5,
+               "x": 15,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(\n  max by (job,cluster,opensearch_cluster,type) (\n  opensearch_cluster_shards_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Shard count"
+               }
+            ],
+            "title": "Shard count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Percent of active shards across the OpenSearch cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 0
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 1
+                        },
+                        {
+                           "color": "green",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 20,
+               "y": 1
+            },
+            "id": 6,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "min by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_shards_active_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 2,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Active shards %%"
+               }
+            ],
+            "title": "Active shards %",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 7
+            },
+            "id": 7,
+            "panels": [ ],
+            "title": "Node roles",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
             "description": "OpenSearch node roles.",
             "fieldConfig": {
@@ -76,22 +466,24 @@
                ]
             },
             "gridPos": {
-               "h": 6,
+               "h": 8,
                "w": 24,
                "x": 0,
-               "y": 0
+               "y": 8
             },
-            "id": 1,
-            "pluginVersion": "v10.0.0",
+            "id": 8,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (job,opensearch_cluster,node,node,nodeid,role,primary_ip) (last_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[1d]))",
+                  "expr": "max by (job,cluster,opensearch_cluster,node,nodeid,role,primary_ip) (\n  last_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[1d])\n)",
+                  "format": "time_series",
                   "instant": true,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{role}}: Node role bool last seen",
+                  "refId": "Node role bool last seen"
                }
             ],
             "title": "Roles",
@@ -115,9 +507,11 @@
                      },
                      "indexByName": {
                         "Time": 0,
+                        "cluster": 3,
                         "cluster_manager": 108,
                         "data": 105,
                         "ingest": 106,
+                        "instance": 3,
                         "job": 3,
                         "master": 104,
                         "node": 3,
@@ -143,374 +537,16 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
-            },
-            "description": "The overall health and availability of the OpenSearch cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "0": {
-                              "index": 0,
-                              "text": "Green"
-                           },
-                           "1": {
-                              "index": 1,
-                              "text": "Yellow"
-                           },
-                           "2": {
-                              "index": 2,
-                              "text": "Red"
-                           }
-                        },
-                        "type": "value"
-                     }
-                  ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "green",
-                           "value": 0
-                        },
-                        {
-                           "color": "yellow",
-                           "value": 1
-                        },
-                        {
-                           "color": "red",
-                           "value": 2
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 0,
-               "y": 2
-            },
-            "id": 2,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.4.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "min by(job,opensearch_cluster) (opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
-               }
-            ],
-            "title": "Cluster status",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of running nodes across the OpenSearch cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "green",
-                           "value": 1
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 3,
-               "y": 2
-            },
-            "id": 3,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.4.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "min by(job,opensearch_cluster) (opensearch_cluster_nodes_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
-               }
-            ],
-            "title": "Node count",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of data nodes in the OpenSearch cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "green",
-                           "value": 1
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 6,
-               "y": 2
-            },
-            "id": 4,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.4.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "min by(job,opensearch_cluster) (opensearch_cluster_datanodes_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
-               }
-            ],
-            "title": "Data node count",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The number of shards in the OpenSearch cluster across all indices.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "green",
-                           "value": 1
-                        }
-                     ]
-                  }
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 9,
-               "y": 2
-            },
-            "id": 5,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.4.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "sum(max by (type) (opensearch_cluster_shards_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}))",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
-               }
-            ],
-            "title": "Shard count",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "Percent of active shards across the OpenSearch cluster.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "mode": "thresholds"
-                  },
-                  "mappings": [ ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 0
-                        },
-                        {
-                           "color": "yellow",
-                           "value": 1
-                        },
-                        {
-                           "color": "green",
-                           "value": 100
-                        }
-                     ]
-                  },
-                  "unit": "percent"
-               },
-               "overrides": [ ]
-            },
-            "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 12,
-               "y": 2
-            },
-            "id": 6,
-            "options": {
-               "colorMode": "value",
-               "graphMode": "none",
-               "justifyMode": "auto",
-               "orientation": "auto",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "textMode": "auto"
-            },
-            "pluginVersion": "9.4.3",
-            "targets": [
-               {
-                  "datasource": {
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "min by(job,opensearch_cluster) (opensearch_cluster_shards_active_percent{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
-                  "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
-               }
-            ],
-            "title": "Active shards %",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
             },
             "description": "OpenSearch node roles over time.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "mappings": [
                      {
                         "options": {
@@ -542,69 +578,102 @@
                         },
                         "type": "value"
                      }
-                  ]
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
                }
             },
             "gridPos": {
-               "h": 5,
-               "w": 9,
-               "x": 15,
-               "y": 2
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 16
             },
-            "id": 7,
+            "id": 9,
             "maxDataPoints": 100,
             "options": {
                "legend": false,
                "showValue": "never"
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", role=\"data\"}[1m]) == 1\n) * 2\n",
-                  "legendFormat": "{{node}}"
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", role=\"data\"}[1m]) == 1\n)\n * 2",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }} / data",
+                  "refId": "Node role: data"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", role=\"master\"}[1m]) == 1\n) * 3\n",
-                  "legendFormat": "{{node}}"
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", role=\"master\"}[1m]) == 1\n)\n * 3",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }} / master",
+                  "refId": "Node role: master"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", role=\"ingest\"}[1m]) == 1\n) * 4\n",
-                  "legendFormat": "{{node}}"
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", role=\"ingest\"}[1m]) == 1\n)\n * 4",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }} / ingest",
+                  "refId": "Node role: ingest"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", role=\"cluster_manager\"}[1m]) == 1\n) * 5\n",
-                  "legendFormat": "{{node}}"
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", role=\"cluster_manager\"}[1m]) == 1\n)\n * 5",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }} / cluster_manager",
+                  "refId": "Node role: cluster_manager"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (node,role) (\n    max_over_time(opensearch_node_role_bool{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", role=\"remote_cluster_client\"}[1m]) == 1\n) * 6\n",
-                  "legendFormat": "{{node}}"
+                  "expr": "\n  max by (job,cluster,opensearch_cluster,node,role) (\n  max_over_time(opensearch_node_role_bool{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", role=\"remote_cluster_client\"}[1m]) == 1\n)\n * 6",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ node }} / remote_client",
+                  "refId": "Node role: remote_cluster_client"
                }
             ],
             "title": "Roles timeline",
             "type": "status-history"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 24
+            },
+            "id": 10,
+            "panels": [ ],
+            "title": "Resource usage",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top nodes by OS CPU usage across the OpenSearch cluster.",
@@ -613,11 +682,9 @@
                   "color": {
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
                   "max": 100,
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -630,40 +697,36 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 8,
                "x": 0,
-               "y": 4
+               "y": 25
             },
-            "id": 8,
+            "id": 11,
             "options": {
-               "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true
+                  ]
+               }
             },
-            "pluginVersion": "9.4.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sort_desc(sum by(node, job,opensearch_cluster) (opensearch_os_cpu_percent{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})))",
+                  "expr": "topk($k, sort_desc(\n  sum by (job,cluster,opensearch_cluster) (\n  opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)\n))",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Top nodes by CPU usage"
                }
             ],
             "title": "Top nodes by CPU usage",
@@ -671,6 +734,7 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The total count of circuit breakers tripped across the OpenSearch cluster.",
@@ -679,9 +743,7 @@
                   "color": {
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -694,41 +756,37 @@
                      ]
                   },
                   "unit": "trips"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 8,
                "x": 8,
-               "y": 4
+               "y": 25
             },
-            "id": 9,
+            "id": 12,
             "options": {
-               "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true
+                  ]
+               }
             },
-            "pluginVersion": "9.4.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,opensearch_cluster, node) (increase(opensearch_circuitbreaker_tripped_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:]))",
+                  "expr": "sum by (job,cluster,opensearch_cluster) (\n  increase(opensearch_circuitbreaker_tripped_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Breakers tripped"
                }
             ],
             "title": "Breakers tripped",
@@ -736,17 +794,16 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Shard status counts across the Opensearch cluster.",
+            "description": "Shard status counts across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -759,47 +816,57 @@
                      ]
                   },
                   "unit": "shards"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 9,
+               "h": 8,
                "w": 8,
                "x": 16,
-               "y": 4
+               "y": 25
             },
-            "id": 10,
+            "id": 13,
             "options": {
-               "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true
+                  ]
+               }
             },
-            "pluginVersion": "9.4.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "min by(type, job,opensearch_cluster) (opensearch_cluster_shards_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
+                  "expr": "min by (job,cluster,opensearch_cluster,type) (\n  opensearch_cluster_shards_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{type}}"
+                  "legendFormat": "{{type}}",
+                  "refId": "Shard status"
                }
             ],
             "title": "Shard status",
             "type": "bargauge"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 33
+            },
+            "id": 14,
+            "panels": [ ],
+            "title": "Storage and tasks",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top nodes by disk usage across the OpenSearch cluster.",
@@ -808,11 +875,9 @@
                   "color": {
                      "mode": "thresholds"
                   },
-                  "mappings": [ ],
                   "max": 100,
                   "min": 0,
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -825,40 +890,36 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 10,
+               "h": 8,
                "w": 8,
                "x": 0,
-               "y": 13
+               "y": 34
             },
-            "id": 11,
+            "id": 15,
             "options": {
-               "displayMode": "gradient",
-               "minVizHeight": 10,
-               "minVizWidth": 0,
                "orientation": "horizontal",
                "reduceOptions": {
                   "calcs": [
                      "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-               },
-               "showUnfilled": true
+                  ]
+               }
             },
-            "pluginVersion": "9.4.3",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sort_desc((100 * (sum by(node, job,opensearch_cluster) (opensearch_fs_path_total_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})- sum by(node, job,opensearch_cluster) (opensearch_fs_path_free_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})) / sum by(node, job,opensearch_cluster) (opensearch_fs_path_total_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}))))",
+                  "expr": "topk($k, sort_desc((100 * (\n  sum by(job,cluster,opensearch_cluster,instance) (opensearch_fs_path_total_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}) - \n  sum by(job,cluster,opensearch_cluster,instance) (opensearch_fs_path_free_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"})\n) / \nsum by(job,cluster,opensearch_cluster,instance) (opensearch_fs_path_total_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"})\n)))",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Top nodes by disk usage"
                }
             ],
             "title": "Top nodes by disk usage",
@@ -866,86 +927,60 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The total count of documents indexed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "documents"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
-               "w": 8,
+               "h": 8,
+               "w": 16,
                "x": 8,
-               "y": 13
+               "y": 34
             },
-            "id": 12,
+            "id": 16,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster) (opensearch_indices_indexing_index_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
+                  "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_indices_indexing_index_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Total documents"
                }
             ],
             "title": "Total documents",
@@ -953,86 +988,60 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The number of tasks waiting to be executed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "tasks"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 8,
-               "x": 16,
-               "y": 13
+               "x": 0,
+               "y": 42
             },
-            "id": 13,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster) (opensearch_cluster_pending_tasks_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
+                  "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_pending_tasks_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Pending tasks"
                }
             ],
             "title": "Pending tasks",
@@ -1040,86 +1049,60 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The total size of the store across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 8,
                "x": 8,
-               "y": 18
+               "y": 42
             },
-            "id": 14,
+            "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job,opensearch_cluster) (opensearch_indices_store_size_bytes{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
+                  "expr": "avg by (job,cluster,opensearch_cluster) (\n  opensearch_indices_store_size_bytes{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Store size"
                }
             ],
             "title": "Store size",
@@ -1127,86 +1110,59 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The max wait time for tasks to be executed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
-               "h": 5,
+               "h": 8,
                "w": 8,
                "x": 16,
-               "y": 18
+               "y": 42
             },
-            "id": 15,
+            "id": 19,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(job,opensearch_cluster) (opensearch_cluster_task_max_waiting_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"})",
+                  "expr": "max by (job,cluster,opensearch_cluster) (\n  opensearch_cluster_task_max_waiting_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{opensearch_cluster}}"
+                  "instant": false,
+                  "legendFormat": "{{opensearch_cluster}}",
+                  "refId": "Task max wait time"
                }
             ],
             "title": "Max task wait time",
@@ -1214,106 +1170,72 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
-               "w": 24,
+               "w": 0,
                "x": 0,
-               "y": 23
+               "y": 50
             },
-            "id": 16,
-            "targets": [ ],
-            "title": "Cluster search and index summary",
+            "id": 20,
+            "panels": [ ],
+            "title": "Search performance",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by combined fetch, query, and scroll request rate across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "reqps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 24
+               "y": 51
             },
-            "id": 17,
+            "id": 21,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sort_desc(avg by(index, job,opensearch_cluster) (\n  opensearch_index_search_fetch_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_search_query_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_search_scroll_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}\n)))\n",
+                  "expr": "topk($k, sort_desc(avg by(index, job,cluster,opensearch_cluster) (\n  opensearch_index_search_fetch_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_search_query_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_search_scroll_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}\n)))",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "instant": false,
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by request rate"
                }
             ],
             "title": "Top indices by request rate",
@@ -1321,87 +1243,60 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by combined fetch, query, and scroll latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 24
+               "y": 51
             },
-            "id": 18,
+            "id": 22,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sort_desc(sum by(index, job,opensearch_cluster) ((increase(opensearch_index_search_fetch_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:])\n+increase(opensearch_index_search_query_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:])\n+increase(opensearch_index_search_scroll_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:]))\n/ clamp_min(increase(opensearch_index_search_fetch_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:])\n+increase(opensearch_index_search_query_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:])\n+increase(opensearch_index_search_scroll_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:]), 1))))\n",
+                  "expr": "topk($k, sort_desc(sum by(index, job,cluster,opensearch_cluster) ((\n  increase(opensearch_index_search_fetch_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval) + \n  increase(opensearch_index_search_query_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval) + \n  increase(opensearch_index_search_scroll_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval)\n) / clamp_min(\n  increase(opensearch_index_search_fetch_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval) + \n  increase(opensearch_index_search_query_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval) + \n  increase(opensearch_index_search_scroll_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval), 1\n))))",
                   "format": "time_series",
-                  "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "instant": false,
+                  "interval": "2m",
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by request latency"
                }
             ],
             "title": "Top indices by request latency",
@@ -1409,181 +1304,134 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by cache hit ratio for the combined request and query cache across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 24
+               "y": 51
             },
-            "id": 19,
+            "id": 23,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sort_desc(avg by(index, job,opensearch_cluster) (\n  100 * (opensearch_index_requestcache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}) / \n  clamp_min((opensearch_index_requestcache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_hit_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_requestcache_miss_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_miss_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}), 1\n  ))))\n",
+                  "expr": "topk($k, sort_desc(avg by(index, job,cluster,opensearch_cluster) (\n  100 * (opensearch_index_requestcache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}) / \n  clamp_min((opensearch_index_requestcache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_hit_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_requestcache_miss_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"} + \n  opensearch_index_querycache_miss_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}), 1\n))))",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by combined cache hit ratio"
                }
             ],
             "title": "Top indices by combined cache hit ratio",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 59
+            },
+            "id": 24,
+            "panels": [ ],
+            "title": "Ingest performance",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top nodes by rate of ingest across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "Bps"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 32
+               "y": 60
             },
-            "id": 20,
+            "id": 25,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sum by(node, job,opensearch_cluster) (rate(opensearch_ingest_total_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__rate_interval])))",
+                  "expr": "topk($k, \n  sum by (job,cluster,opensearch_cluster,node) (\n  rate(opensearch_ingest_total_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__rate_interval])\n)\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Top nodes by ingest rate"
                }
             ],
             "title": "Top nodes by ingest rate",
@@ -1591,91 +1439,61 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top nodes by ingestion latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
-                           "color": "red",
-                           "value": 80
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 32
+               "y": 60
             },
-            "id": 21,
+            "id": 26,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sum by(job,opensearch_cluster, node) (\n  increase(opensearch_ingest_total_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:]) / \n  clamp_min(increase(opensearch_ingest_total_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:]), 1)))\n",
+                  "expr": "topk($k, sum by(job,cluster,opensearch_cluster,instance) (\n  increase(opensearch_ingest_total_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_ingest_total_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:] offset $__interval), 1)\n))",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Top nodes by ingest latency"
                }
             ],
             "title": "Top nodes by ingest latency",
@@ -1683,174 +1501,135 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top nodes by ingestion failures across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "errors"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 32
+               "y": 60
             },
-            "id": 22,
+            "id": 27,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, sum by(job,opensearch_cluster, node) (increase(opensearch_ingest_total_failed_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:])))",
+                  "expr": "topk($k, \n  sum by (job,cluster,opensearch_cluster,node) (\n  increase(opensearch_ingest_total_failed_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:] offset -$__interval)\n)\n)",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{node}}"
+                  "legendFormat": "{{node}}",
+                  "refId": "Top nodes by ingest errors"
                }
             ],
             "title": "Top nodes by ingest errors",
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 68
+            },
+            "id": 28,
+            "panels": [ ],
+            "title": "Indexing performance",
+            "type": "row"
+         },
+         {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by rate of document indexing across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "documents/s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 40
+               "y": 69
             },
-            "id": 23,
+            "id": 29,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, avg by(job,opensearch_cluster, index) (opensearch_index_indexing_index_current_number{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}))",
+                  "expr": "topk($k, \n  avg by (job,cluster,opensearch_cluster,index) (\n  opensearch_index_indexing_index_current_number{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}\n)\n)",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by index rate"
                }
             ],
             "title": "Top indices by index rate",
@@ -1858,87 +1637,61 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by indexing latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "s"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 40
+               "y": 69
             },
-            "id": 24,
+            "id": 30,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, avg by(job,opensearch_cluster, index) \n(increase(opensearch_index_indexing_index_time_seconds{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:]) / \nclamp_min(increase(opensearch_index_indexing_index_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:]), 1)))\n",
+                  "expr": "topk($k, avg by(index, job,cluster,opensearch_cluster) (\n  increase(opensearch_index_indexing_index_time_seconds{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval) / \n  clamp_min(increase(opensearch_index_indexing_index_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\", context=\"total\"}[$__interval:] offset $__interval), 1)\n))",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by index latency"
                }
             ],
             "title": "Top indices by index latency",
@@ -1946,95 +1699,69 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Top indices by index document failures across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
-                     "fillOpacity": 0,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
-                     "lineInterpolation": "linear",
-                     "lineWidth": 1,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "auto",
-                     "spanNulls": false,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "failures"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 40
+               "y": 69
             },
-            "id": 25,
+            "id": 31,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
+                  "mode": "multi",
+                  "sort": "desc"
                }
             },
+            "pluginVersion": "v11.0.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(10, avg by(job,opensearch_cluster, index) (increase(opensearch_index_indexing_index_failed_count{opensearch_cluster!=\"\",job=~\"$job\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:])))",
+                  "expr": "topk($k, \n  avg by (job,cluster,opensearch_cluster,index) (\n  increase(opensearch_index_indexing_index_failed_count{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}[$__interval:] offset -$__interval)\n)\n)",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
+                  "interval": "2m",
                   "intervalFactor": 2,
-                  "legendFormat": "{{index}}"
+                  "legendFormat": "{{index}}",
+                  "refId": "Top indices by index failures"
                }
             ],
             "title": "Top indices by index failures",
             "type": "timeseries"
          }
       ],
-      "refresh": "1m",
-      "schemaVersion": 36,
+      "refresh": "30s",
+      "schemaVersion": 39,
       "tags": [
          "opensearch-mixin"
       ],
@@ -2044,7 +1771,7 @@
                "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
-               "regex": "",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
                "type": "datasource"
             },
             {
@@ -2057,7 +1784,22 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\"}, job)",
+               "query": "label_values(opensearch_os_cpu_percent{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -2072,15 +1814,78 @@
                "label": "Opensearch_cluster",
                "multi": true,
                "name": "opensearch_cluster",
-               "query": "label_values(opensearch_cluster_status{opensearch_cluster!=\"\",job=~\"$job\"}, opensearch_cluster)",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\"}, opensearch_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values(opensearch_os_cpu_percent{job=~\"$job\",cluster=~\"$cluster\",opensearch_cluster=~\"$opensearch_cluster\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "10",
+                  "value": "10"
+               },
+               "includeAll": false,
+               "label": "Top K",
+               "multi": false,
+               "name": "k",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "3",
+                     "value": "3"
+                  },
+                  {
+                     "selected": false,
+                     "text": "5",
+                     "value": "5"
+                  },
+                  {
+                     "selected": false,
+                     "text": "10",
+                     "value": "10"
+                  },
+                  {
+                     "selected": false,
+                     "text": "15",
+                     "value": "15"
+                  },
+                  {
+                     "selected": false,
+                     "text": "25",
+                     "value": "25"
+                  }
+               ],
+               "query": "3 : 3,5 : 5,10 : 10,15 : 15,25 : 25",
+               "type": "custom"
             }
          ]
       },
       "time": {
-         "from": "now-1h",
+         "from": "now-30m",
          "to": "now"
       },
       "timezone": "default",
