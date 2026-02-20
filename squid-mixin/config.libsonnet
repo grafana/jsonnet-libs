@@ -1,16 +1,33 @@
 {
-  _config+:: {
-    dashboardTags: ['squid'],
-    dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
-    dashboardRefresh: '1m',
+  local this = self,
 
-    // alerts thresholds
-    alertsCriticalHighPercentageRequestErrors: 5,
-    alertsWarningLowCacheHitRatio: 85,
-    enableLokiLogs: true,
-    enableMultiCluster: false,
-    multiclusterSelector: 'job=~"$job"',
-    squidSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+  // Basic filtering
+  filteringSelector: '',
+  groupLabels: ['job', 'cluster'],
+  logLabels: ['job', 'cluster', 'instance'],
+  instanceLabels: ['instance'],
+
+  // Dashboard settings
+  uid: 'squid',
+  dashboardNamePrefix: 'Squid',
+  dashboardTags: [self.uid],
+  dashboardPeriod: 'now-1h',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
+  metricsSource: ['prometheus'],
+
+  // Logs configuration
+  enableLokiLogs: true,
+  extraLogLabels: ['level', 'severity'],
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
+  // Alert thresholds
+  alertsCriticalHighPercentageRequestErrors: 5,  // %
+  alertsWarningLowCacheHitRatio: 85,  // %
+
+  // Signal definitions
+  signals: {
+    overview: (import './signals/overview.libsonnet')(this),
   },
 }
