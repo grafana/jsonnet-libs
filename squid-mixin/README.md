@@ -8,10 +8,10 @@ The Squid mixin contains the following dashboards:
 
 and the following alerts:
 
-- SquidHighPercentageOfHTTPServerRequestErrors
-- SquidHighPercentageOfFTPServerRequestErrors
-- SquidHighPercentageOfOtherServerRequestErrors
-- SquidHighPercentageOfClientRequestErrors
+- SquidHighHTTPServerRequestErrors
+- SquidHighFTPServerRequestErrors
+- SquidHighOtherServerRequestErrors
+- SquidHighClientRequestErrors
 - SquidLowCacheHitRatio
 
 ## Squid Overview
@@ -24,9 +24,7 @@ Squid logs are enabled by default in the `config.libsonnet` and can be removed b
 
 ```
 {
-  _config+:: {
-    enableLokiLogs: false,
-  },
+  enableLokiLogs: false,
 }
 ```
 
@@ -34,16 +32,16 @@ In order for the selectors to properly work for access and cache logs ingested i
 
 ```yaml
 scrape_configs:
-  - job_name: integrations/squid
+  - job_name: <your-job-name>
     static_configs:
       - targets: [localhost]
         labels:
-          job: integrations/squid
+          job: <your-job-name>
           instance: '<your-instance-name>'
           __path__: /var/log/squid/access.log
       - targets: [localhost]
         labels:
-          job: integrations/squid
+          job: <your-job-name>
           instance: '<your-instance-name>'
           __path__: /var/log/squid/cache.log
 ```
@@ -53,10 +51,10 @@ scrape_configs:
 
 | Alert                               | Summary                                                                         |
 |-------------------------------------|---------------------------------------------------------------------------------|
-| SquidHighPercentageOfHTTPServerRequestErrors             | There are a high number of HTTP server errors.                      |
-| SquidHighPercentageOfFTPServerRequestErrors                | There are a high number of FTP server request errors.                         |
-| SquidHighPercentageOfOtherServerRequestErrors | There are a high number of other server request errors. |
-| SquidHighPercentageOfClientRequestErrors   | There are a high number of HTTP client request errors.                         |
+| SquidHighHTTPServerRequestErrors             | There are a high number of HTTP server errors.                      |
+| SquidHighFTPServerRequestErrors                | There are a high number of FTP server request errors.                         |
+| SquidHighOtherServerRequestErrors | There are a high number of other server request errors. |
+| SquidHighClientRequestErrors   | There are a high number of HTTP client request errors.                         |
 | SquidLowCacheHitRatio     | The cache hit ratio has fallen below the configured threshold (%).                         |
 
 
@@ -64,10 +62,8 @@ Default thresholds can be configured in `config.libsonnet`
 
 ```js
 {
-  _config+:: {
-    alertsCriticalHighPercentageRequestErrors: 5,
-    alertsWarningLowCacheHitRatio: 85,
-  },
+  alertsCriticalHighPercentageRequestErrors: 5,
+  alertsWarningLowCacheHitRatio: 85,
 }
 ```
 
