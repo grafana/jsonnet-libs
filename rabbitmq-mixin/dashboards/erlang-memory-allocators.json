@@ -98,7 +98,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) * 100",
+          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) * 100",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -182,7 +182,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "(   sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})   -   sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) ) / sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) * 100",
+          "expr": "(   sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})   -   sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) ) / sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -262,7 +262,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -342,7 +342,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -422,7 +422,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -502,7 +502,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -594,7 +594,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}",
+          "expr": "rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
           "legendFormat": "Resident Set Size",
           "refId": "A"
         },
@@ -602,7 +602,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Allocated Used",
           "refId": "B"
         },
@@ -610,7 +610,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Allocated Unused",
           "refId": "C"
         }
@@ -773,7 +773,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}",
+          "expr": "rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -784,7 +784,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"blocks_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Allocated Used",
           "refId": "B"
         },
@@ -792,7 +792,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{usage=\"blocks_size\",  job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Allocated Unused",
           "refId": "C"
         }
@@ -911,7 +911,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by(alloc) (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum by(alloc) (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "{{alloc}}",
           "refId": "A"
         }
@@ -1021,7 +1021,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by(alloc) (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum by(alloc) (erlang_vm_allocators{usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1128,7 +1128,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) * 100",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) * 100",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1207,7 +1207,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1286,7 +1286,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1368,7 +1368,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) * 100",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) * 100",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1447,7 +1447,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1526,7 +1526,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1608,7 +1608,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) * 100",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) * 100",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1687,7 +1687,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1766,7 +1766,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1860,7 +1860,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Used",
           "refId": "A"
         },
@@ -1868,7 +1868,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Unused",
           "refId": "B"
         },
@@ -1876,7 +1876,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Used",
           "refId": "C"
         },
@@ -1884,7 +1884,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Unused",
           "refId": "D"
         },
@@ -1892,7 +1892,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Used",
           "refId": "E"
         },
@@ -1900,7 +1900,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Unused",
           "refId": "F"
         }
@@ -2101,7 +2101,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Multiblock - Used",
@@ -2111,7 +2111,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Unused",
           "refId": "B"
         },
@@ -2119,7 +2119,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Used",
           "refId": "C"
         },
@@ -2127,7 +2127,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"mbcs_pool\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Unused",
           "refId": "D"
         },
@@ -2135,7 +2135,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Used",
           "refId": "E"
         },
@@ -2143,7 +2143,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum (erlang_vm_allocators{alloc=~\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\", kind=\"sbcs\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Unused",
           "refId": "F"
         }
@@ -2235,7 +2235,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Carrier",
           "refId": "A"
         },
@@ -2243,7 +2243,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Block",
           "refId": "B"
         },
@@ -2251,7 +2251,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Carrier",
           "refId": "C"
         },
@@ -2259,7 +2259,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Block",
           "refId": "D"
         },
@@ -2267,7 +2267,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Carrier",
           "refId": "E"
         },
@@ -2275,7 +2275,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Block",
           "refId": "F"
         }
@@ -2476,7 +2476,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Multiblock - Block",
@@ -2486,7 +2486,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock - Carrier",
           "refId": "B"
         },
@@ -2494,7 +2494,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Block",
           "refId": "C"
         },
@@ -2502,7 +2502,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"mbcs_pool\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Multiblock Pool - Carrier",
           "refId": "D"
         },
@@ -2510,7 +2510,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks_size\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"blocks\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Block",
           "refId": "E"
         },
@@ -2518,7 +2518,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\"})",
+          "expr": "sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers_size\", job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) / sum (erlang_vm_allocators{kind=\"sbcs\", alloc=\"$memory_allocator\", job=~\"$job\", usage=\"carriers\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\",  rabbitmq_node=~\"$rabbitmq_node\", job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
           "legendFormat": "Singleblock - Carrier",
           "refId": "F"
         }
@@ -2583,7 +2583,7 @@
         "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
+        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2593,7 +2593,7 @@
         "name": "rabbitmq_cluster",
         "options": [],
         "query": {
-          "query": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
+          "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -2610,7 +2610,7 @@
         "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
+        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_node)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2620,7 +2620,7 @@
         "name": "rabbitmq_node",
         "options": [],
         "query": {
-          "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
+          "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_node)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
