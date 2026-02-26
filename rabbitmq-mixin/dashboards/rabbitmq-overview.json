@@ -102,7 +102,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -188,7 +188,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -273,7 +273,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -357,7 +357,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -442,7 +442,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -526,7 +526,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -611,7 +611,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) + sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -696,7 +696,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -780,7 +780,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -864,7 +864,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "sum(rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\nsum(rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1219,7 +1219,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
+          "expr": "rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}\nor\nrabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1512,7 +1512,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "(rabbitmq_resident_memory_limit_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "(rabbitmq_resident_memory_limit_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\n(rabbitmq_resident_memory_limit_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1770,7 +1770,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_disk_space_available_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
+          "expr": "rabbitmq_disk_space_available_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}\nor\nrabbitmq_disk_space_available_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2028,7 +2028,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "(rabbitmq_process_max_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_open_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "(rabbitmq_process_max_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_open_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\n(rabbitmq_process_max_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_open_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2286,7 +2286,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "(rabbitmq_process_max_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_open_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})",
+          "expr": "(rabbitmq_process_max_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) - (rabbitmq_process_open_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"})\nor\n(rabbitmq_process_max_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_open_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2565,7 +2565,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2820,7 +2820,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3099,7 +3099,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3354,7 +3354,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_confirmed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_confirmed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_confirmed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3609,7 +3609,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_queue_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queue_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_queue_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3864,7 +3864,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_unconfirmed{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unconfirmed{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_unconfirmed{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3983,7 +3983,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_dropped_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_dropped_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_unroutable_dropped_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4102,7 +4102,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_returned_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_returned_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_unroutable_returned_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4381,7 +4381,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(   (rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) +   (rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) ) by(rabbitmq_node)",
+          "expr": "sum(   (rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) +   (rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) ) by(rabbitmq_node)\nor\nsum( (rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + (rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) ) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4639,7 +4639,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4894,7 +4894,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5149,7 +5149,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5404,7 +5404,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_messages_acked_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_acked_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_messages_acked_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5523,7 +5523,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5642,7 +5642,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_get_empty_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_empty_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_get_empty_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5761,7 +5761,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -6040,7 +6040,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
+          "expr": "rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}\nor\nrabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -6299,7 +6299,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_queues_declared_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_declared_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_queues_declared_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -6557,7 +6557,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_queues_created_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_created_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_queues_created_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -6815,7 +6815,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_queues_deleted_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_deleted_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_queues_deleted_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -7094,7 +7094,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
+          "expr": "rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}\nor\nrabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -7352,7 +7352,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channels_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channels_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channels_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -7610,7 +7610,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_channels_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channels_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_channels_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -7889,7 +7889,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}",
+          "expr": "rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}\nor\nrabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -8147,7 +8147,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_connections_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_connections_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_connections_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -8406,7 +8406,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(rabbitmq_connections_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_connections_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}) by(rabbitmq_node)\nor\nsum(rate(rabbitmq_connections_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
