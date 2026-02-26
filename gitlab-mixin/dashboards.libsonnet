@@ -1,4 +1,4 @@
-local g = import '../g.libsonnet';
+local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 local logslib = import 'logs-lib/logs/main.libsonnet';
 {
