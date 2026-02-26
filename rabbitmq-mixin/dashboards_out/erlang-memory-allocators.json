@@ -2583,7 +2583,7 @@
                "allValue": ".+",
                "current": { },
                "datasource": "$datasource",
-               "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_cluster)",
+               "definition": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
                "description": null,
                "error": null,
                "hide": 0,
@@ -2593,7 +2593,7 @@
                "name": "rabbitmq_cluster",
                "options": [ ],
                "query": {
-                  "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_cluster)",
+                  "query": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
                   "refId": "StandardVariableQuery"
                },
                "refresh": 2,
@@ -2610,7 +2610,7 @@
                "allValue": ".+",
                "current": { },
                "datasource": "$datasource",
-               "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_node)",
+               "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
                "description": null,
                "error": null,
                "hide": 0,
@@ -2620,7 +2620,7 @@
                "name": "rabbitmq_node",
                "options": [ ],
                "query": {
-                  "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\",rabbitmq_endpoint=\"aggregated\"}, rabbitmq_node)",
+                  "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
                   "refId": "StandardVariableQuery"
                },
                "refresh": 2,
