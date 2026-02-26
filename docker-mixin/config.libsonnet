@@ -29,6 +29,7 @@
     logsVolumeGroupBy: 'container',
     // ignore logs from k8s
     logsFilteringSelector: self.filteringSelector + ', namespace="" ,container!=""',
+    customAllValue: '.*', # Override this as desired. '.+' is a good option if you want to ensure a label is present
     logsExtraFilters: |||
       | label_format timestamp="{{__timestamp__}}"
       | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{ alignLeft 25 .container }}|{{else}}{{ alignLeft 25 .container}}|{{end}} {{__line__}}`
