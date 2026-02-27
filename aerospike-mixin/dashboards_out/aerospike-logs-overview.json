@@ -181,7 +181,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -223,7 +223,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -254,7 +254,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/aerospike\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -269,7 +269,7 @@
                "label": "Aerospike cluster",
                "multi": true,
                "name": "aerospike_cluster",
-               "query": "label_values({job=\"integrations/aerospike\",job=~\"$job\"}, aerospike_cluster)",
+               "query": "label_values({job=~\"$job\"}, aerospike_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -284,7 +284,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
+               "query": "label_values({job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -299,7 +299,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -74,7 +74,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_applicationsrunning{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_applicationsrunning{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -104,7 +104,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_allocatedcontainers{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_allocatedcontainers{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -139,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_localizationdurationmillisavgtime{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_localizationdurationmillisavgtime{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -174,7 +174,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerlaunchdurationavgtime{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerlaunchdurationavgtime{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -205,6 +205,10 @@
             "description": "The Heap and non-heap memory used for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -212,6 +216,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -240,7 +248,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memheapusedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memheapusedm{name=\"JvmMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - heap",
@@ -251,7 +259,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memnonheapusedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memnonheapusedm{name=\"JvmMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - nonheap",
@@ -269,6 +277,10 @@
             "description": "The Heap and non-heap memory committed for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -276,6 +288,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -304,7 +320,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memheapcommittedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memheapcommittedm{name=\"JvmMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - heap",
@@ -315,7 +331,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memnonheapcommittedm{name=\"JvmMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memnonheapcommittedm{name=\"JvmMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - nonheap",
@@ -333,6 +349,10 @@
             "description": "The number of garbage collection events for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -340,6 +360,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -368,7 +392,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_nodemanager_gccount{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(hadoop_nodemanager_gccount{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -387,6 +411,10 @@
             "description": "The average duration for each garbage collection operation in the NodeManager JVM.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -394,6 +422,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -422,7 +454,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_nodemanager_gctimemillis{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(hadoop_nodemanager_gccount{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(hadoop_nodemanager_gctimemillis{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval) / clamp_min(increase(hadoop_nodemanager_gccount{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -454,6 +486,10 @@
             "description": "The Heap and non-heap memory used for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -461,6 +497,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -489,7 +529,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memheapusedm{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memheapusedm{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - heap",
@@ -500,7 +540,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memnonheapusedm{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memnonheapusedm{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - nonheap",
@@ -518,12 +558,20 @@
             "description": "The Heap and non-heap memory committed for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -552,7 +600,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memheapcommittedm{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memheapcommittedm{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - heap",
@@ -563,7 +611,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_memnonheapcommittedm{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_memnonheapcommittedm{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - nonheap",
@@ -581,6 +629,10 @@
             "description": "CPU utilization of the Node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -588,6 +640,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -616,7 +672,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * hadoop_nodemanager_nodecpuutilization{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "100 * hadoop_nodemanager_nodecpuutilization{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -634,6 +690,10 @@
             "description": "GPU utilization of the Node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -641,6 +701,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -669,7 +733,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * hadoop_nodemanager_nodegpuutilization{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "100 * hadoop_nodemanager_nodegpuutilization{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -700,6 +764,10 @@
             "description": "Number of containers with a given state for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -707,6 +775,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -737,7 +809,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerspaused{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerspaused{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - paused",
@@ -748,7 +820,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerslaunched{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerslaunched{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - launched",
@@ -759,7 +831,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerscompleted{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerscompleted{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - completed",
@@ -770,7 +842,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containersfailed{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containersfailed{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - failed",
@@ -781,7 +853,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerskilled{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerskilled{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - killed",
@@ -792,7 +864,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containersiniting{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containersiniting{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - initing",
@@ -803,7 +875,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containersreiniting{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containersreiniting{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - reiniting",
@@ -821,12 +893,20 @@
             "description": "Total memory used by containers for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -855,7 +935,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerusedmemgb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerusedmemgb{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - used memory",
@@ -873,12 +953,20 @@
             "description": "Total virtual memory used by containers for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -907,7 +995,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_containerusedvmemgb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_containerusedvmemgb{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - used virtual memory",
@@ -925,12 +1013,20 @@
             "description": "The memory available and currently allocated for containers by the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -959,7 +1055,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_availablegb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_availablegb{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - available memory",
@@ -970,7 +1066,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_allocatedgb{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_allocatedgb{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - allocated memory",
@@ -988,12 +1084,20 @@
             "description": "The virtual cores available and currently allocated for containers by the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -1022,7 +1126,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_availablevcores{name=\"NodeManagerMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_availablevcores{name=\"NodeManagerMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - available",
@@ -1033,7 +1137,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_nodemanager_allocatedvcores{name=\"NodeManagerMetrics\", job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_nodemanager_allocatedvcores{name=\"NodeManagerMetrics\", job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - allocated",
@@ -1068,7 +1172,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\"}, job)",
+               "query": "label_values(hadoop_namenode_blockstotal{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1083,7 +1187,7 @@
                "label": "Hadoop cluster",
                "multi": true,
                "name": "hadoop_cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\"}, hadoop_cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, hadoop_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1098,7 +1202,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1113,7 +1217,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

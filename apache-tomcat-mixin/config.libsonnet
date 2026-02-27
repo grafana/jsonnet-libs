@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/tomcat"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: [],
   instanceLabels: ['instance'],

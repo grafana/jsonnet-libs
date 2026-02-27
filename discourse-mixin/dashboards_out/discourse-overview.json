@@ -80,7 +80,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,status) (\n  rate(discourse_http_requests{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,status) (\n  rate(discourse_http_requests{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ api }} - {{ verb }} - {{ status }}",
@@ -142,7 +142,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_active_app_reqs{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_active_app_reqs{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -204,7 +204,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_queued_app_reqs{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_queued_app_reqs{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -266,7 +266,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  rate(discourse_page_views{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job) (\n  rate(discourse_page_views{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -341,7 +341,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",quantile=\"0.5\",action=\"latest\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=~\"$job\",instance=~\"$instance\",quantile=\"0.5\",action=\"latest\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -403,7 +403,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",quantile=\"0.5\",controller=\"topics\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_http_duration_seconds{job=~\"$job\",instance=~\"$instance\",quantile=\"0.5\",controller=\"topics\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -443,7 +443,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",action=\"latest\"})",
+                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=~\"$job\",instance=~\"$instance\",action=\"latest\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -478,7 +478,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\",controller=\"topics\"})",
+                  "expr": "sum by (instance, job, quantile) (discourse_http_duration_seconds{job=~\"$job\",instance=~\"$instance\",controller=\"topics\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -513,7 +513,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(discourse_page_views{job=\"integrations/discourse\"}, job)",
+               "query": "label_values(discourse_page_views{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -528,7 +528,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(discourse_page_views{job=\"integrations/discourse\",job=~\"$job\"}, instance)",
+               "query": "label_values(discourse_page_views{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

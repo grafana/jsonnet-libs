@@ -9,10 +9,10 @@ The PgBouncer mixin contains the following dashboards:
 
 and the following alerts:
 
-- HighNumberClientWaitingConnections
-- HighClientWaitTime
-- HighServerConnectionSaturationWarning
-- HighServerConnectionSaturationCritical
+- PGBouncerHighNumberWaitingConnections
+- PGBouncerHighWaitTime
+- PGBouncerServerSaturationWarning
+- PGBouncerHighSaturationCritical
 
 ## PgBouncer Cluster Overview
 
@@ -69,10 +69,10 @@ scrape_configs:
 
 | Alert                                  | Summary                                                                                                                                                                 |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HighNumberClientWaitingConnections     | High number of clients waiting a connection, which may indicate a bottleneck in connection pooling, where too many clients are waiting for available server connections |
-| HighClientWaitTime                     | Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.                                         |
-| HighServerConnectionSaturationWarning  | System is nearing a high number of user connections, near the threshold of configured max user connections.                                                             |
-| HighServerConnectionSaturationCritical | System is nearing a critically high number of user connections, near the threshold of configured max user connections.                                                  |
+| PGBouncerHighNumberWaitingConnections  | May indicate a bottleneck in connection pooling where too many clients are waiting for available server connections.                                                    |
+| PGBouncerHighWaitTime                  | Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.                                         |
+| PGBouncerServerSaturationWarning       | PGBouncer is nearing user connection capacity.                                                                                                                          |
+| PGBouncerHighSaturationCritical        | PGBouncer is nearing critical levels of user connection capacity.                                                                                                       |
 
 Default thresholds can be configured in `config.libsonnet`
 

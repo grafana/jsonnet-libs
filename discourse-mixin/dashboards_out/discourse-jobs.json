@@ -84,7 +84,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count(discourse_rss{type=\"sidekiq\",job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"})",
+                  "expr": "count(discourse_rss{type=\"sidekiq\",job=~\"$job\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Sidekiq worker count",
@@ -152,7 +152,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count(discourse_rss{type=\"web\",job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"})",
+                  "expr": "count(discourse_rss{type=\"web\",job=~\"$job\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job}}: Web worker count",
@@ -220,7 +220,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job) (\n  discourse_sidekiq_jobs_enqueued{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job) (\n  discourse_sidekiq_jobs_enqueued{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -293,7 +293,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  increase(discourse_scheduled_job_count{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "sum by (job) (\n  increase(discourse_scheduled_job_count{job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job_name}}",
@@ -353,7 +353,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  increase(discourse_sidekiq_job_count{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)\n)",
+                  "expr": "sum by (job) (\n  increase(discourse_sidekiq_job_count{job=~\"$job\",instance=~\"$instance\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job_name}}",
@@ -428,7 +428,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,job_name) (\n  rate(discourse_scheduled_job_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_scheduled_job_duration_seconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job_name}}",
@@ -490,7 +490,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,job_name) (\n  rate(discourse_sidekiq_job_duration_seconds{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,job_name) (\n  rate(discourse_sidekiq_job_duration_seconds{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{job_name}}",
@@ -563,7 +563,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_rss{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_rss{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "pid: {{pid}}",
@@ -623,7 +623,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job) (\n  discourse_v8_used_heap_size{job=\"integrations/discourse\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job) (\n  discourse_v8_used_heap_size{job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{type}}",
@@ -658,7 +658,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(discourse_page_views{job=\"integrations/discourse\"}, job)",
+               "query": "label_values(discourse_page_views{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -673,7 +673,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(discourse_page_views{job=\"integrations/discourse\",job=~\"$job\"}, instance)",
+               "query": "label_values(discourse_page_views{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

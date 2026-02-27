@@ -1,7 +1,7 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job=~"integrations/mssql"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   databaseLabels: ['db'],

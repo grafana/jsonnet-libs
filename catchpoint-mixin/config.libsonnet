@@ -1,6 +1,6 @@
 {
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
-  filteringSelector: 'job=~"integrations/catchpoint"',
+  filteringSelector: '',
   // Used to identify 'group' of instances.
   groupLabels: ['job'],
   instanceLabels: ['instance'],

@@ -27,8 +27,8 @@
           {
             alert: 'VarnishCacheHighMemoryUsage',
             expr: |||
-              (varnish_sma_g_bytes{%(filteringSelector)s,type="s0"} / (varnish_sma_g_bytes{%(filteringSelector)s,type="s0"} + varnish_sma_g_space{%(filteringSelector)s,type="s0"})) * 100 > %(alertsWarningHighMemoryUsage)s
-            ||| % config,
+              (varnish_sma_g_bytes{%(filteringSelectorS0)s} / (varnish_sma_g_bytes{%(filteringSelectorS0)s} + varnish_sma_g_space{%(filteringSelectorS0)s})) * 100 > %(alertsWarningHighMemoryUsage)s
+            ||| % config { filteringSelectorS0: if config.filteringSelector != '' then config.filteringSelector + ',type="s0"' else 'type="s0"' },
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -81,8 +81,8 @@
           {
             alert: 'VarnishCacheSessionsDropping',
             expr: |||
-              increase(varnish_main_sessions{%(filteringSelector)s,type="dropped"}[5m]) > %(alertsCriticalSessionsDropped)s
-            ||| % config,
+              increase(varnish_main_sessions{%(filteringSelectorDropped)s}[5m]) > %(alertsCriticalSessionsDropped)s
+            ||| % config { filteringSelectorDropped: if config.filteringSelector != '' then config.filteringSelector + ',type="dropped"' else 'type="dropped"' },
             'for': '5m',
             labels: {
               severity: 'critical',

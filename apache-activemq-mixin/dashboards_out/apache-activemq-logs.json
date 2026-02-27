@@ -185,7 +185,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -227,7 +227,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",cluster=~\"$cluster\",activemq_cluster=~\"$activemq_cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -258,7 +258,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/apache-activemq\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -273,7 +273,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -288,7 +288,7 @@
                "label": "ActiveMQ cluster",
                "multi": true,
                "name": "activemq_cluster",
-               "query": "label_values({job=~\"integrations/apache-activemq\",job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
+               "query": "label_values({job=~\"$job\",cluster=~\"$cluster\"}, activemq_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

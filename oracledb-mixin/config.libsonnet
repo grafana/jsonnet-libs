@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job=~"integrations/oracledb"',
+  filteringSelector: '',
   enableMultiCluster: false,
   groupLabels: if self.enableMultiCluster then ['cluster', 'job'] else ['job'],
   instanceLabels: ['instance'],

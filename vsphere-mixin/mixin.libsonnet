@@ -1,10 +1,12 @@
+local config = import './config.libsonnet';
 local vspherelib = import './main.libsonnet';
+
 
 local vsphere =
   vspherelib.new()
   + vspherelib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/vsphere"',
+      filteringSelector: config.filteringSelector,
       uid: 'vsphere',
       enableLokiLogs: true,
     }
