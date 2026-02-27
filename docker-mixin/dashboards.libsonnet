@@ -50,7 +50,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
              formatParser=this.config.logsFormatParser,
              showLogsVolume=this.config.showLogsVolume,
              logsVolumeGroupBy=this.config.logsVolumeGroupBy,
-             extraFilters=this.config.logsExtraFilters
+             extraFilters=this.config.logsExtraFilters,
+             customAllValue=this.config.customAllValue,
            ).dashboards.logs
            + self._common
            + g.dashboard.withUid(this.config.uid + '-logs'),

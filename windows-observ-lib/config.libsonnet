@@ -42,6 +42,7 @@
   logsGroupLabels: this.groupLabels,
   logsInstanceLabels: this.instanceLabels,
   logsFilteringSelector: this.filteringSelector,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present
   showLogsVolume: true,
   logsExtraFilters:
     |||
