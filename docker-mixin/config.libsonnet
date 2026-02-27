@@ -8,8 +8,8 @@
     dashboardNamePrefix: '',
     //prefix
     uid: 'integration-docker',
-    // ignore k8s nodes by default
-    filteringSelector: 'job!="kubelet"',
+    // set to apply static filters, e.g. job="integrations/docker"
+    filteringSelector: '',
     containerSelector: 'name!=""',
     //signals related
     groupLabels: ['job'],
@@ -28,7 +28,11 @@
     showLogsVolume: true,
     logsVolumeGroupBy: 'container',
     // ignore logs from k8s
-    logsFilteringSelector: self.filteringSelector + ', namespace="" ,container!=""',
+    logsFilteringSelector:
+      if std.length(self.filteringSelector) > 0 then
+        self.filteringSelector + ', namespace="", container!=""'
+      else
+        'namespace="", container!=""',
     logsExtraFilters: |||
       | label_format timestamp="{{__timestamp__}}"
       | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{ alignLeft 25 .container }}|{{else}}{{ alignLeft 25 .container}}|{{end}} {{__line__}}`

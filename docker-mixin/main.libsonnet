@@ -1,4 +1,5 @@
-local g = import './g.libsonnet';
+local alerts = import './alerts.libsonnet';
+local links = import './links.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(): {
@@ -17,18 +18,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       panels: (import './panels.libsonnet').new(this),
       rows: (import './rows.libsonnet').new(this),
       dashboards: (import './dashboards.libsonnet').new(this),
-      // common links here
-      links: {
-        local link = g.dashboard.link,
-        otherDashboards:
-          link.dashboards.new('All Docker dashboards', this.config.dashboardTags)
-          + link.dashboards.options.withIncludeVars(true)
-          + link.dashboards.options.withKeepTime(true)
-          + link.dashboards.options.withAsDropdown(false),
-      },
+      links: links.new(this),
     },
     prometheus: {
-      alerts: {},
+      alerts: alerts.new(this),
       recordingRules: {},
     },
     asMonitoringMixin(): {

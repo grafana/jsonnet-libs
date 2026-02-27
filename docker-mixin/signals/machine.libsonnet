@@ -1,6 +1,7 @@
 local commonlib = import './common-lib/common/main.libsonnet';
 function(this)
   {
+    local instanceGroupBy = std.join(', ', this.instanceLabels),
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
@@ -61,11 +62,14 @@ function(this)
           cadvisor: {
             expr: |||
               avg(
-                sum by (instance) (container_memory_usage_bytes{%%(queriesSelector)s, %(containerSelector)s})
+                sum by (%(instanceGroupBy)s) (container_memory_usage_bytes{%%(queriesSelector)s, %(containerSelector)s})
                 /
-                avg by (instance) (machine_memory_bytes{%%(queriesSelector)s})
+                avg by (%(instanceGroupBy)s) (machine_memory_bytes{%%(queriesSelector)s})
               ) * 100
-            ||| % { containerSelector: this.containerSelector },
+            ||| % {
+              containerSelector: this.containerSelector,
+              instanceGroupBy: instanceGroupBy,
+            },
           },
         },
       },
