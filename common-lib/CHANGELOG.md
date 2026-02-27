@@ -1,3 +1,6 @@
+# 0.5.1
+- [Signal] fix: Fix info labels rendering as table columns.
+
 # 0.5.0
 - [Panels] feat: Move style choices (colors, line styles) to design tokens directory.
 
