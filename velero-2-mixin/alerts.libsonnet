@@ -57,7 +57,7 @@
           {
             alert: 'VeleroUpStatus',
             expr: |||
-              up{%(filteringSelector)s} != %(alertsVeleroUpStatus)s
+              (up{%(filteringSelector)s} = %(alertsVeleroUpStatus)s) or (absent(up{%(filteringSelector)s}))
             ||| % this.config,
             'for': '5m',
             labels: {
