@@ -205,6 +205,10 @@
             "description": "The Heap and non-heap memory used for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -212,6 +216,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -269,6 +277,10 @@
             "description": "The Heap and non-heap memory committed for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -276,6 +288,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -333,6 +349,10 @@
             "description": "The number of garbage collection events for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -340,6 +360,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -387,6 +411,10 @@
             "description": "The average duration for each garbage collection operation in the NodeManager JVM.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -394,6 +422,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -454,6 +486,10 @@
             "description": "The Heap and non-heap memory used for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -461,6 +497,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -518,12 +558,20 @@
             "description": "The Heap and non-heap memory committed for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -581,6 +629,10 @@
             "description": "CPU utilization of the Node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -588,6 +640,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -634,6 +690,10 @@
             "description": "GPU utilization of the Node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -641,6 +701,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -700,6 +764,10 @@
             "description": "Number of containers with a given state for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -707,6 +775,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -821,12 +893,20 @@
             "description": "Total memory used by containers for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -873,12 +953,20 @@
             "description": "Total virtual memory used by containers for the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -925,12 +1013,20 @@
             "description": "The memory available and currently allocated for containers by the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -988,12 +1084,20 @@
             "description": "The virtual cores available and currently allocated for containers by the NodeManager.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }

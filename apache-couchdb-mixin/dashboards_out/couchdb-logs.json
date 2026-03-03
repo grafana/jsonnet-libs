@@ -263,7 +263,7 @@
                "label": "CouchDB cluster",
                "multi": true,
                "name": "couchdb_cluster",
-               "query": "label_values({,job=~\"$job\"}, couchdb_cluster)",
+               "query": "label_values({job=~\"$job\"}, couchdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -278,7 +278,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
+               "query": "label_values({job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -293,7 +293,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",couchdb_cluster=~\"$couchdb_cluster\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

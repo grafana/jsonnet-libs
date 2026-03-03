@@ -35,6 +35,15 @@
                      "fixedColor": "light-green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "s"
                }
             },
@@ -46,7 +55,6 @@
             },
             "id": 2,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -83,6 +91,15 @@
                      "fixedColor": "light-green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -94,7 +111,6 @@
             },
             "id": 3,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -131,6 +147,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "bytes"
                }
             },
@@ -142,7 +167,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -179,6 +203,15 @@
                      "fixedColor": "light-green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -190,7 +223,6 @@
             },
             "id": 5,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -227,6 +259,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "bytes"
                }
             },
@@ -238,7 +279,6 @@
             },
             "id": 6,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -272,6 +312,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -284,6 +325,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -330,6 +375,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -342,6 +388,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -387,12 +437,20 @@
             "description": "Events in queue in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -438,12 +496,20 @@
             "description": "Messages in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -490,12 +556,20 @@
             "description": "Registrar state store and fetch in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -556,6 +630,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -567,7 +650,6 @@
             },
             "id": 12,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -600,12 +682,20 @@
             "description": "Allocation runs in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -652,12 +742,20 @@
             "description": "Allocation duration in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -704,12 +802,20 @@
             "description": "Allocation latency in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -756,12 +862,20 @@
             "description": "Event queue dispatches in the cluster",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -821,6 +935,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -833,6 +948,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -879,6 +998,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -891,6 +1011,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },

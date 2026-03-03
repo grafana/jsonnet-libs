@@ -49,12 +49,20 @@
             "description": "Rate of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -126,12 +134,20 @@
             "description": "Latency of fetch, scroll, and query requests by selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -206,12 +222,20 @@
             "description": "Ratio of query cache and request cache hits and misses.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -271,6 +295,10 @@
             "description": "Total evictions count by cache type for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -279,6 +307,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -376,12 +405,20 @@
             "description": "Rate of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "documents/s"
                }
@@ -429,6 +466,10 @@
             "description": "Document indexing latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -437,6 +478,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -495,6 +537,10 @@
             "description": "Number of indexing failures for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -503,6 +549,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -561,6 +608,10 @@
             "description": "Index flush latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -569,6 +620,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -627,6 +679,10 @@
             "description": "Index merge time for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -636,6 +692,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -720,6 +777,10 @@
             "description": "Index refresh latency for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -728,6 +789,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -786,6 +848,10 @@
             "description": "Current number of translog operations for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -794,6 +860,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -851,6 +918,10 @@
             "description": "Rate of documents deleted for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -859,6 +930,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -929,6 +1001,10 @@
             "description": "Number of indexed documents for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -937,6 +1013,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -994,6 +1071,10 @@
             "description": "The number of index shards for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1002,6 +1083,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1059,6 +1141,10 @@
             "description": "Current number of segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1067,6 +1153,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1124,6 +1211,10 @@
             "description": "Number of merge operations for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -1133,6 +1224,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1190,6 +1282,10 @@
             "description": "Size of query cache and request cache.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1198,6 +1294,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1267,6 +1364,10 @@
             "description": "Size of the store in bytes for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1275,6 +1376,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1332,6 +1434,10 @@
             "description": "Memory used by segments for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1340,6 +1446,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1397,6 +1504,10 @@
             "description": "Size of merge operations in bytes for the selected index.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -1406,6 +1517,7 @@
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
