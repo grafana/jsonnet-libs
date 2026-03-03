@@ -19,7 +19,7 @@
 
   // Logging configuration
   enableLokiLogs: true,
-  customAllValue: '.*', // Override this as desired. '.+' is a good option if you want to ensure a label is present.
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level', 'severity'],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

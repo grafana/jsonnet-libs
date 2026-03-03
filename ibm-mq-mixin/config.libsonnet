@@ -14,7 +14,7 @@
   // Data source configuration
   metricsSource: 'prometheus',
   enableLokiLogs: true,
-  customAllValue: '.*', // Override this as desired. '.+' is a good option if you want to ensure a label is present.
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logLabels: this.groupLabels,
   extraLogLabels: [],
   logsVolumeGroupBy: 'level',

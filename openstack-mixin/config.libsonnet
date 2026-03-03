@@ -33,7 +33,7 @@
 
   // logs lib related
   enableLokiLogs: true,
-  customAllValue: '.*', // Override this as desired. '.+' is a good option if you want to ensure a label is present.
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logsExtraFilters: '',
   extraLogLabels: ['level', 'service'],
   logsVolumeGroupBy: 'level',

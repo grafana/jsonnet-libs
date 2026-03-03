@@ -24,7 +24,7 @@
   alertsCriticalHighMemoryUsage5m: 80,  //percent: calculated as ratio then multiplied by query
 
   enableLokiLogs: true,
-  customAllValue: '.*', // Override this as desired. '.+' is a good option if you want to ensure a label is present.
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: [],
   showLogsVolume: true,
 
