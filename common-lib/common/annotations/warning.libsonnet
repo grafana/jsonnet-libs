@@ -1,5 +1,6 @@
 local g = import '../g.libsonnet';
 local annotation = g.dashboard.annotation;
+local colors = import '../tokens/colors.libsonnet';
 local base = import './base.libsonnet';
 
 base {
@@ -8,6 +9,6 @@ base {
     target,
   ):
     super.new(title, target)
-    + annotation.withIconColor('light-yellow'),
+    + annotation.withIconColor(colors.palette.warning),
 }
 

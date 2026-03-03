@@ -1,5 +1,6 @@
 local g = import '../g.libsonnet';
 local annotation = g.dashboard.annotation;
+local colors = import '../tokens/colors.libsonnet';
 local base = import './base.libsonnet';
 
 base {
@@ -9,7 +10,7 @@ base {
     instanceLabels,
   ):
     super.new(title, target)
-    + annotation.withIconColor('light-yellow')
+    + annotation.withIconColor(colors.palette.warning)
     + annotation.withHide(true)
     + { useValueForTime: 'on' }
     + base.withTagKeys(instanceLabels),
