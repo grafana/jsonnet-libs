@@ -149,7 +149,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local offsetStr = if offset == '' then '' else ' offset ' + offset;
     local isWholeNumber(str) = str != '' && std.foldl(function(acc, c) acc && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9'), std.stringChars(str), true);
     {
-      native: 'histogram_fraction(0, %(le)s, sum%(sumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]%(offset)s)))*histogram_count(sum%(sumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]%(offset)s)))' % {
+      native: '(histogram_fraction(0, %(le)s, sum%(sumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]%(offset)s))) < +Inf)*histogram_count(sum%(sumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]%(offset)s)))' % {
         le: if isWholeNumber(le) then le + '.0' else le,  // Treated as float number.
         metric: metric,
         offset: offsetStr,
