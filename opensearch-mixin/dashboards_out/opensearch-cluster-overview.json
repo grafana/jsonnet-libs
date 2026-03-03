@@ -50,7 +50,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -73,7 +73,6 @@
                      }
                   ],
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -137,11 +136,10 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -201,11 +199,10 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -265,11 +262,10 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -329,11 +325,10 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "thresholds"
                   },
                   "thresholds": {
-                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -543,10 +538,6 @@
             "description": "OpenSearch node roles over time.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "mappings": [
                      {
                         "options": {
@@ -578,11 +569,7 @@
                         },
                         "type": "value"
                      }
-                  ],
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
-                  }
+                  ]
                }
             },
             "gridPos": {
@@ -933,20 +920,12 @@
             "description": "The total count of documents indexed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "documents"
                }
@@ -994,20 +973,12 @@
             "description": "The number of tasks waiting to be executed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "tasks"
                }
@@ -1055,20 +1026,12 @@
             "description": "The total size of the store across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -1116,20 +1079,12 @@
             "description": "The max wait time for tasks to be executed across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -1189,20 +1144,12 @@
             "description": "Top indices by combined fetch, query, and scroll request rate across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -1249,20 +1196,12 @@
             "description": "Top indices by combined fetch, query, and scroll latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -1310,20 +1249,12 @@
             "description": "Top indices by cache hit ratio for the combined request and query cache across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -1384,20 +1315,12 @@
             "description": "Top nodes by rate of ingest across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "Bps"
                }
@@ -1445,20 +1368,12 @@
             "description": "Top nodes by ingestion latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -1507,20 +1422,12 @@
             "description": "Top nodes by ingestion failures across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "errors"
                }
@@ -1582,20 +1489,12 @@
             "description": "Top indices by rate of document indexing across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "documents/s"
                }
@@ -1643,20 +1542,12 @@
             "description": "Top indices by indexing latency across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -1705,20 +1596,12 @@
             "description": "Top indices by index document failures across the OpenSearch cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "failures"
                }
