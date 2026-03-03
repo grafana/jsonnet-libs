@@ -22,6 +22,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
     local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
 
+    signalName:: signalName,
+    nameShort:: nameShort,
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
