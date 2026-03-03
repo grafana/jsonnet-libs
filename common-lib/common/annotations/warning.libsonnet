@@ -11,4 +11,3 @@ base {
     super.new(title, target)
     + annotation.withIconColor(colors.palette.warning),
 }
-
