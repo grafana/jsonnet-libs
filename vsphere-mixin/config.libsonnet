@@ -25,7 +25,6 @@
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,
-  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['instance', 'log_type', 'level'],
   showLogsVolume: true,
 }
