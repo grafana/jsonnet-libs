@@ -2,13 +2,12 @@ local g = import '../g.libsonnet';
 local annotation = g.dashboard.annotation;
 local base = import './base.libsonnet';
 
-// Show fatal events as annotations
 base {
   new(
     title,
     target,
   ):
     super.new(title, target)
-    + annotation.withIconColor('light-purple')
-    + annotation.withHide(true),
+    + annotation.withIconColor('light-yellow'),
 }
+

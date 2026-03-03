@@ -234,6 +234,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     //only single instance selection allowed
     getVariablesMultiChoice()::
       grafanaVariables.multiInstance,
+    getVariables()::
+      grafanaVariables,
     getVariablesDatasource(type='prometheus'):
       grafanaVariables.datasources[type],
 
