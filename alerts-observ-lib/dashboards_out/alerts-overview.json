@@ -67,7 +67,7 @@
             "description": "Panel to report on the status of firing alerts.",
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 24,
                "x": 0,
                "y": 1
             },
