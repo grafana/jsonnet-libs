@@ -15,7 +15,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
-  customAllValue: '.*', // Override this as desired. '.+' is a good option if you want to ensure a label is present.
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
 
   // Alert thresholds
   alertsHighCPUUtilization: 90,
