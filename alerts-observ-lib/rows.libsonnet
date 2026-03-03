@@ -7,7 +7,7 @@ local g = import './g.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          panels.alertsOverview { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
+          panels.alertsOverview { gridPos: { h: 8, w: 24} },
         ]
       ),
   },
