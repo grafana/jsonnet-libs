@@ -6,7 +6,7 @@
         name: this.config.uid,
         rules: [
           {
-            alert: 'PGBouncerHighNumberClientWaitingConnections',
+            alert: 'PGBouncerHighWaitingConns',
             expr: |||
               pgbouncer_pools_client_waiting_connections{%(filteringSelector)s} > %(alertsHighClientWaitingConnections)s
             ||| % this.config,
@@ -38,7 +38,7 @@
             },
           },
           {
-            alert: 'PGBouncerHighServerConnectionSaturationWarning',
+            alert: 'PGBouncerHighConnSatWarn',
             expr: |||
               100 * (sum without (database, user) (pgbouncer_pools_server_active_connections{%(filteringSelector)s} + pgbouncer_pools_server_idle_connections{%(filteringSelector)s} + pgbouncer_pools_server_used_connections{%(filteringSelector)s}) / clamp_min(pgbouncer_config_max_user_connections{%(filteringSelector)s},1)) > %(alertsHighServerConnectionSaturationWarning)s
             ||| % this.config,
@@ -54,7 +54,7 @@
             },
           },
           {
-            alert: 'PGBouncerHighServerConnectionSaturationCritical',
+            alert: 'PGBouncerHighConnSatCrit',
             expr: |||
               100 * (sum without (database, user) (pgbouncer_pools_server_active_connections{%(filteringSelector)s} + pgbouncer_pools_server_idle_connections{%(filteringSelector)s} + pgbouncer_pools_server_used_connections{%(filteringSelector)s}) / clamp_min(pgbouncer_config_max_user_connections{%(filteringSelector)s},1)) > %(alertsHighServerConnectionSaturationCritical)s
             ||| % this.config,
