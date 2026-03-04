@@ -67,21 +67,12 @@ scrape_configs:
 
 ## Alerts Overview
 
-<<<<<<< HEAD
-| Alert                         | Summary                                                                                                                                                                 |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PGBouncerHighWaitingConns     | High number of clients waiting a connection, which may indicate a bottleneck in connection pooling, where too many clients are waiting for available server connections |
-| PGBouncerHighClientWaitTime   | Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.                                         |
-| PGBouncerHighConnSatWarn      | System is nearing a high number of user connections, near the threshold of configured max user connections.                                                             |
-| PGBouncerHighConnSatCrit      | System is nearing a critically high number of user connections, near the threshold of configured max user connections.                                                  |
-=======
 | Alert                                  | Summary                                                                                                                                                                 |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PGBouncerHighNumberWaitingConnections  | May indicate a bottleneck in connection pooling where too many clients are waiting for available server connections.                                                    |
 | PGBouncerHighWaitTime                  | Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.                                         |
 | PGBouncerServerSaturationWarning       | PGBouncer is nearing user connection capacity.                                                                                                                          |
 | PGBouncerHighSaturationCritical        | PGBouncer is nearing critical levels of user connection capacity.                                                                                                       |
->>>>>>> 56a422ba56084dd2c32018683f9faec4c8240e84
 
 Default thresholds can be configured in `config.libsonnet`
 
