@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job=~"integrations/presto"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster', 'presto_cluster'],
   overviewLegendLabels: ['presto_cluster'],
   coordinatorLegendLabels: ['instance'],
