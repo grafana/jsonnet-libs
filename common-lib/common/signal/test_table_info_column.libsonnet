@@ -32,7 +32,6 @@ local m1 = signal.init(
               matcher: { id: 'byName', options: 'Go version' },
               properties: [
                 { id: 'custom.hidden', value: true },
-                { id: 'displayName', value: 'Version' },
                 { id: 'unit', value: 'short' },
               ],
             },
