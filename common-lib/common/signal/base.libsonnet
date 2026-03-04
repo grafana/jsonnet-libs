@@ -22,6 +22,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
     local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
 
+    signalName:: signalName,
+    nameShort:: nameShort,
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
@@ -195,14 +197,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[])
       ),
 
-    asOverride(name=signalName, override='byQuery', format='time_series'):
+    asOverride(name=this.signalName, override='byQuery', format='time_series'):
       g.panel.timeSeries.standardOptions.withOverridesMixin(
         [
           if override == 'byQuery' then
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
             + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
-            + (if format == 'table' && name != nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort)) else {})
+            + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               (if hasValueMaps then
                  g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
@@ -213,7 +215,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
             + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
-            + (if format == 'table' && name != nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort)) else {})
+            + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               (if hasValueMaps then
                  g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
@@ -227,7 +229,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
            g.panel.timeSeries.standardOptions.withOverridesMixin(
              [
                g.panel.timeSeries.fieldOverride.byName.new(infoLabel)
-               + g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort))
+               + g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort))
                for infoLabel in this.infoLabels
              ],
            )
