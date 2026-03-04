@@ -37,12 +37,20 @@
             "description": "The amount of CPU used by the VMs.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "rotmhz"
                }
@@ -87,6 +95,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -99,6 +108,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -141,12 +154,20 @@
             "description": "The amount of memory used by the VMs.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "mbytes"
                }
@@ -191,6 +212,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -203,6 +225,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -245,12 +271,20 @@
             "description": "The amount of memory that has been swapped or ballooned on the VMs.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "mbytes"
                }
@@ -303,12 +337,20 @@
             "description": "The 20s average rate of data transmitted or received over the network of the VMs.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "KiBs"
                }
@@ -361,12 +403,20 @@
             "description": "The 20s average of received or transmitted packets dropped over the VMs network compared to the overall packets received or transmitted.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -431,12 +481,20 @@
             "description": "The amount of disk space used by the VMs.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -481,6 +539,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -493,6 +552,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                }
             },
@@ -535,7 +598,15 @@
             "description": "Information about the disks associated with the virtual machines.",
             "fieldConfig": {
                "defaults": {
-                  "noValue": "NA"
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "noValue": "NA",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
                },
                "overrides": [
                   {
@@ -742,7 +813,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\"}, job)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -757,7 +828,7 @@
                "label": "Datacenter",
                "multi": true,
                "name": "vcenter_datacenter_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\"}, vcenter_datacenter_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{,job=~\"$job\"}, vcenter_datacenter_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

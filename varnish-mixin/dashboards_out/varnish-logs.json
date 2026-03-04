@@ -157,7 +157,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",cluster=~\"$cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -199,7 +199,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",cluster=~\"$cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -230,7 +230,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/varnish-cache\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -245,7 +245,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({job=\"integrations/varnish-cache\",job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
