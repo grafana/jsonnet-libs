@@ -1,4 +1,4 @@
-local g = import '../g.libsonnet';
+local g = import './g.libsonnet';
 local logslib = import 'logs-lib/logs/main.libsonnet';
 {
   local root = self,
@@ -51,6 +51,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           datasourceRegex=this.grafana.variables.datasources.loki.regex,
           filterSelector=this.config.filteringSelector,
           labels=this.config.groupLabels + this.config.extraLogLabels,
+          customAllValue=this.config.customAllValue,
         )
         {
           dashboards+:
