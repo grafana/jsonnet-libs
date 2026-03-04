@@ -37,7 +37,7 @@ groups:
             description: "Cannot find any metrics related to Velero on {{ $labels.instance }}. This may indicate further issues with Velero or the scraping agent. \n"
             summary: Velero is down.
           expr: |
-            (up{job="integrations/velero"} = 0) or (absent(up{job="integrations/velero"}))
+            (count (up{job="integrations/velero"} == 0) > 0 ) or ( absent(up{job="integrations/velero"}) )
           for: 5m
           labels:
             severity: critical
