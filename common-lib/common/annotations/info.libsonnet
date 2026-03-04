@@ -9,6 +9,5 @@ base {
     target,
   ):
     super.new(title, target)
-    + annotation.withIconColor(colors.palette.warning)
-    + annotation.withHide(true),
+    + annotation.withIconColor(colors.palette.info),
 }
