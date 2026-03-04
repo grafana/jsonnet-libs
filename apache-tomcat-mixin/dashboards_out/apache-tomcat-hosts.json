@@ -93,7 +93,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -105,7 +105,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -117,7 +117,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_expiredsessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -129,7 +129,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -141,7 +141,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_rejectedsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_rejectedsessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -153,7 +153,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_expiredsessions_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(tomcat_session_expiredsessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -216,7 +216,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_session_processingtime_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -228,7 +228,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_session_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(tomcat_session_processingtime_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", host=~\"$host\", context=~\"$context\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -304,7 +304,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_servlet_requestcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -316,7 +316,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
+                  "expr": "sum(rate(tomcat_servlet_errorcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -328,7 +328,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_servlet_requestcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -340,7 +340,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(tomcat_servlet_errorcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
+                  "expr": "rate(tomcat_servlet_errorcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -403,7 +403,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
+                  "expr": "sum(increase(tomcat_servlet_processingtime_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)) by (job, instance)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -415,7 +415,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(tomcat_servlet_processingtime_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)",
+                  "expr": "increase(tomcat_servlet_processingtime_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", module=~\"$host$context\", servlet=~\"$servlet\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -451,7 +451,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\"}, job)",
+               "query": "label_values(tomcat_session_sessioncounter_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -466,7 +466,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\"}, cluster)",
+               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -481,7 +481,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -501,7 +501,7 @@
                },
                "multi": true,
                "name": "host",
-               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, host)",
+               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, host)",
                "refresh": 2,
                "type": "query"
             },
@@ -512,7 +512,7 @@
                },
                "multi": true,
                "name": "context",
-               "query": "label_values(tomcat_session_sessioncounter_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, context)",
+               "query": "label_values(tomcat_session_sessioncounter_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, context)",
                "refresh": 2,
                "type": "query"
             },
@@ -523,7 +523,7 @@
                },
                "multi": true,
                "name": "servlet",
-               "query": "label_values(tomcat_servlet_requestcount_total{job=\"integrations/tomcat\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, servlet)",
+               "query": "label_values(tomcat_servlet_requestcount_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, servlet)",
                "refresh": 2,
                "type": "query"
             }

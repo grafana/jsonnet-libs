@@ -87,7 +87,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(user_session_logins_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(user_session_logins_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -126,7 +126,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "1000 * rate(http_request_duration_seconds_sum{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / rate(http_request_duration_seconds_count{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "1000 * rate(http_request_duration_seconds_sum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / rate(http_request_duration_seconds_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -162,7 +162,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (feature_category) (topk(5, rate(http_requests_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])))",
+                  "expr": "sum by (feature_category) (topk(5, rate(http_requests_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])))",
                   "format": "table",
                   "instant": true,
                   "interval": "2m",
@@ -274,7 +274,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (status) (rate(http_requests_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (status) (rate(http_requests_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -349,7 +349,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(gitlab_ci_active_jobs_sum{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(gitlab_ci_active_jobs_sum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -411,7 +411,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(pipelines_created_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(pipelines_created_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -473,7 +473,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (source) (rate(gitlab_ci_pipeline_size_builds_sum{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (source) (rate(gitlab_ci_pipeline_size_builds_sum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -535,7 +535,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(gitlab_ci_trace_operations_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(gitlab_ci_trace_operations_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -571,7 +571,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(gitlab_cache_misses_total{job=\"integrations/gitlab\"}, job)",
+               "query": "label_values(gitlab_cache_misses_total{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -586,7 +586,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(gitlab_cache_misses_total{job=\"integrations/gitlab\",job=~\"$job\"}, cluster)",
+               "query": "label_values(gitlab_cache_misses_total{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -601,7 +601,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(gitlab_cache_misses_total{job=\"integrations/gitlab\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(gitlab_cache_misses_total{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

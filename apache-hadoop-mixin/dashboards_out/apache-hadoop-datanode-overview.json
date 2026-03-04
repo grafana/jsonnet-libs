@@ -103,7 +103,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_datanode_ramdiskblocksevictedwithoutread{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(hadoop_datanode_ramdiskblocksevictedwithoutread{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -164,7 +164,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_datanode_blocksremoved{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(hadoop_datanode_blocksremoved{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -225,7 +225,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_datanode_volumefailures{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(hadoop_datanode_volumefailures{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -261,7 +261,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\"}, job)",
+               "query": "label_values(hadoop_namenode_blockstotal{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -276,7 +276,7 @@
                "label": "Hadoop cluster",
                "multi": true,
                "name": "hadoop_cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\"}, hadoop_cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, hadoop_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -291,7 +291,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -306,7 +306,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

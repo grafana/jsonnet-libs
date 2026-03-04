@@ -73,7 +73,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg((rate(varnish_main_cache_hit{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]), 1))) by () * 100",
+                  "expr": "avg((rate(varnish_main_cache_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]), 1))) by () * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -125,7 +125,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(varnish_main_client_req{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(varnish_main_client_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -178,7 +178,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (rate(varnish_main_backend_req{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by () (rate(varnish_main_backend_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -230,7 +230,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (irate(varnish_main_sessions_total{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by () (irate(varnish_main_sessions_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -282,7 +282,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (rate(varnish_main_cache_hit{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by () (rate(varnish_main_cache_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -334,7 +334,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (rate(varnish_main_cache_hitpass{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by () (rate(varnish_main_cache_hitpass{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -386,7 +386,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (varnish_main_thread_queue_len{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by () (varnish_main_thread_queue_len{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -438,7 +438,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (varnish_main_pools{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by () (varnish_main_pools{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -517,7 +517,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_conn{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_conn{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -529,7 +529,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_recycle{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_recycle{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -541,7 +541,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_reuse{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_reuse{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -553,7 +553,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_busy{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_busy{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -565,7 +565,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_unhealthy{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_unhealthy{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -628,7 +628,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_sessions{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"conn\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_sessions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"conn\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -640,7 +640,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_sessions{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"queued\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_sessions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"queued\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -652,7 +652,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_sessions{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"dropped\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_sessions{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"dropped\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -715,7 +715,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_client_req{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_client_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -727,7 +727,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_backend_req{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_backend_req{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -814,7 +814,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (instance, job) ((rate(varnish_main_cache_hit{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]), 1))) * 100",
+                  "expr": "avg by (instance, job) ((rate(varnish_main_cache_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]), 1))) * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -880,7 +880,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "varnish_sma_g_bytes{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"s0\"}",
+                  "expr": "varnish_sma_g_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",type=\"s0\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -949,7 +949,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_n_expired{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_n_expired{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -961,7 +961,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_n_lru_nuked{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_n_lru_nuked{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1027,7 +1027,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_s_resp_hdrbytes{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_s_resp_hdrbytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - Frontend header",
@@ -1038,7 +1038,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_s_resp_bodybytes{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_s_resp_bodybytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - Frontend body",
@@ -1049,7 +1049,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(varnish_backend_beresp_hdrbytes{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(varnish_backend_beresp_hdrbytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{backend}} - Backend header",
@@ -1060,7 +1060,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(varnish_backend_beresp_bodybytes{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(varnish_backend_beresp_bodybytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - {{backend}} - Backend body",
@@ -1122,7 +1122,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_threads_failed{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_threads_failed{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1134,7 +1134,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_threads_created{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_threads_created{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1146,7 +1146,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(varnish_main_threads_limited{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(varnish_main_threads_limited{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1158,7 +1158,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "varnish_main_threads{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "varnish_main_threads{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - Total",
@@ -1193,7 +1193,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(varnish_main_sessions{job=\"integrations/varnish-cache\"}, job)",
+               "query": "label_values(varnish_main_sessions{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1208,7 +1208,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(varnish_main_sessions{job=\"integrations/varnish-cache\",job=~\"$job\"}, cluster)",
+               "query": "label_values(varnish_main_sessions{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1223,7 +1223,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(varnish_main_sessions{job=\"integrations/varnish-cache\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(varnish_main_sessions{job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

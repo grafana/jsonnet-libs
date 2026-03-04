@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/aerospike"',
+  filteringSelector: '',
   groupLabels: ['job', 'aerospike_cluster', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance', 'ns'],  // ns == namespace

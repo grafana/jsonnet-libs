@@ -1,7 +1,7 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job=~"integrations/couchbase"',
+  filteringSelector: '',
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'couchbase_cluster'] else ['job', 'couchbase_cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['couchbase-mixin'],

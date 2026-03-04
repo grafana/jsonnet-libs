@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job=~"integrations/apache-activemq"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster', 'activemq_cluster'],
   instanceLabels: ['instance'],
 

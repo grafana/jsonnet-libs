@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/clickhouse"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance'],

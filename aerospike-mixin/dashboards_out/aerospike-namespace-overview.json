@@ -94,7 +94,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "aerospike_namespace_unavailable_partitions{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
+                  "expr": "aerospike_namespace_unavailable_partitions{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{ns}} - {{ns}}",
@@ -146,7 +146,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - aerospike_namespace_device_free_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"device\"}",
+                  "expr": "100 - aerospike_namespace_device_free_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"device\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{ns}} - {{ns}}",
@@ -202,7 +202,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "aerospike_namespace_dead_partitions{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
+                  "expr": "aerospike_namespace_dead_partitions{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{ns}} - {{ns}}",
@@ -255,7 +255,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - aerospike_namespace_memory_free_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"memory\"}",
+                  "expr": "100 - aerospike_namespace_memory_free_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}\nor\naerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\", storage_engine=\"memory\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{ns}} - {{ns}}",
@@ -322,7 +322,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_read_success{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_read_success{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -334,7 +334,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_read_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_read_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -346,7 +346,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_read_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_read_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -358,7 +358,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_read_not_found{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_read_not_found{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -370,7 +370,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_read_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_read_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -438,7 +438,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_write_success{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_write_success{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -450,7 +450,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_write_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_write_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -462,7 +462,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_write_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_write_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -474,7 +474,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_write_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_write_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -542,7 +542,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_udf_complete{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_udf_complete{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -554,7 +554,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_udf_error{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_udf_error{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -566,7 +566,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_udf_timeout{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_udf_timeout{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -578,7 +578,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(aerospike_namespace_client_udf_filtered_out{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
+                  "expr": "rate(aerospike_namespace_client_udf_filtered_out{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -640,7 +640,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "aerospike_namespace_cache_read_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
+                  "expr": "aerospike_namespace_cache_read_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\",ns=~\"$ns\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ aerospike_cluster }} - {{ ns }}",
@@ -675,7 +675,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\"}, job)",
+               "query": "label_values(aerospike_namespace_data_used_pct{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -690,7 +690,7 @@
                "label": "Aerospike cluster",
                "multi": true,
                "name": "aerospike_cluster",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\"}, aerospike_cluster)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\"}, aerospike_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -705,7 +705,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -720,7 +720,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -735,7 +735,7 @@
                "label": "Namespace",
                "multi": true,
                "name": "ns",
-               "query": "label_values(aerospike_namespace_data_used_pct{job=\"integrations/aerospike\",job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}, ns)",
+               "query": "label_values(aerospike_namespace_data_used_pct{job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}, ns)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

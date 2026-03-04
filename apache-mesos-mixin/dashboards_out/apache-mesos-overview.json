@@ -69,7 +69,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_uptime_seconds{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_uptime_seconds{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -125,7 +125,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_cpus{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_cpus{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -181,7 +181,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_mem{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_mem{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -237,7 +237,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_gpus{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_gpus{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -293,7 +293,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_disk{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_disk{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"total\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -356,7 +356,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_mem{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"percent\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_mem{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"percent\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -419,7 +419,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_disk{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"percent\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_disk{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"percent\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -478,7 +478,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster, type) (mesos_master_event_queue_length{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster, type) (mesos_master_event_queue_length{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}} - {{type}}",
@@ -537,7 +537,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster, type) (increase(mesos_master_messages{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)) > 0",
+                  "expr": "max by(mesos_cluster, type) (increase(mesos_master_messages{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval:] offset $__interval)) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -598,7 +598,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_registrar_state_store_ms{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"mean\"})",
+                  "expr": "max by(mesos_cluster) (mesos_registrar_state_store_ms{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", type=\"mean\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}} - store",
@@ -609,7 +609,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_registrar_state_fetch_ms{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_registrar_state_fetch_ms{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}} - fetch",
@@ -664,7 +664,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_registrar_log_recovered{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_registrar_log_recovered{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -723,7 +723,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (increase(mesos_master_allocation_run_ms_count{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
+                  "expr": "max by(mesos_cluster) (increase(mesos_master_allocation_run_ms_count{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__interval] offset $__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -784,7 +784,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_allocation_run_ms{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_allocation_run_ms{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -844,7 +844,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -903,7 +903,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (mesos_master_event_queue_dispatches{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+                  "expr": "max by(mesos_cluster) (mesos_master_event_queue_dispatches{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -979,7 +979,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} / clamp_min(mesos_slave_mem_bytes{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"},1))",
+                  "expr": "max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} / clamp_min(mesos_slave_mem_bytes{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"},1))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -1042,7 +1042,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} / clamp_min(mesos_slave_disk_bytes{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"},1))",
+                  "expr": "max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} / clamp_min(mesos_slave_disk_bytes{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"},1))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mesos_cluster}}",
@@ -1077,7 +1077,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(mesos_master_uptime_seconds{job=\"integrations/apache-mesos\"}, job)",
+               "query": "label_values(mesos_master_uptime_seconds{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1092,7 +1092,7 @@
                "label": "Mesos cluster",
                "multi": true,
                "name": "mesos_cluster",
-               "query": "label_values(mesos_master_uptime_seconds{job=\"integrations/apache-mesos\",job=~\"$job\"}, mesos_cluster)",
+               "query": "label_values(mesos_master_uptime_seconds{job=~\"$job\"}, mesos_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1107,7 +1107,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(mesos_master_uptime_seconds{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\"}, cluster)",
+               "query": "label_values(mesos_master_uptime_seconds{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1122,7 +1122,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(mesos_master_uptime_seconds{job=\"integrations/apache-mesos\",job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(mesos_master_uptime_seconds{job=~\"$job\",mesos_cluster=~\"$mesos_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

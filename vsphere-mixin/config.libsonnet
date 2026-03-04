@@ -1,6 +1,6 @@
 {
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
-  filteringSelector: 'job=~"integrations/vsphere"',
+  filteringSelector: '',
   // Used to identify 'group' of instances.
   groupLabels: ['job'],
   datacenterLabels: ['vcenter_datacenter_name'],
@@ -15,6 +15,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
 
   // Alert thresholds
   alertsHighCPUUtilization: 90,

@@ -82,7 +82,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_uptime_seconds{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_uptime_seconds{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Uptime",
@@ -133,7 +133,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_buckets_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_buckets_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Buckets",
@@ -184,7 +184,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_users_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_users_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Users",
@@ -235,7 +235,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_replications_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_replications_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Replications",
@@ -286,7 +286,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_remotes_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_remotes_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Remotes",
@@ -337,7 +337,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_scrapers_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_scrapers_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Scrapers",
@@ -388,7 +388,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "influxdb_dashboards_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "influxdb_dashboards_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Dashboards",
@@ -439,7 +439,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "go_threads{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "go_threads{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -513,7 +513,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by(job,influxdb_cluster,instance) (rate(http_api_requests_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by(job,influxdb_cluster,instance) (rate(http_api_requests_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -574,7 +574,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (qc_compiling_active{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (job,influxdb_cluster,instance) (qc_compiling_active{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -586,7 +586,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (qc_queueing_active{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (job,influxdb_cluster,instance) (qc_queueing_active{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -598,7 +598,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (qc_executing_active{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (job,influxdb_cluster,instance) (qc_executing_active{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -660,7 +660,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance, status) (rate(http_query_request_count{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance, status) (rate(http_query_request_count{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -672,7 +672,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance, status) (rate(http_write_request_count{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance, status) (rate(http_write_request_count{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -734,7 +734,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_query_request_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_query_request_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -746,7 +746,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_query_response_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_query_response_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -758,7 +758,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_write_request_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_write_request_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -770,7 +770,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_write_response_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance) (rate(http_write_response_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -831,7 +831,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance, result) (rate(influxql_service_requests_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "sum by (job,influxdb_cluster,instance, result) (rate(influxql_service_requests_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -892,7 +892,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,influxdb_cluster,instance, result) (increase(influxql_service_executing_duration_seconds_sum{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__interval] offset -$__interval))",
+                  "expr": "sum by (job,influxdb_cluster,instance, result) (increase(influxql_service_executing_duration_seconds_sum{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__interval] offset -$__interval))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -953,7 +953,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(boltdb_reads_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(boltdb_reads_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -965,7 +965,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(boltdb_writes_total{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(boltdb_writes_total{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1039,7 +1039,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "task_scheduler_current_execution{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "task_scheduler_current_execution{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1100,7 +1100,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "task_executor_total_runs_active{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "task_executor_total_runs_active{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1161,7 +1161,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "task_executor_workers_busy{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "task_executor_workers_busy{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1222,7 +1222,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(task_scheduler_total_execution_calls{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(task_scheduler_total_execution_calls{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1234,7 +1234,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(task_scheduler_total_execute_failure{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(task_scheduler_total_execute_failure{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1295,7 +1295,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(task_scheduler_total_schedule_calls{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(task_scheduler_total_schedule_calls{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1307,7 +1307,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(task_scheduler_total_schedule_fails{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(task_scheduler_total_schedule_fails{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1372,7 +1372,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "time() - go_memstats_last_gc_time_seconds{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "time() - go_memstats_last_gc_time_seconds{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -1432,7 +1432,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(go_gc_duration_seconds_sum{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(go_gc_duration_seconds_sum{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -1493,7 +1493,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "go_memstats_gc_cpu_fraction{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "go_memstats_gc_cpu_fraction{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{influxdb_cluster}} - {{instance}}",
@@ -1553,7 +1553,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "go_memstats_heap_alloc_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"} / clamp_min(go_memstats_heap_idle_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"} + go_memstats_heap_alloc_bytes{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}, 1)",
+                  "expr": "go_memstats_heap_alloc_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"} / clamp_min(go_memstats_heap_idle_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"} + go_memstats_heap_alloc_bytes{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}, 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -1613,7 +1613,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "go_threads{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
+                  "expr": "go_threads{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -1648,7 +1648,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(influxdb_uptime_seconds{job=\"integrations/influxdb\"}, job)",
+               "query": "label_values(influxdb_uptime_seconds{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1663,7 +1663,7 @@
                "label": "InfluxDB cluster",
                "multi": true,
                "name": "influxdb_cluster",
-               "query": "label_values(influxdb_uptime_seconds{job=\"integrations/influxdb\",job=~\"$job\"}, influxdb_cluster)",
+               "query": "label_values(influxdb_uptime_seconds{job=~\"$job\"}, influxdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1678,7 +1678,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(influxdb_uptime_seconds{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}, instance)",
+               "query": "label_values(influxdb_uptime_seconds{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

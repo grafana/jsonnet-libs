@@ -96,7 +96,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_process_cpu_load{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_process_cpu_load{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -157,7 +157,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_memory_usage_used_bytes{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_memory_usage_used_bytes{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ area }}",
@@ -217,7 +217,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "cassandra_storage_load_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "cassandra_storage_load_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -277,7 +277,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_gc_duration_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -337,7 +337,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -398,7 +398,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", cache=\"KeyCache\"} * 100",
+                  "expr": "cassandra_cache_hitrate{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", cache=\"KeyCache\"} * 100",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -458,7 +458,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(cassandra_storage_totalhints_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(cassandra_storage_totalhints_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -519,7 +519,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "cassandra_compaction_pendingtasks{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
+                  "expr": "cassandra_compaction_pendingtasks{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -579,7 +579,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "cassandra_threadpools_currentlyblockedtasks_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", threadpools=\"CompactionExecutor\", path=\"internal\"}",
+                  "expr": "cassandra_threadpools_currentlyblockedtasks_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", threadpools=\"CompactionExecutor\", path=\"internal\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -639,7 +639,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum by (instance) (cassandra_keyspace_writelatency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum by (instance) (cassandra_keyspace_writelatency_seconds_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -700,7 +700,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(sum by (instance) (cassandra_keyspace_readlatency_seconds_count{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})[$__interval:] offset -$__interval)",
+                  "expr": "increase(sum by (instance) (cassandra_keyspace_readlatency_seconds_count{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"})[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -761,7 +761,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg(cassandra_keyspace_writelatency_seconds_average{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"} >= 0)",
+                  "expr": "avg(cassandra_keyspace_writelatency_seconds_average{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"} >= 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -821,7 +821,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_readlatency_seconds_average{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_keyspace_readlatency_seconds_average{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }}",
@@ -882,7 +882,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p95",
@@ -893,7 +893,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_keyspace_writelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p99",
@@ -954,7 +954,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p95",
@@ -965,7 +965,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_keyspace_readlatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p99",
@@ -1026,7 +1026,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_messaging_crossnodelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_messaging_crossnodelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.95\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p99",
@@ -1037,7 +1037,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(cassandra_messaging_crossnodelatency_seconds{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
+                  "expr": "sum(cassandra_messaging_crossnodelatency_seconds{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\",instance=~\"$instance\", quantile=\"0.99\"} >= 0) by (instance)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - p99",
@@ -1072,7 +1072,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\"}, job)",
+               "query": "label_values(cassandra_cache_hitrate{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1087,7 +1087,7 @@
                "label": "Cassandra cluster",
                "multi": true,
                "name": "cassandra_cluster",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\"}, cassandra_cluster)",
+               "query": "label_values(cassandra_cache_hitrate{job=~\"$job\"}, cassandra_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1102,7 +1102,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(cassandra_cache_hitrate{job=\"integrations/apache-cassandra\",job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\"}, instance)",
+               "query": "label_values(cassandra_cache_hitrate{job=~\"$job\",cassandra_cluster=~\"$cassandra_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

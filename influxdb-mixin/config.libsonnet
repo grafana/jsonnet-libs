@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/influxdb"',
+  filteringSelector: '',
   groupLabels: ['job', 'influxdb_cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['influxdb-mixin'],

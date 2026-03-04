@@ -80,7 +80,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_numlivedatanodes{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_numlivedatanodes{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - live DataNodes",
@@ -91,7 +91,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_numdeaddatanodes{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_numdeaddatanodes{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - dead DataNodes",
@@ -102,7 +102,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_numstaledatanodes{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "hadoop_namenode_numstaledatanodes{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - stale DataNodes",
@@ -113,7 +113,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_numdecommissioningdatanodes{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_numdecommissioningdatanodes{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}} - decommissioning DataNodes",
@@ -174,7 +174,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * hadoop_namenode_capacityused{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"} / clamp_min(hadoop_namenode_capacitytotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}, 1)",
+                  "expr": "100 * hadoop_namenode_capacityused{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"} / clamp_min(hadoop_namenode_capacitytotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}, 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -235,7 +235,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -296,7 +296,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_missingblocks{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_missingblocks{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -357,7 +357,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_underreplicatedblocks{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_underreplicatedblocks{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -418,7 +418,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_transactionssincelastcheckpoint{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_transactionssincelastcheckpoint{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -479,7 +479,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(hadoop_namenode_volumefailurestotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(hadoop_namenode_volumefailurestotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -541,7 +541,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_filestotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_filestotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -602,7 +602,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "hadoop_namenode_totalload{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
+                  "expr": "hadoop_namenode_totalload{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\",instance=~\"$instance\", name=\"FSNamesystem\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{hadoop_cluster}} - {{instance}}",
@@ -637,7 +637,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\"}, job)",
+               "query": "label_values(hadoop_namenode_blockstotal{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -652,7 +652,7 @@
                "label": "Hadoop cluster",
                "multi": true,
                "name": "hadoop_cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\"}, hadoop_cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\"}, hadoop_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -667,7 +667,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -682,7 +682,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(hadoop_namenode_blockstotal{job=\"integrations/apache-hadoop\",job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values(hadoop_namenode_blockstotal{job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
