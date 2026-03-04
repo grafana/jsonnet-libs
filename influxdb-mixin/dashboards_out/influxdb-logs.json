@@ -173,7 +173,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -215,7 +215,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/influxdb\",job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",influxdb_cluster=~\"$influxdb_cluster\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -246,7 +246,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/influxdb\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -261,7 +261,7 @@
                "label": "InfluxDB cluster",
                "multi": true,
                "name": "influxdb_cluster",
-               "query": "label_values({job=\"integrations/influxdb\",job=~\"$job\"}, influxdb_cluster)",
+               "query": "label_values({job=~\"$job\"}, influxdb_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -87,7 +87,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
+                  "expr": "avg (jvm_nonheap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_nonheap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_nonheap_memory_committed{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -138,7 +138,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg (jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
+                  "expr": "avg (jvm_heap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} / clamp_min((jvm_heap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"} + jvm_heap_memory_committed{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}), 1))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -156,12 +156,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -190,7 +198,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - internal",
@@ -208,12 +216,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -242,7 +258,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - completed",
@@ -253,7 +269,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_RunningQueries{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - running",
@@ -264,7 +280,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - started",
@@ -282,12 +298,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -316,7 +340,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_FailedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_FailedQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - failed",
@@ -327,7 +351,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_AbandonedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_AbandonedQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - abandoned",
@@ -338,7 +362,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CanceledQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_CanceledQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - canceled",
@@ -356,12 +380,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -390,7 +422,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Rate{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - completed",
@@ -401,7 +433,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_RunningQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_RunningQueries{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - running",
@@ -412,7 +444,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_StartedQueries_OneMinute_Rate{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - started",
@@ -430,12 +462,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -464,7 +504,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_FailedQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_FailedQueries_TotalCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -476,7 +516,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_AbandonedQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_AbandonedQueries_TotalCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -488,7 +528,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(presto_QueryManager_CanceledQueries_TotalCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(presto_QueryManager_CanceledQueries_TotalCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -507,12 +547,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -541,7 +589,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P50{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P50{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - p50",
@@ -552,7 +600,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P75{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P75{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - p75",
@@ -563,7 +611,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P95{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P95{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - p95",
@@ -574,7 +622,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P99{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_ExecutionTime_OneMinute_P99{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - p99",
@@ -592,12 +640,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -626,7 +682,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_ConsumedCpuTimeSecs_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_ConsumedCpuTimeSecs_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -644,12 +700,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "Bps"
                }
@@ -678,7 +742,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CpuInputByteRate_OneMinute_Total{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_CpuInputByteRate_OneMinute_Total{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -709,12 +773,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -743,7 +815,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(jvm_gc_collection_count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
+                  "expr": "increase(jvm_gc_collection_count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "2m",
@@ -762,12 +834,20 @@
             "description": "The average duration for each garbage collection operation in the JVM.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -796,7 +876,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_gc_duration{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}",
+                  "expr": "jvm_gc_duration{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\", name=\"G1 Young Generation\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -814,12 +894,20 @@
             "description": "The heap and non-heap memory committed by the JVM.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                }
@@ -848,7 +936,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_heap_memory_committed{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - heap",
@@ -859,7 +947,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_committed{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_nonheap_memory_committed{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - non heap",
@@ -877,12 +965,20 @@
             "description": "The heap and non-heap memory used by the JVM.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                }
@@ -911,7 +1007,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_heap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_heap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - heap",
@@ -922,7 +1018,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "jvm_nonheap_memory_used{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "jvm_nonheap_memory_used{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} - non heap",
@@ -957,7 +1053,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\"}, job)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -972,7 +1068,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\"}, cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -987,7 +1083,7 @@
                "label": "Presto cluster",
                "multi": true,
                "name": "presto_cluster",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1002,7 +1098,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

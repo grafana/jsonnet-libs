@@ -78,7 +78,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_up{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "oracledb_up{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -96,6 +96,10 @@
             "description": "Number of sessions.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -103,6 +107,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                }
@@ -131,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_resource_current_utilization{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\", resource_name=\"sessions\"}",
+                  "expr": "oracledb_resource_current_utilization{job=~\"$job\",instance=~\"$instance\", resource_name=\"sessions\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - open",
@@ -142,7 +150,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_resource_limit_value{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\", resource_name=\"sessions\"}",
+                  "expr": "oracledb_resource_limit_value{job=~\"$job\",instance=~\"$instance\", resource_name=\"sessions\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - limit",
@@ -160,6 +168,10 @@
             "description": "Number of processes.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -167,6 +179,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                }
@@ -195,7 +211,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_resource_current_utilization{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\", resource_name=\"processes\"}",
+                  "expr": "oracledb_resource_current_utilization{job=~\"$job\",instance=~\"$instance\", resource_name=\"processes\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -207,7 +223,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_resource_limit_value{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\", resource_name=\"processes\"}",
+                  "expr": "oracledb_resource_limit_value{job=~\"$job\",instance=~\"$instance\", resource_name=\"processes\"}",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -239,6 +255,10 @@
             "description": "Application wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -246,6 +266,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -274,7 +298,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_application{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_application{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -293,6 +317,10 @@
             "description": "Commit wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -300,6 +328,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -328,7 +360,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_commit{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_commit{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -347,6 +379,10 @@
             "description": "Concurrency wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -354,6 +390,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -382,7 +422,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_concurrency{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_concurrency{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -401,6 +441,10 @@
             "description": "Configuration wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -408,6 +452,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -436,7 +484,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_configuration{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_configuration{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -455,6 +503,10 @@
             "description": "Network wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -462,6 +514,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -490,7 +546,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_network{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_network{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -509,6 +565,10 @@
             "description": "Scheduler wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -516,6 +576,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -544,7 +608,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_scheduler{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_scheduler{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -563,6 +627,10 @@
             "description": "System I/O wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -570,6 +638,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -598,7 +670,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_system_io{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_system_io{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -617,6 +689,10 @@
             "description": "User I/O wait time, in seconds, waiting for wait events.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -624,6 +700,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -652,7 +732,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(oracledb_wait_time_user_io{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(oracledb_wait_time_user_io{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -684,6 +764,10 @@
             "description": "Shows the size over time for the tablespace.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -691,6 +775,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -719,7 +807,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_tablespace_bytes{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
+                  "expr": "oracledb_tablespace_bytes{job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ tablespace }} - used",
@@ -730,7 +818,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_tablespace_free{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
+                  "expr": "oracledb_tablespace_free{job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ tablespace }} - free",
@@ -741,7 +829,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "oracledb_tablespace_max_bytes{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
+                  "expr": "oracledb_tablespace_max_bytes{job=~\"$job\",instance=~\"$instance\",tablespace=~\"$tablespace\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ instance }} - {{ tablespace }} - max",
@@ -776,7 +864,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(oracledb_up{job=~\"integrations/oracledb\"}, job)",
+               "query": "label_values(oracledb_up{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -791,7 +879,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(oracledb_up{job=~\"integrations/oracledb\",job=~\"$job\"}, instance)",
+               "query": "label_values(oracledb_up{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -806,7 +894,7 @@
                "label": "Tablespace",
                "multi": true,
                "name": "tablespace",
-               "query": "label_values(oracledb_up{job=~\"integrations/oracledb\",job=~\"$job\",instance=~\"$instance\"}, tablespace)",
+               "query": "label_values(oracledb_up{job=~\"$job\",instance=~\"$instance\"}, tablespace)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

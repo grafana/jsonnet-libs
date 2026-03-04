@@ -58,6 +58,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -69,7 +78,6 @@
             },
             "id": 2,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -84,7 +92,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
+                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Resource manager",
@@ -106,6 +114,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -117,7 +134,6 @@
             },
             "id": 3,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -132,7 +148,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
+                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Coordinator",
@@ -154,6 +170,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -165,7 +190,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -180,7 +204,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
+                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Worker",
@@ -202,6 +226,15 @@
                      "fixedColor": "text",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "none"
                }
             },
@@ -213,7 +246,6 @@
             },
             "id": 5,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -228,7 +260,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_InactiveNodeCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
+                  "expr": "sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_InactiveNodeCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}} - inactive",
@@ -246,12 +278,20 @@
             "description": "",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -280,7 +320,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_CompletedQueries_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -325,12 +365,20 @@
             "description": "The rate of user error failures occurring across clusters.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "err/s"
                }
@@ -359,7 +407,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_UserErrorFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_UserErrorFailures_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -377,12 +425,20 @@
             "description": "The number of queued queries.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -411,7 +467,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_QueuedQueries{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_QueuedQueries{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -429,12 +485,20 @@
             "description": "The number of nodes that are blocked due to memory restrictions.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -463,7 +527,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_ClusterMemoryPool_general_BlockedNodes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_ClusterMemoryPool_general_BlockedNodes{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -481,12 +545,20 @@
             "description": "The rate of internal error failures occurring across clusters.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "err/s"
                }
@@ -515,7 +587,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_InternalFailures_OneMinute_Count{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -533,12 +605,20 @@
             "description": "The amount of memory available across the clusters.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                }
@@ -567,7 +647,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_reserved_FreeDistributedBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_reserved_FreeDistributedBytes{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}} - reserved",
@@ -578,7 +658,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_general_FreeDistributedBytes{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (presto_cluster) (presto_ClusterMemoryPool_general_FreeDistributedBytes{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}} - general",
@@ -596,12 +676,20 @@
             "description": "The rate that failures are occurring due to insufficient resources.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "err/s"
                }
@@ -630,7 +718,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "presto_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
+                  "expr": "presto_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}}",
@@ -648,12 +736,20 @@
             "description": "The rate at which volumes of data are being processed.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "Bps"
                }
@@ -682,7 +778,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (presto_cluster) (presto_TaskManager_InputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (presto_cluster) (presto_TaskManager_InputDataSize_OneMinute_Rate{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}} - input",
@@ -693,7 +789,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (presto_cluster) (presto_TaskManager_OutputDataSize_OneMinute_Rate{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
+                  "expr": "sum by (presto_cluster) (presto_TaskManager_OutputDataSize_OneMinute_Rate{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\",instance=~\"$instance\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{presto_cluster}} - output",
@@ -728,7 +824,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\"}, job)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -743,7 +839,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\"}, cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -758,7 +854,7 @@
                "label": "Presto cluster",
                "multi": true,
                "name": "presto_cluster",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\",cluster=~\"$cluster\"}, presto_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -773,7 +869,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"integrations/presto\",job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
+               "query": "label_values(presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~\"$job\",cluster=~\"$cluster\",presto_cluster=~\"$presto_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

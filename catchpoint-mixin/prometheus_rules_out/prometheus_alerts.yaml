@@ -7,9 +7,9 @@ groups:
                 High server response times can lead to slow user experiences. The current value is {{ $value | printf "%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
             summary: High server response time.
           expr: |
-            catchpoint_wait_time{job=~"integrations/catchpoint"} > 1000
+            catchpoint_wait_time{} > 1000
             or
-            catchpoint_wait_time{job=~"integrations/catchpoint"} > avg_over_time(catchpoint_wait_time{job=~"integrations/catchpoint"}[1h]) * 1.2
+            catchpoint_wait_time{} > avg_over_time(catchpoint_wait_time{}[1h]) * 1.2
           for: 5m
           labels:
             severity: warning
@@ -19,9 +19,9 @@ groups:
                 Webpage takes too long to load, potentially indicating issues with server response, network latency, or resource-heavy pages. The current value is {{ $value | printf "%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
             summary: Total time exceeded.
           expr: |
-            catchpoint_total_time{job=~"integrations/catchpoint"} > 5000
+            catchpoint_total_time{} > 5000
             or
-            catchpoint_total_time{job=~"integrations/catchpoint"} > avg_over_time(catchpoint_total_time{job=~"integrations/catchpoint"}[1h]) * 1.2
+            catchpoint_total_time{} > avg_over_time(catchpoint_total_time{}[1h]) * 1.2
           for: 1h
           labels:
             severity: critical
@@ -31,9 +31,9 @@ groups:
                 DNS resolution time is high, which could indicate DNS server issues or misconfigurations affecting website accessibility. The current value is {{ $value | printf "%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
             summary: High DNS resolution time.
           expr: |
-            catchpoint_dns_time{job=~"integrations/catchpoint"} > 500
+            catchpoint_dns_time{} > 500
             or
-            catchpoint_dns_time{job=~"integrations/catchpoint"} > avg_over_time(catchpoint_dns_time{job=~"integrations/catchpoint"}[1h]) * 1.2
+            catchpoint_dns_time{} > avg_over_time(catchpoint_dns_time{}[1h]) * 1.2
           for: 1h
           labels:
             severity: warning
@@ -43,9 +43,9 @@ groups:
                 Significant delays in content loading could impact user experience and webpage usability. The current value is {{ $value | printf "%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
             summary: Content loading delays.
           expr: |
-            catchpoint_content_load_time{job=~"integrations/catchpoint"} > 1500
+            catchpoint_content_load_time{} > 1500
             or
-            catchpoint_content_load_time{job=~"integrations/catchpoint"} > avg_over_time(catchpoint_content_load_time{job=~"integrations/catchpoint"}[1h]) * 1.2
+            catchpoint_content_load_time{} > avg_over_time(catchpoint_content_load_time{}[1h]) * 1.2
           for: 1h
           labels:
             severity: warning
@@ -55,7 +55,7 @@ groups:
                 Monitors the ratio of failed requests to total requests to quickly identify deteriorations in service quality, which could affect user experience and compliance with SLA. The current value is {{ $value | printf "%.2f" }} percent found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
             summary: High failed request ratio.
           expr: |
-            (catchpoint_failed_requests_count{job=~"integrations/catchpoint"} / clamp_min(catchpoint_requests_count{job=~"integrations/catchpoint"}, 1)) > 0.10000000000000001
+            (catchpoint_failed_requests_count{} / clamp_min(catchpoint_requests_count{}, 1)) > 0.10000000000000001
           for: 30m
           labels:
             severity: critical
