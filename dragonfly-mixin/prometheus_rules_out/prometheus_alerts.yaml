@@ -3,8 +3,7 @@ groups:
       rules:
         - alert: DragonflyHighMemoryUsage
           annotations:
-            description: |
-                Memory usage on {{ $labels.instance }} is above 95%. Current value is {{ $value | printf "%.2f" }}%.
+            description: Memory usage on {{ $labels.instance }} is above 95%. Current value is {{ $value | printf "%.2f" }}%.
             summary: Dragonfly memory usage is critically high.
           expr: |
             100 * dragonfly_memory_used_bytes{} / clamp_min(dragonfly_memory_max_bytes{}, 1) > 95
@@ -13,8 +12,7 @@ groups:
             severity: critical
         - alert: DragonflyHighMemoryUsageWarning
           annotations:
-            description: |
-                Memory usage on {{ $labels.instance }} is above 80%. Current value is {{ $value | printf "%.2f" }}%.
+            description: Memory usage on {{ $labels.instance }} is above 80%. Current value is {{ $value | printf "%.2f" }}%.
             summary: Dragonfly memory usage is high.
           expr: |
             100 * dragonfly_memory_used_bytes{} / clamp_min(dragonfly_memory_max_bytes{}, 1) > 80
@@ -23,8 +21,7 @@ groups:
             severity: warning
         - alert: DragonflyHighConnectedClients
           annotations:
-            description: |
-                Connected clients on {{ $labels.instance }} is above 1000. Current value is {{ $value | printf "%.0f" }}.
+            description: Connected clients on {{ $labels.instance }} is above 1000. Current value is {{ $value | printf "%.0f" }}.
             summary: Dragonfly has high number of connected clients.
           expr: |
             dragonfly_connected_clients{} > 1000
@@ -33,8 +30,7 @@ groups:
             severity: warning
         - alert: DragonflyLowKeyspaceHitRate
           annotations:
-            description: |
-                Keyspace hit rate on {{ $labels.instance }} is below 50%. Current hit rate is {{ $value | printf "%.2f" }}%.
+            description: Keyspace hit rate on {{ $labels.instance }} is below 50%. Current hit rate is {{ $value | printf "%.2f" }}%.
             summary: Dragonfly keyspace hit rate is low.
           expr: |
             100 * sum by (job, instance) (rate(dragonfly_keyspace_hits_total{}[5m])) / clamp_min(sum by (job, instance) (rate(dragonfly_keyspace_hits_total{}[5m]) + rate(dragonfly_keyspace_misses_total{}[5m])), 0.001) < (100 - 50)

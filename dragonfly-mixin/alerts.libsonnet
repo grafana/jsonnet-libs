@@ -1,6 +1,8 @@
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
+
 {
   new(this): {
-
+    local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     groups: [
       {
         name: this.config.uid,
@@ -16,9 +18,10 @@
             },
             annotations: {
               summary: 'Dragonfly memory usage is critically high.',
-              description: |||
-                Memory usage on {{ $labels.instance }} is above %(alertsHighMemoryUsageCritical)s%%. Current value is {{ $value | printf "%%.2f" }}%%.
-              ||| % this.config,
+              description: 'Memory usage on {{ $labels.%s }} is above %s%%. Current value is {{ $value | printf "%%.2f" }}%%.' % [
+                instanceLabel,
+                this.config.alertsHighMemoryUsageCritical,
+              ],
             },
           },
           {
@@ -32,9 +35,10 @@
             },
             annotations: {
               summary: 'Dragonfly memory usage is high.',
-              description: |||
-                Memory usage on {{ $labels.instance }} is above %(alertsHighMemoryUsageWarning)s%%. Current value is {{ $value | printf "%%.2f" }}%%.
-              ||| % this.config,
+              description: 'Memory usage on {{ $labels.%s }} is above %s%%. Current value is {{ $value | printf "%%.2f" }}%%.' % [
+                instanceLabel,
+                this.config.alertsHighMemoryUsageWarning,
+              ],
             },
           },
           {
@@ -48,9 +52,10 @@
             },
             annotations: {
               summary: 'Dragonfly has high number of connected clients.',
-              description: |||
-                Connected clients on {{ $labels.instance }} is above %(alertsHighConnectedClients)s. Current value is {{ $value | printf "%%.0f" }}.
-              ||| % this.config,
+              description: 'Connected clients on {{ $labels.%s }} is above %s. Current value is {{ $value | printf "%%.0f" }}.' % [
+                instanceLabel,
+                this.config.alertsHighConnectedClients,
+              ],
             },
           },
           {
@@ -64,9 +69,10 @@
             },
             annotations: {
               summary: 'Dragonfly keyspace hit rate is low.',
-              description: |||
-                Keyspace hit rate on {{ $labels.instance }} is below %(alertsHighKeyspaceMissRate)s%%. Current hit rate is {{ $value | printf "%%.2f" }}%%.
-              ||| % this.config,
+              description: 'Keyspace hit rate on {{ $labels.%s }} is below %s%%. Current hit rate is {{ $value | printf "%%.2f" }}%%.' % [
+                instanceLabel,
+                this.config.alertsHighKeyspaceMissRate,
+              ],
             },
           },
         ],
