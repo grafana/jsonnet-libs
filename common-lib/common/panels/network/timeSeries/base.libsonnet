@@ -15,7 +15,7 @@ base {
     + timeSeries.standardOptions.withUnit('pps')
     + timeSeries.standardOptions.withNoValue('No packets'),
 
-  withNegateOutPackets(regexp='/transmit|tx|out/'):
+  withNegateOutPackets(regexp='/transmit|tx|Tx|out/'):
     defaults.custom.withAxisLabel('out(-) | in(+)')
     + defaults.custom.withAxisCenteredZero(false)
     + timeSeries.standardOptions.withOverrides(
