@@ -116,7 +116,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         aggFunction: aggFunction,
       },
 
-
     unit:: signalUtils.generateUnits(type, unit, this.sourceMaps[0].rangeFunction),
 
     withUnit(unit):
@@ -314,7 +313,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + self.asOverride(override=override, format=format)
       + self.renderDescription(),
 
-
     getValueMappings(sourceMaps)::
       std.uniq(
         std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[])
@@ -423,7 +421,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         ]
       ),
 
-
     common(type)::
       (
         // For table, asTableColumn() fills _descriptionsAccumulator; leave it empty here so only one description is added.
@@ -526,7 +523,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           ]
         )
       else error 'Table format must be "time_series" or "table"',
-
 
     //Return as gauge panel
     asGauge(name=this.signalName):
