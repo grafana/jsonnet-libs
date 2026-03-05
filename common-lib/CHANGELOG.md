@@ -1,7 +1,7 @@
 # 0.5.2
 - [Signal] feat: Add helper getVariables() function.
 - [Annotations] feat: Add new functions for "info","warning","critical" severity alerts.
-- 
+
 # 0.5.1
 - [Signal] fix: Fix info labels rendering as table columns.
 
