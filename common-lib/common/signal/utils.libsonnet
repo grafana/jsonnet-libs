@@ -46,7 +46,6 @@
     else expr,
   },
 
-
   wrapLegend(legend, aggLevel, legendCustomTemplate, aggKeepLabels=[]):
     local _suffix = if std.length(aggKeepLabels) > 0 then ' (%(keepLabelsLegend)s)' else '';
     local _prefix =

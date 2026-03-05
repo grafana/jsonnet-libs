@@ -22,11 +22,11 @@ local test = import 'jsonnetunit/test.libsonnet';
         expect: 'basic',
       },
       testFieldMinMax: {
-        actual: propsById['fieldMinMax'],
+        actual: propsById.fieldMinMax,
         expect: true,
       },
       testColorColdhot: {
-        actual: std.substr(propsById['color'].mode, 0, 11),
+        actual: std.substr(propsById.color.mode, 0, 11),
         expect: 'continuous-',
       },
     }),

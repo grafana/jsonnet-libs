@@ -7,6 +7,8 @@
 - [Signal] feat: If signals of type=counter are rendered into tables (as columns etc...) their sum interval is changed from $__interval to $__range by default to accumulate sum of the full dashboard range.
 - [Signal] feat: If multiple signals are being rendered into single panel, the panel is now populated with all signals' descriptions. All of them are appended with signals' short names.
 - [Signal] chore: all renderer functions use this.signalName as name.
+- [Signal] chore: bump grafonnet to 11.4.0
+- [Panels] chore: add tests for generic panels
 
 # 0.5.2
 - [Signal] feat: Add helper getVariables() function.

@@ -22,7 +22,6 @@ local m1 = signal.init(
     },
   ],
 
-
 );
 
 {
@@ -99,7 +98,7 @@ local m1 = signal.init(
         },
         testPluginVersion: {
           actual: raw.pluginVersion,
-          expect: 'v11.0.0',
+          expect: 'v11.4.0',
         },
         testTransformations: {
           actual: raw.transformations,

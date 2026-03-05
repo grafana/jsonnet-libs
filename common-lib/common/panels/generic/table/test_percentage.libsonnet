@@ -22,15 +22,15 @@ local test = import 'jsonnetunit/test.libsonnet';
         expect: 'basic',
       },
       testUnit: {
-        actual: propsById['unit'],
+        actual: propsById.unit,
         expect: 'percent',
       },
       testMin: {
-        actual: propsById['min'],
+        actual: propsById.min,
         expect: 0,
       },
       testMax: {
-        actual: propsById['max'],
+        actual: propsById.max,
         expect: 100,
       },
     }),
