@@ -1,5 +1,8 @@
-# 0.6.0
+# 0.6.1
+- [Signal] chore: bump grafonnet to 11.4.0
+- [Panels] chore: add tests for generic panels
 
+# 0.6.0
 - [Signal] feat: add new type of aggregation "aggKeepLabels" in addition to "group", "instance", "none".
 - [Signal] feat: updated legend default format: "<aggLabel>: <nameShort> (<keepLabels>)".
 - [Signal] feat: quantile=0.95 is removed from args of unmarshallJsonMulti(). Instead .withQuantile(q=0.05) modifier function is introduced, allowing multiple qunatiles to be rendered from the single signal.
@@ -7,8 +10,6 @@
 - [Signal] feat: If signals of type=counter are rendered into tables (as columns etc...) their sum interval is changed from $__interval to $__range by default to accumulate sum of the full dashboard range.
 - [Signal] feat: If multiple signals are being rendered into single panel, the panel is now populated with all signals' descriptions. All of them are appended with signals' short names.
 - [Signal] chore: all renderer functions use this.signalName as name.
-- [Signal] chore: bump grafonnet to 11.4.0
-- [Panels] chore: add tests for generic panels
 
 # 0.5.2
 - [Signal] feat: Add helper getVariables() function.
