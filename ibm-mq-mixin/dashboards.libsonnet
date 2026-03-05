@@ -135,6 +135,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           labels=this.config.groupLabels + this.config.extraLogLabels + ['qmgr'],
           formatParser=null,
           showLogsVolume=this.config.showLogsVolume,
+          customAllValue=this.config.customAllValue,
         )
         {
           dashboards+:
