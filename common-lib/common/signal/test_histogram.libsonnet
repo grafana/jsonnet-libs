@@ -30,7 +30,7 @@ local m1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: raw.legendFormat,
-        expect: '{{job}}: duration',
+        expect: '{{job}}: duration (p95)',
       },
       testExpression: {
         actual: raw.expr,
@@ -44,7 +44,7 @@ local m1 = signal.init(
       testResult: test.suite({
         testTStitle: {
           actual: raw.title,
-          expect: 'API server duration',
+          expect: 'API server duration (p95)',
         },
         testUnit: {
           actual: raw.fieldConfig.overrides[0].properties[0].value,
@@ -56,7 +56,7 @@ local m1 = signal.init(
         },
         testTSversion: {
           actual: raw.pluginVersion,
-          expect: 'v11.0.0',
+          expect: 'v11.4.0',
         },
         testTSUid: {
           actual: raw.datasource,
@@ -84,10 +84,9 @@ local m1 = signal.init(
         expr: 'http_request_duration_seconds_bucket{%(queriesSelector)s}',
         rangeFunction: 'rate',
         aggKeepLabels: ['handler'],
-        quantile: 0.99,
         infoLabel: null,
       }],
-    ),
+    ).withQuantile(0.99),
 
     testResult: test.suite({
       testDefaultQuantile: {
