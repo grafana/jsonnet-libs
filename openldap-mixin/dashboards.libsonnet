@@ -50,7 +50,8 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                        labels=this.config.logLabels + this.config.extraLogLabels,
                        formatParser=null,
                        showLogsVolume=this.config.showLogsVolume,
-                       logsVolumeGroupBy=this.config.logsVolumeGroupBy)
+                       logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+                       customAllValue=this.config.customAllValue)
            {
              dashboards+:
                {
