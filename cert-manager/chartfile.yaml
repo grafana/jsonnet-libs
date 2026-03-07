@@ -13,4 +13,7 @@ requires:
 - chart: jetstack/cert-manager
   version: 1.8.0
   directory: '1.8.0'
+- chart: jetstack/cert-manager
+  version: 1.9.2
+  directory: '1.9.2'
 version: 1
