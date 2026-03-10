@@ -31,17 +31,15 @@ base {
 
     {
       local this = self,
+      quantile:: 0.95,
+      signalName+:: ' (p%.0f)' % (this.quantile * 100),
+      nameShort+:: ' (p%.0f)' % (this.quantile * 100),
+      wrapDescription()::
+        this.nameShort + ': ' + this.description + '  \n',
       withQuantile(quantile=0.95):
         self
         {
-          sourceMaps:
-            [
-              source
-              {
-                quantile: quantile,
-              }
-              for source in super.sourceMaps
-            ],
+          quantile:: quantile,
         },
     },
 }
