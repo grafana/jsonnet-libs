@@ -22,7 +22,6 @@ local m1 = signal.init(
     },
   ],
 
-
 );
 
 {
@@ -73,37 +72,33 @@ local m1 = signal.init(
     {
       local raw = m1.asTable(),
       testResult: test.suite({
-        testRaw: {
-          actual: raw,
-          expect: {
-            datasource:
-              { type: 'prometheus', uid: '${datasource}' },
-            description: 'API server calls.',
-            fieldConfig: { defaults: { custom: { filterable: false } }, overrides: [{ matcher: { id: 'byName', options: 'API server requests' }, properties: [{ id: 'displayName', value: 'Requests' }, { id: 'unit', value: 'rps' }] }] },
-            pluginVersion: 'v11.0.0',
-            targets: [{ datasource: { type: 'prometheus', uid: '${datasource}' }, expr: 'max by (job,instance) (\n  rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m])\n)', format: 'table', instant: true, legendFormat: '{{instance}}: Requests', refId: 'API server requests' }],
-            title: 'API server requests',
-            transformations: [
-              { id: 'merge' },
-              { id: 'renameByRegex', options: { regex: 'Value #(.*)', renamePattern: '$1' } },
-              { id: 'filterFieldsByName', options: { include: { pattern: '^(?!Time).*$' } } },
-              {
-                id: 'organize',
-                options:
-                  {
-                    indexByName: { instance: 1, job: 0 },
-                    renameByName:
-                      {
-                        Value: 'API server requests',
-                        instance: 'Instance',
-                        job: 'Job',
-                      },
-
-                  },
-              },
-            ],
-            type: 'table',
-          },
+        testDescription: {
+          actual: raw.description,
+          expect: 'Requests (max): API server calls.  \n',
+        },
+        testDatasource: {
+          actual: raw.datasource,
+          expect: { type: 'prometheus', uid: '${datasource}' },
+        },
+        testFieldConfig: {
+          actual: raw.fieldConfig,
+          expect: { defaults: { custom: { filterable: false }, unit: 'rps' }, overrides: [{ matcher: { id: 'byName', options: 'API server requests' }, properties: [{ id: 'displayName', value: 'Requests' }, { id: 'unit', value: 'rps' }] }] },
+        },
+        testTargets: {
+          actual: raw.targets,
+          expect: [{ datasource: { type: 'prometheus', uid: '${datasource}' }, expr: 'max by (job,instance) (\n  rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m])\n)', format: 'table', instant: true, legendFormat: '{{instance}}: Requests', refId: 'API server requests' }],
+        },
+        testTitle: {
+          actual: raw.title,
+          expect: 'API server requests',
+        },
+        testType: {
+          actual: raw.type,
+          expect: 'table',
+        },
+        testPluginVersion: {
+          actual: raw.pluginVersion,
+          expect: 'v11.0.0',
         },
         testTransformations: {
           actual: raw.transformations,
@@ -136,10 +131,6 @@ local m1 = signal.init(
             },
           ],
         },
-        testTStitle: {
-          actual: raw.title,
-          expect: 'API server requests',
-        },
         testColumnTitle: {
           actual: raw.fieldConfig.overrides[0].properties[0].value,
           expect: 'Requests',
@@ -147,21 +138,6 @@ local m1 = signal.init(
         testUnit: {
           actual: raw.fieldConfig.overrides[0].properties[1].value,
           expect: 'rps',
-        },
-        testTStype: {
-          actual: raw.type,
-          expect: 'table',
-        },
-        testTSversion: {
-          actual: raw.pluginVersion,
-          expect: 'v11.0.0',
-        },
-        testTSUid: {
-          actual: raw.datasource,
-          expect: {
-            uid: '${datasource}',
-            type: 'prometheus',
-          },
         },
       }),
     },
