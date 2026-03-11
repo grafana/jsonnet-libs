@@ -8,10 +8,14 @@
 - [Signal] feat: If multiple signals are being rendered into single panel, the panel is now populated with all signals' descriptions. All of them are appended with signals' short names.
 - [Signal] chore: all renderer functions use this.signalName as name.
 
+# 0.5.3
+- [Panels] feat: generic.timeSeries.threshold now allow overriding colors.
+- [Panels] feat: network.timeSeries.base: update withNegateOutPackets filter.
+
 # 0.5.2
 - [Signal] feat: Add helper getVariables() function.
 - [Annotations] feat: Add new functions for "info","warning","critical" severity alerts.
-- 
+
 # 0.5.1
 - [Signal] fix: Fix info labels rendering as table columns.
 
