@@ -1,3 +1,7 @@
+# 0.5.3
+- [Panels] feat: generic.timeSeries.threshold now allow overriding colors.
+- [Panels] feat: network.timeSeries.base: update withNegateOutPackets filter.
+
 # 0.5.2
 - [Signal] feat: Add helper getVariables() function.
 - [Annotations] feat: Add new functions for "info","warning","critical" severity alerts.
