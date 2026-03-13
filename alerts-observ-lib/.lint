@@ -1,0 +1,3 @@
+exclusions:
+  panel-datasource-rule:
+    reason: "alertlist panel uses -- Mixed -- datasource by default."
