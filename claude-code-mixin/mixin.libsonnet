@@ -1,5 +1,5 @@
 {
   grafanaDashboards+:: {
-    'claudecode-overview.json': (import 'dashboards/claudecode-overview.json'),
+    'claudecode-overview.json': (import 'dashboards/claude-code-overview.json'),
   },
 }

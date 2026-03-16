@@ -48,6 +48,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -180,6 +181,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -245,6 +247,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -302,6 +305,7 @@
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "API call rate broken down by model.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -315,9 +319,9 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
-            "drawStyle": "bars",
-            "fillOpacity": 60,
-            "gradientMode": "none",
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -342,6 +346,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -360,8 +365,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 6,
+        "h": 6,
+        "w": 12,
         "x": 0,
         "y": 5
       },
@@ -387,24 +392,102 @@
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "expr": "sum by (model) (count_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" [$__auto]))",
-          "legendFormat": "{{model}}",
-          "refId": "A",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (model) (count_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" [$__auto]))",
+          "legendFormat": "{{model}}",
+          "queryType": "range",
+          "refId": "A"
         }
       ],
       "title": "API Calls by Model",
-      "type": "timeseries",
-      "description": "API call rate broken down by model."
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
+      "description": "Cost distribution across models.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "noValue": "0",
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 7,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
+          "legendFormat": "{{model}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost by Model",
+      "type": "piechart"
     },
     {
       "datasource": {
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "API request latency percentiles (p50 and p95) over time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -463,10 +546,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 5
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 11
       },
       "id": 86,
       "options": {
@@ -491,99 +574,32 @@
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "expr": "quantile_over_time(0.5, {service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap duration_ms | __error__=\"\" [$__auto]) by ()",
-          "legendFormat": "p50",
-          "refId": "A",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "quantile_over_time(0.5, {service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap duration_ms | __error__=\"\" [$__auto]) by ()  or vector(0)",
+          "legendFormat": "p50",
+          "queryType": "range",
+          "refId": "A"
         },
         {
-          "expr": "quantile_over_time(0.95, {service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap duration_ms | __error__=\"\" [$__auto]) by ()",
-          "legendFormat": "p95",
-          "refId": "B",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "quantile_over_time(0.95, {service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap duration_ms | __error__=\"\" [$__auto]) by ()  or vector(0)",
+          "legendFormat": "p95",
+          "queryType": "range",
+          "refId": "B"
         }
       ],
       "title": "API Request Latency",
-      "type": "timeseries",
-      "description": "API request latency percentiles (p50 and p95) over time."
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${prometheus_datasource}"
-      },
-      "description": "Cost distribution across models.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "decimals": 2,
-          "mappings": [],
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 5
-      },
-      "id": 7,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "values": [
-            "percent",
-            "value"
-          ]
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "13.0.0-22843068776.patch2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus_datasource}"
-          },
-          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
-          "legendFormat": "{{model}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Cost by Model",
-      "type": "piechart"
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -605,15 +621,16 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "0",
           "unit": "currencyUSD"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 5
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 11
       },
       "id": 8,
       "options": {
@@ -649,8 +666,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{user_email}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -676,6 +695,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -684,7 +704,7 @@
         "h": 6,
         "w": 6,
         "x": 0,
-        "y": 13
+        "y": 17
       },
       "id": 9,
       "options": {
@@ -721,8 +741,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (os_type) (last_over_time(target_info{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
           "legendFormat": "{{os_type}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -748,6 +770,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -756,7 +779,7 @@
         "h": 6,
         "w": 6,
         "x": 6,
-        "y": 13
+        "y": 17
       },
       "id": 10,
       "options": {
@@ -793,8 +816,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (host_arch) (last_over_time(target_info{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
           "legendFormat": "{{host_arch}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -820,6 +845,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -828,7 +854,7 @@
         "h": 6,
         "w": 6,
         "x": 12,
-        "y": 13
+        "y": 17
       },
       "id": 11,
       "options": {
@@ -865,8 +891,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (terminal_type) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{terminal_type}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -892,6 +920,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -900,7 +929,7 @@
         "h": 6,
         "w": 6,
         "x": 18,
-        "y": 13
+        "y": 17
       },
       "id": 12,
       "options": {
@@ -937,8 +966,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (service_version) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{service_version}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -951,7 +982,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 23
       },
       "id": 60,
       "panels": [],
@@ -963,6 +994,7 @@
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Total lines of code changed in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -990,7 +1022,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 20
+        "y": 24
       },
       "id": 71,
       "options": {
@@ -1018,7 +1050,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
+          "editorMode": "code",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))  or vector(0)",
           "instant": false,
           "legendFormat": "Lines of Code",
           "queryType": "range",
@@ -1027,14 +1060,14 @@
         }
       ],
       "title": "Lines of Code",
-      "type": "stat",
-      "description": "Total lines of code changed in the selected time range."
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Total commits made in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1042,6 +1075,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1063,7 +1097,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 20
+        "y": 24
       },
       "id": 72,
       "options": {
@@ -1100,14 +1134,14 @@
         }
       ],
       "title": "Commits",
-      "type": "stat",
-      "description": "Total commits made in the selected time range."
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Total pull requests opened in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1115,6 +1149,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1136,7 +1171,7 @@
         "h": 4,
         "w": 6,
         "x": 12,
-        "y": 20
+        "y": 24
       },
       "id": 73,
       "options": {
@@ -1173,8 +1208,7 @@
         }
       ],
       "title": "Pull Requests",
-      "type": "stat",
-      "description": "Total pull requests opened in the selected time range."
+      "type": "stat"
     },
     {
       "datasource": {
@@ -1189,6 +1223,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1206,7 +1241,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 20
+        "y": 24
       },
       "id": 64,
       "options": {
@@ -1317,7 +1352,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 28
       },
       "id": 65,
       "options": {
@@ -1346,7 +1381,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"added\"}[$__interval]))",
+          "editorMode": "code",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"added\"}[$__interval]))  or vector(0)",
           "instant": false,
           "legendFormat": "Added",
           "queryType": "range",
@@ -1359,7 +1395,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"removed\"}[$__interval]))",
+          "editorMode": "code",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"removed\"}[$__interval]))  or vector(0)",
           "instant": false,
           "legendFormat": "Removed",
           "queryType": "range",
@@ -1375,6 +1412,7 @@
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Lines of code changed over time broken down by type (added/removed).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1415,6 +1453,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1435,7 +1474,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 28
       },
       "id": 67,
       "options": {
@@ -1464,6 +1503,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (type) (last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__interval]))",
           "instant": false,
           "legendFormat": "{{type}}",
@@ -1473,14 +1513,14 @@
         }
       ],
       "title": "Lines of Code Over Time",
-      "type": "timeseries",
-      "description": "Lines of code changed over time broken down by type (added/removed)."
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Commits over time broken down by team member.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1495,8 +1535,8 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1521,6 +1561,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1541,7 +1582,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 36
       },
       "id": 68,
       "options": {
@@ -1570,6 +1611,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
           "instant": false,
           "legendFormat": "{{user_email}}",
@@ -1579,14 +1621,14 @@
         }
       ],
       "title": "Commits Over Time",
-      "type": "timeseries",
-      "description": "Commits over time broken down by team member."
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Pull requests over time broken down by team member.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1647,7 +1689,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 36
       },
       "id": 69,
       "options": {
@@ -1676,7 +1718,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (user_email) (last_over_time(claude_code_pull_request_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
+          "editorMode": "code",
+          "expr": "sum by (user_email) (last_over_time(claude_code_pull_request_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))  or vector(0)",
           "instant": false,
           "legendFormat": "{{user_email}}",
           "queryType": "range",
@@ -1685,25 +1728,21 @@
         }
       ],
       "title": "Pull Requests Over Time",
-      "type": "timeseries",
-      "description": "Pull requests over time broken down by team member."
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "One row per member: active time, commits, cost per commit, and tokens per commit for the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "custom": {
             "align": "auto",
             "cellOptions": {
               "type": "auto"
             },
-            "filterable": true,
             "footer": {
               "reducers": []
             },
@@ -1716,81 +1755,45 @@
               {
                 "color": "green",
                 "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "Team Member"
+              "options": "Cost/Commit (USD)"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 220
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Active Time"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "s"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cost/Commit"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "decimals",
-                "value": 4
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Tokens/Commit"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 0
+                "value": 287
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 44
       },
-      "id": 83,
+      "id": 92,
       "options": {
         "cellHeight": "sm",
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Commits"
+          }
+        ]
       },
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
@@ -1800,10 +1803,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (user_email) (last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
-          "hide": true,
+          "editorMode": "code",
+          "expr": "sum by (user_email) (last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
           "instant": true,
-          "legendFormat": "{{user_email}}",
+          "legendFormat": "",
           "queryType": "instant",
           "range": false,
           "refId": "A"
@@ -1814,10 +1817,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
-          "hide": true,
+          "editorMode": "code",
+          "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
           "instant": true,
-          "legendFormat": "{{user_email}}",
+          "legendFormat": "",
           "queryType": "instant",
           "range": false,
           "refId": "B"
@@ -1828,46 +1831,64 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (user_email) (last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[7d]))",
-          "hide": true,
+          "editorMode": "code",
+          "expr": "sum by (user_email) (last_over_time(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[7d])) / sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
           "instant": true,
-          "legendFormat": "{{user_email}}",
+          "legendFormat": "",
+          "queryType": "instant",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (user_email) (last_over_time(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\"}[7d])) / sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
+          "instant": true,
+          "legendFormat": "",
           "queryType": "instant",
           "range": false,
           "refId": "D"
-        },
-        {
-          "app": "grafana-assistant-app",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus_datasource}"
-          },
-          "expr": "sum by (user_email) (last_over_time(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "{{user_email}}",
-          "queryType": "instant",
-          "range": false,
-          "refId": "F"
-        },
-        {
-          "app": "grafana-assistant-app",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus_datasource}"
-          },
-          "expr": "sum by (user_email) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "{{user_email}}",
-          "queryType": "instant",
-          "range": false,
-          "refId": "G"
         }
       ],
       "title": "Productivity by Members",
-      "type": "table",
-      "description": "Productivity metrics per team member including lines of code, commits, active time, cost, and tokens."
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "user_email",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true
+            },
+            "renameByName": {
+              "Value 1": "Active Time (s)",
+              "Value 2": "Commits",
+              "Value 3": "Cost/Commit (USD)",
+              "Value 4": "Tokens/Commit",
+              "user_email": "Member"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -1875,7 +1896,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 54
       },
       "id": 80,
       "panels": [],
@@ -1887,6 +1908,7 @@
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Ratio of accepted tool decisions in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1895,6 +1917,7 @@
           "mappings": [],
           "max": 1,
           "min": 0,
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1920,7 +1943,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 55
       },
       "id": 74,
       "options": {
@@ -1948,7 +1971,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\", decision=\"accept\"}[7d])) / clamp_min(sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d])), 1)",
+          "editorMode": "code",
+          "expr": "sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\", decision=\"accept\"}[$__range])) / clamp_min(sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__range])), 1)",
           "instant": true,
           "legendFormat": "Accept Rate",
           "queryType": "instant",
@@ -1957,14 +1981,14 @@
         }
       ],
       "title": "Tool Acceptance Rate",
-      "type": "stat",
-      "description": "Ratio of accepted tool decisions in the selected time range."
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "Average tool execution time per tool in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1992,6 +2016,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2013,7 +2038,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 55
+        "y": 58
       },
       "id": 89,
       "options": {
@@ -2058,14 +2083,14 @@
         }
       ],
       "title": "Avg Tool Execution Time",
-      "type": "barchart",
-      "description": "Average tool execution time per tool in the selected time range."
+      "type": "barchart"
     },
     {
       "datasource": {
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "Most frequently used tools in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2093,6 +2118,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2114,7 +2140,7 @@
         "h": 8,
         "w": 10,
         "x": 8,
-        "y": 55
+        "y": 58
       },
       "id": 88,
       "options": {
@@ -2159,14 +2185,14 @@
         }
       ],
       "title": "Top Tools Used",
-      "type": "barchart",
-      "description": "Most frequently used tools in the selected time range."
+      "type": "barchart"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Distribution of tool decisions (accept/reject/etc).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2179,7 +2205,8 @@
               "viz": false
             }
           },
-          "mappings": []
+          "mappings": [],
+          "noValue": "0"
         },
         "overrides": []
       },
@@ -2187,7 +2214,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 55
+        "y": 58
       },
       "id": 75,
       "options": {
@@ -2227,6 +2254,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
           "instant": true,
           "legendFormat": "{{decision}}",
@@ -2236,14 +2264,14 @@
         }
       ],
       "title": "Tool Decisions",
-      "type": "piechart",
-      "description": "Distribution of tool decisions (accept/reject/etc)."
+      "type": "piechart"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Tool decisions (accept/reject) over time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2284,6 +2312,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2304,7 +2333,7 @@
         "h": 11,
         "w": 17,
         "x": 0,
-        "y": 63
+        "y": 66
       },
       "id": 76,
       "options": {
@@ -2333,6 +2362,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
           "instant": false,
           "legendFormat": "{{decision}}",
@@ -2342,14 +2372,14 @@
         }
       ],
       "title": "Tool Decisions Over Time",
-      "type": "timeseries",
-      "description": "Tool decisions (accept/reject) over time."
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Tool usage broken down by team member.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2366,6 +2396,7 @@
             "inspect": false
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2423,7 +2454,7 @@
         "h": 6,
         "w": 7,
         "x": 17,
-        "y": 63
+        "y": 66
       },
       "id": 82,
       "options": {
@@ -2444,6 +2475,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sort_desc(sum by (user_email) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d])))",
           "instant": true,
           "legendFormat": "{{user_email}}",
@@ -2481,14 +2513,14 @@
           }
         }
       ],
-      "type": "table",
-      "description": "Tool usage broken down by team member."
+      "type": "table"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${prometheus_datasource}"
       },
+      "description": "Tool usage counts broken down by tool name.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2496,6 +2528,7 @@
           },
           "mappings": [],
           "min": 0,
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2516,7 +2549,7 @@
         "h": 5,
         "w": 7,
         "x": 17,
-        "y": 69
+        "y": 72
       },
       "id": 77,
       "options": {
@@ -2551,7 +2584,8 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sort_desc(sum by (tool_name) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d])))",
+          "editorMode": "code",
+          "expr": "sort_desc(sum by (tool_name) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__interval] )))",
           "instant": true,
           "legendFormat": "{{tool_name}}",
           "queryType": "instant",
@@ -2560,8 +2594,7 @@
         }
       ],
       "title": "Usage by Tool",
-      "type": "bargauge",
-      "description": "Tool usage counts broken down by tool name."
+      "type": "bargauge"
     },
     {
       "collapsed": false,
@@ -2590,6 +2623,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2607,7 +2641,7 @@
         "h": 3,
         "w": 7,
         "x": 0,
-        "y": 74
+        "y": 78
       },
       "id": 41,
       "options": {
@@ -2641,78 +2675,6 @@
       ],
       "title": "Total Cost",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${prometheus_datasource}"
-      },
-      "description": "Cost distribution across team members.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "decimals": 2,
-          "mappings": [],
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 7,
-        "x": 0,
-        "y": 78
-      },
-      "id": 44,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "values": [
-            "percent",
-            "value"
-          ]
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "13.0.0-22843068776.patch2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus_datasource}"
-          },
-          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
-          "legendFormat": "{{user_email}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Cost Distribution by Member",
-      "type": "piechart"
     },
     {
       "datasource": {
@@ -2761,6 +2723,7 @@
           },
           "decimals": 4,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2806,8 +2769,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\", model=~\"$model\"}[$__interval])) by (model)",
+          "editorMode": "code",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (model)",
           "legendFormat": "{{model}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -2908,8 +2873,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\", model=~\"$model\"}[$__interval])) by (user_email)",
+          "editorMode": "code",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (user_email)",
           "legendFormat": "{{user_email}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -2918,9 +2885,83 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
+      "description": "Cost distribution across team members.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "noValue": "0",
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 0,
+        "y": 81
+      },
+      "id": 44,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
+          "legendFormat": "{{user_email}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Cost Distribution by Member",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "Average cost per API call in the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2962,6 +3003,7 @@
           },
           "decimals": 4,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3008,18 +3050,20 @@
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap cost_usd | __error__=\"\" [$__auto]) by ()",
-          "legendFormat": "Avg Cost",
-          "refId": "A",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap cost_usd | __error__=\"\" [$__auto]) by ()  or vector(0)",
+          "legendFormat": "Avg Cost",
+          "queryType": "range",
+          "refId": "A"
         }
       ],
       "title": "Avg Cost per API Call",
-      "type": "timeseries",
-      "description": "Average cost per API call in the selected time range."
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -3178,6 +3222,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3243,6 +3288,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3308,6 +3354,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3373,6 +3420,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -3589,7 +3637,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\", model=~\"$model\"}[$__interval])) by (type)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (type)",
           "legendFormat": "{{type}}",
           "refId": "A"
         }
@@ -3616,6 +3664,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -3660,8 +3709,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (model) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", instance=~\"$instance\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{model}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -3687,6 +3738,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
@@ -3731,8 +3783,10 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by (user_email) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{user_email}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -3744,6 +3798,7 @@
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "Average input, cache read, and output tokens per API request.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3830,42 +3885,51 @@
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap input_tokens | __error__=\"\" [$__auto]) by ()",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap input_tokens | __error__=\"\" [$__auto]) by ()  or vector(0)",
           "legendFormat": "Input",
-          "refId": "A",
+          "queryType": "range",
+          "refId": "A"
+        },
+        {
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
-        },
-        {
-          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap cache_read_tokens | __error__=\"\" [$__auto]) by ()",
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap cache_read_tokens | __error__=\"\" [$__auto]) by ()  or vector(0)",
           "legendFormat": "Cache Read",
-          "refId": "B",
-          "datasource": {
-            "type": "loki",
-            "uid": "${loki_datasource}"
-          }
+          "queryType": "range",
+          "refId": "B"
         },
         {
-          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap output_tokens | __error__=\"\" [$__auto]) by ()",
-          "legendFormat": "Output",
-          "refId": "C",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "avg_over_time({service_name=\"claude-code\"} | event_name=\"api_request\" | user_email=~\"$member\" | model=~\"$model\" | unwrap output_tokens | __error__=\"\" [$__auto]) by ()  or vector(0)",
+          "legendFormat": "Output",
+          "queryType": "range",
+          "refId": "C"
         }
       ],
       "title": "Avg Tokens per API Request",
-      "type": "timeseries",
-      "description": "Average input, cache read, and output tokens per API request."
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "loki",
         "uid": "${loki_datasource}"
       },
+      "description": "Claude Code events over time broken down by event name.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3951,18 +4015,20 @@
       "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "expr": "sum by (event_name) (count_over_time({service_name=\"claude-code\"} | user_email=~\"$member\" [$__auto]))",
-          "legendFormat": "{{event_name}}",
-          "refId": "A",
           "datasource": {
             "type": "loki",
             "uid": "${loki_datasource}"
-          }
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (event_name) (count_over_time({service_name=\"claude-code\"} | user_email=~\"$member\" [$__auto]))   or vector(0)",
+          "legendFormat": "{{event_name}}",
+          "queryType": "range",
+          "refId": "A"
         }
       ],
       "title": "Events Over Time",
-      "type": "timeseries",
-      "description": "Claude Code events over time broken down by event name."
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -4151,13 +4217,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "default",
   "title": "Claude Code Overview",
-  "uid": "claudecode-overview",
-  "version": 13,
+  "uid": "claude-code-overview",
+  "version": 67,
   "weekStart": ""
 }
