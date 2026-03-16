@@ -1,0 +1,9 @@
+exclusions:
+    template-datasource-rule:
+        reason: Dashboard uses prometheus_datasource variable following the standard jsonnet-libs pattern, not Loki or Tempo datasources.
+    target-instance-rule:
+        reason: Codex OTel metrics may not expose an instance label; instance variable is included for standard compliance but metrics are not scraped per-instance.
+    template-instance-rule:
+        reason: Codex OTel metrics may not expose an instance label; allValue '.*' prevents filtering out all metrics when instance is absent.
+    template-job-rule:
+        reason: model, auth_mode, originator variables use allValue '.*' as they are application-level labels, not infrastructure labels requiring strict matching.
