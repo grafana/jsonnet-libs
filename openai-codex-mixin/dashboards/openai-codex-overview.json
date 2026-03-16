@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -12,226 +15,469 @@
       }
     ]
   },
-  "description": "OpenAI Codex usage analytics powered by OpenTelemetry",
+  "description": "Usage overview for codex-app-server based on Loki logs \u2014 mirroring Claude Code Overview layout with sessions, tokens, performance, and platform breakdowns.",
   "editable": false,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 1,
+  "graphTooltip": 0,
   "links": [],
   "panels": [
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
-      "id": 1,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 28,
+      "panels": [],
       "title": "Overview",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Total API requests made in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total number of log events in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "short"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
-        "textMode": "auto"
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
       },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
-          "legendFormat": "API Requests",
-          "refId": "A"
-        }
-      ],
-      "title": "API Requests",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Ratio of successful API requests in the selected time range.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
       "id": 3,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\", success=\"true\"}[$__range])) / clamp_min(sum(delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range])), 1)",
-          "legendFormat": "Success Rate",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))",
+          "instant": false,
+          "legendFormat": "Requests",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "API Success Rate",
+      "title": "Total Requests",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Total tool calls made in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total tokens consumed across all types (input + output + cached + reasoning) in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
-      "id": 4,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 22,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "Tool Calls",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto])) + sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__auto])) + sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | cached_token_count != \"\" | unwrap cached_token_count [$__auto])) + sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | reasoning_token_count != \"\" | unwrap reasoning_token_count [$__auto]))",
+          "instant": false,
+          "legendFormat": "Total Tokens",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Tool Calls",
+      "title": "Total Tokens",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Ratio of successful tool calls in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Number of unique conversation sessions in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 1,
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "percentunit"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
-      "id": 5,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\", success=\"true\"}[$__range])) / clamp_min(sum(delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__range])), 1)",
-          "legendFormat": "Tool Success Rate",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "count(count by (conversation_id) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto])))",
+          "instant": false,
+          "legendFormat": "Conversations",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Tool Success Rate",
+      "title": "Conversations",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "API requests over time, showing traffic patterns.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Number of unique users in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "count(count by (user_email) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" [$__auto])))",
+          "instant": false,
+          "legendFormat": "Active Users",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Active Users",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Request rate over time broken down by model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 2,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "short"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 5 },
-      "id": 6,
-      "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 5
       },
+      "id": 5,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])) by (model)",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (model) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))",
+          "instant": false,
           "legendFormat": "{{model}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "API Request Rate by Model",
+      "title": "Request Rate by Model",
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "API request distribution by model.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total API calls broken down by model in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } },
-          "mappings": [],
-          "unit": "short"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 5 },
-      "id": 7,
-      "options": {
-        "displayLabels": ["name"],
-        "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "values": ["percent", "value"] },
-        "pieType": "donut",
-        "tooltip": { "mode": "single", "sort": "none" }
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 5
       },
+      "id": 23,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum by (model) (delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (model) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__range]))",
+          "instant": false,
           "legendFormat": "{{model}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -239,1083 +485,2246 @@
       "type": "piechart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "API request distribution by auth mode.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Average API response latency over time using duration_ms field.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "mappings": [],
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 5 },
-      "id": 8,
-      "options": {
-        "displayLabels": ["name"],
-        "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "values": ["percent", "value"] },
-        "pieType": "donut",
-        "tooltip": { "mode": "single", "sort": "none" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum by (auth_mode) (delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range]))",
-          "legendFormat": "{{auth_mode}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Requests by Auth Mode",
-      "type": "piechart"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 13 },
-      "id": 20,
-      "title": "API Performance",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "50th percentile API request duration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1000 }, { "color": "red", "value": 5000 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          },
           "unit": "ms"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 14 },
-      "id": 21,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 11
       },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p50",
-          "refId": "A"
-        }
-      ],
-      "title": "API Duration p50",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "95th percentile API request duration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 2000 }, { "color": "red", "value": 10000 }] },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 14 },
-      "id": 22,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p95",
-          "refId": "A"
-        }
-      ],
-      "title": "API Duration p95",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "99th percentile API request duration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 5000 }, { "color": "red", "value": 20000 }] },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 14 },
-      "id": 23,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p99",
-          "refId": "A"
-        }
-      ],
-      "title": "API Duration p99",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Ratio of failed API requests in the selected time range.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.01 }, { "color": "red", "value": 0.05 }] },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 14 },
       "id": 24,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\", success=\"false\"}[$__range])) / clamp_min(sum(delta(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__range])), 1)",
-          "legendFormat": "Error Rate",
-          "refId": "A"
-        }
-      ],
-      "title": "API Error Rate",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "API request duration percentiles over time.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
           },
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
-      "id": 25,
-      "options": {
-        "legend": { "calcs": ["last"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p50",
+          "expr": "avg(avg_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | duration_ms != 0 | unwrap duration_ms [$__auto]))",
+          "instant": false,
+          "legendFormat": "Avg",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p95",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "max(max_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | duration_ms != 0 | unwrap duration_ms [$__auto]))",
+          "instant": false,
+          "legendFormat": "Max",
+          "queryType": "range",
+          "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(codex_api_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\", model=~\"$model\"}[$__rate_interval])))",
-          "legendFormat": "p99",
-          "refId": "C"
         }
       ],
-      "title": "API Request Duration",
+      "title": "API Request Latency",
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "API request success and failure rates over time.",
+      "description": "Total API calls per team member in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "reqps"
+          "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": { "id": "byName", "options": "errors" },
-            "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
-          },
-          {
-            "matcher": { "id": "byName", "options": "success" },
-            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
-          }
-        ]
+        "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
       "id": 26,
       "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\", success=\"true\"}[$__rate_interval]))",
-          "legendFormat": "success",
-          "refId": "A"
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value"
+          ]
         },
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_api_request_total{job=~\"$job\", instance=~\"$instance\", model=~\"$model\", success=\"false\"}[$__rate_interval]))",
-          "legendFormat": "errors",
-          "refId": "B"
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
         }
-      ],
-      "title": "API Requests Over Time",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
-      "id": 40,
-      "title": "SSE Events",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Total SSE events processed in the selected time range.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "short"
-        },
-        "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 27 },
-      "id": 41,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_sse_event_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "SSE Events",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk(20, sum by (user_email) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__range])))",
+          "instant": false,
+          "legendFormat": "{{user_email}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "SSE Events",
-      "type": "stat"
+      "title": "Requests by Team Member",
+      "type": "piechart",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      }
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Ratio of successful SSE events in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Average API response duration in milliseconds over the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 1,
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.9 }, { "color": "red", "value": 0.95 }] },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 27 },
-      "id": 42,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_sse_event_total{job=~\"$job\", instance=~\"$instance\", success=\"true\"}[$__range])) / clamp_min(sum(delta(codex_sse_event_total{job=~\"$job\", instance=~\"$instance\"}[$__range])), 1)",
-          "legendFormat": "SSE Success Rate",
-          "refId": "A"
-        }
-      ],
-      "title": "SSE Success Rate",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "95th percentile SSE event processing duration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 500 }, { "color": "red", "value": 2000 }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          },
           "unit": "ms"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 27 },
-      "id": 43,
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 17
+      },
+      "id": 14,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
+        "colorMode": "background",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_sse_event_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p95",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "avg(avg_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | duration_ms != 0 | unwrap duration_ms [$__auto]))",
+          "instant": false,
+          "legendFormat": "Avg Duration",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "SSE Duration p95",
+      "title": "Avg Response Duration",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "SSE event distribution by kind.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Request distribution by authentication mode.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
           "mappings": [],
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 27 },
-      "id": 44,
-      "options": {
-        "displayLabels": ["name"],
-        "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "values": ["percent"] },
-        "pieType": "donut",
-        "tooltip": { "mode": "single", "sort": "none" }
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 17
       },
+      "id": 18,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum by (kind) (delta(codex_sse_event_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "{{kind}}",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (auth_mode) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__range]))",
+          "instant": false,
+          "legendFormat": "{{auth_mode}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "SSE Events by Kind",
+      "title": "Auth Mode",
       "type": "piechart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "SSE event rate over time by kind.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Request distribution by terminal type.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
-      "id": 45,
-      "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 17
       },
+      "id": 17,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_sse_event_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (kind)",
-          "legendFormat": "{{kind}}",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (originator) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__range]))",
+          "instant": false,
+          "legendFormat": "{{terminal_type}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "SSE Event Rate by Kind",
-      "type": "timeseries"
+      "title": "Terminal Type",
+      "type": "piechart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "SSE event duration percentiles over time.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Request distribution by app version.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ms"
+          "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
-      "id": 46,
-      "options": {
-        "legend": { "calcs": ["last"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 17
       },
+      "id": 19,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(codex_sse_event_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p50",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (service_version) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__range]))",
+          "instant": false,
+          "legendFormat": "{{service_version}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Codex Version",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "mixed",
+        "uid": "-- Mixed --"
+      },
+      "description": "Percentage of successful requests (success=true) in the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 90
+              },
+              {
+                "color": "green",
+                "value": 99
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 20
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | success = \"true\" [$__range]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Success",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_sse_event_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p95",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | success != \"\" [$__range]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Total",
+          "queryType": "range",
+          "range": true,
           "refId": "B"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(codex_sse_event_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p99",
-          "refId": "C"
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A / $B * 100",
+          "refId": "C",
+          "type": "math"
         }
       ],
-      "title": "SSE Event Duration",
-      "type": "timeseries"
+      "title": "Success Rate",
+      "type": "stat"
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 39 },
-      "id": 60,
-      "title": "Tool Calls",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 29,
+      "panels": [],
+      "title": "Productivity",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Tool call distribution by tool name.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Per-user breakdown of conversations, token usage and efficiency.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } },
-          "mappings": [],
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 40 },
-      "id": 61,
-      "options": {
-        "displayLabels": ["name"],
-        "legend": { "displayMode": "table", "placement": "right", "showLegend": true, "values": ["percent", "value"] },
-        "pieType": "donut",
-        "tooltip": { "mode": "single", "sort": "none" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum by (tool) (delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "{{tool}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Tool Call Distribution",
-      "type": "piechart"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Tool call rate over time by tool name.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+          "color": {
+            "mode": "thresholds"
           },
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 16, "x": 8, "y": 40 },
-      "id": 62,
-      "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (tool)",
-          "legendFormat": "{{tool}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Tool Call Rate by Tool",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Tool call success rate per tool.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
           "custom": {
-            "align": "auto",
-            "cellOptions": { "type": "auto" },
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
             "inspect": false
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] }
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Success Rate" },
+            "matcher": {
+              "id": "byName",
+              "options": "Team Member"
+            },
             "properties": [
-              { "id": "unit", "value": "percentunit" },
-              { "id": "decimals", "value": 1 },
-              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } }
+              {
+                "id": "custom.width",
+                "value": 415
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Total Calls" },
-            "properties": [{ "id": "unit", "value": "short" }]
+            "matcher": {
+              "id": "byName",
+              "options": "Tokens / Conversation"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
           },
           {
-            "matcher": { "id": "byName", "options": "Time" },
-            "properties": [{ "id": "custom.hidden", "value": true }]
+            "matcher": {
+              "id": "byName",
+              "options": "Tokens"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Requests"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 257
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Conversations"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 165
+              }
+            ]
           }
         ]
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 48 },
-      "id": 63,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 25,
       "options": {
         "cellHeight": "sm",
-        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "enablePagination": false,
         "showHeader": true,
-        "sortBy": [{ "desc": true, "displayName": "Total Calls" }]
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Tokens"
+          }
+        ]
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sort_desc(sum by (tool) (delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__range_s:1m])))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "Total Calls",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "topk(50, sum by (user_email) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto])))",
+          "instant": false,
+          "legendFormat": "",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum by (tool) (delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\", success=\"true\"}[$__range_s:1m])) / clamp_min(sum by (tool) (delta(codex_tool_call_total{job=~\"$job\", instance=~\"$instance\"}[$__range_s:1m])), 1)",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "Success Rate",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "topk(50, count by (user_email) (sum by (user_email, conversation_id) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))))",
+          "instant": false,
+          "legendFormat": "",
+          "queryType": "range",
+          "range": true,
           "refId": "B"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "topk(50, sum by (user_email) (sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto])) + sum by (user_email) (sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__auto])))",
+          "instant": false,
+          "legendFormat": "",
+          "queryType": "range",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (user_email) (sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto])) / count by (user_email) (sum by (user_email, conversation_id) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto])))",
+          "instant": false,
+          "legendFormat": "",
+          "queryType": "range",
+          "range": true,
+          "refId": "D"
         }
       ],
-      "title": "Tool Call Summary",
+      "title": "Top Users by Request Count",
       "transformations": [
         {
-          "id": "merge",
-          "options": {}
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "user_email",
+            "mode": "outer"
+          }
         },
         {
           "id": "organize",
           "options": {
-            "excludeByName": { "Time": true },
-            "indexByName": { "tool": 0, "Value #A": 1, "Value #B": 2 },
-            "renameByName": { "Value #A": "Total Calls", "Value #B": "Success Rate" }
+            "excludeByName": {
+              "Field 1": true,
+              "Field 2": true,
+              "Field 3": true,
+              "Field 4": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true
+            },
+            "renameByName": {
+              "Value 1": "Requests",
+              "Value 2": "Conversations",
+              "Value 3": "Tokens",
+              "Value 4": "Tokens / Conversation",
+              "user_email": "Team Member"
+            }
           }
         }
       ],
       "type": "table"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Tool call duration percentiles over time.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Request rate over time broken down by team member.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 2,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ms"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 48 },
-      "id": 64,
-      "options": {
-        "legend": { "calcs": ["last"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 34
       },
+      "id": 6,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.50, sum by (le, tool) (rate(codex_tool_call_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "{{tool}} p50",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (user_email) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))",
+          "instant": false,
+          "legendFormat": "{{user_email}}",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le, tool) (rate(codex_tool_call_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "{{tool}} p95",
-          "refId": "B"
         }
       ],
-      "title": "Tool Call Duration by Tool",
+      "title": "Request Rate by Team Member",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Breakdown of successful vs failed requests in the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "false": {
+                  "color": "red",
+                  "index": 1
+                },
+                "true": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 34
+      },
+      "id": 16,
+      "options": {
+        "displayLabels": [
+          "name",
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (success) (count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | success != \"\" [$__range]))",
+          "instant": false,
+          "legendFormat": "{{success}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Success vs Failures",
+      "type": "piechart"
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 56 },
-      "id": 80,
-      "title": "WebSocket",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 27,
+      "panels": [],
+      "title": "Tokens",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Total WebSocket requests in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total input tokens consumed in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 57 },
-      "id": 81,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 43
+      },
+      "id": 7,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_websocket_request_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "WS Requests",
-          "refId": "A"
-        }
-      ],
-      "title": "WebSocket Requests",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "WebSocket request success rate in the selected time range.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.9 }, { "color": "red", "value": 0.95 }] },
-          "unit": "percentunit"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "overrides": []
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 57 },
-      "id": 82,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_websocket_request_total{job=~\"$job\", instance=~\"$instance\", success=\"true\"}[$__range])) / clamp_min(sum(delta(codex_websocket_request_total{job=~\"$job\", instance=~\"$instance\"}[$__range])), 1)",
-          "legendFormat": "WS Success Rate",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto]))",
+          "instant": true,
+          "legendFormat": "Input Tokens",
+          "queryType": "instant",
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "WebSocket Success Rate",
+      "title": "Input Tokens",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "Total WebSocket events processed in the selected time range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total output tokens generated in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 57 },
-      "id": 83,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 43
+      },
+      "id": 8,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(delta(codex_websocket_event_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "legendFormat": "WS Events",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__auto]))",
+          "instant": true,
+          "legendFormat": "Output Tokens",
+          "queryType": "instant",
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "WebSocket Events",
+      "title": "Output Tokens",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "95th percentile WebSocket request duration.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total cached tokens in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "text", "mode": "fixed" },
-          "decimals": 0,
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1000 }, { "color": "red", "value": 5000 }] },
-          "unit": "ms"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 57 },
-      "id": 84,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 43
+      },
+      "id": 9,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_websocket_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p95",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | cached_token_count != \"\" | unwrap cached_token_count [$__auto]))",
+          "instant": true,
+          "legendFormat": "Cached Tokens",
+          "queryType": "instant",
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "WebSocket Request Duration p95",
+      "title": "Cached Tokens",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "WebSocket request and event rates over time.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Total reasoning tokens in the selected time range.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 43
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | reasoning_token_count != \"\" | unwrap reasoning_token_count [$__auto]))",
+          "instant": true,
+          "legendFormat": "Reasoning Tokens",
+          "queryType": "instant",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Reasoning Tokens",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Token consumption broken down by type (input, output, cached, reasoning).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 47
+      },
+      "id": 11,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__range]))",
+          "instant": false,
+          "legendFormat": "Input",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__range]))",
+          "instant": false,
+          "legendFormat": "Output",
+          "queryType": "range",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | cached_token_count != \"\" | unwrap cached_token_count [$__range]))",
+          "instant": false,
+          "legendFormat": "Cached",
+          "queryType": "range",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | reasoning_token_count != \"\" | unwrap reasoning_token_count [$__range]))",
+          "instant": false,
+          "legendFormat": "Reasoning",
+          "queryType": "range",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Token Distribution by Type",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Token usage volume over time broken down by type.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 2,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 61 },
-      "id": 85,
-      "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 8,
+        "y": 47
       },
-      "targets": [
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_websocket_request_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "legendFormat": "WS Requests",
-          "refId": "A"
+      "id": 13,
+      "options": {
+        "annotations": {
+          "multiLane": false
         },
-        {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "sum(rate(codex_websocket_event_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (kind)",
-          "legendFormat": "events/{{kind}}",
-          "refId": "B"
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
         }
-      ],
-      "title": "WebSocket Activity Over Time",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-      "description": "WebSocket request duration percentiles over time.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": { "group": "A", "mode": "none" },
-            "thresholdsStyle": { "mode": "off" }
-          },
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
-          "unit": "ms"
-        },
-        "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 61 },
-      "id": 86,
-      "options": {
-        "legend": { "calcs": ["last"], "displayMode": "table", "placement": "right", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(codex_websocket_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p50",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto]))",
+          "instant": false,
+          "legendFormat": "Input",
+          "queryType": "range",
+          "range": true,
           "refId": "A"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(codex_websocket_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p95",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__auto]))",
+          "instant": false,
+          "legendFormat": "Output",
+          "queryType": "range",
+          "range": true,
           "refId": "B"
         },
         {
-          "datasource": { "type": "prometheus", "uid": "${prometheus_datasource}" },
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(codex_websocket_request_duration_ms_bucket{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
-          "legendFormat": "p99",
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | cached_token_count != \"\" | unwrap cached_token_count [$__auto]))",
+          "instant": false,
+          "legendFormat": "Cached",
+          "queryType": "range",
+          "range": true,
           "refId": "C"
         }
       ],
-      "title": "WebSocket Request Duration",
+      "title": "Token Usage Over Time",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Token consumption broken down by model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 55
+      },
+      "id": 12,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum by (model) (sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__range]))",
+          "instant": false,
+          "legendFormat": "{{model}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens by Model",
+      "type": "piechart"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "id": 30,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk(20, sum by (user_email) (sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__range])))",
+          "instant": false,
+          "legendFormat": "{{user_email}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens by Team Member",
+      "type": "piechart",
+      "description": "Token consumption broken down by team member.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      }
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "F"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Input"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "G"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Output"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "H"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cached"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "I"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Reasoning"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 63
+      },
+      "id": 32,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | input_token_count != \"\" | unwrap input_token_count [$__auto]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Input Tokens",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | output_token_count != \"\" | unwrap output_token_count [$__auto]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Output Tokens",
+          "queryType": "range",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | cached_token_count != \"\" | unwrap cached_token_count [$__auto]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Cached Tokens",
+          "queryType": "range",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(sum_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" | reasoning_token_count != \"\" | unwrap reasoning_token_count [$__auto]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Reasoning Tokens",
+          "queryType": "range",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "Requests",
+          "queryType": "range",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A / $E",
+          "refId": "F",
+          "type": "math"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$B / $E",
+          "refId": "G",
+          "type": "math"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$C / $E",
+          "refId": "H",
+          "type": "math"
+        },
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$D / $E",
+          "refId": "I",
+          "type": "math"
+        }
+      ],
+      "title": "Avg Tokens per Request",
+      "type": "timeseries",
+      "description": "Average tokens per request broken down by type (input, output, cached, reasoning) in the selected time range."
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 63
+      },
+      "id": 31,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "sum(count_over_time({service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\" [$__auto]))",
+          "instant": false,
+          "legendFormat": "Events",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Events Over Time",
+      "type": "timeseries",
+      "description": "Codex events over time.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 71
+      },
+      "id": 33,
+      "panels": [],
+      "title": "Events",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "description": "Live log stream from codex-app-server, filtered by selected member and model.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 72
+      },
+      "id": 21,
+      "options": {
+        "dedupStrategy": "none",
+        "detailsMode": "sidebar",
+        "enableInfiniteScrolling": true,
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showControls": false,
+        "showFieldSelector": false,
+        "showLabels": true,
+        "showLevel": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "syntaxHighlighting": false,
+        "unwrappedColumns": false,
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{service_name=\"codex-app-server\"} | user_email =~ \"$member\" | model =~ \"$model\"",
+          "instant": false,
+          "legendFormat": "",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Events",
+      "type": "logs"
     }
   ],
-  "refresh": "5m",
-  "schemaVersion": 38,
-  "tags": ["openai-codex", "ai", "observability"],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
   "templating": {
     "list": [
       {
-        "label": "Prometheus data source",
-        "name": "prometheus_datasource",
-        "query": "prometheus",
+        "current": {},
+        "label": "Loki data source",
+        "name": "loki_datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
         "regex": "",
         "type": "datasource"
       },
       {
-        "allValue": ".+",
+        "allValue": ".*",
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": {
-          "type": "prometheus",
-          "uid": "${prometheus_datasource}"
+          "type": "loki",
+          "uid": "grafanacloud-logs"
         },
         "includeAll": true,
-        "label": "Job",
+        "label": "Team Member",
         "multi": true,
-        "name": "job",
-        "query": "label_values(codex_api_request_total, job)",
+        "name": "member",
+        "options": [],
+        "query": {
+          "label": "user_email",
+          "stream": "{service_name=\"codex-app-server\"}",
+          "type": 1
+        },
         "refresh": 2,
+        "regex": "",
+        "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
       },
       {
         "allValue": ".*",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${prometheus_datasource}"
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
         },
-        "includeAll": true,
-        "label": "Instance",
-        "multi": true,
-        "name": "instance",
-        "query": "label_values(codex_api_request_total{job=~\"$job\"}, instance)",
-        "refresh": 2,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
         "datasource": {
-          "type": "prometheus",
-          "uid": "${prometheus_datasource}"
+          "type": "loki",
+          "uid": "grafanacloud-logs"
         },
         "includeAll": true,
         "label": "Model",
         "multi": true,
         "name": "model",
-        "query": "label_values(codex_api_request_total{job=~\"$job\", instance=~\"$instance\"}, model)",
+        "options": [],
+        "query": {
+          "label": "model",
+          "stream": "{service_name=\"codex-app-server\"}",
+          "type": 1
+        },
         "refresh": 2,
+        "regex": "",
+        "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
       }
     ]
   },
-  "time": { "from": "now-24h", "to": "now" },
+  "time": {
+    "from": "2026-03-16T15:23:32.502Z",
+    "to": "2026-03-16T16:03:07.263Z"
+  },
   "timepicker": {},
-  "timezone": "default",
+  "timezone": "browser",
   "title": "OpenAI Codex Overview",
-  "uid": "openai-codex-overview"
+  "uid": "isfdh2b",
+  "version": 13,
+  "weekStart": ""
 }
