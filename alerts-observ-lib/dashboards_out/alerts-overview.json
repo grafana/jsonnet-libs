@@ -7,7 +7,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"critical\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}\n)",
                "hide": true,
                "iconColor": "#ff7383",
                "name": "Critical alert",
@@ -21,7 +21,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"info\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"info\", job=~\"$job\",instance=~\"$instance\"}\n)",
                "hide": true,
                "iconColor": "#5794f2",
                "name": "Info message",
@@ -35,7 +35,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"warning\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"warning\", job=~\"$job\",instance=~\"$instance\"}\n)",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Warning alert",
@@ -64,7 +64,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Panel to report on the status of firing alerts.",
+            "description": "Currently firing alerts.",
             "gridPos": {
                "h": 8,
                "w": 24,
@@ -72,7 +72,7 @@
                "y": 1
             },
             "options": {
-               "alertInstanceLabelFilter": "job!=\"\",job=~\"${job:regex}\",instance=~\"${instance:regex}\"",
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\"",
                "groupMode": "default"
             },
             "pluginVersion": "v11.4.0",
@@ -104,7 +104,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({__name__=~\"ALERTS\",job!=\"\"}, job)",
+               "query": "label_values({__name__=~\"ALERTS\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -119,7 +119,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({__name__=~\"ALERTS\",job!=\"\",job=~\"$job\"}, instance)",
+               "query": "label_values({__name__=~\"ALERTS\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

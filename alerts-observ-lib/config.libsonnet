@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',
   groupLabels: ['job'],
   groupMode: 'default',  // 'default' or 'custom'
   instanceLabels: ['instance'],
