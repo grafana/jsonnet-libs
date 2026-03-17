@@ -1,0 +1,136 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "enable": true,
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}\n)",
+               "hide": true,
+               "iconColor": "#ff7383",
+               "name": "Critical alert",
+               "tagKeys": "job,instance",
+               "textFormat": "{{alertname}}",
+               "titleFormat": "Critical alert"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "enable": true,
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"info\", job=~\"$job\",instance=~\"$instance\"}\n)",
+               "hide": true,
+               "iconColor": "#5794f2",
+               "name": "Info message",
+               "tagKeys": "job,instance",
+               "textFormat": "{{alertname}}",
+               "titleFormat": "Info message"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "enable": true,
+               "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"warning\", job=~\"$job\",instance=~\"$instance\"}\n)",
+               "hide": true,
+               "iconColor": "#fade2a",
+               "name": "Warning alert",
+               "tagKeys": "job,instance",
+               "textFormat": "{{alertname}}",
+               "titleFormat": "Warning alert"
+            }
+         ]
+      },
+      "links": [ ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "Alerts overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Currently firing alerts.",
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 1
+            },
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\"",
+               "groupMode": "default"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "Alerts",
+            "type": "alertlist"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "alerts"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"ALERTS\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({__name__=~\"ALERTS\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Alerts overview",
+      "uid": "alerts-alerts-overview"
+   }
