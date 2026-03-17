@@ -1,4 +1,6 @@
 exclusions:
+    target-logql-auto-rule:
+        reason: "Math expression targets (e.g. $A / $B * 100) are incorrectly flagged as invalid LogQL; they are Grafana expression queries, not LogQL."
     template-datasource-rule:
         reason: Dashboard uses prometheus_datasource variable following the standard jsonnet-libs pattern, not Loki or Tempo datasources.
     target-instance-rule:
