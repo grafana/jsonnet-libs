@@ -268,8 +268,23 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       std.prune(
         {
           checks: [
-            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub' && type != 'log') then error "type must be one of 'gauge','histogram','counter','raw','info','log'. Got %s for %s" % [type, name],
-            if (aggLevel != 'aggKeepLabels' && aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'aggKeepLabels', 'group','instance' or 'none'",
+            if (type != 'gauge' &&
+                type != 'histogram' &&
+                type != 'counter' &&
+                type != 'raw' &&
+                type != 'info' &&
+                type != 'stub' &&
+                type != 'log')
+            then
+              error "type must be one of 'gauge','histogram','counter','raw','info','log'. Got %s for %s" % [type, name],
+            if (
+              aggLevel != 'aggKeepLabels' &&
+              aggLevel != 'none' &&
+              aggLevel != 'instance' &&
+              aggLevel != 'group'
+            )
+            then
+              error "aggLevel must be one of 'aggKeepLabels', 'group','instance' or 'none'",
           ],
         }
       ) +
