@@ -1,0 +1,43 @@
+groups:
+    - name: otelcol-rules
+      rules:
+        - alert: ExporterQueueSaturated
+          annotations:
+            description: The {{ $labels.data_type }} queue of the {{ $labels.exporter }} exporter is almost full ({{ $value }}). It will start dropping data once full
+            summary: Exporter queue is reaching limit.
+          expr: sum(otelcol_exporter_queue_size{}) by (data_type,service_instance_id,exporter) / sum(otelcol_exporter_queue_capacity{}) by (data_type,service_instance_id,exporter) > 0.8
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            service_name: opentelemetry-collector
+            severity: warning
+        - alert: MetricsFailedToSend
+          annotations:
+            description: Collector {{ $labels.service_instance_id }} failed to enqueue metrics for the {{ $labels.exporter }}
+            summary: Failed to enqueue metrics for export.
+          expr: sum(rate(otelcol_exporter_enqueue_failed_metric_points_total{}[5m])) by (exporter,service_instance_id) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            service_name: opentelemetry-collector
+            severity: critical
+        - alert: LogsFailedToSend
+          annotations:
+            description: Collector {{ $labels.service_instance_id }} failed to enqueue logs for the {{ $labels.exporter }}
+            summary: Failed to enqueue logs for export.
+          expr: sum(rate(otelcol_exporter_enqueue_failed_log_records_total{}[5m])) by (exporter,service_instance_id) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            service_name: opentelemetry-collector
+            severity: critical
+        - alert: SpansFailedToSend
+          annotations:
+            description: Collector {{ $labels.service_instance_id }} failed to enqueue spans for the {{ $labels.exporter }}
+            summary: Failed to enqueue spans for export.
+          expr: sum(rate(otelcol_exporter_enqueue_failed_spans_total{}[5m])) by (exporter,service_instance_id) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            service_name: opentelemetry-collector
+            severity: critical
