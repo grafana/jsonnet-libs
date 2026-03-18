@@ -1,0 +1,37 @@
+{
+  local this = self,
+  // any modular library should include as inputs:
+  // 'dashboardNamePrefix' - Use as prefix for all Dashboards and (optional) rule groups
+  // 'filteringSelector' - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
+  // 'groupLabels' - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
+  // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
+  // 'uid' - UID to prefix all dashboards original uids
+  filteringSelector: '',
+  groupLabels: ['job'],
+  pureInstanceLabels: ['instance'],
+  legendLabels: ['instance'],
+  legendLabelsWithJob: ['job', 'instance'],
+  instanceLabels: ['instance'],
+  dashboardTags: [self.uid],
+  uid: 'dragonfly',
+  dashboardNamePrefix: 'Dragonfly',
+
+  // Metrics source for signals
+  metricsSource: ['prometheus'],
+
+  // Signals
+  signals: {
+    overview: (import './signals/overview.libsonnet')(this),
+  },
+
+  // additional params can be added if needed
+  dashboardPeriod: 'now-1h',
+  dashboardTimezone: 'default',
+  dashboardRefresh: '1m',
+
+  // alert thresholds
+  alertsHighMemoryUsageWarning: 80,
+  alertsHighMemoryUsageCritical: 95,
+  alertsHighConnectedClients: 1000,
+  alertsHighKeyspaceMissRate: 50,
+}
