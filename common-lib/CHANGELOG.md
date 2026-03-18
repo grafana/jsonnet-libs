@@ -1,5 +1,8 @@
-# 0.6.0
+# 0.6.1
+- [Signal] chore: bump grafonnet to 11.4.0
+- [Panels] chore: add tests for generic panels
 
+# 0.6.0
 - [Signal] feat: add new type of aggregation "aggKeepLabels" in addition to "group", "instance", "none".
 - [Signal] feat: updated legend default format: "<aggLabel>: <nameShort> (<keepLabels>)".
 - [Signal] feat: quantile=0.95 is removed from args of unmarshallJsonMulti(). Instead .withQuantile(q=0.95) modifier function is introduced, allowing multiple quantiles to be rendered from the single signal.

@@ -58,7 +58,7 @@ local m1 = signal.init(
         },
         testTSversion: {
           actual: raw.pluginVersion,
-          expect: 'v11.0.0',
+          expect: 'v11.4.0',
         },
         testTSUid: {
           actual: raw.datasource,
