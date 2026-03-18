@@ -268,7 +268,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       std.prune(
         {
           checks: [
-
             if (type != 'gauge' &&
                 type != 'histogram' &&
                 type != 'counter' &&
