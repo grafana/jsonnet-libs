@@ -1,4 +1,4 @@
-local g = import '../g.libsonnet';
+local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 local logslib = import 'logs-lib/logs/main.libsonnet';
 {
@@ -45,6 +45,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           labels=this.config.groupLabels + this.config.extraLogLabels,
           formatParser=null,
           showLogsVolume=this.config.showLogsVolume,
+          customAllValue=this.config.customAllValue,
         )
         {
           dashboards+:

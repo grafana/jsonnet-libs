@@ -88,6 +88,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             labels=this.config.logLabels + this.config.extraLogLabels,
             formatParser=null,
             showLogsVolume=this.config.showLogsVolume,
+            customAllValue=this.config.customAllValue,
           )
           {
             dashboards+:

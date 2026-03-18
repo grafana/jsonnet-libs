@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/tomcat"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: [],
   instanceLabels: ['instance'],
@@ -16,6 +16,7 @@
 
   // Logging configuration
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level'],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

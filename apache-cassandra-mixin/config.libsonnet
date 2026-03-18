@@ -2,7 +2,7 @@
   local this = self,
   enableDatacenterLabel: false,
   enableRackLabel: false,
-  filteringSelector: 'job="integrations/apache-cassandra"',
+  filteringSelector: '',
 
   groupLabels: ['job', 'cassandra_cluster'] + (if this.enableDatacenterLabel then ['datacenter'] else []) + (if this.enableRackLabel then ['rack'] else []),
   instanceLabels: ['instance'],
@@ -24,6 +24,7 @@
   alertsCriticalHighMemoryUsage5m: 80,  //percent: calculated as ratio then multiplied by query
 
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: [],
   showLogsVolume: true,
 

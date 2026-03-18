@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job="integrations/openstack"',
+  filteringSelector: '',
   groupLabels: ['job'],
   // instance of openstack cluster
   instanceLabels: ['instance'],
@@ -33,6 +33,7 @@
 
   // logs lib related
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logsExtraFilters: '',
   extraLogLabels: ['level', 'service'],
   logsVolumeGroupBy: 'level',

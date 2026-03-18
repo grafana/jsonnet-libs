@@ -1,7 +1,7 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job=~"integrations/couchbase"',
+  filteringSelector: '',
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'couchbase_cluster'] else ['job', 'couchbase_cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['couchbase-mixin'],
@@ -16,6 +16,7 @@
 
   // logs lib related
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logLabels: if self.enableMultiCluster then ['job', 'instance', 'cluster', 'level'] else ['job', 'instance', 'level'],
   extraLogLabels: [],  // Required by logs-lib
   logsVolumeGroupBy: 'level',

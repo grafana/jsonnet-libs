@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job=~".*openldap.*"',
+  filteringSelector: '',
   uid: 'openldap',
 
   enableMultiCluster: false,
@@ -21,6 +21,7 @@
   alertsWarningBindFailureRateIncrease: 10,
 
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level', 'component'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

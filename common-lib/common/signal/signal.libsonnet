@@ -71,7 +71,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type: std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
             legendCustomTemplate: std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             valueMappings: std.get(signalsJson.signals[s], 'valueMappings', []),
-            quantile: std.get(signalsJson.signals[s], 'quantile', 0.95),
           },
         ],
       )
@@ -144,7 +143,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 infoLabel: std.get(source.value, 'infoLabel', null),
                 legendCustomTemplate: std.get(source.value, 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
                 valueMappings: std.get(source.value, 'valueMappings', []),
-                quantile: std.get(source.value, 'quantile', 0.95),
               }
               for source in std.objectKeysValues(signalsJson.signals[s].sources)
               if std.member(validatedArr, source.key)
@@ -234,6 +232,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     //only single instance selection allowed
     getVariablesMultiChoice()::
       grafanaVariables.multiInstance,
+    getVariables()::
+      grafanaVariables,
     getVariablesDatasource(type='prometheus'):
       grafanaVariables.datasources[type],
 
@@ -261,7 +261,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           type: type,
           legendCustomTemplate: null,
           valueMappings: [],
-          quantile: 0.95,
         },
       ],
     ):
@@ -269,8 +268,23 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       std.prune(
         {
           checks: [
-            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub' && type != 'log') then error "type must be one of 'gauge','histogram','counter','raw','info','log'. Got %s for %s" % [type, name],
-            if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
+            if (type != 'gauge' &&
+                type != 'histogram' &&
+                type != 'counter' &&
+                type != 'raw' &&
+                type != 'info' &&
+                type != 'stub' &&
+                type != 'log')
+            then
+              error "type must be one of 'gauge','histogram','counter','raw','info','log'. Got %s for %s" % [type, name],
+            if (
+              aggLevel != 'aggKeepLabels' &&
+              aggLevel != 'none' &&
+              aggLevel != 'instance' &&
+              aggLevel != 'group'
+            )
+            then
+              error "aggLevel must be one of 'aggKeepLabels', 'group','instance' or 'none'",
           ],
         }
       ) +

@@ -26,6 +26,7 @@
 
   // Loki logs configuration
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

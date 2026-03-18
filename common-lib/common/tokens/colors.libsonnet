@@ -19,6 +19,7 @@
     text: 'text',  //special color that changes to opposite depending on light/dark theme
     // alerts and thresholds
     ok: self.green,
+    fatal: self['light-purple'],
     critical: self['light-red'],
     warning: self.yellow,
     info: self.blue,

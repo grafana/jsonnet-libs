@@ -7,8 +7,8 @@
           {
             alert: 'DiscourseHigh5xxErrors',
             expr: |||
-              100 * rate(discourse_http_requests{status=~"5..", %(filteringSelector)s}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsCritical5xxResponses)s
-            ||| % this.config,
+              100 * rate(discourse_http_requests{%(filteringSelector5xx)s}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsCritical5xxResponses)s
+            ||| % this.config { filteringSelector5xx: if this.config.filteringSelector != '' then 'status=~"5..",' + this.config.filteringSelector else 'status=~"5.."' },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -24,8 +24,8 @@
           {
             alert: 'DiscourseHigh4xxErrors',
             expr: |||
-              100 * rate(discourse_http_requests{status=~"4..", %(filteringSelector)s}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsWarning4xxResponses)s
-            ||| % this.config,
+              100 * rate(discourse_http_requests{%(filteringSelector4xx)s}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsWarning4xxResponses)s
+            ||| % this.config { filteringSelector4xx: if this.config.filteringSelector != '' then 'status=~"4..",' + this.config.filteringSelector else 'status=~"4.."' },
             'for': '5m',
             labels: {
               severity: 'warning',

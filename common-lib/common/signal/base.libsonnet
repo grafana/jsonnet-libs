@@ -20,8 +20,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local prometheusQuery = g.query.prometheus,
     local this = self,
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
-    local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
 
+    legendCustomTemplate:: sourceMaps[0].legendCustomTemplate,
+    signalName:: signalName,
+    nameShort:: nameShort,
+    hideNameInLegend:: false,
+    legendBase:: if this.hideNameInLegend then '' else this.nameShort,
+    description:: description,
+    aggLevel:: aggLevel,
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
@@ -50,9 +56,25 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     , sourceMaps, init=[]),
         )
       ),
+    // Return description for accumulation
+    wrapDescription()::
+      this.nameShort + ' (' + this.vars.aggFunction + ')' + ': ' + this.description,
+
+    // Render description for panel. Uses accumulated descriptions.
+    // If multiple descriptions are present, join them with double newlines.
+    // Else use single description as is.
+    renderDescription()::
+      {
+        description:
+          if std.length(super._descriptionsAccumulator) > 1
+          then std.join('  \n\n', std.map(function(x) x, super._descriptionsAccumulator))
+          else if std.length(super._descriptionsAccumulator) == 1
+          then super._descriptionsAccumulator[0] + '  \n'
+          else this.description,
+      },
 
     //calculate aggKeepLabels to be used in legendLabelsCalculation
-    local aggKeepLabels = self.combineUniqueKeepLabels(this.sourceMaps),
+    aggKeepLabels:: self.combineUniqueKeepLabels(this.sourceMaps),
     infoLabels:: self.combineUniqueInfoLabels(this.sourceMaps),
     vars::
       vars
@@ -61,12 +83,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         aggLabels:
           []
           + (
-            if aggLevel == 'group' then super.groupLabels
-            else if aggLevel == 'instance' then super.groupLabels + super.instanceLabels
-            else if aggLevel == 'none' then []
+            if this.aggLevel == 'group' then super.groupLabels
+            else if this.aggLevel == 'instance' then super.groupLabels + super.instanceLabels
+            else if this.aggLevel == 'none' || this.aggLevel == 'aggKeepLabels' then []
           )
           + (
-            if std.length(aggKeepLabels) > 0 then aggKeepLabels
+            if std.length(this.aggKeepLabels) > 0 then this.aggKeepLabels
             else []
           )
           + (
@@ -80,19 +102,27 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           []
           +
           (
-            if aggLevel == 'group' then super.groupLabels
-            else if aggLevel == 'instance' then super.instanceLabels
-            else if aggLevel == 'none' then super.instanceLabels
+            if this.aggLevel == 'group' then super.groupLabels
+            else if this.aggLevel == 'instance' then super.instanceLabels
+            else if this.aggLevel == 'none' || this.aggLevel == 'aggKeepLabels' then super.instanceLabels
           ),
         aggLegend: utils.labelsToPanelLegend(
           // keep last label
-          xtd.array.slice(legendLabels + aggKeepLabels, -1)
+          xtd.array.slice(legendLabels, -1)
         ),
+        keepLabelsLegend: if std.length(this.aggKeepLabels) > 0
+        then utils.labelsToPanelLegend(this.aggKeepLabels, separator=' ')
+        else '',
         aggFunction: aggFunction,
       },
 
-
     unit:: signalUtils.generateUnits(type, unit, this.sourceMaps[0].rangeFunction),
+
+    withUnit(unit):
+      this
+      {
+        unit:: unit,
+      },
 
     withOffset(offset):
       this
@@ -158,14 +188,102 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             for source in this.sourceMaps
           ],
       },
+
+    withLegendFormat(legendFormat):
+      this
+      {
+        legendCustomTemplate:: legendFormat,
+      },
+    withHideNameInLegend(hide=true):
+      this
+      {
+        hideNameInLegend:: hide,
+      },
+    withName(name):
+      this
+      {
+        signalName:: name,
+      },
+    withNameShort(name):
+      this
+      {
+        nameShort:: name,
+      },
+    withAgglevel(aggLevel):
+      this
+      {
+        aggLevel:: aggLevel,
+      },
+    withAggFunction(aggFunction):
+      this
+      {
+        vars+:: {
+          aggFunction: aggFunction,
+        },
+      },
+    withInstanceLabels(labels):
+      this
+      {
+        vars+:: {
+          instanceLabels: labels,
+        },
+      },
+    withInstanceLabelsMixin(labels):
+      this
+      {
+        vars+:: {
+          instanceLabels+: labels,
+        },
+      },
+    withGroupLabels(labels):
+      this
+      {
+        vars+:: {
+          groupLabels: labels,
+        },
+      },
+    withGroupLabelsMixin(labels):
+      this
+      {
+        vars+:: {
+          groupLabels+: labels,
+        },
+      },
+    withInterval(interval):
+      this
+      {
+        vars+:: {
+          interval: interval,
+        },
+      },
+    withAlertsInterval(interval):
+      this
+      {
+        vars+:: {
+          alertsInterval: interval,
+        },
+      },
+    withRangeFunction(rangeFunction):
+      this
+      {
+        sourceMaps:
+          [
+            source
+            {
+              rangeFunction: rangeFunction,
+            }
+            for source in this.sourceMaps
+          ],
+      },
+
     //Return as grafana panel target(query+legend)
-    asTarget(name=signalName):
+    asTarget(name=this.signalName):
       prometheusQuery.new(
         '${%s}' % datasource,
         self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
-      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(nameShort, aggLevel, legendCustomTemplate) % this.vars)
+      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(this.legendBase, this.aggLevel, this.legendCustomTemplate, this.aggKeepLabels) % this.vars)
       + prometheusQuery.withFormat('time_series')
       + prometheusQuery.withInstant(false),
 
@@ -177,32 +295,37 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     //Return as grafana panel mixin target(query+legend) + overrides(like units)
     asPanelMixin(override='byQuery'):
-      g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
-      + self.asOverride(override=override),
+      { _descriptionsAccumulator+:: [this.wrapDescription()] }
+      + g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
+      // This is required for perses migrations mostly
+      + g.panel.timeSeries.standardOptions.withUnit(self.unit)
+      + self.asOverride(override=override)
+      + self.renderDescription(),
 
     //Return table target (instant=true, format=table) + overrides
     asTableColumn(override='byName', format='table'):
-      g.panel.table.queryOptions.withTargetsMixin(
+      { _descriptionsAccumulator+:: [this.wrapDescription()] }
+      + g.panel.table.queryOptions.withTargetsMixin(
         if format == 'table' then self.asTableTarget()
         else if format == 'time_series' then self.asTarget()
         else error 'Unknown format, must be "table" or "time_series"'
       )
-      + self.asOverride(override=override, format=format),
-
+      + self.asOverride(override=override, format=format)
+      + self.renderDescription(),
 
     getValueMappings(sourceMaps)::
       std.uniq(
         std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[])
       ),
 
-    asOverride(name=signalName, override='byQuery', format='time_series'):
+    asOverride(name=this.signalName, override='byQuery', format='time_series'):
       g.panel.timeSeries.standardOptions.withOverridesMixin(
         [
           if override == 'byQuery' then
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
             + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
-            + (if format == 'table' && name != nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort)) else {})
+            + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               (if hasValueMaps then
                  g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
@@ -213,7 +336,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
             + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
-            + (if format == 'table' && name != nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort)) else {})
+            + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               (if hasValueMaps then
                  g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
@@ -227,7 +350,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
            g.panel.timeSeries.standardOptions.withOverridesMixin(
              [
                g.panel.timeSeries.fieldOverride.byName.new(infoLabel)
-               + g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(nameShort))
+               + g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort))
                for infoLabel in this.infoLabels
              ],
            )
@@ -240,9 +363,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           local aggLabels =
             []
             + (
-              if aggLevel == 'group' then this.vars.groupLabels
-              else if aggLevel == 'instance' then this.vars.groupLabels + this.vars.instanceLabels
-              else if aggLevel == 'none' then []
+              if this.aggLevel == 'group' then this.vars.groupLabels
+              else if this.aggLevel == 'instance' then this.vars.groupLabels + this.vars.instanceLabels
+              else if this.aggLevel == 'none' || this.aggLevel == 'aggKeepLabels' then []
             )
             + (
               if std.length(source.aggKeepLabels) > 0 then source.aggKeepLabels
@@ -257,10 +380,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
-            q=std.get(source, 'quantile', default=0.95),
-            aggLevel=aggLevel,
+            q=std.get(this, 'quantile', default=0.95),
+            aggLevel=this.aggLevel,
             rangeFunction=source.rangeFunction,
             alertRule=false,
+            interval=this.vars.interval,
           ).applyFunctions()
           % this.vars {
             agg: std.join(',', aggLabels),
@@ -273,16 +397,17 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     asRuleExpression():
       self.combineUniqueExpressions(
         [
-          //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
+          //override aggLevel to 'none', to avoid losing labels in alerts due to by() clause:
           signalUtils.wrapExpr(
             type,
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
-            q=std.get(source, 'quantile', default=0.95),
+            q=std.get(this, 'quantile', default=0.95),
             aggLevel='none',
             rangeFunction=source.rangeFunction,
             // ensure that interval doesn't have Grafana dashboard dynamic intervals:
             alertRule=true,
+            interval=this.vars.interval,
           ).applyFunctions()
           % this.vars
             {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
@@ -296,11 +421,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         ]
       ),
 
-
     common(type)::
+      (
+        // For table, asTableColumn() fills _descriptionsAccumulator; leave it empty here so only one description is added.
+        if type == 'table' then { _descriptionsAccumulator:: [] }
+        else { description: this.description, _descriptionsAccumulator:: [this.wrapDescription()] }
+      )
       // override panel-wide --mixed-- datasource
-      prometheusQuery.withDatasource('${%s}' % datasource)
-      + g.panel.timeSeries.panelOptions.withDescription(description)
+      + prometheusQuery.withDatasource('${%s}' % datasource)
+      // This is required for perses migrations mostly
+      + g.panel.timeSeries.standardOptions.withUnit(self.unit)
       + (
         if type == 'table' then {}
         else
@@ -311,19 +441,19 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       ),
 
     //Return as timeSeriesPanel
-    asTimeSeries(name=signalName):
+    asTimeSeries(name=this.signalName):
       g.panel.timeSeries.new(name)
       + self.common(type='timeSeries'),
 
     //Return as statPanel
-    asStat(name=signalName):
+    asStat(name=this.signalName):
       g.panel.stat.new(name)
       + self.common(type='stat'),
     // Return as table
     // Table format: all targets must have format=table, instant=true, and matching labels set.
     // Timeseries format: all targets must have format=timeseries, instant=false, and matching labels set.
     // Useful to show Table trends.
-    asTable(name=signalName, format='table', filterable=false):
+    asTable(name=this.signalName, format='table', filterable=false):
       g.panel.table.new(name)
       // https://github.com/grafana/grafonnet/issues/238
       // + g.panel.table.standardOptions.withFilterable(value=filterable)
@@ -394,13 +524,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         )
       else error 'Table format must be "time_series" or "table"',
 
-
     //Return as gauge panel
-    asGauge(name=signalName):
+    asGauge(name=this.signalName):
       g.panel.gauge.new(name)
       + self.common(type='gauge'),
     //Return as statusHistory
-    asStatusHistory(name=signalName):
+    asStatusHistory(name=this.signalName):
       g.panel.statusHistory.new(name)
       + self.common(type='status-history')
       // limit number of DPs

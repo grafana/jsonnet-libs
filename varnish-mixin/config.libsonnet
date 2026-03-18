@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/varnish-cache"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['varnish-mixin'],
@@ -14,6 +14,7 @@
 
   // logs lib related
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logLabels: ['job', 'instance', 'cluster', 'level'],
   extraLogLabels: [],  // Required by logs-lib
   logsVolumeGroupBy: 'level',

@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/aerospike"',
+  filteringSelector: '',
   groupLabels: ['job', 'aerospike_cluster', 'cluster'],
   logLabels: ['job', 'cluster', 'instance'],
   instanceLabels: ['instance', 'ns'],  // ns == namespace
@@ -18,6 +18,7 @@
 
   // Logging configuration
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level'],  // Required by logs-lib
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

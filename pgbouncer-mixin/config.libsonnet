@@ -6,7 +6,7 @@
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
   // 'uid' - UID to prefix all dashboards original uids
   enableMultiCluster: false,
-  filteringSelector: 'job="integrations/pgbouncer"',
+  filteringSelector: '',
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
   logLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'instance'] else ['job', 'pgbouncer_cluster', 'instance'],
   pureInstanceLabels: ['instance'],
@@ -30,6 +30,7 @@
 
   // logs lib related
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,

@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job="integrations/apache-hadoop"',
+  filteringSelector: '',
   groupLabels: ['job', 'hadoop_cluster', 'cluster'],
   instanceLabels: ['instance'],
 
@@ -14,6 +14,7 @@
 
   // Logging configuration
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logLabels: ['job', 'cluster', 'instance'],
   extraLogLabels: ['level'],  // Required by logs-lib
   logsVolumeGroupBy: 'level',

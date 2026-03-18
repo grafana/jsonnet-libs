@@ -1,12 +1,13 @@
 {
   local this = self,
   enableMultiCluster: false,
-  filteringSelector: 'job=~"$job", cluster=~"$cluster"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
   dashboardTags: ['tensorflow-mixin'],
   uid: 'tensorflow',
   dashboardNamePrefix: 'TensorFlow',
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
 
   // additional params
   dashboardPeriod: 'now-30m',

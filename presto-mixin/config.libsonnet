@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job=~"integrations/presto"',
+  filteringSelector: '',
   groupLabels: ['job', 'cluster', 'presto_cluster'],
   overviewLegendLabels: ['presto_cluster'],
   coordinatorLegendLabels: ['instance'],
@@ -17,6 +17,7 @@
   // Data source configuration
   metricsSource: 'prometheus',
   enableLokiLogs: true,
+  customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
   logLabels: this.groupLabels + this.instanceLabels,
   extraLogLabels: [],
   logsVolumeGroupBy: 'level',
