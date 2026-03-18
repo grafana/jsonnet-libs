@@ -19,42 +19,50 @@ Workflow to generate dashboards would be as follows:
 
 ### Modify functions
 
-These functions modify one of the signal's property and then  return signal back. Can be used as part of the builder pattern.
+These functions modify one of the signal's properties and then return the signal back. They are designed to be used as part of a builder pattern, typically applied just before rendering panels or alert expressions.
 
-- withTopK(limit=25) - wrap signal expression into topk().
-- withExprWrappersMixin(wrapper=[]) - wrap signal expression into additional function on top of existing wrappers.
-- withOffset(offset) - add offset modifier to the expression.
-- withFilteringSelectorMixin(mixin) - add additional selector to filteringSelector used.
-- withQuantile(quantile=0.95) - add quantile modifier to the expression for histogram signals.
+- `withTopK(limit=25)` - wrap signal expression into `topk(limit, ...)`.
+- `withExprWrappersMixin(wrapper=[])` - wrap signal expression into additional function(s) on top of existing wrappers.
+- `withOffset(offset)` - add `offset` modifier to the expression.
+- `withFilteringSelectorMixin(mixin)` - add additional selector to `filteringSelector` used.
+- `withQuantile(quantile=0.95)` - set histogram quantile (also applies to signals produced by `unmarshallJsonMulti()`).
+- `withLegendFormat(legendFormat)` - override automatically generated legend with a custom template.
+- `withHideNameInLegend(hide=true)` - hide or show `nameShort` in the legend, while keeping aggregation labels and kept labels.
+- `withName(name)` / `withNameShort(nameShort)` - override full panel title and legend/column label respectively.
+- `withAgglevel(aggLevel)` / `withAggFunction(aggFunction)` - override aggregation level/function per signal.
+- `withInstanceLabels(...)` / `withInstanceLabelsMixin(...)` / `withGroupLabels(...)` / `withGroupLabelsMixin(...)` - override or extend grouping labels on a per-signal basis.
+- `withInterval(interval)` / `withAlertsInterval(interval)` - override evaluation interval used in expressions and alert rules.
+- `withRangeFunction(rangeFunction)` - override rate/delta/increase function used for counter-type signals.
+- `withUnit(unit)` - override the effective unit used when rendering the signal.
 
 ### Render functions
 
 These functions return signals view as one of the Grafana panels, its part, or as alerts.
 
 - Panel functions
-  - asTimeSeries() - renders TimeSeries panel with signals expression as the the first target and panel override.
-  - asStat() - renders Stat panel with signals expression as the the first target and panel override.
-  - asGauge() - renders Gauge panel with signals expression as the the first target and panel override.
-  - asStatusHistory() - renders StatusHistory panel with signals expression as the the first target and panel override.
-  - asTable(format=table|time_series) - renders Table panel with signals expression as the the first target and panel override.
+  - `asTimeSeries()` - renders TimeSeries panel with signals expression as the the first target and panel override.
+  - `asStat()` - renders Stat panel with signals expression as the the first target and panel override.
+  - `asGauge()` - renders Gauge panel with signals expression as the the first target and panel override.
+  - `asStatusHistory()` - renders StatusHistory panel with signals expression as the the first target and panel override.
+  - `asTable(format=table|time_series)` - renders Table panel with signals expression as the the first target and panel override.
 - Parts of panels
-  - asPanelMixin() - add signals expression as the the target and panel override to the existing panel of any type, except a table.
-  - asTableColumn(format=table|time_series) - add signals expression as the the target and panel override to the existing panel created with .asTable() function.
-  - asTarget() - add signals expression as the the target to the existing panel.
-  - asTableTarget() - add signals expression as the the target to the existing panel, with format=table.
-  - asOverride() - add panel override to the existing panel.
-  - asPanelExpression() - add signals expression to the panels target.
+  - `asPanelMixin()` - add signals expression as the the target and panel override to the existing panel of any type, except a table.
+  - `asTableColumn(format=table|time_series)` - add signals expression as the the target and panel override to the existing panel created with .asTable() function.
+  - `asTarget()` - add signals expression as the the target to the existing panel.
+  - `asTableTarget()` - add signals expression as the the target to the existing panel, with format=table.
+  - `asOverride()` - add panel override to the existing panel.
+  - `asPanelExpression()` - add signals expression to the panels target.
 - Prometheus rules (alerts)
-  - asRuleExpression() - add signals expression without any Grafana dynamic variables inside. Can be used for Prometheus alerts and rules.
+  - `asRuleExpression()` - add signals expression without any Grafana dynamic variables inside. Can be used for Prometheus alerts and rules.
 
-## Autotransformations
+## Opiniated autotransformations
 
 ### Expressions
-When one of built-in functions are used (asTimeSeries, asPanelsMixin, asTarget...) signals' base expressions are converted automatically based on the type:
+When one of built-in functions are used (asTimeSeries(), asPanelsMixin(), asTarget()...) signals' base expressions are converted automatically based on the type:
 
-- counter: is wrapped into `<rangeFunction>(<base>[<interval>])`
+- counter: is wrapped into `<rangeFunction>(<base>[<interval>])`. When rendered into tables (for example via `asTable()` / `asTableColumn()`), counters use the full dashboard range (`$__range`) instead of `$__interval` when summing values.
 - gauge: no transformation
-- histogram: wrapped into `histogram_quantile(0.95, <aggFunction>(rate(<base>[<interval>])) by (le,<agg>))`
+- histogram: wrapped into `histogram_quantile(q, <aggFunction>(rate(<base>[<interval>])) by (le,<agg>))`, where `q` defaults to `0.95` and can be overridden with `withQuantile(quantile)`.
 - info: no transformation
 - raw: no transformation. You can write your own complex expression and make sure is kept as is.
 
@@ -75,7 +83,7 @@ Init level:
 |instanceLabels| List of labels used to identify single entity or specific service instance. |*|`[instance]`|`['instance']`|
 |interval| The interval used in `counters` and `histogram` auto transformations. |1m,5m.1h..., $__rate_interval, $__interval...|`5m`,|`$__rate_interval`|
 |alertsInterval| The interval used in  `counters` and `histogram` auto transformations in alerts. Grafana's $__rate_interval or similar are not supported. |1m,5m.1h...|`5m`,|`5m`|
-|aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
+|aggLevel| Metrics aggregation level. |none, instance, group, aggKeepLabels|`group`|`none`|
 |aggKeepLabels| Extra labels to keep when aggregating with by() clause. |`['pool','level']`|`[]`|
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |varMetric| A Metric used for variables discovery. |*|`up`|`node_uname_info`|
@@ -95,10 +103,10 @@ Signal's level:
 |type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
 |optional| Set this signal optional.| true,false | false | false|
 |unit| Signal's units. |*|bytes|``|
-|description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
+|description| Signal's description. Used to populate panel's description; when multiple signals are rendered into a single panel, all signal descriptions are combined, each prefixed with the signal's short name. |*|CPU usage time in percent.|``|
 |sourceMaps[].expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
 |sourceMaps[].exprWrappers| Signal's additional wrapper functions that could be added as an array, [<left_part>, <right_part>]. Functions would be applied AFTER any autotransformation takes place.  |*|`['topk(10,',')']`|[]|
-|aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
+|aggLevel| Metrics aggregation level. When set to `aggKeepLabels`, aggregation is driven purely by `aggKeepLabels`. |none, instance, group, aggKeepLabels|`group`|`none`|
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |sourceMaps[].aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
 |sourceMaps[].infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
@@ -117,8 +125,9 @@ The following is supported in expressions and legends:
 - `%(filteringSelector)s` - expands to filteringSelector matchers
 - `%(groupLabels)s` - expands to groupLabels list
 - `%(instanceLabels)s` - expands to instanceLabels list
-- `%(agg)s` - expands to list of labels according to `aggLevel` and `aggKeepLabels` choosen
-- `%(aggLegend)s` - expands to label in legend format (i.e. `{{<label1>}}`) according to `aggLevel` and `aggKeepLabels` choosen
+- `%(agg)s` - expands to list of labels according to `aggLevel` and `aggKeepLabels` chosen
+- `%(aggLegend)s` - expands to label in legend format (i.e. `{{<label1>}}`) according to `aggLevel` and `aggKeepLabels` chosen
+- `%(aggLegendExcludeKeepLabels)s` - expands to label in legend format (i.e. `{{<label1>}}`) according to `aggLevel` only, excluding `aggKeepLabels`
 - `%(aggFunction)s` - expands to aggregation function
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
@@ -310,6 +319,24 @@ g.dashboard.new('Device')
     + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
     ]
 )
+```
+
+## Example 4: Create table from signals
+
+Use one signal to create the table with `asTable()`, then add more columns with `asTableColumn()` (from kafka-observ-lib):
+
+```jsonnet
+signals.consumerGroup.consumerGroupConsumeRate.asTable(name='Consumer group overview', format='time_series')
++ signals.consumerGroup.consumerGroupLag.asTableColumn(override='byName', format='time_series')
++ signals.consumerGroup.consumerGroupLagTime.asTableColumn(override='byName', format='time_series')
+```
+
+Or in table format:
+
+```jsonnet
+signals.consumerGroup.consumerGroupConsumeRate.asTable(name='Consumer group overview', format='table')
++ signals.consumerGroup.consumerGroupLag.asTableColumn(override='byName', format='table')
++ signals.consumerGroup.consumerGroupLagTime.asTableColumn(override='byName', format='table')
 ```
 
 ## Running tests
