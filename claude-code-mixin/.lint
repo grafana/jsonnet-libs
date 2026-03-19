@@ -2,7 +2,7 @@ exclusions:
   target-promql-rule:
     reason: "Linter does not support LogQL queries."
   target-instance-rule:
-    reason: Claude Code metrics use user_email and model labels rather than instance for filtering. The instance variable is included for standard compliance but metrics are not scraped per-instance.
+    reason: Claude Code metrics use `user_email` and `model` labels rather than instance for filtering. The instance variable is included for standard compliance but metrics are not scraped per-instance.
   template-instance-rule:
     reason: Claude Code OTel metrics may not expose an instance label; allValue '.*' prevents filtering out all metrics when instance is absent.
   template-job-rule:
