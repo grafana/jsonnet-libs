@@ -3026,12 +3026,12 @@
       "title": "Timeouts",
       "type": "timeseries"
     },
-    )
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "The percentile latencies for Workflows inclusive of retries and backoff",
+      "description": "The 50th percentile latencies for Workflows inclusive of retries and backoff",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3089,7 +3089,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 77
       },
@@ -3124,38 +3124,224 @@
           "exemplar": true,
           "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p50{temporal_namespace=~\"$temporal_namespace\"}",
           "interval": "",
-          "legendFormat": "50th Percentile",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p95{temporal_namespace=~\"$temporal_namespace\"}",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "95th Percentile",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p99{temporal_namespace=~\"$temporal_namespace\"}",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "99th Percentile",
-          "range": true,
-          "refId": "C"
         }
       ],
-      "title": "Workflow Latency",
+      "title": "Workflow Latency p50",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The 95th percentile latencies for Workflows inclusive of retries and backoff",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 77
+      },
+      "id": 115,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p95{temporal_namespace=~\"$temporal_namespace\"}",
+          "interval": "",
+          "legendFormat": "{{temporal_workflow_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Workflow Latency p95",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The 99th percentile latencies for Workflows inclusive of retries and backoff",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 77
+      },
+      "id": 116,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p99{temporal_namespace=~\"$temporal_namespace\"}",
+          "interval": "",
+          "legendFormat": "{{temporal_workflow_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Workflow Latency p99",
       "type": "timeseries"
     },
     {
