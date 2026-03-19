@@ -4574,10 +4574,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "text": "grafanacloud-claudecodeo11y-prom",
-          "value": "grafanacloud-prom"
-        },
         "label": "Prometheus data source",
         "name": "prometheus_datasource",
         "options": [],
@@ -4588,10 +4584,6 @@
       },
       {
         "allowCustomValue": true,
-        "current": {
-          "text": "grafanacloud-claudecodeo11y-logs",
-          "value": "grafanacloud-logs"
-        },
         "includeAll": false,
         "label": "Loki data source",
         "name": "loki_datasource",
@@ -4603,12 +4595,6 @@
       },
       {
         "allValue": ".+",
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4627,15 +4613,9 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
         "includeAll": true,
         "label": "Team Member",
@@ -4670,15 +4650,9 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
         "includeAll": true,
         "label": "Model",
@@ -4713,15 +4687,9 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
         "includeAll": true,
         "label": "Organization",
