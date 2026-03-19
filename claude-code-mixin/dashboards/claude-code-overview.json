@@ -1631,7 +1631,7 @@
           "refId": "B"
         }
       ],
-      "title": "Session Outcome",
+      "title": "Session outcome",
       "type": "piechart"
     },
     {
@@ -1713,7 +1713,7 @@
           "refId": "A"
         }
       ],
-      "title": "Commits / Session",
+      "title": "Commits / session",
       "type": "stat"
     },
     {
