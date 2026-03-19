@@ -16,7 +16,7 @@
     ]
   },
   "description": "Claude Code usage analytics powered by OpenTelemetry",
-  "editable": false,
+  "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "links": [],
@@ -86,7 +86,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -94,7 +94,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
           "legendFormat": "Total Cost",
           "range": true,
           "refId": "A"
@@ -153,14 +153,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
           "legendFormat": "Total Tokens",
           "refId": "A"
         }
@@ -219,14 +219,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "count(count by (session_id) (claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}))",
+          "expr": "count(count by (session_id) (last_over_time(claude_code_session_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])))",
           "legendFormat": "Sessions",
           "refId": "A"
         }
@@ -285,20 +285,122 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "count(count by (user_email) (claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}))",
+          "expr": "count(count by (user_email) (claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}))",
           "legendFormat": "Active Users",
           "refId": "A"
         }
       ],
       "title": "Active users",
       "type": "stat"
+    },
+    {
+      "description": "Cost by model. Bar width adapts to the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.5,
+            "drawStyle": "bars",
+            "fillOpacity": 71,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 94,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-23069273608.patch3",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{model}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cost usage",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -368,11 +470,12 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 15
       },
       "id": 90,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -389,7 +492,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -436,7 +539,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 15
       },
       "id": 7,
       "options": {
@@ -465,7 +568,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -473,7 +576,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))",
+          "expr": "sum by (model) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{model}}",
           "range": true,
           "refId": "A"
@@ -549,11 +652,12 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 21
       },
       "id": 86,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -571,7 +675,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -630,7 +734,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 21
       },
       "id": 8,
       "options": {
@@ -659,7 +763,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -667,7 +771,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", model=~\"$model\"}[$__range]))",
+          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{user_email}}",
           "range": true,
           "refId": "A"
@@ -704,7 +808,7 @@
         "h": 6,
         "w": 6,
         "x": 0,
-        "y": 17
+        "y": 27
       },
       "id": 9,
       "options": {
@@ -734,7 +838,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -779,7 +883,7 @@
         "h": 6,
         "w": 6,
         "x": 6,
-        "y": 17
+        "y": 27
       },
       "id": 10,
       "options": {
@@ -809,7 +913,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -854,7 +958,7 @@
         "h": 6,
         "w": 6,
         "x": 12,
-        "y": 17
+        "y": 27
       },
       "id": 11,
       "options": {
@@ -884,7 +988,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -892,7 +996,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (terminal_type) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))",
+          "expr": "sum by (terminal_type) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{terminal_type}}",
           "range": true,
           "refId": "A"
@@ -929,7 +1033,7 @@
         "h": 6,
         "w": 6,
         "x": 18,
-        "y": 17
+        "y": 27
       },
       "id": 12,
       "options": {
@@ -959,7 +1063,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -967,7 +1071,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (service_version) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))",
+          "expr": "sum by (service_version) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{service_version}}",
           "range": true,
           "refId": "A"
@@ -982,7 +1086,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 33
       },
       "id": 60,
       "panels": [],
@@ -1022,7 +1126,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 24
+        "y": 34
       },
       "id": 71,
       "options": {
@@ -1042,7 +1146,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1051,7 +1155,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))  or vector(0)",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])) or vector(0)",
           "instant": false,
           "legendFormat": "Lines of code",
           "queryType": "range",
@@ -1097,7 +1201,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 24
+        "y": 34
       },
       "id": 72,
       "options": {
@@ -1117,7 +1221,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1125,11 +1229,11 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
-          "instant": false,
+          "expr": "sum(changes(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range]))",
+          "instant": true,
           "legendFormat": "Commits",
-          "queryType": "range",
-          "range": true,
+          "queryType": "instant",
+          "range": false,
           "refId": "A"
         }
       ],
@@ -1171,7 +1275,7 @@
         "h": 4,
         "w": 6,
         "x": 12,
-        "y": 24
+        "y": 34
       },
       "id": 73,
       "options": {
@@ -1191,7 +1295,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1199,7 +1303,7 @@
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_pull_request_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
+          "expr": "sum(last_over_time(claude_code_pull_request_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d]))",
           "instant": false,
           "legendFormat": "Pull Requests",
           "queryType": "range",
@@ -1241,7 +1345,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 24
+        "y": 34
       },
       "id": 64,
       "options": {
@@ -1261,14 +1365,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
+          "expr": "sum(last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d]))",
           "legendFormat": "Active Time",
           "refId": "A"
         }
@@ -1352,11 +1456,12 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 38
       },
       "id": 65,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -1373,7 +1478,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1382,7 +1487,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"added\"}[$__interval]))  or vector(0)",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", type=\"added\"}[$__interval])) or vector(0)",
           "instant": false,
           "legendFormat": "Added",
           "queryType": "range",
@@ -1396,7 +1501,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\", type=\"removed\"}[$__interval]))  or vector(0)",
+          "expr": "sum(last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", type=\"removed\"}[$__interval])) or vector(0)",
           "instant": false,
           "legendFormat": "Removed",
           "queryType": "range",
@@ -1474,11 +1579,12 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 28
+        "y": 38
       },
       "id": 67,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -1495,7 +1601,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1504,7 +1610,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (type) (last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
+          "expr": "sum by (type) (last_over_time(claude_code_lines_of_code_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__interval]))",
           "instant": false,
           "legendFormat": "{{type}}",
           "queryType": "range",
@@ -1582,11 +1688,12 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 46
       },
       "id": 68,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -1603,7 +1710,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1612,7 +1719,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
+          "expr": "sum by (user_email) (changes(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "{{user_email}}",
           "queryType": "range",
@@ -1689,11 +1796,12 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 46
       },
       "id": 69,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -1710,7 +1818,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1719,7 +1827,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_pull_request_count_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))  or vector(0)",
+          "expr": "sum by (user_email) (last_over_time(claude_code_pull_request_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__interval])) or vector(0)",
           "instant": false,
           "legendFormat": "{{user_email}}",
           "queryType": "range",
@@ -1782,7 +1890,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 54
       },
       "id": 92,
       "options": {
@@ -1795,7 +1903,7 @@
           }
         ]
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1804,7 +1912,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
+          "expr": "sum by (user_email) (last_over_time(claude_code_active_time_seconds_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "queryType": "instant",
@@ -1818,7 +1926,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
+          "expr": "sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "queryType": "instant",
@@ -1832,7 +1940,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\"}[7d])) / sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
+          "expr": "(sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])) or (sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) * 0)) / (clamp_min(sum by (user_email) (increase(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])), 1) or (sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) * 0 + 1))",
           "instant": true,
           "legendFormat": "",
           "queryType": "instant",
@@ -1846,7 +1954,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (last_over_time(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\"}[7d])) / sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", user_email=~\"$member\"}[7d]))  or vector(0)",
+          "expr": "(sum by (user_email) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])) or (sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) * 0)) / (clamp_min(sum by (user_email) (increase(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])), 1) or (sum by (user_email) (last_over_time(claude_code_commit_count_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])) * 0 + 1))",
           "instant": true,
           "legendFormat": "",
           "queryType": "instant",
@@ -1896,7 +2004,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 54
+        "y": 64
       },
       "id": 80,
       "panels": [],
@@ -1943,7 +2051,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 55
+        "y": 65
       },
       "id": 74,
       "options": {
@@ -1963,7 +2071,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1972,7 +2080,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\", decision=\"accept\"}[$__range])) / clamp_min(sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__range])), 1)",
+          "expr": "sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", decision=\"accept\"}[$__range])) / clamp_min(sum(last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range])), 1)",
           "instant": true,
           "legendFormat": "Accept Rate",
           "queryType": "instant",
@@ -2038,7 +2146,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 58
+        "y": 68
       },
       "id": 89,
       "options": {
@@ -2064,7 +2172,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2140,7 +2248,7 @@
         "h": 8,
         "w": 10,
         "x": 8,
-        "y": 58
+        "y": 68
       },
       "id": 88,
       "options": {
@@ -2166,7 +2274,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2214,7 +2322,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 58
+        "y": 68
       },
       "id": 75,
       "options": {
@@ -2246,7 +2354,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2255,7 +2363,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d]))",
+          "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d]))",
           "instant": true,
           "legendFormat": "{{decision}}",
           "queryType": "instant",
@@ -2333,11 +2441,12 @@
         "h": 11,
         "w": 17,
         "x": 0,
-        "y": 66
+        "y": 76
       },
       "id": 76,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -2354,7 +2463,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2363,7 +2472,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__interval]))",
+          "expr": "sum by (decision) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__interval]))",
           "instant": false,
           "legendFormat": "{{decision}}",
           "queryType": "range",
@@ -2454,7 +2563,7 @@
         "h": 6,
         "w": 7,
         "x": 17,
-        "y": 66
+        "y": 76
       },
       "id": 82,
       "options": {
@@ -2467,7 +2576,7 @@
           }
         ]
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2476,7 +2585,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (user_email) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[7d])))",
+          "expr": "sort_desc(sum by (user_email) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[7d])))",
           "instant": true,
           "legendFormat": "{{user_email}}",
           "queryType": "instant",
@@ -2549,7 +2658,7 @@
         "h": 5,
         "w": 7,
         "x": 17,
-        "y": 72
+        "y": 82
       },
       "id": 77,
       "options": {
@@ -2576,7 +2685,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -2585,7 +2694,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (tool_name) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", user_email=~\"$member\"}[$__interval] )))",
+          "expr": "sort_desc(sum by (tool_name) (last_over_time(claude_code_code_edit_tool_decision_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__interval])))",
           "instant": true,
           "legendFormat": "{{tool_name}}",
           "queryType": "instant",
@@ -2602,7 +2711,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 87
       },
       "id": 40,
       "panels": [],
@@ -2641,7 +2750,7 @@
         "h": 3,
         "w": 7,
         "x": 0,
-        "y": 78
+        "y": 88
       },
       "id": 41,
       "options": {
@@ -2661,14 +2770,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
           "legendFormat": "Total Cost",
           "refId": "A"
         }
@@ -2741,11 +2850,12 @@
         "h": 10,
         "w": 8,
         "x": 7,
-        "y": 78
+        "y": 88
       },
       "id": 42,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -2762,7 +2872,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -2770,7 +2880,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (model)",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (model)",
           "legendFormat": "{{model}}",
           "range": true,
           "refId": "A"
@@ -2843,11 +2953,12 @@
         "h": 10,
         "w": 9,
         "x": 15,
-        "y": 78
+        "y": 88
       },
       "id": 43,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -2866,7 +2977,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -2874,7 +2985,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (user_email)",
+          "expr": "sum(increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (user_email)",
           "legendFormat": "{{user_email}}",
           "range": true,
           "refId": "A"
@@ -2912,7 +3023,7 @@
         "h": 7,
         "w": 7,
         "x": 0,
-        "y": 81
+        "y": 91
       },
       "id": 44,
       "options": {
@@ -2941,14 +3052,14 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", model=~\"$model\"}[$__range]))",
+          "expr": "sum by (user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{user_email}}",
           "refId": "A"
         }
@@ -3025,11 +3136,12 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 88
+        "y": 98
       },
       "id": 87,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -3047,7 +3159,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -3147,7 +3259,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 95
+        "y": 105
       },
       "id": 45,
       "options": {
@@ -3160,14 +3272,14 @@
           }
         ]
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sort_desc(sum by (model, user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range_s:1m])))",
+          "expr": "sort_desc(sum by (model, user_email) (increase(claude_code_cost_usage_USD_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range_s:1m])))",
           "format": "table",
           "instant": true,
           "legendFormat": "",
@@ -3202,7 +3314,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 103
+        "y": 113
       },
       "id": 20,
       "panels": [],
@@ -3240,7 +3352,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 104
+        "y": 114
       },
       "id": 21,
       "options": {
@@ -3260,14 +3372,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
           "legendFormat": "Total",
           "refId": "A"
         }
@@ -3306,7 +3418,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 104
+        "y": 114
       },
       "id": 22,
       "options": {
@@ -3326,14 +3438,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\", type=\"input\"}[$__range]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\", type=\"input\"}[$__range]))",
           "legendFormat": "Input",
           "refId": "A"
         }
@@ -3372,7 +3484,7 @@
         "h": 4,
         "w": 6,
         "x": 12,
-        "y": 104
+        "y": 114
       },
       "id": 23,
       "options": {
@@ -3392,14 +3504,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\", type=\"output\"}[$__range]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\", type=\"output\"}[$__range]))",
           "legendFormat": "Output",
           "refId": "A"
         }
@@ -3438,7 +3550,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 104
+        "y": 114
       },
       "id": 24,
       "options": {
@@ -3458,20 +3570,122 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\", type=\"cacheRead\"}[$__range]))",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\", type=\"cacheRead\"}[$__range]))",
           "legendFormat": "Cache Read",
           "refId": "A"
         }
       ],
       "title": "Cache read tokens",
       "type": "stat"
+    },
+    {
+      "description": "Total tokens by model. Bar width adapts to the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 118
+      },
+      "id": 93,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.0-23069273608.patch3",
+      "targets": [
+        {
+          "app": "grafana-assistant-app",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "expr": "sum by (model) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{model}}",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Token usage",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -3500,7 +3714,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 108
+        "y": 128
       },
       "id": 25,
       "options": {
@@ -3531,14 +3745,14 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum by (type) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
+          "expr": "sum by (type) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{type}}",
           "refId": "A"
         }
@@ -3609,11 +3823,12 @@
         "h": 8,
         "w": 16,
         "x": 8,
-        "y": 108
+        "y": 128
       },
       "id": 26,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -3630,14 +3845,14 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${prometheus_datasource}"
           },
-          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (type)",
+          "expr": "sum(increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\", model=~\"$model\"}[$__rate_interval])) by (type)",
           "legendFormat": "{{type}}",
           "refId": "A"
         }
@@ -3673,7 +3888,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 116
+        "y": 136
       },
       "id": 27,
       "options": {
@@ -3702,7 +3917,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -3710,7 +3925,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (model) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", user_email=~\"$member\"}[$__range]))",
+          "expr": "sum by (model) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", user_email=~\"$member\"}[$__range]))",
           "legendFormat": "{{model}}",
           "range": true,
           "refId": "A"
@@ -3747,7 +3962,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 116
+        "y": 136
       },
       "id": 28,
       "options": {
@@ -3776,7 +3991,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -3784,7 +3999,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (user_email) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", model=~\"$model\"}[$__range]))",
+          "expr": "sum by (user_email) (increase(claude_code_token_usage_tokens_total{job=~\"$job\", organization_id=~\"$organization_id\", model=~\"$model\"}[$__range]))",
           "legendFormat": "{{user_email}}",
           "range": true,
           "refId": "A"
@@ -3860,11 +4075,12 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 124
+        "y": 144
       },
       "id": 91,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -3882,7 +4098,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -3991,11 +4207,12 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 124
+        "y": 144
       },
       "id": 85,
       "options": {
         "annotations": {
+          "clustering": -1,
           "multiLane": false
         },
         "legend": {
@@ -4012,7 +4229,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "datasource": {
@@ -4043,7 +4260,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 132
+        "y": 152
       },
       "id": 84,
       "options": {
@@ -4060,10 +4277,11 @@
         "showTime": true,
         "sortOrder": "Descending",
         "syntaxHighlighting": false,
+        "timestampResolution": "ms",
         "unwrappedColumns": false,
         "wrapLogMessage": true
       },
-      "pluginVersion": "13.0.0-22843068776.patch2",
+      "pluginVersion": "13.0.0-23069273608.patch3",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -4149,6 +4367,7 @@
       },
       {
         "allValue": ".*",
+        "allowCustomValue": true,
         "current": {
           "text": "All",
           "value": [
@@ -4157,21 +4376,40 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${prometheus_datasource}"
+          "uid": "grafanacloud-prom"
         },
         "includeAll": true,
         "label": "Team Member",
         "multi": true,
         "name": "member",
         "options": [],
-        "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\"}, user_email)",
-        "refresh": 2,
-        "regexApplyTo": "value",
+        "query": {
+          "label": "user_email",
+          "labelFilters": [
+            {
+              "label": "job",
+              "op": "=~",
+              "value": "$job"
+            },
+            {
+              "label": "organization_id",
+              "op": "=~",
+              "value": "$organization_id"
+            }
+          ],
+          "metric": "claude_code_cost_usage_USD_total",
+          "qryType": 1,
+          "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\",organization_id=~\"$organization_id\"},user_email)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "sort": 1,
         "type": "query"
       },
       {
         "allValue": ".*",
+        "allowCustomValue": true,
         "current": {
           "text": "All",
           "value": [
@@ -4180,29 +4418,84 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${prometheus_datasource}"
+          "uid": "grafanacloud-prom"
         },
         "includeAll": true,
         "label": "Model",
         "multi": true,
         "name": "model",
         "options": [],
-        "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\"}, model)",
-        "refresh": 2,
-        "regexApplyTo": "value",
+        "query": {
+          "label": "model",
+          "labelFilters": [
+            {
+              "label": "job",
+              "op": "=~",
+              "value": "$job"
+            },
+            {
+              "label": "organization_id",
+              "op": "=~",
+              "value": "$organization_id"
+            }
+          ],
+          "metric": "claude_code_cost_usage_USD_total",
+          "qryType": 1,
+          "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\",organization_id=~\"$organization_id\"},model)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "includeAll": true,
+        "label": "Organization",
+        "multi": true,
+        "name": "organization_id",
+        "options": [],
+        "query": {
+          "label": "organization_id",
+          "labelFilters": [
+            {
+              "label": "job",
+              "op": "=~",
+              "value": "$job"
+            }
+          ],
+          "metric": "claude_code_cost_usage_USD_total",
+          "qryType": 1,
+          "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\"},organization_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "sort": 1,
         "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "default",
   "title": "Claude Code",
   "uid": "claude-code-overview",
-  "version": 67,
+  "version": 4,
   "weekStart": ""
 }
