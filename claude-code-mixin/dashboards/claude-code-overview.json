@@ -4603,12 +4603,6 @@
       },
       {
         "allValue": ".+",
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4627,12 +4621,6 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4665,12 +4653,6 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4708,12 +4690,6 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
