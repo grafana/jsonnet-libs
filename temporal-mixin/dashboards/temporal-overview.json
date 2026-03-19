@@ -3026,13 +3026,145 @@
       "title": "Timeouts",
       "type": "timeseries"
     },
+    )
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The percentile latencies for Workflows inclusive of retries and backoff",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 77
+      },
+      "id": 114,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p50{temporal_namespace=~\"$temporal_namespace\"}",
+          "interval": "",
+          "legendFormat": "50th Percentile",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p95{temporal_namespace=~\"$temporal_namespace\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "95th Percentile",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "temporal_cloud_v1_workflow_schedule_to_close_latency_p99{temporal_namespace=~\"$temporal_namespace\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "99th Percentile",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Workflow Latency",
+      "type": "timeseries"
+    },
     {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 85
       },
       "id": 73,
       "panels": [],
@@ -3076,7 +3208,7 @@
         "h": 2,
         "w": 5,
         "x": 0,
-        "y": 78
+        "y": 86
       },
       "id": 107,
       "options": {
@@ -3152,7 +3284,7 @@
         "h": 2,
         "w": 5,
         "x": 5,
-        "y": 78
+        "y": 86
       },
       "id": 108,
       "options": {
@@ -3227,7 +3359,7 @@
         "h": 2,
         "w": 5,
         "x": 10,
-        "y": 78
+        "y": 86
       },
       "id": 113,
       "options": {
@@ -3306,7 +3438,7 @@
         "h": 2,
         "w": 5,
         "x": 15,
-        "y": 78
+        "y": 86
       },
       "id": 109,
       "options": {
@@ -3383,7 +3515,7 @@
         "h": 2,
         "w": 4,
         "x": 20,
-        "y": 78
+        "y": 86
       },
       "id": 110,
       "options": {
@@ -3488,7 +3620,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 75,
       "options": {
@@ -3592,7 +3724,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 80
+        "y": 88
       },
       "id": 80,
       "options": {
@@ -3699,7 +3831,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 89
+        "y": 97
       },
       "id": 81,
       "options": {
@@ -3806,7 +3938,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 89
+        "y": 97
       },
       "id": 82,
       "options": {
@@ -3913,7 +4045,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 98
+        "y": 114
       },
       "id": 83,
       "options": {
@@ -3960,7 +4092,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 105
+        "y": 113
       },
       "id": 29,
       "panels": [],
@@ -4074,7 +4206,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 106
+        "y": 114
       },
       "id": 31,
       "options": {
@@ -4162,7 +4294,7 @@
         "h": 9,
         "w": 4,
         "x": 12,
-        "y": 106
+        "y": 114
       },
       "id": 32,
       "options": {
@@ -4234,7 +4366,7 @@
         "h": 9,
         "w": 4,
         "x": 16,
-        "y": 106
+        "y": 114
       },
       "id": 33,
       "options": {
@@ -4306,7 +4438,7 @@
         "h": 9,
         "w": 4,
         "x": 20,
-        "y": 106
+        "y": 114
       },
       "id": 34,
       "options": {
@@ -4437,7 +4569,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 115
+        "y": 123
       },
       "id": 85,
       "options": {
@@ -4583,7 +4715,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 115
+        "y": 123
       },
       "id": 86,
       "options": {
@@ -4657,7 +4789,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 124
+        "y": 132
       },
       "id": 40,
       "panels": [],
@@ -4730,7 +4862,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 125
+        "y": 133
       },
       "id": 11,
       "options": {
@@ -4837,7 +4969,7 @@
         "h": 9,
         "w": 4,
         "x": 12,
-        "y": 125
+        "y": 133
       },
       "id": 42,
       "options": {
@@ -4944,7 +5076,7 @@
         "h": 9,
         "w": 4,
         "x": 16,
-        "y": 125
+        "y": 133
       },
       "id": 43,
       "options": {
@@ -5051,7 +5183,7 @@
         "h": 9,
         "w": 4,
         "x": 20,
-        "y": 125
+        "y": 133
       },
       "id": 44,
       "options": {
@@ -5098,7 +5230,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 134
+        "y": 142
       },
       "id": 19,
       "panels": [],
@@ -5197,7 +5329,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 135
+        "y": 143
       },
       "id": 60,
       "options": {
@@ -5317,7 +5449,7 @@
         "h": 9,
         "w": 13,
         "x": 11,
-        "y": 135
+        "y": 143
       },
       "id": 6,
       "options": {
@@ -5424,7 +5556,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 144
+        "y": 152
       },
       "id": 8,
       "options": {
@@ -5531,7 +5663,7 @@
         "h": 9,
         "w": 6,
         "x": 11,
-        "y": 144
+        "y": 152
       },
       "id": 61,
       "options": {
@@ -5638,7 +5770,7 @@
         "h": 9,
         "w": 7,
         "x": 17,
-        "y": 144
+        "y": 152
       },
       "id": 45,
       "options": {
@@ -5746,7 +5878,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 169
       },
       "id": 52,
       "options": {
@@ -5815,7 +5947,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 160
+        "y": 168
       },
       "id": 55,
       "panels": [],
@@ -5889,7 +6021,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 161
+        "y": 169
       },
       "id": 30,
       "options": {
@@ -6018,7 +6150,7 @@
         "h": 10,
         "w": 8,
         "x": 8,
-        "y": 161
+        "y": 169
       },
       "id": 74,
       "options": {
@@ -6147,7 +6279,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 161
+        "y": 169
       },
       "id": 35,
       "options": {
