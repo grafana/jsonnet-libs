@@ -1516,6 +1516,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
       "description": "Productive sessions had at least 1 commit. Wasted sessions had no commits.",
       "fieldConfig": {
         "defaults": {
@@ -1631,6 +1635,10 @@
       "type": "piechart"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
       "description": "How productive each session is on average",
       "fieldConfig": {
         "defaults": {
@@ -4574,6 +4582,10 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "text": "grafanacloud-claudecodeo11y-prom",
+          "value": "grafanacloud-prom"
+        },
         "label": "Prometheus data source",
         "name": "prometheus_datasource",
         "options": [],
@@ -4584,6 +4596,10 @@
       },
       {
         "allowCustomValue": true,
+        "current": {
+          "text": "grafanacloud-claudecodeo11y-alert-state-history",
+          "value": "grafanacloud-alert-state-history"
+        },
         "includeAll": false,
         "label": "Loki data source",
         "name": "loki_datasource",
@@ -4595,6 +4611,14 @@
       },
       {
         "allValue": ".+",
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4613,6 +4637,54 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${prometheus_datasource}"
+        },
+        "includeAll": true,
+        "label": "Organization",
+        "multi": true,
+        "name": "organization_id",
+        "options": [],
+        "query": {
+          "label": "organization_id",
+          "labelFilters": [
+            {
+              "label": "job",
+              "op": "=~",
+              "value": "$job"
+            }
+          ],
+          "metric": "claude_code_cost_usage_USD_total",
+          "qryType": 1,
+          "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\"},organization_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "regexApplyTo": "value",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "allowCustomValue": true,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4650,6 +4722,14 @@
       {
         "allValue": ".*",
         "allowCustomValue": true,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus_datasource}"
@@ -4683,38 +4763,6 @@
         "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "allowCustomValue": true,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${prometheus_datasource}"
-        },
-        "includeAll": true,
-        "label": "Organization",
-        "multi": true,
-        "name": "organization_id",
-        "options": [],
-        "query": {
-          "label": "organization_id",
-          "labelFilters": [
-            {
-              "label": "job",
-              "op": "=~",
-              "value": "$job"
-            }
-          ],
-          "metric": "claude_code_cost_usage_USD_total",
-          "qryType": 1,
-          "query": "label_values(claude_code_cost_usage_USD_total{job=~\"$job\"},organization_id)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "regexApplyTo": "value",
-        "sort": 1,
-        "type": "query"
       }
     ]
   },
@@ -4726,6 +4774,6 @@
   "timezone": "default",
   "title": "Claude Code",
   "uid": "claude-code-overview",
-  "version": 72,
+  "version": 2,
   "weekStart": ""
 }
