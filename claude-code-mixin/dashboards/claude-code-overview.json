@@ -4582,39 +4582,29 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "text": "grafanacloud-claudecodeo11y-prom",
-          "value": "grafanacloud-prom"
-        },
         "label": "Prometheus data source",
         "name": "prometheus_datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "type": "datasource"
       },
       {
         "allowCustomValue": true,
-        "current": {
-          "text": "grafanacloud-claudecodeo11y-alert-state-history",
-          "value": "grafanacloud-alert-state-history"
-        },
         "includeAll": false,
         "label": "Loki data source",
         "name": "loki_datasource",
         "options": [],
         "query": "loki",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
         "type": "datasource"
       },
       {
         "allValue": ".+",
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -4638,9 +4628,7 @@
         "allValue": ".*",
         "allowCustomValue": true,
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -4678,9 +4666,7 @@
         "allValue": ".*",
         "allowCustomValue": true,
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -4723,9 +4709,7 @@
         "allValue": ".*",
         "allowCustomValue": true,
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -4767,13 +4751,13 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "default",
   "title": "Claude Code",
   "uid": "claude-code-overview",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }
