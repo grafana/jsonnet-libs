@@ -143,7 +143,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
       },
       testLegend: {
         actual: panel.legendFormat,
-        expect: '{{xxx}}: ABC',  // only last label is kept
+        expect: '{{job}}: ABC ({{xxx}})',  // updated format: aggLabel: nameShort (keepLabels)
       },
     }),
   },
