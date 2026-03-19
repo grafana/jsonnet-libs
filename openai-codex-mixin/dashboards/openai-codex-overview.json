@@ -99,7 +99,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total Requests",
+      "title": "Total requests",
       "type": "stat"
     },
     {
@@ -168,7 +168,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total Tokens",
+      "title": "Total tokens",
       "type": "stat"
     },
     {
@@ -304,7 +304,7 @@
           "refId": "A"
         }
       ],
-      "title": "Active Users",
+      "title": "Active users",
       "type": "stat"
     },
     {
@@ -406,7 +406,7 @@
           "refId": "A"
         }
       ],
-      "title": "Request Rate by Model",
+      "title": "Request rate by model",
       "type": "timeseries"
     },
     {
@@ -481,7 +481,7 @@
           "refId": "A"
         }
       ],
-      "title": "Requests by Model",
+      "title": "Requests by model",
       "type": "piechart"
     },
     {
@@ -607,7 +607,7 @@
           "refId": "B"
         }
       ],
-      "title": "API Request Latency",
+      "title": "API request latency",
       "type": "timeseries"
     },
     {
@@ -678,7 +678,7 @@
           "refId": "A"
         }
       ],
-      "title": "Requests by Team Member",
+      "title": "Requests by team member",
       "type": "piechart",
       "datasource": {
         "type": "loki",
@@ -759,7 +759,7 @@
           "refId": "A"
         }
       ],
-      "title": "Avg Response Duration",
+      "title": "Avg response duration",
       "type": "stat"
     },
     {
@@ -835,7 +835,7 @@
           "refId": "A"
         }
       ],
-      "title": "Auth Mode",
+      "title": "Auth mode",
       "type": "piechart"
     },
     {
@@ -913,7 +913,7 @@
           "refId": "A"
         }
       ],
-      "title": "Terminal Type",
+      "title": "Terminal type",
       "type": "piechart"
     },
     {
@@ -991,7 +991,7 @@
           "refId": "A"
         }
       ],
-      "title": "Codex Version",
+      "title": "Codex version",
       "type": "piechart"
     },
     {
@@ -1094,7 +1094,7 @@
           "type": "math"
         }
       ],
-      "title": "Success Rate",
+      "title": "Success rate",
       "type": "stat"
     },
     {
@@ -1279,7 +1279,7 @@
           "refId": "D"
         }
       ],
-      "title": "Top Users by Request Count",
+      "title": "Top users by request count",
       "transformations": [
         {
           "id": "reduce",
@@ -1430,7 +1430,7 @@
           "refId": "A"
         }
       ],
-      "title": "Request Rate by Team Member",
+      "title": "Request rate by team member",
       "type": "timeseries"
     },
     {
@@ -1522,7 +1522,7 @@
           "refId": "A"
         }
       ],
-      "title": "Success vs Failures",
+      "title": "Success vs failures",
       "type": "piechart"
     },
     {
@@ -1604,7 +1604,7 @@
           "refId": "A"
         }
       ],
-      "title": "Input Tokens",
+      "title": "Input tokens",
       "type": "stat"
     },
     {
@@ -1673,7 +1673,7 @@
           "refId": "A"
         }
       ],
-      "title": "Output Tokens",
+      "title": "Output tokens",
       "type": "stat"
     },
     {
@@ -1742,7 +1742,7 @@
           "refId": "A"
         }
       ],
-      "title": "Cached Tokens",
+      "title": "Cached tokens",
       "type": "stat"
     },
     {
@@ -1811,7 +1811,7 @@
           "refId": "A"
         }
       ],
-      "title": "Reasoning Tokens",
+      "title": "Reasoning tokens",
       "type": "stat"
     },
     {
@@ -1927,7 +1927,7 @@
           "refId": "D"
         }
       ],
-      "title": "Token Distribution by Type",
+      "title": "Token distribution by type",
       "type": "piechart"
     },
     {
@@ -2056,7 +2056,7 @@
           "refId": "C"
         }
       ],
-      "title": "Token Usage Over Time",
+      "title": "Token usage over time",
       "type": "timeseries"
     },
     {
@@ -2131,7 +2131,7 @@
           "refId": "A"
         }
       ],
-      "title": "Tokens by Model",
+      "title": "Tokens by model",
       "type": "piechart"
     },
     {
@@ -2202,7 +2202,7 @@
           "refId": "A"
         }
       ],
-      "title": "Tokens by Team Member",
+      "title": "Tokens by team member",
       "type": "piechart",
       "description": "Token consumption broken down by team member.",
       "datasource": {
@@ -2469,7 +2469,7 @@
           "type": "math"
         }
       ],
-      "title": "Avg Tokens per Request",
+      "title": "Avg tokens per request",
       "type": "timeseries",
       "description": "Average tokens per request broken down by type (input, output, cached, reasoning) in the selected time range."
     },
@@ -2569,7 +2569,7 @@
           "refId": "A"
         }
       ],
-      "title": "Events Over Time",
+      "title": "Events over time",
       "type": "timeseries",
       "description": "Codex events over time.",
       "datasource": {
@@ -2723,7 +2723,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "OpenAI Codex Overview",
+  "title": "OpenAI Codex",
   "uid": "isfdh2b",
   "version": 13,
   "weekStart": ""

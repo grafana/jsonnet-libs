@@ -1,18 +1,10 @@
-# Claude Code Mixin
+# Claude Code mixin
 
-The Claude Code mixin is a set of configurable Grafana dashboards.
-
-The Claude Code mixin contains the following dashboards:
-
-- Claude Code Overview
-
-## Claude Code Overview Dashboard
-
-The Claude Code Overview dashboard provides details on usage and cost analytics for Claude Code, powered by OpenTelemetry. The dashboard includes visualizations for token usage, cost breakdown by model and team member, session activity, coding activity (commits, pull requests, edits), and environment details (OS type, architecture, terminal).
+The Claude Code mixin is a Grafana dashboard for monitoring Claude Code usage and costs, powered by OpenTelemetry. It includes visualizations for token usage, cost breakdown by model and team member, session activity, coding activity (commits, pull requests, edits), and environment details (OS type, architecture, terminal).
 
 ## Tools
 
-To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
+To use this mixin, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
 
 ```bash
 $ go get github.com/monitoring-mixins/mixtool/cmd/mixtool

@@ -1,9 +1,16 @@
 exclusions:
   target-promql-rule:
     reason: "Linter does not support LogQL queries."
+    entries:
+      - panel: "API Calls by Model"
+      - panel: "API Request Latency"
+      - panel: "Avg Tool Execution Time"
+      - panel: "Top Tools Used"
+      - panel: "Avg Cost per API Call"
+      - panel: "Avg Tokens per API Request"
+      - panel: "Events Over Time"
+      - panel: "Events"
   target-instance-rule:
-    reason: Claude Code metrics use `user_email` and `model` labels rather than instance for filtering. The instance variable is included for standard compliance but metrics are not scraped per-instance.
+    reason: Claude Code OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
   template-instance-rule:
-    reason: Claude Code OTel metrics may not expose an instance label; allValue '.*' prevents filtering out all metrics when instance is absent.
-  template-job-rule:
-    reason: member and model variables use allValue '.*' as they are application-level labels, not infrastructure labels requiring strict matching.
+    reason: Claude Code OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
