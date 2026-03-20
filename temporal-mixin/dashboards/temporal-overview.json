@@ -4091,7 +4091,7 @@
           "exemplar": true,
           "expr": "temporal_cloud_v1_activity_schedule_to_close_latency_p50{temporal_namespace=~\"$temporal_namespace\"}",
           "interval": "",
-          "legendFormat": "50th Percentile",
+          "legendFormat": "p50 {{temporal_namespace}}",
           "range": true,
           "refId": "A"
         },
@@ -4104,7 +4104,7 @@
           "expr": "temporal_cloud_v1_activity_schedule_to_close_latency_p95{temporal_namespace=~\"$temporal_namespace\"}",
           "hide": false,
           "instant": false,
-          "legendFormat": "95th Percentile",
+          "legendFormat": "p95 {{temporal_namespace}}",
           "range": true,
           "refId": "B"
         },
@@ -4117,7 +4117,7 @@
           "expr": "temporal_cloud_v1_activity_schedule_to_close_latency_p99{temporal_namespace=~\"$temporal_namespace\"}",
           "hide": false,
           "instant": false,
-          "legendFormat": "99th Percentile",
+          "legendFormat": "p99 {{temporal_namespace}}",
           "range": true,
           "refId": "C"
         }
