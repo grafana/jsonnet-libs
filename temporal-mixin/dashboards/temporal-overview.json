@@ -3455,7 +3455,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_success_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3561,7 +3561,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_cancel_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3667,7 +3667,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_fail_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3773,7 +3773,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_timeout_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3879,7 +3879,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_task_fail_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3985,7 +3985,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_activity_task_timeout_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_workflow_type)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{temporal_workflow_type}}",
           "range": true,
           "refId": "A"
         }
