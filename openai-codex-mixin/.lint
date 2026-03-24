@@ -1,0 +1,10 @@
+exclusions:
+  target-logql-auto-rule:
+    reason: "Math expression targets are incorrectly flagged as invalid LogQL; they are Grafana expression queries, not LogQL."
+    entries:
+      - panel: "Success rate"
+      - panel: "Avg tokens per request"
+  target-instance-rule:
+    reason: OpenAI Codex OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
+  template-instance-rule:
+    reason: OpenAI Codex OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
