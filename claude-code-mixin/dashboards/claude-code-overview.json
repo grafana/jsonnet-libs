@@ -383,7 +383,7 @@
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -569,7 +569,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -764,7 +764,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -837,7 +837,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -910,7 +910,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -983,7 +983,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -1056,7 +1056,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -1598,7 +1598,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -1736,7 +1736,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -2432,7 +2432,7 @@
         "stacking": "none",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         },
         "xTickLabelRotation": 0,
@@ -2534,7 +2534,7 @@
         "stacking": "none",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         },
         "xTickLabelRotation": 0,
@@ -2612,7 +2612,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -3307,7 +3307,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -3414,7 +3414,7 @@
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -4010,7 +4010,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -4180,7 +4180,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -4254,7 +4254,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -4727,7 +4727,7 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},

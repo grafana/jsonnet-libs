@@ -459,7 +459,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -656,7 +656,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -815,7 +815,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -891,7 +891,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -969,7 +969,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -1502,7 +1502,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -1868,7 +1868,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -2111,7 +2111,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -2180,7 +2180,7 @@
         "sort": "desc",
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "desc"
         }
       },
@@ -2488,7 +2488,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -2549,7 +2549,7 @@
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "all",
           "sort": "none"
         }
       },
@@ -2718,8 +2718,8 @@
     ]
   },
   "time": {
-    "from": "2026-03-16T15:23:32.502Z",
-    "to": "2026-03-16T16:03:07.263Z"
+    "from": "now-3h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
