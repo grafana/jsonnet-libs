@@ -1,0 +1,16 @@
+exclusions:
+  target-promql-rule:
+    reason: "Linter does not support LogQL queries."
+    entries:
+      - panel: "API calls by model"
+      - panel: "API request latency"
+      - panel: "Avg tool execution time"
+      - panel: "Top tools used"
+      - panel: "Avg cost per API call"
+      - panel: "Avg tokens per API request"
+      - panel: "Events over time"
+      - panel: "Events"
+  target-instance-rule:
+    reason: Claude Code OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
+  template-instance-rule:
+    reason: Claude Code OTel metrics do not expose an instance label, so instance is not a relevant filtering dimension for this mixin.
