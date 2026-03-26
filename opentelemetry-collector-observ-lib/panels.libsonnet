@@ -343,7 +343,7 @@ local incomingByProcessorStyle =
         ),
       ]),
     exporterQueueSize:
-      g.panel.table.new('Queue Size')
+      g.panel.table.new('Queue size')
       + g.panel.table.panelOptions.withDescription(|||
         **Note: This table only makes sense when selecting a single collector as queue sizes may differ**
         Shows metrics of the internal [sending queue](https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/exporterhelper/README.md) per exporter

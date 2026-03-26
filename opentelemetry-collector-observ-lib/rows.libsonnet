@@ -36,7 +36,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ]
       ),
     process:
-      g.panel.row.new('Process Overview')
+      g.panel.row.new('Process overview')
       + g.panel.row.withCollapsed(true)
       + g.panel.row.withPanels(
         [
