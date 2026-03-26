@@ -28,10 +28,10 @@ local g = import './g.libsonnet';
             g.util.grid.wrapPanels(
               [
                 this.grafana.rows.overview,
-                this.grafana.rows.process,
                 this.grafana.rows.receivers,
                 this.grafana.rows.processors,
                 this.grafana.rows.exporters,
+                this.grafana.rows.process,
               ]
             )
           ),
