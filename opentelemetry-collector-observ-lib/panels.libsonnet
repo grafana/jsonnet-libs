@@ -84,23 +84,23 @@ local ratePanel = function(name, targets)
   + stat.standardOptions.withOverridesMixin(signalColorsOverrides());
 
 local incomingByProcessorStyle =
-  g.panel.timeSeries.options.withLegend({ calcs: [], displayMode: 'table', placement: 'right' })
-  + g.panel.timeSeries.options.tooltip.withMode('multi')
-  + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('opacity')
-  + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
-  + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal');
+  commonlib.panels.generic.timeSeries.base.stylize()
+  + g.panel.timeSeries.options.withLegend({ calcs: [], displayMode: 'table', placement: 'right' });
 
 {
   new(signals, process):: {
     fleetOverview:
-      g.panel.table.new('Fleet overview')
+      commonlib.panels.generic.table.base.new(
+        'Fleet overview',
+        targets=[
+          process.signals.process.uptime.asTableTarget(),
+          signals.exporter.saturationByCollector.asTableTarget(),
+        ]
+      )
+      + commonlib.panels.generic.table.percentage.stylizeByName('Queue saturation')
       + g.panel.table.panelOptions.withDescription('List of collectors and their queue saturation')
       + g.panel.table.standardOptions.withUnit('s')
       + g.panel.table.queryOptions.withDatasource('prometheus', '${datasource}')
-      + g.panel.table.queryOptions.withTargets([
-        process.signals.process.uptime.asTableTarget(),
-        signals.exporter.saturationByCollector.asTableTarget(),
-      ])
       + g.panel.table.standardOptions.thresholds.withMode('absolute')
       + g.panel.table.standardOptions.thresholds.withSteps([
         {
@@ -112,19 +112,7 @@ local incomingByProcessorStyle =
       ])
       + g.panel.table.standardOptions.withOverridesMixin([
         g.panel.table.fieldOverride.byName.new('Queue saturation')
-        + g.panel.table.fieldOverride.byRegexp.withProperty(
-          'custom.cellOptions',
-          {
-            type: 'gauge',
-            mode: 'lcd',
-          }
-        )
-        + g.panel.table.fieldOverride.byRegexp.withProperty(
-          'unit',
-          'percentunit'
-        )
-        + g.panel.table.fieldOverride.byRegexp.withProperty('min', 0)
-        + g.panel.table.fieldOverride.byRegexp.withProperty('max', 1),
+        + g.panel.table.fieldOverride.byRegexp.withProperty('color', { mode: 'thresholds' }),
       ])
       + g.panel.table.queryOptions.withTransformationsMixin([
         g.panel.table.queryOptions.transformation.withId('joinByField')
@@ -192,13 +180,13 @@ local incomingByProcessorStyle =
     ]),
     receiverCount:
       signals.receiver.count.asStat()
-      + stat.options.withColorMode('background'),
+      + commonlib.panels.generic.stat.base.stylize(),
     processorCount:
       signals.processor.count.asStat()
-      + stat.options.withColorMode('background'),
+      + commonlib.panels.generic.stat.base.stylize(),
     exporterCount:
       signals.exporter.count.asStat()
-      + stat.options.withColorMode('background'),
+      + commonlib.panels.generic.stat.base.stylize(),
     metricsReceiverStat:
       signals.receiver.metrics.asStat()
       + stat.standardOptions.color.withMode('fixed')
@@ -253,19 +241,21 @@ local incomingByProcessorStyle =
       signals.processor.spans.asTarget(),
     ]),
     processorOverview:
-      g.panel.table.new('Processors')
+      commonlib.panels.generic.table.base.new(
+        'Processors',
+        targets=[
+          // need to use separate queries here as the table transformations can't
+          // group them in the way we want
+          signals.processor.incomingMetricsByProcessor.asTarget(),
+          signals.processor.incomingLogsByProcessor.asTarget(),
+          signals.processor.incomingTracesByProcessor.asTarget(),
+          signals.processor.outgoingMetricsByProcessor.asTarget(),
+          signals.processor.outgoingLogsByProcessor.asTarget(),
+          signals.processor.outgoingTracesByProcessor.asTarget(),
+        ]
+      )
       + g.panel.table.panelOptions.withDescription('Processing rate breakdown by receiver')
       + g.panel.table.queryOptions.withDatasource('prometheus', '${datasource}')
-      + g.panel.table.queryOptions.withTargets([
-        // need to use separate queries here as the table transformations can't
-        // group them in the way we want
-        signals.processor.incomingMetricsByProcessor.asTarget(),
-        signals.processor.incomingLogsByProcessor.asTarget(),
-        signals.processor.incomingTracesByProcessor.asTarget(),
-        signals.processor.outgoingMetricsByProcessor.asTarget(),
-        signals.processor.outgoingLogsByProcessor.asTarget(),
-        signals.processor.outgoingTracesByProcessor.asTarget(),
-      ])
       + g.panel.table.fieldConfig.defaults.custom.withCellOptionsMixin({
         type: 'sparkline',
       })
@@ -288,14 +278,17 @@ local incomingByProcessorStyle =
 
     metricsExporterStat:
       signals.exporter.metrics.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.standardOptions.color.withMode('fixed')
       + stat.standardOptions.color.withFixedColor(signalColors.metrics),
     logsExporterStat:
       signals.exporter.logs.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.standardOptions.color.withMode('fixed')
       + stat.standardOptions.color.withFixedColor(signalColors.logs),
     spansExporterStat:
       signals.exporter.spans.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.standardOptions.color.withMode('fixed')
       + stat.standardOptions.color.withFixedColor(signalColors.spans),
     metricsExporterSuccessRate:
@@ -319,17 +312,20 @@ local incomingByProcessorStyle =
       signals.exporter.spans.asTarget(),
     ]),
     exporterOverview:
-      g.panel.table.new('Exporters')
-      + g.panel.table.panelOptions.withDescription('Exporting rate breakdown by exporter')
+      commonlib.panels.generic.table.base.new(
+        'Exporters',
+        description='Exporting rate breakdown by exporter',
+        targets=[
+          signals.exporter.metricsByExporter.asTarget(),
+          signals.exporter.metricsFailedByExporter.asTarget(),
+          signals.exporter.logsByExporter.asTarget(),
+          signals.exporter.logsFailedByExporter.asTarget(),
+          signals.exporter.spansByExporter.asTarget(),
+          signals.exporter.spansFailedByExporter.asTarget(),
+
+        ]
+      )
       + g.panel.table.queryOptions.withDatasource('prometheus', '${datasource}')
-      + g.panel.table.queryOptions.withTargets([
-        signals.exporter.metricsByExporter.asTarget(),
-        signals.exporter.metricsFailedByExporter.asTarget(),
-        signals.exporter.logsByExporter.asTarget(),
-        signals.exporter.logsFailedByExporter.asTarget(),
-        signals.exporter.spansByExporter.asTarget(),
-        signals.exporter.spansFailedByExporter.asTarget(),
-      ])
       + g.panel.table.fieldConfig.defaults.custom.withCellOptionsMixin({
         type: 'sparkline',
       })
@@ -349,19 +345,21 @@ local incomingByProcessorStyle =
         ),
       ]),
     exporterQueueSize:
-      g.panel.table.new('Queue size')
-      + g.panel.table.panelOptions.withDescription(|||
-        **Note: This table only makes sense when selecting a single collector as queue sizes may differ**
-        Shows metrics of the internal [sending queue](https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/exporterhelper/README.md) per exporter
-      |||)
+      commonlib.panels.generic.table.base.new(
+        'Queue size',
+        description=|||
+          **Note: This table only makes sense when selecting a single collector as queue sizes may differ**
+          Shows metrics of the internal [sending queue](https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/exporterhelper/README.md) per exporter
+        |||,
+        targets=[
+          signals.exporter.queueSizeByExporter.asTarget(),
+          signals.exporter.queueCapacityByExporter.asTarget(),
+          signals.exporter.enqueueMetricsFailedByExporter.asTarget(),
+          signals.exporter.enqueueLogsFailedByExporter.asTarget(),
+          signals.exporter.enqueueSpansFailedByExporter.asTarget(),
+        ],
+      )
       + g.panel.table.queryOptions.withDatasource('prometheus', '${datasource}')
-      + g.panel.table.queryOptions.withTargets([
-        signals.exporter.queueSizeByExporter.asTarget(),
-        signals.exporter.queueCapacityByExporter.asTarget(),
-        signals.exporter.enqueueMetricsFailedByExporter.asTarget(),
-        signals.exporter.enqueueLogsFailedByExporter.asTarget(),
-        signals.exporter.enqueueSpansFailedByExporter.asTarget(),
-      ])
       + g.panel.table.fieldConfig.defaults.custom.withCellOptionsMixin({
         type: 'sparkline',
       })
