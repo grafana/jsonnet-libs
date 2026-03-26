@@ -53,11 +53,11 @@ function(this)
         name: 'Queue saturation',
         description: 'Describes how full the sending queue is for a given collector',
         type: 'raw',
-        unit: 'percentunit',
+        unit: 'percent',
         sources: {
           otelcol: {
             legendCustomTemplate: '{{ service_instance_id }} saturation',
-            expr: 'max(otelcol_exporter_queue_size{%(queriesSelector)s} / otelcol_exporter_queue_capacity{%(queriesSelector)s}) by (service_instance_id)',
+            expr: '(max(otelcol_exporter_queue_size{%(queriesSelector)s} / otelcol_exporter_queue_capacity{%(queriesSelector)s}) by (service_instance_id)) * 100',
           },
         },
       },
@@ -81,18 +81,20 @@ function(this)
             name: 'Success rate',
             description: 'Proportion of successfully exported %(plural)s against total %(plural)s' % signal,
             type: 'raw',
-            unit: 'percentunit',
+            unit: 'percent',
             sources: {
               otelcol: {
                 legendCustomTemplate: '%(capitalized) success rate' % signal,
                 expr: |||
-                  sum(rate(otelcol_exporter_sent_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
-                  /
                   (
-                  sum(rate(otelcol_exporter_sent_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
-                  +
-                  (sum(rate(otelcol_exporter_send_failed_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s])) or vector(0))
-                  )
+                    sum(rate(otelcol_exporter_sent_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
+                    /
+                    (
+                    sum(rate(otelcol_exporter_sent_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
+                    +
+                    (sum(rate(otelcol_exporter_send_failed_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s])) or vector(0))
+                    )
+                  ) * 100
                 ||| % signal,
               },
             },

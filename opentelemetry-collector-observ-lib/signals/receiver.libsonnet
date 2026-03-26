@@ -55,18 +55,18 @@ function(this)
             name: 'Success rate',
             description: 'Proportion of successfully ingested %(plural)s against total received metrics' % signal,
             type: 'raw',
-            unit: 'percentunit',
+            unit: 'percent',
             sources: {
               otelcol: {
                 legendCustomTemplate: '%(capitalized) success rate' % signal,
                 expr: |||
-                  sum(rate(otelcol_receiver_accepted_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
+                  (sum(rate(otelcol_receiver_accepted_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
                   /
                   (
                   sum(rate(otelcol_receiver_accepted_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
                   +
                   sum(rate(otelcol_receiver_refused_%(metric_id)s_total{%%(queriesSelector)s}[%%(interval)s]))
-                  )
+                  )) * 100
                 ||| % signal,
               },
             },

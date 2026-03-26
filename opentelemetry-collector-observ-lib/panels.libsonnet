@@ -65,19 +65,13 @@ local gaugeHighValuesGreen = [
   },
   {
     color: 'yellow',
-    value: 0.9,
+    value: 90,
   },
   {
     color: 'green',
-    value: 0.95,
+    value: 95,
   },
 ];
-
-local percentGauge = function(steps)
-  g.panel.gauge.standardOptions.withMin(0)
-  + g.panel.gauge.standardOptions.withMax(1)
-  + g.panel.gauge.standardOptions.thresholds.withMode('absolute')
-  + g.panel.gauge.standardOptions.thresholds.withSteps(steps);
 
 local ratePanel = function(name, targets)
   stat.new(name)
@@ -219,13 +213,19 @@ local incomingByProcessorStyle =
       + stat.standardOptions.color.withFixedColor(signalColors.spans),
     metricsReceiverSuccessRate:
       signals.receiver.metricsSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     logsReceiverSuccessRate:
       signals.receiver.logsSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     spansReceiverSuccessRate:
       signals.receiver.spansSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     downArrow:
       g.panel.text.new('')
       + g.panel.text.panelOptions.withTransparent(true)
@@ -300,13 +300,19 @@ local incomingByProcessorStyle =
       + stat.standardOptions.color.withFixedColor(signalColors.spans),
     metricsExporterSuccessRate:
       signals.exporter.metricsSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     logsExporterSuccessRate:
       signals.exporter.logsSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     spansExporterSuccessRate:
       signals.exporter.spansSuccessRate.asGauge()
-      + percentGauge(gaugeHighValuesGreen),
+      + commonlib.panels.generic.stat.percentage.stylize()
+      + g.panel.gauge.standardOptions.color.withMode('thresholds')
+      + g.panel.gauge.standardOptions.thresholds.withSteps(gaugeHighValuesGreen),
     exportingRate: ratePanel('Exporting rate', [
       signals.exporter.metrics.asTarget(),
       signals.exporter.logs.asTarget(),
