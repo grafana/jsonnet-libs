@@ -49,10 +49,10 @@ local orderFields = function(fields) {
   id: 'organize',
   options: {
     excludeByName: {},
-    indexByName: std.foldl(function(acc, opts)
+    indexByName: std.foldl(function(asc, opts)
       local field = opts.field;
       local idx = opts.idx;
-      acc {
+      asc {
         [field]: idx,
       }, std.mapWithIndex(function(idx, field) { field: field, idx: idx }, fields), {}),
   },
