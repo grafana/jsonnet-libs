@@ -5,7 +5,7 @@
   groupLabels: ['service_name'],
   instanceLabels: ['service_instance_id'],
   uid: 'otelcol',
-  dashboardNamePrefix: '',
+  dashboardNamePrefix: 'OpenTelemetry ',
   dashboardTags: ['opentelemetry', 'collector'],
   metricsSource: 'otelcol',
   signals+:

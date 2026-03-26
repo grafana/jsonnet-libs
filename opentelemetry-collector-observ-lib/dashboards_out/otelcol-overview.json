@@ -3005,6 +3005,6 @@
          "to": "now"
       },
       "timezone": "utc",
-      "title": "Collector overview",
+      "title": "OpenTelemetry Collector overview",
       "uid": "otelcol-overview-dashboard"
    }
