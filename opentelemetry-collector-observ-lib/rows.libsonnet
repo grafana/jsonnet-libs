@@ -1,7 +1,7 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
-  new(panels, type):: {
+  new(panels):: {
     overview:
       g.panel.row.new('Collector overview')
       + g.panel.row.withCollapsed(false)

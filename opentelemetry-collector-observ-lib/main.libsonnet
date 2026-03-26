@@ -15,7 +15,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           filteringSelector: this.config.filteringSelector,
           groupLabels: this.config.groupLabels,
           instanceLabels: this.config.instanceLabels,
-          uid: this.config.uid - '-otelcol',
+          uid: this.config.uid,
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
           metricsSource: this.config.metricsSource,
@@ -32,7 +32,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         // add panels from process lib
         + this.process.grafana.panels,
       rows:
-        (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricSource),
+        (import './rows.libsonnet').new(this.grafana.panels),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
