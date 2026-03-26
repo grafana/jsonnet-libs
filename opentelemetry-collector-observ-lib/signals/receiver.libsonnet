@@ -33,9 +33,9 @@ function(this)
           },
         },
       },
-    } + std.foldl(
-      function(acc, signal)
-        acc {
+    } + common.forAllTelemetryTypes(
+      function(signal)
+        {
           [signal.plural]: {
             name: signal.capitalized,
             description: 'Total rate of %(plural)s received (incl. failed)' % signal,
@@ -111,8 +111,5 @@ function(this)
             },
           },
         },
-      common.signalTypes,
-      {}
     ),
-
   }

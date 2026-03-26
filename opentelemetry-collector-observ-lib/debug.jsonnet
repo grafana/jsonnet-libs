@@ -1,4 +1,5 @@
 // debug file to use with grafanactl
+// grafanactl resources serve --script 'jsonnet -J vendor ./debug.jsonnet' --watch ./
 
 local otelcollib = import 'main.libsonnet';
 local otelcol =

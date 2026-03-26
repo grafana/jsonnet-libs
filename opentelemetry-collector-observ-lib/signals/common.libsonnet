@@ -10,4 +10,5 @@
       { plural: 'spans', metric_id: 'spans', otel_signal: 'traces' },
     ]
   ),
+  forAllTelemetryTypes(f): std.foldl(function(acc, t) acc + f(t), self.signalTypes, {}),
 }
