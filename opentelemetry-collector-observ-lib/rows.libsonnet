@@ -7,8 +7,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          panels.fleetOverview { gridPos+: { w: 18 } },
-          panels.alertList { gridPos+: { w: 6 } },
+          panels.fleetOverview { gridPos+: { w: 16, h: 8 } },
+          panels.alertList { gridPos+: { w: 8, h: 8 } },
 
           // receivers
           panels.receiverCount { gridPos+: { w: 3, h: 4 } },
@@ -42,8 +42,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         [
           panels.uptime { gridPos+: { w: 12, h: 4 } },
           panels.startTime { gridPos+: { w: 12, h: 4 } },
-          panels.cpuUsage { gridPos+: { w: 12 } },
-          panels.memoryUsage { gridPos+: { w: 12 } },
+          panels.cpuUsage { gridPos+: { w: 12, h: 8 } },
+          panels.memoryUsage { gridPos+: { w: 12, h: 8 } },
         ]
       ),
     receivers:
@@ -51,22 +51,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.ingestionRate { gridPos+: { w: 24, h: 4 } },
-        panels.receiverOverview { gridPos+: { w: 24 } },
+        panels.receiverOverview { gridPos+: { w: 24, h: 8 } },
       ]),
     processors:
       g.panel.row.new('Processors')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.processingRate { gridPos+: { w: 24, h: 4 } },
-        panels.processorOverview { gridPos+: { w: 24 } },
+        panels.processorOverview { gridPos+: { w: 24, h: 8 } },
       ]),
     exporters:
       g.panel.row.new('Exporters')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.exportingRate { gridPos+: { w: 24, h: 4 } },
-        panels.exporterOverview { gridPos+: { w: 24 } },
-        panels.exporterQueueSize { gridPos+: { w: 24 } },
+        panels.exporterOverview { gridPos+: { w: 24, h: 8 } },
+        panels.exporterQueueSize { gridPos+: { w: 24, h: 8 } },
       ]),
   },
 }
