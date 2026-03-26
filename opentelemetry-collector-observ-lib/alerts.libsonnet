@@ -2,6 +2,7 @@ local common = import './signals/common.libsonnet';
 
 {
   new(this): {
+    local alertConfig = this.config { filteringSelector: this.config.alertsFilteringSelector },
 
     groups: [
       {
@@ -10,7 +11,9 @@ local common = import './signals/common.libsonnet';
           [
             {
               alert: 'ExporterQueueSaturated',
-              expr: 'sum(otelcol_exporter_queue_size{}) by (data_type,service_instance_id,exporter) / sum(otelcol_exporter_queue_capacity{}) by (data_type,service_instance_id,exporter) > 0.8',
+              expr: 'sum(otelcol_exporter_queue_size{%(filteringSelector)s}) by (data_type,service_instance_id,exporter) / sum(otelcol_exporter_queue_capacity{%(filteringSelector)s}) by (data_type,service_instance_id,exporter) > %(threshold)s' % alertConfig {
+                threshold: alertConfig.alerts.queueSaturation.warn,
+              },
               'for': '5m',
               keep_firing_for: '5m',
               labels: {
@@ -26,7 +29,7 @@ local common = import './signals/common.libsonnet';
           + [
             {
               alert: '%(capitalized)sFailedToSend' % signal,
-              expr: 'sum(rate(otelcol_exporter_enqueue_failed_%(metric_id)s_total{}[5m])) by (exporter,service_instance_id) > 0' % signal,
+              expr: 'sum(rate(otelcol_exporter_enqueue_failed_%(metric_id)s_total{%(filteringSelector)s}[5m])) by (exporter,service_instance_id) > 0' % (signal + alertConfig),
               'for': '5m',
               keep_firing_for: '5m',
               labels: {
