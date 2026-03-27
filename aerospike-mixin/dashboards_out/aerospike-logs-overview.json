@@ -269,7 +269,7 @@
                "label": "Aerospike cluster",
                "multi": true,
                "name": "aerospike_cluster",
-               "query": "label_values({,job=~\"$job\"}, aerospike_cluster)",
+               "query": "label_values({job=~\"$job\"}, aerospike_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -284,7 +284,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
+               "query": "label_values({job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -299,7 +299,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",aerospike_cluster=~\"$aerospike_cluster\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

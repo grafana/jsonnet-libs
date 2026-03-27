@@ -55,6 +55,16 @@
             },
             "description": "Number of nodes in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -150,7 +160,7 @@
                },
                "showHeader": true
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -188,6 +198,16 @@
             },
             "description": "Number of namespaces in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -288,7 +308,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -317,6 +337,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -328,7 +357,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -336,7 +364,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -365,6 +393,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -376,7 +413,6 @@
             },
             "id": 5,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -384,7 +420,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -408,6 +444,16 @@
             },
             "description": "Memory utilization for the top k nodes in an Aerospike cluster.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -491,7 +537,7 @@
                "y": 9
             },
             "id": 6,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -516,6 +562,16 @@
             },
             "description": "Disk utilization for the top k nodes in an Aerospike cluster. Compatible with Aerospike versions < 7.0 using legacy metrics.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -599,7 +655,7 @@
                "y": 9
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -625,6 +681,10 @@
             "description": "Rate of client read transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -632,6 +692,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -659,7 +723,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -733,6 +797,10 @@
             "description": "Rate of client write transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -740,6 +808,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -767,7 +839,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -829,6 +901,10 @@
             "description": "Rate of client UDF transactions in an Aerospike cluster organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -836,6 +912,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -863,7 +943,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -925,6 +1005,10 @@
             "description": "Number of active connections to an Aerospike cluster.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -932,6 +1016,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                }
@@ -953,7 +1041,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

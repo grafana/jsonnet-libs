@@ -245,7 +245,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\"}, cluster)",
+               "query": "label_values({job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

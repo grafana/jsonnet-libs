@@ -275,7 +275,7 @@
                "label": "Hadoop cluster",
                "multi": true,
                "name": "hadoop_cluster",
-               "query": "label_values({,job=~\"$job\"}, hadoop_cluster)",
+               "query": "label_values({job=~\"$job\"}, hadoop_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -290,7 +290,7 @@
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({,job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
+               "query": "label_values({job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -305,7 +305,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({,job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, level)",
+               "query": "label_values({job=~\"$job\",hadoop_cluster=~\"$hadoop_cluster\",cluster=~\"$cluster\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

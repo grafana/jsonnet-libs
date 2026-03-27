@@ -60,6 +60,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -71,7 +80,6 @@
             },
             "id": 2,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -79,7 +87,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -104,6 +112,10 @@
             "description": "Memory utilization in an Aerospike node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 75,
                      "gradientMode": "opacity",
@@ -111,6 +123,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -132,7 +148,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -161,6 +177,15 @@
                      "fixedColor": "green",
                      "mode": "fixed"
                   },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                }
             },
@@ -172,7 +197,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -180,7 +204,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -205,6 +229,10 @@
             "description": "Disk utilization per namespace on an Aerospike node. Compatible with Aerospike versions < 7.0 using legacy metrics.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -212,6 +240,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -235,7 +267,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -260,6 +292,10 @@
             "description": "Fragmentation rate for the jemalloc heap in an Aerospike node.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 75,
                      "gradientMode": "opacity",
@@ -267,6 +303,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -288,7 +328,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -313,6 +353,10 @@
             "description": "Number of active connections to this Aerospike instance.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 75,
                      "gradientMode": "opacity",
@@ -320,6 +364,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                }
@@ -347,7 +395,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -397,6 +445,10 @@
             "description": "Rate of client read transactions in this Aerospike instance organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -404,6 +456,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -431,7 +487,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -505,6 +561,10 @@
             "description": "Rate of client write transactions in this Aerospike instance organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -512,6 +572,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -539,7 +603,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -601,6 +665,10 @@
             "description": "Rate of client UDF transactions in this Aerospike instance organized by result.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -608,6 +676,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "reqps"
                }
@@ -635,7 +707,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -697,6 +769,10 @@
             "description": "Percentage of read transactions that are resolved by a cache hit.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -704,6 +780,10 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -725,7 +805,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

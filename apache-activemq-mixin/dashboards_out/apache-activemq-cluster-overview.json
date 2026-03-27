@@ -67,8 +67,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -79,7 +88,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -105,8 +114,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -117,7 +135,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -143,8 +161,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -155,7 +182,7 @@
                "y": 1
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -181,8 +208,17 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -193,7 +229,7 @@
                "y": 1
             },
             "id": 5,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -218,12 +254,20 @@
             "description": "Number of messages that have been sent to destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -244,7 +288,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -269,12 +313,20 @@
             "description": "Number of messages that have been acknowledged (and removed) from destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -295,7 +347,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -327,6 +379,15 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percentunit"
                }
             },
@@ -346,7 +407,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -378,6 +439,15 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percentunit"
                }
             },
@@ -397,7 +467,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -429,6 +499,15 @@
                   "decimals": 1,
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "percentunit"
                }
             },
@@ -448,7 +527,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
