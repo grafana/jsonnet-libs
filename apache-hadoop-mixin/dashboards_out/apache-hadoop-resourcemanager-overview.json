@@ -163,20 +163,12 @@
             "description": "Number of applications by state for the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -278,20 +270,12 @@
             "description": "The available memory in the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -349,20 +333,12 @@
             "description": "The available virtual cores in the Hadoop ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -433,20 +409,12 @@
             "description": "The Heap and non-heap memory used for the ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -504,20 +472,12 @@
             "description": "The Heap and non-heap memory committed for the ResourceManager.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "decmbytes"
                }
@@ -575,20 +535,12 @@
             "description": "The recent increase in the number of garbage collection events for the ResourceManager JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   }
                }
             },
@@ -635,20 +587,12 @@
             "description": "The average duration for each garbage collection operation in the ResourceManager JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "ms"
                }

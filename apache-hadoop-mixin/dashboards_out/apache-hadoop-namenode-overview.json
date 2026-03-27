@@ -131,21 +131,13 @@
             "description": "The storage utilization of the NameNode.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -192,21 +184,13 @@
             "description": "Total number of blocks managed by the NameNode.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -253,21 +237,13 @@
             "description": "Number of blocks reported by DataNodes as missing.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -314,21 +290,13 @@
             "description": "Number of blocks that are under-replicated.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -375,21 +343,13 @@
             "description": "Number of transactions processed by the NameNode since the last checkpoint.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -436,21 +396,13 @@
             "description": "The recent increase in number of volume failures on all DataNodes.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "ops"
                }
@@ -498,21 +450,13 @@
             "description": "Total number of files managed by the NameNode.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -559,21 +503,13 @@
             "description": "Total load on the NameNode.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
