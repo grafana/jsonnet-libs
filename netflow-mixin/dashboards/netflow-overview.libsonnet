@@ -2,6 +2,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local var = g.dashboard.variable;
 
 local panels = import 'panels.libsonnet';
+local signals = import '../signals/main.libsonnet';
 
 
 local labelVar = function(label, title=label) var.query.new(label, 'network_io_bytes')
@@ -29,19 +30,11 @@ local dashboardUid = 'netflow-overview';
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withRefresh($._config.dashboardRefresh)
       + g.dashboard.withTimezone($._config.dashboardTimezone)
-      + g.dashboard.withVariables([
-        var.datasource.new('prometheus_datasource', 'prometheus')
-        + var.query.generalOptions.withLabel('Prometheus data source'),
-        var.datasource.new('loki_datasource', 'loki')
-        + var.query.generalOptions.withLabel('Loki data source'),
-        labelVar('job', 'Job')
-        + var.query.generalOptions.showOnDashboard.withNothing(),
-        labelVar('device_name', 'Device name'),
-        labelVar('network_local_address', 'Source'),
-        labelVar('network_peer_address', 'Destination'),
-      ])
+      + g.dashboard.withVariables(
+        signals.getVariablesMultiChoice()
+      )
       + g.dashboard.withPanels([
-        panels.totalTraffic
+        panels.trafficRate
         + withPos(0, 1, 5, 15),
         panels.stats
         + withPos(15, 1, 5, 9),
