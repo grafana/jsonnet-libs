@@ -74,8 +74,7 @@ local gaugeHighValuesGreen = [
 ];
 
 local ratePanel = function(name, targets)
-  stat.new(name)
-  + stat.panelOptions.withDescription('Per-signal rates of incoming data')
+  commonlib.panels.generic.stat.base.new(name, targets, 'Per-signal rates of incoming data')
   + stat.options.withColorMode('background')
   + stat.panelOptions.withTransparent(true)
   + stat.queryOptions.withDatasource('prometheus', '${datasource}')
@@ -89,6 +88,8 @@ local incomingByProcessorStyle =
 
 {
   new(signals, process):: {
+    // Without any data, this panel shows an error because the `joinByField` transforms fails on empty data
+    // There is no way to work around this as of grafana 12.4.2
     fleetOverview:
       commonlib.panels.generic.table.base.new(
         'Fleet overview',
