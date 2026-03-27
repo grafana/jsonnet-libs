@@ -226,7 +226,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       writeTransactionsPanel:
@@ -245,7 +244,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       udfTransactionsPanel:
@@ -264,7 +262,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       clientConnectionsPanel:
@@ -278,7 +275,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of active connections to an Aerospike cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // ==========================
@@ -326,7 +322,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('percent')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       heapMemoryEfficiencyPanel:
@@ -374,7 +369,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       instanceWriteTransactionsPanel:
@@ -393,7 +387,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       instanceUdfTransactionsPanel:
@@ -412,7 +405,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cacheReadUtilizationPanel:
@@ -422,7 +414,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Percentage of read transactions that are resolved by a cache hit.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // ==========================
@@ -444,7 +435,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.timeSeries.new('Disk usage')
         + signals.namespace.namespaceDiskUsage.asPanelMixin()
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namespaceDeadPartitionsPanel:
@@ -463,7 +453,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.panelOptions.withDescription('Memory utilization in an Aerospike namespace')
         + signals.namespace.namespaceMemoryUsage.asPanelMixin()
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namespaceReadTransactionsPanel:
@@ -483,7 +472,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namespaceWriteTransactionsPanel:
@@ -502,7 +490,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namespaceUdfTransactionsPanel:
@@ -521,7 +508,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max'])
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }

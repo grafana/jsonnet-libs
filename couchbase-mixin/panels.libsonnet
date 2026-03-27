@@ -20,7 +20,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory used for the top buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bucket_topBucketsByDiskUsedPanel:
@@ -48,7 +47,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of active items for the largest buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bucket_topBucketsByOperationsPanel:
@@ -60,7 +58,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of operations for the busiest buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bucket_topBucketsByOperationsFailedPanel:
@@ -72,7 +69,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of operations failed for the most problematic buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bucket_topBucketsByHighPriorityRequestsPanel:
@@ -84,7 +80,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of high priority requests processed by the KV engine for the top buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       bucket_bottomBucketsByCacheHitRatioPanel:
@@ -97,7 +92,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.standardOptions.withMax(1)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
 
       bucket_topBucketsByVBucketsCountPanel:
@@ -123,7 +117,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory occupied by the queue for a virtual bucket for the top buckets.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       //
@@ -139,7 +132,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Percentage of memory allocated to Couchbase on this node actually in use.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_cpuUtilizationPanel:
@@ -151,7 +143,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='CPU utilization percentage across all available cores on this Couchbase node.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_totalMemoryUsedByServicePanel:
@@ -165,7 +156,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory used by the index, analytics, and data services for a node.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_backupSizePanel:
@@ -177,7 +167,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Size of the backup for a node.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_currentConnectionsPanel:
@@ -189,7 +178,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of active connections to a node.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_httpResponseCodesPanel:
@@ -201,7 +189,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of HTTP response codes handled by the cluster manager.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_httpRequestMethodsPanel:
@@ -213,7 +200,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of HTTP request methods handled by the cluster manager.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_queryServiceRequestsPanel:
@@ -227,7 +213,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of N1QL requests processed by the query service for a node.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_queryServiceRequestProcessingTimePanel:
@@ -243,7 +228,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of queries grouped by processing time.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_indexServiceRequestsPanel:
@@ -255,7 +239,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of index service requests served.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       node_indexCacheHitRatioPanel:
@@ -267,7 +250,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Ratio at which cache scans result in a hit rather than a miss.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
 
       node_averageScanLatencyPanel:
@@ -279,7 +261,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Average time to serve a scan request per index.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ns')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       //
@@ -295,7 +276,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Top nodes by memory usage across the Couchbase cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topNodesByHTTPRequestsPanel:
@@ -307,7 +287,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of HTTP requests handled by the cluster manager for the top nodes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topNodesByQueryServiceRequestsPanel:
@@ -319,7 +298,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of N1QL requests processed by the query service for the top nodes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topNodesByIndexAverageScanLatencyPanel:
@@ -331,7 +309,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Average time to serve an index service scan request for the top nodes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ns')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_xdcrReplicationRatePanel:
@@ -343,7 +320,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of replication through the Cross Data Center Replication feature.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_xdcrDocsReceivedPanel:
@@ -355,7 +331,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The rate of mutations received by this cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('mut/sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_localBackupSizePanel:
@@ -376,7 +351,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory used for the top buckets across the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topBucketsByDiskUsedPanel:
@@ -404,7 +378,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of operations for the busiest buckets across the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topBucketsByOperationsFailedPanel:
@@ -416,7 +389,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of operations failed for the most problematic buckets across the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       cluster_topBucketsByVBucketsCountPanel:
@@ -442,7 +414,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory occupied by the queue for a virtual bucket for the top buckets across the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }
