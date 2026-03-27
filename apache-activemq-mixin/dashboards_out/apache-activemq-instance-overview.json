@@ -193,17 +193,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -277,17 +268,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -324,17 +306,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -370,20 +343,12 @@
             "description": "Number of messages on queue destinations, including any that have been dispatched but not yet acknowledged.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   }
                }
             },
@@ -429,10 +394,6 @@
             "description": "The percentage of memory being used by topic and queue destinations.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
@@ -440,10 +401,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "percent"
                }
@@ -501,20 +458,12 @@
             "description": "Number of messages that have been sent to destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   }
                }
             },
@@ -560,20 +509,12 @@
             "description": "Number of messages that have been acknowledged (and removed) from destinations in a cluster.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   }
                }
             },
@@ -619,10 +560,6 @@
             "description": "Average time a message was held across all destinations.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
@@ -630,10 +567,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -691,10 +624,6 @@
             "description": "Number of messages across destinations that are expired.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
@@ -702,10 +631,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -776,10 +701,6 @@
             "description": "The time spent performing recent garbage collections",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
@@ -787,10 +708,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "s"
                }
@@ -837,10 +754,6 @@
             "description": "The recent increase in the number of garbage collection events for the JVM.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 25,
                      "gradientMode": "opacity",
@@ -848,10 +761,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }

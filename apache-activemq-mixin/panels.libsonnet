@@ -331,7 +331,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages being enqueued to queues.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       queueDequeueRatePanel:
@@ -341,7 +340,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages being dequeued from queues.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       queueAverageEnqueueTimePanel:
@@ -351,7 +349,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Average time to enqueue messages to queues.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       queueExpiredRatePanel:
@@ -361,7 +358,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of messages expiring in queues.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       queueAverageMessageSizePanel:
@@ -505,7 +501,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       topicDequeueRatePanel:
@@ -517,7 +512,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       topicAverageEnqueueTimePanel:
@@ -529,7 +523,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       topicExpiredRatePanel:
@@ -541,7 +534,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       topicAverageMessageSizePanel:
@@ -565,8 +557,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('none')
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.options.withOrientation('horizontal')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+        + g.panel.timeSeries.options.withOrientation('horizontal'),
 
       topicSummaryPanel:
         commonlib.panels.generic.table.base.new(

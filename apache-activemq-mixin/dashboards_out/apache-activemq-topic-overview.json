@@ -61,17 +61,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -108,17 +99,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -155,17 +137,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -202,17 +175,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "#5794f2",
+                     "fixedColor": "text",
                      "mode": "fixed"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "#5794f2",
-                           "value": null
-                        }
-                     ]
                   }
                }
             },
@@ -248,21 +212,13 @@
             "description": "Rate of messages being enqueued to topics.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -312,21 +268,13 @@
             "description": "Rate of messages being dequeued from topics.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -376,21 +324,13 @@
             "description": "Average time to enqueue messages to topics.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "ms"
                }
@@ -439,21 +379,13 @@
             "description": "Rate of messages expiring in topics.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "/ sec"
                }
@@ -503,20 +435,12 @@
             "description": "Top topics by consumers.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -566,10 +490,6 @@
             "description": "Average size of messages in topics.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "fillOpacity": 54,
                      "gradientMode": "opacity",
@@ -577,10 +497,6 @@
                      "lineWidth": 2,
                      "showPoints": "never",
                      "spanNulls": false
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
                   },
                   "unit": "bytes"
                }
@@ -629,10 +545,6 @@
             "description": "Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
                   "custom": {
                      "align": "left",
                      "cellOptions": {
