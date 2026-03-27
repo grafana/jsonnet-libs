@@ -1,0 +1,3049 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "Collector overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "List of collectors and their queue saturation",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 0.25
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.5
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Queue saturation"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Queue saturation"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "thresholds"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 16,
+               "x": 0,
+               "y": 1
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "otelcol_process_uptime_seconds_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{service_instance_id}}: Uptime",
+                  "refId": "Uptime"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(max(otelcol_exporter_queue_size{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"} / otelcol_exporter_queue_capacity{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}) by (service_instance_id)) * 100",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{ service_instance_id }} saturation",
+                  "refId": "Queue saturation"
+               }
+            ],
+            "title": "Fleet overview",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "service_instance_id",
+                     "mode": "inner"
+                  }
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": {
+                        "Queue saturation": true,
+                        "Uptime": true,
+                        "service_instance_id": true,
+                        "service_name": true,
+                        "service_version": true
+                     },
+                     "indexByName": { },
+                     "renameByName": {
+                        "service_instance_id": "Instance ID",
+                        "service_name": "Name",
+                        "service_version": "Version"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "options": {
+               "alertInstanceLabelFilter": "collector_distro_name!=\"\"",
+               "datasource": "-- Grafana --"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "OpenTelemetry collector alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of receivers",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Receiver count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 0,
+               "y": 5
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(count by (receiver) ({__name__=~\"otelcol_receiver_(accepted|refused)_(log_records|metric_points|spans)_total\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Receivers",
+                  "refId": "Receiver count"
+               }
+            ],
+            "title": "Receiver count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of metrics received (incl. failed)",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "purple",
+                     "mode": "fixed"
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Metrics"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 3,
+               "y": 5
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metrics",
+                  "refId": "Metrics"
+               }
+            ],
+            "title": "Metrics",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully ingested metrics against total received metrics",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 7,
+               "y": 5
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(sum(rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n/\n(\nsum(rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+\nsum(rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metricsuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of logs received (incl. failed)",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "yellow",
+                     "mode": "fixed"
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 10,
+               "y": 5
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logs",
+                  "refId": "Logs"
+               }
+            ],
+            "title": "Logs",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully ingested logs against total received metrics",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 14,
+               "y": 5
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(sum(rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n/\n(\nsum(rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+\nsum(rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logsuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of spans received (incl. failed)",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "blue",
+                     "mode": "fixed"
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Spans"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 17,
+               "y": 5
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spans",
+                  "refId": "Spans"
+               }
+            ],
+            "title": "Spans",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully ingested spans against total received metrics",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 21,
+               "y": 5
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(sum(rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n/\n(\nsum(rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+\nsum(rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spansuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 24,
+               "x": 0,
+               "y": 7
+            },
+            "options": {
+               "content": "<div style=\"display: flex; justify-content: space-around; width: 100%; font-size: 2em; font-weight: bold\">\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n</div>\n"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "",
+            "transparent": true,
+            "type": "text"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of processors",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Processor count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 0,
+               "y": 13
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(count by (processor) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",__name__=~\"otelcol_processor_(incoming|outgoing)_items_total\"}))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Processors",
+                  "refId": "Processor count"
+               }
+            ],
+            "title": "Processor count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of incoming metrics",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Incoming metrics"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 7,
+               "x": 3,
+               "y": 13
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"metrics\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming metrics"
+               }
+            ],
+            "title": "Incoming metrics",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of incoming logs",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Incoming logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 7,
+               "x": 10,
+               "y": 13
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"logs\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming logs"
+               }
+            ],
+            "title": "Incoming logs",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Rate of incoming traces",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Incoming traces"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 7,
+               "x": 17,
+               "y": 13
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"traces\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming traces"
+               }
+            ],
+            "title": "Incoming traces",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 2,
+               "w": 24,
+               "x": 0,
+               "y": 15
+            },
+            "options": {
+               "content": "<div style=\"display: flex; justify-content: space-around; width: 100%; font-size: 2em; font-weight: bold\">\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n  <span>↓</span>\n</div>\n"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "",
+            "transparent": true,
+            "type": "text"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total number of exporters",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Exporter count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 0,
+               "y": 19
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(count by (exporter) (otelcol_exporter_queue_size{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Exporters",
+                  "refId": "Exporter count"
+               }
+            ],
+            "title": "Exporter count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of metrics exported",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "purple",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Metrics"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 3,
+               "y": 19
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metrics",
+                  "refId": "Metrics"
+               }
+            ],
+            "title": "Metrics",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully exported metrics against total metrics",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 7,
+               "y": 19
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum(rate(otelcol_exporter_sent_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  /\n  (\n  sum(rate(otelcol_exporter_sent_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  +\n  (sum(rate(otelcol_exporter_send_failed_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])) or vector(0))\n  )\n) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metricsuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of logs exported",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "yellow",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 10,
+               "y": 19
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logs",
+                  "refId": "Logs"
+               }
+            ],
+            "title": "Logs",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully exported logs against total logs",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 14,
+               "y": 19
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum(rate(otelcol_exporter_sent_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  /\n  (\n  sum(rate(otelcol_exporter_sent_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  +\n  (sum(rate(otelcol_exporter_send_failed_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])) or vector(0))\n  )\n) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logsuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Total rate of spans exported",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "blue",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Spans"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 17,
+               "y": 19
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spans",
+                  "refId": "Spans"
+               }
+            ],
+            "title": "Spans",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Proportion of successfully exported spans against total spans",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 90
+                        },
+                        {
+                           "color": "green",
+                           "value": 95
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Success rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 3,
+               "x": 21,
+               "y": 19
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum(rate(otelcol_exporter_sent_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  /\n  (\n  sum(rate(otelcol_exporter_sent_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  +\n  (sum(rate(otelcol_exporter_send_failed_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])) or vector(0))\n  )\n) * 100\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spansuccess rate",
+                  "refId": "Success rate"
+               }
+            ],
+            "title": "Success rate",
+            "type": "gauge"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 27
+            },
+            "panels": [ ],
+            "title": "Receivers",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Per-signal rates of incoming data",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "options": {
+               "colorMode": "background"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metrics",
+                  "refId": "Metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logs",
+                  "refId": "Logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum (rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n+ sum (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spans",
+                  "refId": "Spans"
+               }
+            ],
+            "title": "Ingestion statistics",
+            "transparent": true,
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Ingested metrics (avg): Total rate of metrics received per receiver  \n\nMetrics refusal rate (avg): Rate of metrics refused  \n\nIngested logs (avg): Total rate of logs received per receiver  \n\nLogs refusal rate (avg): Rate of logs refused  \n\nIngested spans (avg): Total rate of spans received per receiver  \n\nSpans refusal rate (avg): Rate of spans refused",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "cellOptions": {
+                        "type": "sparkline"
+                     },
+                     "filterable": false
+                  },
+                  "noValue": "0",
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Ingested metrics"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Metrics refusal rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Ingested logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Logs refusal rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Ingested spans"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Spans refusal rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "cps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*Ingested [Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*Ingested [Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*Ingested ([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "receiver"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "basic"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*refusal.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 36
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum by (receiver) (rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  + sum by (receiver) (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_accepted_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ receiver }} metrics",
+                  "refId": "Ingested metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (receiver) (rate(otelcol_receiver_refused_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))or\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Metrics refusal rate ({{receiver}})",
+                  "refId": "Metrics refusal rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum by (receiver) (rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  + sum by (receiver) (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_accepted_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ receiver }} logs",
+                  "refId": "Ingested logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (receiver) (rate(otelcol_receiver_refused_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))or\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Logs refusal rate ({{receiver}})",
+                  "refId": "Logs refusal rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "(\n  sum by (receiver) (rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  + sum by (receiver) (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  sum by (receiver) (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n  unless sum by (receiver) (rate(otelcol_receiver_accepted_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))\n)\nor\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ receiver }} spans",
+                  "refId": "Ingested spans"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (receiver) (rate(otelcol_receiver_refused_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]))or\n(\n  count by (receiver) ({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\",receiver!=\"\"}) * 0\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Spans refusal rate ({{receiver}})",
+                  "refId": "Spans refusal rate"
+               }
+            ],
+            "title": "Receivers",
+            "transformations": [
+               {
+                  "id": "timeSeriesTable"
+               },
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Trend #(.*)",
+                     "renamePattern": "$1"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "panels": [ ],
+            "title": "Processors",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Per-signal rates of incoming data",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 24,
+               "x": 0,
+               "y": 45
+            },
+            "options": {
+               "colorMode": "background"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"metrics\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metrics",
+                  "refId": "Metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"logs\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logs",
+                  "refId": "Logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"traces\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spans",
+                  "refId": "Spans"
+               }
+            ],
+            "title": "Processing rate",
+            "transparent": true,
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Processing rate breakdown by receiver",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "cellOptions": {
+                        "type": "sparkline"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "processor"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "basic"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*refusal.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 53
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"metrics\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"logs\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_incoming_items_total{otel_signal=\"traces\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Incoming traces"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_outgoing_items_total{otel_signal=\"metrics\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Outgoing metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_outgoing_items_total{otel_signal=\"logs\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Outgoing logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,processor) (\n  rate(otelcol_processor_outgoing_items_total{otel_signal=\"traces\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (service_name,processor) ({processor!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{processor}}",
+                  "refId": "Outgoing traces"
+               }
+            ],
+            "title": "Processors",
+            "transformations": [
+               {
+                  "id": "timeSeriesTable",
+                  "options": { }
+               },
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Trend #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "indexByName": {
+                        "Incoming logs": 3,
+                        "Incoming metrics": 1,
+                        "Outgoing logs": 4,
+                        "Outgoing metrics": 2,
+                        "processor": 0
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 61
+            },
+            "panels": [ ],
+            "title": "Exporters",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Per-signal rates of incoming data",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 24,
+               "x": 0,
+               "y": 62
+            },
+            "options": {
+               "colorMode": "background"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Metrics",
+                  "refId": "Metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Logs",
+                  "refId": "Logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(otelcol_exporter_sent_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Spans",
+                  "refId": "Spans"
+               }
+            ],
+            "title": "Exporting rate",
+            "transparent": true,
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Exporting rate breakdown by exporter",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "cellOptions": {
+                        "type": "sparkline"
+                     }
+                  },
+                  "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Mm]etrics.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*[Ll]ogs.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*([Tt]races|[Ss]pans).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "exporter"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "basic"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/failure/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 70
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_sent_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Exported metrics ({{exporter}})",
+                  "refId": "Exported metrics"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_send_failed_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Metrics export failure rate ({{exporter}})",
+                  "refId": "Metrics export failure rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_sent_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Exported logs ({{exporter}})",
+                  "refId": "Exported logs"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_send_failed_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Logs export failure rate ({{exporter}})",
+                  "refId": "Logs export failure rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_sent_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Exported spans ({{exporter}})",
+                  "refId": "Exported spans"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_send_failed_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Spans export failure rate ({{exporter}})",
+                  "refId": "Spans export failure rate"
+               }
+            ],
+            "title": "Exporters",
+            "transformations": [
+               {
+                  "id": "timeSeriesTable",
+                  "options": { }
+               },
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Trend #(.*)",
+                     "renamePattern": "$1"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "**Note: This table only makes sense when selecting a single collector as queue sizes may differ**\nShows metrics of the internal [sending queue](https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/exporterhelper/README.md) per exporter\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "cellOptions": {
+                        "type": "sparkline"
+                     }
+                  },
+                  "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "exporter"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "basic"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*failures.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 78
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (service_name,exporter) (\n  otelcol_exporter_queue_size{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Queue size by exporter ({{exporter}})",
+                  "refId": "Queue size by exporter"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (service_name,exporter) (\n  otelcol_exporter_queue_capacity{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Queue capacity by exporter ({{exporter}})",
+                  "refId": "Queue capacity by exporter"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_enqueue_failed_metric_points_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Metrics enqueue failures ({{exporter}})",
+                  "refId": "Metrics enqueue failures"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_enqueue_failed_log_records_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Logs enqueue failures ({{exporter}})",
+                  "refId": "Logs enqueue failures"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  sum by (service_name,exporter) (\n  rate(otelcol_exporter_enqueue_failed_spans_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval])\n)\nor (count by (exporter) ({exporter!=\"\",service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Spans enqueue failures ({{exporter}})",
+                  "refId": "Spans enqueue failures"
+               }
+            ],
+            "title": "Queue size",
+            "transformations": [
+               {
+                  "id": "timeSeriesTable",
+                  "options": { }
+               },
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Trend #(.*)",
+                     "renamePattern": "$1"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 86
+            },
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process uptime.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "thresholds"
+                        },
+                        "decimals": 1,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "orange",
+                                 "value": null
+                              },
+                              {
+                                 "color": "text",
+                                 "value": 600
+                              }
+                           ]
+                        },
+                        "unit": "dtdurations"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Uptime"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "dtdurations"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 12,
+                     "x": 0,
+                     "y": 87
+                  },
+                  "options": {
+                     "colorMode": "value",
+                     "graphMode": "none"
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "otelcol_process_uptime_seconds_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{service_instance_id}}: Uptime",
+                        "refId": "Uptime"
+                     }
+                  ],
+                  "title": "Uptime",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process start time.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "text",
+                           "mode": "fixed"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "dateTimeAsIso"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process start time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "dateTimeAsIso"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 4,
+                     "w": 12,
+                     "x": 12,
+                     "y": 87
+                  },
+                  "options": {
+                     "graphMode": "none",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ]
+                     }
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (service_name,service_instance_id) (\n  (time()-otelcol_process_uptime_seconds_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"})*1000\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{service_instance_id}}: Process start time",
+                        "refId": "Process start time"
+                     }
+                  ],
+                  "title": "Process start time",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process CPU usage.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "continuous-BlYlRd"
+                        },
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "scheme",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "decimals": 1,
+                        "max": 100,
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "percent"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "CPU usage (process)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "percent"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 95
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (service_name,service_instance_id) (\n  rate(otelcol_process_cpu_seconds_total{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}[$__rate_interval]) * 100\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{service_instance_id}}: CPU usage (process)",
+                        "refId": "CPU usage (process)"
+                     }
+                  ],
+                  "title": "CPU usage (process)",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Process resident memory size in bytes.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "bytes"
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byFrameRefID",
+                              "options": "Process memory used (rss)"
+                           },
+                           "properties": [
+                              {
+                                 "id": "unit",
+                                 "value": "bytes"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byRegexp",
+                              "options": ".*(T|t)otal.*"
+                           },
+                           "properties": [
+                              {
+                                 "id": "color",
+                                 "value": {
+                                    "fixedColor": "#ffb357",
+                                    "mode": "fixed"
+                                 }
+                              },
+                              {
+                                 "id": "custom.fillOpacity",
+                                 "value": 0
+                              },
+                              {
+                                 "id": "custom.lineStyle",
+                                 "value": {
+                                    "dash": [
+                                       10,
+                                       10
+                                    ],
+                                    "fill": "dash"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 95
+                  },
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "expr": "avg by (service_name,service_instance_id) (\n  otelcol_process_memory_rss_bytes{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$service_instance_id\"}\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{service_instance_id}}: Process memory used (rss)",
+                        "refId": "Process memory used (rss)"
+                     }
+                  ],
+                  "title": "Process memory used (rss)",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Process overview",
+            "type": "row"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "opentelemetry",
+         "collector"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Service name",
+               "multi": true,
+               "name": "service_name",
+               "query": "label_values(otelcol_process_uptime_seconds_total{service_name!=\"\"}, service_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Service instance id",
+               "multi": true,
+               "name": "service_instance_id",
+               "query": "label_values(otelcol_process_uptime_seconds_total{service_name!=\"\",service_name=~\"$service_name\"}, service_instance_id)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "baseFilters": [ ],
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "filters": [ ],
+               "label": "Extra filters",
+               "name": "adhoc",
+               "type": "adhoc"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "utc",
+      "title": "OpenTelemetry Collector overview",
+      "uid": "otelcol-overview-dashboard"
+   }

@@ -21,7 +21,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "decimals": 1,
@@ -65,7 +65,7 @@
                "colorMode": "value",
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -93,7 +93,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "dateTimeAsIso"
                },
                "overrides": [
                   {
@@ -117,7 +127,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -125,7 +134,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -150,6 +159,10 @@
             "description": "System's load average.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -158,6 +171,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [
@@ -182,7 +199,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -220,7 +237,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -242,10 +259,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Process CPU usage.",
+            "description": "CPU usage (process) (avg): Process CPU usage.  \n\nCPU usage (system) (avg): CPU Usage of host system.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -258,6 +276,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -303,7 +325,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -333,12 +355,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "Process memory used (rss): Signal not found.",
+            "description": "Process resident memory size in bytes.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -347,9 +373,25 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process memory used (rss)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
                   {
                      "matcher": {
                         "id": "byRegexp",
@@ -359,7 +401,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -388,7 +430,6 @@
                "y": 7
             },
             "options": {
-               "content": "",
                "legend": {
                   "calcs": [ ],
                   "displayMode": "list"
@@ -398,26 +439,47 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
-            "title": "",
-            "transparent": true,
-            "type": "text"
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  process_resident_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process memory used (rss)",
+                  "refId": "Process memory used (rss)"
+               }
+            ],
+            "title": "Process memory used (rss)",
+            "type": "timeseries"
          },
          {
             "datasource": {
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Process files opened.",
+            "description": "Process files open (avg): Process files opened.  \n\nProcess files max (avg): Process files opened limit.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -462,7 +524,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
