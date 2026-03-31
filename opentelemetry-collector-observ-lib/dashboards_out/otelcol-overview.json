@@ -2170,6 +2170,13 @@
                   "id": "organize",
                   "options": {
                      "excludeByName": { },
+                     "includeByName": {
+                        "Incoming logs": true,
+                        "Incoming metrics": true,
+                        "Outgoing logs": true,
+                        "Outgoing metrics": true,
+                        "processor": true
+                     },
                      "indexByName": {
                         "Incoming logs": 3,
                         "Incoming metrics": 1,

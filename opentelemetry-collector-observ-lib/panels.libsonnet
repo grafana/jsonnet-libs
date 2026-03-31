@@ -49,6 +49,10 @@ local orderFields = function(fields) {
   id: 'organize',
   options: {
     excludeByName: {},
+    includeByName: std.foldl(function(acc, field)
+      acc {
+        [field]: true,
+      }, fields, {}),
     indexByName: std.foldl(function(asc, opts)
       local field = opts.field;
       local idx = opts.idx;
