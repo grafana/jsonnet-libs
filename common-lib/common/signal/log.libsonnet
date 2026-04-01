@@ -34,7 +34,6 @@ base {
         lokiQuery.withDatasource('${%s}' % datasource)
         + g.panel.logs.panelOptions.withDescription(description),
 
-
       //Return as grafana panel target(query+legend)
       asTarget(name=name):
         lokiQuery.new(

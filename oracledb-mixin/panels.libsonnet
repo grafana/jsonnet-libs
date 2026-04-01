@@ -44,7 +44,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of sessions.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       processesPanel:
@@ -57,7 +56,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of processes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       applicationWaitTimePanel:
@@ -67,7 +65,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Application wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       commitWaitTimePanel:
@@ -77,7 +74,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Commit wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       concurrencyWaitTimePanel:
@@ -87,7 +83,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Concurrency wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       configurationWaitTimePanel:
@@ -97,7 +92,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Configuration wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkWaitTimePanel:
@@ -107,7 +101,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Network wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       schedulerWaitTimePanel:
@@ -117,7 +110,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Scheduler wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       systemIOWaitTimePanel:
@@ -127,7 +119,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='System I/O wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       userIOWaitTimePanel:
@@ -137,7 +128,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='User I/O wait time, in seconds, waiting for wait events.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       tablespaceSizePanel:
@@ -151,7 +141,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Shows the size over time for the tablespace.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }

@@ -87,7 +87,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -109,10 +109,10 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Disk usage (avg): Disk usage percentage for Aerospike namespaces. Supports both legacy (device_free_pct) and modern (data_used_pct) metrics.  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
                      "spanNulls": false
                   },
                   "unit": "percent"
@@ -195,7 +195,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -217,11 +217,10 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Memory utilization in an Aerospike namespace",
+            "description": "Memory usage (avg): Memory usage percentage for Aerospike namespaces.  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "fillOpacity": 0,
                      "spanNulls": false
                   },
                   "unit": "percent"
@@ -278,7 +277,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -315,7 +314,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -394,7 +393,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -431,7 +430,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -498,7 +497,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -535,7 +534,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -602,7 +601,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 0,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -633,7 +632,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

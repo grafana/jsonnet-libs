@@ -7,12 +7,26 @@ local signalUtils = import './utils.libsonnet';
     type,
   ): {
     local this = self,
-
+    signalName:: signalName,
     withTopK(limit): this,
     withOffset(offset): this,
     withFilteringSelectorMixin(mixin): this,
     withExprWrappersMixin(wrappers=[]): this,
-    asOverride(name=signalName, override='byQuery', format='time_series'): {},
+    withLegendFormat(legendFormat): this,
+    withHideNameInLegend(hide=true): this,
+    withName(name): this,
+    withNameShort(name): this,
+    withAgglevel(aggLevel): this,
+    withAggFunction(aggFunction): this,
+    withInstanceLabels(labels): this,
+    withInstanceLabelsMixin(labels): this,
+    withGroupLabels(labels): this,
+    withGroupLabelsMixin(labels): this,
+    withInterval(interval): this,
+    withAlertsInterval(interval): this,
+    withRangeFunction(rangeFunction): this,
+    withQuantile(quantile=0.95): this,
+    asOverride(name=this.signalName, override='byQuery', format='time_series'): {},
     asTarget():: {},
     asTableTarget():: {},
 
@@ -23,27 +37,27 @@ local signalUtils = import './utils.libsonnet';
     //Return query, usable in alerts/recording rules. No aggregation is applied.
     asRuleExpression():: {},
     //Return as timeSeriesPanel
-    asTimeSeries(name=signalName)::
+    asTimeSeries(name=this.signalName)::
       g.panel.text.new('')
       + g.panel.text.panelOptions.withTransparent(true)
       + g.panel.text.panelOptions.withDescription(name + ': Signal not found.')
       + g.panel.text.options.withContent(''),
 
     //Return as statPanel
-    asStat(name=signalName)::
+    asStat(name=this.signalName)::
       self.asTimeSeries(),
 
-    asTable(name=signalName, format)::
+    asTable(name=this.signalName, format)::
       self.asTimeSeries(),
 
-    asStatusHistory(name=signalName)::
+    asStatusHistory(name=this.signalName)::
       self.asTimeSeries(),
 
     //Return as timeSeriesPanel
-    asGauge(name=signalName)::
+    asGauge(name=this.signalName)::
       self.asTimeSeries(),
 
-    asTableColumn(override, format):: {},
+    asTableColumn(override='byName', format='table'):: {},
   },
 
 }

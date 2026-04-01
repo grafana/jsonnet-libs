@@ -61,7 +61,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The storage utilization of the NameNode.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeTotalBlocksPanel:
@@ -71,7 +70,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Total number of blocks managed by the NameNode.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeMissingBlocksPanel:
@@ -81,7 +79,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of blocks reported by DataNodes as missing.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeUnderreplicatedBlocksPanel:
@@ -91,7 +88,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of blocks that are under-replicated.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeTransactionsSinceLastCheckpointPanel:
@@ -101,7 +97,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of transactions processed by the NameNode since the last checkpoint.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeVolumeFailuresPanel:
@@ -111,7 +106,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The recent increase in number of volume failures on all DataNodes.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('ops')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeTotalFilesPanel:
@@ -121,7 +115,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Total number of files managed by the NameNode.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       namenodeTotalLoadPanel:
@@ -131,7 +124,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Total load on the NameNode.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // ==========================
@@ -183,7 +175,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The Heap and non-heap memory used for the NodeManager.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('bytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       nodeManagerMemoryCommittedPanel:
@@ -196,7 +187,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The Heap and non-heap memory committed for the NodeManager.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       nodeManagerGarbageCollectionCountPanel:
@@ -206,7 +196,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The number of garbage collection events for the NodeManager.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       nodeManagerGarbageCollectionTimePanel:
@@ -216,7 +205,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The average duration for each garbage collection operation in the NodeManager JVM.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // ==========================
@@ -233,7 +221,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='The Heap and non-heap memory used for the NodeManager.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
 
@@ -255,7 +242,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='CPU utilization of the Node.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       nodeManagerNodeGPUUtilizationPanel:
@@ -265,7 +251,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='GPU utilization of the Node.',
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       // ==========================
@@ -289,7 +274,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withAsTable(true)
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       nodeManagerContainerUsedMemoryPanel:
@@ -298,8 +282,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodemanager.containerUsedMemory.asTarget()],
           description='Total memory used by containers for the NodeManager.',
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+        + g.panel.timeSeries.standardOptions.withUnit('decmbytes'),
 
 
       nodeManagerContainerUsedVirtualMemoryPanel:
@@ -308,8 +291,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.nodemanager.containerUsedVirtualMemory.asTarget()],
           description='Total virtual memory used by containers for the NodeManager.',
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+        + g.panel.timeSeries.standardOptions.withUnit('decmbytes'),
 
       nodeManagerContainerAvailableMemoryPanel:
         commonlib.panels.generic.timeSeries.base.new(
@@ -320,8 +302,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='The memory available and currently allocated for containers by the NodeManager.',
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decmbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+        + g.panel.timeSeries.standardOptions.withUnit('decmbytes'),
 
 
       nodeManagerContainersAvailableVirtualCoresPanel:
@@ -333,8 +314,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='The virtual cores available and currently allocated for containers by the NodeManager.',
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+        + g.panel.timeSeries.standardOptions.withUnit('none'),
 
 
       // ==========================

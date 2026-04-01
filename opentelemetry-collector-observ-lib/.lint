@@ -1,0 +1,10 @@
+exclusions:
+  target-instance-rule:
+    reason: "The job label is used differently in the otel world (`service.name` maps to `job` and is the same across instances)"
+  template-instance-rule:
+    reason: "The job label is used differently in the otel world (`service.name` maps to `job` and is the same across instances)"
+  target-job-rule:
+    reason: "The job label is used differently in the otel world (`service.name` maps to `job` and is the same across instances)"
+  template-job-rule:
+    reason: "The job label is used differently in the otel world (`service.name` maps to `job` and is the same across instances)"
+  

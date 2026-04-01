@@ -14,6 +14,7 @@ function(this)
       cadvisor: 'container_cpu_usage_seconds_total',
       //https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
       jmx_exporter: 'java_lang_operatingsystem_processcputime',
+      otelcol: 'otelcol_process_uptime_seconds_total',
     },
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -37,6 +38,9 @@ function(this)
           },
           otel_with_suffixes: {
             expr: 'runtime_uptime_milliseconds_total{%(queriesSelector)s}',
+          },
+          otelcol: {
+            expr: 'otelcol_process_uptime_seconds_total{%(queriesSelector)s}',
           },
           java_otel: self.otel,
           java_otel_with_suffixes: self.otel_with_suffixes,
@@ -71,6 +75,9 @@ function(this)
           otel_with_suffixes: {
             expr: 'process_start_time_seconds{%(queriesSelector)s} * 1000',
           },
+          otelcol: {
+            expr: '(time()-otelcol_process_uptime_seconds_total{%(queriesSelector)s})*1000',
+          },
           java_otel: self.otel,
           java_otel_with_suffixes: self.otel_with_suffixes,
           cadvisor: {
@@ -97,6 +104,9 @@ function(this)
           },
           java_otel_with_suffixes: {
             expr: 'process_runtime_jvm_cpu_utilization_ratio{%(queriesSelector)s} * 100',
+          },
+          otelcol: {
+            expr: 'rate(otelcol_process_cpu_seconds_total{%(queriesSelector)s}[%(interval)s]) * 100',
           },
           prometheus: {
             // convert to gauge from counter to match others here.
@@ -127,6 +137,9 @@ function(this)
           },
           cadvisor: {
             expr: 'container_memory_rss{%(queriesSelector)s}',
+          },
+          otelcol: {
+            expr: 'otelcol_process_memory_rss_bytes{%(queriesSelector)s}',
           },
           //best could be found:
           jmx_exporter: {
