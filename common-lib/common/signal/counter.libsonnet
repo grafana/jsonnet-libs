@@ -30,6 +30,7 @@ base {
     )
 
     {
+      local this = self,
     },
 
 }

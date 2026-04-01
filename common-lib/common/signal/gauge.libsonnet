@@ -28,6 +28,7 @@ base {
       sourceMaps=sourceMaps,
     )
     {
+      local this = self,
     },
 
 }

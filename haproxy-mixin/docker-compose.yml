@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   grafana:
-    image: 'grafana/grafana:12.4.0@sha256:b0ae311af06228bcfd4a620504b653db80f5b91e94dc3dc2a5b7dab202bcde20'
+    image: 'grafana/grafana:12.4.2@sha256:83749231c3835e390a3144e5e940203e42b9589761f20ef3169c716e734ad505'
     environment:
       - 'GF_AUTH_ANONYMOUS_ENABLED=true'
       - 'GF_AUTH_ANONYMOUS_ORG_ROLE=Admin'

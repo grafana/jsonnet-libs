@@ -26,7 +26,6 @@ local utils = commonlib.utils;
           description='Number of batch requests.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('reqps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       severeErrorsPanel:
@@ -36,7 +35,6 @@ local utils = commonlib.utils;
           description='Number of severe errors that caused connections to be killed.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('errors')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       deadlocksPanel:
@@ -46,7 +44,6 @@ local utils = commonlib.utils;
           description='Rate of deadlocks occurring over time.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('deadlocks')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       osMemoryUsagePanel:
@@ -87,7 +84,6 @@ local utils = commonlib.utils;
           description='The current stall (latency) for database writes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       databaseReadStallDurationPanel:
@@ -97,7 +93,6 @@ local utils = commonlib.utils;
           description='The current stall (latency) for database reads.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       transactionLogExpansionsPanel:
@@ -107,7 +102,6 @@ local utils = commonlib.utils;
           description='Number of times the transaction log has been expanded for a database.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('expansions')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       pageFileMemoryPanel:
@@ -127,7 +121,6 @@ local utils = commonlib.utils;
           description='Percentage of page found and read from the SQL Server buffer cache.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       pageCheckpointsPanel:
@@ -137,7 +130,6 @@ local utils = commonlib.utils;
           description='Rate of page checkpoints per second.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('checkpoints/s')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       pageFaultsPanel:
@@ -147,7 +139,6 @@ local utils = commonlib.utils;
           description='The number of page faults that were incurred by the SQL Server process.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('faults')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }

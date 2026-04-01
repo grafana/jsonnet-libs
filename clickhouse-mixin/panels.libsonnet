@@ -12,7 +12,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.replica.interserverConnections.asTarget()],
           description='Number of connections due to interserver communication'
         )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       replicaQueueSizePanel:
@@ -21,7 +20,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.replica.replicasMaxQueueSize.asTarget()],
           description='Number of replica tasks in queue'
         )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       replicaOperationsPanel:
@@ -31,7 +29,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Replica Operations over time to other nodes'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       replicaReadOnlyPanel:
@@ -41,7 +38,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Shows replicas in read-only state over time'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperWatchesPanel:
@@ -51,7 +47,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Current number of watches in ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperSessionsPanel:
@@ -61,7 +56,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Current number of sessions to ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperRequestsPanel:
@@ -71,7 +65,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Current number of active requests to ZooKeeper'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       successfulQueriesPanel:
@@ -81,7 +74,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of successful queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       failedQueriesPanel:
@@ -91,7 +83,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Rate of failed queries per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       rejectedInsertsPanel:
@@ -101,7 +92,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of rejected inserts per second'
         )
         + g.panel.timeSeries.standardOptions.withUnit('/ sec')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       memoryUsagePanel:
@@ -111,7 +101,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Memory usage over time'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       memoryUsageGaugePanel:
@@ -137,7 +126,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Current number of connections to ClickHouse'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkReceivedPanel:
@@ -148,7 +136,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.queryOptions.withInterval('1m')
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkTransmittedPanel:
@@ -158,7 +145,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Transmitted network throughput'
         )
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       diskReadLatencyPanel:
@@ -169,7 +155,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Time spent waiting for read syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       diskWriteLatencyPanel:
@@ -180,7 +165,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Time spent waiting for write syscall'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkTransmitLatencyInboundPanel:
@@ -190,7 +174,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Latency of inbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       networkTransmitLatencyOutboundPanel:
@@ -200,7 +183,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Latency of outbound network traffic'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
 
       zooKeeperWaitTimePanel:
@@ -210,7 +192,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Time spent waiting for ZooKeeper request to process'
         )
         + g.panel.timeSeries.standardOptions.withUnit('µs')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
 }

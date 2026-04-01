@@ -8,7 +8,7 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
 {
   local this = self,
 
-  stylize():
+  stylize(color=tokens.base.colors.palette.threshold):
     fieldConfig.defaults.custom.withLineStyleMixin(
       {
         fill: 'dash',
@@ -17,10 +17,10 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
     )
     + fieldConfig.defaults.custom.withFillOpacity(0)
     + timeSeries.standardOptions.color.withMode(tokens.base.colors.mode.single)
-    + timeSeries.standardOptions.color.withFixedColor(tokens.base.colors.palette.threshold),
-  stylizeByRegexp(regexp):
+    + timeSeries.standardOptions.color.withFixedColor(color),
+  stylizeByRegexp(regexp, color=tokens.base.colors.palette.threshold):
     timeSeries.standardOptions.withOverridesMixin(
       fieldOverride.byRegexp.new(regexp)
-      + fieldOverride.byRegexp.withPropertiesFromOptions(this.stylize())
+      + fieldOverride.byRegexp.withPropertiesFromOptions(this.stylize(color))
     ),
 }

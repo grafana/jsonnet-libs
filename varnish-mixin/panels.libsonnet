@@ -269,7 +269,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           description='Number of failed, created, limited, and current threads.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('none')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(false),
     },
