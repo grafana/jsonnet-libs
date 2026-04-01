@@ -451,12 +451,12 @@
                "legend": {
                   "asTable": true,
                   "calcs": [
-                     "last*",
+                     "lastNotNull",
                      "min",
                      "mean",
                      "max"
                   ],
-                  "displayMode": "list",
+                  "displayMode": "table",
                   "placement": "right"
                },
                "tooltip": {

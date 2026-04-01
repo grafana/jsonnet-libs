@@ -559,7 +559,7 @@
                "legend": {
                   "asTable": true,
                   "calcs": [ ],
-                  "displayMode": "table",
+                  "displayMode": "list",
                   "placement": "right"
                },
                "tooltip": {
