@@ -6,7 +6,7 @@
       "links": [
          {
             "keepTime": true,
-            "title": "Microsoft IIS Logs",
+            "title": "Microsoft IIS logs",
             "type": "link",
             "url": "/d/microsoftiis-logs"
          },
