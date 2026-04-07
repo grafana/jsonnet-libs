@@ -18,7 +18,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         g.row('Hits')
         .addPanel(
           g.panel('Hit Rate') +
-          g.queryPanel('sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance", command="get", status="hit"}[$__rate_interval])) / sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", command="get"}[$__rate_interval]))', 'Hit Rate') +
+          g.queryPanel('sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance", command="get", status="hit"}[$__rate_interval])) / sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance", command="get"}[$__rate_interval]))', 'Hit Rate') +
           { yaxes: g.yaxes('percentunit') },
         )
         .addPanel(
