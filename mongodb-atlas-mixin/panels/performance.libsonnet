@@ -67,7 +67,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.tooltip.withSort('desc')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withAsTable(true)
-      + g.panel.timeSeries.options.legend.withCalcs(['last*', 'min', 'mean', 'max']),
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'mean', 'max']),
 
     networkThroughputPerformance:
       commonlib.panels.generic.timeSeries.base.new('Network throughput', targets=[

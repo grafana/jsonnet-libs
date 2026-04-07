@@ -172,7 +172,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('iops')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withAsTable(true)
-      + g.panel.timeSeries.options.legend.withCalcs(['last*', 'min', 'mean', 'max']),
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'mean', 'max']),
 
     hardwareIOWaitTime:
       commonlib.panels.generic.timeSeries.base.new('Hardware I/O wait time / $__interval', targets=[
@@ -186,7 +187,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.tooltip.withSort('desc')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withAsTable(true)
-      + g.panel.timeSeries.options.legend.withCalcs(['last*', 'min', 'mean', 'max']),
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'mean', 'max']),
 
     hardwareCPUInterruptServiceTime:
       commonlib.panels.generic.timeSeries.base.new('Hardware CPU interrupt service time / $__interval', targets=[
@@ -234,7 +236,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.tooltip.withSort('desc')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withAsTable(true)
-      + g.panel.timeSeries.options.legend.withCalcs(['last*', 'min', 'mean', 'max']),
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'mean', 'max']),
 
     slowRequests:
       commonlib.panels.network.timeSeries.traffic.new('Slow requests', targets=[
@@ -285,6 +288,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.options.tooltip.withMode('multi')
       + g.panel.pieChart.options.tooltip.withSort('desc')
       + g.panel.pieChart.options.legend.withAsTable(true)
+      + g.panel.pieChart.options.legend.withDisplayMode('table')
       + g.panel.pieChart.options.legend.withPlacement('right'),
 
     readwriteLatency:
