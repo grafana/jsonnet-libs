@@ -1,6 +1,6 @@
 # OracleDB Mixin
 
-OracleDB mixin is a set of configurable alerts and dashboards that use the third party [OracleDB Exporter](https://github.com/iamseth/oracledb_exporter) using Prometheus and Loki for logs (optional).
+OracleDB mixin is a set of configurable alerts and dashboards that use the official [OracleDB Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) using Prometheus and Loki for logs (optional).
 
 ## Alerts
 

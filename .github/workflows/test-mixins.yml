@@ -25,7 +25,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
         with:
-          go-version: 1.23
+          go-version: 1.25
       - name: Tools cache
         id: tools-cache
         uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
@@ -52,7 +52,7 @@ jobs:
           persist-credentials: false
       - name: Get changed mixins
         id: changed-mixins
-        uses: step-security/changed-files@60967b822d3001fa82242f8d6b4ed46bc3600a68 # v47.0.1
+        uses: step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad # v47.0.5
         with:
           dir_names: true
           dir_names_exclude_current_dir: true
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
         with:
-          go-version: 1.23
+          go-version: 1.25
       - name: Restore Tools cache
         uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
         with:

@@ -4,12 +4,6 @@
       },
       "links": [
          {
-            "keepTime": true,
-            "title": "Microsoft IIS Logs",
-            "type": "link",
-            "url": "/d/microsoftiis-logs"
-         },
-         {
             "includeVars": true,
             "keepTime": true,
             "title": "Microsoft IIS applications",
