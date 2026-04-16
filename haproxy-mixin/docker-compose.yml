@@ -34,7 +34,7 @@ services:
       - './dashboards:/var/lib/grafana/dashboards'
 
   prometheus:
-    image: 'quay.io/prometheus/prometheus:v3.7.1@sha256:ff7e389acbe064a4823212a500393d40a28a8f362e4b05cbf6742a9a3ef736b2'
+    image: 'quay.io/prometheus/prometheus:v3.11.2@sha256:cd37346c974517be59bd528c43cfff51727fb75393df0ad8d10ce10013a047b6'
     ports:
       - '${PROMETHEUS_PORT:-9090}:9090'
     volumes:
