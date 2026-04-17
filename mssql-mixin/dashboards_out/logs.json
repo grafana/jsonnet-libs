@@ -5,13 +5,13 @@
       "links": [
          {
             "keepTime": true,
-            "title": "MSSQL Overview",
+            "title": "MSSQL overview",
             "type": "link",
             "url": "/d/mssql_mssql_overview"
          },
          {
             "keepTime": true,
-            "title": "MSSQL Pages",
+            "title": "MSSQL pages",
             "type": "link",
             "url": "/d/mssql_mssql_pages"
          },
