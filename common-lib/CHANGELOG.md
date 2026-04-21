@@ -1,6 +1,9 @@
+# 0.6.2
+- [Panels] chore: panel requests.stat.errors use default palette color if there are no errors and red color if erorrs > 0.
+
 # 0.6.1
-- [Signal] chore: bump grafonnet to 11.4.0
-- [Panels] chore: add tests for generic panels
+- [Signal] chore: bump grafonnet to 11.4.0.
+- [Panels] chore: add tests for generic panels.
 
 # 0.6.0
 - [Signal] feat: add new type of aggregation "aggKeepLabels" in addition to "group", "instance", "none".
