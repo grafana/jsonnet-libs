@@ -35,7 +35,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -59,7 +69,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -67,7 +76,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -95,7 +104,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -119,7 +138,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -127,7 +145,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -153,9 +171,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -178,7 +206,7 @@
                "x": 6,
                "y": 1
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -204,9 +232,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -229,7 +267,7 @@
                "x": 9,
                "y": 1
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -251,8 +289,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Cluster bytes in (sum): Aggregate rate of incoming data in bytes across all brokers from producers.  \nMeasures total network ingress and storage write load.  \n  \n\nCluster bytes out (sum): Aggregate rate of outgoing data in bytes across all brokers to consumers and followers.  \nMeasures total network egress load and consumer throughput.  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -264,13 +307,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
-                  "unit": "bps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -354,8 +401,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Cluster messages in (sum): Aggregate rate of incoming messages across all brokers and topics in the cluster.  \nRepresents total producer throughput and write workload.  \n  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -365,7 +417,11 @@
                   },
                   "decimals": 1,
                   "noValue": "No packets",
-                  "unit": "pps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "mps"
                },
                "overrides": [
                   {
@@ -424,9 +480,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -449,7 +515,7 @@
                "x": 0,
                "y": 5
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -475,9 +541,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -500,7 +576,7 @@
                "x": 3,
                "y": 5
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -526,9 +602,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -551,7 +637,7 @@
                "x": 6,
                "y": 5
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -577,9 +663,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -602,7 +698,7 @@
                "x": 9,
                "y": 5
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -624,12 +720,18 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Broker's current controller role: 0 indicates follower, 1 indicates active controller.  \nOnly one broker should have value 1 at any time.  \nUsed to identify which broker is managing cluster metadata and leadership.\nCurrent controller role: 0 - follower, 1 - controller.\n",
+            "description": "Current role (sum): Broker's current controller role: 0 indicates follower, 1 indicates active controller.  \nOnly one broker should have value 1 at any time.  \nUsed to identify which broker is managing cluster metadata and leadership.\nCurrent controller role: 0 - follower, 1 - controller.\n  \n\nCurrent zookeeper role (sum): 0 - zookeeper, 1 - zookeeper(leader).\n  \n\nCurrent role (kraft) (sum): Broker state in KRaft mode (Kafka without ZooKeeper).  \nAny value indicates the broker is running in KRaft mode.  \nUsed to identify KRaft-enabled brokers in the cluster.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "fixed"
-                  }
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -737,7 +839,7 @@
             "options": {
                "showValue": "never"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -793,8 +895,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Broker bytes in (sum): Rate of incoming data in bytes published to this broker from producers.  \nMeasures network and storage write load.  \n  \n\nBroker bytes out (sum): Rate of outgoing data in bytes sent from this broker to consumers and followers.  \nMeasures network read load and consumer throughput.  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -806,13 +913,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
-                  "unit": "bps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -896,8 +1007,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Broker messages in (sum): Rate of incoming messages published to this broker across all topics.  \nTracks producer throughput and write workload.  \n  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -907,7 +1023,11 @@
                   },
                   "decimals": 1,
                   "noValue": "No packets",
-                  "unit": "pps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "mps"
                },
                "overrides": [
                   {
@@ -977,13 +1097,22 @@
             "description": "Number of partitions that are currently online and available on this broker. This includes\npartitions where this broker is either the leader or a follower replica. The total count\nreflects the broker's share of the topic partitions across the cluster. A sudden drop in\nonline partitions may indicate broker issues, partition reassignments, or cluster rebalancing.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1016,7 +1145,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1042,8 +1171,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-red",
-                     "mode": "fixed"
+                     "fixedColor": "#ff7383",
+                     "mode": "shades"
                   },
                   "custom": {
                      "drawStyle": "bars",
@@ -1056,7 +1185,12 @@
                         "mode": "normal"
                      }
                   },
-                  "noValue": "No errors"
+                  "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1090,7 +1224,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1116,8 +1250,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-red",
-                     "mode": "fixed"
+                     "fixedColor": "#ff7383",
+                     "mode": "shades"
                   },
                   "custom": {
                      "drawStyle": "bars",
@@ -1130,7 +1264,12 @@
                         "mode": "normal"
                      }
                   },
-                  "noValue": "No errors"
+                  "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1164,7 +1303,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1190,8 +1329,8 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "light-red",
-                     "mode": "fixed"
+                     "fixedColor": "#ff7383",
+                     "mode": "shades"
                   },
                   "custom": {
                      "drawStyle": "bars",
@@ -1204,7 +1343,12 @@
                         "mode": "normal"
                      }
                   },
-                  "noValue": "No errors"
+                  "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1238,7 +1382,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1263,13 +1407,22 @@
             "description": "The number of in-sync replicas (ISRs) for a particular partition should remain fairly static,\nthe only exceptions are when you are expanding your broker cluster or removing partitions.\nIn order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. \n\nA replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset\n(user-configurable by setting the replica.lag.max.messages configuration parameter),\nor it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason,\nan increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.\n\nThe Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1302,7 +1455,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1327,13 +1480,22 @@
             "description": "The number of in-sync replicas (ISRs) for a particular partition should remain fairly static,\nthe only exceptions are when you are expanding your broker cluster or removing partitions.\nIn order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. \n\nA replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset\n(user-configurable by setting the replica.lag.max.messages configuration parameter),\nor it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason,\nan increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.\n\nThe Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1366,7 +1528,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1397,9 +1559,13 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Total time breakdown for producer requests.\nquantile: 0.95\n\n- `Request queue`: Time spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "description": "Produce follower queue time (avg): Time spent waiting in the request queue.\nHigh values indicate insufficient IO threads, CPU bottlenecks, or undersized request queue.  \nQueue size should match connection count.\n  \n\nProduce follower local time (avg): Time spent being processed by leader.\nHigh values often indicate slow storage or disk bottlenecks.  \nCheck LogFlushRateAndTimeMs for disk performance issues.\n  \n\nProduce follower remote time (avg): Time spent waiting for follower response (only when 'require acks' is set).\nFor fetch requests, high values may indicate caught-up consumers with no new data (normal if near max wait time).  \nConfigure via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n  \n\nProduce follower response queue time (avg): Time spent waiting in the response queue.\nHigh values indicate insufficient network threads or slow network dequeue causing backpressure.\n  \n\nProduce follower response time (avg): Time to send the response.\nHigh values indicate slow zero-copy operations or network saturation.  \nNetwork buffer fullness can cause Kafka to block.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "none",
@@ -1409,7 +1575,12 @@
                            "stacking": {
                               "mode": "normal"
                            }
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ms"
                      },
                      "overrides": [
                         {
@@ -1558,9 +1729,13 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Total time breakdown for fetch-follower requests.\nquantile: 0.95\n\n- `Request queue`: Time spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "description": "Fetch-follower queue time (avg): Time spent waiting in the request queue.\nHigh values indicate insufficient IO threads, CPU bottlenecks, or undersized request queue.  \nQueue size should match connection count.\n  \n\nFetch-follower local time (avg): Time spent being processed by leader.\nHigh values often indicate slow storage or disk bottlenecks.  \nCheck LogFlushRateAndTimeMs for disk performance issues.\n  \n\nFetch-follower remote time (avg): Time spent waiting for follower response (only when 'require acks' is set).\nFor fetch requests, high values may indicate caught-up consumers with no new data (normal if near max wait time).  \nConfigure via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n  \n\nFetch-follower response queue time (avg): Time spent waiting in the response queue.\nHigh values indicate insufficient network threads or slow network dequeue causing backpressure.\n  \n\nFetch-follower response time (avg): Time to send the response.\nHigh values indicate slow zero-copy operations or network saturation.  \nNetwork buffer fullness can cause Kafka to block.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "none",
@@ -1570,7 +1745,12 @@
                            "stacking": {
                               "mode": "normal"
                            }
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ms"
                      },
                      "overrides": [
                         {
@@ -1719,9 +1899,13 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Total time breakdown for fetch requests.\nquantile: 0.95\n\n- `Request queue`: Time   spent waiting in the request queue.\n- `Local time`: Time spent being processed by leader.\n- `Remote time`: Time spent waiting for follower response (only when 'require acks' is set).\n- `Response queue`: Time spent waiting in the response queue.\n- `Response time`: Time to send the response.\n\n",
+                  "description": "Fetch-consumer queue time (avg): Time spent waiting in the request queue.\nHigh values indicate insufficient IO threads, CPU bottlenecks, or undersized request queue.  \nQueue size should match connection count.\n  \n\nFetch-consumer local time (avg): Time spent being processed by leader.\nHigh values often indicate slow storage or disk bottlenecks.  \nCheck LogFlushRateAndTimeMs for disk performance issues.\n  \n\nFetch-consumer remote time (avg): Time spent waiting for follower response (only when 'require acks' is set).\nFor fetch requests, high values may indicate caught-up consumers with no new data (normal if near max wait time).  \nConfigure via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n  \n\nFetch-consumer response queue time (avg): Time spent waiting in the response queue.\nHigh values indicate insufficient network threads or slow network dequeue causing backpressure.\n  \n\nFetch-consumer response time (avg): Time to send the response.\nHigh values indicate slow zero-copy operations or network saturation.  \nNetwork buffer fullness can cause Kafka to block.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "none",
@@ -1731,7 +1915,12 @@
                            "stacking": {
                               "mode": "normal"
                            }
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ms"
                      },
                      "overrides": [
                         {
@@ -1896,13 +2085,22 @@
                   "description": "Rate of producer messages requiring format conversion to match broker's log.message.format.version.  \nConversions add CPU overhead and latency.  \nNon-zero values suggest producer and broker version mismatches requiring alignment.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "mps"
                      },
                      "overrides": [
                         {
@@ -1935,7 +2133,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1960,13 +2158,22 @@
                   "description": "Rate of messages requiring format conversion during consumer fetch to match log.message.format.version.  \nConversions impact broker CPU and consumer latency.  \nIndicates version mismatch between stored messages and consumer expectations.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "mps"
                      },
                      "overrides": [
                         {
@@ -1999,7 +2206,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2037,13 +2244,22 @@
                   "description": "Latency in milliseconds for ZooKeeper requests from broker to ZooKeeper ensemble.  \nHigh latency indicates ZooKeeper performance issues or network problems.  \nCritical for broker operations like leader election and metadata updates.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ms"
                      },
                      "overrides": [
                         {
@@ -2076,7 +2292,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2098,16 +2314,25 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Rate of successful ZooKeeper connections established by broker.  \nFrequent connections may indicate session instability or network issues.  \nShould be stable in healthy clusters with occasional reconnections during maintenance.\n",
+                  "description": "Zookeeper connections (avg): Rate of successful ZooKeeper connections established by broker.  \nFrequent connections may indicate session instability or network issues.  \nShould be stable in healthy clusters with occasional reconnections during maintenance.\n  \n\nZookeeper expired connections (avg): Rate of ZooKeeper session expirations from broker.  \nExpirations cause broker to lose cluster membership temporarily.  \nIndicates GC pauses, network issues, or ZooKeeper overload requiring investigation.\n  \n\nZookeeper disconnects (avg): Rate of ZooKeeper disconnections from broker.  \nFrequent disconnects indicate unstable ZooKeeper connectivity or network problems.  \nCan lead to ISR changes and performance degradation if persistent.\n  \n\nZookeeper auth failures (avg): Rate of ZooKeeper authentication failures from broker.  \nIndicates incorrect credentials, ACL issues, or security configuration problems.  \nPrevents broker from accessing ZooKeeper data and requires immediate security review.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -2176,7 +2401,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2251,7 +2476,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "decimals": 1,
@@ -2295,7 +2520,7 @@
                "colorMode": "value",
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2323,7 +2548,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "dateTimeAsIso"
                },
                "overrides": [
                   {
@@ -2347,7 +2582,6 @@
                "y": 75
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -2355,7 +2589,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2380,6 +2614,10 @@
             "description": "System's load average.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 0,
                      "gradientMode": "opacity",
@@ -2388,6 +2626,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [
@@ -2412,7 +2654,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -2450,7 +2692,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2472,10 +2714,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Process CPU usage.",
+            "description": "CPU usage (process) (avg): Process CPU usage.  \n\nCPU usage (system) (avg): CPU Usage of host system.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -2488,6 +2731,10 @@
                   "decimals": 1,
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -2533,7 +2780,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2569,6 +2816,10 @@
             "description": "Process resident memory size in bytes.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -2577,6 +2828,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -2601,7 +2856,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -2639,7 +2894,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2661,16 +2916,25 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Process files opened.",
+            "description": "Process files open (avg): Process files opened.  \n\nProcess files max (avg): Process files opened limit.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -2715,7 +2979,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2761,12 +3025,21 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "decimals": 1,
                         "max": 100,
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
                         "unit": "percent"
                      }
                   },
@@ -2784,7 +3057,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2810,12 +3083,21 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "decimals": 1,
                         "max": 100,
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
                         "unit": "percent"
                      }
                   },
@@ -2833,7 +3115,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2859,9 +3141,19 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "fixed"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -2884,7 +3176,7 @@
                      "x": 8,
                      "y": 88
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2910,9 +3202,19 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "fixed"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -2935,7 +3237,7 @@
                      "x": 12,
                      "y": 88
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2970,9 +3272,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The used space is the amount of memory that is currently occupied by Java objects.",
+                  "description": "JVM memory used(heap) (avg): The used space is the amount of memory that is currently occupied by Java objects.  \n\nJVM memory max(heap) (avg): The max heap size is the size specified via the -Xmx flag.\nReturns -1 if the maximum memory size is undefined.\n\nThis amount of memory is not guaranteed to be available for memory management\nif it is greater than the amount of committed memory.\nThe Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\nSee also: https://docs.oracle.com/javase/10/docs/api/java/lang/management/MemoryUsage.html\n  \n\nJVM memory committed(heap) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -2981,6 +3287,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -3005,7 +3315,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -3068,7 +3378,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3113,9 +3423,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The amount of memory that is currently in non-heap.",
+                  "description": "JVM memory used(nonheap) (avg): The amount of memory that is currently in non-heap.  \n\nJVM memory max(nonheap) (avg): Measure of memory max possible (non-heap). Returns -1 if the maximum memory size is undefined.  \n\nJVM memory committed(nonheap) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine(non-heap).\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -3124,6 +3438,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -3148,7 +3466,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -3211,7 +3529,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3269,16 +3587,25 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "description": "Threads (avg): The current number of live threads including both daemon and non-daemon threads.  \n\nThreads (daemon) (avg): Daemon thread count of a JVM.  \n\nThreads (peak) (avg): Peak thread count of a JVM.  \n\nThreads (deadlocked) (avg): Cycles of JVM-threads that are in deadlock waiting to acquire object monitors or ownable synchronizers.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -3326,7 +3653,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -3376,7 +3703,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3434,13 +3761,22 @@
                   "description": "Threads by current state.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -3473,7 +3809,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {

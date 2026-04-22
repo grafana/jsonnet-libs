@@ -384,36 +384,39 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % groupLabel,
               },
             },
-            {
-              alert: 'KafkaZookeeperSyncConnect',
-              expr: 'avg by(' + std.join(',', this.config.groupLabels + this.config.instanceLabels) + ') (' + this.signals.zookeeperClient.zookeeperConnections.asRuleExpression() + ') < 0',
-              'for': '5m',
-              labels: {
-                severity: 'critical',
+          ]
+          +
+          if this.config.zookeeperEnabled then
+            [
+              {
+                alert: 'KafkaZookeeperSyncConnect',
+                expr: 'avg by(' + std.join(',', this.config.groupLabels + this.config.instanceLabels) + ') (' + this.signals.zookeeperClient.zookeeperConnections.asRuleExpression() + ') < 0',
+                'for': '5m',
+                labels: {
+                  severity: 'critical',
+                },
+                annotations: {
+                  summary: 'Kafka Zookeeper sync disconnected.',
+                  description: |||
+                    Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} has lost connection to Zookeeper.
+
+                    Zookeeper connectivity is essential for Kafka broker operation. A disconnected broker cannot:
+                    - Participate in controller elections
+                    - Register or maintain its broker metadata
+                    - Receive cluster state updates
+                    - Serve as partition leader (will be removed from ISR)
+                    - Handle leadership changes or partition reassignments
+
+                    This will cause the broker to become isolated from the cluster, leading to under-replicated partitions and potential service degradation for any topics hosted on this broker.
+
+                    Prolonged Zookeeper disconnection will result in the broker being ejected from the cluster and leadership reassignments.
+                  ||| % [
+                    instanceLabel,
+                    groupLabel,
+                  ],
+                },
               },
-              annotations: {
-                summary: 'Kafka Zookeeper sync disconnected.',
-                description: |||
-                  Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} has lost connection to Zookeeper.
-
-                  Zookeeper connectivity is essential for Kafka broker operation. A disconnected broker cannot:
-                  - Participate in controller elections
-                  - Register or maintain its broker metadata
-                  - Receive cluster state updates
-                  - Serve as partition leader (will be removed from ISR)
-                  - Handle leadership changes or partition reassignments
-
-                  This will cause the broker to become isolated from the cluster, leading to under-replicated partitions and potential service degradation for any topics hosted on this broker.
-
-                  Prolonged Zookeeper disconnection will result in the broker being ejected from the cluster and leadership reassignments.
-                ||| % [
-                  instanceLabel,
-                  groupLabel,
-                ],
-              },
-            },
-
-          ],
+            ] else [],
       },
     ],
   },

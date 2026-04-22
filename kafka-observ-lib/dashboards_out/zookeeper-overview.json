@@ -35,7 +35,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -59,7 +69,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -67,7 +76,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -95,7 +104,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -119,7 +138,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -127,7 +145,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -152,13 +170,22 @@
             "description": "Outstanding requests to ZooKeeper cluster.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -191,7 +218,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -219,7 +246,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -243,7 +280,6 @@
                "y": 5
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -251,7 +287,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -279,7 +315,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -303,7 +349,6 @@
                "y": 5
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -311,7 +356,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -337,8 +382,14 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "mode": "fixed"
-                  }
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -385,7 +436,7 @@
             "options": {
                "showValue": "never"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -422,13 +473,22 @@
             "description": "Amount of time it takes for the server to respond to a client request.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ms"
                },
                "overrides": [
                   {
@@ -461,7 +521,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -486,13 +546,22 @@
             "description": "Amount of time it takes for the server to respond to a client request.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ms"
                },
                "overrides": [
                   {
@@ -525,7 +594,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -550,13 +619,22 @@
             "description": "Amount of time it takes for the server to respond to a client request.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ms"
                },
                "overrides": [
                   {
@@ -589,7 +667,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -624,12 +702,21 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "decimals": 1,
                         "max": 100,
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
                         "unit": "percent"
                      }
                   },
@@ -647,7 +734,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -673,12 +760,21 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "decimals": 1,
                         "max": 100,
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
                         "unit": "percent"
                      }
                   },
@@ -696,7 +792,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -722,9 +818,19 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "fixed"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -747,7 +853,7 @@
                      "x": 8,
                      "y": 27
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -773,9 +879,19 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "fixed"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -798,7 +914,7 @@
                      "x": 12,
                      "y": 27
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -837,7 +953,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "decimals": 1,
@@ -881,7 +997,7 @@
                      "colorMode": "value",
                      "graphMode": "none"
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -909,7 +1025,17 @@
                         "color": {
                            "fixedColor": "text",
                            "mode": "fixed"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "dateTimeAsIso"
                      },
                      "overrides": [
                         {
@@ -933,7 +1059,6 @@
                      "y": 32
                   },
                   "options": {
-                     "colorMode": "fixed",
                      "graphMode": "none",
                      "reduceOptions": {
                         "calcs": [
@@ -941,7 +1066,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -966,6 +1091,10 @@
                   "description": "Load average: Signal not found.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
@@ -974,6 +1103,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "short"
                      },
                      "overrides": [
@@ -986,7 +1119,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1025,7 +1158,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "title": "",
                   "transparent": true,
                   "type": "text"
@@ -1039,6 +1172,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "custom": {
@@ -1051,6 +1185,10 @@
                         "decimals": 1,
                         "max": 100,
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "percent"
                      },
                      "overrides": [
@@ -1084,7 +1222,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1109,6 +1247,10 @@
                   "description": "Process resident memory size in bytes.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1117,6 +1259,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1141,7 +1287,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1179,7 +1325,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1201,16 +1347,25 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Process files opened.",
+                  "description": "Process files open (avg): Process files opened.  \n\nProcess files max (avg): Process files opened limit.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": ""
                      },
                      "overrides": [
                         {
@@ -1255,7 +1410,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1301,9 +1456,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The used space is the amount of memory that is currently occupied by Java objects.",
+                  "description": "JVM memory used(heap) (avg): The used space is the amount of memory that is currently occupied by Java objects.  \n\nJVM memory max(heap) (avg): The max heap size is the size specified via the -Xmx flag.\nReturns -1 if the maximum memory size is undefined.\n\nThis amount of memory is not guaranteed to be available for memory management\nif it is greater than the amount of committed memory.\nThe Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\nSee also: https://docs.oracle.com/javase/10/docs/api/java/lang/management/MemoryUsage.html\n  \n\nJVM memory committed(heap) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1312,6 +1471,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1336,7 +1499,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1399,7 +1562,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1444,9 +1607,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The amount of memory that is currently in non-heap.",
+                  "description": "JVM memory used(nonheap) (avg): The amount of memory that is currently in non-heap.  \n\nJVM memory max(nonheap) (avg): Measure of memory max possible (non-heap). Returns -1 if the maximum memory size is undefined.  \n\nJVM memory committed(nonheap) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine(non-heap).\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1455,6 +1622,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1479,7 +1650,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1542,7 +1713,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1600,9 +1771,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Memory used for G1 Eden Space Collection.",
+                  "description": "Eden Space (used) (avg): Memory used for G1 Eden Space Collection.  \n\nEden Space (max) (avg): The max heap size is the size specified via the -Xmx flag.\nReturns -1 if the maximum memory size is undefined.\n\nThis amount of memory is not guaranteed to be available for memory management\nif it is greater than the amount of committed memory.\nThe Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\nSee also: https://docs.oracle.com/javase/10/docs/api/java/lang/management/MemoryUsage.html\n  \n\nEden Space (committed) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1611,6 +1786,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1635,7 +1814,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1697,7 +1876,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1741,9 +1920,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Memory used for Survival collection.",
+                  "description": "Survival space (used) (avg): Memory used for Survival collection.  \n\nSurvival space (max) (avg): The max heap size is the size specified via the -Xmx flag.\nReturns -1 if the maximum memory size is undefined.\n\nThis amount of memory is not guaranteed to be available for memory management\nif it is greater than the amount of committed memory.\nThe Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\nSee also: https://docs.oracle.com/javase/10/docs/api/java/lang/management/MemoryUsage.html\n  \n\nSurvival space (committed) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1752,6 +1935,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1776,7 +1963,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1838,7 +2025,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1882,9 +2069,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Memory used for Tenured(Old Gen) collection.",
+                  "description": "Tenured space (used) (avg): Memory used for Tenured(Old Gen) collection.  \n\nTenured space (max) (avg): The max heap size is the size specified via the -Xmx flag.\nReturns -1 if the maximum memory size is undefined.\n\nThis amount of memory is not guaranteed to be available for memory management\nif it is greater than the amount of committed memory.\nThe Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\nSee also: https://docs.oracle.com/javase/10/docs/api/java/lang/management/MemoryUsage.html\n  \n\nTenured space (committed) (avg): The committed size is the amount of memory guaranteed to be available for use by the Java virtual machine.\n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1893,6 +2084,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -1917,7 +2112,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -1979,7 +2174,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2026,13 +2221,22 @@
                   "description": "Major and minor garbage collections",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "ops"
                      },
                      "overrides": [
                         {
@@ -2065,7 +2269,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2075,7 +2279,7 @@
                         "expr": "avg by (kafka_cluster,gc) (\n  rate(jvm_gc_collection_seconds_count{kafka_cluster=~\"$kafka_cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{gc}}",
+                        "legendFormat": "{{kafka_cluster}}",
                         "refId": "Garbage collections"
                      }
                   ],
@@ -2087,16 +2291,25 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Major and minor garbage collections",
+                  "description": "GC time (avg) (avg): Garbage collection time (max).  \n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 0,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "s"
                      },
                      "overrides": [
                         {
@@ -2151,9 +2364,13 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "'Allocated' is the size increase of the young generation memory pool after one GC and before the next. It reflects minor GC.\n'Promoted' is the size increase of the old generation memory pool after GC. It reflects full GC.\n",
+                  "description": "Allocated (bytes) (avg): Memory allocated to Eden Space.  \n",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -2162,6 +2379,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -2174,7 +2395,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -2259,16 +2480,25 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The current number of live threads including both daemon and non-daemon threads.",
+                  "description": "Threads (avg): The current number of live threads including both daemon and non-daemon threads.  \n\nThreads (daemon) (avg): Daemon thread count of a JVM.  \n\nThreads (peak) (avg): Peak thread count of a JVM.  \n\nThreads (deadlocked) (avg): Cycles of JVM-threads that are in deadlock waiting to acquire object monitors or ownable synchronizers.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -2316,7 +2546,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -2366,7 +2596,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2424,13 +2654,22 @@
                   "description": "Threads by current state.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -2463,7 +2702,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2498,9 +2737,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
+                  "description": "Direct buffer used bytes (avg): Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.  \n\nDirect buffer capacity (avg): Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -2509,6 +2752,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -2545,7 +2792,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -2583,7 +2830,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2616,9 +2863,13 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "description": "The mapped buffer pool is used for its FileChannel instances.",
+                  "description": "Mapped buffer used (avg): The mapped buffer pool is used for its FileChannel instances.  \n\nMapped buffer capacity (avg): The mapped buffer pool is used for its FileChannel instances.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -2627,6 +2878,10 @@
                            "showPoints": "never"
                         },
                         "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -2663,7 +2918,7 @@
                               {
                                  "id": "color",
                                  "value": {
-                                    "fixedColor": "light-orange",
+                                    "fixedColor": "#ffb357",
                                     "mode": "fixed"
                                  }
                               },
@@ -2701,7 +2956,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
