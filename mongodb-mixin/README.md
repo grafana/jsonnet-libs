@@ -2,7 +2,7 @@
 
 The MongoDB mixin is a set of configurable, reusable, and extensible alerts and dashboards based on the metrics exported by [Percona MongoDB Exporter](https://github.com/percona/mongodb_exporter).
 
-This mixin includes 3 dashboards suited for MongoDB, namely MongoDB Cluster, MongoDB Instance and MongoDB ReplicaSet.
+This mixin includes 4 dashboards suited for MongoDB: MongoDB Overview, MongoDB Cluster, MongoDB Instance, and MongoDB ReplicaSet. A 5th MongoDB Logs dashboard is generated when `enableLokiLogs: true` is set in `config.libsonnet` (requires a Loki datasource).
 
 The alerts were based on those published at [https://awesome-prometheus-alerts.grep.to/rules.html#mongodb](https://awesome-prometheus-alerts.grep.to/rules.html#mongodb).
 

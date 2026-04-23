@@ -18,7 +18,7 @@ groups:
             severity: critical
         - alert: MongodbReplicationLag
           annotations:
-            description: MongoDB replication lag is more than 60s (instance {{ $labels.service_name }})
+            description: MongoDB replication lag is more than 60s (instance {{ $labels.service_name }}).
             summary: MongoDB replication lag is exceeding the threshold.
           expr: mongodb_mongod_replset_member_replication_lag{state="SECONDARY", } > 60
           for: 5m
@@ -34,9 +34,9 @@ groups:
             severity: critical
         - alert: MongodbNumberCursorsOpen
           annotations:
-            description: Too many cursors opened by MongoDB for clients (> 10k) on {{ $labels.service_name }}.
+            description: Too many cursors opened by MongoDB for clients (> 10000) on {{ $labels.service_name }}.
             summary: MongoDB number of cursors open too high.
-          expr: mongodb_mongod_metrics_cursor_open{state="total", } > 10 * 1000
+          expr: mongodb_mongod_metrics_cursor_open{state="total", } > 10000
           for: 2m
           labels:
             severity: warning
@@ -50,7 +50,7 @@ groups:
             severity: warning
         - alert: MongodbTooManyConnections
           annotations:
-            description: Too many connections to MongoDB instance {{ $labels.service_name }} (> 80%).
+            description: Too many connections to MongoDB instance {{ $labels.service_name }} (> 80%%).
             summary: MongoDB has too many connections.
           expr: avg by (job,mongodb_cluster,service_name) (rate(mongodb_connections{state="current",}[1m])) / avg by (job,mongodb_cluster,service_name) (sum (mongodb_connections) by (job,mongodb_cluster,service_name)) * 100 > 80
           for: 2m

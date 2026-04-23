@@ -1,0 +1,779 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "id": null,
+      "links": [
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB logs",
+            "type": "link",
+            "url": "/d/mongodb-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB cluster",
+            "type": "link",
+            "url": "/d/mongodb-cluster"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB instance",
+            "type": "link",
+            "url": "/d/mongodb-instance"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB replica set",
+            "type": "link",
+            "url": "/d/mongodb-replicaset"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Health",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of MongoDB instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Total instances",
+                  "refId": "Total instances"
+               }
+            ],
+            "title": "Total instances",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of MongoDB instances that are up.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} == 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Instances up",
+                  "refId": "Instances up"
+               }
+            ],
+            "title": "Instances up",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of MongoDB instances that are down.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "green",
+                           "value": 0
+                        },
+                        {
+                           "color": "red",
+                           "value": 1
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 8,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "count(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} == 0) or vector(0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Instances down",
+                  "refId": "Instances down"
+               }
+            ],
+            "title": "Instances down",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total current connections across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 12,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Total connections",
+                  "refId": "Total connections"
+               }
+            ],
+            "title": "Total connections",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total operations per second across all instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 16,
+               "y": 1
+            },
+            "id": 6,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Total operations",
+                  "refId": "Total operations"
+               }
+            ],
+            "title": "Total QPS",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Maximum replication lag across all secondaries.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "yellow",
+                           "value": 10
+                        },
+                        {
+                           "color": "red",
+                           "value": 60
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 20,
+               "y": 1
+            },
+            "id": 7,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max(mongodb_mongod_replset_member_replication_lag{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{mongodb_cluster}}: Max replication lag",
+                  "refId": "Max replication lag"
+               }
+            ],
+            "title": "Max replication lag",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Replica set state per instance over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "index": 0,
+                              "text": "STARTUP"
+                           },
+                           "1": {
+                              "index": 1,
+                              "text": "PRIMARY"
+                           },
+                           "10": {
+                              "index": 9,
+                              "text": "REMOVED"
+                           },
+                           "2": {
+                              "index": 2,
+                              "text": "SECONDARY"
+                           },
+                           "3": {
+                              "index": 3,
+                              "text": "RECOVERING"
+                           },
+                           "5": {
+                              "index": 4,
+                              "text": "STARTUP2"
+                           },
+                           "6": {
+                              "index": 5,
+                              "text": "UNKNOWN"
+                           },
+                           "7": {
+                              "index": 6,
+                              "text": "ARBITER"
+                           },
+                           "8": {
+                              "index": 7,
+                              "text": "DOWN"
+                           },
+                           "9": {
+                              "index": 8,
+                              "text": "ROLLBACK"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 7
+            },
+            "id": 8,
+            "maxDataPoints": 50,
+            "options": {
+               "showValue": "auto"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Replica set state"
+               }
+            ],
+            "title": "Instance states",
+            "type": "status-history"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 13
+            },
+            "id": 9,
+            "panels": [ ],
+            "title": "Performance",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Current connections per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 14
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,mongodb_cluster, service_name) (mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Connections"
+               }
+            ],
+            "title": "Connections by instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Operations per second per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 14
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,mongodb_cluster, service_name) (irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Operations"
+               }
+            ],
+            "title": "Operations by instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Replication lag per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 10,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 22
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster, service_name) (mongodb_mongod_replset_member_replication_lag{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Replication lag"
+               }
+            ],
+            "title": "Replication lag by instance",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "tags": [
+         "mongodb-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(mongodb_up{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "MongoDB cluster",
+               "multi": true,
+               "name": "mongodb_cluster",
+               "query": "label_values(mongodb_up{job=~\"$job\"}, mongodb_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Service name",
+               "multi": true,
+               "name": "service_name",
+               "query": "label_values(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}, service_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "MongoDB overview",
+      "uid": "mongodb-overview"
+   }
