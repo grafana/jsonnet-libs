@@ -18,7 +18,9 @@ and the following alerts:
 
 The Squid overview dashboard provides details on both server and client HTTP, FTP, and other requests, caching hits and misses, and both cache and access logs.
 
-![TODO Dashboard screenshots]()
+![First screenshot of the Squid overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/squid/screenshots/squid_overview_1.png)
+![Second screenshot of the Squid overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/squid/screenshots/squid_overview_2.png)
+![Screenshot of the Squid logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/squid/screenshots/squid_logs_1.png)
 
 Squid logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
