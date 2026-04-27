@@ -28,7 +28,7 @@ jobs:
           go-version: 1.25
       - name: Tools cache
         id: tools-cache
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
             ~/go/bin
@@ -100,7 +100,7 @@ jobs:
         with:
           go-version: 1.25
       - name: Restore Tools cache
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
             ~/go/bin
