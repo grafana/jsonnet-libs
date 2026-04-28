@@ -10,7 +10,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.stat.info.stylize(),
     clusterRoles:
       signals.cluster.role.asStatusHistory()
-      + signals.zookeeper.cluster.role.asPanelMixin()
+      + (if std.objectHas(signals, 'zookeeper') then signals.zookeeper.cluster.role.asPanelMixin() else {})
       + signals.cluster.kraftBrokerRole.asPanelMixin()
       + commonlib.panels.generic.statusHistory.base.stylize(),
 

@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   grafana:
-    image: 'grafana/grafana:12.4.2@sha256:83749231c3835e390a3144e5e940203e42b9589761f20ef3169c716e734ad505'
+    image: 'grafana/grafana:13.0.1@sha256:0f86bada30d65ef9d0183b90c1e2682ac92d53d95da8bed322b984ea78a4a73a'
     environment:
       - 'GF_AUTH_ANONYMOUS_ENABLED=true'
       - 'GF_AUTH_ANONYMOUS_ORG_ROLE=Admin'
@@ -34,7 +34,7 @@ services:
       - './dashboards:/var/lib/grafana/dashboards'
 
   prometheus:
-    image: 'quay.io/prometheus/prometheus:v3.7.1@sha256:ff7e389acbe064a4823212a500393d40a28a8f362e4b05cbf6742a9a3ef736b2'
+    image: 'quay.io/prometheus/prometheus:v3.11.2@sha256:cd37346c974517be59bd528c43cfff51727fb75393df0ad8d10ce10013a047b6'
     ports:
       - '${PROMETHEUS_PORT:-9090}:9090'
     volumes:

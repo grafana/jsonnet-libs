@@ -29,12 +29,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Kafka active topics overview. ",
+            "description": "Topic start offset (max): Earliest available offset for each partition due to retention or deletion.  \n  \n\nTopic end offset (max): Latest offset (high water mark) for each partition representing newest available message.  \nContinuously increases as new messages arrive.  \nDifference between end and start offsets indicates total messages available.\n  \n\nMessages in per second (sum): Rate of messages produced to each partition within this topic.  \n  \n\nTopic log size (max): Total size in bytes of data stored on disk for each topic partition.  \nGrows with incoming messages and shrinks with retention cleanup.  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "unit": "none"
                },
                "overrides": [
                   {
@@ -93,7 +94,7 @@
                "x": 0,
                "y": 1
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -182,13 +183,22 @@
             "description": "Rate of messages produced to this topic across all partitions.  \nIndicates topic write activity and producer throughput.  \nUse to identify hot topics and understand data flow patterns.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "mps"
                },
                "overrides": [
                   {
@@ -221,7 +231,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -246,6 +256,10 @@
             "description": "Rate of incoming data in bytes written to this topic from producers.  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -255,7 +269,11 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
-                  "unit": "bps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
                },
                "overrides": [
                   {
@@ -288,7 +306,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -313,6 +331,10 @@
             "description": "Rate of outgoing data in bytes read from this topic by consumers.  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -322,7 +344,11 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
-                  "unit": "bps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
                },
                "overrides": [
                   {
@@ -355,7 +381,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -389,12 +415,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Rate at which a consumer group is consuming and committing offsets for a topic.  \nMeasures consumer throughput and processing speed.  \nShould match or exceed producer rate to prevent growing lag.\n",
+            "description": "Consumer group consume rate (avg): Rate at which a consumer group is consuming and committing offsets for a topic.  \nMeasures consumer throughput and processing speed.  \nShould match or exceed producer rate to prevent growing lag.\n  \n\nConsumer group lag (sum): Number of messages a consumer group is behind the latest available offset for a topic partition.  \nHigh or growing lag indicates consumers can't keep up with producer throughput.  \nCritical metric for consumer health and real-time processing requirements.\n  \n\nConsumer group lag in ms (avg): Time lag in milliseconds between message production and consumption for a consumer group.  \nRepresents real-time delay in message processing.  \nMore intuitive than message count lag for understanding business impact of delays.\n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "unit": "mps"
                },
                "overrides": [
                   {
@@ -441,7 +468,7 @@
                "x": 0,
                "y": 24
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -519,13 +546,22 @@
             "description": "Rate at which a consumer group is consuming and committing offsets for a topic.  \nMeasures consumer throughput and processing speed.  \nShould match or exceed producer rate to prevent growing lag.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "mps"
                },
                "overrides": [
                   {
@@ -558,7 +594,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -583,13 +619,22 @@
             "description": "Number of messages a consumer group is behind the latest available offset for a topic partition.  \nHigh or growing lag indicates consumers can't keep up with producer throughput.  \nCritical metric for consumer health and real-time processing requirements.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -622,7 +667,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -647,13 +692,22 @@
             "description": "Time lag in milliseconds between message production and consumption for a consumer group.  \nRepresents real-time delay in message processing.  \nMore intuitive than message count lag for understanding business impact of delays.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ms"
                },
                "overrides": [
                   {
@@ -686,7 +740,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

@@ -45,7 +45,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(rate(memcached_commands_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\", command=\"get\", status=\"hit\"}[$__rate_interval])) / sum(rate(memcached_commands_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", command=\"get\"}[$__rate_interval]))",
+                        "expr": "sum(rate(memcached_commands_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\", command=\"get\", status=\"hit\"}[$__rate_interval])) / sum(rate(memcached_commands_total{cluster=~\"$cluster\", namespace=~\"$namespace\", job=~\"$job\", instance=~\"$instance\", command=\"get\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Hit Rate",
                         "legendLink": null
