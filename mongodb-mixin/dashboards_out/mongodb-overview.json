@@ -148,7 +148,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} == 1)",
+                  "expr": "count(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} == 1) or vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mongodb_cluster}}: Instances up",

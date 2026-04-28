@@ -151,7 +151,7 @@
                   "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_databases_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type=\"partitioned\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Shards",
+                  "legendFormat": "Sharded DBs",
                   "refId": "Sharded DBs"
                }
             ],
@@ -206,7 +206,7 @@
                   "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_databases_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type=\"unpartitioned\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Shards",
+                  "legendFormat": "Unsharded DBs",
                   "refId": "Unsharded DBs"
                }
             ],
@@ -261,7 +261,7 @@
                   "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_shards_draining_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Shards",
+                  "legendFormat": "Draining shards",
                   "refId": "Draining shards"
                }
             ],
@@ -316,7 +316,7 @@
                   "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Shards",
+                  "legendFormat": "Sharded collections",
                   "refId": "Sharded collections"
                }
             ],
@@ -557,7 +557,7 @@
                   "expr": "max by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{db}} | {{shard}} | Collections",
+                  "legendFormat": "{{db}} | {{shard}}",
                   "refId": "Collections in shards"
                }
             ],
@@ -1086,7 +1086,7 @@
                   "expr": "avg by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_indexes_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{db}} | {{shard}} | Collections",
+                  "legendFormat": "{{db}} | {{shard}}",
                   "refId": "# Indexes per shard"
                }
             ],
@@ -1188,7 +1188,7 @@
                   "expr": "avg by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_index_size_bytes{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{db}} | {{shard}} | Collections",
+                  "legendFormat": "{{db}} | {{shard}}",
                   "refId": "Size of indexes per shard"
                }
             ],
@@ -1450,7 +1450,7 @@
                   "expr": "sum by (set) (avg by (service_name, set) (mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"}) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{shard}}",
+                  "legendFormat": "{{set}}",
                   "refId": "Connections per shard"
                }
             ],
@@ -1523,7 +1523,7 @@
                   "expr": "sum(sum(irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])) by (instance) * on (instance) group_right mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (set)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{shard}}",
+                  "legendFormat": "{{set}}",
                   "refId": "Operations per shard"
                }
             ],
@@ -1718,7 +1718,7 @@
                   "expr": "sum(sum(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"} or mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (set)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{shard}}",
+                  "legendFormat": "{{set}}",
                   "refId": "Cursors per shard"
                }
             ],

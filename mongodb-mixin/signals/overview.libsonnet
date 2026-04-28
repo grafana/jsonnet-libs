@@ -29,7 +29,7 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'count(mongodb_up{%(queriesSelector)s} == 1)',
+            expr: 'count(mongodb_up{%(queriesSelector)s} == 1) or vector(0)',
           },
         },
       },

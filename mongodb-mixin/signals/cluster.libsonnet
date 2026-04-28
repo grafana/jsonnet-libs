@@ -34,7 +34,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_sharding_databases_total{%(queriesSelector)s, type="partitioned"}',
-            legendCustomTemplate: 'Shards',
+            legendCustomTemplate: 'Sharded DBs',
           },
         },
       },
@@ -47,7 +47,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_sharding_databases_total{%(queriesSelector)s, type="unpartitioned"}',
-            legendCustomTemplate: 'Shards',
+            legendCustomTemplate: 'Unsharded DBs',
           },
         },
       },
@@ -60,7 +60,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_sharding_shards_draining_total{%(queriesSelector)s}',
-            legendCustomTemplate: 'Shards',
+            legendCustomTemplate: 'Draining shards',
           },
         },
       },
@@ -73,7 +73,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_sharding_collections_total{%(queriesSelector)s}',
-            legendCustomTemplate: 'Shards',
+            legendCustomTemplate: 'Sharded collections',
           },
         },
       },
@@ -125,7 +125,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_db_collections_total{%(queriesSelector)s, db!~"admin|config"}',
-            legendCustomTemplate: '{{db}} | {{shard}} | Collections',
+            legendCustomTemplate: '{{db}} | {{shard}}',
             aggKeepLabels: ['db', 'shard'],
           },
         },
@@ -239,7 +239,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_db_indexes_total{%(queriesSelector)s, db!~"admin|config"}',
-            legendCustomTemplate: '{{db}} | {{shard}} | Collections',
+            legendCustomTemplate: '{{db}} | {{shard}}',
             aggKeepLabels: ['db', 'shard'],
           },
         },
@@ -264,7 +264,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'mongodb_mongos_db_index_size_bytes{%(queriesSelector)s, db!~"admin|config"}',
-            legendCustomTemplate: '{{db}} | {{shard}} | Collections',
+            legendCustomTemplate: '{{db}} | {{shard}}',
             aggKeepLabels: ['db', 'shard'],
           },
         },
@@ -314,7 +314,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'sum by (set) (avg by (service_name, set) (mongodb_connections{%(queriesSelector)s, state="current"}) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}))',
-            legendCustomTemplate: '{{shard}}',
+            legendCustomTemplate: '{{set}}',
           },
         },
       },
@@ -327,7 +327,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'sum(sum(irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])) by (instance) * on (instance) group_right mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}) by (set)',
-            legendCustomTemplate: '{{shard}}',
+            legendCustomTemplate: '{{set}}',
           },
         },
       },
@@ -364,7 +364,7 @@ function(this)
         sources: {
           percona_mongodb: {
             expr: 'sum(sum(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"} or mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}) by (set)',
-            legendCustomTemplate: '{{shard}}',
+            legendCustomTemplate: '{{set}}',
           },
         },
       },
