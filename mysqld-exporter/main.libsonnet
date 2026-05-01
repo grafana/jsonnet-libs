@@ -1,6 +1,6 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 local configMap = k.core.v1.configMap;
-local configVolumeMount = k.util.configVolumeMount;
+local configMapVolumeMount = k.util.configMapVolumeMount;
 local container = k.core.v1.container;
 
 {
@@ -54,7 +54,7 @@ local container = k.core.v1.container;
             DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/?tls=$(MYSQL_TLS_MODE)',
           }),
         ]
-      ) + (if needsConfigFile then configVolumeMount(configMapName, '/conf') else {}),
+      ) + (if needsConfigFile then configMapVolumeMount(this.configMap, '/conf') else {}),
 
     service:
       k.util.serviceFor(this.deployment),
