@@ -7578,7 +7578,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(sum(avg_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[30d])) * 30 * 24 * 3600) or vector(0)",
+          "expr": "sum(sum_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[30d])/(30 * 24 * 60) * 30 * 24 * 60 * 60) or vector(0)",
           "legendFormat": "",
           "refId": "A"
         }
@@ -7646,7 +7646,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(sum(avg_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[7d])) * 7 * 24 * 3600) or vector(0)",
+          "expr": "sum(sum_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[7d])/(7 * 24 * 60) * 7 * 24 * 60 * 60) or vector(0)",
           "legendFormat": "",
           "refId": "A"
         }
@@ -7714,7 +7714,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(sum(avg_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[$__range])) * $__range_s) or vector(0)",
+          "expr": "sum(sum_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[$__range])/($__range_s / 60) * $__range_s) or vector(0)",
           "legendFormat": "",
           "refId": "A"
         }
