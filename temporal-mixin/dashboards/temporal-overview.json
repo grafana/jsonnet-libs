@@ -7313,7 +7313,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "title": "Top 20 Billable Actions by Workflow Type",
+      "title": "Top 20 Billable Actions by Workflow Type And Action Type",
       "description": "Estimated billable action counts per workflow type and action type over the selected time range",
       "type": "table",
       "gridPos": {
@@ -7431,7 +7431,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "title": "Billable Actions",
+      "title": "Billable Actions by Action Type",
       "description": "Billable action rate broken down by action type",
       "type": "timeseries",
       "id": 126,
@@ -7969,7 +7969,7 @@
         "uid": "${datasource}"
       },
       "title": "Heartbeat Ratio",
-      "description": "Percentage of total actions that are activity heartbeats. Above 25% may indicate over-frequent heartbeats.",
+      "description": "Percentage of total actions that are activity heartbeats. Above 25% may indicate over-frequent heartbeats. See https://docs.temporal.io/develop/go/activities/timeouts#activity-heartbeats",
       "type": "gauge",
       "id": 132,
       "gridPos": {
