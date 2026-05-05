@@ -7657,7 +7657,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "title": "Range Billable Actions",
+      "title": "Billable actions for current timespan",
       "description": "Estimated total billable actions within the selected dashboard time range",
       "type": "stat",
       "id": 129,
