@@ -32,6 +32,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.replsetMembers.asTarget()],
         description='Number of replica set members.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -65,6 +66,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='MongoDB server version information.'
       )
+      + g.panel.table.standardOptions.withUnit('short')
       + g.panel.table.queryOptions.withTransformations([
         {
           id: 'organize',
@@ -112,7 +114,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.elections.asTarget()],
         description='Number of replica set elections.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     replicasetHeartbeatTime:
       commonlib.panels.generic.timeSeries.base.new(
@@ -139,7 +142,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.oplogBufferCount.asTarget()],
         description='Number of operations in the oplog buffer.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     replicasetOplogGetmoreTime:
       commonlib.panels.generic.timeSeries.base.new(

@@ -31,6 +31,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.totalInstances.asTarget()],
         description='Total number of MongoDB instances.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -40,6 +41,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.instancesUp.asTarget()],
         description='Number of MongoDB instances that are up.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         g.panel.stat.standardOptions.threshold.step.withColor('green')
@@ -54,6 +56,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.instancesDown.asTarget()],
         description='Number of MongoDB instances that are down.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         g.panel.stat.standardOptions.threshold.step.withColor('green')
@@ -72,6 +75,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.totalConnections.asTarget()],
         description='Total current connections across all instances.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -121,7 +125,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         description='Current connections per instance.'
       )
       + withFillOpacity
-      + withTableLegend,
+      + withTableLegend
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     overviewOpsByInstance:
       commonlib.panels.generic.timeSeries.base.new(

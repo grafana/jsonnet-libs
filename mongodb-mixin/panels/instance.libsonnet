@@ -105,7 +105,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.connectionsCurrent.asTarget()],
         description='Number of current connections.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceDocumentOps:
       commonlib.panels.generic.timeSeries.base.new(
@@ -132,7 +133,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.queuedOps.asTarget()],
         description='Number of operations queued due to a lock.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceCursors:
       commonlib.panels.generic.timeSeries.base.new(
@@ -140,7 +142,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.cursorsOpen.asTarget()],
         description='Number of open cursors by state.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceScannedAndMoved:
       commonlib.panels.generic.timeSeries.base.new(

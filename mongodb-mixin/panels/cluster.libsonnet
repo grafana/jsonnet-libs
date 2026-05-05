@@ -18,6 +18,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardsTotal.asTarget()],
         description='Total number of shards.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -27,6 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardedDbs.asTarget()],
         description='Number of sharded databases.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -36,6 +38,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.unshardedDbs.asTarget()],
         description='Number of unsharded databases.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -45,6 +48,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.drainingShards.asTarget()],
         description='Number of shards being drained.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -54,6 +58,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardedCollections.asTarget()],
         description='Total number of sharded collections.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -63,6 +68,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunksTotal.asTarget()],
         description='Total number of chunks.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -72,6 +78,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.balancerEnabled.asTarget()],
         description='Whether the balancer is enabled.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.standardOptions.withMappings([
         g.panel.stat.standardOptions.mapping.ValueMap.withType()
         + g.panel.stat.standardOptions.mapping.ValueMap.withOptions({
@@ -88,6 +95,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunksBalanced.asTarget()],
         description='Whether chunks are balanced.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.standardOptions.withMappings([
         g.panel.stat.standardOptions.mapping.ValueMap.withType()
         + g.panel.stat.standardOptions.mapping.ValueMap.withOptions({
@@ -108,7 +116,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withFormat('table'),
         ],
         description='Number of collections per shard and database.'
-      ),
+      )
+      + g.panel.table.standardOptions.withUnit('short'),
 
     clusterCollectionSizeInShardsTable:
       commonlib.panels.generic.table.base.new(
@@ -164,7 +173,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withFormat('table'),
         ],
         description='Number of chunks per shard.'
-      ),
+      )
+      + g.panel.table.standardOptions.withUnit('short'),
 
     clusterChunksDynamic:
       commonlib.panels.generic.timeSeries.base.new(
@@ -172,7 +182,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardChunksDynamic.asTarget()],
         description='Rate of change in chunk counts.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterChunkSplitEvents:
       commonlib.panels.generic.timeSeries.base.new(
@@ -180,7 +191,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunkSplitEvents.asTarget()],
         description='Rate of chunk split events.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterChunkMoveEvents:
       commonlib.panels.generic.timeSeries.base.new(
@@ -188,7 +200,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunkMoveEvents.asTarget()],
         description='Rate of chunk move events.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     // Indexes
     clusterIndexesPerShardTable:
@@ -200,7 +213,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.query.prometheus.withFormat('table'),
         ],
         description='Number of indexes per shard and database.'
-      ),
+      )
+      + g.panel.table.standardOptions.withUnit('short'),
 
     clusterIndexesDynamic:
       commonlib.panels.generic.timeSeries.base.new(
@@ -208,7 +222,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.indexesDynamic.asTarget()],
         description='Rate of change in index counts.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterIndexSizePerShardTable:
       commonlib.panels.generic.table.base.new(
@@ -239,7 +254,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         description='Current number of connections per instance.'
       )
       + withFillOpacity
-      + withTableLegend,
+      + withTableLegend
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterConnectionsAvailable:
       commonlib.panels.generic.timeSeries.base.new(
@@ -248,7 +264,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         description='Available connections per instance.'
       )
       + withFillOpacity
-      + withTableLegend,
+      + withTableLegend
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterConnectionsPerShard:
       commonlib.panels.generic.timeSeries.base.new(
@@ -256,7 +273,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.connectionsPerShard.asTarget()],
         description='Current connections aggregated per shard.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     // Operations
     clusterOpsPerShard:
@@ -294,7 +312,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.cursorsPerShard.asTarget()],
         description='Total cursors aggregated by shard.'
       )
-      + withFillOpacity,
+      + withFillOpacity
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterCursorsTotal:
       commonlib.panels.generic.stat.base.new(
@@ -302,6 +321,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.cursorsTotal.asTarget()],
         description='Total number of open cursors across the cluster.'
       )
+      + g.panel.stat.standardOptions.withUnit('short')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull']),
 
     clusterCursorsByInstance:
@@ -311,7 +331,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         description='Cursors per instance.'
       )
       + withFillOpacity
-      + withTableLegend,
+      + withTableLegend
+      + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     // Additional info
     clusterReplicationLagBySet:
