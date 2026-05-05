@@ -52,7 +52,7 @@ groups:
           annotations:
             description: Too many connections to MongoDB instance {{ $labels.service_name }} (> 80%%).
             summary: MongoDB has too many connections.
-          expr: avg by (job,mongodb_cluster,service_name) (rate(mongodb_connections{state="current",}[1m])) / avg by (job,mongodb_cluster,service_name) (sum (mongodb_connections) by (job,mongodb_cluster,service_name)) * 100 > 80
+          expr: 100 * sum by (job,mongodb_cluster,service_name) (mongodb_connections{state="current",}) / sum by (job,mongodb_cluster,service_name) (mongodb_connections{state=~"current|available",}) > 80
           for: 2m
           labels:
             severity: warning

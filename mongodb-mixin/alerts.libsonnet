@@ -96,7 +96,7 @@
                 instanceLabel: this.config.instanceLabels[std.length(this.config.instanceLabels) - 1],
               },
             },
-            expr: 'avg by (%(agg)s) (rate(mongodb_connections{state="current",%(filteringSelector)s}[1m])) / avg by (%(agg)s) (sum (mongodb_connections) by (%(agg)s)) * 100 > %(alertsWarningConnectionUtilization)s' % this.config { agg: agg },
+            expr: '100 * sum by (%(agg)s) (mongodb_connections{state="current",%(filteringSelector)s}) / sum by (%(agg)s) (mongodb_connections{state=~"current|available",%(filteringSelector)s}) > %(alertsWarningConnectionUtilization)s' % this.config { agg: agg },
             'for': '2m',
             labels: {
               severity: 'warning',
