@@ -7399,7 +7399,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "topk(20,\n  $__range_s *\n  sum by (temporal_workflow_type, action_type) (\n    avg_over_time(\n      temporal_cloud_v1_billable_action_count{\n        temporal_namespace=~\"$temporal_namespace\"\n      }[$__range:1m]\n    )\n  )\n)",
+          "expr": "topk(20,\n  $__range_s *\n  sum by (temporal_workflow_type, action_type) (\n    avg_over_time(\n      temporal_cloud_v1_billable_action_count{\n        temporal_namespace=~\"$temporal_namespace\"\n      }[$__range]\n    )\n  )\n)",
           "format": "table",
           "instant": true,
           "refId": "A"
