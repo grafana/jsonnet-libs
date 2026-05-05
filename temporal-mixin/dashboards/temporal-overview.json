@@ -7957,7 +7957,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "2 * avg_over_time((sum(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}) or vector(0))[7d:1m])",
+          "expr": "2 * avg_over_time((sum(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}) or vector(0))[7d])",
           "legendFormat": "2x 7d baseline",
           "refId": "B"
         }
