@@ -7714,7 +7714,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(sum_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[$__range])/($__range_s / 60) * $__range_s) or vector(0)",
+          "expr": "sum(sum_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[$__range])*60) or vector(0)",
           "legendFormat": "",
           "refId": "A"
         }
