@@ -7488,7 +7488,7 @@
               }
             ]
           },
-          "unit": ""
+          "unit": "action/s"
         },
         "overrides": []
       },
@@ -7782,7 +7782,7 @@
               }
             ]
           },
-          "unit": ""
+          "unit": "action/s"
         },
         "overrides": []
       },
@@ -7957,7 +7957,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "2 * avg_over_time((sum(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}) or vector(0))[7d])",
+          "expr": "2 * (sum(avg_over_time(temporal_cloud_v1_billable_action_count{temporal_namespace=~\"$temporal_namespace\"}[7d])) or vector(0))",
           "legendFormat": "2x 7d baseline",
           "refId": "B"
         }
@@ -7969,7 +7969,7 @@
         "uid": "${datasource}"
       },
       "title": "Heartbeat Ratio",
-      "description": "Percentage of total actions that are activity heartbeats. Above 25% may indicate over-frequent heartbeats. See https://docs.temporal.io/develop/go/activities/timeouts#activity-heartbeats",
+      "description": "Percentage of total actions that are activity heartbeats. Refer to [Activity Heartbeats documentation](https://docs.temporal.io/develop/go/activities/timeouts#activity-heartbeats) for more details",
       "type": "gauge",
       "id": 132,
       "gridPos": {
