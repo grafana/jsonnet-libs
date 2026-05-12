@@ -31,5 +31,6 @@
     instance: (import './signals/instance.libsonnet')(this),
     replicaset: (import './signals/replicaset.libsonnet')(this),
     cluster: (import './signals/cluster.libsonnet')(this),
+    alerts: (import './signals/alerts.libsonnet')(this),
   },
 }
