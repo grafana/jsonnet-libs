@@ -33,11 +33,19 @@ The MongoDB instance dashboard provides per-instance details: uptime, QPS, repli
 
 ## MongoDB replica set
 
-The MongoDB replica set dashboard provides per-replica-set details: members, last election, average lag, version distribution, member states, replication lag, operations, elections, heartbeat and member ping times, and oplog details (buffered ops, getmore time, recovery window, processing time, operations).
+The MongoDB replica set dashboard provides per-replica-set details:
+
+- Overview: members, last election, average lag, version distribution, member states
+- Performance: replication lag, operations, elections, heartbeat and member ping times
+- Oplog: buffered ops, getmore time, recovery window, processing time, operations
 
 ## MongoDB cluster
 
-The MongoDB cluster dashboard provides sharded-cluster details: number of shards, sharded/unsharded databases, draining shards, sharded collections, total chunks, balancer status, collections and chunks per shard, indexes per shard, connections, operations, and cursors.
+The MongoDB cluster dashboard provides sharded-cluster details:
+
+- Overview: number of shards, sharded/unsharded databases, draining shards, sharded collections, total chunks, balancer status
+- Per-shard: collections, chunks, indexes
+- Traffic: connections, operations, cursors
 
 ## MongoDB logs
 
@@ -103,7 +111,7 @@ into your Grafana server. The exact details will be depending on your environmen
 
 ## Generate dashboards and alerts
 
-Edit `config.libsonnet` if required and then build JSON dashboard files for Grafana:
+Edit `config.libsonnet` if required and then generate the dashboard files:
 
 ```bash
 make

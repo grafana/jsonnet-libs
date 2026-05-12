@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals, config): {
     local tsPanel = g.panel.timeSeries,
-    local withFillOpacity = tsPanel.fieldConfig.defaults.custom.withFillOpacity(10),
     local withTableLegend =
       tsPanel.options.legend.withPlacement('right')
       + tsPanel.options.legend.withDisplayMode('table')
@@ -138,7 +137,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardServicesQps.asTarget()],
         description='Queries per second for shard services.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('ops')
       + g.panel.timeSeries.panelOptions.withRepeat('shard'),
@@ -149,7 +147,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.configServicesQps.asTarget()],
         description='Queries per second for config services.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -159,7 +156,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.mongosServicesQps.asTarget()],
         description='Queries per second for mongos services.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -182,7 +178,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.shardChunksDynamic.asTarget()],
         description='Rate of change in chunk counts.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterChunkSplitEvents:
@@ -191,7 +186,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunkSplitEvents.asTarget()],
         description='Rate of chunk split events.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterChunkMoveEvents:
@@ -200,7 +194,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.chunkMoveEvents.asTarget()],
         description='Rate of chunk move events.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     // Indexes
@@ -222,7 +215,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.indexesDynamic.asTarget()],
         description='Rate of change in index counts.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterIndexSizePerShardTable:
@@ -243,7 +235,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.indexSizeDynamic.asTarget()],
         description='Rate of change in index sizes.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
     // Connections
@@ -253,7 +244,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.connectionsCurrent.asTarget()],
         description='Current number of connections per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
@@ -263,7 +253,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.connectionsAvailable.asTarget()],
         description='Available connections per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
@@ -273,7 +262,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.connectionsPerShard.asTarget()],
         description='Current connections aggregated per shard.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     // Operations
@@ -283,7 +271,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.opsPerShard.asTarget()],
         description='Operations per second aggregated by shard.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     clusterOpsByType:
@@ -292,7 +279,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.opsByType.asTarget()],
         description='Operations per second by type.'
       )
-      + withFillOpacity
       + withStacking
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -302,7 +288,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.opsByServiceName.asTarget()],
         description='Operations per second for selected instance.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     // Cursors
@@ -312,7 +297,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.cursorsPerShard.asTarget()],
         description='Total cursors aggregated by shard.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     clusterCursorsTotal:
@@ -330,7 +314,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.cursorsByInstance.asTarget()],
         description='Cursors per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
@@ -341,7 +324,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.replicationLagBySet.asTarget()],
         description='Maximum replication lag per replica set.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     clusterOplogRangeBySet:
@@ -350,7 +332,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.cluster.oplogRangeBySet.asTarget()],
         description='Oplog time window per replica set.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('s'),
   },
 }

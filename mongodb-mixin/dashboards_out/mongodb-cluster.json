@@ -629,7 +629,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -673,7 +673,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"})",
+                  "expr": "sum by (service_name) (\n  irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name, set) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -696,7 +696,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -739,7 +739,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"})",
+                  "expr": "sum by (service_name) (\n  irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name, set) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -762,7 +762,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -805,7 +805,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(sum by (service_name) (rate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name) (avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) / avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}))",
+                  "expr": "sum by (service_name) (\n  rate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name) (\n  avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})\n  / avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -884,7 +884,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -944,7 +944,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1004,7 +1004,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1120,7 +1120,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1223,7 +1223,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1296,7 +1296,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1362,7 +1362,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1428,7 +1428,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1465,7 +1465,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (set) (avg by (service_name, set) (mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"}) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}))",
+                  "expr": "sum by (set) (\n  avg by (service_name, set) (mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"})\n  * on (service_name) group_right\n  avg by (service_name, set) (\n    mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n    / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  )\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{set}}",
@@ -1501,7 +1501,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1538,7 +1538,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum(irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])) by (instance) * on (instance) group_right mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (set)",
+                  "expr": "sum by (set) (\n  sum by (instance) (\n    irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n  )\n  * on (instance) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{set}}",
@@ -1561,7 +1561,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1624,7 +1624,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1697,7 +1697,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1734,7 +1734,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(sum(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"} or mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (set)",
+                  "expr": "sum by (set) (\n  sum by (service_name) (\n    mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}\n    or mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}\n  )\n  * on (service_name) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{set}}",
@@ -1789,7 +1789,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by () (max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval]))",
+                  "expr": "sum(\n  max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Cursors",
@@ -1812,7 +1812,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1855,7 +1855,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (service_name) (max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval]))",
+                  "expr": "sum by (service_name) (\n  max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -1888,7 +1888,7 @@
                            "mode": "palette-classic"
                         },
                         "custom": {
-                           "fillOpacity": 10,
+                           "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
@@ -1948,7 +1948,7 @@
                            "mode": "palette-classic"
                         },
                         "custom": {
-                           "fillOpacity": 10,
+                           "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
@@ -1985,7 +1985,7 @@
                            "type": "prometheus",
                            "uid": "${prometheus_datasource}"
                         },
-                        "expr": "max(max(mongodb_mongod_replset_oplog_head_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} - mongodb_mongod_replset_oplog_tail_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"} / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}) by (set)",
+                        "expr": "max by (set) (\n  max by (service_name) (\n    mongodb_mongod_replset_oplog_head_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n    - mongodb_mongod_replset_oplog_tail_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  )\n  * on (service_name) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": "{{set}}",

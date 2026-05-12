@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals, config): {
     local tsPanel = g.panel.timeSeries,
-    local withFillOpacity = tsPanel.fieldConfig.defaults.custom.withFillOpacity(10),
     local withTableLegend =
       tsPanel.options.legend.withPlacement('right')
       + tsPanel.options.legend.withDisplayMode('table')
@@ -124,7 +123,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.connectionsByInstance.asTarget()],
         description='Current connections per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
@@ -134,7 +132,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.opsByInstance.asTarget()],
         description='Operations per second per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -144,7 +141,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.overview.replicationLagByInstance.asTarget()],
         description='Replication lag per instance.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('s'),
   },

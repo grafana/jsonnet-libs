@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals, config): {
     local tsPanel = g.panel.timeSeries,
-    local withFillOpacity = tsPanel.fieldConfig.defaults.custom.withFillOpacity(10),
     local withStacking = tsPanel.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
     // Replica set state value mappings
@@ -47,7 +46,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       commonlib.panels.generic.stat.base.new(
         'Replica set',
         targets=[signals.instance.replicaSetState.asTarget()],
-        description='An integer between 0 and 10 that represents the replica state of the current member.'
+        description='An integer between 0 and 10 that represents the replica state of the current member. See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.'
       )
       + g.panel.stat.standardOptions.withMappings([replicaSetStateMappings])
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
@@ -95,7 +94,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Rate of command operations by type.'
       )
-      + withFillOpacity
       + withStacking
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -105,7 +103,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.connectionsCurrent.asTarget()],
         description='Number of current connections.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceDocumentOps:
@@ -114,7 +111,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.documentOps.asTarget()],
         description='Rate of document operations by state.'
       )
-      + withFillOpacity
       + withStacking
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
@@ -124,7 +120,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.latencyDetail.asTarget()],
         description='Average operation latency by type.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('µs'),
 
     instanceQueuedOps:
@@ -133,7 +128,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.queuedOps.asTarget()],
         description='Number of operations queued due to a lock.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceCursors:
@@ -142,7 +136,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.cursorsOpen.asTarget()],
         description='Number of open cursors by state.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     instanceScannedAndMoved:
@@ -154,7 +147,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Rate of scanned objects and record moves.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     instanceAsserts:
@@ -163,7 +155,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.asserts.asTarget()],
         description='Rate of assert events by type.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     instanceGetLastErrorWriteOps:
@@ -175,7 +166,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Rate of getLastError write operations and timeouts.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     instanceQueryEfficiency:
@@ -187,7 +177,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Ratio of documents returned vs scanned, and index usage.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
     instanceGetLastErrorWriteTime:
@@ -196,7 +185,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.getLastErrorWriteTime.asTarget()],
         description='Rate of getLastError write wait time.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
     instancePageFaults:
@@ -205,7 +193,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.instance.pageFaults.asTarget()],
         description='Rate of page faults.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
   },
 }

@@ -24,7 +24,7 @@ function(this)
       },
       replicaSetState: {
         name: 'Replica set state',
-        description: 'An integer between 0 and 10 that represents the replica state of the current member.',
+        description: 'An integer between 0 and 10 that represents the replica state of the current member. See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.',
         type: 'gauge',
         unit: 'short',
         sources: {
@@ -41,7 +41,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'sum(irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]) or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))',
+            expr: |||
+              sum(
+                irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+                or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+            |||,
           },
         },
       },
@@ -76,7 +81,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s, type) (irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]) or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s, type) (
+                irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+                or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: '{{type}}',
           },
         },
@@ -88,19 +98,29 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s, type) (irate(mongodb_mongod_op_counters_repl_total{%(queriesSelector)s, type!~"(command|query|getmore)"}[$__rate_interval]) or irate(mongodb_mongos_op_counters_repl_total{%(queriesSelector)s, type!~"(command|query|getmore)"}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s, type) (
+                irate(mongodb_mongod_op_counters_repl_total{%(queriesSelector)s, type!~"(command|query|getmore)"}[$__rate_interval])
+                or irate(mongodb_mongos_op_counters_repl_total{%(queriesSelector)s, type!~"(command|query|getmore)"}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: '{{type}}',
           },
         },
       },
       ttlDeletedDocuments: {
-        name: 'TTL deleted documents',
+        name: 'Documents deleted by TTL',
         description: 'Rate of documents deleted by TTL indexes.',
         type: 'raw',
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s) (
+                irate(mongodb_mongod_metrics_ttl_deleted_documents_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'ttl_delete',
           },
         },
@@ -149,7 +169,12 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'mongodb_mongod_metrics_cursor_open{%(queriesSelector)s} or mongodb_mongod_cursors{%(queriesSelector)s} or mongodb_mongos_metrics_cursor_open{%(queriesSelector)s} or mongodb_mongos_cursors{%(queriesSelector)s}',
+            expr: |||
+              mongodb_mongod_metrics_cursor_open{%(queriesSelector)s}
+              or mongodb_mongod_cursors{%(queriesSelector)s}
+              or mongodb_mongos_metrics_cursor_open{%(queriesSelector)s}
+              or mongodb_mongos_cursors{%(queriesSelector)s}
+            |||,
             legendCustomTemplate: '{{state}}',
             aggKeepLabels: ['state'],
           },
@@ -186,7 +211,13 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s, type) (irate(mongodb_mongod_asserts_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_asserts_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s, type) (
+                irate(mongodb_mongod_asserts_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_asserts_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_asserts_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: '{{type}}',
           },
         },
@@ -198,7 +229,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s) (
+                irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'Total',
           },
         },
@@ -210,7 +246,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s) (
+                irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'Timeouts',
           },
         },
@@ -246,7 +287,12 @@ function(this)
         unit: 'ms',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s) (
+                irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'Write wait time',
           },
         },
@@ -258,7 +304,13 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'avg by (%(agg)s) (irate(mongodb_mongod_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: |||
+              avg by (%(agg)s) (
+                irate(mongodb_mongod_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_mongos_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval])
+                or irate(mongodb_extra_info_page_faults_total{%(queriesSelector)s}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'Faults',
           },
         },

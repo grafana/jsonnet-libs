@@ -47,11 +47,11 @@ local g = import './g.libsonnet';
         this.grafana.panels.instanceQueuedOps { gridPos+: { w: 8, h: 8 } },
         this.grafana.panels.instanceCursors { gridPos+: { w: 12, h: 8 } },
         this.grafana.panels.instanceScannedAndMoved { gridPos+: { w: 12, h: 8 } },
-        this.grafana.panels.instanceAsserts { gridPos+: { w: 8, h: 8 } },
-        this.grafana.panels.instanceGetLastErrorWriteOps { gridPos+: { w: 8, h: 8 } },
-        this.grafana.panels.instanceQueryEfficiency { gridPos+: { w: 8, h: 8 } },
+        this.grafana.panels.instanceGetLastErrorWriteOps { gridPos+: { w: 12, h: 8 } },
         this.grafana.panels.instanceGetLastErrorWriteTime { gridPos+: { w: 12, h: 8 } },
-        this.grafana.panels.instancePageFaults { gridPos+: { w: 12, h: 8 } },
+        this.grafana.panels.instanceAsserts { gridPos+: { w: 8, h: 8 } },
+        this.grafana.panels.instanceQueryEfficiency { gridPos+: { w: 8, h: 8 } },
+        this.grafana.panels.instancePageFaults { gridPos+: { w: 8, h: 8 } },
       ]),
 
     // ReplicaSet dashboard rows

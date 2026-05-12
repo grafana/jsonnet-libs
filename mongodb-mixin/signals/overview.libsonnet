@@ -62,7 +62,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'sum(irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]) or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))',
+            expr: |||
+              sum(
+                irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+                or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+            |||,
           },
         },
       },
@@ -97,7 +102,12 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'sum by (%(agg)s, service_name) (irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]) or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))',
+            expr: |||
+              sum by (%(agg)s, service_name) (
+                irate(mongodb_mongod_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+                or irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: '{{service_name}}',
           },
         },

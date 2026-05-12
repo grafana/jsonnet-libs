@@ -326,7 +326,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))",
+                  "expr": "sum(\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{mongodb_cluster}}: Total operations",
@@ -519,7 +519,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -585,7 +585,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -628,7 +628,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,mongodb_cluster, service_name) (irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))",
+                  "expr": "sum by (job,mongodb_cluster, service_name) (\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -651,7 +651,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,

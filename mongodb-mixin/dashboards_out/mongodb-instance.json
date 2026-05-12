@@ -150,7 +150,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]))",
+                  "expr": "sum(\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}: QPS",
@@ -165,7 +165,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "An integer between 0 and 10 that represents the replica state of the current member.",
+            "description": "An integer between 0 and 10 that represents the replica state of the current member. See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -344,7 +344,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -384,7 +384,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name, type) (irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{type}}",
@@ -395,7 +395,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name, type) (irate(mongodb_mongod_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]) or irate(mongodb_mongos_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval])\n  or irate(mongodb_mongos_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{type}}",
@@ -406,11 +406,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "ttl_delete",
-                  "refId": "TTL deleted documents"
+                  "refId": "Documents deleted by TTL"
                }
             ],
             "title": "Command operations",
@@ -429,7 +429,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -489,7 +489,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -552,7 +552,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -612,7 +612,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -672,7 +672,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -709,7 +709,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name,state) (\n  mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"} or mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"} or mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"} or mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n)",
+                  "expr": "avg by (job,mongodb_cluster,service_name,state) (\n  mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{state}}",
@@ -732,7 +732,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -795,7 +795,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of assert events by type.",
+            "description": "Rate of getLastError write operations and timeouts.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -803,7 +803,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -818,7 +818,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 32
             },
@@ -840,14 +840,25 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name, type) (irate(mongodb_mongod_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{type}}",
-                  "refId": "Assert events"
+                  "legendFormat": "Total",
+                  "refId": "getLastError write operations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Timeouts",
+                  "refId": "getLastError write timeouts"
                }
             ],
-            "title": "Assert events",
+            "title": "getLastError write operations",
             "type": "timeseries"
          },
          {
@@ -855,7 +866,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of getLastError write operations and timeouts.",
+            "description": "Rate of getLastError write wait time.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -863,7 +874,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -873,13 +884,13 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "ops"
+                  "unit": "ms"
                }
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 32
             },
             "id": 15,
@@ -900,25 +911,74 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Total",
-                  "refId": "getLastError write operations"
+                  "legendFormat": "Write wait time",
+                  "refId": "getLastError write time"
+               }
+            ],
+            "title": "getLastError write time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of assert events by type.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 40
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
                },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "Timeouts",
-                  "refId": "getLastError write timeouts"
+                  "legendFormat": "{{type}}",
+                  "refId": "Assert events"
                }
             ],
-            "title": "getLastError write operations",
+            "title": "Assert events",
             "type": "timeseries"
          },
          {
@@ -934,7 +994,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -950,10 +1010,10 @@
             "gridPos": {
                "h": 8,
                "w": 8,
-               "x": 16,
-               "y": 32
+               "x": 8,
+               "y": 40
             },
-            "id": 16,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -997,66 +1057,6 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of getLastError write wait time.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "fillOpacity": 10,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
-                  },
-                  "unit": "ms"
-               }
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 40
-            },
-            "id": 17,
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.4.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "Write wait time",
-                  "refId": "getLastError write time"
-               }
-            ],
-            "title": "getLastError write time",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
             "description": "Rate of page faults.",
             "fieldConfig": {
                "defaults": {
@@ -1065,7 +1065,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1080,8 +1080,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 8,
+               "x": 16,
                "y": 40
             },
             "id": 18,
@@ -1102,7 +1102,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Faults",

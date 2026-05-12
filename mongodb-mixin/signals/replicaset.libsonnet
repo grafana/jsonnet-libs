@@ -147,7 +147,18 @@ function(this)
         unit: 'ms',
         sources: {
           percona_mongodb: {
-            expr: 'max by (%(agg)s, name, state) (mongodb_mongod_replset_member_ping_ms{%(queriesSelector)s} or label_replace(label_replace(mongodb_rs_members_pingMs{%(queriesSelector)s, member_state!=""}, "state", "$1", "member_state", "(.*)"), "name", "$1", "member_idx", "(.*)"))',
+            expr: |||
+              max by (%(agg)s, name, state) (
+                mongodb_mongod_replset_member_ping_ms{%(queriesSelector)s}
+                or label_replace(
+                  label_replace(
+                    mongodb_rs_members_pingMs{%(queriesSelector)s, member_state!=""},
+                    "state", "$1", "member_state", "(.*)"
+                  ),
+                  "name", "$1", "member_idx", "(.*)"
+                )
+              )
+            |||,
             legendCustomTemplate: '{{service_name}} - {{name}} - {{state}}',
           },
         },

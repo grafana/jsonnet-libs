@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals, config): {
     local tsPanel = g.panel.timeSeries,
-    local withFillOpacity = tsPanel.fieldConfig.defaults.custom.withFillOpacity(10),
     local withTableLegend =
       tsPanel.options.legend.withPlacement('right')
       + tsPanel.options.legend.withDisplayMode('table')
@@ -91,7 +90,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.replicationLag.asTarget()],
         description='Replication lag per secondary member.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
@@ -105,7 +103,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Operations per second.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
     replicasetElections:
@@ -114,7 +111,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.elections.asTarget()],
         description='Number of replica set elections.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     replicasetHeartbeatTime:
@@ -123,7 +119,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.heartbeatTime.asTarget()],
         description='Time since last heartbeat from each member.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     replicasetMemberPing:
@@ -132,7 +127,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.memberPing.asTarget()],
         description='Round-trip packet time to each member.'
       )
-      + withFillOpacity
       + withTableLegend
       + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
@@ -142,7 +136,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.oplogBufferCount.asTarget()],
         description='Number of operations in the oplog buffer.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('short'),
 
     replicasetOplogGetmoreTime:
@@ -151,7 +144,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         targets=[signals.replicaset.oplogGetmoreTime.asTarget()],
         description='Rate of time spent on oplog getmore operations.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
     replicasetOplogRecoveryWindow:
@@ -163,7 +155,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Oplog time window.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('s'),
 
     replicasetOplogProcessingTime:
@@ -176,7 +167,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Rate of time spent on oplog processing.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
     replicasetOplogOperations:
@@ -189,7 +179,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ],
         description='Rate of oplog operations.'
       )
-      + withFillOpacity
       + g.panel.timeSeries.standardOptions.withUnit('ops'),
   },
 }

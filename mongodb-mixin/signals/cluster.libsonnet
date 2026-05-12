@@ -151,7 +151,16 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: '(sum by (service_name) (irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{%(queriesSelector)s, set=~"$shard"} / mongodb_mongod_replset_my_state{%(queriesSelector)s, set=~"$shard"})',
+            expr: |||
+              sum by (service_name) (
+                irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+              * on (service_name) group_right
+              avg by (service_name, set) (
+                mongodb_mongod_replset_my_state{%(queriesSelector)s, set=~"$shard"}
+                / mongodb_mongod_replset_my_state{%(queriesSelector)s, set=~"$shard"}
+              )
+            |||,
             legendCustomTemplate: '{{service_name}}',
           },
         },
@@ -163,7 +172,16 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: '(sum by (service_name) (irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{%(queriesSelector)s, set!~"$shard"} / mongodb_mongod_replset_my_state{%(queriesSelector)s, set!~"$shard"})',
+            expr: |||
+              sum by (service_name) (
+                irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+              * on (service_name) group_right
+              avg by (service_name, set) (
+                mongodb_mongod_replset_my_state{%(queriesSelector)s, set!~"$shard"}
+                / mongodb_mongod_replset_my_state{%(queriesSelector)s, set!~"$shard"}
+              )
+            |||,
             legendCustomTemplate: '{{service_name}}',
           },
         },
@@ -175,7 +193,16 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: '(sum by (service_name) (rate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name) (avg by (service_name) (mongodb_mongos_db_collections_total{%(queriesSelector)s}) / avg by (service_name) (mongodb_mongos_db_collections_total{%(queriesSelector)s}))',
+            expr: |||
+              sum by (service_name) (
+                rate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+              )
+              * on (service_name) group_right
+              avg by (service_name) (
+                avg by (service_name) (mongodb_mongos_db_collections_total{%(queriesSelector)s})
+                / avg by (service_name) (mongodb_mongos_db_collections_total{%(queriesSelector)s})
+              )
+            |||,
             legendCustomTemplate: '{{service_name}}',
           },
         },
@@ -313,7 +340,16 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'sum by (set) (avg by (service_name, set) (mongodb_connections{%(queriesSelector)s, state="current"}) * on (service_name) group_right avg by (service_name, set) (mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}))',
+            expr: |||
+              sum by (set) (
+                avg by (service_name, set) (mongodb_connections{%(queriesSelector)s, state="current"})
+                * on (service_name) group_right
+                avg by (service_name, set) (
+                  mongodb_mongod_replset_my_state{%(queriesSelector)s}
+                  / mongodb_mongod_replset_my_state{%(queriesSelector)s}
+                )
+              )
+            |||,
             legendCustomTemplate: '{{set}}',
           },
         },
@@ -326,7 +362,16 @@ function(this)
         unit: 'ops',
         sources: {
           percona_mongodb: {
-            expr: 'sum(sum(irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])) by (instance) * on (instance) group_right mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}) by (set)',
+            expr: |||
+              sum by (set) (
+                sum by (instance) (
+                  irate(mongodb_op_counters_total{%(queriesSelector)s, type!="command"}[$__rate_interval])
+                )
+                * on (instance) group_right
+                mongodb_mongod_replset_my_state{%(queriesSelector)s}
+                / mongodb_mongod_replset_my_state{%(queriesSelector)s}
+              )
+            |||,
             legendCustomTemplate: '{{set}}',
           },
         },
@@ -363,7 +408,17 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'sum(sum(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"} or mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}) by (set)',
+            expr: |||
+              sum by (set) (
+                sum by (service_name) (
+                  mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"}
+                  or mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}
+                )
+                * on (service_name) group_right
+                mongodb_mongod_replset_my_state{%(queriesSelector)s}
+                / mongodb_mongod_replset_my_state{%(queriesSelector)s}
+              )
+            |||,
             legendCustomTemplate: '{{set}}',
           },
         },
@@ -375,7 +430,14 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'sum by () (max_over_time(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval]))',
+            expr: |||
+              sum(
+                max_over_time(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval])
+                or max_over_time(mongodb_mongos_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval])
+                or max_over_time(mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval])
+                or max_over_time(mongodb_mongos_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: 'Cursors',
           },
         },
@@ -387,7 +449,14 @@ function(this)
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'sum by (service_name) (max_over_time(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval]))',
+            expr: |||
+              sum by (service_name) (
+                max_over_time(mongodb_mongod_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval])
+                or max_over_time(mongodb_mongos_metrics_cursor_open{%(queriesSelector)s, state="total"}[$__rate_interval])
+                or max_over_time(mongodb_mongod_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval])
+                or max_over_time(mongodb_mongos_cursors{%(queriesSelector)s, state="total_open"}[$__rate_interval])
+              )
+            |||,
             legendCustomTemplate: '{{service_name}}',
           },
         },
@@ -412,7 +481,17 @@ function(this)
         unit: 's',
         sources: {
           percona_mongodb: {
-            expr: 'max(max(mongodb_mongod_replset_oplog_head_timestamp{%(queriesSelector)s} - mongodb_mongod_replset_oplog_tail_timestamp{%(queriesSelector)s}) by (service_name) * on (service_name) group_right mongodb_mongod_replset_my_state{%(queriesSelector)s} / mongodb_mongod_replset_my_state{%(queriesSelector)s}) by (set)',
+            expr: |||
+              max by (set) (
+                max by (service_name) (
+                  mongodb_mongod_replset_oplog_head_timestamp{%(queriesSelector)s}
+                  - mongodb_mongod_replset_oplog_tail_timestamp{%(queriesSelector)s}
+                )
+                * on (service_name) group_right
+                mongodb_mongod_replset_my_state{%(queriesSelector)s}
+                / mongodb_mongod_replset_my_state{%(queriesSelector)s}
+              )
+            |||,
             legendCustomTemplate: '{{set}}',
           },
         },

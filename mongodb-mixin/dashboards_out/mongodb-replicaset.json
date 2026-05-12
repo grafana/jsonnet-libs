@@ -391,7 +391,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -457,7 +457,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -539,7 +539,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -599,7 +599,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -659,7 +659,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -702,7 +702,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "max by (job,mongodb_cluster,service_name, name, state) (mongodb_mongod_replset_member_ping_ms{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"} or label_replace(label_replace(mongodb_rs_members_pingMs{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", member_state!=\"\"}, \"state\", \"$1\", \"member_state\", \"(.*)\"), \"name\", \"$1\", \"member_idx\", \"(.*)\"))",
+                  "expr": "max by (job,mongodb_cluster,service_name, name, state) (\n  mongodb_mongod_replset_member_ping_ms{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n  or label_replace(\n    label_replace(\n      mongodb_rs_members_pingMs{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", member_state!=\"\"},\n      \"state\", \"$1\", \"member_state\", \"(.*)\"\n    ),\n    \"name\", \"$1\", \"member_idx\", \"(.*)\"\n  )\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}} - {{name}} - {{state}}",
@@ -738,7 +738,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -798,7 +798,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -858,7 +858,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -929,7 +929,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -1011,7 +1011,7 @@
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "fillOpacity": 10,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
