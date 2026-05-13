@@ -1,0 +1,7 @@
+exclusions:
+  target-job-rule:
+    reason: Use filteringSelector with static job
+  template-instance-rule:
+    reason: "instanceLabels must be single-select for single instance dashboards."
+  target-instance-rule:
+    reason: "'scrape_job' used as instance selector"

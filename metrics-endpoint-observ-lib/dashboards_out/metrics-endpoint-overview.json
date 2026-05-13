@@ -1,0 +1,378 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [ ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Scrape overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 5,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "content": "<div style=\"width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;\">\n  <img\n     style=\"width:auto;height:100%\"\n     src=\"https://storage.googleapis.com/grafanalabs-integration-logos/metrics-endpoint-prometheus.svg\">\n</div>\n"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "",
+            "transparent": true,
+            "type": "text"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of samples scraped. Every unique metric/label combination counts as a separate sample.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Samples scraped"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 19,
+               "x": 5,
+               "y": 1
+            },
+            "id": 3,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,scrape_job) (\n  scrape_samples_scraped{job!=\"\",job=~\"$job\",scrape_job=~\"$scrape_job\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{scrape_job}}",
+                  "refId": "Samples scraped"
+               }
+            ],
+            "title": "Samples scraped",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 5,
+               "x": 0,
+               "y": 10
+            },
+            "id": 4,
+            "options": {
+               "content": "# Metrics scrape dashboard\nThis dashboard helps you analyze scrape metadata for the [Metrics Endpoint integration](https://grafana.com/docs/grafana-cloud/monitor-infrastructure/integrations/integration-reference/integration-metrics-endpoint/).\nIt can help you debug issues with metrics not arriving or unexpected cardinality.\n\nFor metrics on Metrics Endpoint itself, refer to the [other dashboards provided by this integration](/dashboards/f/integration---metrics-endpoint).\n"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "",
+            "transparent": true,
+            "type": "text"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top ten metrics with the highest cardinality. For more information on cardinality, refer to the [cardinality management dashboards](https://grafana.com/docs/grafana-cloud/cost-management-and-billing/analyze-costs/metrics-costs/prometheus-metrics-costs/cardinality-management/)",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Highest cardinality metrics"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 19,
+               "x": 5,
+               "y": 10
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(10,count({job!=\"\",job=~\"$job\",scrape_job=~\"$scrape_job\"}) by (__name__))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ __name__ }}",
+                  "refId": "Highest cardinality metrics"
+               }
+            ],
+            "title": "Highest cardinality metrics",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "#ff7383",
+                              "index": 1,
+                              "text": "Error"
+                           },
+                           "1": {
+                              "color": "#73bf69",
+                              "index": 0,
+                              "text": "Ok"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "min": 0
+               }
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 19
+            },
+            "id": 6,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,scrape_job) (\n  metrics_endpoint_export_response_success{job!=\"\",job=~\"$job\",scrape_job=~\"$scrape_job\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{scrape_job}}",
+                  "refId": "Scrape response"
+               }
+            ],
+            "title": "Scrape status",
+            "type": "state-timeline"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "How long it takes for the metrics scrape to complete. Long durations might indicate issues with the endpoint.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Scrape duration"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 9,
+               "w": 24,
+               "x": 0,
+               "y": 28
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,scrape_job) (\n  scrape_duration_seconds{job!=\"\",job=~\"$job\",scrape_job=~\"$scrape_job\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{scrape_job}}: Scrape duration",
+                  "refId": "Scrape duration"
+               }
+            ],
+            "title": "Scrape duration",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "metrics-endpoint"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"metrics_endpoint_export_response_success\",job!=\"\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Scrape_job",
+               "multi": true,
+               "name": "scrape_job",
+               "query": "label_values({__name__=~\"metrics_endpoint_export_response_success\",job!=\"\",job=~\"$job\"}, scrape_job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Metrics endpoint scrape overview",
+      "uid": "metricsendpoint-scrape-overview"
+   }
