@@ -10,7 +10,6 @@ local var = g.dashboard.variable;
       clusterOSRoles:
         g.panel.table.new('Roles')
         + g.panel.table.panelOptions.withDescription('OpenSearch node roles.')
-        + g.panel.table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.table.queryOptions.withTargets([
           signals.clusterOverview.node_role_last_seen.asTarget()
           + g.query.prometheus.withInstant(true),
@@ -199,7 +198,6 @@ local var = g.dashboard.variable;
       topNodesByCPUUsagePanel:
         g.panel.barGauge.new('Top nodes by CPU usage')
         + g.panel.barGauge.panelOptions.withDescription('Top nodes by OS CPU usage across the OpenSearch cluster.')
-        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.os_cpu_percent_topk.asTarget() { intervalFactor: 2 },
         ])
@@ -219,7 +217,6 @@ local var = g.dashboard.variable;
       breakersTrippedPanel:
         g.panel.barGauge.new('Breakers tripped')
         + g.panel.barGauge.panelOptions.withDescription('The total count of circuit breakers tripped across the OpenSearch cluster.')
-        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.circuitbreaker_tripped_count_sum.asTarget() { interval: '2m', intervalFactor: 2 },
         ])
@@ -237,7 +234,6 @@ local var = g.dashboard.variable;
       shardStatusPanel:
         g.panel.barGauge.new('Shard status')
         + g.panel.barGauge.panelOptions.withDescription('Shard status counts across the OpenSearch cluster.')
-        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.cluster_shards_number_by_type.asTarget() { intervalFactor: 2 },
         ])
@@ -255,7 +251,6 @@ local var = g.dashboard.variable;
       topNodesByDiskUsagePanel:
         g.panel.barGauge.new('Top nodes by disk usage')
         + g.panel.barGauge.panelOptions.withDescription('Top nodes by disk usage across the OpenSearch cluster.')
-        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.barGauge.queryOptions.withTargets([
           signals.clusterOverview.fs_path_used_percent_topk.asTarget() { intervalFactor: 2 },
         ])
