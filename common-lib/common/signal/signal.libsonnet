@@ -382,4 +382,17 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       else
         std.get(signalsJson.discoveryMetric, type, std.get(signalsJson.discoveryMetric, defaultSignalSource, 'up'))
     else 'up',
+
+  // Returns the templated PromQL expr for each signal; stub signals
+  // (asPanelExpression() == {}) are filtered out. No dedup here.
+  collectMetricExprs(signalsObj):
+    std.filter(
+      function(e) std.isString(e) && e != '',
+      [
+        signalsObj[s].asPanelExpression()
+        for s in std.objectFields(signalsObj)
+        if std.isObject(signalsObj[s])
+           && std.objectHas(signalsObj[s], 'asPanelExpression')
+      ]
+    ),
 }
