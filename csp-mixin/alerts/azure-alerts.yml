@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: AzureVMHighCpuUtilization
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})  > 85
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})  > 85
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -18,7 +18,7 @@ groups:
 
       - alert: AzureVMUnavailable
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) != 1
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) != 1
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -35,7 +35,7 @@ groups:
     rules:
       - alert: AzureDatabaseHighDtuConsumption
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 10m
         keep_firing_for: 10m
         labels:
@@ -50,7 +50,7 @@ groups:
 
       - alert: AzureDatabaseHighStorageUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 95
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 95
         for: 15m
         keep_firing_for: 10m
         labels:
@@ -65,7 +65,7 @@ groups:
 
       - alert: AzureDatabaseHighDeadlockCount
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 5
+          sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 5
         for: 10m
         keep_firing_for: 10m
         labels:
@@ -80,7 +80,7 @@ groups:
 
       - alert: AzureDatabaseHighUserCpuUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 10m
         keep_firing_for: 10m
         labels:
@@ -95,7 +95,7 @@ groups:
 
       - alert: AzureDatabaseHighSystemFailedConnections
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
+          sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -110,7 +110,7 @@ groups:
 
       - alert: AzureDatabaseHighUserFailedConnections
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
+          sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
         for: 15m
         keep_firing_for: 10m
         labels:
@@ -125,7 +125,7 @@ groups:
 
       - alert: AzureDatabaseHighWorkerUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_workers_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_workers_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -140,7 +140,7 @@ groups:
 
       - alert: AzureDatabaseHighDataIoUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_physical_data_read_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_physical_data_read_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 15m
         keep_firing_for: 10m
         labels:
@@ -155,7 +155,7 @@ groups:
 
       - alert: AzureDatabaseLowTempdbLogSpace
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_tempdb_log_used_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
+          avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_tempdb_log_used_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
         for: 5m
         keep_firing_for: 10m
         labels:
