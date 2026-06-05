@@ -17,6 +17,6 @@
 /logs-lib/ @grafana/cloud-integrations
 /status-panels-lib/ @grafana/cloud-integrations
 
-/temporal-mixin/ @grafana/devex
-/supabase-mixin/ @grafana/devex
-/cloudflare-workers-mixin/ @grafana/devex
+/temporal-mixin/ @grafana/growth-engineering
+/supabase-mixin/ @grafana/growth-engineering
+/cloudflare-workers-mixin/ @grafana/growth-engineering
