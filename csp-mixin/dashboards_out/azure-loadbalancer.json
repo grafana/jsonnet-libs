@@ -22,10 +22,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -40,7 +49,7 @@
             "options": {
                "colorMode": "background_solid"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -66,10 +75,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -84,7 +102,7 @@
             "options": {
                "colorMode": "background_solid"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -110,10 +128,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "decbytes"
                },
                "overrides": [ ]
@@ -128,7 +155,7 @@
             "options": {
                "colorMode": "background_solid"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -154,10 +181,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -172,7 +208,7 @@
             "options": {
                "colorMode": "background_solid"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -210,6 +246,10 @@
             "description": "Total number of SYN Packets transmitted within time period",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -218,6 +258,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -239,7 +283,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -264,6 +308,10 @@
             "description": "Total number of Packets transmitted within time period",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -272,6 +320,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -293,7 +345,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -318,6 +370,10 @@
             "description": "Total number of Bytes transmitted within time period",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -326,6 +382,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "decbytes"
                },
                "overrides": [ ]
@@ -347,7 +407,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -372,6 +432,10 @@
             "description": "Total number of new SNAT connections created within time period",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -380,6 +444,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -401,7 +469,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -436,9 +504,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total SNAT ports used and allocated within time period",
+            "description": "SNAT Ports (avg): Total SNAT ports used and allocated within time period  \n\nAllocated SNAT Ports (avg): Total number of SNAT ports allocated",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -447,6 +519,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -468,7 +544,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -501,7 +577,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total SNAT ports used at the current time",
+            "description": "Currently used SNAT ports (avg): Total SNAT ports used at the current time  \n\nAllocated SNAT Ports (avg): Total number of SNAT ports allocated",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -519,7 +595,7 @@
                "y": 21
             },
             "id": 13,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
