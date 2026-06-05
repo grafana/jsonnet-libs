@@ -7,7 +7,7 @@ groups:
             description: The VM {{ $labels.resourceName }} is under heavy load and may become unresponsive.
             summary: VM CPU utilization is too high.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})  > 85
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"})  > 85
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -21,7 +21,7 @@ groups:
             description: The VM {{ $labels.resourceName }} is not functioning or crashed, which may require immediate action.
             summary: VM unavailable.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) != 1
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) != 1
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -37,7 +37,7 @@ groups:
             description: Check active queries and optimize indexes or consider scaling up DTUs to handle load in {{ $labels.resourceName }} database.
             summary: High database DTU consumption.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
           for: 10m
           keep_firing_for: 10m
           labels:
@@ -51,7 +51,7 @@ groups:
             description: Archive or delete old data, or scale up storage capacity in {{ $labels.resourceName }} database.
             summary: High database Storage usage.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 95
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 95
           for: 15m
           keep_firing_for: 10m
           labels:
@@ -65,7 +65,7 @@ groups:
             description: Check {{ $labels.resourceName }} database logs for deadlock details and optimize affected queries.
             summary: High database Deadlock count.
           expr: |
-            sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 5
+            sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 5
           for: 10m
           keep_firing_for: 10m
           labels:
@@ -79,7 +79,7 @@ groups:
             description: Identify high CPU queries on {{ $labels.resourceName }} database and optimize them.
             summary: High database User CPU usage.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
           for: 10m
           keep_firing_for: 10m
           labels:
@@ -93,7 +93,7 @@ groups:
             description: Check network problems, firewall restrictions or high resource consumption affecting application access to the {{ $labels.resourceName }} database.
             summary: High number of database System Failed connections.
           expr: |
-            sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
+            sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -107,7 +107,7 @@ groups:
             description: Check for authentication problems, network configuration errors, firewall issues, or resource constraints, affecting database accessibility for users on database {{ $labels.resourceName }}.
             summary: High number of database User Failed connections.
           expr: |
-            sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
+            sum by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (rate(azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
           for: 15m
           keep_firing_for: 10m
           labels:
@@ -121,7 +121,7 @@ groups:
             description: Look for long execution queries, review the number of concurrent queries and requests being sent to the database or check if there are any blocking sessions or deadlocks into the {{ $labels.resourceName }} database.
             summary: High database worker usage.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_workers_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_workers_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -135,7 +135,7 @@ groups:
             description: Review queries with high read or write activity, check if there are missing indexes or inefficient indexes that result in full table scans and assess the volume of transactions into the {{ $labels.resourceName }} database.
             summary: High database data IO usage.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_physical_data_read_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_physical_data_read_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
           for: 15m
           keep_firing_for: 10m
           labels:
@@ -149,7 +149,7 @@ groups:
             description: Look for active sessions that might be using TempDB intensively, identify stored procedures or queries that create temporary tables or objects, and also look for long-running or memory-intensive queries that rely heavily on TempDB into the {{ $labels.resourceName }} database.
             summary: Low database tempdb log space.
           expr: |
-            avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_tempdb_log_used_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
+            avg by (job,resourceGroup,subscriptionName,resourceName,asserts_env,asserts_site) (azure_microsoft_sql_servers_databases_tempdb_log_used_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -239,7 +239,7 @@ groups:
             description: The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.
             summary: VM CPU utilization is too high.
           expr: |
-            100 * avg by (job,project_id,instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
+            100 * avg by (job,project_id,instance_name,asserts_env,asserts_site) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -253,7 +253,7 @@ groups:
             description: Check {{ $labels.instance_id }} VM for I/O bottlenecks and upgrade to SSD if necessary.
             summary: VM IO latency is too high.
           expr: |
-            avg by (job,project_id,instance_id)(stackdriver_gce_instance_compute_googleapis_com_instance_disk_average_io_latency{job=~".+",project_id=~".+",instance_id=~".+"}) > 5000
+            avg by (job,project_id,instance_id,asserts_env,asserts_site)(stackdriver_gce_instance_compute_googleapis_com_instance_disk_average_io_latency{job=~".+",project_id=~".+",instance_id=~".+"}) > 5000
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -269,7 +269,7 @@ groups:
             description: Check {{ $labels.database_id }} database for high CPU queries and optimize them, or scale up the instance if sustained high usage.
             summary: Database CPU utilization is too high.
           expr: |
-            100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
+            100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -283,7 +283,7 @@ groups:
             description: Review high-memory queries or add more memory to the {{ $labels.database_id }} instance.
             summary: Database memory utilization is too high.
           expr: |
-            100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+            100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -297,7 +297,7 @@ groups:
             description: Delete or archive unused data, or increase disk size to the {{ $labels.database_id }} database.
             summary: Database disk utilization is too high.
           expr: |
-            100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+            100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -311,7 +311,7 @@ groups:
             description: Investigate connection pooling settings and connection management in your {{ $labels.database_id }} application database.
             summary: Too many database active connections.
           expr: |
-            avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_threads{thread_kind="THREADS_CONNECTED", job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 0.9 * avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_max_connections{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"})
+            avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_threads{thread_kind="THREADS_CONNECTED", job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 0.9 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_max_connections{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"})
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -325,7 +325,7 @@ groups:
             description: Verify credentials and network settings; check for firewall rules blocking connections for the {{ $labels.database_id }} database.
             summary: More than 5 MySQL failed connections in 5 minutes.
           expr: |
-            sum by(job, instance, project_id, database_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
+            sum by(job, instance, project_id, database_id, asserts_env, asserts_site)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -339,7 +339,7 @@ groups:
             description: Check {{ $labels.database_id }} database for network latency between primary and replica; adjust configurations to optimize replication.
             summary: More than 5 seconds lag between database read replica and primary.
           expr: |
-            avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_replication_seconds_behind_master) > 5
+            avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_replication_seconds_behind_master) > 5
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -355,7 +355,7 @@ groups:
             description: Scale up subscribers or adjust message processing capacity for the {{ $labels.instance }} instance.
             summary: More than 1000 unacknowledged messages for a PubSub subscription.
           expr: |
-            avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000
+            avg by (job,project_id,instance,asserts_env,asserts_site)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000
           for: 5m
           keep_firing_for: 10m
           labels:
@@ -369,7 +369,7 @@ groups:
             description: Investigate {{ $labels.instance }} instance and speed up message processing; ensure consumers can handle the load.
             summary: Unacknowledged messages for more than 60 seconds for a PubSub subscription.
           expr: |
-            avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{job=~".+",project_id=~".+",instance=~".+"}) > 60
+            avg by (job,project_id,instance,asserts_env,asserts_site)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{job=~".+",project_id=~".+",instance=~".+"}) > 60
           for: 5m
           keep_firing_for: 10m
           labels:

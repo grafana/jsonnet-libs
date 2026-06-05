@@ -24,7 +24,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -52,7 +53,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -80,7 +81,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -108,7 +110,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -130,12 +132,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Fractional utilization of allocated CPU on an instance",
+            "description": "Top 5 Instances by CPU utilitization (sum): Fractional utilization of allocated CPU on an instance  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -239,7 +242,7 @@
                "y": 9
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -297,12 +300,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances with system problems.",
+            "description": "Top 5 Instances by System problem (sum): List of top 5 instances with system problems.  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -374,7 +378,7 @@
                "y": 9
             },
             "id": 5,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -432,7 +436,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances by disk read bytes",
+            "description": "Top 5 Instances by Disk read bytes (sum): List of top 5 instances by disk read bytes  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -510,7 +514,7 @@
                "y": 17
             },
             "id": 6,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -568,7 +572,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances by disk write bytes",
+            "description": "Top 5 Instances by Disk write bytes (sum): List of top 5 instances by disk write bytes  \n",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -646,7 +650,7 @@
                "y": 17
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -915,7 +919,7 @@
                "y": 29
             },
             "id": 8,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1020,8 +1024,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Memory utilization",
+            "description": "Memory utilization (avg): Memory utilization  \n\nMemory utilization2 (avg): Memory used",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -1056,7 +1063,7 @@
                "y": 37
             },
             "id": 9,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1089,8 +1096,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Packets sent/received over the network. Sampled every 60 seconds",
+            "description": "Sent/received packets (sum): Packets sent/received over the network. Sampled every 60 seconds  \n\nReceived packets (sum): Packets received over the network. Sampled every 60 seconds",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "sishort"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -1125,7 +1135,7 @@
                "y": 37
             },
             "id": 10,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1158,8 +1168,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Count of bytes sent/received over the network. Sampled every 60 seconds",
+            "description": "Network throughput sent/received (avg): Count of bytes sent/received over the network. Sampled every 60 seconds  \n\nNetwork throughput received (avg): Count of bytes sent/received over the network. Sampled every 60 seconds",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -1194,7 +1207,7 @@
                "y": 45
             },
             "id": 11,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1227,8 +1240,11 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total count of bytes read/write from disk. Sampled every 60 seconds",
+            "description": "Disk read/write bytes (avg): Total count of bytes read/write from disk. Sampled every 60 seconds  \n\nDisk write bytes (avg): Total count of bytes read/write from disk. Sampled every 60 seconds",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "bytes"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -1263,7 +1279,7 @@
                "y": 45
             },
             "id": 12,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1316,7 +1332,7 @@
                   "options": {
                      "content": "Use this section to look at one instance at a time by picking a value in the *Instance* picker at the top of the dashboard."
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "title": "Instances",
                   "type": "text"
                },
@@ -1327,6 +1343,9 @@
                   },
                   "description": "Fractional utilization of allocated CPU on this instance.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "percentunit"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1349,7 +1368,7 @@
                      "y": 66
                   },
                   "id": 15,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1373,6 +1392,9 @@
                   },
                   "description": "CPU usage, in seconds. For Container-Optimized OS, or Ubuntu running GKE.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "percent"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1395,7 +1417,7 @@
                      "y": 66
                   },
                   "id": 16,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1419,6 +1441,9 @@
                   },
                   "description": "Bytes received from the network. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "bytes"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1441,7 +1466,7 @@
                      "y": 74
                   },
                   "id": 17,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1465,6 +1490,9 @@
                   },
                   "description": "Bytes sent from the network. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "bytes"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1487,7 +1515,7 @@
                      "y": 74
                   },
                   "id": 18,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1511,6 +1539,9 @@
                   },
                   "description": "Bytes read from disk. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "bytes"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1533,7 +1564,7 @@
                      "y": 82
                   },
                   "id": 19,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1557,6 +1588,9 @@
                   },
                   "description": "Bytes written to disk. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "bytes"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1579,7 +1613,7 @@
                      "y": 82
                   },
                   "id": 20,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1603,6 +1637,9 @@
                   },
                   "description": "Disk read IO operations. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1625,7 +1662,7 @@
                      "y": 90
                   },
                   "id": 21,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1649,6 +1686,9 @@
                   },
                   "description": "Disk write IO operations. Sampled every 60 seconds.",
                   "fieldConfig": {
+                     "defaults": {
+                        "unit": "short"
+                     },
                      "overrides": [
                         {
                            "matcher": {
@@ -1671,7 +1711,7 @@
                      "y": 90
                   },
                   "id": 22,
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
