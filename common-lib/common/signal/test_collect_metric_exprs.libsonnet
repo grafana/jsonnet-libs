@@ -50,6 +50,12 @@ local jsonSignals = {
 local signals = signal.unmarshallJsonMulti(jsonSignals, 'prometheus');
 local exprs = signal.collectMetricExprs(signals);
 
+local groupedSignals = {
+  overview: signal.unmarshallJsonMulti(jsonSignals, 'prometheus'),
+  instance: signal.unmarshallJsonMulti(jsonSignals, 'prometheus'),
+};
+local groupedExprs = signal.collectMetricExprs(groupedSignals);
+
 {
   collectMetricExprs: {
     raw:: exprs,
@@ -73,6 +79,18 @@ local exprs = signal.collectMetricExprs(signals);
       testNoEmptyObjects: {
         actual: std.any([!std.isString(e) for e in exprs]),
         expect: false,
+      },
+      testGroupedCount: {
+        actual: std.length(groupedExprs),
+        expect: 4,
+      },
+      testGroupedAllStrings: {
+        actual: std.all([std.isString(e) for e in groupedExprs]),
+        expect: true,
+      },
+      testGroupedContainsAbc: {
+        actual: std.member(groupedExprs, 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)'),
+        expect: true,
       },
     }),
   },
