@@ -80,15 +80,20 @@ local groupedExprs = signal.collectMetricExprs(groupedSignals);
         actual: std.any([!std.isString(e) for e in exprs]),
         expect: false,
       },
-      testGroupedCount: {
+    }),
+  },
+  collectMetricExprsGrouped: {
+    raw:: groupedExprs,
+    testResult: test.suite({
+      testCount: {
         actual: std.length(groupedExprs),
         expect: 4,
       },
-      testGroupedAllStrings: {
+      testAllStrings: {
         actual: std.all([std.isString(e) for e in groupedExprs]),
         expect: true,
       },
-      testGroupedContainsAbc: {
+      testContainsAbc: {
         actual: std.member(groupedExprs, 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)'),
         expect: true,
       },
