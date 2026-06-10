@@ -16,7 +16,7 @@ and the following alerts:
 - OpenSearchUnstableShardUnassigned
 - OpenSearchHighNodeDiskUsage (warning and critical)
 - OpenSearchHighNodeCpuUsage (warning and critical)
-- OpenSearchHighNodeMemoryUsage (warning and critical)
+- OpenSearchHighHeapMemoryUsage (warning and critical)
 - OpenSearchModerateRequestLatency
 - OpenSearchModerateIndexLatency
 
@@ -78,7 +78,7 @@ The OpenSearch search and index overview dashboard provides details on request p
 | OpenSearchUnstableShardUnassigned   | There are shards that have been detected as unassigned.                         |
 | OpenSearchHighNodeDiskUsage         | The node disk usage has exceeded the configured threshold (warning or critical). |
 | OpenSearchHighNodeCpuUsage          | The node CPU usage has exceeded the configured threshold (warning or critical).  |
-| OpenSearchHighNodeMemoryUsage       | The node memory usage has exceeded the configured threshold (warning or critical). |
+| OpenSearchHighHeapMemoryUsage       | The heap memory usage has exceeded the configured threshold (warning or critical). |
 | OpenSearchModerateRequestLatency    | The request latency has exceeded the warning threshold.                         |
 | OpenSearchModerateIndexLatency      | The index latency has exceeded the warning threshold.                           |
 
@@ -95,8 +95,8 @@ Default thresholds can be configured in `config.libsonnet`
     alertsCriticalDiskUsage: 80,
     alertsWarningCPUUsage: 70,
     alertsCriticalCPUUsage: 85,
-    alertsWarningMemoryUsage: 70,
-    alertsCriticalMemoryUsage: 85,
+    alertsWarningHeapMemoryUsage: 70,
+    alertsCriticalHeapMemoryUsage: 85,
     alertsWarningRequestLatency: 500,  // milliseconds
     alertsWarningIndexLatency: 500,  // milliseconds
   },
