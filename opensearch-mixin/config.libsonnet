@@ -31,8 +31,8 @@
   alertsCriticalDiskUsage: 80,  // %
   alertsWarningCPUUsage: 70,  // %
   alertsCriticalCPUUsage: 85,  // %
-  alertsWarningMemoryUsage: 70,  // %
-  alertsCriticalMemoryUsage: 85,  // %
+  alertsWarningHeapMemoryUsage: 70,  // %
+  alertsCriticalHeapMemoryUsage: 85,  // %
   alertsWarningRequestLatency: 500,  // milliseconds
   alertsWarningIndexLatency: 500,  // milliseconds
 

@@ -79,23 +79,23 @@ groups:
           for: 5m
           labels:
             severity: critical
-        - alert: OpenSearchHighNodeMemoryUsage
+        - alert: OpenSearchHighHeapMemoryUsage
           annotations:
             description: |
-                {{$labels.node}} has had {{ printf "%.0f" $value }}% memory usage over the last 5m which is above the threshold of 70.
-            summary: The node memory usage has exceeded the warning threshold.
+                {{$labels.node}} has had {{ printf "%.0f" $value }}% heap memory usage over the last 5m which is above the threshold of 70.
+            summary: The heap memory usage has exceeded the warning threshold.
           expr: |
-            sum without(nodeid) (opensearch_os_mem_used_percent{}) > 70
+            sum without(nodeid) (opensearch_jvm_mem_heap_used_percent{}) > 70
           for: 5m
           labels:
             severity: warning
-        - alert: OpenSearchHighNodeMemoryUsage
+        - alert: OpenSearchHighHeapMemoryUsage
           annotations:
             description: |
-                {{$labels.node}} has had {{ printf "%.0f" $value }}% memory usage over the last 5m which is above the threshold of 85.
-            summary: The node memory usage has exceeded the critical threshold.
+                {{$labels.node}} has had {{ printf "%.0f" $value }}% heap memory usage over the last 5m which is above the threshold of 85.
+            summary: The heap memory usage has exceeded the critical threshold.
           expr: |
-            sum without(nodeid) (opensearch_os_mem_used_percent{}) > 85
+            sum without(nodeid) (opensearch_jvm_mem_heap_used_percent{}) > 85
           for: 5m
           labels:
             severity: critical

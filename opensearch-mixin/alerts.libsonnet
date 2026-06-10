@@ -135,34 +135,34 @@
             },
           },
           {
-            alert: 'OpenSearchHighNodeMemoryUsage',
+            alert: 'OpenSearchHighHeapMemoryUsage',
             expr: |||
-              sum without(nodeid) (opensearch_os_mem_used_percent{%(filteringSelector)s}) > %(alertsWarningMemoryUsage)s
+              sum without(nodeid) (opensearch_jvm_mem_heap_used_percent{%(filteringSelector)s}) > %(alertsWarningHeapMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'warning',
             },
             annotations: {
-              summary: 'The node memory usage has exceeded the warning threshold.',
+              summary: 'The heap memory usage has exceeded the warning threshold.',
               description: |||
-                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsWarningMemoryUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% heap memory usage over the last 5m which is above the threshold of %(alertsWarningHeapMemoryUsage)s.
               ||| % this.config,
             },
           },
           {
-            alert: 'OpenSearchHighNodeMemoryUsage',
+            alert: 'OpenSearchHighHeapMemoryUsage',
             expr: |||
-              sum without(nodeid) (opensearch_os_mem_used_percent{%(filteringSelector)s}) > %(alertsCriticalMemoryUsage)s
+              sum without(nodeid) (opensearch_jvm_mem_heap_used_percent{%(filteringSelector)s}) > %(alertsCriticalHeapMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
               severity: 'critical',
             },
             annotations: {
-              summary: 'The node memory usage has exceeded the critical threshold.',
+              summary: 'The heap memory usage has exceeded the critical threshold.',
               description: |||
-                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsCriticalMemoryUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% heap memory usage over the last 5m which is above the threshold of %(alertsCriticalHeapMemoryUsage)s.
               ||| % this.config,
             },
           },
