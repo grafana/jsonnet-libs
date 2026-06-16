@@ -5129,15 +5129,30 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "limit"
+              "id": "byFrameRefID",
+              "options": "A"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "dark-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-red"
                 }
               },
               {
@@ -5148,21 +5163,6 @@
                     10
                   ],
                   "fill": "dash"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "APS (actions per second)"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
-                  "mode": "fixed"
                 }
               }
             ]
@@ -5207,7 +5207,7 @@
           "expr": "sum(temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "instant": false,
           "interval": "",
-          "legendFormat": "APS (actions per second)",
+          "legendFormat": "{{temporal_namespace}} APS (actions per second)",
           "range": true,
           "refId": "A"
         },
@@ -5217,10 +5217,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(400)",
+          "expr": "temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}",
           "hide": false,
           "instant": false,
-          "legendFormat": "limit",
+          "legendFormat": "{{temporal_namespace}} limit",
           "range": true,
           "refId": "B"
         }
@@ -5507,15 +5507,30 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "limit"
+              "id": "byFrameRefID",
+              "options": "A"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "dark-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-red"
                 }
               },
               {
@@ -5569,7 +5584,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
-          "legendFormat": "RPS (requests per second)",
+          "legendFormat": "{{temporal_namespace}} RPS (requests per second)",
           "range": true,
           "refId": "A"
         },
@@ -5579,10 +5594,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
+          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"}",
           "hide": false,
           "instant": false,
-          "legendFormat": "limit",
+          "legendFormat": "{{temporal_namespace}} limit",
           "range": true,
           "refId": "B"
         }
@@ -5653,15 +5668,30 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "limit"
+              "id": "byFrameRefID",
+              "options": "A"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "dark-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-red"
                 }
               },
               {
@@ -5672,6 +5702,21 @@
                     10
                   ],
                   "fill": "dash"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
                 }
               }
             ]
@@ -5715,7 +5760,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_operations_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
-          "legendFormat": "OPS (operations per second)",
+          "legendFormat": "{{temporal_namespace}} OPS (operations per second)",
           "range": true,
           "refId": "A"
         },
@@ -5725,10 +5770,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "vector(3200)",
+          "expr": "sum(temporal_cloud_v1_operations_limit{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "hide": false,
           "instant": false,
-          "legendFormat": "limit",
+          "legendFormat": "{{temporal_namespace}} limit",
           "range": true,
           "refId": "B"
         },
@@ -5742,7 +5787,7 @@
           "expr": "sum(temporal_cloud_v1_operations_throttled_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "hide": false,
           "interval": "",
-          "legendFormat": "throttled",
+          "legendFormat": "{{temporal_namespace}} throttled",
           "range": true,
           "refId": "C"
         }
@@ -6267,15 +6312,30 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byName",
-              "options": "limit"
+              "id": "byFrameRefID",
+              "options": "A"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "dark-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-red"
                 }
               },
               {
@@ -6329,7 +6389,7 @@
           "exemplar": true,
           "expr": "sum(temporal_cloud_v1_service_request_count{temporal_namespace=~\"$temporal_namespace\"}) by (temporal_namespace)",
           "interval": "",
-          "legendFormat": "RPS (requests per second)",
+          "legendFormat": "{{temporal_namespace}} RPS (requests per second)",
           "range": true,
           "refId": "A"
         },
@@ -6339,10 +6399,10 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"} or vector(1600)",
+          "expr": "temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"}",
           "hide": false,
           "instant": false,
-          "legendFormat": "limit",
+          "legendFormat": "{{temporal_namespace}} limit",
           "range": true,
           "refId": "B"
         }
@@ -8113,6 +8173,636 @@
       "panels": [],
       "title": "Billable Actions",
       "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 248
+      },
+      "id": 140,
+      "panels": [],
+      "title": "Provisioned Capacity (TRU)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Namespaces in provisioned capacity mode, with TRU count and APS/RPS/OPS limits",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TRUs"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 249
+      },
+      "id": 141,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])) / 500",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_operations_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Provisioned namespace limits",
+      "type": "table",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "temporal_namespace",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "temporal_namespace": 0,
+              "Value #B": 1,
+              "Value #A": 2,
+              "Value #C": 3,
+              "Value #D": 4
+            },
+            "renameByName": {
+              "temporal_namespace": "Namespace",
+              "Value #A": "APS limit",
+              "Value #B": "TRUs",
+              "Value #C": "RPS limit",
+              "Value #D": "OPS limit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 12,
+        "y": 249
+      },
+      "id": 144,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[30d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[30d:1m]\n        )\n    )",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "30 Day Capacity Utilization (Approximate)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 16,
+        "y": 249
+      },
+      "id": 143,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[7d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[7d:1m]\n        )\n    )",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "7 Day Capacity Utilization (Approximate)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 249
+      },
+      "id": 142,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[1d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[1d:1m]\n        )\n    )",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "1 Day Capacity Utilization (Approximate)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "dark-red"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 257
+      },
+      "id": 146,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (\n    temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}\n    )\nand on (temporal_namespace) ( \n    last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n    != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n    )",
+          "legendFormat": "{{temporal_namespace}} APS (actions per second)",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n!= \nlast_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])",
+          "legendFormat": "{{temporal_namespace}} APS limit",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Provisioned APS vs Limit",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 257
+      },
+      "id": 145,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18186912471",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (temporal_namespace) (\n    temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}\n    )\n/ on (temporal_namespace) ( \n    last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n    != \n    last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n    )",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Capacity Utilization",
+      "type": "timeseries"
     }
   ],
   "preload": false,
