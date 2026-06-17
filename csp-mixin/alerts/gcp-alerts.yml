@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: GcpCEHighCpuUtilization
         expr: |
-          100 * avg by (job,project_id,instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
+          100 * avg by (job,project_id,instance_name,asserts_env,asserts_site) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -18,7 +18,7 @@ groups:
 
       - alert: GcpCEHighIOLatency
         expr: |
-          avg by (job,project_id,instance_id)(stackdriver_gce_instance_compute_googleapis_com_instance_disk_average_io_latency{job=~".+",project_id=~".+",instance_id=~".+"}) > 5000
+          avg by (job,project_id,instance_id,asserts_env,asserts_site)(stackdriver_gce_instance_compute_googleapis_com_instance_disk_average_io_latency{job=~".+",project_id=~".+",instance_id=~".+"}) > 5000
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -35,7 +35,7 @@ groups:
     rules:
       - alert: GcpCloudSQLHighCpu
         expr: |
-          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
+          100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -50,7 +50,7 @@ groups:
 
       - alert: GcpCloudSQLMemoryUsage
         expr: |
-          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+          100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -65,7 +65,7 @@ groups:
 
       - alert: GcpCloudSQLDiskUsage
         expr: |
-          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
+          100 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 85
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -80,7 +80,7 @@ groups:
 
       - alert: GcpCloudSQLActiveConnections
         expr: |
-          avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_threads{thread_kind="THREADS_CONNECTED", job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 0.9 * avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_max_connections{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"})
+          avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_threads{thread_kind="THREADS_CONNECTED", job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 0.9 * avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_max_connections{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"})
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -95,7 +95,7 @@ groups:
 
       - alert: GcpCloudSQLAbortedConnections
         expr: |
-          sum by(job, instance, project_id, database_id)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
+          sum by(job, instance, project_id, database_id, asserts_env, asserts_site)(rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_aborted_connects_count[5m])) > 5
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -110,7 +110,7 @@ groups:
 
       - alert: GcpCloudSQLLagSecondsBehindMaster
         expr: |
-          avg by (job,project_id,instance, database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_replication_seconds_behind_master) > 5
+          avg by (job,project_id,instance,database_id,asserts_env,asserts_site) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_replication_seconds_behind_master) > 5
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -127,7 +127,7 @@ groups:
     rules:
       - alert: GcpPubSubNumUndeliveredMessages
         expr: |
-          avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000
+          avg by (job,project_id,instance,asserts_env,asserts_site)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{job=~".+",project_id=~".+",instance=~".+"}) > 1000
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -142,7 +142,7 @@ groups:
 
       - alert: GcpPubSubUnackedMessageAge
         expr: |
-          avg by (job,project_id,instance)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{job=~".+",project_id=~".+",instance=~".+"}) > 60
+          avg by (job,project_id,instance,asserts_env,asserts_site)(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{job=~".+",project_id=~".+",instance=~".+"}) > 60
         for: 5m
         keep_firing_for: 10m
         labels:

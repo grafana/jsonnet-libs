@@ -24,7 +24,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "locale"
                },
                "overrides": [
                   {
@@ -48,7 +49,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -76,7 +77,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "locale"
                },
                "overrides": [
                   {
@@ -100,7 +102,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -128,7 +130,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "bytes"
                },
                "overrides": [
                   {
@@ -152,7 +155,7 @@
                "y": 1
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -177,8 +180,16 @@
             "description": "Total network throughput in bits for the selected timerange",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "minWidth": 100
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                },
@@ -252,7 +263,7 @@
                "y": 8
             },
             "id": 5,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -316,6 +327,14 @@
             "description": "Number of messages stored.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "locale"
                },
                "overrides": [
@@ -352,7 +371,7 @@
                "y": 8
             },
             "id": 6,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -394,6 +413,14 @@
             "description": "Total bytes stored",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -430,7 +457,7 @@
                "y": 8
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -471,6 +498,9 @@
             },
             "description": "Number of messages stored.",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "locale"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -493,7 +523,7 @@
                "y": 15
             },
             "id": 8,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -530,6 +560,9 @@
             },
             "description": "Percent availability by API request.",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "percent"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -558,7 +591,7 @@
                   "placement": "bottom"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -587,7 +620,8 @@
                      "stacking": {
                         "mode": "normal"
                      }
-                  }
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -611,7 +645,7 @@
                "y": 35
             },
             "id": 11,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -635,6 +669,9 @@
             },
             "description": "Percentage of api request failure by type",
             "fieldConfig": {
+               "defaults": {
+                  "unit": "percentunit"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -657,7 +694,7 @@
                "y": 35
             },
             "id": 12,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -692,9 +729,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "received (avg): Total bytes received over the network  \n\ntransmitted (avg): Total bytes sent over the network",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -709,13 +750,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -767,7 +812,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

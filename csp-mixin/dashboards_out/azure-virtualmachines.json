@@ -22,9 +22,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -48,7 +58,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -70,12 +80,21 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Measure of availability of virtual machines",
+            "description": "VM Availability (avg): Measure of availability of virtual machines  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -145,7 +164,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -185,12 +204,21 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Fractional utilization of allocated CPU on an instance",
+            "description": "Top 5 Instances by CPU utilitization (avg): Fractional utilization of allocated CPU on an instance  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -258,7 +286,7 @@
                "y": 9
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -304,11 +332,19 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances with less amount of physical memory immediately available for allocation.",
+            "description": "Top 5 Instances by Less available memory (avg): List of top 5 instances with less amount of physical memory immediately available for allocation.  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "filterable": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                },
@@ -334,7 +370,7 @@
                "y": 9
             },
             "id": 5,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -383,11 +419,19 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances by disk read bytes",
+            "description": "Top 5 Instances by Disk read bytes (sum): List of top 5 instances by disk read bytes  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "filterable": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                },
@@ -413,7 +457,7 @@
                "y": 17
             },
             "id": 6,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -459,11 +503,19 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "List of top 5 instances by disk write bytes",
+            "description": "Top 5 Instances by Disk write bytes (sum): List of top 5 instances by disk write bytes  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "filterable": false
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "decbytes"
                },
@@ -489,7 +541,7 @@
                "y": 17
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -535,12 +587,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
+            "description": "CPU Utilization average (avg): The percentage of allocated compute units that are currently in use by the Virtual Machine(s)  \n\nAvailable memory (avg): Amount of physical memory, in bytes, immediately available for allocation to a process or for system use in the Virtual Machine  \n\nNetwork sent (sum): The number of bytes sent to all network interfaces by the Virtual Machine(s)  \n\nNetwork received (sum): The number of bytes received on all network interfaces by the Virtual Machine(s)  \n\nDisk read bytes (sum): Bytes read from disk during monitoring period  \n\nDisk write bytes (sum): Bytes written to disk during monitoring period",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": false
-                  }
+                  },
+                  "unit": "percent"
                },
                "overrides": [
                   {
@@ -710,7 +763,7 @@
                "y": 25
             },
             "id": 8,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -819,9 +872,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Bytes read/written from/to disk during monitoring period",
+            "description": "Disk read/write bytes (sum): Bytes read/written from/to disk during monitoring period  \n\nDisk write bytes (sum): Bytes written to disk during monitoring period",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -829,7 +886,12 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "noValue": "0"
+                  "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "decbytes"
                },
                "overrides": [
                   {
@@ -875,7 +937,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -908,9 +970,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Disk read/write IOPS",
+            "description": "Disk read/write operations (avg): Disk read/write IOPS  \n\nDisk write operations (avg): Disk write IOPS",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -918,7 +984,12 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "noValue": "0"
+                  "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
                },
                "overrides": [
                   {
@@ -964,7 +1035,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -997,16 +1068,25 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "The number of bytes sent/received over the network.",
+            "description": "Network throughput sent/received (sum): The number of bytes sent/received over the network.  \n\nNetwork throughput received (sum): The number of bytes received over the network.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "decbytes"
                },
                "overrides": [
                   {
@@ -1052,7 +1132,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1085,16 +1165,25 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Number of current flows in the inbound/outbound direction",
+            "description": "Flows (sum): Number of current flows in the inbound/outbound direction  \n\nOutbound flows (sum): Number of current flows in the outbound direction",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "cps"
                },
                "overrides": [
                   {
@@ -1140,7 +1229,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1193,7 +1282,7 @@
                   "options": {
                      "content": "Use this section to look at one instance at a time by picking a value in the *ResourceName* picker at the top of the dashboard."
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "title": "Instances",
                   "type": "text"
                },
@@ -1205,6 +1294,10 @@
                   "description": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1212,7 +1305,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "percent"
                      },
                      "overrides": [
                         {
@@ -1246,7 +1344,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1271,6 +1369,10 @@
                   "description": "Amount of physical memory, in bytes, immediately available for allocation to a process or for system use in the Virtual Machine",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1278,7 +1380,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "decbytes"
                      },
                      "overrides": [
                         {
@@ -1312,7 +1419,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1337,6 +1444,10 @@
                   "description": "Total number of credits consumed by the Virtual Machine.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1344,7 +1455,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1378,7 +1494,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1403,6 +1519,10 @@
                   "description": "Total number of credits available to burst.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1410,7 +1530,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1444,7 +1569,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1469,13 +1594,22 @@
                   "description": "The number of bytes received on all network interfaces by the Virtual Machine(s)",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "decbytes"
                      },
                      "overrides": [
                         {
@@ -1509,7 +1643,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1534,13 +1668,22 @@
                   "description": "The number of bytes sent to all network interfaces by the Virtual Machine(s)",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "decbytes"
                      },
                      "overrides": [
                         {
@@ -1574,7 +1717,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1599,6 +1742,10 @@
                   "description": "Bytes read from disk during monitoring period",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1606,7 +1753,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "decbytes"
                      },
                      "overrides": [
                         {
@@ -1640,7 +1792,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1665,6 +1817,10 @@
                   "description": "Bytes written to disk during monitoring period",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1672,7 +1828,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "decbytes"
                      },
                      "overrides": [
                         {
@@ -1706,7 +1867,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1731,6 +1892,10 @@
                   "description": "Disk read IOPS",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1738,7 +1903,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1772,7 +1942,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1797,6 +1967,10 @@
                   "description": "Disk write IOPS",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -1804,7 +1978,12 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "noValue": "0"
+                        "noValue": "0",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1838,7 +2017,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1863,13 +2042,22 @@
                   "description": "The number of current flows in the inbound direction (traffic going into the VM).",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1903,7 +2091,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1928,13 +2116,22 @@
                   "description": "Number of current flows in the outbound direction",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
-                        }
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -1968,7 +2165,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
