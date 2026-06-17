@@ -8192,7 +8192,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Namespaces in provisioned capacity mode, with TRU count and APS/RPS/OPS limits",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8257,7 +8257,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]))",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -8270,7 +8270,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])) / 500",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])) / 500",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -8283,7 +8283,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])))",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_service_request_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -8296,7 +8296,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_operations_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[6h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[6h])))",
+          "expr": "sum by (temporal_namespace) (last_over_time(temporal_cloud_v1_operations_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) and on (temporal_namespace) (last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -8404,7 +8404,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[30d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[30d:1m]\n        )\n    )",
+          "expr": "sum by (temporal_namespace) ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[30d:1m]) ) / sum by (temporal_namespace) ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[30d:1m] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -8474,7 +8474,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[7d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[7d:1m]\n        )\n    )",
+          "expr": "sum by (temporal_namespace) ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[7d:1m]) ) / sum by (temporal_namespace) ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[7d:1m] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -8544,7 +8544,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"})\n            and on (temporal_namespace) ( \n                last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n            )\n        )[1d:1m])\n    )\n/ sum by (temporal_namespace) (\n    sum_over_time(\n        (\n            last_over_time(\n                temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n                != \n                last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n            )[1d:1m]\n        )\n    )",
+          "expr": "sum by (temporal_namespace) ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[1d:1m]) ) / sum by (temporal_namespace) ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[1d:1m] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -8684,7 +8684,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (\n    temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}\n    )\nand on (temporal_namespace) ( \n    last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n    != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n    )",
+          "expr": "sum by (temporal_namespace) ( temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"} ) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )",
           "legendFormat": "{{temporal_namespace}} APS (actions per second)",
           "range": true,
           "refId": "A"
@@ -8695,13 +8695,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n!= \nlast_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])",
+          "expr": "last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])",
           "legendFormat": "{{temporal_namespace}} APS limit",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Provisioned APS vs Limit",
+      "title": "Actions vs Provisioned Limit",
       "type": "timeseries"
     },
     {
@@ -8795,7 +8795,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (temporal_namespace) (\n    temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}\n    )\n/ on (temporal_namespace) ( \n    last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h])\n    != \n    last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) \n    )",
+          "expr": "sum by (temporal_namespace) ( temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"} ) / on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
