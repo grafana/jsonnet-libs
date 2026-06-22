@@ -93,7 +93,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_pool_serverside_cur_conns{%(queriesSelector)s, ' + poolSelector + '}',
-          legendCustomTemplate: '{{pool}} - {{instance}}',
+          legendCustomTemplate: '{{pool}} - {{instance}} - current',
         },
       },
     },
@@ -107,7 +107,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_pool_serverside_max_conns{%(queriesSelector)s, ' + poolSelector + '}',
-          legendCustomTemplate: '{{pool}} - {{instance}}',
+          legendCustomTemplate: '{{pool}} - {{instance}} - max',
         },
       },
     },

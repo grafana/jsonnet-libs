@@ -79,7 +79,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_cur_conns{%(queriesSelector)s, ' + nodeSelector + '}',
-          legendCustomTemplate: '{{node}} - {{instance}}',
+          legendCustomTemplate: '{{node}} - {{instance}} - current',
         },
       },
     },
@@ -93,7 +93,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_node_serverside_max_conns{%(queriesSelector)s, ' + nodeSelector + '}',
-          legendCustomTemplate: '{{node}} - {{instance}}',
+          legendCustomTemplate: '{{node}} - {{instance}} - max',
         },
       },
     },
