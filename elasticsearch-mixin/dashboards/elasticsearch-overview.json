@@ -183,7 +183,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"red\"}==1 or (elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"green\"}==1)+4 or (elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"yellow\"}==1)+22",
+          "expr": "elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"red\"}==1 or (elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"green\"}==1)+4 or (elasticsearch_cluster_health_status{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\",color=\"yellow\"}==1)+2",
           "format": "time_series",
           "instant": true,
           "interval": "",
