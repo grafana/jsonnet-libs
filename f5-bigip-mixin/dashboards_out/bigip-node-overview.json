@@ -278,7 +278,7 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
@@ -410,7 +410,7 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
@@ -470,7 +470,7 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",

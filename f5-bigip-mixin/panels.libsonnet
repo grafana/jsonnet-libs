@@ -189,8 +189,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.currentSessions.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current number of active sessions to the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       nodeConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -211,8 +210,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesIn.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data received from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       nodeTrafficOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -220,8 +218,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesOut.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data sent from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       nodePacketsInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
