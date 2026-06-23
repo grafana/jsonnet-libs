@@ -21,6 +21,10 @@
             "description": "Amount of requests sent by status code for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -29,6 +33,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "reqps"
                },
                "overrides": [ ]
@@ -50,7 +58,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -75,6 +83,10 @@
             "description": "Amount of requests sent by country for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -83,6 +95,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -104,7 +120,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -129,6 +145,10 @@
             "description": "Amount of cache results for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -137,6 +157,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -158,7 +182,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -183,6 +207,10 @@
             "description": "Amount of requests by protocol for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -191,6 +219,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "short"
                },
                "overrides": [ ]
@@ -212,7 +244,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -237,6 +269,10 @@
             "description": "Percentage of requests failing for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -246,6 +282,10 @@
                   },
                   "max": 1,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percentunit"
                },
                "overrides": [
@@ -288,7 +328,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -323,9 +363,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Latency of all responses for the filters selected",
+            "description": "Total Response (avg): Latency of all responses for the filters selected  \n\nLatency 90 (avg): The total latency of responses  \n\nLatency 99 (avg): The total latency of responses  \n\nLatency Average (avg): Latency of return trip time for the frontend for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -334,6 +378,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "ms"
                },
                "overrides": [
@@ -416,7 +464,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -471,9 +519,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Latency of return trip time for the frontend for the filters selected",
+            "description": "Frontend RTT (avg): Latency of return trip time for the frontend for the filters selected  \n\nFrontend RTT Latency 90 (avg): Latency of return trip time for the frontend for the filters selected  \n\nFrontend RTT Latency 99 (avg): Latency of return trip time for the frontend for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -482,6 +534,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "ms"
                },
                "overrides": [
@@ -549,7 +605,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -593,9 +649,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Latency of responses for the backend for the filters selected",
+            "description": "Backend Response (avg): Latency of responses for the backend for the filters selected  \n\nBackend Response Latency 90 (avg): Latency of responses for the backend for the filters selected  \n\nBackend Response Latency 99 (avg): Latency of responses for the backend for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 10,
                      "gradientMode": "none",
@@ -604,6 +664,10 @@
                      "showPoints": "never"
                   },
                   "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "ms"
                },
                "overrides": [
@@ -671,7 +735,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -728,9 +792,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total bytes sent/received by load balancer for the filters selected",
+            "description": "Total requests sent/received (avg): Total bytes sent/received by load balancer for the filters selected  \n\nTotal Requests received (avg): Total bytes received by load balancer for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisLabel": "out(-) | in(+)",
                      "fillOpacity": 10,
@@ -738,6 +806,10 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                },
@@ -795,7 +867,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -828,9 +900,13 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Total bytes sent/received by backend for the filters selected",
+            "description": "Backend requests sent/received (avg): Total bytes sent/received by backend for the filters selected  \n\nBackend Total Requests received (avg): Total bytes sent/received by backend for the filters selected",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisLabel": "out(-) | in(+)",
                      "fillOpacity": 10,
@@ -838,6 +914,10 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                },
@@ -895,7 +975,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

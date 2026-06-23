@@ -18,7 +18,7 @@ jobs:
       cache-hit: ${{ steps.tools-cache.outputs.cache-hit }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -46,7 +46,7 @@ jobs:
       changed-mixins: ${{ steps.changed-mixins.outputs.all_changed_files }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
     services:
       grafana:
-        image: grafana/grafana:13.0.1@sha256:0f86bada30d65ef9d0183b90c1e2682ac92d53d95da8bed322b984ea78a4a73a
+        image: grafana/grafana:13.0.2@sha256:5dad0df181cb644a14e13617b913b261a54f7d4fd4510721dba420929f35bea2
         ports:
           - 3000:3000
         env:
@@ -91,7 +91,7 @@ jobs:
           GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
           persist-credentials: false

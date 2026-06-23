@@ -24,7 +24,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -48,7 +49,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -76,7 +77,8 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -100,7 +102,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -125,7 +127,8 @@
             "description": "Rate in bytes of network egress on the fixed standard tier.",
             "fieldConfig": {
                "defaults": {
-                  "noValue": "0"
+                  "noValue": "0",
+                  "unit": "bps"
                },
                "overrides": [
                   {
@@ -149,7 +152,7 @@
                "y": 9
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -159,7 +162,7 @@
                   "expr": "avg by (job,traffic_source) (\n  stackdriver_networking_googleapis_com_location_networking_googleapis_com_fixed_standard_tier_usage{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{traffic_source}}: Fixed standard tier network egress",
+                  "legendFormat": "{{job}}: Fixed standard tier network egress ({{traffic_source}})",
                   "refId": "Fixed standard tier network egress"
                }
             ],
@@ -187,6 +190,14 @@
             "description": "Average throughput",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
@@ -223,7 +234,7 @@
                "y": 18
             },
             "id": 6,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -233,7 +244,7 @@
                   "expr": "topk(5,\n  avg by (job,service_name) (\n  stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"} + stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}\n)\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{service_name}}: Top 5 services by network throughput.",
+                  "legendFormat": "{{job}}: Top 5 services by network throughput. ({{service_name}})",
                   "refId": "Top 5 services by network throughput."
                }
             ],
@@ -265,6 +276,14 @@
             "description": "Average error rate",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -301,7 +320,7 @@
                "y": 18
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -311,7 +330,7 @@
                   "expr": "topk(5,\n  avg by (job,service_name) (\n  (stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\", response_code_class=~\"500|400\"} + stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\", response_code_class=~\"500|400\"}) / (stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"} + stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"})\n)\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{service_name}}: Top 5 services by network error response code",
+                  "legendFormat": "{{job}}: Top 5 services by network error response code ({{service_name}})",
                   "refId": "Top 5 services by network error response code"
                }
             ],
@@ -340,9 +359,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "received (sum):   \n\ntransmitted (sum): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -357,13 +380,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -415,7 +442,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -448,9 +475,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network errors refer to issues that occur during the transmission of data across a network. \n\nThese errors can result from various factors, including physical issues, jitter, collisions, noise and interference.\n\nMonitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.\n",
+            "description": "received (avg):   \n\ntransmitted (avg): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -460,7 +491,11 @@
                   },
                   "decimals": 1,
                   "noValue": "No errors",
-                  "unit": "pps"
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percent"
                },
                "overrides": [
                   {
@@ -506,7 +541,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -539,9 +574,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "received (sum):   \n\ntransmitted (sum): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -556,13 +595,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -614,7 +657,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -624,7 +667,7 @@
                   "expr": "sum by (job,service_name) (\n  rate(stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{service_name}}: received",
+                  "legendFormat": "{{job}}: received ({{service_name}})",
                   "refId": "received"
                },
                {
@@ -635,7 +678,7 @@
                   "expr": "sum by (job,service_name) (\n  rate(stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{service_name}}: transmitted",
+                  "legendFormat": "{{job}}: transmitted ({{service_name}})",
                   "refId": "transmitted"
                }
             ],
@@ -647,9 +690,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "received (sum):   \n\ntransmitted (sum): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -664,13 +711,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -722,7 +773,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -732,7 +783,7 @@
                   "expr": "sum by (job,response_code_class) (\n  rate(stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{response_code_class}}: received",
+                  "legendFormat": "{{job}}: received ({{response_code_class}})",
                   "refId": "received"
                },
                {
@@ -743,7 +794,7 @@
                   "expr": "sum by (job,response_code_class) (\n  rate(stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{response_code_class}}: transmitted",
+                  "legendFormat": "{{job}}: transmitted ({{response_code_class}})",
                   "refId": "transmitted"
                }
             ],
@@ -768,9 +819,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "transmitted (avg):   \n\nreceived (avg): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -785,13 +840,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -843,7 +902,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -876,9 +935,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "transmitted (avg):   \n\nreceived (avg): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -893,13 +956,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -951,7 +1018,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -961,7 +1028,7 @@
                   "expr": "avg by (job,protocol) (\n  rate(stackdriver_vpn_tunnel_networking_googleapis_com_vpn_tunnel_egress_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{protocol}}: transmitted",
+                  "legendFormat": "{{job}}: transmitted ({{protocol}})",
                   "refId": "transmitted"
                },
                {
@@ -972,7 +1039,7 @@
                   "expr": "avg by (job,protocol) (\n  rate(stackdriver_vpn_tunnel_networking_googleapis_com_vpn_tunnel_ingress_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{protocol}}: received",
+                  "legendFormat": "{{job}}: received ({{protocol}})",
                   "refId": "received"
                }
             ],
@@ -984,9 +1051,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "transmitted (avg):   \n\nreceived (avg): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "axisCenteredZero": false,
                      "axisLabel": "out(-) | in(+)",
@@ -1001,13 +1072,17 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1059,7 +1134,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1069,7 +1144,7 @@
                   "expr": "avg by (job,local_resource_type) (\n  rate(stackdriver_vpn_tunnel_networking_googleapis_com_vpn_tunnel_egress_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{local_resource_type}}: transmitted",
+                  "legendFormat": "{{job}}: transmitted ({{local_resource_type}})",
                   "refId": "transmitted"
                },
                {
@@ -1080,7 +1155,7 @@
                   "expr": "avg by (job,local_resource_type) (\n  rate(stackdriver_vpn_tunnel_networking_googleapis_com_vpn_tunnel_ingress_bytes_count{job=\"integrations/gcp\",job=~\"$job\",project_id=~\"$project_id\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{local_resource_type}}: received",
+                  "legendFormat": "{{job}}: received ({{local_resource_type}})",
                   "refId": "received"
                }
             ],

@@ -388,11 +388,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   collectMetricExprs(signalsObj):
     std.filter(
       function(e) std.isString(e) && e != '',
-      [
-        signalsObj[s].asPanelExpression()
+      std.flattenArrays([
+        if std.isObject(signalsObj[s]) && std.objectHasAll(signalsObj[s], 'asPanelExpression') then
+          [signalsObj[s].asPanelExpression()]
+        else if std.isObject(signalsObj[s]) then
+          self.collectMetricExprs(signalsObj[s])
+        else
+          []
         for s in std.objectFields(signalsObj)
-        if std.isObject(signalsObj[s])
-           && std.objectHas(signalsObj[s], 'asPanelExpression')
-      ]
+      ])
     ),
 }
