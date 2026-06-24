@@ -76,7 +76,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
 
             g.dashboard.variable.query.new('bigip_partition')
             + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus)
-            + g.dashboard.variable.query.queryTypes.withLabelValues('partition', 'bigip_node_status_availability_state{' + this.config.filteringSelector + ', node=~"$bigip_node"}')
+            + g.dashboard.variable.query.queryTypes.withLabelValues('partition', 'bigip_node_status_availability_state{' + (if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' else '') + 'node=~"$bigip_node"}')
             + g.dashboard.variable.query.selectionOptions.withIncludeAll(true, '.+')
             + g.dashboard.variable.query.selectionOptions.withMulti(true)
             + g.dashboard.variable.query.generalOptions.withLabel('BIG-IP partition')
