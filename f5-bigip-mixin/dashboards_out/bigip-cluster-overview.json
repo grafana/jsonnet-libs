@@ -64,6 +64,8 @@
             "description": "The percentage of nodes available.",
             "fieldConfig": {
                "defaults": {
+                  "max": 100,
+                  "min": 90,
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
@@ -72,16 +74,12 @@
                            "value": 0
                         },
                         {
-                           "color": "red",
+                           "color": "yellow",
                            "value": 95
                         },
                         {
-                           "color": "yellow",
-                           "value": 96
-                        },
-                        {
                            "color": "green",
-                           "value": 100
+                           "value": 99
                         }
                      ]
                   },
@@ -125,6 +123,8 @@
             "description": "The percentage of pools available.",
             "fieldConfig": {
                "defaults": {
+                  "max": 100,
+                  "min": 90,
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
@@ -133,16 +133,12 @@
                            "value": 0
                         },
                         {
-                           "color": "red",
+                           "color": "yellow",
                            "value": 95
                         },
                         {
-                           "color": "yellow",
-                           "value": 96
-                        },
-                        {
                            "color": "green",
-                           "value": 100
+                           "value": 99
                         }
                      ]
                   },
@@ -186,6 +182,8 @@
             "description": "The percentage of virtual servers available.",
             "fieldConfig": {
                "defaults": {
+                  "max": 100,
+                  "min": 90,
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
@@ -194,16 +192,12 @@
                            "value": 0
                         },
                         {
-                           "color": "red",
+                           "color": "yellow",
                            "value": 95
                         },
                         {
-                           "color": "yellow",
-                           "value": 96
-                        },
-                        {
                            "color": "green",
-                           "value": 100
+                           "value": 99
                         }
                      ]
                   },
@@ -247,6 +241,9 @@
             "description": "Nodes with the highest number of active server-side connections.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "short"
                }
@@ -287,6 +284,9 @@
             "description": "Nodes with the highest outbound traffic.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "decbytes"
                }
@@ -328,6 +328,9 @@
             "description": "Pools with the highest number of active members.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "short"
                }
@@ -368,6 +371,9 @@
             "description": "Pools with the highest number of requests.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "short"
                }
@@ -409,6 +415,9 @@
             "description": "Pools with the largest connection queues.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "short"
                }
@@ -449,6 +458,9 @@
             "description": "Virtual servers with the highest traffic (inbound and outbound).",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "decbytes"
                }
@@ -490,6 +502,9 @@
             "description": "Virtual servers with the highest response times.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
                   "min": 0,
                   "unit": "ms"
                }

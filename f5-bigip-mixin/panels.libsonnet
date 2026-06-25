@@ -14,15 +14,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of nodes available.')
         + g.panel.gauge.standardOptions.withUnit('percent')
+        + g.panel.gauge.standardOptions.withMin(90)
+        + g.panel.gauge.standardOptions.withMax(100)
         + g.panel.gauge.standardOptions.thresholds.withMode('absolute')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.thresholdStep.withValue(0)
           + g.panel.gauge.thresholdStep.withColor('red'),
           g.panel.gauge.thresholdStep.withValue(95)
-          + g.panel.gauge.thresholdStep.withColor('red'),
-          g.panel.gauge.thresholdStep.withValue(96)
           + g.panel.gauge.thresholdStep.withColor('yellow'),
-          g.panel.gauge.thresholdStep.withValue(100)
+          g.panel.gauge.thresholdStep.withValue(99)
           + g.panel.gauge.thresholdStep.withColor('green'),
         ])
         + g.panel.gauge.options.withShowThresholdMarkers(true)
@@ -35,15 +35,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of pools available.')
         + g.panel.gauge.standardOptions.withUnit('percent')
+        + g.panel.gauge.standardOptions.withMin(90)
+        + g.panel.gauge.standardOptions.withMax(100)
         + g.panel.gauge.standardOptions.thresholds.withMode('absolute')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.thresholdStep.withValue(0)
           + g.panel.gauge.thresholdStep.withColor('red'),
           g.panel.gauge.thresholdStep.withValue(95)
-          + g.panel.gauge.thresholdStep.withColor('red'),
-          g.panel.gauge.thresholdStep.withValue(96)
           + g.panel.gauge.thresholdStep.withColor('yellow'),
-          g.panel.gauge.thresholdStep.withValue(100)
+          g.panel.gauge.thresholdStep.withValue(99)
           + g.panel.gauge.thresholdStep.withColor('green'),
         ])
         + g.panel.gauge.options.withShowThresholdMarkers(true)
@@ -56,15 +56,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.panel.gauge.panelOptions.withDescription('The percentage of virtual servers available.')
         + g.panel.gauge.standardOptions.withUnit('percent')
+        + g.panel.gauge.standardOptions.withMin(90)
+        + g.panel.gauge.standardOptions.withMax(100)
         + g.panel.gauge.standardOptions.thresholds.withMode('absolute')
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.thresholdStep.withValue(0)
           + g.panel.gauge.thresholdStep.withColor('red'),
           g.panel.gauge.thresholdStep.withValue(95)
-          + g.panel.gauge.thresholdStep.withColor('red'),
-          g.panel.gauge.thresholdStep.withValue(96)
           + g.panel.gauge.thresholdStep.withColor('yellow'),
-          g.panel.gauge.thresholdStep.withValue(100)
+          g.panel.gauge.thresholdStep.withValue(99)
           + g.panel.gauge.thresholdStep.withColor('green'),
         ])
         + g.panel.gauge.options.withShowThresholdMarkers(true)
@@ -79,6 +79,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Nodes with the highest number of active server-side connections.')
         + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -90,6 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Nodes with the highest outbound traffic.')
         + g.panel.barGauge.standardOptions.withUnit('decbytes')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -101,6 +103,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Pools with the highest number of active members.')
         + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -112,6 +115,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Pools with the highest number of requests.')
         + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -123,6 +127,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Pools with the largest connection queues.')
         + g.panel.barGauge.standardOptions.withUnit('short')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -134,6 +139,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Virtual servers with the highest traffic (inbound and outbound).')
         + g.panel.barGauge.standardOptions.withUnit('decbytes')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
@@ -145,34 +151,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.barGauge.panelOptions.withDescription('Virtual servers with the highest response times.')
         + g.panel.barGauge.standardOptions.withUnit('ms')
         + g.panel.barGauge.standardOptions.withMin(0)
+        + g.panel.barGauge.standardOptions.color.withMode('palette-classic')
         + g.panel.barGauge.options.withDisplayMode('gradient')
         + g.panel.barGauge.options.withOrientation('horizontal'),
 
       // Node panels
       nodeAvailabilityStatusTable:
-        commonlib.panels.generic.table.base.new(
-          title='Availability status',
-          targets=[signals.node.availabilityState.asTableTarget()],
-        )
-        + g.panel.table.queryOptions.withTransformations([
+        signals.node.availabilityState.asTable(name='Availability status', format='table')
+        + g.panel.table.panelOptions.withDescription('The availability status of the node.')
+        + g.panel.table.queryOptions.withTransformationsMixin(
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
             excludeByName: {
-              Time: true,
               job: true,
               __name__: true,
               partition: true,
             },
-            indexByName: {},
             renameByName: {
               instance: 'Instance',
               node: 'Node',
-              Value: 'Status',
             },
           }),
-        ])
-        + g.panel.table.panelOptions.withDescription('The availability status of the node.')
-        + g.panel.table.standardOptions.withUnit('short'),
+        ),
 
       nodeRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -189,8 +189,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.currentSessions.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current number of active sessions to the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       nodeConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -202,7 +201,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current active server-side connections to the node in comparison to the maximum connection capacity.')
         + g.panel.timeSeries.standardOptions.withUnit('short')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       nodeTrafficInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -210,8 +210,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesIn.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data received from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       nodeTrafficOutboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -219,8 +218,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           targets=[signals.node.serversideBytesOut.asTarget()]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The rate of data sent from the pool by the node.')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       nodePacketsInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -240,29 +238,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Pool panels
       poolAvailabilityStatusTable:
-        commonlib.panels.generic.table.base.new(
-          title='Availability status',
-          targets=[signals.pool.availabilityState.asTableTarget()],
-        )
-        + g.panel.table.queryOptions.withTransformations([
+        signals.pool.availabilityState.asTable(name='Availability status', format='table')
+        + g.panel.table.panelOptions.withDescription('The availability status of the pool.')
+        + g.panel.table.queryOptions.withTransformationsMixin(
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
             excludeByName: {
-              Time: true,
               job: true,
               __name__: true,
               partition: true,
             },
-            indexByName: {},
             renameByName: {
               instance: 'Instance',
               pool: 'Pool',
-              Value: 'Status',
             },
           }),
-        ])
-        + g.panel.table.panelOptions.withDescription('The availability status of the pool.')
-        + g.panel.table.standardOptions.withUnit('short'),
+        ),
 
       poolRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -281,7 +272,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The number of active and minimum required members within the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       poolConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -292,7 +285,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The current and maximum number of node connections within the pool.')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       poolConnectionQueueDepthTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -315,7 +310,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Traffic inbound',
           targets=[signals.pool.serversideBytesIn.asTarget()]
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The rate of date received from virtual servers by the pool.')
+        + g.panel.timeSeries.panelOptions.withDescription('The rate of data received from virtual servers by the pool.')
         + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       poolTrafficOutboundTimeSeries:
@@ -323,7 +318,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           'Traffic outbound',
           targets=[signals.pool.serversideBytesOut.asTarget()]
         )
-        + g.panel.timeSeries.panelOptions.withDescription('The rate of date sent from virtual servers by the pool.')
+        + g.panel.timeSeries.panelOptions.withDescription('The rate of data sent from virtual servers by the pool.')
         + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
       poolPacketsInboundTimeSeries:
@@ -344,29 +339,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Virtual Server panels
       virtualServerAvailabilityStatusTable:
-        commonlib.panels.generic.table.base.new(
-          title='Availability status',
-          targets=[signals.virtualServer.availabilityState.asTableTarget()],
-        )
-        + g.panel.table.queryOptions.withTransformations([
+        signals.virtualServer.availabilityState.asTable(name='Availability status', format='table')
+        + g.panel.table.panelOptions.withDescription('The availability status of the virtual server.')
+        + g.panel.table.queryOptions.withTransformationsMixin(
           g.panel.table.transformation.withId('organize')
           + g.panel.table.transformation.withOptions({
             excludeByName: {
-              Time: true,
               job: true,
               __name__: true,
               partition: true,
             },
-            indexByName: {},
             renameByName: {
               instance: 'Instance',
               vs: 'Virtual Server',
-              Value: 'Status',
             },
           }),
-        ])
-        + g.panel.table.panelOptions.withDescription('The availability status of the virtual server.')
-        + g.panel.table.standardOptions.withUnit('short'),
+        ),
 
       virtualServerRequestsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -394,7 +382,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The evicted and current client-side connections within the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       virtualServerEphemeralConnectionsTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -406,7 +396,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ]
         )
         + g.panel.timeSeries.panelOptions.withDescription('The ephemeral evicted and current client-side connections within the virtual server.')
-        + g.panel.timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       virtualServerTrafficInboundTimeSeries:
         commonlib.panels.generic.timeSeries.base.new(

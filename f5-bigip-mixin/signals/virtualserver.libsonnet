@@ -79,7 +79,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_cur_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
-          legendCustomTemplate: '{{vs}} - {{instance}}',
+          legendCustomTemplate: '{{vs}} - {{instance}} - current',
         },
       },
     },
@@ -93,7 +93,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_max_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
-          legendCustomTemplate: '{{vs}} - {{instance}}',
+          legendCustomTemplate: '{{vs}} - {{instance}} - max',
         },
       },
     },
@@ -107,7 +107,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_vs_clientside_evicted_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
-          legendCustomTemplate: '{{vs}} - {{instance}}',
+          legendCustomTemplate: '{{vs}} - {{instance}} - evicted',
         },
       },
     },
@@ -121,7 +121,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_cur_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
-          legendCustomTemplate: '{{vs}} - {{instance}}',
+          legendCustomTemplate: '{{vs}} - {{instance}} - current',
         },
       },
     },
@@ -135,7 +135,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: 'bigip_vs_ephemeral_max_conns{%(queriesSelector)s, ' + virtualServerSelector + '}',
-          legendCustomTemplate: '{{vs}} - {{instance}}',
+          legendCustomTemplate: '{{vs}} - {{instance}} - max',
         },
       },
     },
