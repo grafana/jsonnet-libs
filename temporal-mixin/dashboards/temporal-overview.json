@@ -8404,7 +8404,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[30d:1m]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[30d:1m] ) )",
+          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[30d:]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[30d:] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -8474,7 +8474,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[7d:1m]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[7d:1m] ) )",
+          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[7d:]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[7d:] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -8544,7 +8544,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[1d:1m]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[1d:1m] ) )",
+          "expr": "sum ( sum_over_time( ( sum by (temporal_namespace) (temporal_cloud_v1_total_action_count{temporal_namespace=~\"$temporal_namespace\"}) and on (temporal_namespace) ( last_over_time(temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) ) )[1d:]) ) / sum ( sum_over_time( ( last_over_time( temporal_cloud_v1_action_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) != last_over_time(temporal_cloud_v1_action_on_demand_envelope_limit{temporal_namespace=~\"$temporal_namespace\"}[1h]) )[1d:] ) )",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
