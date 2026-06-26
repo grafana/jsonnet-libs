@@ -16,7 +16,7 @@
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
-  customAllValue: '.*',
+  customAllValue: '.+',
 
   // Alerts configuration
   alertsCriticalReplicationLag: 60,  // seconds

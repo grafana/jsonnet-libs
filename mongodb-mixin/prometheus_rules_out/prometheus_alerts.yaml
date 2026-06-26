@@ -32,8 +32,8 @@ groups:
             (
               avg by (job,mongodb_cluster) (mongodb_mongod_replset_oplog_tail_timestamp{} - mongodb_mongod_replset_oplog_head_timestamp{})
               - (
-                avg by (job,mongodb_cluster) (mongodb_mongod_replset_member_optime_date{state="PRIMARY"})
-                - avg(mongodb_mongod_replset_member_optime_date{state="SECONDARY", })
+                avg by (job,mongodb_cluster) (mongodb_mongod_replset_member_optime_date{state="PRIMARY", })
+                - avg by (job,mongodb_cluster) (mongodb_mongod_replset_member_optime_date{state="SECONDARY", })
               )
             ) <= 0
           for: 5m

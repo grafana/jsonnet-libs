@@ -51,7 +51,7 @@
                 avg by (%(groupAgg)s) (%(oplogWindow)s)
                 - (
                   avg by (%(groupAgg)s) (%(primaryOptime)s)
-                  - avg(%(secondaryOptime)s)
+                  - avg by (%(groupAgg)s) (%(secondaryOptime)s)
                 )
               ) <= 0
             ||| % {

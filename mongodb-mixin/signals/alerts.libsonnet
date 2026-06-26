@@ -62,7 +62,7 @@ function(this)
         unit: 's',
         sources: {
           percona_mongodb: {
-            expr: 'mongodb_mongod_replset_member_optime_date{state="PRIMARY"}',
+            expr: 'mongodb_mongod_replset_member_optime_date{state="PRIMARY", %(queriesSelector)s}',
           },
         },
       },
