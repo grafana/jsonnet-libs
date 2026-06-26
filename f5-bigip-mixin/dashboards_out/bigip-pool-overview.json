@@ -64,25 +64,64 @@
             "description": "The availability status of the pool.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "short"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Availability status"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Unavailable"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Available"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
+               "w": 12,
                "x": 0,
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -99,17 +138,41 @@
             "title": "Availability status",
             "transformations": [
                {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Availability status"
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
-                        "Time": true,
                         "__name__": true,
                         "job": true,
                         "partition": true
                      },
-                     "indexByName": { },
                      "renameByName": {
-                        "Value": "Status",
                         "instance": "Instance",
                         "pool": "Pool"
                      }
@@ -147,8 +210,8 @@
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 0,
-               "y": 9
+               "x": 12,
+               "y": 1
             },
             "id": 3,
             "options": {
@@ -161,7 +224,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -207,22 +270,23 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
+               "w": 24,
+               "x": 0,
                "y": 9
             },
             "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -278,7 +342,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 24,
                "x": 0,
                "y": 17
             },
@@ -286,14 +350,15 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -303,7 +368,7 @@
                   "expr": "bigip_pool_serverside_cur_conns{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{pool}} - {{instance}}",
+                  "legendFormat": "{{pool}} - {{instance}} - current",
                   "refId": "Server-side current connections"
                },
                {
@@ -314,7 +379,7 @@
                   "expr": "bigip_pool_serverside_max_conns{job=~\"$job\",instance=~\"$instance\", pool=~\"$bigip_pool\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{pool}} - {{instance}}",
+                  "legendFormat": "{{pool}} - {{instance}} - max",
                   "refId": "Server-side maximum connections"
                }
             ],
@@ -350,8 +415,8 @@
             "gridPos": {
                "h": 8,
                "w": 12,
-               "x": 12,
-               "y": 17
+               "x": 0,
+               "y": 25
             },
             "id": 6,
             "options": {
@@ -364,7 +429,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -409,8 +474,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 24,
-               "x": 0,
+               "w": 12,
+               "x": 12,
                "y": 25
             },
             "id": 7,
@@ -424,7 +489,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -447,7 +512,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate of date received from virtual servers by the pool.",
+            "description": "The rate of data received from virtual servers by the pool.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -485,7 +550,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -507,7 +572,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The rate of date sent from virtual servers by the pool.",
+            "description": "The rate of data sent from virtual servers by the pool.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -545,7 +610,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -605,7 +670,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -666,7 +731,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {

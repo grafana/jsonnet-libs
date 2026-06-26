@@ -1,9 +1,12 @@
-local main = import './main.libsonnet';
+local config = import './config.libsonnet';
+local f5lib = import './main.libsonnet';
+local util = import 'grafana-cloud-integration-utils/util.libsonnet';
 
-// Create the mixin with default configuration
-local mixin = main.new();
+local mixin = f5lib.new()
+              + f5lib.withConfigMixin(
+                config,
+              );
 
-// Export in the standard mixin format
 {
   grafanaDashboards+:: mixin.grafana.dashboards,
   prometheusAlerts+:: {

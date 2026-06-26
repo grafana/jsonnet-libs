@@ -64,16 +64,55 @@
             "description": "The availability status of the node.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "short"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Availability status"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Unavailable"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Available"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -82,7 +121,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -99,17 +138,41 @@
             "title": "Availability status",
             "transformations": [
                {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Availability status"
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
-                        "Time": true,
                         "__name__": true,
                         "job": true,
                         "partition": true
                      },
-                     "indexByName": { },
                      "renameByName": {
-                        "Value": "Status",
                         "instance": "Instance",
                         "node": "Node"
                      }
@@ -161,7 +224,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -215,14 +278,14 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -275,14 +338,15 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -292,7 +356,7 @@
                   "expr": "bigip_node_serverside_cur_conns{job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{node}} - {{instance}}",
+                  "legendFormat": "{{node}} - {{instance}} - current",
                   "refId": "Server-side current connections"
                },
                {
@@ -303,7 +367,7 @@
                   "expr": "bigip_node_serverside_max_conns{job=~\"$job\",instance=~\"$instance\", node=~\"$bigip_node\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{node}} - {{instance}}",
+                  "legendFormat": "{{node}} - {{instance}} - max",
                   "refId": "Server-side maximum connections"
                }
             ],
@@ -346,14 +410,14 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -406,14 +470,14 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -473,7 +537,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -534,7 +598,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -629,7 +693,7 @@
                "label": "BIG-IP partition",
                "multi": true,
                "name": "bigip_partition",
-               "query": "label_values(bigip_node_status_availability_state{, node=~\"$bigip_node\"}, partition)",
+               "query": "label_values(bigip_node_status_availability_state{node=~\"$bigip_node\"}, partition)",
                "refresh": 2,
                "type": "query"
             }

@@ -64,16 +64,55 @@
             "description": "The availability status of the virtual server.",
             "fieldConfig": {
                "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [ ]
+                  "custom": {
+                     "filterable": false
                   },
                   "unit": "short"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Availability status"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
+                        {
+                           "id": "mappings",
+                           "value": [
+                              {
+                                 "options": {
+                                    "0": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Unavailable"
+                                    },
+                                    "1": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Available"
+                                    }
+                                 },
+                                 "type": "value"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -82,7 +121,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -99,17 +138,41 @@
             "title": "Availability status",
             "transformations": [
                {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": { },
+                     "renameByName": {
+                        "Value": "Availability status"
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
-                        "Time": true,
                         "__name__": true,
                         "job": true,
                         "partition": true
                      },
-                     "indexByName": { },
                      "renameByName": {
-                        "Value": "Status",
                         "instance": "Instance",
                         "vs": "Virtual Server"
                      }
@@ -161,7 +224,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -222,7 +285,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -267,7 +330,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
                "y": 17
             },
@@ -275,14 +338,15 @@
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -292,7 +356,7 @@
                   "expr": "bigip_vs_clientside_cur_conns{job=~\"$job\",instance=~\"$instance\", vs=~\"$bigip_vs\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{vs}} - {{instance}}",
+                  "legendFormat": "{{vs}} - {{instance}} - current",
                   "refId": "Client-side current connections"
                },
                {
@@ -303,7 +367,7 @@
                   "expr": "bigip_vs_clientside_max_conns{job=~\"$job\",instance=~\"$instance\", vs=~\"$bigip_vs\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{vs}} - {{instance}}",
+                  "legendFormat": "{{vs}} - {{instance}} - max",
                   "refId": "Client-side maximum connections"
                },
                {
@@ -314,7 +378,7 @@
                   "expr": "bigip_vs_clientside_evicted_conns{job=~\"$job\",instance=~\"$instance\", vs=~\"$bigip_vs\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{vs}} - {{instance}}",
+                  "legendFormat": "{{vs}} - {{instance}} - evicted",
                   "refId": "Client-side evicted connections"
                }
             ],
@@ -349,22 +413,23 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 12,
                "y": 17
             },
             "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list"
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -374,7 +439,7 @@
                   "expr": "bigip_vs_ephemeral_cur_conns{job=~\"$job\",instance=~\"$instance\", vs=~\"$bigip_vs\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{vs}} - {{instance}}",
+                  "legendFormat": "{{vs}} - {{instance}} - current",
                   "refId": "Ephemeral current connections"
                },
                {
@@ -385,7 +450,7 @@
                   "expr": "bigip_vs_ephemeral_max_conns{job=~\"$job\",instance=~\"$instance\", vs=~\"$bigip_vs\", partition=~\"$bigip_partition\"}",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{vs}} - {{instance}}",
+                  "legendFormat": "{{vs}} - {{instance}} - max",
                   "refId": "Ephemeral maximum connections"
                },
                {
@@ -431,9 +496,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 17
+               "w": 6,
+               "x": 0,
+               "y": 25
             },
             "id": 7,
             "options": {
@@ -446,7 +511,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -491,8 +556,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 0,
+               "w": 6,
+               "x": 6,
                "y": 25
             },
             "id": 8,
@@ -506,7 +571,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -551,7 +616,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
+               "w": 6,
                "x": 12,
                "y": 25
             },
@@ -566,7 +631,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -612,9 +677,9 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 0,
-               "y": 33
+               "w": 6,
+               "x": 18,
+               "y": 25
             },
             "id": 10,
             "options": {
@@ -627,7 +692,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -673,8 +738,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
+               "w": 12,
+               "x": 0,
                "y": 33
             },
             "id": 11,
@@ -688,7 +753,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -734,8 +799,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
+               "w": 12,
+               "x": 12,
                "y": 33
             },
             "id": 12,
@@ -749,7 +814,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -810,7 +875,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -871,7 +936,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
