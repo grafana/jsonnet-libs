@@ -1,0 +1,1192 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "id": null,
+      "links": [
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB logs",
+            "type": "link",
+            "url": "/d/mongodb-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB cluster",
+            "type": "link",
+            "url": "/d/mongodb-cluster"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB overview",
+            "type": "link",
+            "url": "/d/mongodb-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB replica set",
+            "type": "link",
+            "url": "/d/mongodb-replicaset"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The uptime of the MongoDB instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  mongodb_instance_uptime_seconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Uptime",
+                  "refId": "Uptime"
+               }
+            ],
+            "title": "Uptime",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Queries per second.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 6,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: QPS",
+                  "refId": "QPS"
+               }
+            ],
+            "title": "QPS",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "An integer between 0 and 10 that represents the replica state of the current member. See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "index": 0,
+                              "text": "STARTUP"
+                           },
+                           "1": {
+                              "index": 1,
+                              "text": "PRIMARY"
+                           },
+                           "10": {
+                              "index": 9,
+                              "text": "REMOVED"
+                           },
+                           "2": {
+                              "index": 2,
+                              "text": "SECONDARY"
+                           },
+                           "3": {
+                              "index": 3,
+                              "text": "RECOVERING"
+                           },
+                           "5": {
+                              "index": 4,
+                              "text": "STARTUP2"
+                           },
+                           "6": {
+                              "index": 5,
+                              "text": "UNKNOWN"
+                           },
+                           "7": {
+                              "index": 6,
+                              "text": "ARBITER"
+                           },
+                           "8": {
+                              "index": 7,
+                              "text": "DOWN"
+                           },
+                           "9": {
+                              "index": 8,
+                              "text": "ROLLBACK"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 12,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{set}}",
+                  "refId": "Replica set state"
+               }
+            ],
+            "title": "Replica set",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average command latency.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (irate(mongodb_mongod_op_latencies_latency_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type=\"command\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type=\"command\"}[$__rate_interval]) > 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}: Command latency",
+                  "refId": "Command latency"
+               }
+            ],
+            "title": "Latency",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 7
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Service summary",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of command operations by type.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 8
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n  or irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Command operations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval])\n  or irate(mongodb_mongos_op_counters_repl_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Replication operations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "ttl_delete",
+                  "refId": "Documents deleted by TTL"
+               }
+            ],
+            "title": "Command operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of current connections.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 8
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  mongodb_mongod_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"current\"} or mongodb_mongos_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"current\"} or mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"current\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Connections",
+                  "refId": "Current connections"
+               }
+            ],
+            "title": "Connections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of document operations by state.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 16
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, state) (irate(mongodb_mongod_metrics_document_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{state}}",
+                  "refId": "Document operations"
+               }
+            ],
+            "title": "Document operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Average operation latency by type.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "µs"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 16
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (irate(mongodb_mongod_op_latencies_latency_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]) > 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Latency detail"
+               }
+            ],
+            "title": "Latency detail",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of operations queued due to a lock.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 16
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name,type) (\n  mongodb_mongod_global_lock_current_queue{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Queued operations"
+               }
+            ],
+            "title": "Queued operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of open cursors by state.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 24
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name,state) (\n  mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\nor mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{state}}",
+                  "refId": "Cursors"
+               }
+            ],
+            "title": "Cursors",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of scanned objects and record moves.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 24
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, state) (irate(mongodb_mongod_metrics_query_executor_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{state}}",
+                  "refId": "Scanned and moved objects"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (rate(mongodb_mongod_metrics_record_moves_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "moved",
+                  "refId": "Record moves"
+               }
+            ],
+            "title": "Scanned and moved objects",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of getLastError write operations and timeouts.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 32
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Total",
+                  "refId": "getLastError write operations"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Timeouts",
+                  "refId": "getLastError write timeouts"
+               }
+            ],
+            "title": "getLastError write operations",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of getLastError write wait time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ms"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 32
+            },
+            "id": 15,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Write wait time",
+                  "refId": "getLastError write time"
+               }
+            ],
+            "title": "getLastError write time",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of assert events by type.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 40
+            },
+            "id": 16,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name, type) (\n  irate(mongodb_mongod_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_asserts_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Assert events"
+               }
+            ],
+            "title": "Assert events",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Ratio of documents returned vs scanned, and index usage.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 40
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(irate(mongodb_mongod_metrics_document_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"returned\"}[$__rate_interval])) / sum(irate(mongodb_mongod_metrics_query_executor_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Document",
+                  "refId": "Query efficiency - documents"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"scanned\"}[$__rate_interval])) / sum(irate(mongodb_mongod_metrics_query_executor_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Index",
+                  "refId": "Query efficiency - index"
+               }
+            ],
+            "title": "Query efficiency",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of page faults.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 40
+            },
+            "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,service_name) (\n  irate(mongodb_mongod_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_mongos_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n  or irate(mongodb_extra_info_page_faults_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Faults",
+                  "refId": "Page faults"
+               }
+            ],
+            "title": "Page faults",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "tags": [
+         "mongodb-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(mongodb_up{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "MongoDB cluster",
+               "multi": true,
+               "name": "mongodb_cluster",
+               "query": "label_values(mongodb_up{job=~\"$job\"}, mongodb_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Service name",
+               "multi": true,
+               "name": "service_name",
+               "query": "label_values(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}, service_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "MongoDB instance",
+      "uid": "mongodb-instance"
+   }
