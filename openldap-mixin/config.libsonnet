@@ -1,4 +1,5 @@
 {
+  local this = self,
   filteringSelector: '',
   uid: 'openldap',
 
@@ -25,4 +26,13 @@
   extraLogLabels: ['level', 'component'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
+
+  metricsSource: 'prometheus',
+  signals+: {
+    overview: (import './signals/overview.libsonnet')(this),
+    connections: (import './signals/connections.libsonnet')(this),
+    operations: (import './signals/operations.libsonnet')(this),
+    authentication: (import './signals/authentication.libsonnet')(this),
+    threads: (import './signals/threads.libsonnet')(this),
+  },
 }
