@@ -5,7 +5,7 @@ local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local table = g.panel.table,
       local barGauge = g.panel.barGauge,
@@ -14,7 +14,7 @@ local utils = commonlib.utils;
       clustersCountStatus:
         commonlib.panels.generic.stat.info.new(
           'Clusters',
-          targets=[t.clustersCount],
+          targets=[signals.overview.clustersCount.asTarget()],
           description='The number of clusters in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -22,7 +22,7 @@ local utils = commonlib.utils;
       hostsCountStatus:
         commonlib.panels.generic.stat.info.new(
           'ESXi hosts',
-          targets=[t.hostsCount],
+          targets=[signals.overview.hostsCount.asTarget()],
           description='The number of ESXi hosts in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -30,7 +30,7 @@ local utils = commonlib.utils;
       resourcePoolsCountStatus:
         commonlib.panels.generic.stat.info.new(
           'Resource pools',
-          targets=[t.resourcePoolsCount],
+          targets=[signals.overview.resourcePoolsCount.asTarget()],
           description='The number of resource pools in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -38,7 +38,7 @@ local utils = commonlib.utils;
       vmsCountStatus:
         commonlib.panels.generic.stat.info.new(
           'VMs',
-          targets=[t.vmsCount],
+          targets=[signals.overview.vmsCount.asTarget()],
           description='The number of virtual machines in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -46,7 +46,7 @@ local utils = commonlib.utils;
       clusteredVMsOnStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered VMs on',
-          targets=[t.clusteredVMsOnCount],
+          targets=[signals.overview.clusteredVMsOnCount.asTarget()],
           description='The number of virtual machines currently powered on that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -54,7 +54,7 @@ local utils = commonlib.utils;
       clusteredVMsOffStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered VMs off',
-          targets=[t.clusteredVMsOffCount],
+          targets=[signals.overview.clusteredVMsOffCount.asTarget()],
           description='The number of virtual machines currently powered off that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -62,7 +62,7 @@ local utils = commonlib.utils;
       clusteredVMsSuspendedStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered VMs suspended',
-          targets=[t.clusteredVMsSuspendedCount],
+          targets=[signals.overview.clusteredVMsSuspendedCount.asTarget()],
           description='The number of virtual machines currently in a suspended state that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -70,7 +70,7 @@ local utils = commonlib.utils;
       clusteredVMTemplatesCountStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered VM templates',
-          targets=[t.clusteredVMTemplatesCount],
+          targets=[signals.overview.clusteredVMTemplatesCount.asTarget()],
           description='The number of virtual machine templates that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -78,7 +78,7 @@ local utils = commonlib.utils;
       clusteredHostsActiveStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered active ESXi hosts',
-          targets=[t.clusteredHostsActiveCount],
+          targets=[signals.overview.clusteredHostsActiveCount.asTarget()],
           description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) that belong to a cluster within the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -86,7 +86,7 @@ local utils = commonlib.utils;
       clusteredHostsInactiveStatus:
         commonlib.panels.generic.stat.info.new(
           'Clustered inactive ESXi hosts',
-          targets=[t.clusteredHostsInactiveCount],
+          targets=[signals.overview.clusteredHostsInactiveCount.asTarget()],
           description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) that belong to a cluster within the datacenter.'
         )
         + stat.options.withGraphMode('none'),
@@ -94,7 +94,7 @@ local utils = commonlib.utils;
       topCPUUtilizationClusters:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top CPU utilization by cluster',
-          targets=[t.topCPUUtilizationClusters],
+          targets=[signals.overview.topCPUUtilizationClusters.asTarget()],
           description='The clusters with the highest CPU utilization percentage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -103,7 +103,7 @@ local utils = commonlib.utils;
       topMemoryUtilizationClusters:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top memory utilization by cluster',
-          targets=[t.topMemoryUtilizationClusters],
+          targets=[signals.overview.topMemoryUtilizationClusters.asTarget()],
           description='The clusters with the highest memory utilization percentage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -113,39 +113,39 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'Clusters table',
           targets=[
-            t.totalCPUClusters + g.query.prometheus.withFormat('table')
+            signals.overview.totalCPUClusters.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('total_cpu')
             ,
-            t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
+            signals.overview.topCPUUtilizationClusters.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('cpu_utilization')
             ,
-            t.totalMemoryClusters + g.query.prometheus.withFormat('table')
+            signals.overview.totalMemoryClusters.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('total_memory')
             ,
-            t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
+            signals.overview.topMemoryUtilizationClusters.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('memory_utilization')
             ,
-            t.hostsActiveClustersCount + g.query.prometheus.withFormat('table')
+            signals.overview.hostsActiveClustersCount.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('hosts_active')
             ,
-            t.hostsInactiveClustersCount + g.query.prometheus.withFormat('table')
+            signals.overview.hostsInactiveClustersCount.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('hosts_inactive')
             ,
-            t.vmsOnClustersCount + g.query.prometheus.withFormat('table')
+            signals.overview.vmsOnClustersCount.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('vms_on')
             ,
-            t.vmsOffClustersCount + g.query.prometheus.withFormat('table')
+            signals.overview.vmsOffClustersCount.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('vms_off')
             ,
-            t.vmsSuspendedClustersCount + g.query.prometheus.withFormat('table')
+            signals.overview.vmsSuspendedClustersCount.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('vms_suspended'),
           ],
@@ -297,15 +297,15 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'Datastores table',
           targets=[
-            t.datastoreDiskTotal + g.query.prometheus.withFormat('table')
+            signals.datastore.datastoreDiskTotal.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_total')
             + g.query.prometheus.withRange(true)
             ,
-            t.datastoreDiskUtilization + g.query.prometheus.withFormat('table')
+            signals.datastore.datastoreDiskUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.datastoreDiskAvailable + g.query.prometheus.withFormat('table')
+            signals.datastore.datastoreDiskAvailable.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_available')
             + g.query.prometheus.withRange(true),
           ],
@@ -390,7 +390,7 @@ local utils = commonlib.utils;
       topCPUUsageResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
           'Top CPU usage by resource pools',
-          targets=[t.topCPUUsageResourcePools],
+          targets=[signals.overview.topCPUUsageResourcePools.asTarget()],
           description='The resource pools with the highest CPU usage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -399,7 +399,7 @@ local utils = commonlib.utils;
       topMemoryUsageResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
           'Top memory usage by resource pools',
-          targets=[t.topMemoryUsageResourcePools],
+          targets=[signals.overview.topMemoryUsageResourcePools.asTarget()],
           description='The resource pools with the highest memory usage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -408,7 +408,7 @@ local utils = commonlib.utils;
       topCPUShareResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
           'Top CPU shares by resource pools',
-          targets=[t.topCPUShareResourcePools],
+          targets=[signals.overview.topCPUShareResourcePools.asTarget()],
           description='The resource pools with the highest amount of CPU shares allocated in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -417,7 +417,7 @@ local utils = commonlib.utils;
       topMemoryShareResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
           'Top memory shares by resource pools',
-          targets=[t.topMemoryShareResourcePools],
+          targets=[signals.overview.topMemoryShareResourcePools.asTarget()],
           description='The resource pools with the highest amount of memory shares allocated in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -426,7 +426,7 @@ local utils = commonlib.utils;
       topCPUUtilizationHosts:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top CPU utilization by ESXi hosts',
-          targets=[t.topCPUUtilizationHosts],
+          targets=[signals.overview.topCPUUtilizationHosts.asTarget()],
           description='The ESXi hosts with the highest CPU utilization in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -435,7 +435,7 @@ local utils = commonlib.utils;
       topMemoryUtilizationHosts:
         commonlib.panels.generic.timeSeries.base.new(
           'Top memory utilization by ESXi hosts',
-          targets=[t.topMemoryUtilizationHosts],
+          targets=[signals.overview.topMemoryUtilizationHosts.asTarget()],
           description='The ESXi hosts with the highest memory utilization in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -444,7 +444,7 @@ local utils = commonlib.utils;
       topDiskAvgLatencyHosts:
         commonlib.panels.generic.timeSeries.base.new(
           'Top avg disk latency by ESXi hosts',
-          targets=[t.topDiskAvgLatencyHosts],
+          targets=[signals.overview.topDiskAvgLatencyHosts.asTarget()],
           description='The ESXi hosts with the highest average disk latency in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -453,7 +453,7 @@ local utils = commonlib.utils;
       topPacketErrorRateHosts:
         commonlib.panels.generic.timeSeries.base.new(
           'Top packet errors by ESXi hosts',
-          targets=[t.topPacketErrorRateHosts],
+          targets=[signals.overview.topPacketErrorRateHosts.asTarget()],
           description='The ESXi hosts with the highest percentage of packet errors in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -462,7 +462,7 @@ local utils = commonlib.utils;
       hostCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'CPU usage',
-          targets=[t.hostCPUUsage],
+          targets=[signals.host.hostCPUUsage.asTarget()],
           description='The amount of CPU used by the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('rotmhz')
@@ -471,7 +471,7 @@ local utils = commonlib.utils;
       hostCPUUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'CPU utilization',
-          targets=[t.hostCPUUtilization],
+          targets=[signals.host.hostCPUUtilization.asTarget()],
           description='The CPU utilization percentage of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -480,7 +480,7 @@ local utils = commonlib.utils;
       hostMemoryUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'Memory usage',
-          targets=[t.hostMemoryUsage],
+          targets=[signals.host.hostMemoryUsage.asTarget()],
           description='The amount of memory used by the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('mbytes')
@@ -489,7 +489,7 @@ local utils = commonlib.utils;
       hostMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Memory utilization',
-          targets=[t.hostMemoryUtilization],
+          targets=[signals.host.hostMemoryUtilization.asTarget()],
           description='The memory utilization percentage of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -498,7 +498,7 @@ local utils = commonlib.utils;
       hostModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
           'Modified memory',
-          targets=[t.hostModifiedMemoryBallooned, t.hostModifiedMemorySwapped],
+          targets=[signals.host.hostModifiedMemoryBallooned.asTarget(), signals.host.hostModifiedMemorySwapped.asTarget()],
           description='The amount of memory that has been swapped or ballooned on the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('mbytes')
@@ -508,7 +508,7 @@ local utils = commonlib.utils;
       hostNetworkThroughputRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Avg network throughput rate',
-          targets=[t.hostNetworkTransmittedThroughputRate, t.hostNetworkReceivedThroughputRate],
+          targets=[signals.host.hostNetworkTransmittedThroughputRate.asTarget(), signals.host.hostNetworkReceivedThroughputRate.asTarget()],
           description='The 20s average rate of data transmitted or received over the network of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('KiBs')
@@ -518,7 +518,7 @@ local utils = commonlib.utils;
       hostPacketErrorRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Avg packet errors',
-          targets=[t.hostPacketReceivedErrorRate, t.hostPacketTransmittedErrorRate],
+          targets=[signals.host.hostPacketReceivedErrorRate.asTarget(), signals.host.hostPacketTransmittedErrorRate.asTarget()],
           description='The 20s average of received or transmitted packets dropped over the ESXi hosts network compared to the overall packets received or transmitted.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -529,35 +529,35 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'VMs table',
           targets=[
-            t.hostVMCPUUsage + g.query.prometheus.withFormat('table')
+            signals.host.hostVMCPUUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMCPUUtilization + g.query.prometheus.withFormat('table')
+            signals.host.hostVMCPUUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMMemoryUsage + g.query.prometheus.withFormat('table')
+            signals.host.hostVMMemoryUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMMemoryUtilization + g.query.prometheus.withFormat('table')
+            signals.host.hostVMMemoryUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMDiskUsage + g.query.prometheus.withFormat('table')
+            signals.host.hostVMDiskUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMDiskUtilization + g.query.prometheus.withFormat('table')
+            signals.host.hostVMDiskUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            signals.host.hostVMNetworkThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('netowrk_throughput')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMPacketDropRate + g.query.prometheus.withFormat('table')
+            signals.host.hostVMPacketDropRate.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('packet_drop_rate')
             + g.query.prometheus.withRange(true),
           ],
@@ -714,16 +714,16 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'Disks table',
           targets=[
-            t.hostDiskReadThroughput + g.query.prometheus.withFormat('table')
+            signals.host.hostDiskReadThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_reads')
             + g.query.prometheus.withRange(true),
-            t.hostDiskReadLatency + g.query.prometheus.withFormat('table')
+            signals.host.hostDiskReadLatency.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_read_latency')
             + g.query.prometheus.withRange(true),
-            t.hostDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            signals.host.hostDiskWriteThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_writes')
             + g.query.prometheus.withRange(true),
-            t.hostDiskWriteLatency + g.query.prometheus.withFormat('table')
+            signals.host.hostDiskWriteLatency.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_write_latency')
             + g.query.prometheus.withRange(true),
           ],
@@ -811,7 +811,7 @@ local utils = commonlib.utils;
       vmCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'CPU usage',
-          targets=[t.vmCPUUsage],
+          targets=[signals.vm.vmCPUUsage.asTarget()],
           description='The amount of CPU used by the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -820,7 +820,7 @@ local utils = commonlib.utils;
       vmCPUUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'CPU utilization',
-          targets=[t.vmCPUUtilization],
+          targets=[signals.vm.vmCPUUtilization.asTarget()],
           description='The CPU utilization percentage of VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -829,7 +829,7 @@ local utils = commonlib.utils;
       vmMemoryUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'Memory usage',
-          targets=[t.vmMemoryUsage],
+          targets=[signals.vm.vmMemoryUsage.asTarget()],
           description='The amount of memory used by the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -838,7 +838,7 @@ local utils = commonlib.utils;
       vmMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Memory utilization',
-          targets=[t.vmMemoryUtilization],
+          targets=[signals.vm.vmMemoryUtilization.asTarget()],
           description='The memory utilization percentage of the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -847,7 +847,7 @@ local utils = commonlib.utils;
       vmDiskUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'Disk usage',
-          targets=[t.vmDiskUsage],
+          targets=[signals.vm.vmDiskUsage.asTarget()],
           description='The amount of disk space used by the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -856,7 +856,7 @@ local utils = commonlib.utils;
       vmDiskUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Disk utilization',
-          targets=[t.vmDiskUtilization],
+          targets=[signals.vm.vmDiskUtilization.asTarget()],
           description='The disk utilization percentage of VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -865,7 +865,7 @@ local utils = commonlib.utils;
       vmModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
           'Modified memory',
-          targets=[t.vmModifiedMemoryBallooned, t.vmModifiedMemorySwapped],
+          targets=[signals.vm.vmModifiedMemoryBallooned.asTarget(), signals.vm.vmModifiedMemorySwapped.asTarget()],
           description='The amount of memory that has been swapped or ballooned on the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -875,7 +875,7 @@ local utils = commonlib.utils;
       vmNetworkThroughputRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Avg network throughput rate',
-          targets=[t.vmNetworkReceivedThroughputRate, t.vmNetworkTransmittedThroughputRate],
+          targets=[signals.vm.vmNetworkReceivedThroughputRate.asTarget(), signals.vm.vmNetworkTransmittedThroughputRate.asTarget()],
           description='The 20s average rate of data transmitted or received over the network of the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -885,7 +885,7 @@ local utils = commonlib.utils;
       vmPacketDropRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Avg packet drops',
-          targets=[t.vmPacketReceivedDropRate, t.vmPacketTransmittedDropRate],
+          targets=[signals.vm.vmPacketReceivedDropRate.asTarget(), signals.vm.vmPacketTransmittedDropRate.asTarget()],
           description='The 20s average of received or transmitted packets dropped over the VMs network compared to the overall packets received or transmitted.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('list')
@@ -896,16 +896,16 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'Disks table',
           targets=[
-            t.vmDiskReadThroughput + g.query.prometheus.withFormat('table')
+            signals.vm.vmDiskReadThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_reads')
             + g.query.prometheus.withRange(true),
-            t.vmDiskReadLatency + g.query.prometheus.withFormat('table')
+            signals.vm.vmDiskReadLatency.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_read_latency')
             + g.query.prometheus.withRange(true),
-            t.vmDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            signals.vm.vmDiskWriteThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_writes')
             + g.query.prometheus.withRange(true),
-            t.vmDiskWriteLatency + g.query.prometheus.withFormat('table')
+            signals.vm.vmDiskWriteLatency.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_write_latency')
             + g.query.prometheus.withRange(true),
           ],
@@ -993,7 +993,7 @@ local utils = commonlib.utils;
       clusterVMsOnStatus:
         commonlib.panels.generic.stat.info.new(
           'VMs on',
-          targets=[t.clusterVMsOnCount],
+          targets=[signals.cluster.clusterVMsOnCount.asTarget()],
           description='The number of virtual machines currently powered on within the cluster.'
         )
         + stat.options.withGraphMode('none'),
@@ -1001,7 +1001,7 @@ local utils = commonlib.utils;
       clusterVMsOffStatus:
         commonlib.panels.generic.stat.info.new(
           'VMs off',
-          targets=[t.clusterVMsOffCount],
+          targets=[signals.cluster.clusterVMsOffCount.asTarget()],
           description='The number of virtual machines currently powered off within the cluster.'
         )
         + stat.options.withGraphMode('none'),
@@ -1009,7 +1009,7 @@ local utils = commonlib.utils;
       clusterVMsSuspendedStatus:
         commonlib.panels.generic.stat.info.new(
           'VMs suspended',
-          targets=[t.clusterVMsSuspendedCount],
+          targets=[signals.cluster.clusterVMsSuspendedCount.asTarget()],
           description='The number of virtual machines currently in a suspended state within the cluster.'
         )
         + stat.options.withGraphMode('none'),
@@ -1017,7 +1017,7 @@ local utils = commonlib.utils;
       clusterHostsActiveStatus:
         commonlib.panels.generic.stat.info.new(
           'Active ESXi hosts',
-          targets=[t.clusterHostsActiveCount],
+          targets=[signals.cluster.clusterHostsActiveCount.asTarget()],
           description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) within the cluster.'
         )
         + stat.options.withGraphMode('none'),
@@ -1025,7 +1025,7 @@ local utils = commonlib.utils;
       clusterHostsInactiveStatus:
         commonlib.panels.generic.stat.info.new(
           'Inactive ESXi hosts',
-          targets=[t.clusterHostsInactiveCount],
+          targets=[signals.cluster.clusterHostsInactiveCount.asTarget()],
           description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) within the cluster.'
         )
         + stat.options.withGraphMode('none'),
@@ -1033,7 +1033,7 @@ local utils = commonlib.utils;
       clusterResourcePoolsStatus:
         commonlib.panels.generic.stat.info.new(
           'Resource pools',
-          targets=[t.clusterResourcePoolsCount],
+          targets=[signals.cluster.clusterResourcePoolsCount.asTarget()],
           description='The number of resource pools within the cluster (including nested).'
         )
         + stat.options.withGraphMode('none'),
@@ -1041,7 +1041,7 @@ local utils = commonlib.utils;
       clusterCPULimit:
         barGauge.new(title='Cluster CPU limit')
         + barGauge.queryOptions.withTargets([
-          t.clusterCPULimit,
+          signals.cluster.clusterCPULimit.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The available CPU capacity of the cluster.')
         + barGauge.options.withOrientation('horizontal')
@@ -1053,7 +1053,7 @@ local utils = commonlib.utils;
       clusterCPUEffective:
         barGauge.new(title='Cluster CPU effective')
         + barGauge.queryOptions.withTargets([
-          t.clusterCPUEffective,
+          signals.cluster.clusterCPUEffective.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The effective CPU capacity of the cluster.')
         + barGauge.options.withOrientation('horizontal')
@@ -1065,7 +1065,7 @@ local utils = commonlib.utils;
       clusterCPUUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Cluster CPU utilization',
-          targets=[t.clusterCPUUtilization],
+          targets=[signals.cluster.clusterCPUUtilization.asTarget()],
           description='The CPU utilization percentage of the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -1074,7 +1074,7 @@ local utils = commonlib.utils;
       clusterMemoryLimit:
         barGauge.new(title='Cluster memory limit')
         + barGauge.queryOptions.withTargets([
-          t.clusterMemoryLimit,
+          signals.cluster.clusterMemoryLimit.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The available memory capacity of the cluster.')
         + barGauge.options.withOrientation('horizontal')
@@ -1086,7 +1086,7 @@ local utils = commonlib.utils;
       clusterMemoryEffective:
         barGauge.new(title='Cluster memory effective')
         + barGauge.queryOptions.withTargets([
-          t.clusterMemoryEffective,
+          signals.cluster.clusterMemoryEffective.asTarget(),
         ])
         + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
         + barGauge.options.withOrientation('horizontal')
@@ -1098,7 +1098,7 @@ local utils = commonlib.utils;
       clusterMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Cluster memory utilization',
-          targets=[t.clusterMemoryUtilization],
+          targets=[signals.cluster.clusterMemoryUtilization.asTarget()],
           description='The memory utilization percentage of the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
@@ -1108,35 +1108,35 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'ESXi hosts table',
           targets=[
-            t.clusterHostCPUUsage + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostCPUUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostCPUUtilization + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostCPUUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostMemoryUsage + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostMemoryUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostMemoryUtilization + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostMemoryUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostDiskThroughput + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostDiskThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_throughput')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostDiskLatency + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostDiskLatency.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_latency')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostNetworkThroughput + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostNetworkThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('network_throughput')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterHostPacketErrorRate + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterHostPacketErrorRate.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('packet_error_rate')
             + g.query.prometheus.withRange(true),
           ],
@@ -1291,35 +1291,35 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'VMs table',
           targets=[
-            t.clusterVMCPUUsage + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMCPUUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMCPUUtilization + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMCPUUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMMemoryUsage + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMMemoryUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMMemoryUtilization + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMMemoryUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMDiskUsage + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMDiskUsage.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_usage')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMDiskUtilization + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMDiskUtilization.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMNetworkThroughput.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('network_throughput')
             + g.query.prometheus.withRange(true)
             ,
-            t.clusterVMPacketDropRate + g.query.prometheus.withFormat('table')
+            signals.cluster.clusterVMPacketDropRate.asTarget() + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRefId('packet_drop_rate')
             + g.query.prometheus.withRange(true),
           ],

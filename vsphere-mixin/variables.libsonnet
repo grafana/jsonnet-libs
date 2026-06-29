@@ -98,7 +98,7 @@ local extendedUtils = utils {
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [filteringSelector])),
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, if filteringSelector != '' then [filteringSelector] else [])),
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
