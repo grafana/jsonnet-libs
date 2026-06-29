@@ -44,7 +44,7 @@ local utils = commonlib.utils;
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, if filteringSelector != '' then [filteringSelector] else [])),
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')

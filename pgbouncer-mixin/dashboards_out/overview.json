@@ -55,14 +55,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_pools_client_waiting_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",})"
+                  "expr": "sum(\n  pgbouncer_pools_client_waiting_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Client waiting connections"
                }
             ],
             "title": "Client waiting connections",
@@ -106,14 +110,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",})"
+                  "expr": "sum(\n  pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Active client connections"
                }
             ],
             "title": "Active client connections",
@@ -157,14 +165,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_pools_server_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",})"
+                  "expr": "sum(\n  pgbouncer_pools_server_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Active server connections"
                }
             ],
             "title": "Active server connections",
@@ -208,14 +220,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_databases_max_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",})"
+                  "expr": "sum(\n  pgbouncer_databases_max_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Max database connections"
                }
             ],
             "title": "Max database connections",
@@ -259,14 +275,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_config_max_user_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",})"
+                  "expr": "sum(\n  pgbouncer_config_max_user_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Max user connections"
                }
             ],
             "title": "Max user connections",
@@ -310,14 +330,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(pgbouncer_config_max_client_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",})"
+                  "expr": "sum(\n  pgbouncer_config_max_client_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Max client connections"
                }
             ],
             "title": "Max client connections",
@@ -378,15 +402,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__rate_interval])",
-                  "legendFormat": "{{database}}"
+                  "expr": "rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Queries processed"
                }
             ],
             "title": "Queries processed",
@@ -435,15 +462,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__interval:]), 1)",
-                  "legendFormat": "{{database}}"
+                  "expr": "1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]), 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Average query duration"
                }
             ],
             "title": "Queries average duration / $__interval",
@@ -507,23 +537,29 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__rate_interval])",
-                  "legendFormat": "{{database}} - received"
+                  "expr": "rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - received",
+                  "refId": "Network received"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__rate_interval])",
-                  "legendFormat": "{{database}} - sent"
+                  "expr": "rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - sent",
+                  "refId": "Network sent"
                }
             ],
             "title": "Network traffic",
@@ -584,15 +620,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__rate_interval])",
-                  "legendFormat": "{{database}}"
+                  "expr": "rate(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "SQL transaction rate"
                }
             ],
             "title": "SQL transaction rate",
@@ -641,15 +680,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__interval:]) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}[$__interval:]), 1)",
-                  "legendFormat": "{{database}}"
+                  "expr": "1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]), 1)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Average transaction duration"
                }
             ],
             "title": "SQL average transaction duration / $__interval",
@@ -711,39 +753,51 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_server_idle_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}} - idle"
+                  "expr": "pgbouncer_pools_server_idle_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - idle",
+                  "refId": "Server idle connections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_server_used_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}} - used"
+                  "expr": "pgbouncer_pools_server_used_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - used",
+                  "refId": "Server used connections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_server_login_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}} - login"
+                  "expr": "pgbouncer_pools_server_login_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - login",
+                  "refId": "Server login connections"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_server_testing_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}} - testing"
+                  "expr": "pgbouncer_pools_server_testing_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}} - testing",
+                  "refId": "Server testing connections"
                }
             ],
             "title": "Server connections",
@@ -804,15 +858,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}}"
+                  "expr": "pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Active client connections"
                }
             ],
             "title": "Active client connections",
@@ -861,15 +918,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_client_waiting_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}}"
+                  "expr": "pgbouncer_pools_client_waiting_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Client waiting connections"
                }
             ],
             "title": "Waiting clients",
@@ -918,15 +978,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "pgbouncer_pools_client_maxwait_seconds{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\",}",
-                  "legendFormat": "{{database}}"
+                  "expr": "pgbouncer_pools_client_maxwait_seconds{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{database}}",
+                  "refId": "Max client wait time"
                }
             ],
             "title": "Max client wait time",
@@ -972,7 +1035,7 @@
                "label": "Pgbouncer_cluster",
                "multi": true,
                "name": "pgbouncer_cluster",
-               "query": "label_values(pgbouncer_databases_current_connections{,job=~\"$job\"}, pgbouncer_cluster)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=~\"$job\"}, pgbouncer_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -987,7 +1050,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(pgbouncer_databases_current_connections{,job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}, instance)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
