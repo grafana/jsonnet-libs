@@ -5,18 +5,68 @@ local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local fieldOverride = g.panel.table.fieldOverride,
       local alertList = g.panel.alertList,
       local pieChart = g.panel.pieChart,
       local barGauge = g.panel.barGauge,
 
+      // Selector mixins appended to each signal's job/instance selector to
+      // reproduce the legacy pureTestNameSelector / testNameSelector.
+      local pureSel = 'test_name=~"$test_name"',
+      local testSel = 'test_name=~"$test_name",node_name=~"$node_name"',
+
+      // Overview: topk(1, avg by (<by>) (avg_over_time(<metric>[$__interval:])))
+      local topAvg(signal, by) =
+        signal
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['avg_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['avg by (' + by + ') (', ')'])
+        .withTopK(1)
+        .withLegendFormat('{{' + by + '}}')
+        .asTarget(),
+
+      // Overview: topk(1, sum by (<by>) (sum_over_time(<metric>[$__interval:])))
+      local topSum(signal, by) =
+        signal
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['sum_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['sum by (' + by + ') (', ')'])
+        .withTopK(1)
+        .withLegendFormat('{{' + by + '}}')
+        .asTarget(),
+
+      // Overview: bottomk(1, avg by (<by>) (avg_over_time(<successRatio>[$__interval:])))
+      local bottomRatio(by) =
+        signals.network.requestSuccessRatio
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['avg_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['avg by (' + by + ') (', ')'])
+        .withExprWrappersMixin(['bottomk(1, ', ')'])
+        .withLegendFormat('{{' + by + '}}')
+        .asTarget(),
+
+      // Performance dashboards: sum by (<by>) (<metric>{testNameSelector})
+      local sumBy(signal, by, legend) =
+        signal
+        .withFilteringSelectorMixin(testSel)
+        .withExprWrappersMixin(['sum by (' + by + ') (', ')'])
+        .withLegendFormat(legend)
+        .asTarget(),
+
+      // Performance dashboards: ratio-of-averages (aggregation baked in signal)
+      local ratioBy(signal, legend) =
+        signal
+        .withFilteringSelectorMixin(testSel)
+        .withLegendFormat(legend)
+        .asTarget(),
+
       // Catchpoint Overview dashboard Panels
       topAvgLoadTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by tests',
-          targets=[t.topAvgLoadTimeTestName],
+          targets=[topAvg(signals.timing.loadTime, 'test_name')],
           description='The top average total load time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -26,7 +76,7 @@ local utils = commonlib.utils;
       topAvgTotalLoadTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by nodes',
-          targets=[t.topAvgTotalLoadTimeNodeName],
+          targets=[topAvg(signals.timing.loadTime, 'node_name')],
           description='The top average total load time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -36,7 +86,7 @@ local utils = commonlib.utils;
       topAvgDocumentCompletionTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average document completion time by tests',
-          targets=[t.topAvgDocumentCompletionTimeTestName],
+          targets=[topAvg(signals.timing.documentCompleteTime, 'test_name')],
           description='The top average document completion time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -46,7 +96,7 @@ local utils = commonlib.utils;
       topAvgDocumentCompletionTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average document completion time by nodes',
-          targets=[t.topAvgDocumentCompletionTimeNodeName],
+          targets=[topAvg(signals.timing.documentCompleteTime, 'node_name')],
           description='The top average document completion time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -56,7 +106,7 @@ local utils = commonlib.utils;
       bottomAvgRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom average success request ratio by tests',
-          targets=[t.bottomAvgRequestSuccessRatioTestName],
+          targets=[bottomRatio('test_name')],
           description='The lowest average success request ratio among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -66,7 +116,7 @@ local utils = commonlib.utils;
       bottomAvgRequestSuccessRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom average success request ratio by nodes',
-          targets=[t.bottomAvgRequestSuccessRatioNodeName],
+          targets=[bottomRatio('node_name')],
           description='The lowest average success request ratio among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -76,7 +126,7 @@ local utils = commonlib.utils;
       topAvgConnectionSetupTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by tests',
-          targets=[t.topAvgConnectionSetupTimeTestName],
+          targets=[topAvg(signals.timing.connectTime, 'test_name')],
           description='The top average connection setup time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -86,7 +136,7 @@ local utils = commonlib.utils;
       topAvgConnectionSetupTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by nodes',
-          targets=[t.topAvgConnectionSetupTimeNodeName],
+          targets=[topAvg(signals.timing.connectTime, 'node_name')],
           description='The top average connection setup time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -96,7 +146,7 @@ local utils = commonlib.utils;
       topAvgContentLoadingTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time',
-          targets=[t.topAvgContentLoadingTimeTestName],
+          targets=[topAvg(signals.timing.contentLoadTime, 'test_name')],
           description='The top average content loading time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -106,7 +156,7 @@ local utils = commonlib.utils;
       topAvgContentLoadingTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time by nodes',
-          targets=[t.topAvgContentLoadingTimeNodeName],
+          targets=[topAvg(signals.timing.contentLoadTime, 'node_name')],
           description='The top average content loading time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
@@ -116,7 +166,7 @@ local utils = commonlib.utils;
       topAvgRedirectsTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by tests',
-          targets=[t.topAvgRedirectsTestName],
+          targets=[topAvg(signals.timing.redirectTime, 'test_name')],
           description='The top average number of redirects among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -125,7 +175,7 @@ local utils = commonlib.utils;
       topAvgRedirectsNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by nodes',
-          targets=[t.topAvgRedirectsNodeName],
+          targets=[topAvg(signals.timing.redirectTime, 'node_name')],
           description='The top average number of redirects among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -138,7 +188,7 @@ local utils = commonlib.utils;
       topErrorsByTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top errors by tests',
-          targets=[t.topErrorsByTestName],
+          targets=[topSum(signals.errors.anyError, 'test_name')],
           description='The top number of errors encountered among all tests over the specified interval.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -151,7 +201,10 @@ local utils = commonlib.utils;
       pageCompletionTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
-          targets=[t.pageCompletionTime, t.pageTotalLoadTime],
+          targets=[
+            sumBy(signals.timing.documentCompleteTime, 'node_name', '{{node_name}} - completion'),
+            sumBy(signals.timing.totalTime, 'node_name', '{{node_name}} - load'),
+          ],
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -164,7 +217,11 @@ local utils = commonlib.utils;
       DNSResolution:
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
-          targets=[t.DNSResolution, t.SSLTime, t.connectTime],
+          targets=[
+            sumBy(signals.timing.dnsTime, 'node_name', '{{node_name}} - DNS'),
+            sumBy(signals.timing.sslTime, 'node_name', '{{node_name}} - SSL'),
+            sumBy(signals.timing.connectTime, 'node_name', '{{node_name}} - connect'),
+          ],
           description='Time taken to establish an SSL handshake, DNS resolution, and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -177,7 +234,10 @@ local utils = commonlib.utils;
       contentHandling:
         commonlib.panels.generic.timeSeries.base.new(
           'Content handling',
-          targets=[t.contentHandlingLoad, t.contentHandlingRender],
+          targets=[
+            sumBy(signals.timing.contentLoadTime, 'node_name', '{{node_name}} - load'),
+            sumBy(signals.timing.renderStartTime, 'node_name', '{{node_name}} - render'),
+          ],
           description='Time taken to load and render content on the webpage.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -190,7 +250,7 @@ local utils = commonlib.utils;
       clientProcessing:
         commonlib.panels.generic.timeSeries.base.new(
           'Client processing',
-          targets=[t.clientProcessing],
+          targets=[sumBy(signals.timing.clientTime, 'node_name', '{{node_name}}')],
           description='Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -200,7 +260,10 @@ local utils = commonlib.utils;
       additionalDelay:
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
-          targets=[t.additionalDelay, t.waitTime],
+          targets=[
+            sumBy(signals.timing.redirectTime, 'node_name', '{{node_name}} - redirect'),
+            sumBy(signals.timing.waitTime, 'node_name', '{{node_name}} - wait'),
+          ],
           description='Additional delays encountered due to redirects, as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -213,7 +276,10 @@ local utils = commonlib.utils;
       responseContentSize:
         commonlib.panels.generic.timeSeries.base.new(
           'Response content size',
-          targets=[t.responseContentSize, t.responseHeaderSize],
+          targets=[
+            sumBy(signals.network.responseContentSize, 'node_name', '{{node_name}} - content'),
+            sumBy(signals.network.responseHeaderSize, 'node_name', '{{node_name}} - header'),
+          ],
           description='Size of the HTTP response content.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -223,7 +289,10 @@ local utils = commonlib.utils;
       totalContentSize:
         commonlib.panels.generic.timeSeries.base.new(
           'Total content size',
-          targets=[t.totalContentSize, t.totalHeaderSize],
+          targets=[
+            sumBy(signals.network.totalContentSize, 'node_name', '{{node_name}} - content'),
+            sumBy(signals.network.totalHeaderSize, 'node_name', '{{node_name}} - header'),
+          ],
           description='Total size of the HTTP response content and headers.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -234,7 +303,7 @@ local utils = commonlib.utils;
       networkConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Network connections',
-          targets=[t.networkConnections],
+          targets=[sumBy(signals.network.connectionsCount, 'node_name', '{{node_name}}')],
           description='Number of connections made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('conn')
@@ -244,7 +313,7 @@ local utils = commonlib.utils;
       hostsContacted:
         commonlib.panels.generic.timeSeries.base.new(
           'Hosts contacted',
-          targets=[t.hostsContacted],
+          targets=[sumBy(signals.network.hostsCount, 'node_name', '{{node_name}}')],
           description='Number of hosts contacted.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('hosts')
@@ -254,7 +323,7 @@ local utils = commonlib.utils;
       cacheAccess:
         commonlib.panels.generic.timeSeries.base.new(
           'Cache access',
-          targets=[t.cacheAccess],
+          targets=[sumBy(signals.network.cachedCount, 'node_name', '{{node_name}}')],
           description='Number of cached elements accessed.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -263,7 +332,7 @@ local utils = commonlib.utils;
       requestSucessRatio:
         commonlib.panels.generic.timeSeries.base.new(
           'Requests success ratio',
-          targets=[t.requestSuccessRatio],
+          targets=[ratioBy(signals.network.requestSuccessRatioByNode, '{{node_name}}')],
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -273,7 +342,7 @@ local utils = commonlib.utils;
       redirections:
         commonlib.panels.generic.timeSeries.base.new(
           'Redirects',
-          targets=[t.redirections],
+          targets=[sumBy(signals.network.redirectionsCount, 'node_name', '{{node_name}}')],
           description='Number of HTTP redirections encountered.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -281,7 +350,15 @@ local utils = commonlib.utils;
 
       contentTypesLoadedBySize:
         pieChart.new(title='Content types loaded by size')
-        + pieChart.queryOptions.withTargets([t.imageLoadedBySize, t.htmlLoadedBySize, t.cssLoadedBySize, t.scriptLoadedBySize, t.fontLoadedBySize, t.xmlLoadedBySize, t.mediaLoadedBySize])
+        + pieChart.queryOptions.withTargets([
+          sumBy(signals.content.imageContentSize, 'test_name', 'image'),
+          sumBy(signals.content.htmlContentSize, 'test_name', 'html'),
+          sumBy(signals.content.cssContentSize, 'test_name', 'css'),
+          sumBy(signals.content.scriptContentSize, 'test_name', 'script'),
+          sumBy(signals.content.fontContentSize, 'test_name', 'font'),
+          sumBy(signals.content.xmlContentSize, 'test_name', 'xml'),
+          sumBy(signals.content.mediaContentSize, 'test_name', 'media'),
+        ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.withTooltipMixin({
           mode: 'multi',
@@ -292,7 +369,15 @@ local utils = commonlib.utils;
 
       contentLoadedByType:
         barGauge.new(title='Content loaded by type')
-        + barGauge.queryOptions.withTargets([t.imageLoadedByType, t.htmlLoadedByType, t.cssLoadedByType, t.scriptLoadedByType, t.fontLoadedByType, t.xmlLoadedByType, t.mediaLoadedByType])
+        + barGauge.queryOptions.withTargets([
+          sumBy(signals.content.imageCount, 'test_name', 'image'),
+          sumBy(signals.content.htmlCount, 'test_name', 'html'),
+          sumBy(signals.content.cssCount, 'test_name', 'css'),
+          sumBy(signals.content.scriptCount, 'test_name', 'script'),
+          sumBy(signals.content.fontCount, 'test_name', 'font'),
+          sumBy(signals.content.xmlCount, 'test_name', 'xml'),
+          sumBy(signals.content.mediaCount, 'test_name', 'media'),
+        ])
         + barGauge.panelOptions.withDescription('Number of elements loaded.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.thresholds.withSteps([
@@ -301,7 +386,14 @@ local utils = commonlib.utils;
 
       errors:
         barGauge.new(title='Errors')
-        + barGauge.queryOptions.withTargets([t.objectLoadedError, t.DNSError, t.loadError, t.timeoutError, t.connectionError, t.transactionError])
+        + barGauge.queryOptions.withTargets([
+          sumBy(signals.errors.errorObjectsLoaded, 'test_name', 'object loaded'),
+          sumBy(signals.errors.dnsError, 'test_name', 'DNS'),
+          sumBy(signals.errors.loadError, 'test_name', 'load'),
+          sumBy(signals.errors.timeoutError, 'test_name', 'timeout'),
+          sumBy(signals.errors.connectionError, 'test_name', 'connection'),
+          sumBy(signals.errors.transactionError, 'test_name', 'transaction'),
+        ])
         + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.withMax(1)
@@ -314,7 +406,10 @@ local utils = commonlib.utils;
       pageCompletionTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
-          targets=[t.pageCompletionTimeNodeName, t.pageTotalLoadTimeNodeName],
+          targets=[
+            sumBy(signals.timing.documentCompleteTime, 'test_name', '{{test_name}} - completion'),
+            sumBy(signals.timing.totalTime, 'test_name', '{{test_name}} - load'),
+          ],
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -327,7 +422,11 @@ local utils = commonlib.utils;
       DNSResolutionNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
-          targets=[t.DNSResolutionNodeName, t.SSLTimeNodeName, t.connectTimeNodeName],
+          targets=[
+            sumBy(signals.timing.dnsTime, 'test_name', '{{test_name}} - DNS'),
+            sumBy(signals.timing.sslTime, 'test_name', '{{test_name}} - SSL'),
+            sumBy(signals.timing.connectTime, 'test_name', '{{test_name}} - connect'),
+          ],
           description='Time taken establish an SSL handshake, DNS resolution and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -340,7 +439,10 @@ local utils = commonlib.utils;
       contentHandlingNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Content handling',
-          targets=[t.contentHandlingLoad, t.contentHandlingRender],
+          targets=[
+            sumBy(signals.timing.contentLoadTime, 'node_name', '{{node_name}} - load'),
+            sumBy(signals.timing.renderStartTime, 'node_name', '{{node_name}} - render'),
+          ],
           description='Time taken to load and render content on the webpage.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -353,7 +455,7 @@ local utils = commonlib.utils;
       clientProcessingNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Client processing',
-          targets=[t.clientProcessingNodeName],
+          targets=[sumBy(signals.timing.clientTime, 'test_name', '{{test_name}}')],
           description='Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -363,7 +465,10 @@ local utils = commonlib.utils;
       additionalDelayNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
-          targets=[t.additionalDelayNodeName, t.waitTimeNodeName],
+          targets=[
+            sumBy(signals.timing.redirectTime, 'test_name', '{{test_name}} - redirect'),
+            sumBy(signals.timing.waitTime, 'test_name', '{{test_name}} - wait'),
+          ],
           description='Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -376,7 +481,10 @@ local utils = commonlib.utils;
       responseContentSizeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Response content size',
-          targets=[t.responseContentSizeNodeName, t.responseHeaderSizeNodeName],
+          targets=[
+            sumBy(signals.network.responseContentSize, 'test_name', '{{test_name}} - content'),
+            sumBy(signals.network.responseHeaderSize, 'test_name', '{{test_name}} - header'),
+          ],
           description='Size of the HTTP response content in bytes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -386,7 +494,10 @@ local utils = commonlib.utils;
       totalContentSizeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Total content size',
-          targets=[t.totalContentSizeNodeName, t.totalHeaderSizeNodeName],
+          targets=[
+            sumBy(signals.network.totalContentSize, 'test_name', '{{test_name}} - content'),
+            sumBy(signals.network.totalHeaderSize, 'test_name', '{{test_name}} - header'),
+          ],
           description='Total size of the HTTP response content and headers in bytes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
@@ -397,7 +508,7 @@ local utils = commonlib.utils;
       networkConnectionsNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Network connections',
-          targets=[t.networkConnectionsNodeName],
+          targets=[sumBy(signals.network.connectionsCount, 'test_name', '{{test_name}}')],
           description='Number of connections made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('conn')
@@ -407,7 +518,7 @@ local utils = commonlib.utils;
       hostsContactedNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Hosts contacted',
-          targets=[t.hostsContactedNodeName],
+          targets=[sumBy(signals.network.hostsCount, 'test_name', '{{test_name}}')],
           description='Number of hosts contacted.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('hosts')
@@ -417,7 +528,7 @@ local utils = commonlib.utils;
       cacheAccessNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Cache access',
-          targets=[t.cacheAccessNodeName],
+          targets=[sumBy(signals.network.cachedCount, 'test_name', '{{test_name}}')],
           description='Number of cached elements accessed.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -426,7 +537,7 @@ local utils = commonlib.utils;
       requestSucessRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Requests success ratio',
-          targets=[t.requestSuccessRatioNodeName],
+          targets=[ratioBy(signals.network.requestSuccessRatioByTest, '{{test_name}}')],
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -436,7 +547,7 @@ local utils = commonlib.utils;
       redirectionsNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Redirects',
-          targets=[t.redirectionsNodeName],
+          targets=[sumBy(signals.network.redirectionsCount, 'test_name', '{{test_name}}')],
           description='Number of HTTP redirections encountered.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -444,7 +555,15 @@ local utils = commonlib.utils;
 
       contentTypesLoadedBySizeNodeName:
         pieChart.new(title='Content types loaded by size')
-        + pieChart.queryOptions.withTargets([t.imageLoadedBySizeNodeName, t.htmlLoadedBySizeNodeName, t.cssLoadedBySizeNodeName, t.scriptLoadedBySizeNodeName, t.fontLoadedBySizeNodeName, t.xmlLoadedBySizeNodeName, t.mediaLoadedBySizeNodeName])
+        + pieChart.queryOptions.withTargets([
+          sumBy(signals.content.imageContentSize, 'node_name', 'image'),
+          sumBy(signals.content.htmlContentSize, 'node_name', 'html'),
+          sumBy(signals.content.cssContentSize, 'node_name', 'css'),
+          sumBy(signals.content.scriptContentSize, 'node_name', 'script'),
+          sumBy(signals.content.fontContentSize, 'node_name', 'font'),
+          sumBy(signals.content.xmlContentSize, 'node_name', 'xml'),
+          sumBy(signals.content.mediaContentSize, 'node_name', 'media'),
+        ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.withTooltipMixin({
           mode: 'multi',
@@ -455,7 +574,15 @@ local utils = commonlib.utils;
 
       contentLoadedByTypeNodeName:
         barGauge.new(title='Content loaded by type')
-        + barGauge.queryOptions.withTargets([t.imageLoadedByTypeNodeName, t.htmlLoadedByTypeNodeName, t.cssLoadedByTypeNodeName, t.scriptLoadedByTypeNodeName, t.fontLoadedByTypeNodeName, t.xmlLoadedByTypeNodeName, t.mediaLoadedByTypeNodeName])
+        + barGauge.queryOptions.withTargets([
+          sumBy(signals.content.imageCount, 'node_name', 'image'),
+          sumBy(signals.content.htmlCount, 'node_name', 'html'),
+          sumBy(signals.content.cssCount, 'node_name', 'css'),
+          sumBy(signals.content.scriptCount, 'node_name', 'script'),
+          sumBy(signals.content.fontCount, 'node_name', 'font'),
+          sumBy(signals.content.xmlCount, 'node_name', 'xml'),
+          sumBy(signals.content.mediaCount, 'node_name', 'media'),
+        ])
         + barGauge.panelOptions.withDescription('Number of elements loaded.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.thresholds.withSteps([
@@ -464,7 +591,14 @@ local utils = commonlib.utils;
 
       errorsNodeName:
         barGauge.new(title='Errors')
-        + barGauge.queryOptions.withTargets([t.objectLoadedErrorNodeName, t.DNSErrorNodeName, t.loadErrorNodeName, t.timeoutErrorNodeName, t.connectionErrorNodeName, t.transactionErrorNodeName])
+        + barGauge.queryOptions.withTargets([
+          sumBy(signals.errors.errorObjectsLoaded, 'node_name', 'object loaded'),
+          sumBy(signals.errors.dnsError, 'node_name', 'DNS'),
+          sumBy(signals.errors.loadError, 'node_name', 'load'),
+          sumBy(signals.errors.timeoutError, 'node_name', 'timeout'),
+          sumBy(signals.errors.connectionError, 'node_name', 'connection'),
+          sumBy(signals.errors.transactionError, 'node_name', 'transaction'),
+        ])
         + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.withMax(1)

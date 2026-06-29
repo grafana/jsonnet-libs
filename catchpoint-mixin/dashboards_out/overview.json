@@ -72,15 +72,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, sum by (test_name) (sum_over_time(catchpoint_any_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  sum by (test_name) (\n  sum_over_time(\n  catchpoint_any_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Any error"
                }
             ],
             "title": "Top errors by tests",
@@ -161,15 +164,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  avg by (test_name) (\n  avg_over_time(\n  catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Total load time"
                }
             ],
             "title": "Top average total load time by tests",
@@ -219,15 +225,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1,\n  avg by (node_name) (\n  avg_over_time(\n  catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Total load time"
                }
             ],
             "title": "Top average total load time by nodes",
@@ -277,15 +286,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  avg by (test_name) (\n  avg_over_time(\n  catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Document completion time"
                }
             ],
             "title": "Top average document completion time by tests",
@@ -335,15 +347,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1,\n  avg by (node_name) (\n  avg_over_time(\n  catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Document completion time"
                }
             ],
             "title": "Top average document completion time by nodes",
@@ -405,15 +420,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(1, avg by (test_name) (avg_over_time(((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "bottomk(1, \n  avg by (test_name) (\n  avg_over_time(\n  ((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Request success ratio"
                }
             ],
             "title": "Bottom average success request ratio by tests",
@@ -463,15 +481,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(1, avg by (node_name) (avg_over_time(((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "bottomk(1, \n  avg by (node_name) (\n  avg_over_time(\n  ((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Request success ratio"
                }
             ],
             "title": "Bottom average success request ratio by nodes",
@@ -533,15 +554,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  avg by (test_name) (\n  avg_over_time(\n  catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Connection setup time"
                }
             ],
             "title": "Top average connection setup time by tests",
@@ -591,15 +615,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1,\n  avg by (node_name) (\n  avg_over_time(\n  catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Connection setup time"
                }
             ],
             "title": "Top average connection setup time by nodes",
@@ -649,15 +676,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  avg by (test_name) (\n  avg_over_time(\n  catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Content load time"
                }
             ],
             "title": "Top average content loading time",
@@ -707,15 +737,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1,\n  avg by (node_name) (\n  avg_over_time(\n  catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Content load time"
                }
             ],
             "title": "Top average content loading time by nodes",
@@ -764,15 +797,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1,\n  avg by (test_name) (\n  avg_over_time(\n  catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Redirect time"
                }
             ],
             "title": "Top average redirects by tests",
@@ -821,15 +857,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1,\n  avg by (node_name) (\n  avg_over_time(\n  catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}\n[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Redirect time"
                }
             ],
             "title": "Top average redirects by nodes",
@@ -875,7 +914,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(catchpoint_any_error{,job=~\"$job\"}, instance)",
+               "query": "label_values(catchpoint_any_error{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -890,7 +929,7 @@
                "label": "Test_name",
                "multi": true,
                "name": "test_name",
-               "query": "label_values(catchpoint_any_error{,job=~\"$job\",instance=~\"$instance\"}, test_name)",
+               "query": "label_values(catchpoint_any_error{job=~\"$job\",instance=~\"$instance\"}, test_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -38,7 +38,9 @@ local utils = commonlib.utils;
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+        // Drop an empty filteringSelector so chained variable queries don't get a
+        // leading comma inside the braces (e.g. catchpoint_any_error{,job=~"$job"}).
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, if filteringSelector != '' then [filteringSelector] else [])),
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
