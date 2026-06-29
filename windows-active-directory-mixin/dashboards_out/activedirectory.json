@@ -9,7 +9,7 @@
                "enable": true,
                "expr": "{job=~\"$job\",instance=~\"$instance\", channel=\"System\", level=\"Critical\"} | json",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical system event",
                "tagKeys": "job,instance,level",
                "textFormat": "{{message}}",
@@ -21,9 +21,9 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "expr": "windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_boot_time_timestamp{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
                "hide": true,
-               "iconColor": "light-yellow",
+               "iconColor": "#fade2a",
                "name": "Reboot",
                "tagKeys": "job,instance",
                "titleFormat": "Reboot",
@@ -37,7 +37,7 @@
                "enable": true,
                "expr": "{job=~\"$job\",instance=~\"$instance\", source=\"Service Control Manager\", level=\"Error\"} |= \"terminated\" | json",
                "hide": true,
-               "iconColor": "light-orange",
+               "iconColor": "#fade2a",
                "name": "Service failed",
                "tagKeys": "job,instance,level",
                "textFormat": "{{message}}",
@@ -69,6 +69,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -80,7 +89,6 @@
             },
             "id": 1,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -88,15 +96,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(windows_ad_replication_pending_operations{job=~\"$job\",instance=~\"$instance\"})",
-                  "legendFormat": "Operations"
+                  "expr": "sum(\n  windows_ad_replication_pending_operations{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Pending operations",
+                  "refId": "AD pending replication operations"
                }
             ],
             "title": "Replication pending operations",
@@ -113,6 +124,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -124,7 +144,6 @@
             },
             "id": 2,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -132,15 +151,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(windows_ad_directory_service_threads{job=~\"$job\",instance=~\"$instance\"})",
-                  "legendFormat": "Directory service threads"
+                  "expr": "sum(\n  windows_ad_directory_service_threads{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Directory service threads",
+                  "refId": "AD directory service threads"
                }
             ],
             "title": "Directory service threads",
@@ -176,6 +198,15 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
                   }
                }
             },
@@ -187,7 +218,6 @@
             },
             "id": 4,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -195,15 +225,18 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(windows_ad_replication_pending_synchronizations{job=~\"$job\",instance=~\"$instance\"})",
-                  "legendFormat": "Operations"
+                  "expr": "sum(\n  windows_ad_replication_pending_synchronizations{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Pending syncs",
+                  "refId": "AD pending synchronizations"
                }
             ],
             "title": "Replication pending synchronizations",
@@ -217,12 +250,20 @@
             "description": "The rate at which LDAP bind requests are being made.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                }
@@ -244,7 +285,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -252,7 +293,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_binds_total{bind_method=~\"ldap\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }}",
+                  "refId": "AD LDAP bind requests"
                }
             ],
             "title": "LDAP bind requests",
@@ -266,12 +310,20 @@
             "description": "The rate of LDAP read, search, and write operations.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                }
@@ -293,7 +345,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -301,7 +353,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_directory_operations_total{origin=~\"ldap\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} - {{ operation }}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ operation }}",
+                  "refId": "AD LDAP operations"
                }
             ],
             "title": "LDAP operations",
@@ -314,6 +369,16 @@
             },
             "description": "Distribution of different types of operations performed on the Active Directory database.\n",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -558,7 +623,7 @@
                "y": 15
             },
             "id": 7,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -566,7 +631,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_binds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} - {{ operation }}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ operation }}",
+                  "refId": "AD bind operations"
                }
             ],
             "title": "Bind operations overview",
@@ -681,6 +749,10 @@
             "description": "Rate of replication traffic between servers within the same site.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -690,6 +762,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                }
             },
@@ -715,15 +791,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(windows_ad_replication_data_intrasite_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 8",
-                  "legendFormat": "{{instance}} - {{ direction }}"
+                  "expr": "rate(windows_ad_replication_data_intrasite_bytes_total{job=~\"$job\",instance=~\"$instance\"} * 8[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ direction }}",
+                  "refId": "AD intrasite replication traffic"
                }
             ],
             "title": "Intrasite replication traffic",
@@ -737,6 +816,10 @@
             "description": "Rate of replication traffic between servers across different sites.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -746,6 +829,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bps"
                }
             },
@@ -771,15 +858,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "rate(windows_ad_replication_data_intersite_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 8",
-                  "legendFormat": "{{instance}} - {{ direction }}"
+                  "expr": "rate(windows_ad_replication_data_intersite_bytes_total{job=~\"$job\",instance=~\"$instance\"} * 8[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ direction }}",
+                  "refId": "AD intersite replication traffic"
                }
             ],
             "title": "Intersite replication traffic",
@@ -793,12 +883,20 @@
             "description": "The rate of traffic received from other replication partners.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                }
             },
@@ -824,7 +922,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -832,7 +930,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_replication_inbound_objects_updated_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} objects"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Object updates",
+                  "refId": "AD inbound object replication updates"
                },
                {
                   "datasource": {
@@ -840,7 +941,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_replication_inbound_properties_updated_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} properties"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Property updates",
+                  "refId": "AD inbound property replication updates"
                }
             ],
             "title": "Inbound replication updates",
@@ -853,6 +957,16 @@
             },
             "description": "Distribution of different types of operations performed on the Active Directory database.\n",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -967,7 +1081,7 @@
                "y": 33
             },
             "id": 11,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -975,7 +1089,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_database_operations_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} - {{ operation }}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ operation }}",
+                  "refId": "AD database operations"
                }
             ],
             "title": "Database operations overview",
@@ -1046,12 +1163,20 @@
             "description": "The rate of database operations.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                }
@@ -1078,7 +1203,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1086,7 +1211,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "rate(windows_ad_database_operations_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
-                  "legendFormat": "{{instance}} - {{ operation }}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ instance }} - {{ operation }}",
+                  "refId": "AD database operations"
                }
             ],
             "title": "Database operations",
