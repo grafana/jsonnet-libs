@@ -9,6 +9,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
+  metricsSource: ['prometheus'],
 
   alertsWarningPlacementHighMemoryUsage: 80,  // %
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
@@ -39,4 +40,14 @@
   logsVolumeGroupBy: 'level',
   logsFilteringSelector: self.filteringSelector,
   showLogsVolume: true,
+
+  // Signals configuration
+  signals+: {
+    placement: (import './signals/placement.libsonnet')(self),
+    identity: (import './signals/identity.libsonnet')(self),
+    nova: (import './signals/nova.libsonnet')(self),
+    neutron: (import './signals/neutron.libsonnet')(self),
+    cinder: (import './signals/cinder.libsonnet')(self),
+    glance: (import './signals/glance.libsonnet')(self),
+  },
 }

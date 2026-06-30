@@ -2,12 +2,6 @@
       "links": [
          {
             "keepTime": true,
-            "title": "OpenStack Cinder",
-            "type": "link",
-            "url": "/d/openstack-cinder"
-         },
-         {
-            "keepTime": true,
             "title": "OpenStack logs",
             "type": "link",
             "url": "/d/openstack-logs"
@@ -17,6 +11,12 @@
             "title": "OpenStack Neutron",
             "type": "link",
             "url": "/d/openstack-neutron"
+         },
+         {
+            "keepTime": true,
+            "title": "OpenStack Nova",
+            "type": "link",
+            "url": "/d/openstack-nova"
          },
          {
             "keepTime": true,
@@ -31,7 +31,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Reports the status of the Nova compute service.",
+            "description": "Reports the status of the Cinder block storage service.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -69,7 +69,7 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 6,
+               "w": 4,
                "x": 0,
                "y": 0
             },
@@ -77,7 +77,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -87,7 +87,7 @@
                   "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
-            "title": "Nova status",
+            "title": "Cinder status",
             "type": "stat"
          },
          {
@@ -95,7 +95,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The current number of total and running virtual machines.",
+            "description": "The number of volumes managed by Cinder.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -118,8 +118,8 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 18,
-               "x": 6,
+               "w": 10,
+               "x": 4,
                "y": 0
             },
             "id": 2,
@@ -133,19 +133,19 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_total_vms{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "openstack_cinder_volumes{job=~\"$job\",instance=~\"$instance\"}",
                   "interval": "1m",
                   "legendFormat": "{{instance}}"
                }
             ],
-            "title": "VMs",
+            "title": "Volumes",
             "type": "timeseries"
          },
          {
@@ -153,7 +153,79 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Percentage of the maximum number of instances in use for each project.",
+            "description": "The current status of volumes in Cinder.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 10,
+               "x": 14,
+               "y": 0
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status=~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"} > 0",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - {{status}}"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "topk(5, openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status!~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"}) > 0",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}} - {{status}}"
+               }
+            ],
+            "title": "Volume status",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The percent of volume storage in use for Cinder.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -183,7 +255,7 @@
                "x": 0,
                "y": 8
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -195,19 +267,19 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_limits_instances_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_instances_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "expr": "openstack_cinder_limits_volume_used_gb{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_cinder_limits_volume_max_gb{job=~\"$job\",instance=~\"$instance\"}, 1)",
                   "interval": "1m",
                   "legendFormat": "{{instance}} - {{tenant}}"
                }
             ],
-            "title": "Instance usage",
+            "title": "Volume usage",
             "type": "timeseries"
          },
          {
@@ -215,7 +287,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Percentage of the maximum number of virtual CPUs in use for each project.",
+            "description": "The percent of backup storage in use for Cinder.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -245,7 +317,7 @@
                "x": 12,
                "y": 8
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -257,19 +329,19 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_limits_vcpus_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_vcpus_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "expr": "openstack_cinder_limits_backup_used_gb{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_cinder_limits_backup_max_gb{job=~\"$job\",instance=~\"$instance\"}, 1)",
                   "interval": "1m",
                   "legendFormat": "{{instance}} - {{tenant}}"
                }
             ],
-            "title": "VCPU usage",
+            "title": "Backup usage",
             "type": "timeseries"
          },
          {
@@ -277,7 +349,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Percentage of the maximum amount of memory in use for each project.",
+            "description": "The percent of pool capacity in use for Cinder.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -307,31 +379,30 @@
                "x": 0,
                "y": 16
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "right"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_limits_memory_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_memory_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "expr": "(openstack_cinder_pool_capacity_total_gb{job=~\"$job\",instance=~\"$instance\"} - openstack_cinder_pool_capacity_free_gb{job=~\"$job\",instance=~\"$instance\"}) / clamp_min(openstack_cinder_pool_capacity_total_gb{job=~\"$job\",instance=~\"$instance\"}, 1)",
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{name}}"
                }
             ],
-            "title": "Memory usage",
+            "title": "Pool usage",
             "type": "timeseries"
          },
          {
@@ -339,11 +410,70 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Details for the agents for OpenStack Nova.",
+            "description": "The number of volume snapshots in Cinder.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 16
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "openstack_cinder_snapshots{job=~\"$job\",instance=~\"$instance\"}",
+                  "interval": "1m",
+                  "legendFormat": "{{instance}}"
+               }
+            ],
+            "title": "Snapshots",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Details for the agents for OpenStack Cinder.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
-                     "align": "center"
+                     "align": "center",
+                     "cellOptions": "color-text"
                   }
                },
                "overrides": [
@@ -383,11 +513,11 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 16
+               "w": 24,
+               "x": 0,
+               "y": 24
             },
-            "id": 6,
+            "id": 8,
             "pluginVersion": "v10.0.0",
             "targets": [
                {
@@ -395,7 +525,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_agent_state{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "openstack_cinder_agent_state{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true
                }
@@ -426,10 +556,10 @@
                         "__name__": 7,
                         "adminState": 3,
                         "hostname": 5,
-                        "id": 4,
                         "instance": 1,
                         "job": 8,
                         "service": 0,
+                        "uuid": 4,
                         "zone": 2
                      },
                      "renameByName": {
@@ -438,6 +568,7 @@
                         "id": "ID",
                         "instance": "Instance",
                         "service": "Service",
+                        "uuid": "UUID",
                         "zone": "Zone"
                      }
                   }
@@ -505,6 +636,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "OpenStack Nova",
-      "uid": "openstack-nova"
+      "title": "OpenStack Cinder",
+      "uid": "openstack-cinder"
    }
