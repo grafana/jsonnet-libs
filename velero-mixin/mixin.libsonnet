@@ -9,6 +9,6 @@
     groups+: std.parseYaml(rules).groups,
   },
 
-  prometheusAlerts+:
+  prometheusAlerts+::
     importRules(importstr 'alerts/velero-alerts.yml'),
 }
