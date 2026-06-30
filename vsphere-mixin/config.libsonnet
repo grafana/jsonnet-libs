@@ -1,4 +1,5 @@
 {
+  local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: '',
   // Used to identify 'group' of instances.
@@ -28,4 +29,18 @@
   enableLokiLogs: true,
   extraLogLabels: ['instance', 'log_type', 'level'],
   showLogsVolume: true,
+
+  // Source(s) used when unmarshalling signals into panel targets.
+  metricsSource: 'prometheus',
+
+  // Signal definitions, grouped by domain. Pass `this` (the config) so the
+  // signal files can read the config's label lists. Passing `self` would
+  // resolve to the inner `signals` object and fail at unmarshal time.
+  signals+: {
+    overview: (import './signals/overview.libsonnet')(this),
+    datastore: (import './signals/datastore.libsonnet')(this),
+    cluster: (import './signals/cluster.libsonnet')(this),
+    host: (import './signals/host.libsonnet')(this),
+    vm: (import './signals/vm.libsonnet')(this),
+  },
 }
