@@ -57,15 +57,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",})",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by active connections"
                }
             ],
             "title": "Top databases by active connections",
@@ -133,15 +136,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by queries processed"
                }
             ],
             "title": "Top databases by queries processed",
@@ -190,15 +196,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__interval:]), 1))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]), 1))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by average query duration"
                }
             ],
             "title": "Top databases by average query duration",
@@ -248,23 +257,29 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received",
+                  "refId": "Top databases by network traffic received"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent",
+                  "refId": "Top databases by network traffic sent"
                }
             ],
             "title": "Top databases by network traffic",
@@ -310,7 +325,7 @@
                "label": "Pgbouncer_cluster",
                "multi": true,
                "name": "pgbouncer_cluster",
-               "query": "label_values(pgbouncer_databases_current_connections{,job=~\"$job\"}, pgbouncer_cluster)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=~\"$job\"}, pgbouncer_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

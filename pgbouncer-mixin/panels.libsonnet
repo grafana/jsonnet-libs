@@ -1,10 +1,9 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local alertList = g.panel.alertList,
 
@@ -12,7 +11,9 @@ local utils = commonlib.utils;
       clientsWaitingConnections:
         commonlib.panels.generic.stat.base.new(
           'Client waiting connections',
-          targets=[t.clientsWaitingConnections],
+          targets=[
+            signals.connections.pools_client_waiting_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Current number of client connections waiting on a server connection.'
         )
         + stat.options.withGraphMode('none')
@@ -28,35 +29,45 @@ local utils = commonlib.utils;
       activeClientConnections:
         commonlib.panels.generic.stat.info.new(
           'Active client connections',
-          targets=[t.activeClientConnections],
+          targets=[
+            signals.connections.pools_client_active_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Current number of active client connections.'
         )
         + stat.options.withGraphMode('none'),
       activeServerConnections:
         commonlib.panels.generic.stat.info.new(
           'Active server connections',
-          targets=[t.activeServerConnections],
+          targets=[
+            signals.connections.pools_server_active_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Current number of client connections that are linked to a server connection and able to process queries.'
         )
         + stat.options.withGraphMode('none'),
       maxDatabaseConnections:
         commonlib.panels.generic.stat.info.new(
           'Max database connections',
-          targets=[t.maxDatabaseConnections],
+          targets=[
+            signals.connections.databases_max_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Maximum number of allowed connections for database.'
         )
         + stat.options.withGraphMode('none'),
       maxUserConnections:
         commonlib.panels.generic.stat.info.new(
           'Max user connections',
-          targets=[t.maxUserConnections],
+          targets=[
+            signals.config.config_max_user_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Maximum number of server connections per user allowed.'
         )
         + stat.options.withGraphMode('none'),
       maxClientConnections:
         commonlib.panels.generic.stat.info.new(
           'Max client connections',
-          targets=[t.maxClientConnections],
+          targets=[
+            signals.config.config_max_client_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asTarget(),
+          ],
           description='Maximum number of client connections allowed.'
         )
         + stat.options.withGraphMode('none'),
@@ -64,7 +75,7 @@ local utils = commonlib.utils;
       queriesPooled:
         commonlib.panels.generic.timeSeries.base.new(
           'Queries processed',
-          targets=[t.queriesPooled],
+          targets=[signals.stats.stats_queries_pooled_total.asTarget()],
           description=|||
             Rate of SQL queries pooled by PgBouncer.
           |||
@@ -74,7 +85,7 @@ local utils = commonlib.utils;
       queryDuration:
         commonlib.panels.generic.timeSeries.base.new(
           'Queries average duration / $__interval',
-          targets=[t.queryDuration],
+          targets=[signals.stats.stats_query_avg_duration.asTarget()],
           description=|||
             Average duration of queries being processed by PgBouncer.
           |||
@@ -84,7 +95,10 @@ local utils = commonlib.utils;
       networkTraffic:
         commonlib.panels.network.timeSeries.traffic.new(
           'Network traffic',
-          targets=[t.networkTrafficRecieved, t.networkTrafficSent],
+          targets=[
+            signals.stats.stats_received_bytes_total.asTarget(),
+            signals.stats.stats_sent_bytes_total.asTarget(),
+          ],
           description=|||
             Volume in bytes of network traffic received by PgBouncer.
           |||
@@ -96,7 +110,7 @@ local utils = commonlib.utils;
       transactionRate:
         commonlib.panels.generic.timeSeries.base.new(
           'SQL transaction rate',
-          targets=[t.transactionRate],
+          targets=[signals.stats.stats_sql_transactions_pooled_total.asTarget()],
           description=|||
             Rate of SQL transactions pooled.
           |||
@@ -106,7 +120,7 @@ local utils = commonlib.utils;
       transactionAverageDuration:
         commonlib.panels.generic.timeSeries.base.new(
           'SQL average transaction duration / $__interval',
-          targets=[t.transactionAverageDuration],
+          targets=[signals.stats.stats_transaction_avg_duration.asTarget()],
           description=|||
             Average duration of SQL transactions pooled.
           |||
@@ -116,7 +130,12 @@ local utils = commonlib.utils;
       serverConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Server connections',
-          targets=[t.serverIdleConnections, t.serverUsedConnections, t.serverLoginConnections, t.serverTestingConnections],
+          targets=[
+            signals.connections.pools_server_idle_connections.asTarget(),
+            signals.connections.pools_server_used_connections.asTarget(),
+            signals.connections.pools_server_login_connections.asTarget(),
+            signals.connections.pools_server_testing_connections.asTarget(),
+          ],
           description=|||
             Number of various server connection states.
           |||
@@ -128,7 +147,7 @@ local utils = commonlib.utils;
       granularActiveClientConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Active client connections',
-          targets=[t.granularActiveClientConnections],
+          targets=[signals.connections.pools_client_active_connections.asTarget()],
           description=|||
             Current number of active client connections.
           |||
@@ -138,7 +157,7 @@ local utils = commonlib.utils;
       clientsWaiting:
         commonlib.panels.generic.timeSeries.base.new(
           'Waiting clients',
-          targets=[t.clientsWaiting],
+          targets=[signals.connections.pools_client_waiting_connections.asTarget()],
           description=|||
             Current number of client connections waiting on a server connection.
           |||
@@ -148,7 +167,7 @@ local utils = commonlib.utils;
       maxClientWaitTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Max client wait time',
-          targets=[t.maxClientWaitTime],
+          targets=[signals.connections.pools_client_maxwait_seconds.asTarget()],
           description=|||
             Age of the oldest unserved client connection in seconds.
           |||
@@ -162,7 +181,7 @@ local utils = commonlib.utils;
       topDatabaseActiveConnection:
         commonlib.panels.generic.timeSeries.base.new(
           'Top databases by active connections',
-          targets=[t.topDatabaseActiveConnection],
+          targets=[signals.cluster.top_database_active_connection.asTarget()],
           description=|||
             Top databases by current number of active client connections.
           |||
@@ -171,7 +190,7 @@ local utils = commonlib.utils;
       topDatabaseQueryPooled:
         commonlib.panels.generic.timeSeries.base.new(
           'Top databases by queries processed',
-          targets=[t.topDatabaseQueryProcessed],
+          targets=[signals.cluster.top_database_query_processed.asTarget()],
           description=|||
             Top databases by rate of SQL queries pooled by PgBouncer.
           |||
@@ -180,7 +199,7 @@ local utils = commonlib.utils;
       topDatabaseQueryDuration:
         commonlib.panels.generic.timeSeries.base.new(
           'Top databases by average query duration',
-          targets=[t.topDatabaseQueryDuration],
+          targets=[signals.cluster.top_database_query_duration.asTarget()],
           description=|||
             Top databases by average duration of queries being processed by PgBouncer.
           |||
@@ -189,7 +208,10 @@ local utils = commonlib.utils;
       topDatabaseNetworkTraffic:
         commonlib.panels.generic.timeSeries.base.new(
           'Top databases by network traffic',
-          targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
+          targets=[
+            signals.cluster.top_database_network_received.asTarget(),
+            signals.cluster.top_database_network_sent.asTarget(),
+          ],
           description=|||
             Top databases by volume of network traffic.
           |||
