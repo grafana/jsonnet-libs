@@ -1,4 +1,5 @@
 {
+  local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: '',
   // Used to identify 'group' of instances.
@@ -14,6 +15,14 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
+
+  metricsSource: 'prometheus',
+  signals: {
+    timing: (import './signals/timing.libsonnet')(this),
+    network: (import './signals/network.libsonnet')(this),
+    content: (import './signals/content.libsonnet')(this),
+    errors: (import './signals/errors.libsonnet')(this),
+  },
 
   // Alert thresholds
   alertsHighServerResponseTime: 1000,  //ms
