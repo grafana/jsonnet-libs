@@ -29,7 +29,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
         varMetric='mongodb_up',
-        customAllValue='.+',
+        customAllValue='.*',
         enableLokiLogs=this.config.enableLokiLogs,
       ),
       annotations: {},

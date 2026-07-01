@@ -127,11 +127,11 @@ function(this)
       replicaSetStateByInstance: {
         name: 'Replica set state',
         description: 'Replica set state per instance.',
-        type: 'gauge',
+        type: 'raw',
         unit: 'short',
         sources: {
           percona_mongodb: {
-            expr: 'mongodb_mongod_replset_my_state{%(queriesSelector)s}',
+            expr: 'max by (%(agg)s, service_name) (mongodb_mongod_replset_my_state{%(queriesSelector)s})',
             legendCustomTemplate: '{{service_name}}',
           },
         },

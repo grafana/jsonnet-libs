@@ -159,7 +159,7 @@ function(this)
                 )
               )
             |||,
-            legendCustomTemplate: '{{service_name}} - {{name}} - {{state}}',
+            legendCustomTemplate: '{{name}} - {{state}}',
           },
         },
       },

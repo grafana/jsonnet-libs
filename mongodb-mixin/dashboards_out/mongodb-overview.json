@@ -421,7 +421,7 @@
                            },
                            "1": {
                               "index": 1,
-                              "text": "PRIMARY"
+                              "text": "PRIMARY (Healthy)"
                            },
                            "10": {
                               "index": 9,
@@ -429,7 +429,7 @@
                            },
                            "2": {
                               "index": 2,
-                              "text": "SECONDARY"
+                              "text": "SECONDARY (Healthy)"
                            },
                            "3": {
                               "index": 3,
@@ -483,7 +483,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,mongodb_cluster) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "expr": "max by (job,mongodb_cluster, service_name) (mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{service_name}}",
@@ -720,7 +720,7 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -735,7 +735,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -750,7 +750,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"

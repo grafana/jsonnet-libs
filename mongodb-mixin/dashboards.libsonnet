@@ -70,14 +70,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             + g.dashboard.variable.query.queryTypes.withLabelValues(label='set', metric='mongodb_mongod_replset_my_state{%(queriesSelector)s}' % vars)
             + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus)
             + g.dashboard.variable.query.selectionOptions.withMulti(true)
-            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true)
+            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true, '.*')
             + g.dashboard.variable.query.generalOptions.withLabel('Replica set'),
 
             g.dashboard.variable.query.new('secondary')
             + g.dashboard.variable.query.queryTypes.withLabelValues(label='service_name', metric='mongodb_mongod_replset_member_replication_lag{%(queriesSelector)s}' % vars)
             + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus)
             + g.dashboard.variable.query.selectionOptions.withMulti(true)
-            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true)
+            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true, '.*')
             + g.dashboard.variable.query.generalOptions.withLabel('Secondary'),
           ],
           uid + '-replicaset',
@@ -109,7 +109,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             + g.dashboard.variable.query.queryTypes.withLabelValues(label='set', metric='mongodb_mongod_replset_my_state{%(queriesSelector)s}' % vars)
             + g.dashboard.variable.query.withDatasourceFromVariable(vars.datasources.prometheus)
             + g.dashboard.variable.query.selectionOptions.withMulti(true)
-            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true)
+            + g.dashboard.variable.query.selectionOptions.withIncludeAll(true, '.*')
             + g.dashboard.variable.query.generalOptions.withLabel('Shard'),
           ],
           uid + '-cluster',

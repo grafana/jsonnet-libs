@@ -266,6 +266,16 @@
                         "Value": true,
                         "__name__": true,
                         "job": true
+                     },
+                     "indexByName": {
+                        "mongodb": 2,
+                        "mongodb_cluster": 1,
+                        "service_name": 0
+                     },
+                     "renameByName": {
+                        "mongodb": "Version",
+                        "mongodb_cluster": "Cluster",
+                        "service_name": "Instance"
                      }
                   }
                }
@@ -293,7 +303,7 @@
                            },
                            "1": {
                               "index": 1,
-                              "text": "PRIMARY"
+                              "text": "PRIMARY (Healthy)"
                            },
                            "10": {
                               "index": 9,
@@ -301,7 +311,7 @@
                            },
                            "2": {
                               "index": 2,
-                              "text": "SECONDARY"
+                              "text": "SECONDARY (Healthy)"
                            },
                            "3": {
                               "index": 3,
@@ -705,7 +715,7 @@
                   "expr": "max by (job,mongodb_cluster,service_name, name, state) (\n  mongodb_mongod_replset_member_ping_ms{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}\n  or label_replace(\n    label_replace(\n      mongodb_rs_members_pingMs{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\", member_state!=\"\"},\n      \"state\", \"$1\", \"member_state\", \"(.*)\"\n    ),\n    \"name\", \"$1\", \"member_idx\", \"(.*)\"\n  )\n)\n",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{service_name}} - {{name}} - {{state}}",
+                  "legendFormat": "{{name}} - {{state}}",
                   "refId": "Max member ping time"
                }
             ],
@@ -1096,7 +1106,7 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -1111,7 +1121,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -1126,7 +1136,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -1149,6 +1159,7 @@
                "type": "datasource"
             },
             {
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -1162,6 +1173,7 @@
                "type": "query"
             },
             {
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"

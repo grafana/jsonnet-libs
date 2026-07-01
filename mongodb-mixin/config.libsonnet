@@ -6,7 +6,7 @@
   uid: 'mongodb',
   dashboardTags: [self.uid + '-mixin'],
   dashboardNamePrefix: 'MongoDB',
-  dashboardPeriod: 'now-1h',
+  dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
   metricsSource: ['percona_mongodb'],

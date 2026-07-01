@@ -14,8 +14,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       g.panel.stat.standardOptions.mapping.ValueMap.withType()
       + g.panel.stat.standardOptions.mapping.ValueMap.withOptions({
         '0': { index: 0, text: 'STARTUP' },
-        '1': { index: 1, text: 'PRIMARY' },
-        '2': { index: 2, text: 'SECONDARY' },
+        '1': { index: 1, text: 'PRIMARY (Healthy)' },
+        '2': { index: 2, text: 'SECONDARY (Healthy)' },
         '3': { index: 3, text: 'RECOVERING' },
         '5': { index: 4, text: 'STARTUP2' },
         '6': { index: 5, text: 'UNKNOWN' },
@@ -71,6 +71,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           id: 'organize',
           options: {
             excludeByName: { Time: true, Value: true, __name__: true, job: true },
+            renameByName: { mongodb: 'Version', mongodb_cluster: 'Cluster', service_name: 'Instance' },
+            indexByName: { service_name: 0, mongodb_cluster: 1, mongodb: 2 },
           },
         },
       ]),

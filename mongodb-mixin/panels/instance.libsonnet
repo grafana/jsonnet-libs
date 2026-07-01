@@ -11,8 +11,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       g.panel.stat.standardOptions.mapping.ValueMap.withType()
       + g.panel.stat.standardOptions.mapping.ValueMap.withOptions({
         '0': { index: 0, text: 'STARTUP' },
-        '1': { index: 1, text: 'PRIMARY' },
-        '2': { index: 2, text: 'SECONDARY' },
+        '1': { index: 1, text: 'PRIMARY (Healthy)' },
+        '2': { index: 2, text: 'SECONDARY (Healthy)' },
         '3': { index: 3, text: 'RECOVERING' },
         '5': { index: 4, text: 'STARTUP2' },
         '6': { index: 5, text: 'UNKNOWN' },
@@ -46,9 +46,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       commonlib.panels.generic.stat.base.new(
         'Replica set',
         targets=[signals.instance.replicaSetState.asTarget()],
-        description='An integer between 0 and 10 that represents the replica state of the current member. See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.'
+        description='Current replica set state of the member (for example PRIMARY or SECONDARY). See https://www.mongodb.com/docs/manual/reference/replica-states/ for the meaning of each value.'
       )
       + g.panel.stat.standardOptions.withMappings([replicaSetStateMappings])
+      + g.panel.stat.standardOptions.withDisplayName('${__field.labels.service_name}')
       + g.panel.stat.options.reduceOptions.withCalcs(['lastNotNull'])
       + g.panel.stat.options.withGraphMode('none'),
 
@@ -69,6 +70,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         description='Current state of the replica set member.'
       )
       + g.panel.stat.standardOptions.withMappings([replicaSetStateMappings])
+      + g.panel.stat.standardOptions.withDisplayName('${__field.labels.service_name}')
+      + g.panel.stat.options.withGraphMode('none')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.standardOptions.thresholds.withSteps([
         g.panel.stat.standardOptions.threshold.step.withColor('green')
