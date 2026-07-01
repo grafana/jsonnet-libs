@@ -1,0 +1,2093 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": false,
+      "id": null,
+      "links": [
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB logs",
+            "type": "link",
+            "url": "/d/mongodb-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB instance",
+            "type": "link",
+            "url": "/d/mongodb-instance"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB overview",
+            "type": "link",
+            "url": "/d/mongodb-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "MongoDB replica set",
+            "type": "link",
+            "url": "/d/mongodb-replicaset"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of shards.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_shards_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Shards",
+                  "refId": "# of shards"
+               }
+            ],
+            "title": "# of shards",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of sharded databases.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 3,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_databases_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type=\"partitioned\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sharded DBs",
+                  "refId": "Sharded DBs"
+               }
+            ],
+            "title": "Sharded DBs",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of unsharded databases.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 6,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_databases_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type=\"unpartitioned\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Unsharded DBs",
+                  "refId": "Unsharded DBs"
+               }
+            ],
+            "title": "Unsharded DBs",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of shards being drained.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 9,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_shards_draining_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Draining shards",
+                  "refId": "Draining shards"
+               }
+            ],
+            "title": "Draining shards",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of sharded collections.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 12,
+               "y": 1
+            },
+            "id": 6,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Sharded collections",
+                  "refId": "Sharded collections"
+               }
+            ],
+            "title": "Sharded collections",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of chunks.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 15,
+               "y": 1
+            },
+            "id": 7,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_chunks_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Chunks",
+                  "refId": "Chunks"
+               }
+            ],
+            "title": "Chunks",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Whether the balancer is enabled.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 0,
+                              "text": "Disabled"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 1,
+                              "text": "Enabled"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 18,
+               "y": 1
+            },
+            "id": 8,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_balancer_enabled{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Cluster balanced",
+                  "refId": "Balancer enabled"
+               }
+            ],
+            "title": "Balancer enabled",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Whether chunks are balanced.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "mappings": [
+                     {
+                        "options": {
+                           "0": {
+                              "color": "red",
+                              "index": 0,
+                              "text": "No"
+                           },
+                           "1": {
+                              "color": "green",
+                              "index": 1,
+                              "text": "Yes"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 21,
+               "y": 1
+            },
+            "id": 9,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "min by (job,mongodb_cluster) (\n  mongodb_mongos_sharding_chunks_is_balanced{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Cluster balanced",
+                  "refId": "Chunks balanced"
+               }
+            ],
+            "title": "Chunks balanced",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of collections per shard and database.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 9
+            },
+            "id": 10,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{db}} | {{shard}}",
+                  "refId": "Collections in shards"
+               }
+            ],
+            "title": "Number of collections in shards",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Size of collections per shard and database.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 9
+            },
+            "id": 11,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "max by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_data_size_bytes{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{mongodb_cluster}}: Collection size in shards ({{db}} {{shard}})",
+                  "refId": "Collection size in shards"
+               }
+            ],
+            "title": "Size of collections in shards",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Queries per second for shard services.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 17
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "repeat": "shard",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name, set) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set=~\"$shard\"}\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Shard services QPS"
+               }
+            ],
+            "title": "Shard services QPS - $shard",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Queries per second for config services.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 25
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name, set) (\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", set!~\"$shard\"}\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Config services QPS"
+               }
+            ],
+            "title": "Config services QPS",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Queries per second for mongos services.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 25
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  rate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n)\n* on (service_name) group_right\navg by (service_name) (\n  avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})\n  / avg by (service_name) (mongodb_mongos_db_collections_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"})\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Mongos services QPS"
+               }
+            ],
+            "title": "Mongos services QPS",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 33
+            },
+            "id": 15,
+            "panels": [ ],
+            "title": "Chunks in shards",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of chunks per shard.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 34
+            },
+            "id": 16,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,shard,db) (\n  mongodb_mongos_sharding_shard_chunks_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{shard}}",
+                  "refId": "# of chunks in shards"
+               }
+            ],
+            "title": "# of chunks in shards",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of change in chunk counts.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 34
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(mongodb_mongos_sharding_shard_chunks_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{shard}}",
+                  "refId": "Dynamic of chunks"
+               }
+            ],
+            "title": "Dynamic of chunks",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of chunk split events.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 42
+            },
+            "id": 18,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", event=~\".*split.*\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{event}}",
+                  "refId": "Chunk split events"
+               }
+            ],
+            "title": "Chunk split events",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of chunk move events.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 42
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", event=~\".*moveChunk.*\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{event}}",
+                  "refId": "Chunk move events"
+               }
+            ],
+            "title": "Chunk move events",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 50
+            },
+            "id": 20,
+            "panels": [ ],
+            "title": "Indexes in shards",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Number of indexes per shard and database.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 51
+            },
+            "id": 21,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_indexes_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{db}} | {{shard}}",
+                  "refId": "# Indexes per shard"
+               }
+            ],
+            "title": "# Indexes per shard",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of change in index counts.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 51
+            },
+            "id": 22,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "irate(mongodb_mongos_db_indexes_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{shard}}-{{db}}",
+                  "refId": "Dynamic of indexes"
+               }
+            ],
+            "title": "Dynamic of indexes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Size of indexes per shard and database.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 59
+            },
+            "id": 23,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,mongodb_cluster,db,shard) (\n  mongodb_mongos_db_index_size_bytes{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{db}} | {{shard}}",
+                  "refId": "Size of indexes per shard"
+               }
+            ],
+            "title": "Size of indexes per shard",
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Rate of change in index sizes.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 59
+            },
+            "id": 24,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "rate(mongodb_mongos_db_index_size_bytes{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", db!~\"admin|config\"}[$__rate_interval])",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{shard}}-{{db}}",
+                  "refId": "Dynamic of indexes size"
+               }
+            ],
+            "title": "Dynamic of indexes size",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 67
+            },
+            "id": 25,
+            "panels": [ ],
+            "title": "Connections",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Current number of connections per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 68
+            },
+            "id": 26,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (max_over_time(mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Current connections"
+               }
+            ],
+            "title": "Current connections per instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Available connections per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 68
+            },
+            "id": 27,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (max_over_time(mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"available\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Available connections"
+               }
+            ],
+            "title": "Available connections per instance",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Current connections aggregated per shard.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 68
+            },
+            "id": 28,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (set) (\n  avg by (service_name, set) (mongodb_connections{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"current\"})\n  * on (service_name) group_right\n  avg by (service_name, set) (\n    mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n    / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  )\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{set}}",
+                  "refId": "Connections per shard"
+               }
+            ],
+            "title": "Current connections per shard",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 76
+            },
+            "id": 29,
+            "panels": [ ],
+            "title": "Operations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Operations per second aggregated by shard.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 77
+            },
+            "id": 30,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (set) (\n  sum by (instance) (\n    irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval])\n  )\n  * on (instance) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{set}}",
+                  "refId": "Operations per shard"
+               }
+            ],
+            "title": "Operations per shard",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Operations per second by type.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 77
+            },
+            "id": 31,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (type) (irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Operations by type"
+               }
+            ],
+            "title": "Operations by type",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Operations per second for selected instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ops"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 85
+            },
+            "id": 32,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (type) (irate(mongodb_op_counters_total{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", type!=\"command\", service_name=~\"$service_name\"}[$__rate_interval]))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{type}}",
+                  "refId": "Operations by instance"
+               }
+            ],
+            "title": "Operations $service_name",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 93
+            },
+            "id": 33,
+            "panels": [ ],
+            "title": "Cursors",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total cursors aggregated by shard.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 94
+            },
+            "id": 34,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (set) (\n  sum by (service_name) (\n    mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}\n    or mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}\n  )\n  * on (service_name) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{set}}",
+                  "refId": "Cursors per shard"
+               }
+            ],
+            "title": "Cursors per shard",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Total number of open cursors across the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 94
+            },
+            "id": 35,
+            "options": {
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum(\n  max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Cursors",
+                  "refId": "MongoDB cursors"
+               }
+            ],
+            "title": "MongoDB cursors",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Cursors per instance.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               }
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 102
+            },
+            "id": 36,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "lastNotNull",
+                     "min",
+                     "mean",
+                     "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "sum by (service_name) (\n  max_over_time(mongodb_mongod_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_metrics_cursor_open{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total\"}[$__rate_interval])\n  or max_over_time(mongodb_mongod_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n  or max_over_time(mongodb_mongos_cursors{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\", state=\"total_open\"}[$__rate_interval])\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{service_name}}",
+                  "refId": "Cursors by instance"
+               }
+            ],
+            "title": "Cursors by instance",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": true,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 110
+            },
+            "id": 37,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "description": "Maximum replication lag per replica set.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 0,
+                     "y": 111
+                  },
+                  "id": 38,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "max by (set) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}[$__rate_interval]) > 0) by (service_name, set))",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{set}}",
+                        "refId": "Replication lag by set"
+                     }
+                  ],
+                  "title": "Replication lag by set",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "description": "Oplog time window per replica set.",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "fillOpacity": 30,
+                           "gradientMode": "opacity",
+                           "lineInterpolation": "smooth",
+                           "lineWidth": 2,
+                           "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "s"
+                     }
+                  },
+                  "gridPos": {
+                     "h": 8,
+                     "w": 12,
+                     "x": 12,
+                     "y": 111
+                  },
+                  "id": 39,
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list"
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                     }
+                  },
+                  "pluginVersion": "v11.4.0",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${prometheus_datasource}"
+                        },
+                        "expr": "max by (set) (\n  max by (service_name) (\n    mongodb_mongod_replset_oplog_head_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n    - mongodb_mongod_replset_oplog_tail_timestamp{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  )\n  * on (service_name) group_right\n  mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n  / mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}\n)\n",
+                        "format": "time_series",
+                        "instant": false,
+                        "legendFormat": "{{set}}",
+                        "refId": "Oplog window by set"
+                     }
+                  ],
+                  "title": "Replication lag by set oplog window",
+                  "type": "timeseries"
+               }
+            ],
+            "title": "Additional info",
+            "type": "row"
+         }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "tags": [
+         "mongodb-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(mongodb_up{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "MongoDB cluster",
+               "multi": true,
+               "name": "mongodb_cluster",
+               "query": "label_values(mongodb_up{job=~\"$job\"}, mongodb_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Service name",
+               "multi": true,
+               "name": "service_name",
+               "query": "label_values(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\"}, service_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Shard",
+               "multi": true,
+               "name": "shard",
+               "query": "label_values(mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=~\"$mongodb_cluster\",service_name=~\"$service_name\"}, set)",
+               "refresh": 2,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "MongoDB cluster",
+      "uid": "mongodb-cluster"
+   }
