@@ -1,5 +1,8 @@
 function(this) {
-  filteringSelector: this.filteringSelector,
+  // Left empty so panel queries stay driven by the $job/$instance variables only,
+  // matching the legacy dashboards. The static filteringSelector is still applied
+  // via the dashboard variable queries (see variables.libsonnet).
+  filteringSelector: '',
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
@@ -185,7 +188,7 @@ function(this) {
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s} - openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s}',
+          expr: 'openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s,network_name=~"' + this.alertsIPutilizationNetworksMatcher + '"}-openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s,network_name=~"' + this.alertsIPutilizationNetworksMatcher + '"}',
           legendCustomTemplate: '{{network_name}}',
         },
       },
@@ -197,7 +200,7 @@ function(this) {
       unit: 'percentunit',
       sources: {
         prometheus: {
-          expr: 'sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s}) / sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s})',
+          expr: 'sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s}) / sum by (job, instance, ip_version, subnet_name)(openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s})',
           legendCustomTemplate: '{{instance}} - {{subnet_name}}',
         },
       },

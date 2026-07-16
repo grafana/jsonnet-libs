@@ -1,5 +1,8 @@
 function(this) {
-  filteringSelector: this.filteringSelector,
+  // Left empty so panel queries stay driven by the $job/$instance variables only,
+  // matching the legacy dashboards. The static filteringSelector is still applied
+  // via the dashboard variable queries (see variables.libsonnet).
+  filteringSelector: '',
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,

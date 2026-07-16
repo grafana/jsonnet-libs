@@ -3,7 +3,74 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 {
   new(this): {
-    local t = this.grafana.targets,
+    local signals = this.signals,
+
+    // Render signal targets to match the legacy hand-written targets:
+    // hide the fields asTarget()/asTableTarget() set that the legacy targets
+    // did not (refId, format, instant and - where noted - legendFormat).
+    // asTimeSeriesTarget additionally applies the legacy 1m query interval.
+    local asStatTarget(signal) =
+      signal.asTarget() { refId:: null, format:: null, instant:: null, legendFormat:: null },
+    local asPlainTarget(signal) =
+      signal.asTarget() { refId:: null, format:: null, instant:: null },
+    local asTimeSeriesTarget(signal) =
+      asPlainTarget(signal)
+      + g.panel.timeSeries.queryOptions.withInterval('1m'),
+    local asTableTarget(signal) =
+      signal.asTableTarget() { refId:: null, legendFormat:: null },
+
+    local t = {
+      placementStatus: asStatTarget(signals.placement.placement_up),
+      keystoneStatus: asStatTarget(signals.identity.identity_up),
+      novaStatus: asStatTarget(signals.nova.nova_up),
+      neutronStatus: asStatTarget(signals.neutron.neutron_up),
+      cinderStatus: asStatTarget(signals.cinder.cinder_up),
+      glanceStatus: asStatTarget(signals.glance.glance_up),
+      totalDiskCapacity: asTableTarget(signals.placement.placement_resource_total_disk),
+      totalDiskUsage: asTableTarget(signals.placement.placement_resource_usage_disk),
+      totalMemoryCapacity: asTableTarget(signals.placement.placement_resource_total_memory),
+      totalMemoryUsage: asTableTarget(signals.placement.placement_resource_usage_memory),
+      totalVCPUCapacity: asTableTarget(signals.placement.placement_resource_total_vcpu),
+      totalVCPUUsage: asTableTarget(signals.placement.placement_resource_usage_vcpu),
+      vCPUUsed: asStatTarget(signals.placement.placement_vcpu_usage_ratio),
+      RAMUsed: asStatTarget(signals.placement.placement_memory_usage_ratio),
+      domains: asStatTarget(signals.identity.identity_domains),
+      projects: asStatTarget(signals.identity.identity_projects),
+      regions: asStatTarget(signals.identity.identity_regions),
+      users: asTimeSeriesTarget(signals.identity.identity_users),
+      projectDetails: asTableTarget(signals.identity.identity_project_info),
+      vms: asTimeSeriesTarget(signals.nova.nova_total_vms),
+      instanceUsage: asTimeSeriesTarget(signals.nova.nova_instance_usage),
+      vCPUUsage: asTimeSeriesTarget(signals.nova.nova_vcpu_usage),
+      memoryUsage: asTimeSeriesTarget(signals.nova.nova_memory_usage),
+      novaAgentState: asTableTarget(signals.nova.nova_agent_state),
+      networks: asTimeSeriesTarget(signals.neutron.neutron_networks),
+      subnets: asTimeSeriesTarget(signals.neutron.neutron_subnets),
+      routers: asTimeSeriesTarget(signals.neutron.neutron_routers.withLegendFormat('{{instance}} - total')),
+      routersNotActive: asTimeSeriesTarget(signals.neutron.neutron_routers_not_active.withLegendFormat('{{instance}} - inactive')),
+      routerDetails: asTableTarget(signals.neutron.neutron_router_info),
+      ports: asTimeSeriesTarget(signals.neutron.neutron_ports.withLegendFormat('{{instance}} - total')),
+      portsLBNotActive: asTimeSeriesTarget(signals.neutron.neutron_ports_lb_not_active.withLegendFormat('{{instance}} - load balancer inactive')),
+      portsNoIPs: asTimeSeriesTarget(signals.neutron.neutron_ports_no_ips.withLegendFormat('{{instance}} - no IPs')),
+      portDetails: asTableTarget(signals.neutron.neutron_port_info),
+      floatingIPs: asTimeSeriesTarget(signals.neutron.neutron_floating_ips.withLegendFormat('{{instance}} - total')),
+      floatingIPsAssociatedNotActive: asTimeSeriesTarget(signals.neutron.neutron_floating_ips_associated_not_active.withLegendFormat('{{instance}} - associated inactive')),
+      ipsUsed: asTimeSeriesTarget(signals.neutron.neutron_ip_usage_ratio),
+      securityGroups: asTimeSeriesTarget(signals.neutron.neutron_security_groups),
+      neutronAgentState: asTableTarget(signals.neutron.neutron_agent_state),
+      freeIPs: asPlainTarget(signals.neutron.neutron_free_ips),
+      volumes: asTimeSeriesTarget(signals.cinder.cinder_volumes),
+      volumeErrorStatus: asTimeSeriesTarget(signals.cinder.cinder_volume_error_status),
+      volumeNonErrorStatus: asTimeSeriesTarget(signals.cinder.cinder_volume_top_statuses),
+      volumeUsage: asTimeSeriesTarget(signals.cinder.cinder_volume_usage),
+      backupUsage: asTimeSeriesTarget(signals.cinder.cinder_backup_usage),
+      poolUsage: asTimeSeriesTarget(signals.cinder.cinder_pool_usage),
+      snaphots: asTimeSeriesTarget(signals.cinder.cinder_snapshots),
+      cinderAgentState: asTableTarget(signals.cinder.cinder_agent_state),
+      imageCount: asTimeSeriesTarget(signals.glance.glance_images),
+      imageDetails: asTableTarget(signals.glance.glance_image_bytes),
+    },
+
     local alertList = g.panel.alertList,
     local stat = g.panel.stat,
     local timeSeries = g.panel.timeSeries,

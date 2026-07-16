@@ -148,7 +148,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_identity_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Keystone status",
@@ -212,7 +212,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Nova status",
@@ -276,7 +276,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Neutron status",
@@ -340,7 +340,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_cinder_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Cinder status",
@@ -404,7 +404,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Glance status",
@@ -1157,7 +1157,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}"
                }
             ],
             "title": "Glance status",

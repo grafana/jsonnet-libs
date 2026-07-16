@@ -1,5 +1,8 @@
 function(this) {
-  filteringSelector: this.filteringSelector,
+  // Left empty so panel queries stay driven by the $job/$instance variables only,
+  // matching the legacy dashboards. The static filteringSelector is still applied
+  // via the dashboard variable queries (see variables.libsonnet).
+  filteringSelector: '',
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
@@ -55,6 +58,18 @@ function(this) {
         prometheus: {
           expr: 'openstack_identity_regions{%(queriesSelector)s}',
           legendCustomTemplate: '{{instance}}',
+        },
+      },
+    },
+    identity_project_info: {
+      name: 'Project details',
+      description: 'Details for the projects in the OpenStack cloud.',
+      type: 'gauge',
+      unit: 'short',
+      sources: {
+        prometheus: {
+          expr: 'openstack_identity_project_info{%(queriesSelector)s}',
+          legendCustomTemplate: '{{instance}} - {{name}}',
         },
       },
     },

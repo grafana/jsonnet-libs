@@ -1,5 +1,8 @@
 function(this) {
-  filteringSelector: this.filteringSelector,
+  // Left empty so panel queries stay driven by the $job/$instance variables only,
+  // matching the legacy dashboards. The static filteringSelector is still applied
+  // via the dashboard variable queries (see variables.libsonnet).
+  filteringSelector: '',
   groupLabels: this.groupLabels,
   instanceLabels: this.instanceLabels,
   enableLokiLogs: this.enableLokiLogs,
@@ -101,7 +104,7 @@ function(this) {
       unit: 'percent',
       sources: {
         prometheus: {
-          expr: '100 * sum(openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="VCPU"}) / sum(openstack_placement_resource_total{%(queriesSelector)s, resourcetype="VCPU"})',
+          expr: '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="VCPU"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="VCPU"})',
           legendCustomTemplate: 'vCPU used %',
         },
       },
@@ -113,7 +116,7 @@ function(this) {
       unit: 'percent',
       sources: {
         prometheus: {
-          expr: '100 * sum(openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="MEMORY_MB"}) / sum(openstack_placement_resource_total{%(queriesSelector)s, resourcetype="MEMORY_MB"})',
+          expr: '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="MEMORY_MB"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="MEMORY_MB"})',
           legendCustomTemplate: 'Memory used %',
         },
       },
