@@ -102,13 +102,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])) > 0",
+                  "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}}"
+                  "legendFormat": "{{collection}} - {{core}}",
+                  "refId": "Update handlers"
                }
             ],
             "title": "Update handlers / $__interval",
@@ -190,12 +192,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search query load"
                }
             ],
             "title": "Core search and retrieval query load",
@@ -277,12 +281,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized query load"
                }
             ],
             "title": "Specialized query load",
@@ -364,12 +370,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search 95p query latency"
                }
             ],
             "title": "Core search and retrieval 95p query latency",
@@ -451,12 +459,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized 95p query latency"
                }
             ],
             "title": "Specialized 95p query latency",
@@ -538,12 +548,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search 99p query latency"
                }
             ],
             "title": "Core search and retrieval 99p query latency",
@@ -625,12 +637,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized 99p query latency"
                }
             ],
             "title": "Specialized 99p query latency",
@@ -728,12 +742,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search local query load"
                }
             ],
             "title": "Core search and retrieval local query load",
@@ -815,12 +831,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized local query load"
                }
             ],
             "title": "Specialized local query load",
@@ -902,12 +920,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search local 95p query latency"
                }
             ],
             "title": "Core search and retrieval local p95 query latency",
@@ -989,12 +1009,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized local 95p query latency"
                }
             ],
             "title": "Specialized local 95p query latency",
@@ -1076,12 +1098,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/select|/query|/get\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Core search local 99p query latency"
                }
             ],
             "title": "Core search and retrieval 99p local query latency",
@@ -1163,12 +1187,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\", searchHandler=~\"/sql|/export|/stream\", collection=~\"$solr_collection\", core=~\"$solr_core\",}) > 0",
+                  "expr": "avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", searchHandler=~\"/sql|/export|/stream\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
+                  "refId": "Specialized local 99p query latency"
                }
             ],
             "title": "Specialized local 99p query latency",
@@ -1266,13 +1292,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\", item=~\"evictions\"}[$__interval:])) > 0",
+                  "expr": "avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\", item=~\"evictions\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{type}}"
+                  "legendFormat": "{{collection}} - {{core}} - {{type}}",
+                  "refId": "Cache evictions"
                }
             ],
             "title": "Cache evictions / $__interval",
@@ -1359,12 +1387,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\"}) > 0",
+                  "expr": "avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}} - {{type}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}} - {{type}}",
+                  "refId": "Cache hit ratio"
                }
             ],
             "title": "Cache hit ratio",
@@ -1462,13 +1492,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_timeouts_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))",
+                  "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_timeouts_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}}"
+                  "legendFormat": "{{collection}} - {{core}}",
+                  "refId": "Core timeouts"
                }
             ],
             "title": "Core timeouts / $__interval",
@@ -1550,13 +1582,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job, base_url) (increase(solr_metrics_node_timeouts_total{job=~\"$job\", base_url=~\"$base_url\", solr_cluster=~\"$solr_cluster\"}[$__interval:]))",
+                  "expr": "avg by(job, base_url) (increase(solr_metrics_node_timeouts_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]))",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}}"
+                  "legendFormat": "{{base_url}}",
+                  "refId": "Node timeouts"
                }
             ],
             "title": "Node timeouts / $__interval",
@@ -1654,12 +1688,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job, base_url, collection, core) (solr_metrics_core_query_errors_1minRate{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\"})",
+                  "expr": "avg by(job, base_url, collection, core) (solr_metrics_core_query_errors_1minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}}",
+                  "refId": "Query error rate"
                }
             ],
             "title": "Query error rate",
@@ -1741,12 +1777,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by(job, base_url, collection, core) (solr_metrics_core_query_client_errors_1minRate{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", collection=~\"$solr_collection\", core=~\"$solr_core\"})",
+                  "expr": "avg by(job, base_url, collection, core) (solr_metrics_core_query_client_errors_1minRate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"})",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{collection}} - {{core}}"
+                  "instant": false,
+                  "legendFormat": "{{collection}} - {{core}}",
+                  "refId": "Query client error rate"
                }
             ],
             "title": "Query client errors",

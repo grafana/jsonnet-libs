@@ -102,12 +102,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Connections"
                }
             ],
             "title": "Connections",
@@ -189,21 +191,25 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - submitted"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - submitted",
+                  "refId": "Threads submitted"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - completed"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - completed",
+                  "refId": "Threads completed"
                }
             ],
             "title": "Threads / $__interval",
@@ -285,12 +291,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Node core FS usage"
                }
             ],
             "title": "Node core FS usage",
@@ -372,12 +380,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "File descriptors"
                }
             ],
             "title": "File descriptors",
@@ -475,13 +485,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Garbage collections"
                }
             ],
             "title": "Garbage collections / $__interval",
@@ -563,13 +575,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:]), 1)) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]), 1)) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Garbage collection time"
                }
             ],
             "title": "Garbage collection time / $__interval",
@@ -660,12 +674,14 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"systemCpuLoad\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"systemCpuLoad\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}}",
+                  "refId": "CPU load"
                }
             ],
             "title": "CPU load",
@@ -747,30 +763,36 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"freePhysicalMemorySize\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"freePhysicalMemorySize\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - free physical"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - free physical",
+                  "refId": "OS free physical memory"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"totalPhysicalMemorySize\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"totalPhysicalMemorySize\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - total physical"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - total physical",
+                  "refId": "OS total physical memory"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committedVirtualMemorySize\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committedVirtualMemorySize\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - committed virtual"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - committed virtual",
+                  "refId": "OS committed virtual memory"
                }
             ],
             "title": "OS memory",
@@ -852,21 +874,25 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"used\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"used\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - heap",
+                  "refId": "Heap memory used"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"used\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"used\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - non-heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - non-heap",
+                  "refId": "Non-heap memory used"
                }
             ],
             "title": "Memory used",
@@ -948,21 +974,25 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committed\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committed\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - heap",
+                  "refId": "Heap memory committed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committed\"}) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committed\"}) > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - non-heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - non-heap",
+                  "refId": "Non-heap memory committed"
                }
             ],
             "title": "Memory committed",
@@ -1060,13 +1090,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{method}}"
+                  "legendFormat": "{{base_url}} - {{method}}",
+                  "refId": "Requests"
                }
             ],
             "title": "Requests  / $__interval",
@@ -1148,13 +1180,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{status}}"
+                  "legendFormat": "{{base_url}} - {{status}}",
+                  "refId": "Responses"
                }
             ],
             "title": "Responses  / $__interval",
@@ -1236,13 +1270,15 @@
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}}"
+                  "legendFormat": "{{base_url}}",
+                  "refId": "Dispatches"
                }
             ],
             "title": "Dispatches  / $__interval",

@@ -1,5 +1,6 @@
 {
   _config+:: {
+    local this = self,
     enableMultiCluster: false,
     solrSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     multiclusterSelector: 'job=~"$job"',
@@ -30,11 +31,11 @@
     uid: 'apache-solr',
     metricsSource: 'prometheus',
     signals+: {
-      cluster: (import './signals/cluster.libsonnet')(self),
-      query: (import './signals/query.libsonnet')(self),
-      node: (import './signals/node.libsonnet')(self),
-      jvm: (import './signals/jvm.libsonnet')(self),
-      jetty: (import './signals/jetty.libsonnet')(self),
+      cluster: (import './signals/cluster.libsonnet')(this),
+      query: (import './signals/query.libsonnet')(this),
+      node: (import './signals/node.libsonnet')(this),
+      jvm: (import './signals/jvm.libsonnet')(this),
+      jetty: (import './signals/jetty.libsonnet')(this),
     },
   },
 }

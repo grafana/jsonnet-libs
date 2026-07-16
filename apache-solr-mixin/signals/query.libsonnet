@@ -1,5 +1,6 @@
 function(this)
   {
+    datasource: 'prometheus_datasource',
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
@@ -19,6 +20,19 @@ function(this)
           prometheus: {
             expr: 'avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{%(queriesSelector)s}[$__interval:])) > 0',
             legendCustomTemplate: '{{collection}} - {{core}}',
+          },
+        },
+      },
+      queryMeanRate: {
+        name: 'Mean queries',
+        nameShort: 'Mean queries',
+        type: 'raw',
+        description: 'Average rate of query processing in the cluster.',
+        unit: 'reqps',
+        sources: {
+          prometheus: {
+            expr: 'avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{%(queriesSelector)s, category="QUERY"})',
+            legendCustomTemplate: '{{collection}} - {{core}} - {{searchHandler}}',
           },
         },
       },

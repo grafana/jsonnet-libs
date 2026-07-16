@@ -1,5 +1,6 @@
 function(this)
   {
+    datasource: 'prometheus_datasource',
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,

@@ -1,4 +1,5 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local commonlib = import 'common-lib/common/main.libsonnet';
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
@@ -11,7 +12,10 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local liveNodesPanel(matcher) = {
+// extra selector for panels that are filterable by the collection/core variables
+local coreFilter = 'collection=~"$solr_collection", core=~"$solr_core"';
+
+local liveNodesPanel(signals) = {
   datasource: {
     type: 'prometheus',
     uid: '${prometheus_datasource}',
@@ -58,32 +62,16 @@ local liveNodesPanel(matcher) = {
   },
   pluginVersion: '9.4.3',
   targets: [
-    {
-      disableTextWrap: false,
-      expr: 'min by (job, solr_cluster) (solr_collections_live_nodes{' + matcher + '})',
-      fullMetaSearch: false,
-      includeNullMetadata: true,
-      instant: false,
-      legendFormat: '__auto',
-      range: true,
-      useBackend: false,
-    },
+    signals.cluster.liveNodes.asTarget(),
   ],
   title: 'Live nodes',
   type: 'stat',
 };
 
-local zookeeperStatusPanel(matcher) = {
+local zookeeperStatusPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'solr_zookeeper_status{' + matcher + '}',
-      datasource=promDatasource,
-      intervalFactor=2,
-      instant=true,
-      legendFormat='{{zk_host}}',
-      format='table',
-    ),
+    signals.cluster.zookeeperStatus.asTableTarget(),
   ],
   type: 'table',
   title: 'Zookeeper status',
@@ -230,15 +218,10 @@ local zookeeperStatusPanel(matcher) = {
   pluginVersion: '9.4.3',
 };
 
-local zookeeperEnsembleSizePanel(matcher) = {
+local zookeeperEnsembleSizePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'solr_zookeeper_ensemble_size{' + matcher + '}',
-      datasource=promDatasource,
-      legendFormat='{{zk_host}}',
-      format='time_series',
-    ),
+    signals.cluster.zookeeperEnsembleSize.asTarget(),
   ],
   type: 'timeseries',
   title: 'Zookeeper ensemble size',
@@ -337,7 +320,7 @@ local alertsPanel(matcher) = {
   },
 };
 
-local shardStatePanel(matcher) = {
+local shardStatePanel(signals) = {
   datasource: {
     type: 'prometheus',
     uid: '${prometheus_datasource}',
@@ -389,32 +372,16 @@ local shardStatePanel(matcher) = {
   },
   pluginVersion: '9.4.3',
   targets: [
-    {
-      disableTextWrap: false,
-      expr: '100 * sum(solr_collections_shard_state{' + matcher + '})  / count(solr_collections_shard_state{' + matcher + '})',
-      fullMetaSearch: false,
-      includeNullMetadata: true,
-      instant: false,
-      legendFormat: '__auto',
-      range: true,
-      useBackend: false,
-    },
+    signals.cluster.shardState.asTarget(),
   ],
   title: 'Running shards',
   type: 'stat',
 };
 
-local shardStatusPanel(matcher) = {
+local shardStatusPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'solr_collections_shard_state{' + matcher + '}',
-      datasource=promDatasource,
-      intervalFactor=2,
-      instant=true,
-      legendFormat='{{auto}}',
-      format='table',
-    ),
+    signals.cluster.shardStateTable.asTableTarget(),
   ],
   type: 'table',
   title: 'Shard status',
@@ -585,7 +552,7 @@ local shardStatusPanel(matcher) = {
   pluginVersion: '9.4.3',
 };
 
-local replicaStatePanel(matcher) = {
+local replicaStatePanel(signals) = {
   datasource: {
     type: 'prometheus',
     uid: '${prometheus_datasource}',
@@ -637,32 +604,16 @@ local replicaStatePanel(matcher) = {
   },
   pluginVersion: '9.4.3',
   targets: [
-    {
-      disableTextWrap: false,
-      expr: '100 * sum(solr_collections_replica_state{' + matcher + '})  / count(solr_collections_replica_state{' + matcher + '})',
-      fullMetaSearch: false,
-      includeNullMetadata: true,
-      instant: false,
-      legendFormat: '__auto',
-      range: true,
-      useBackend: false,
-    },
+    signals.cluster.replicaState.asTarget(),
   ],
   title: 'Running replicas',
   type: 'stat',
 };
 
-local replicaStatusPanel(matcher) = {
+local replicaStatusPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'solr_collections_replica_state{' + matcher + '}',
-      datasource=promDatasource,
-      legendFormat='{{auto}}',
-      instant=true,
-      intervalFactor=2,
-      format='table',
-    ),
+    signals.cluster.replicaStateTable.asTableTarget(),
   ],
   type: 'table',
   title: 'Replica status',
@@ -925,15 +876,10 @@ local topNodeMetricsRow = {
   collapsed: false,
 };
 
-local topCPULoadByNodePanel(matcher) = {
+local topCPULoadByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, 100 * avg by (job, base_url, solr_cluster) (solr_metrics_jvm_os_cpu_load{' + matcher + ', item="systemCpuLoad"}))',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-    ),
+    signals.jvm.cpuLoad.withTopK('$k').asTarget(),
   ],
   type: 'timeseries',
   title: 'Top nodes by CPU load',
@@ -1010,15 +956,10 @@ local topCPULoadByNodePanel(matcher) = {
   },
 };
 
-local topHeapMemoryUsageByNodePanel(matcher) = {
+local topHeapMemoryUsageByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, 100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="used"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="max"}), 1)))',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-    ),
+    signals.jvm.heapMemoryUsage.withTopK('$k').asTarget(),
   ],
   type: 'timeseries',
   title: 'Top nodes by heap memory usage',
@@ -1095,15 +1036,10 @@ local topHeapMemoryUsageByNodePanel(matcher) = {
   },
 };
 
-local topMeanQueriesByNodePanel(matcher) = {
+local topMeanQueriesByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{' + matcher + ', category="QUERY", collection=~"$solr_collection", core=~"$solr_core"}))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryMeanRate.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTarget(),
   ],
   type: 'timeseries',
   title: 'Top cores by mean queries',
@@ -1171,16 +1107,11 @@ local topMeanQueriesByNodePanel(matcher) = {
   },
 };
 
-local topUpdateHandlersByNodePanel(matcher) = {
+local topUpdateHandlersByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, avg by (job, base_url, solr_cluster, collection, core) (increase(solr_metrics_core_update_handler_adds_total{' + matcher + ', collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.query.updateHandlerAdds.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Top cores by update handlers / $__interval',
@@ -1248,15 +1179,10 @@ local topUpdateHandlersByNodePanel(matcher) = {
   },
 };
 
-local topIndexSizeByNodePanel(matcher) = {
+local topIndexSizeByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{' + matcher + ', collection=~"$solr_collection", core=~"$solr_core"}))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-    ),
+    signals.node.indexSize.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTarget(),
   ],
   type: 'timeseries',
   title: 'Top cores by index size',
@@ -1324,15 +1250,10 @@ local topIndexSizeByNodePanel(matcher) = {
   },
 };
 
-local topCacheHitRatioByNodePanel(matcher) = {
+local topCacheHitRatioByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'bottomk($k, 100 * avg by (job, base_url, solr_cluster, collection, core, type) (solr_metrics_core_searcher_cache_ratio{' + matcher + ', collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache"}))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{type}}',
-      format='time_series',
-    ),
+    signals.query.cacheHitRatio.withFilteringSelectorMixin(coreFilter).withExprWrappersMixin(['bottomk($k,', ')']).asTarget(),
   ],
   type: 'timeseries',
   title: 'Top cores by cache hit ratio',
@@ -1417,16 +1338,11 @@ local errorsRow = {
   collapsed: false,
 };
 
-local topCoreErrorsByNodePanel(matcher) = {
+local topCoreErrorsByNodePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{' + matcher + ', collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.node.coreErrors.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Top cores by core errors / $__interval',
@@ -1494,16 +1410,11 @@ local topCoreErrorsByNodePanel(matcher) = {
   },
 };
 
-local topNodeErrorsPanel(matcher) = {
+local topNodeErrorsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'topk($k, avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{' + matcher + '}[$__interval:])))',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.node.nodeErrors.withTopK('$k').asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Top nodes by node errors / $__interval',
@@ -1576,6 +1487,15 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster"' % cfg;
 {
   grafanaDashboards+:: {
     'apache-solr-cluster-overview.json':
+      // this dashboard has no base_url variable, so signals are scoped to
+      // solr_cluster instead of the config-wide instanceLabels
+      local signals = {
+        [sig]: commonlib.signals.unmarshallJsonMulti(
+          $._config.signals[sig] { instanceLabels: ['solr_cluster'] },
+          type=$._config.metricsSource
+        )
+        for sig in std.objectFields($._config.signals)
+      };
       dashboard.new(
         'Apache Solr cluster overview',
         time_from='%s' % $._config.dashboardPeriod,
@@ -1671,24 +1591,24 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster"' % cfg;
       )
       .addPanels(
         [
-          liveNodesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
-          zookeeperStatusPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
-          zookeeperEnsembleSizePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
+          liveNodesPanel(signals) { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
+          zookeeperStatusPanel(signals) { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
+          zookeeperEnsembleSizePanel(signals) { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
           alertsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 0 } },
-          shardStatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 0, y: 6 } },
-          shardStatusPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 4, y: 6 } },
-          replicaStatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 12, y: 6 } },
-          replicaStatusPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 6 } },
+          shardStatePanel(signals) { gridPos: { h: 6, w: 4, x: 0, y: 6 } },
+          shardStatusPanel(signals) { gridPos: { h: 6, w: 8, x: 4, y: 6 } },
+          replicaStatePanel(signals) { gridPos: { h: 6, w: 4, x: 12, y: 6 } },
+          replicaStatusPanel(signals) { gridPos: { h: 6, w: 8, x: 16, y: 6 } },
           topNodeMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
-          topCPULoadByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
-          topHeapMemoryUsageByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
-          topMeanQueriesByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
-          topUpdateHandlersByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
-          topIndexSizeByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-          topCacheHitRatioByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          topCPULoadByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
+          topHeapMemoryUsageByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
+          topMeanQueriesByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
+          topUpdateHandlersByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
+          topIndexSizeByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          topCacheHitRatioByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
           errorsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-          topCoreErrorsByNodePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
-          topNodeErrorsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
+          topCoreErrorsByNodePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
+          topNodeErrorsPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
         ]
       ),
   },

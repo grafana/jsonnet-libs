@@ -1,7 +1,7 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local commonlib = import 'common-lib/common/main.libsonnet';
 local dashboard = grafana.dashboard;
 local template = grafana.template;
-local prometheus = grafana.prometheus;
 
 local dashboardUid = 'apache-solr-query-performance';
 
@@ -11,16 +11,14 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local updateHandlersPanel(matcher) = {
+// extra selector for panels that are filterable by the collection/core variables
+local coreFilter = 'collection=~"$solr_collection", core=~"$solr_core"';
+
+local updateHandlersPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{' + matcher + '}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.query.updateHandlerAdds.withFilteringSelectorMixin(coreFilter).asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Update handlers / $__interval',
@@ -88,15 +86,10 @@ local updateHandlersPanel(matcher) = {
   },
 };
 
-local coreSearchAndRetrievalQueryLoadPanel(matcher) = {
+local coreSearchAndRetrievalQueryLoadPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryLoad5min.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval query load',
@@ -164,15 +157,10 @@ local coreSearchAndRetrievalQueryLoadPanel(matcher) = {
   },
 };
 
-local coreSearchAndRetrieval95pQueryLatencyPanel(matcher) = {
+local coreSearchAndRetrieval95pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryP95.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval 95p query latency',
@@ -239,15 +227,10 @@ local coreSearchAndRetrieval95pQueryLatencyPanel(matcher) = {
     },
   },
 };
-local coreSearchAndRetrieval99pQueryLatencyPanel(matcher) = {
+local coreSearchAndRetrieval99pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryP99.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval 99p query latency',
@@ -315,15 +298,10 @@ local coreSearchAndRetrieval99pQueryLatencyPanel(matcher) = {
   },
 };
 
-local coreSearchAndRetrievalLocalQueryLoadPanel(matcher) = {
+local coreSearchAndRetrievalLocalQueryLoadPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryLocalLoad5min.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval local query load',
@@ -391,15 +369,10 @@ local coreSearchAndRetrievalLocalQueryLoadPanel(matcher) = {
   },
 };
 
-local coreSearchAndRetrievalLocal95pQueryLatencyPanel(matcher) = {
+local coreSearchAndRetrievalLocal95pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryLocalP95.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval local p95 query latency',
@@ -467,15 +440,10 @@ local coreSearchAndRetrievalLocal95pQueryLatencyPanel(matcher) = {
   },
 };
 
-local coreSearchAndRetrievalLocal99pQueryLatencyPanel(matcher) = {
+local coreSearchAndRetrievalLocal99pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{' + matcher + ', searchHandler=~"/select|/query|/get",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.queryLocalP99.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Core search and retrieval 99p local query latency',
@@ -551,15 +519,10 @@ local localQueriesRow = {
   collapsed: false,
 };
 
-local specializedQueryLoadPanel(matcher) = {
+local specializedQueryLoadPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedQueryLoad5min.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized query load',
@@ -627,15 +590,10 @@ local specializedQueryLoadPanel(matcher) = {
   },
 };
 
-local specialized95pQueryLatencyPanel(matcher) = {
+local specialized95pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedQueryP95.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized 95p query latency',
@@ -703,15 +661,10 @@ local specialized95pQueryLatencyPanel(matcher) = {
   },
 };
 
-local specialized99pQueryLatencyPanel(matcher) = {
+local specialized99pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedQueryP99.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized 99p query latency',
@@ -779,15 +732,10 @@ local specialized99pQueryLatencyPanel(matcher) = {
   },
 };
 
-local specializedLocalQueryLoadPanel(matcher) = {
+local specializedLocalQueryLoadPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedLocalLoad5min.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized local query load',
@@ -855,15 +803,10 @@ local specializedLocalQueryLoadPanel(matcher) = {
   },
 };
 
-local specializedLocal95pQueryLatencyPanel(matcher) = {
+local specializedLocal95pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedLocalP95.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized local 95p query latency',
@@ -931,15 +874,10 @@ local specializedLocal95pQueryLatencyPanel(matcher) = {
   },
 };
 
-local specializedLocal99pQueryLatencyPanel(matcher) = {
+local specializedLocal99pQueryLatencyPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
-      format='time_series',
-    ),
+    signals.query.specializedLocalP99.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Specialized local 99p query latency',
@@ -1015,16 +953,11 @@ local cacheRow = {
   collapsed: false,
 };
 
-local cacheEvictionsPanel(matcher) = {
+local cacheEvictionsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{' + matcher + ', type=~"documentCache|filterCache|queryResultCache", item=~"evictions"}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{type}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.query.cacheEvictions.withFilteringSelectorMixin(coreFilter).asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Cache evictions / $__interval',
@@ -1092,15 +1025,10 @@ local cacheEvictionsPanel(matcher) = {
   },
 };
 
-local cacheHitRatioPanel(matcher) = {
+local cacheHitRatioPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{' + matcher + ', type=~"documentCache|filterCache|queryResultCache"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}} - {{type}}',
-      format='time_series',
-    ),
+    signals.query.cacheHitRatio.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Cache hit ratio',
@@ -1181,16 +1109,11 @@ local timeoutsRow = {
   collapsed: false,
 };
 
-local coreTimeoutsPanel(matcher) = {
+local coreTimeoutsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(job, base_url, collection, core) (increase(solr_metrics_core_timeouts_total{' + matcher + '}[$__interval:]))',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.query.coreTimeouts.withFilteringSelectorMixin(coreFilter).asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Core timeouts / $__interval',
@@ -1258,16 +1181,11 @@ local coreTimeoutsPanel(matcher) = {
   },
 };
 
-local nodeTimeoutsPanel(matcher) = {
+local nodeTimeoutsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(job, base_url) (increase(solr_metrics_node_timeouts_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:]))',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.query.nodeTimeouts.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Node timeouts / $__interval',
@@ -1343,15 +1261,10 @@ local errorsRow = {
   collapsed: false,
 };
 
-local queryErrorRatePanel(matcher) = {
+local queryErrorRatePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(job, base_url, collection, core) (solr_metrics_core_query_errors_1minRate{' + matcher + '})',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-    ),
+    signals.query.queryErrorRate.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Query error rate',
@@ -1419,15 +1332,10 @@ local queryErrorRatePanel(matcher) = {
   },
 };
 
-local queryClientErrorsPanel(matcher) = {
+local queryClientErrorsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by(job, base_url, collection, core) (solr_metrics_core_query_client_errors_1minRate{' + matcher + '})',
-      datasource=promDatasource,
-      legendFormat='{{collection}} - {{core}}',
-      format='time_series',
-    ),
+    signals.query.queryClientErrors.withFilteringSelectorMixin(coreFilter).asTarget(),
   ],
   type: 'timeseries',
   title: 'Query client errors',
@@ -1495,11 +1403,16 @@ local queryClientErrorsPanel(matcher) = {
   },
 };
 
-local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster", base_url=~"$base_url", collection=~"$solr_collection", core=~"$solr_core"' % cfg;
-
 {
   grafanaDashboards+:: {
     'apache-solr-query-performance.json':
+      local signals = {
+        [sig]: commonlib.signals.unmarshallJsonMulti(
+          $._config.signals[sig],
+          type=$._config.metricsSource
+        )
+        for sig in std.objectFields($._config.signals)
+      };
       dashboard.new(
         'Apache Solr query performance',
         time_from='%s' % $._config.dashboardPeriod,
@@ -1596,29 +1509,29 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster", base_u
       )
       .addPanels(
         [
-          updateHandlersPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
-          coreSearchAndRetrievalQueryLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          specializedQueryLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-          coreSearchAndRetrieval95pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-          specialized95pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-          coreSearchAndRetrieval99pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
-          specialized99pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
+          updateHandlersPanel(signals) { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
+          coreSearchAndRetrievalQueryLoadPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          specializedQueryLoadPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          coreSearchAndRetrieval95pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+          specialized95pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+          coreSearchAndRetrieval99pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
+          specialized99pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
           localQueriesRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-          coreSearchAndRetrievalLocalQueryLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-          specializedLocalQueryLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-          coreSearchAndRetrievalLocal95pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
-          specializedLocal95pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
-          coreSearchAndRetrievalLocal99pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
-          specializedLocal99pQueryLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          coreSearchAndRetrievalLocalQueryLoadPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          specializedLocalQueryLoadPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          coreSearchAndRetrievalLocal95pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+          specializedLocal95pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+          coreSearchAndRetrievalLocal99pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          specializedLocal99pQueryLatencyPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
           cacheRow { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
-          cacheEvictionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 49 } },
-          cacheHitRatioPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 49 } },
+          cacheEvictionsPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 49 } },
+          cacheHitRatioPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 49 } },
           timeoutsRow { gridPos: { h: 1, w: 24, x: 0, y: 55 } },
-          coreTimeoutsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 61 } },
-          nodeTimeoutsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 61 } },
+          coreTimeoutsPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 61 } },
+          nodeTimeoutsPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 61 } },
           errorsRow { gridPos: { h: 1, w: 24, x: 0, y: 66 } },
-          queryErrorRatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 72 } },
-          queryClientErrorsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 72 } },
+          queryErrorRatePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 72 } },
+          queryClientErrorsPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 72 } },
         ]
       ),
   },

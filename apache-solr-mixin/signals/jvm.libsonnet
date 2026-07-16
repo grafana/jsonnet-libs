@@ -1,5 +1,6 @@
 function(this)
   {
+    datasource: 'prometheus_datasource',
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
@@ -175,6 +176,19 @@ function(this)
           prometheus: {
             expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{%(queriesSelector)s, item="committed"}) > 0',
             legendCustomTemplate: '{{base_url}} - non-heap',
+          },
+        },
+      },
+      heapMemoryUsage: {
+        name: 'Heap memory usage',
+        nameShort: 'Heap usage',
+        type: 'raw',
+        description: 'JVM heap memory usage per node.',
+        unit: 'percent',
+        sources: {
+          prometheus: {
+            expr: '100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="used"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="max"}), 1))',
+            legendCustomTemplate: '{{base_url}}',
           },
         },
       },

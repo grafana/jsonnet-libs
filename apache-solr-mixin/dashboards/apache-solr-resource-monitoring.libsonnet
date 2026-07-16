@@ -1,7 +1,7 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local commonlib = import 'common-lib/common/main.libsonnet';
 local dashboard = grafana.dashboard;
 local template = grafana.template;
-local prometheus = grafana.prometheus;
 
 local dashboardUid = 'apache-solr-resource-monitoring';
 
@@ -11,15 +11,10 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local connectionsPanel(matcher) = {
+local connectionsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{' + matcher + '}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{item}}',
-      format='time_series',
-    ),
+    signals.node.connections.asTarget(),
   ],
   type: 'timeseries',
   title: 'Connections',
@@ -87,21 +82,11 @@ local connectionsPanel(matcher) = {
   },
 };
 
-local threadsPanel(matcher) = {
+local threadsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{' + matcher + ', executor="updateOnlyExecutor"}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - submitted',
-      format='time_series',
-    ),
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{' + matcher + ', executor="updateOnlyExecutor"}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - completed',
-      format='time_series',
-    ),
+    signals.node.threadPoolSubmitted.asTarget(),
+    signals.node.threadPoolCompleted.asTarget(),
   ],
   type: 'timeseries',
   title: 'Threads / $__interval',
@@ -169,15 +154,10 @@ local threadsPanel(matcher) = {
   },
 };
 
-local nodeCoreFSUsagePanel(matcher) = {
+local nodeCoreFSUsagePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{' + matcher + '}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{item}}',
-      format='time_series',
-    ),
+    signals.node.coreRootFsBytes.asTarget(),
   ],
   type: 'timeseries',
   title: 'Node core FS usage',
@@ -245,16 +225,11 @@ local nodeCoreFSUsagePanel(matcher) = {
   },
 };
 
-local garbageCollectionsPanel(matcher) = {
+local garbageCollectionsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{' + matcher + '}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{item}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.jvm.garbageCollections.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Garbage collections / $__interval',
@@ -322,16 +297,11 @@ local garbageCollectionsPanel(matcher) = {
   },
 };
 
-local garbageCollectionTimePanel(matcher) = {
+local garbageCollectionTimePanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{' + matcher + '}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{' + matcher + '}[$__interval:]), 1)) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{item}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.jvm.garbageCollectionTime.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Garbage collection time / $__interval',
@@ -407,15 +377,10 @@ local jvmMetricsRow = {
   collapsed: false,
 };
 
-local cpuAverageLoadPanel(matcher) = {
+local cpuAverageLoadPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{' + matcher + ', item="systemCpuLoad"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-    ),
+    signals.jvm.cpuLoad.asTarget(),
   ],
   type: 'timeseries',
   title: 'CPU load',
@@ -492,27 +457,12 @@ local cpuAverageLoadPanel(matcher) = {
   },
 };
 
-local osMemoryPanel(matcher) = {
+local osMemoryPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="freePhysicalMemorySize"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - free physical',
-      format='time_series',
-    ),
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="totalPhysicalMemorySize"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - total physical',
-      format='time_series',
-    ),
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="committedVirtualMemorySize"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - committed virtual',
-      format='time_series',
-    ),
+    signals.jvm.osMemoryFree.asTarget(),
+    signals.jvm.osMemoryTotal.asTarget(),
+    signals.jvm.osMemoryVirtual.asTarget(),
   ],
   type: 'timeseries',
   title: 'OS memory',
@@ -580,15 +530,10 @@ local osMemoryPanel(matcher) = {
   },
 };
 
-local numberOfFileDescriptorsPanel(matcher) = {
+local numberOfFileDescriptorsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{' + matcher + '}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{item}}',
-      format='time_series',
-    ),
+    signals.jvm.fileDescriptors.asTarget(),
   ],
   type: 'timeseries',
   title: 'File descriptors',
@@ -656,21 +601,11 @@ local numberOfFileDescriptorsPanel(matcher) = {
   },
 };
 
-local memoryUsedPanel(matcher) = {
+local memoryUsedPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="used"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - heap',
-      format='time_series',
-    ),
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{' + matcher + ', item="used"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - non-heap',
-      format='time_series',
-    ),
+    signals.jvm.memoryHeapUsed.asTarget(),
+    signals.jvm.memoryNonHeapUsed.asTarget(),
   ],
   type: 'timeseries',
   title: 'Memory used',
@@ -738,21 +673,11 @@ local memoryUsedPanel(matcher) = {
   },
 };
 
-local memoryCommittedPanel(matcher) = {
+local memoryCommittedPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="committed"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - heap',
-      format='time_series',
-    ),
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{' + matcher + ', item="committed"}) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - non-heap',
-      format='time_series',
-    ),
+    signals.jvm.memoryHeapCommitted.asTarget(),
+    signals.jvm.memoryNonHeapCommitted.asTarget(),
   ],
   type: 'timeseries',
   title: 'Memory committed',
@@ -828,16 +753,11 @@ local jettyMetricsRow = {
   collapsed: false,
 };
 
-local requestsPanel(matcher) = {
+local requestsPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{' + matcher + '}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{method}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.jetty.requests.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Requests  / $__interval',
@@ -905,16 +825,11 @@ local requestsPanel(matcher) = {
   },
 };
 
-local responsesPanel(matcher) = {
+local responsesPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{' + matcher + '}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}} - {{status}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.jetty.responses.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Responses  / $__interval',
@@ -982,16 +897,11 @@ local responsesPanel(matcher) = {
   },
 };
 
-local dispatchesPanel(matcher) = {
+local dispatchesPanel(signals) = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{' + matcher + '}[$__interval:])) > 0',
-      datasource=promDatasource,
-      legendFormat='{{base_url}}',
-      format='time_series',
-      interval='1m',
-    ),
+    signals.jetty.dispatches.asTarget()
+    + { interval: '1m' },
   ],
   type: 'timeseries',
   title: 'Dispatches  / $__interval',
@@ -1059,11 +969,16 @@ local dispatchesPanel(matcher) = {
   },
 };
 
-local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster", base_url=~"$base_url"' % cfg;
-
 {
   grafanaDashboards+:: {
     'apache-solr-resource-monitoring.json':
+      local signals = {
+        [sig]: commonlib.signals.unmarshallJsonMulti(
+          $._config.signals[sig],
+          type=$._config.metricsSource
+        )
+        for sig in std.objectFields($._config.signals)
+      };
       dashboard.new(
         'Apache Solr resource monitoring',
         time_from='%s' % $._config.dashboardPeriod,
@@ -1138,21 +1053,21 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster", base_u
       )
       .addPanels(
         [
-          connectionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-          threadsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-          nodeCoreFSUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          numberOfFileDescriptorsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          connectionsPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+          threadsPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+          nodeCoreFSUsagePanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          numberOfFileDescriptorsPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
           jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
-          garbageCollectionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
-          garbageCollectionTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
-          cpuAverageLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
-          osMemoryPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
-          memoryUsedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-          memoryCommittedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          garbageCollectionsPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
+          garbageCollectionTimePanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
+          cpuAverageLoadPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
+          osMemoryPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
+          memoryUsedPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          memoryCommittedPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
           jettyMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-          requestsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
-          responsesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
-          dispatchesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 43 } },
+          requestsPanel(signals) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          responsesPanel(signals) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          dispatchesPanel(signals) { gridPos: { h: 6, w: 24, x: 0, y: 43 } },
         ]
       ),
   },
