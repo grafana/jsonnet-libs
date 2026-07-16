@@ -14,13 +14,12 @@ function(this)
       authAttempts: {
         name: 'Authentication attempts',
         nameShort: 'Auth attempts',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP authentication attempts over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'openldap_bind{%(queriesSelector)s}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_bind{%(queriesSelector)s}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate,
           },
         },

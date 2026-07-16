@@ -58,8 +58,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Uptime,cn=Time,cn=Monitor\"}",
-                  "legendFormat": "{{instance}}"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Uptime,cn=Time,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Uptime"
                }
             ],
             "title": "Uptime",
@@ -111,8 +114,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Referrals,cn=Statistics,cn=Monitor\"}",
-                  "legendFormat": "{{instance}}"
+                  "expr": "openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Referrals,cn=Statistics,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Referrals"
                }
             ],
             "title": "Referrals",
@@ -193,9 +199,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Current,cn=Connections,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Current,cn=Connections,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Connections"
                }
             ],
             "title": "Connections / $__interval",
@@ -257,16 +266,22 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Read,cn=Waiters,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Read"
+                  "expr": "openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Read,cn=Waiters,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Read",
+                  "refId": "Read waiters"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Write,cn=Waiters,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Write"
+                  "expr": "openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Write,cn=Waiters,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Write",
+                  "refId": "Write waiters"
                }
             ],
             "title": "Waiters",
@@ -328,9 +343,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Directory entries"
                }
             ],
             "title": "Directory entries / $__interval",
@@ -392,9 +410,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_dial{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\"}[$__interval:])",
+                  "expr": "increase(openldap_dial{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Network connectivity"
                }
             ],
             "title": "Network connectivity / $__interval",
@@ -456,9 +477,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_counter_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=PDU,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=PDU,cn=Statistics,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "PDU processed"
                }
             ],
             "title": "PDU processed / $__interval",
@@ -520,9 +544,12 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_bind{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\"}[$__interval:])",
+                  "expr": "increase(openldap_bind{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Authentication attempts"
                }
             ],
             "title": "Authentication attempts / $__interval",
@@ -590,45 +617,60 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Add,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Add,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Add"
+                  "legendFormat": "{{instance}} - Add",
+                  "refId": "Add operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Bind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Bind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Bind"
+                  "legendFormat": "{{instance}} - Bind",
+                  "refId": "Bind operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Modify,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Modify,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Modify"
+                  "legendFormat": "{{instance}} - Modify",
+                  "refId": "Modify operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Search,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Search,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Search"
+                  "legendFormat": "{{instance}} - Search",
+                  "refId": "Search operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Delete,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Delete,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Delete"
+                  "legendFormat": "{{instance}} - Delete",
+                  "refId": "Delete operations"
                }
             ],
             "title": "Core operations / $__interval",
@@ -696,45 +738,60 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Abandon"
+                  "legendFormat": "{{instance}} - Abandon",
+                  "refId": "Abandon operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Compare,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Compare,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Compare"
+                  "legendFormat": "{{instance}} - Compare",
+                  "refId": "Compare operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Unbind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Unbind,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Unbind"
+                  "legendFormat": "{{instance}} - Unbind",
+                  "refId": "Unbind operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Extended,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Extended,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Extended"
+                  "legendFormat": "{{instance}} - Extended",
+                  "refId": "Extended operations"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(openldap_monitor_operation{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Modrdn,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Modrdn,cn=Operations,cn=Monitor\"}[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - Modrdn"
+                  "legendFormat": "{{instance}} - Modrdn",
+                  "refId": "Modrdn operations"
                }
             ],
             "title": "Auxiliary operations / $__interval",
@@ -805,24 +862,33 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Open,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Open"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Open,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Open",
+                  "refId": "Open threads"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Active,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Active"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Active,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Active",
+                  "refId": "Active threads"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Max,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Max"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Max,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Max",
+                  "refId": "Max threads"
                }
             ],
             "title": "Primary thread activity",
@@ -893,32 +959,44 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Starting,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Starting"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Starting,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Starting",
+                  "refId": "Starting threads"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Pending,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Pending"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Pending,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Pending",
+                  "refId": "Pending threads"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Max Pending,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Max Pending"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Max Pending,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Max Pending",
+                  "refId": "Max pending threads"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openldap_monitored_object{job=~\"$job\",instance=~\"$instance\",job=~\"integrations/openldap\", dn=\"cn=Backload,cn=Threads,cn=Monitor\"}",
-                  "legendFormat": "{{instance}} - Backload"
+                  "expr": "openldap_monitored_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Backload,cn=Threads,cn=Monitor\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} - Backload",
+                  "refId": "Backload threads"
                }
             ],
             "title": "Thread queue management",

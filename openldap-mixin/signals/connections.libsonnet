@@ -14,13 +14,12 @@ function(this)
       connections: {
         name: 'Connections',
         nameShort: 'Connections',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of new LDAP connections over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Current,cn=Connections,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Current,cn=Connections,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate,
           },
         },
@@ -57,13 +56,12 @@ function(this)
       networkConnectivity: {
         name: 'Network connectivity',
         nameShort: 'Dial attempts',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP network connection attempts over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'openldap_dial{%(queriesSelector)s}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_dial{%(queriesSelector)s}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate,
           },
         },

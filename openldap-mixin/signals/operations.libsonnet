@@ -14,13 +14,12 @@ function(this)
       pduProcessed: {
         name: 'PDU processed',
         nameShort: 'PDUs',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Protocol Data Units (PDUs) processed over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=PDU,cn=Statistics,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=PDU,cn=Statistics,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate,
           },
         },
@@ -29,13 +28,12 @@ function(this)
       addOperations: {
         name: 'Add operations',
         nameShort: 'Add',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Add operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Add,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Add,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Add',
           },
         },
@@ -44,13 +42,12 @@ function(this)
       bindOperations: {
         name: 'Bind operations',
         nameShort: 'Bind',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Bind operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Bind,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Bind,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Bind',
           },
         },
@@ -59,13 +56,12 @@ function(this)
       modifyOperations: {
         name: 'Modify operations',
         nameShort: 'Modify',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Modify operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modify,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modify,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Modify',
           },
         },
@@ -74,13 +70,12 @@ function(this)
       searchOperations: {
         name: 'Search operations',
         nameShort: 'Search',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Search operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Search,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Search,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Search',
           },
         },
@@ -89,13 +84,12 @@ function(this)
       deleteOperations: {
         name: 'Delete operations',
         nameShort: 'Delete',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Delete operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Delete,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Delete,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Delete',
           },
         },
@@ -104,13 +98,12 @@ function(this)
       abandonOperations: {
         name: 'Abandon operations',
         nameShort: 'Abandon',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Abandon operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Abandon,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Abandon,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Abandon',
           },
         },
@@ -119,13 +112,12 @@ function(this)
       compareOperations: {
         name: 'Compare operations',
         nameShort: 'Compare',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Compare operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Compare,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Compare,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Compare',
           },
         },
@@ -134,13 +126,12 @@ function(this)
       unbindOperations: {
         name: 'Unbind operations',
         nameShort: 'Unbind',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Unbind operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Unbind,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Unbind,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Unbind',
           },
         },
@@ -149,13 +140,12 @@ function(this)
       extendedOperations: {
         name: 'Extended operations',
         nameShort: 'Extended',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Extended operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Extended,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Extended,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Extended',
           },
         },
@@ -164,13 +154,12 @@ function(this)
       modrdnOperations: {
         name: 'Modrdn operations',
         nameShort: 'Modrdn',
-        type: 'counter',
+        type: 'raw',
         description: 'The rate of LDAP Modify RDN operations.',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modrdn,cn=Operations,cn=Monitor"}',
-            rangeFunction: 'increase',
+            expr: 'increase(openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modrdn,cn=Operations,cn=Monitor"}[$__interval:])',
             legendCustomTemplate: legendCustomTemplate + ' - Modrdn',
           },
         },

@@ -4,15 +4,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local timeSeriesPanel = g.panel.timeSeries,
       local alertListPanel = g.panel.alertList,
+      local withInterval = timeSeriesPanel.queryOptions.withInterval('1m'),
 
       // Uptime Panel
       uptime: commonlib.panels.generic.stat.info.new(
                 'Uptime',
-                targets=[t.uptime],
+                targets=[signals.overview.uptime.asTarget()],
                 description='The total time since the LDAP server was last started.'
               )
               + stat.options.withTextMode('value')
@@ -27,7 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Referrals Panel
       referrals: commonlib.panels.generic.stat.info.new(
                    'Referrals',
-                   targets=[t.referrals],
+                   targets=[signals.overview.referrals.asTarget()],
                    description='The number of LDAP referrals.'
                  )
                  + stat.options.withTextMode('value')
@@ -45,7 +46,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Directory Entries Panel
       directoryEntries: commonlib.panels.generic.timeSeries.base.new(
                           'Directory entries / $__interval',
-                          targets=[t.directoryEntries('__interval')],
+                          targets=[signals.overview.directoryEntries.asTarget() + withInterval],
                           description='The total increase of new directory entries added over time.'
                         )
                         + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -61,7 +62,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Connections Panel
       connections: commonlib.panels.generic.timeSeries.base.new(
                      'Connections / $__interval',
-                     targets=[t.connections('__interval')],
+                     targets=[signals.connections.connections.asTarget() + withInterval],
                      description='The increase of new LDAP connections over time.'
                    )
                    + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -77,7 +78,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Waiters Panel
       waiters: commonlib.panels.generic.timeSeries.base.new(
                  'Waiters',
-                 targets=[t.waiters('Read'), t.waiters('Write')],
+                 targets=[
+                   signals.connections.readWaiters.asTarget(),
+                   signals.connections.writeWaiters.asTarget(),
+                 ],
                  description='The number of read and write waiters.'
                )
                + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -93,7 +97,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Network Connectivity Panel
       networkConnectivity: commonlib.panels.generic.timeSeries.base.new(
                              'Network connectivity / $__interval',
-                             targets=[t.networkConnectivity('__interval')],
+                             targets=[signals.connections.networkConnectivity.asTarget() + withInterval],
                              description='The LDAP network connection attempts over time.'
                            )
                            + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -109,7 +113,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // PDU Processed Panel
       pduProcessed: commonlib.panels.generic.timeSeries.base.new(
                       'PDU processed / $__interval',
-                      targets=[t.pduProcessed('__interval')],
+                      targets=[signals.operations.pduProcessed.asTarget() + withInterval],
                       description='The number of LDAP Protocol Data Units (PDUs) processed over time.'
                     )
                     + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -125,7 +129,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       // Authentication Attempts Panel
       authenticationAttempts: commonlib.panels.generic.timeSeries.base.new(
                                 'Authentication attempts / $__interval',
-                                targets=[t.authenticationAttempts('__interval')],
+                                targets=[signals.authentication.authAttempts.asTarget() + withInterval],
                                 description='The total increase of authentication attempts over time.'
                               )
                               + timeSeriesPanel.options.legend.withDisplayMode('list')
@@ -142,11 +146,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       coreOperations: commonlib.panels.generic.timeSeries.base.new(
                         'Core operations / $__interval',
                         targets=[
-                          t.coreOperations('Add', '__interval'),
-                          t.coreOperations('Bind', '__interval'),
-                          t.coreOperations('Modify', '__interval'),
-                          t.coreOperations('Search', '__interval'),
-                          t.coreOperations('Delete', '__interval'),
+                          signals.operations.addOperations.asTarget() + withInterval,
+                          signals.operations.bindOperations.asTarget() + withInterval,
+                          signals.operations.modifyOperations.asTarget() + withInterval,
+                          signals.operations.searchOperations.asTarget() + withInterval,
+                          signals.operations.deleteOperations.asTarget() + withInterval,
                         ],
                         description='The key LDAP operations.'
                       )
@@ -167,11 +171,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       auxiliaryOperations: commonlib.panels.generic.timeSeries.base.new(
                              'Auxiliary operations / $__interval',
                              targets=[
-                               t.auxiliaryOperations('Abandon', '__interval'),
-                               t.auxiliaryOperations('Compare', '__interval'),
-                               t.auxiliaryOperations('Unbind', '__interval'),
-                               t.auxiliaryOperations('Extended', '__interval'),
-                               t.auxiliaryOperations('Modrdn', '__interval'),
+                               signals.operations.abandonOperations.asTarget() + withInterval,
+                               signals.operations.compareOperations.asTarget() + withInterval,
+                               signals.operations.unbindOperations.asTarget() + withInterval,
+                               signals.operations.extendedOperations.asTarget() + withInterval,
+                               signals.operations.modrdnOperations.asTarget() + withInterval,
                              ],
                              description='The less frequent but important LDAP operations.'
                            )
@@ -192,9 +196,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       primaryThreadActivity: commonlib.panels.generic.timeSeries.base.new(
                                'Primary thread activity',
                                targets=[
-                                 t.threadQueueManagement('Open'),
-                                 t.threadQueueManagement('Active'),
-                                 t.threadQueueManagement('Max'),
+                                 signals.threads.openThreads.asTarget(),
+                                 signals.threads.activeThreads.asTarget(),
+                                 signals.threads.maxThreads.asTarget(),
                                ],
                                description='The active, open, and maximum threads in the LDAP server.'
                              )
@@ -216,10 +220,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       threadQueueManagement: commonlib.panels.generic.timeSeries.base.new(
                                'Thread queue management',
                                targets=[
-                                 t.threadQueueManagement('Starting'),
-                                 t.threadQueueManagement('Pending'),
-                                 t.threadQueueManagement('Max Pending'),
-                                 t.threadQueueManagement('Backload'),
+                                 signals.threads.startingThreads.asTarget(),
+                                 signals.threads.pendingThreads.asTarget(),
+                                 signals.threads.maxPendingThreads.asTarget(),
+                                 signals.threads.backloadThreads.asTarget(),
                                ],
                                description="The LDAP server's thread backlog and pending status."
                              )
