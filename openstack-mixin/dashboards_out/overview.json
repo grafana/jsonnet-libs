@@ -84,7 +84,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Placement status"
                }
             ],
             "title": "Placement status",
@@ -148,7 +152,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_identity_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_identity_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Keystone status"
                }
             ],
             "title": "Keystone status",
@@ -212,7 +220,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Nova status"
                }
             ],
             "title": "Nova status",
@@ -276,7 +288,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Neutron status"
                }
             ],
             "title": "Neutron status",
@@ -340,7 +356,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_cinder_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_cinder_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Cinder status"
                }
             ],
             "title": "Cinder status",
@@ -404,7 +424,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Glance status"
                }
             ],
             "title": "Glance status",
@@ -485,7 +509,9 @@
                   },
                   "expr": "openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\", resourcetype=\"DISK_GB\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement disk capacity"
                },
                {
                   "datasource": {
@@ -494,7 +520,9 @@
                   },
                   "expr": "openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\", resourcetype=\"DISK_GB\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement disk usage"
                },
                {
                   "datasource": {
@@ -503,7 +531,9 @@
                   },
                   "expr": "openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\", resourcetype=\"MEMORY_MB\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement memory capacity"
                },
                {
                   "datasource": {
@@ -512,7 +542,9 @@
                   },
                   "expr": "openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\", resourcetype=\"MEMORY_MB\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement memory usage"
                },
                {
                   "datasource": {
@@ -521,7 +553,9 @@
                   },
                   "expr": "openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\", resourcetype=\"VCPU\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement vCPU capacity"
                },
                {
                   "datasource": {
@@ -530,7 +564,9 @@
                   },
                   "expr": "openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\", resourcetype=\"VCPU\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{hostname}}",
+                  "refId": "Placement vCPU usage"
                }
             ],
             "title": "Total resources",
@@ -587,12 +623,12 @@
                      "includeByName": { },
                      "indexByName": {
                         "Time": 7,
-                        "Value #A": 1,
-                        "Value #B": 2,
-                        "Value #C": 3,
-                        "Value #D": 4,
-                        "Value #E": 5,
-                        "Value #F": 6,
+                        "Value #Placement disk capacity": 1,
+                        "Value #Placement disk usage": 2,
+                        "Value #Placement memory capacity": 3,
+                        "Value #Placement memory usage": 4,
+                        "Value #Placement vCPU capacity": 5,
+                        "Value #Placement vCPU usage": 6,
                         "cluster 1": 0,
                         "cluster 2": 8,
                         "cluster 3": 9,
@@ -602,12 +638,12 @@
                      },
                      "renameByName": {
                         "Time": "",
-                        "Value #A": "Disk available",
-                        "Value #B": "Disk used",
-                        "Value #C": "Memory avaliable",
-                        "Value #D": "Memory used",
-                        "Value #E": "VCPUs available",
-                        "Value #F": "VCPUs used",
+                        "Value #Placement disk capacity": "Disk available",
+                        "Value #Placement disk usage": "Disk used",
+                        "Value #Placement memory capacity": "Memory avaliable",
+                        "Value #Placement memory usage": "Memory used",
+                        "Value #Placement vCPU capacity": "VCPUs available",
+                        "Value #Placement vCPU usage": "VCPUs used",
                         "cluster 1": "cluster",
                         "hostname": "Hostname",
                         "instance": "Instance",
@@ -658,7 +694,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(100*sum(openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\",resourcetype=\"VCPU\"}))/sum(openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\",resourcetype=\"VCPU\"})"
+                  "expr": "(100*sum(openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\",resourcetype=\"VCPU\"}))/sum(openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\",resourcetype=\"VCPU\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "vCPU used %",
+                  "refId": "vCPU usage ratio"
                }
             ],
             "title": "vCPU used",
@@ -702,7 +742,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(100*sum(openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\",resourcetype=\"MEMORY_MB\"}))/sum(openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\",resourcetype=\"MEMORY_MB\"})"
+                  "expr": "(100*sum(openstack_placement_resource_usage{job=~\"$job\",instance=~\"$instance\",resourcetype=\"MEMORY_MB\"}))/sum(openstack_placement_resource_total{job=~\"$job\",instance=~\"$instance\",resourcetype=\"MEMORY_MB\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Memory used %",
+                  "refId": "Memory usage ratio"
                }
             ],
             "title": "Memory used",
@@ -744,7 +788,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_network_ip_availabilities_total{job=~\"$job\",instance=~\"$instance\",network_name=~\".+\"}-openstack_neutron_network_ip_availabilities_used{job=~\"$job\",instance=~\"$instance\",network_name=~\".+\"}",
-                  "legendFormat": "{{network_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{network_name}}",
+                  "refId": "Free IPs"
                }
             ],
             "title": "Free IPs",
@@ -807,7 +854,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_identity_domains{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_identity_domains{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Domains"
                }
             ],
             "title": "Domains",
@@ -858,7 +909,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_identity_projects{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_identity_projects{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Projects"
                }
             ],
             "title": "Projects",
@@ -909,7 +964,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_identity_regions{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_identity_regions{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Regions"
                }
             ],
             "title": "Regions",
@@ -966,8 +1025,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_identity_users{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Users"
                }
             ],
             "title": "Users",
@@ -1036,7 +1098,9 @@
                   },
                   "expr": "openstack_identity_project_info{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{name}}",
+                  "refId": "Project details"
                }
             ],
             "title": "Project details",
@@ -1157,7 +1221,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_glance_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Glance status"
                }
             ],
             "title": "Glance status",
@@ -1214,8 +1282,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_glance_images{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Image count"
                }
             ],
             "title": "Image count",
@@ -1264,7 +1335,9 @@
                   },
                   "expr": "openstack_glance_image_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{name}}",
+                  "refId": "Image size"
                }
             ],
             "title": "Images",

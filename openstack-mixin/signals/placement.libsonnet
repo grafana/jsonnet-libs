@@ -105,7 +105,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="VCPU"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="VCPU"})',
-          legendCustomTemplate: 'vCPU used %',
+          legendCustomTemplate: 'vCPU used %%',  // literal % must be escaped: legends are rendered with jsonnet's % formatter
         },
       },
     },
@@ -117,7 +117,7 @@ function(this) {
       sources: {
         prometheus: {
           expr: '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="MEMORY_MB"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="MEMORY_MB"})',
-          legendCustomTemplate: 'Memory used %',
+          legendCustomTemplate: 'Memory used %%',  // literal % must be escaped: legends are rendered with jsonnet's % formatter
         },
       },
     },

@@ -5,72 +5,6 @@ local utils = commonlib.utils;
   new(this): {
     local signals = this.signals,
 
-    // Render signal targets to match the legacy hand-written targets:
-    // hide the fields asTarget()/asTableTarget() set that the legacy targets
-    // did not (refId, format, instant and - where noted - legendFormat).
-    // asTimeSeriesTarget additionally applies the legacy 1m query interval.
-    local asStatTarget(signal) =
-      signal.asTarget() { refId:: null, format:: null, instant:: null, legendFormat:: null },
-    local asPlainTarget(signal) =
-      signal.asTarget() { refId:: null, format:: null, instant:: null },
-    local asTimeSeriesTarget(signal) =
-      asPlainTarget(signal)
-      + g.panel.timeSeries.queryOptions.withInterval('1m'),
-    local asTableTarget(signal) =
-      signal.asTableTarget() { refId:: null, legendFormat:: null },
-
-    local t = {
-      placementStatus: asStatTarget(signals.placement.placement_up),
-      keystoneStatus: asStatTarget(signals.identity.identity_up),
-      novaStatus: asStatTarget(signals.nova.nova_up),
-      neutronStatus: asStatTarget(signals.neutron.neutron_up),
-      cinderStatus: asStatTarget(signals.cinder.cinder_up),
-      glanceStatus: asStatTarget(signals.glance.glance_up),
-      totalDiskCapacity: asTableTarget(signals.placement.placement_resource_total_disk),
-      totalDiskUsage: asTableTarget(signals.placement.placement_resource_usage_disk),
-      totalMemoryCapacity: asTableTarget(signals.placement.placement_resource_total_memory),
-      totalMemoryUsage: asTableTarget(signals.placement.placement_resource_usage_memory),
-      totalVCPUCapacity: asTableTarget(signals.placement.placement_resource_total_vcpu),
-      totalVCPUUsage: asTableTarget(signals.placement.placement_resource_usage_vcpu),
-      vCPUUsed: asStatTarget(signals.placement.placement_vcpu_usage_ratio),
-      RAMUsed: asStatTarget(signals.placement.placement_memory_usage_ratio),
-      domains: asStatTarget(signals.identity.identity_domains),
-      projects: asStatTarget(signals.identity.identity_projects),
-      regions: asStatTarget(signals.identity.identity_regions),
-      users: asTimeSeriesTarget(signals.identity.identity_users),
-      projectDetails: asTableTarget(signals.identity.identity_project_info),
-      vms: asTimeSeriesTarget(signals.nova.nova_total_vms),
-      instanceUsage: asTimeSeriesTarget(signals.nova.nova_instance_usage),
-      vCPUUsage: asTimeSeriesTarget(signals.nova.nova_vcpu_usage),
-      memoryUsage: asTimeSeriesTarget(signals.nova.nova_memory_usage),
-      novaAgentState: asTableTarget(signals.nova.nova_agent_state),
-      networks: asTimeSeriesTarget(signals.neutron.neutron_networks),
-      subnets: asTimeSeriesTarget(signals.neutron.neutron_subnets),
-      routers: asTimeSeriesTarget(signals.neutron.neutron_routers.withLegendFormat('{{instance}} - total')),
-      routersNotActive: asTimeSeriesTarget(signals.neutron.neutron_routers_not_active.withLegendFormat('{{instance}} - inactive')),
-      routerDetails: asTableTarget(signals.neutron.neutron_router_info),
-      ports: asTimeSeriesTarget(signals.neutron.neutron_ports.withLegendFormat('{{instance}} - total')),
-      portsLBNotActive: asTimeSeriesTarget(signals.neutron.neutron_ports_lb_not_active.withLegendFormat('{{instance}} - load balancer inactive')),
-      portsNoIPs: asTimeSeriesTarget(signals.neutron.neutron_ports_no_ips.withLegendFormat('{{instance}} - no IPs')),
-      portDetails: asTableTarget(signals.neutron.neutron_port_info),
-      floatingIPs: asTimeSeriesTarget(signals.neutron.neutron_floating_ips.withLegendFormat('{{instance}} - total')),
-      floatingIPsAssociatedNotActive: asTimeSeriesTarget(signals.neutron.neutron_floating_ips_associated_not_active.withLegendFormat('{{instance}} - associated inactive')),
-      ipsUsed: asTimeSeriesTarget(signals.neutron.neutron_ip_usage_ratio),
-      securityGroups: asTimeSeriesTarget(signals.neutron.neutron_security_groups),
-      neutronAgentState: asTableTarget(signals.neutron.neutron_agent_state),
-      freeIPs: asPlainTarget(signals.neutron.neutron_free_ips),
-      volumes: asTimeSeriesTarget(signals.cinder.cinder_volumes),
-      volumeErrorStatus: asTimeSeriesTarget(signals.cinder.cinder_volume_error_status),
-      volumeNonErrorStatus: asTimeSeriesTarget(signals.cinder.cinder_volume_top_statuses),
-      volumeUsage: asTimeSeriesTarget(signals.cinder.cinder_volume_usage),
-      backupUsage: asTimeSeriesTarget(signals.cinder.cinder_backup_usage),
-      poolUsage: asTimeSeriesTarget(signals.cinder.cinder_pool_usage),
-      snaphots: asTimeSeriesTarget(signals.cinder.cinder_snapshots),
-      cinderAgentState: asTableTarget(signals.cinder.cinder_agent_state),
-      imageCount: asTimeSeriesTarget(signals.glance.glance_images),
-      imageDetails: asTableTarget(signals.glance.glance_image_bytes),
-    },
-
     local alertList = g.panel.alertList,
     local stat = g.panel.stat,
     local timeSeries = g.panel.timeSeries,
@@ -80,7 +14,7 @@ local utils = commonlib.utils;
     placementStatus:
       commonlib.panels.generic.stat.base.new(
         'Placement status',
-        targets=[t.placementStatus],
+        targets=[signals.placement.placement_up.asTarget()],
         description='Reports the status of the Placement resource-scheduling service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -104,7 +38,7 @@ local utils = commonlib.utils;
     keystoneStatus:
       commonlib.panels.generic.stat.base.new(
         'Keystone status',
-        targets=[t.keystoneStatus],
+        targets=[signals.identity.identity_up.asTarget()],
         description='Reports the status of the Keystone identity service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -128,7 +62,7 @@ local utils = commonlib.utils;
     novaStatus:
       commonlib.panels.generic.stat.base.new(
         'Nova status',
-        targets=[t.novaStatus],
+        targets=[signals.nova.nova_up.asTarget()],
         description='Reports the status of the Nova compute service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -152,7 +86,7 @@ local utils = commonlib.utils;
     neutronStatus:
       commonlib.panels.generic.stat.base.new(
         'Neutron status',
-        targets=[t.neutronStatus],
+        targets=[signals.neutron.neutron_up.asTarget()],
         description='Reports the status of the Neutron networking service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -176,7 +110,7 @@ local utils = commonlib.utils;
     cinderStatus:
       commonlib.panels.generic.stat.base.new(
         'Cinder status',
-        targets=[t.cinderStatus],
+        targets=[signals.cinder.cinder_up.asTarget()],
         description='Reports the status of the Cinder block storage service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -200,7 +134,7 @@ local utils = commonlib.utils;
     glanceStatus:
       commonlib.panels.generic.stat.base.new(
         'Glance status',
-        targets=[t.glanceStatus],
+        targets=[signals.glance.glance_up.asTarget()],
         description='Reports the status of the Glance image service.',
       )
       + stat.standardOptions.withUnit('string')
@@ -229,12 +163,12 @@ local utils = commonlib.utils;
     totalResources:
       table.new('Total resources')
       + table.queryOptions.withTargets([
-        t.totalDiskCapacity,
-        t.totalDiskUsage,
-        t.totalMemoryCapacity,
-        t.totalMemoryUsage,
-        t.totalVCPUCapacity,
-        t.totalVCPUUsage,
+        signals.placement.placement_resource_total_disk.asTableTarget(),
+        signals.placement.placement_resource_usage_disk.asTableTarget(),
+        signals.placement.placement_resource_total_memory.asTableTarget(),
+        signals.placement.placement_resource_usage_memory.asTableTarget(),
+        signals.placement.placement_resource_total_vcpu.asTableTarget(),
+        signals.placement.placement_resource_usage_vcpu.asTableTarget(),
       ])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Summary of the hardware resources available and used by OpenStack.')
@@ -301,12 +235,12 @@ local utils = commonlib.utils;
             },
             indexByName: {
               'cluster 1': 0,
-              'Value #A': 1,
-              'Value #B': 2,
-              'Value #C': 3,
-              'Value #D': 4,
-              'Value #E': 5,
-              'Value #F': 6,
+              'Value #Placement disk capacity': 1,
+              'Value #Placement disk usage': 2,
+              'Value #Placement memory capacity': 3,
+              'Value #Placement memory usage': 4,
+              'Value #Placement vCPU capacity': 5,
+              'Value #Placement vCPU usage': 6,
               Time: 7,
               'cluster 2': 8,
               'cluster 3': 9,
@@ -316,12 +250,12 @@ local utils = commonlib.utils;
             },
             renameByName: {
               Time: '',
-              'Value #A': 'Disk available',
-              'Value #B': 'Disk used',
-              'Value #C': 'Memory avaliable',
-              'Value #D': 'Memory used',
-              'Value #E': 'VCPUs available',
-              'Value #F': 'VCPUs used',
+              'Value #Placement disk capacity': 'Disk available',
+              'Value #Placement disk usage': 'Disk used',
+              'Value #Placement memory capacity': 'Memory avaliable',
+              'Value #Placement memory usage': 'Memory used',
+              'Value #Placement vCPU capacity': 'VCPUs available',
+              'Value #Placement vCPU usage': 'VCPUs used',
               hostname: 'Hostname',
               instance: 'Instance',
               openstack_placement_resource_total: 'Total',
@@ -338,7 +272,7 @@ local utils = commonlib.utils;
       gauge.new(
         'vCPU used'
       )
-      + gauge.queryOptions.withTargetsMixin(t.vCPUUsed)
+      + gauge.queryOptions.withTargetsMixin(signals.placement.placement_vcpu_usage_ratio.asTarget())
       + gauge.standardOptions.withUnit('percent')
       + gauge.standardOptions.withMin(0)
       + gauge.standardOptions.withMax(150)
@@ -353,7 +287,7 @@ local utils = commonlib.utils;
       gauge.new(
         'Memory used'
       )
-      + gauge.queryOptions.withTargetsMixin(t.RAMUsed)
+      + gauge.queryOptions.withTargetsMixin(signals.placement.placement_memory_usage_ratio.asTarget())
       + gauge.standardOptions.withUnit('percent')
       + gauge.standardOptions.withMin(0)
       + gauge.standardOptions.withMax(150)
@@ -368,7 +302,7 @@ local utils = commonlib.utils;
       stat.new(
         'Free IPs',
       )
-      + stat.queryOptions.withTargetsMixin(t.freeIPs)
+      + stat.queryOptions.withTargetsMixin(signals.neutron.neutron_free_ips.asTarget())
       + stat.standardOptions.thresholds.withSteps([
         stat.standardOptions.threshold.step.withValue(0) +
         stat.standardOptions.threshold.step.withColor('red'),
@@ -379,7 +313,7 @@ local utils = commonlib.utils;
     domains:
       commonlib.panels.generic.stat.info.new(
         'Domains',
-        targets=[t.domains],
+        targets=[signals.identity.identity_domains.asTarget()],
         description='The number of domains for the OpenStack cloud.',
       )
       + stat.options.withGraphMode('none'),
@@ -387,7 +321,7 @@ local utils = commonlib.utils;
     projects:
       commonlib.panels.generic.stat.info.new(
         'Projects',
-        targets=[t.projects],
+        targets=[signals.identity.identity_projects.asTarget()],
         description='The number of projects for the OpenStack cloud.',
       )
       + stat.options.withGraphMode('none'),
@@ -395,7 +329,7 @@ local utils = commonlib.utils;
     regions:
       commonlib.panels.generic.stat.info.new(
         'Regions',
-        targets=[t.regions],
+        targets=[signals.identity.identity_regions.asTarget()],
         description='The number of regions for the OpenStack cloud.',
       )
       + stat.options.withGraphMode('none'),
@@ -403,14 +337,17 @@ local utils = commonlib.utils;
     users:
       commonlib.panels.generic.timeSeries.base.new(
         'Users',
-        targets=[t.users],
+        targets=[
+          signals.identity.identity_users.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of users for the OpenStack cloud.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     projectDetails:
       table.new('Project details')
-      + table.queryOptions.withTargets([t.projectDetails])
+      + table.queryOptions.withTargets([signals.identity.identity_project_info.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the projects in the OpenStack cloud.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -486,7 +423,10 @@ local utils = commonlib.utils;
     vms:
       commonlib.panels.generic.timeSeries.base.new(
         'VMs',
-        targets=[t.vms],
+        targets=[
+          signals.nova.nova_total_vms.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The current number of total and running virtual machines.',
       )
       + timeSeries.standardOptions.withDecimals(0),
@@ -494,7 +434,10 @@ local utils = commonlib.utils;
     instanceUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'Instance usage',
-        targets=[t.instanceUsage],
+        targets=[
+          signals.nova.nova_instance_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='Percentage of the maximum number of instances in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -505,7 +448,10 @@ local utils = commonlib.utils;
     vCPUUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'VCPU usage',
-        targets=[t.vCPUUsage],
+        targets=[
+          signals.nova.nova_vcpu_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='Percentage of the maximum number of virtual CPUs in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -516,7 +462,10 @@ local utils = commonlib.utils;
     memoryUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'Memory usage',
-        targets=[t.memoryUsage],
+        targets=[
+          signals.nova.nova_memory_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='Percentage of the maximum amount of memory in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -526,7 +475,7 @@ local utils = commonlib.utils;
 
     novaAgents:
       table.new('Agents')
-      + table.queryOptions.withTargets([t.novaAgentState])
+      + table.queryOptions.withTargets([signals.nova.nova_agent_state.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Nova.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -599,7 +548,10 @@ local utils = commonlib.utils;
     networks:
       commonlib.panels.generic.timeSeries.base.new(
         'Networks',
-        targets=[t.networks],
+        targets=[
+          signals.neutron.neutron_networks.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of networks managed by Neutron.',
       )
       + timeSeries.standardOptions.withDecimals(0),
@@ -607,7 +559,10 @@ local utils = commonlib.utils;
     subnets:
       commonlib.panels.generic.timeSeries.base.new(
         'Subnets',
-        targets=[t.subnets],
+        targets=[
+          signals.neutron.neutron_subnets.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of networks managed by Neutron.'
       )
       + timeSeries.standardOptions.withDecimals(0),
@@ -615,14 +570,19 @@ local utils = commonlib.utils;
     routers:
       commonlib.panels.generic.timeSeries.base.new(
         'Routers',
-        targets=[t.routers, t.routersNotActive],
+        targets=[
+          signals.neutron.neutron_routers.withLegendFormat('{{instance}} - total').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+          signals.neutron.neutron_routers_not_active.withLegendFormat('{{instance}} - inactive').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of routers managed by Neutron.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     routerDetails:
       table.new('Router details')
-      + table.queryOptions.withTargets([t.routerDetails])
+      + table.queryOptions.withTargets([signals.neutron.neutron_router_info.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Detailed view of the routers managed by Neutron.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -712,14 +672,21 @@ local utils = commonlib.utils;
     ports:
       commonlib.panels.generic.timeSeries.base.new(
         'Ports',
-        targets=[t.ports, t.portsLBNotActive, t.portsNoIPs],
+        targets=[
+          signals.neutron.neutron_ports.withLegendFormat('{{instance}} - total').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+          signals.neutron.neutron_ports_lb_not_active.withLegendFormat('{{instance}} - load balancer inactive').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+          signals.neutron.neutron_ports_no_ips.withLegendFormat('{{instance}} - no IPs').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of routers managed by Neutron.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     portDetails:
       table.new('Port details')
-      + table.queryOptions.withTargets([t.portDetails])
+      + table.queryOptions.withTargets([signals.neutron.neutron_port_info.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Detailed view of the ports managed by Neutron.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -813,7 +780,12 @@ local utils = commonlib.utils;
     floatingIPs:
       commonlib.panels.generic.timeSeries.base.new(
         'Floating IPs',
-        targets=[t.floatingIPs, t.floatingIPsAssociatedNotActive],
+        targets=[
+          signals.neutron.neutron_floating_ips.withLegendFormat('{{instance}} - total').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+          signals.neutron.neutron_floating_ips_associated_not_active.withLegendFormat('{{instance}} - associated inactive').asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of public IP addresses managed by Neutron.',
       )
       + timeSeries.standardOptions.withDecimals(0),
@@ -821,7 +793,10 @@ local utils = commonlib.utils;
     ipsUsed:
       commonlib.panels.generic.timeSeries.percentage.new(
         'IPs used',
-        targets=[t.ipsUsed],
+        targets=[
+          signals.neutron.neutron_ip_usage_ratio.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The usage of available IP addresses broken down by subnet.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -832,14 +807,17 @@ local utils = commonlib.utils;
     securityGroups:
       commonlib.panels.generic.timeSeries.base.new(
         'Security groups',
-        targets=[t.securityGroups],
+        targets=[
+          signals.neutron.neutron_security_groups.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of network security groups managed by Neutron.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     neutronAgents:
       table.new('Agents')
-      + table.queryOptions.withTargets([t.neutronAgentState])
+      + table.queryOptions.withTargets([signals.neutron.neutron_agent_state.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Neutron.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -912,7 +890,10 @@ local utils = commonlib.utils;
     volumes:
       commonlib.panels.generic.timeSeries.base.new(
         'Volumes',
-        targets=[t.volumes],
+        targets=[
+          signals.cinder.cinder_volumes.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of volumes managed by Cinder.',
       )
       + timeSeries.standardOptions.withDecimals(0),
@@ -920,7 +901,12 @@ local utils = commonlib.utils;
     volumeStatus:
       commonlib.panels.generic.timeSeries.base.new(
         'Volume status',
-        targets=[t.volumeErrorStatus, t.volumeNonErrorStatus],
+        targets=[
+          signals.cinder.cinder_volume_error_status.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+          signals.cinder.cinder_volume_top_statuses.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The current status of volumes in Cinder.',
       )
       + timeSeries.options.legend.withPlacement('right')
@@ -933,7 +919,10 @@ local utils = commonlib.utils;
     volumeUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'Volume usage',
-        targets=[t.volumeUsage],
+        targets=[
+          signals.cinder.cinder_volume_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The percent of volume storage in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -944,7 +933,10 @@ local utils = commonlib.utils;
     backupUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'Backup usage',
-        targets=[t.backupUsage],
+        targets=[
+          signals.cinder.cinder_backup_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The percent of backup storage in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -955,7 +947,10 @@ local utils = commonlib.utils;
     poolUsage:
       commonlib.panels.generic.timeSeries.percentage.new(
         'Pool usage',
-        targets=[t.poolUsage],
+        targets=[
+          signals.cinder.cinder_pool_usage.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The percent of pool capacity in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
@@ -965,14 +960,17 @@ local utils = commonlib.utils;
     snapshots:
       commonlib.panels.generic.timeSeries.base.new(
         'Snapshots',
-        targets=[t.snaphots],
+        targets=[
+          signals.cinder.cinder_snapshots.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of volume snapshots in Cinder.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     cinderAgents:
       table.new('Agents')
-      + table.queryOptions.withTargets([t.cinderAgentState])
+      + table.queryOptions.withTargets([signals.cinder.cinder_agent_state.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Cinder.')
       + table.fieldConfig.defaults.custom.withAlign('center')
@@ -1047,14 +1045,17 @@ local utils = commonlib.utils;
     imageCount:
       commonlib.panels.generic.timeSeries.base.new(
         'Image count',
-        targets=[t.imageCount],
+        targets=[
+          signals.glance.glance_images.asTarget()
+          + timeSeries.queryOptions.withInterval('1m'),
+        ],
         description='The number of images present in Glance.',
       )
       + timeSeries.standardOptions.withDecimals(0),
 
     images:
       table.new('Images')
-      + table.queryOptions.withTargets([t.imageDetails])
+      + table.queryOptions.withTargets([signals.glance.glance_image_bytes.asTableTarget()])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the images in Glance.')
       + table.fieldConfig.defaults.custom.withAlign('center')

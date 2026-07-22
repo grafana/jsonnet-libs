@@ -84,7 +84,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Neutron status"
                }
             ],
             "title": "Neutron status",
@@ -141,8 +145,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_networks{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Networks"
                }
             ],
             "title": "Networks",
@@ -199,8 +206,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_subnets{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Subnets"
                }
             ],
             "title": "Subnets",
@@ -257,8 +267,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_routers{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - total"
+                  "legendFormat": "{{instance}} - total",
+                  "refId": "Routers"
                },
                {
                   "datasource": {
@@ -266,8 +279,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_routers_not_active{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - inactive"
+                  "legendFormat": "{{instance}} - inactive",
+                  "refId": "Inactive routers"
                }
             ],
             "title": "Routers",
@@ -346,7 +362,9 @@
                   },
                   "expr": "openstack_neutron_router{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{name}}",
+                  "refId": "Router info"
                }
             ],
             "title": "Router details",
@@ -452,8 +470,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_ports{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - total"
+                  "legendFormat": "{{instance}} - total",
+                  "refId": "Ports"
                },
                {
                   "datasource": {
@@ -461,8 +482,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_ports_lb_not_active{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - load balancer inactive"
+                  "legendFormat": "{{instance}} - load balancer inactive",
+                  "refId": "Load balancer inactive ports"
                },
                {
                   "datasource": {
@@ -470,8 +494,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_ports_no_ips{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - no IPs"
+                  "legendFormat": "{{instance}} - no IPs",
+                  "refId": "Ports with no IPs"
                }
             ],
             "title": "Ports",
@@ -550,7 +577,9 @@
                   },
                   "expr": "openstack_neutron_port{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{mac_address}}",
+                  "refId": "Port info"
                }
             ],
             "title": "Port details",
@@ -660,8 +689,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_floating_ips{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - total"
+                  "legendFormat": "{{instance}} - total",
+                  "refId": "Floating IPs"
                },
                {
                   "datasource": {
@@ -669,8 +701,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_floating_ips_associated_not_active{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - associated inactive"
+                  "legendFormat": "{{instance}} - associated inactive",
+                  "refId": "Inactive associated floating IPs"
                }
             ],
             "title": "Floating IPs",
@@ -731,8 +766,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_used{job=~\"$job\",instance=~\"$instance\"}) / sum by (job, instance, ip_version, subnet_name)(openstack_neutron_network_ip_availabilities_total{job=~\"$job\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{subnet_name}}"
+                  "legendFormat": "{{instance}} - {{subnet_name}}",
+                  "refId": "IP pool usage"
                }
             ],
             "title": "IPs used",
@@ -789,8 +827,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_neutron_security_groups{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Security groups"
                }
             ],
             "title": "Security groups",
@@ -859,7 +900,9 @@
                   },
                   "expr": "openstack_neutron_agent_state{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{service}} - {{hostname}}",
+                  "refId": "Neutron agent state"
                }
             ],
             "title": "Agents",

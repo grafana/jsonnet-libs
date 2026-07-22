@@ -84,7 +84,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Nova status"
                }
             ],
             "title": "Nova status",
@@ -141,8 +145,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_total_vms{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "legendFormat": "{{instance}}",
+                  "refId": "Total VMs"
                }
             ],
             "title": "VMs",
@@ -203,8 +210,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_instances_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_instances_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "Instance usage"
                }
             ],
             "title": "Instance usage",
@@ -265,8 +275,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_vcpus_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_vcpus_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "vCPU usage"
                }
             ],
             "title": "VCPU usage",
@@ -327,8 +340,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_memory_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_memory_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "Memory usage"
                }
             ],
             "title": "Memory usage",
@@ -397,7 +413,9 @@
                   },
                   "expr": "openstack_nova_agent_state{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{service}} - {{hostname}}",
+                  "refId": "Nova agent state"
                }
             ],
             "title": "Agents",
