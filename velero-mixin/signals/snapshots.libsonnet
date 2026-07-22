@@ -15,78 +15,78 @@ function(this)
     signals: {
       volumeSnapshotAttempts: {
         name: 'Volume snapshot attempts',
-        type: 'counter',
-        description: 'Total number of volume snapshot attempts.',
+        type: 'raw',
+        description: 'Number of volume snapshot attempts.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_volume_snapshot_attempt_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Attempts',
           },
         },
       },
 
       volumeSnapshotSuccesses: {
         name: 'Volume snapshot successes',
-        type: 'counter',
-        description: 'Total number of successful volume snapshots.',
+        type: 'raw',
+        description: 'Number of successful volume snapshots.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_volume_snapshot_success_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Success',
           },
         },
       },
 
       volumeSnapshotFailures: {
         name: 'Volume snapshot failures',
-        type: 'counter',
-        description: 'Total number of failed volume snapshots.',
+        type: 'raw',
+        description: 'Number of failed volume snapshots.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_volume_snapshot_failure_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_volume_snapshot_failure_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Failure',
           },
         },
       },
 
       csiSnapshotAttempts: {
         name: 'CSI snapshot attempts',
-        type: 'counter',
-        description: 'Total number of CSI snapshot attempts.',
+        type: 'raw',
+        description: 'Number of CSI snapshot attempts.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_csi_snapshot_attempt_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Attempts',
           },
         },
       },
 
       csiSnapshotSuccesses: {
         name: 'CSI snapshot successes',
-        type: 'counter',
-        description: 'Total number of successful CSI snapshots.',
+        type: 'raw',
+        description: 'Number of successful CSI snapshots.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_csi_snapshot_success_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Success',
           },
         },
       },
 
       csiSnapshotFailures: {
         name: 'CSI snapshot failures',
-        type: 'counter',
-        description: 'Total number of failed CSI snapshots.',
+        type: 'raw',
+        description: 'Number of failed CSI snapshots.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_csi_snapshot_failure_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_csi_snapshot_failure_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Failure',
           },
         },
       },

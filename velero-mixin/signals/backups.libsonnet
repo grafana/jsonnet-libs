@@ -67,34 +67,21 @@ function(this)
 
       backupTarballSize: {
         name: 'Backup tarball size',
-        type: 'gauge',
-        description: 'Size of the backup tarball in bytes.',
+        type: 'raw',
+        description: 'Size of the backup tarball in bytes averaged over the last 15 minutes.',
         unit: 'decbytes',
         sources: {
           prometheus: {
-            expr: 'velero_backup_tarball_size_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'avg_over_time(velero_backup_tarball_size_bytes{%(queriesSelector)s}[15m])',
+            legendCustomTemplate: '{{schedule}}',
           },
         },
       },
 
-      backupAttempts: {
-        name: 'Backup attempts',
-        type: 'counter',
-        description: 'Total number of backup attempts.',
-        unit: 'short',
-        sources: {
-          prometheus: {
-            expr: 'velero_backup_attempt_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
-          },
-        },
-      },
-
-      backupSuccesses: {
-        name: 'Backup successes',
-        type: 'counter',
-        description: 'Total number of successful backups.',
+      backupSuccessTotal: {
+        name: 'Total successful backups',
+        type: 'raw',
+        description: 'Cumulative number of successful backups.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -104,15 +91,54 @@ function(this)
         },
       },
 
-      backupFailures: {
-        name: 'Backup failures',
-        type: 'counter',
-        description: 'Total number of failed backups.',
+      backupDeletionAttemptTotal: {
+        name: 'Total backup deletion attempts',
+        type: 'raw',
+        description: 'Cumulative number of backup deletion attempts.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_backup_failure_total{%(queriesSelector)s}',
+            expr: 'velero_backup_deletion_attempt_total{%(queriesSelector)s}',
             legendCustomTemplate: legendCustomTemplate,
+          },
+        },
+      },
+
+      backupAttempts: {
+        name: 'Backup attempts',
+        type: 'raw',
+        description: 'Number of backup attempts.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'increase(velero_backup_attempt_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Attempts',
+          },
+        },
+      },
+
+      backupSuccesses: {
+        name: 'Backup successes',
+        type: 'raw',
+        description: 'Number of successful backups.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'increase(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Success',
+          },
+        },
+      },
+
+      backupFailures: {
+        name: 'Backup failures',
+        type: 'raw',
+        description: 'Number of failed backups.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'increase(velero_backup_failure_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Failures',
           },
         },
       },
@@ -132,39 +158,39 @@ function(this)
 
       backupDeletionAttempts: {
         name: 'Backup deletion attempts',
-        type: 'counter',
-        description: 'Total number of backup deletion attempts.',
+        type: 'raw',
+        description: 'Number of backup deletion attempts.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_backup_deletion_attempt_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_backup_deletion_attempt_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Attemps',  // legacy dashboard legend kept verbatim (sic)
           },
         },
       },
 
       backupDeletionSuccesses: {
         name: 'Backup deletion successes',
-        type: 'counter',
-        description: 'Total number of successful backup deletions.',
+        type: 'raw',
+        description: 'Number of successful backup deletions.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_backup_deletion_success_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_backup_deletion_success_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Success',
           },
         },
       },
 
       backupDeletionFailures: {
         name: 'Backup deletion failures',
-        type: 'counter',
-        description: 'Total number of failed backup deletions.',
+        type: 'raw',
+        description: 'Number of failed backup deletions.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_backup_deletion_failure_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_backup_deletion_failure_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Failure',
           },
         },
       },

@@ -1,6 +1,8 @@
+local config = import 'config.libsonnet';
+
 {
   grafanaDashboards+:: {
-    'velero-overview.json': (import 'dashboards/velero-overview.json'),
+    'velero-overview.json': (import 'dashboards/velero-overview.libsonnet')(config),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing

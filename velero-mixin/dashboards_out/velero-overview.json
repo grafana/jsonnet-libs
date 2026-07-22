@@ -112,13 +112,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_backup_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\" , schedule=~\"$schedule\"}",
+                  "expr": "velero_backup_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Total backups"
                }
             ],
             "title": "Total Backups",
@@ -180,13 +180,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_backup_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Total successful backups"
                }
             ],
             "title": "Total Successful Backups",
@@ -248,13 +248,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_backup_items_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_backup_items_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Backup items"
                }
             ],
             "title": "Total backup Items",
@@ -316,13 +316,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_restore_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_restore_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Total restores"
                }
             ],
             "title": "Total Restores",
@@ -384,13 +384,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_restore_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Total successful restores"
                }
             ],
             "title": "Total Succesful Restores",
@@ -452,13 +452,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "velero_backup_deletion_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_backup_deletion_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Total backup deletion attempts"
                }
             ],
             "title": "Total Backup Deletion Attempts",
@@ -536,14 +536,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "up{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
+                  "expr": "up{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "__auto",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Velero status"
                }
             ],
             "title": "Status",
@@ -633,40 +632,35 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_backup_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
+                  "expr": "increase(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Attempts",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Backup attempts"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "builder",
-                  "expr": "increase(velero_backup_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Success",
-                  "range": true,
-                  "refId": "C"
+                  "refId": "Backup successes"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_backup_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Failures",
-                  "range": true,
-                  "refId": "B"
+                  "refId": "Backup failures"
                }
             ],
             "title": "Backups Overview",
@@ -756,40 +750,35 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_restore_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
+                  "expr": "increase(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Attempts",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Restore attempts"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_restore_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Success",
-                  "range": true,
-                  "refId": "B"
+                  "refId": "Restore successes"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_restore_failed_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Failure",
-                  "range": true,
-                  "refId": "C"
+                  "refId": "Restore failures"
                }
             ],
             "title": "Restore Overview",
@@ -879,40 +868,35 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_backup_deletion_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
+                  "expr": "increase(velero_backup_deletion_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Attemps",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Backup deletion attempts"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_backup_deletion_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_backup_deletion_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Success",
-                  "range": true,
-                  "refId": "B"
+                  "refId": "Backup deletion successes"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_backup_deletion_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_backup_deletion_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Failure",
-                  "range": true,
-                  "refId": "C"
+                  "refId": "Backup deletion failures"
                }
             ],
             "title": "Backup Deletion Overview",
@@ -1002,40 +986,35 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_volume_snapshot_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
+                  "expr": "increase(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Attempts",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Volume snapshot attempts"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_volume_snapshot_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Success",
-                  "range": true,
-                  "refId": "B"
+                  "refId": "Volume snapshot successes"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_volume_snapshot_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Failure",
-                  "range": true,
-                  "refId": "C"
+                  "refId": "Volume snapshot failures"
                }
             ],
             "title": "Volume Snapshots overview",
@@ -1125,40 +1104,35 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_csi_snapshot_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
+                  "expr": "increase(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Attempts",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "CSI snapshot attempts"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_csi_snapshot_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Success",
-                  "range": true,
-                  "refId": "B"
+                  "refId": "CSI snapshot successes"
                },
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "increase(velero_csi_snapshot_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[$__rate_interval])",
-                  "hide": false,
+                  "expr": "increase(velero_csi_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__rate_interval])",
+                  "format": "time_series",
                   "instant": false,
                   "legendFormat": "Failure",
-                  "range": true,
-                  "refId": "C"
+                  "refId": "CSI snapshot failures"
                }
             ],
             "title": "CSI Snapshots overview",
@@ -1251,16 +1225,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "exemplar": false,
-                  "expr": "velero_backup_last_status{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "velero_backup_last_status{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Status",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Backup last status"
                }
             ],
             "title": "Backup Last status",
@@ -1349,13 +1320,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "backup_duration_seconds{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+                  "expr": "backup_duration_seconds{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}",
+                  "format": "time_series",
                   "instant": false,
-                  "range": true,
-                  "refId": "A"
+                  "legendFormat": "",
+                  "refId": "Backup duration"
                }
             ],
             "title": "Backup Duration",
@@ -1447,13 +1418,13 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "$datasource"
+                     "uid": "${datasource}"
                   },
-                  "editorMode": "code",
-                  "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}[15m])",
+                  "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[15m])",
+                  "format": "time_series",
+                  "instant": false,
                   "legendFormat": "{{schedule}}",
-                  "range": true,
-                  "refId": "A"
+                  "refId": "Backup tarball size"
                }
             ],
             "title": "Backup Size",

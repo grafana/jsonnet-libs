@@ -26,23 +26,10 @@ function(this)
         },
       },
 
-      restoreAttempts: {
-        name: 'Restore attempts',
-        type: 'counter',
-        description: 'Total number of restore attempts.',
-        unit: 'short',
-        sources: {
-          prometheus: {
-            expr: 'velero_restore_attempt_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
-          },
-        },
-      },
-
-      restoreSuccesses: {
-        name: 'Restore successes',
-        type: 'counter',
-        description: 'Total number of successful restores.',
+      restoreSuccessTotal: {
+        name: 'Total successful restores',
+        type: 'raw',
+        description: 'Cumulative number of successful restores.',
         unit: 'short',
         sources: {
           prometheus: {
@@ -52,15 +39,41 @@ function(this)
         },
       },
 
-      restoreFailures: {
-        name: 'Restore failures',
-        type: 'counter',
-        description: 'Total number of failed restores.',
+      restoreAttempts: {
+        name: 'Restore attempts',
+        type: 'raw',
+        description: 'Number of restore attempts.',
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'velero_restore_failed_total{%(queriesSelector)s}',
-            legendCustomTemplate: legendCustomTemplate,
+            expr: 'increase(velero_restore_attempt_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Attempts',
+          },
+        },
+      },
+
+      restoreSuccesses: {
+        name: 'Restore successes',
+        type: 'raw',
+        description: 'Number of successful restores.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'increase(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Success',
+          },
+        },
+      },
+
+      restoreFailures: {
+        name: 'Restore failures',
+        type: 'raw',
+        description: 'Number of failed restores.',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'increase(velero_restore_failed_total{%(queriesSelector)s}[$__rate_interval])',
+            legendCustomTemplate: 'Failure',
           },
         },
       },
