@@ -85,7 +85,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "min by (job, solr_cluster) (solr_collections_live_nodes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
+                  "expr": "min by (job, solr_cluster) (solr_collections_live_nodes{job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{solr_cluster}}",
@@ -253,7 +253,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "solr_zookeeper_status{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
+                  "expr": "solr_zookeeper_status{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{zk_host}}",
@@ -342,7 +342,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "solr_zookeeper_ensemble_size{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
+                  "expr": "solr_zookeeper_ensemble_size{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{zk_host}}",
@@ -459,7 +459,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum(solr_collections_shard_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}) / count(solr_collections_shard_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
+                  "expr": "100 * sum(solr_collections_shard_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}) / count(solr_collections_shard_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{solr_cluster}}",
@@ -651,7 +651,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "solr_collections_shard_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
+                  "expr": "solr_collections_shard_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{shard}}",
@@ -725,7 +725,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * sum(solr_collections_replica_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}) / count(solr_collections_replica_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
+                  "expr": "100 * sum(solr_collections_replica_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}) / count(solr_collections_replica_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"})",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{solr_cluster}}",
@@ -1001,7 +1001,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "solr_collections_replica_state{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
+                  "expr": "solr_collections_replica_state{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{core}}",
@@ -1115,7 +1115,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"systemCpuLoad\"}) > 0\n)",
+                  "expr": "topk($k,\n  avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"systemCpuLoad\"}) > 0\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{base_url}}",
@@ -1213,7 +1213,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"used\"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"max\"}), 1))\n)",
+                  "expr": "topk($k,\n  100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"used\"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\", item=\"max\"}), 1))\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{base_url}}",
@@ -1302,7 +1302,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\", category=\"QUERY\"})\n)",
+                  "expr": "topk($k,\n  avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\", category=\"QUERY\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
@@ -1391,7 +1391,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])) > 0\n)",
+                  "expr": "topk($k,\n  avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:])) > 0\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1481,7 +1481,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"})\n)",
+                  "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}}",
@@ -1579,7 +1579,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk($k,\n  avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\"}) > 0\n)",
+                  "expr": "bottomk($k,\n  avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\"}) > 0\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{type}}",
@@ -1684,7 +1684,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))\n)",
+                  "expr": "topk($k,\n  avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1774,7 +1774,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}[$__interval:]))\n)",
+                  "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",

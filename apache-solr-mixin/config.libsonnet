@@ -25,7 +25,7 @@
     enableLokiLogs: true,
 
     // signals framework
-    filteringSelector: self.filterSelector,
+    filteringSelector: '',  // set to apply static filters to all queries, i.e. job="bar"
     groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
     instanceLabels: ['solr_cluster', 'base_url'],
     uid: 'apache-solr',
